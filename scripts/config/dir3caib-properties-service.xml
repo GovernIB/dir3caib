@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server>
+    <mbean code="org.jboss.varia.property.SystemPropertiesService" name="jboss:type=Service,name=Dir3caibSystemProperties">
+        <attribute name="Properties">
+		    <!-- Dialecte de la BBDD -->
+		    # es.caib.dir3caib.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+		    # es.caib.dir3caib.hibernate.dialect=org.hibernate.dialect.MySQLDialect      
+		    # es.caib.dir3caib.hibernate.dialect=org.hibernate.dialect.DB2Dialect
+		    # es.caib.dir3caib.hibernate.dialect=org.hibernate.dialect.SQLServerDialect
+		    # es.caib.dir3caib.hibernate.dialect=net.sf.hibernate.dialect.Oracle9Dialect
+		    es.caib.dir3caib.hibernate.dialect=org.hibernate.dialect.Oracle10gDialect
+		    es.caib.dir3caib.hibernate.query.substitutions=true 1, false 0
+
+            <!-- Directorio base para los archivos generales -->
+            es.caib.dir3caib.archivos.path=D:/dades/dades/Proyectos/SICRES3/dir3caib/archivos/
+			es.caib.dir3caib.catalogos.path=D:/dades/dades/Proyectos/SICRES3/dir3caib/archivos/catalogos/
+			es.caib.dir3caib.oficinas.path=D:/dades/dades/Proyectos/SICRES3/dir3caib/archivos/oficinas/
+			es.caib.dir3caib.unidades.path=D:/dades/dades/Proyectos/SICRES3/dir3caib/archivos/unidades/
+            <!-- Autentificación para los dir3ws -->
+
+            <!--endpoints de ws-->
+            es.caib.dir3caib.catalogo.endpoint=http://pre-dir3ws.redsara.es/directorio/services/SC21CT_VolcadoCatalogos?wsdl
+            es.caib.dir3caib.unidad.endpoint=http://pre-dir3ws.redsara.es/directorio/services/SD01UN_DescargaUnidades?wsdl
+            es.caib.dir3caib.oficina.endpoint=http://pre-dir3ws.redsara.es/directorio/services/SD02OF_DescargaOficinas?wsdl
+
+			es.caib.dir3caib.dir3ws.user=regwebCAIB
+            es.caib.dir3caib.dir3ws.pass=4a0a4bb5a611a85eb6e7d6d96521a934
+        </attribute>
+    </mbean>
+</server>

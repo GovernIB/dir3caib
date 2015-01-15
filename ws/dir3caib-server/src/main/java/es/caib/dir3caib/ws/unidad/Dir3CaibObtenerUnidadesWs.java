@@ -1,0 +1,41 @@
+package es.caib.dir3caib.ws.unidad;
+
+import es.caib.dir3caib.persistence.model.ws.UnidadTF;
+import es.caib.dir3caib.utils.Constants;
+
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
+import javax.jws.WebMethod;
+import javax.jws.WebService;
+import java.util.List;
+
+/**
+ * Created by Fundació BIT.
+ * 
+ * @author earrivi
+ * @author anadal (seguretat) Date: 12/02/14
+ */
+@WebService(
+/*
+ * name="ObtenerUnidades", targetNamespace = "http://www.caib.es/dir3caib"
+ */)
+public interface Dir3CaibObtenerUnidadesWs {
+
+  @WebMethod
+  @PermitAll
+  public String getVersion();
+
+  @WebMethod
+  @PermitAll
+  public String getVersionWs();
+
+  @WebMethod
+  @RolesAllowed({ Constants.DIR_ADMIN })
+  public UnidadTF obtenerUnidad(String codigo, String fechaActualizacion, String fechaSincronizacion) throws Exception;
+
+  @WebMethod
+  @RolesAllowed({ Constants.DIR_ADMIN })
+  public List<UnidadTF> obtenerArbolUnidades(String codigo, String fechaActualizacion, String fechaSincronizacion)
+      throws Exception;
+
+}

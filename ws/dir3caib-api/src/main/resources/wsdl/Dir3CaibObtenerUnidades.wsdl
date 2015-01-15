@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions name="Dir3CaibObtenerUnidadesWsService" targetNamespace="http://www.caib.es/dir3caib" xmlns:ns1="http://unidad.ws.dir3caib.caib.es/" xmlns:ns2="http://schemas.xmlsoap.org/wsdl/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.caib.es/dir3caib" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:import location="http://localhost:8080/dir3caib/ws/Dir3CaibObtenerUnidades?wsdl=Dir3CaibObtenerUnidadesWs.wsdl" namespace="http://unidad.ws.dir3caib.caib.es/">
+    </wsdl:import>
+  <wsdl:binding name="Dir3CaibObtenerUnidadesWsServiceSoapBinding" type="ns1:Dir3CaibObtenerUnidadesWs">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getVersionWs">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="getVersionWs">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getVersionWsResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getVersion">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="getVersion">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getVersionResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerUnidad">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="obtenerUnidad">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="obtenerUnidadResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerArbolUnidades">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="obtenerArbolUnidades">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="obtenerArbolUnidadesResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Dir3CaibObtenerUnidadesWsService">
+    <wsdl:port binding="tns:Dir3CaibObtenerUnidadesWsServiceSoapBinding" name="Dir3CaibObtenerUnidadesWs">
+      <soap:address location="http://ibit157:8080/dir3caib/ws/Dir3CaibObtenerUnidades" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions name="Dir3CaibObtenerCatalogosWsService" targetNamespace="http://www.caib.es/dir3caib" xmlns:ns1="http://catalogo.ws.dir3caib.caib.es/" xmlns:ns2="http://schemas.xmlsoap.org/wsdl/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.caib.es/dir3caib" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:import location="http://localhost:8080/dir3caib/ws/Dir3CaibObtenerCatalogos?wsdl=Dir3CaibObtenerCatalogosWs.wsdl" namespace="http://catalogo.ws.dir3caib.caib.es/">
+    </wsdl:import>
+  <wsdl:binding name="Dir3CaibObtenerCatalogosWsServiceSoapBinding" type="ns1:Dir3CaibObtenerCatalogosWs">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="obtenerCatComunidadAutonoma">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="obtenerCatComunidadAutonoma">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="obtenerCatComunidadAutonomaResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatEntidadGeografica">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="obtenerCatEntidadGeografica">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="obtenerCatEntidadGeograficaResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatProvincia">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="obtenerCatProvincia">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="obtenerCatProvinciaResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatLocalidad">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="obtenerCatLocalidad">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="obtenerCatLocalidadResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatNivelAdministracion">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="obtenerCatNivelAdministracion">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="obtenerCatNivelAdministracionResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatEstadoEntidad">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="obtenerCatEstadoEntidad">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="obtenerCatEstadoEntidadResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatPais">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="obtenerCatPais">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="obtenerCatPaisResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getVersionWs">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="getVersionWs">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getVersionWsResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getVersion">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="getVersion">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getVersionResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Dir3CaibObtenerCatalogosWsService">
+    <wsdl:port binding="tns:Dir3CaibObtenerCatalogosWsServiceSoapBinding" name="Dir3CaibObtenerCatalogosWs">
+      <soap:address location="http://ibit157:8080/dir3caib/ws/Dir3CaibObtenerCatalogos" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
