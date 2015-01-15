@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:sec="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/security
+       http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <sec:global-method-security secured-annotations="enabled" jsr250-annotations="enabled" pre-post-annotations="enabled" proxy-target-class="true"/>
+
+    <sec:http create-session="never" use-expressions="true" auto-config="false" entry-point-ref="preAuthenticatedProcessingFilterEntryPoint">
+        <sec:intercept-url pattern="/rest/**" access="permitAll"/>
+        <sec:intercept-url pattern="/**" access="hasRole('DIR_ADMIN')"/>
+        <sec:custom-filter position="PRE_AUTH_FILTER" ref="preauthFilter"/>
+        <sec:session-management session-fixation-protection="none"/>
+    </sec:http>
+
+    <sec:authentication-manager alias="authenticationManager">
+        <sec:authentication-provider ref="preAuthenticatedAuthenticationProvider"/>
+    </sec:authentication-manager>
+
+      <bean id="preAuthenticatedProcessingFilterEntryPoint" class="org.springframework.security.web.authentication.Http403ForbiddenEntryPoint" />
+
+      <bean id="preAuthenticatedAuthenticationProvider" class="org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider">
+          <property name="preAuthenticatedUserDetailsService">
+              <bean class="org.springframework.security.web.authentication.preauth.PreAuthenticatedGrantedAuthoritiesUserDetailsService" />
+          </property>
+      </bean>
+
+      <bean id="attributes2GrantedAuthoritiesMapper" class="es.caib.dir3caib.back.security.RolesBasedAttributes2GrantedAuthoritiesMapper">
+          <property name="baseRoleMapping">
+              <map>
+                  <entry key="DIR_ADMIN" value="DIR_ADMIN"/>
+              </map>
+          </property>
+      </bean>
+      <bean id="mappableAttributesRetriever" class="es.caib.dir3caib.back.security.RolesBasedMappableAttributesRetriever">
+          <property name="defaultMappableAttributes">
+              <set>
+                  <value>DIR_ADMIN</value>
+
+              </set>
+          </property>
+      </bean>
+
+      <bean id="preauthFilter" class="org.springframework.security.web.authentication.preauth.j2ee.J2eePreAuthenticatedProcessingFilter">
+          <property name="authenticationDetailsSource">
+              <bean class="org.springframework.security.web.authentication.preauth.j2ee.J2eeBasedPreAuthenticatedWebAuthenticationDetailsSource">
+                  <property name="mappableRolesRetriever" ref="mappableAttributesRetriever"/>
+                  <property name="userRoles2GrantedAuthoritiesMapper" ref="attributes2GrantedAuthoritiesMapper"/>
+              </bean>
+          </property>
+          <property name="authenticationManager" ref="authenticationManager"/>
+      </bean>
+
+
+</beans>
