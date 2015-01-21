@@ -132,7 +132,7 @@
         <!--
         <repositories>
            <repository>
-             <id>es.caib.dir3caib</id>
+             <id>dir3caib-maven-repos</id>
              <name>Dir3Caib Maven Repository</name>
              <url>http://dir3caib.sourceforge.net/maven/</url>
            </repository>
