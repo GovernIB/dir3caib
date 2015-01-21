@@ -77,34 +77,35 @@
                         <target>1.6</target>
                     </configuration>
                 </plugin>
-
-                <plugin>
-                    <groupId>com.google.code.maven-replacer-plugin</groupId>
-                    <artifactId>maven-replacer-plugin</artifactId>
-                    <version>1.4.0</version>
-                    <inherited>false</inherited>
-                    <executions>
-                        <execution>
-                            <phase>process-sources</phase>
-                            <goals>
-                                <goal>replace</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <file>${version.txt.template.file}</file>
-                        <outputFile>${version.txt.file}</outputFile>
-                        <replacements>
-                            <replacement>
-                                <token>@project.version@</token>
-                                <value>${project.version}</value>
-                            </replacement>
-                        </replacements>
-                    </configuration>
-                </plugin>
-
             </plugins>
         </pluginManagement>
+		
+		<plugins>
+			<plugin>
+				<groupId>com.google.code.maven-replacer-plugin</groupId>
+				<artifactId>maven-replacer-plugin</artifactId>
+				<version>1.4.0</version>
+				<inherited>false</inherited>
+				<executions>
+					<execution>
+						<phase>process-sources</phase>
+						<goals>
+							<goal>replace</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<file>${version.txt.template.file}</file>
+					<outputFile>${version.txt.file}</outputFile>
+					<replacements>
+						<replacement>
+							<token>@project.version@</token>
+							<value>${project.version}</value>
+						</replacement>
+					</replacements>
+				</configuration>
+			</plugin>
+		</plugins>
 		
 		
 		<extensions>
