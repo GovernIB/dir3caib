@@ -2,6 +2,8 @@
 <server>
     <mbean code="org.jboss.varia.property.SystemPropertiesService" name="jboss:type=Service,name=Dir3caibSystemProperties">
         <attribute name="Properties">
+		    es.caib.dir3caib.iscaib=false
+		
 		    <!-- Dialecte de la BBDD -->
 		    # es.caib.dir3caib.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
 		    # es.caib.dir3caib.hibernate.dialect=org.hibernate.dialect.MySQLDialect      
