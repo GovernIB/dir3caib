@@ -6,11 +6,9 @@ package es.caib.dir3caib.utils;
  * 
  */
 public class Configuracio implements Constants {
-  
-
 
   public static boolean isCAIB() {
-    return CompileConstants.IS_CAIB;
+    return Boolean.getBoolean(DIR3CAIB_PROPERTY_BASE + "iscaib");
   }
 
   

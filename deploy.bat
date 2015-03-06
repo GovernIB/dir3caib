@@ -1,8 +1,7 @@
 @echo off
-echo
-echo Parametres Opcionals:
-echo          -Dcaib : Compila amb les opcions de seguretat per WS de la CAIB
-echo  
+@echo
+type help.txt
+@echo  
 
 cmd /C mvn -DskipTests %* install
 

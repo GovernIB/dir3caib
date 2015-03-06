@@ -3,9 +3,7 @@ package es.caib.dir3caib.back.utils;
 import es.caib.dir3caib.persistence.utils.DataBaseUtils;
 import es.caib.dir3caib.persistence.utils.Versio;
 import es.caib.dir3caib.utils.Configuracio;
-import es.caib.dir3caib.utils.CompileConstants;
 import org.apache.log4j.Logger;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletConfig;
@@ -49,7 +47,7 @@ public class InitServlet extends HttpServlet {
     }
 
      // Mostrar Versió
-    String ver = Versio.VERSIO + (CompileConstants.IS_CAIB?"-caib" : "");
+    String ver = Versio.VERSIO + (Configuracio.isCAIB()?"-caib" : "");
     try {
       log.info("RegWeb Version: " + ver);
     } catch (Throwable e) {

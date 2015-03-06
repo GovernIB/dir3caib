@@ -9,7 +9,7 @@ import es.caib.dir3caib.persistence.model.ws.CatEntidadGeograficaTF;
 import es.caib.dir3caib.persistence.model.ws.CatLocalidadTF;
 import es.caib.dir3caib.persistence.model.ws.CatProvinciaTF;
 import es.caib.dir3caib.persistence.utils.Versio;
-import es.caib.dir3caib.utils.CompileConstants;
+import es.caib.dir3caib.utils.Configuracio;
 import es.caib.dir3caib.utils.Constants;
 
 import org.jboss.ejb3.annotation.SecurityDomain;
@@ -22,6 +22,7 @@ import javax.ejb.Stateless;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
+
 import java.util.List;
 
 /**
@@ -44,7 +45,7 @@ import java.util.List;
    )
 @WebContext(contextRoot = "/dir3caib/ws", urlPattern = "/" + Dir3CaibObtenerCatalogosImpl.NAME,
     transportGuarantee = TransportGuarantee.NONE, secureWSDLAccess = false,
-    authMethod = CompileConstants.AUTH_METHOD)
+    authMethod = "WSBASIC")
 public class Dir3CaibObtenerCatalogosImpl implements Dir3CaibObtenerCatalogosWs {
   
   public static final String NAME = "Dir3CaibObtenerCatalogos";
@@ -54,7 +55,7 @@ public class Dir3CaibObtenerCatalogosImpl implements Dir3CaibObtenerCatalogosWs 
   @Override
   public String getVersion() {
     
-    return Versio.VERSIO + (CompileConstants.IS_CAIB?"-caib": "");
+    return Versio.VERSIO + (Configuracio.isCAIB()?"-caib": "");
   }
 
   @Override

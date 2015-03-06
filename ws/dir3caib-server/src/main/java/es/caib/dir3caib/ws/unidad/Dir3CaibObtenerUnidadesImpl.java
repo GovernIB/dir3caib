@@ -3,7 +3,7 @@ package es.caib.dir3caib.ws.unidad;
 import es.caib.dir3caib.persistence.ejb.ObtenerUnidadesLocal;
 import es.caib.dir3caib.persistence.model.ws.UnidadTF;
 import es.caib.dir3caib.persistence.utils.Versio;
-import es.caib.dir3caib.utils.CompileConstants;
+import es.caib.dir3caib.utils.Configuracio;
 import es.caib.dir3caib.utils.Constants;
 
 import org.jboss.ejb3.annotation.SecurityDomain;
@@ -15,6 +15,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
+
 import java.util.List;
 
 /**
@@ -30,7 +31,7 @@ import java.util.List;
 @RolesAllowed({ Constants.DIR_ADMIN })
 @WebService(name = Dir3CaibObtenerUnidadesImpl.NAME_WS, portName = Dir3CaibObtenerUnidadesImpl.NAME_WS, serviceName = Dir3CaibObtenerUnidadesImpl.NAME_WS
     + "Service", targetNamespace = "http://www.caib.es/dir3caib", endpointInterface = "es.caib.dir3caib.ws.unidad.Dir3CaibObtenerUnidadesWs")
-@WebContext(contextRoot = "/dir3caib/ws", urlPattern = "/" + Dir3CaibObtenerUnidadesImpl.NAME, transportGuarantee = TransportGuarantee.NONE, secureWSDLAccess = false, authMethod = CompileConstants.AUTH_METHOD)
+@WebContext(contextRoot = "/dir3caib/ws", urlPattern = "/" + Dir3CaibObtenerUnidadesImpl.NAME, transportGuarantee = TransportGuarantee.NONE, secureWSDLAccess = false, authMethod = "WSBASIC")
 public class Dir3CaibObtenerUnidadesImpl implements Dir3CaibObtenerUnidadesWs {
 
   public static final String NAME = "Dir3CaibObtenerUnidades";
@@ -43,7 +44,7 @@ public class Dir3CaibObtenerUnidadesImpl implements Dir3CaibObtenerUnidadesWs {
   @Override
   public String getVersion() {
 
-    return Versio.VERSIO + (CompileConstants.IS_CAIB ? "-caib" : "");
+    return Versio.VERSIO + (Configuracio.isCAIB() ? "-caib" : "");
   }
 
   @Override

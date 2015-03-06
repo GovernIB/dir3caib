@@ -3,7 +3,7 @@ package es.caib.dir3caib.ws.oficina;
 import es.caib.dir3caib.persistence.ejb.ObtenerOficinasLocal;
 import es.caib.dir3caib.persistence.model.ws.OficinaTF;
 import es.caib.dir3caib.persistence.utils.Versio;
-import es.caib.dir3caib.utils.CompileConstants;
+import es.caib.dir3caib.utils.Configuracio;
 import es.caib.dir3caib.utils.Constants;
 
 import org.jboss.ejb3.annotation.SecurityDomain;
@@ -15,6 +15,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
+
 import java.util.List;
 
 /**
@@ -30,7 +31,7 @@ import java.util.List;
 @RolesAllowed({ Constants.DIR_ADMIN })
 @WebService(name = Dir3CaibObtenerOficinasImpl.NAME_WS, portName = Dir3CaibObtenerOficinasImpl.NAME_WS, serviceName = Dir3CaibObtenerOficinasImpl.NAME_WS
     + "Service", targetNamespace = "http://www.caib.es/dir3caib", endpointInterface = "es.caib.dir3caib.ws.oficina.Dir3CaibObtenerOficinasWs")
-@WebContext(contextRoot = "/dir3caib/ws", urlPattern = "/" + Dir3CaibObtenerOficinasImpl.NAME, transportGuarantee = TransportGuarantee.NONE, secureWSDLAccess = false, authMethod = CompileConstants.AUTH_METHOD)
+@WebContext(contextRoot = "/dir3caib/ws", urlPattern = "/" + Dir3CaibObtenerOficinasImpl.NAME, transportGuarantee = TransportGuarantee.NONE, secureWSDLAccess = false, authMethod = "WSBASIC")
 public class Dir3CaibObtenerOficinasImpl /* extends CommonMethodsImpl */implements
     Dir3CaibObtenerOficinasWs {
 
@@ -44,7 +45,7 @@ public class Dir3CaibObtenerOficinasImpl /* extends CommonMethodsImpl */implemen
   @Override
   public String getVersion() {
 
-    return Versio.VERSIO + (CompileConstants.IS_CAIB ? "-caib" : "");
+    return Versio.VERSIO + (Configuracio.isCAIB() ? "-caib" : "");
   }
 
   @Override
