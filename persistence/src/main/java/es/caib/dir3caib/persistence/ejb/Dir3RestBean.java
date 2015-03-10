@@ -3,6 +3,7 @@ package es.caib.dir3caib.persistence.ejb;
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.model.Oficina;
 import es.caib.dir3caib.persistence.model.Unidad;
+import es.caib.dir3caib.persistence.model.utils.ObjetoBasico;
 import es.caib.dir3caib.persistence.utils.DataBaseUtils;
 import org.apache.log4j.Logger;
 
@@ -140,12 +141,11 @@ public class Dir3RestBean implements Dir3RestLocal {
 
     }
 
-     public List<Unidad> busquedaOrganismos(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad) throws Exception {
+     public List<ObjetoBasico> busquedaOrganismos(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad) throws Exception {
        Query q;
        Map<String, Object> parametros = new HashMap<String, Object>();
        List<String> where = new ArrayList<String>();
-
-       StringBuffer query = new StringBuffer("Select unidad from Unidad as unidad ");
+       StringBuffer query = new StringBuffer("Select unidad.codigo, unidad.denominacion from Unidad as unidad ");
 
        // Parametros de busqueda
 
@@ -180,17 +180,17 @@ public class Dir3RestBean implements Dir3RestLocal {
        }
 
 
-       return q.getResultList();
+       return getObjetoBasicoList(q.getResultList());
 
      }
 
 
-     public List<Oficina> busquedaOficinas(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad) throws Exception {
+     public List<ObjetoBasico> busquedaOficinas(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad) throws Exception {
          Query q;
          Map<String, Object> parametros = new HashMap<String, Object>();
          List<String> where = new ArrayList<String>();
 
-         StringBuffer query = new StringBuffer("Select oficina from Oficina as oficina ");
+         StringBuffer query = new StringBuffer("Select oficina.codigo, oficina.denominacion from Oficina as oficina ");
 
          // Parametros de busqueda
 
@@ -224,7 +224,7 @@ public class Dir3RestBean implements Dir3RestLocal {
          }
 
 
-         return q.getResultList();
+         return getObjetoBasicoList(q.getResultList());
 
        }
 
@@ -242,5 +242,24 @@ public class Dir3RestBean implements Dir3RestLocal {
          Query q = em.createQuery("select oficina.denominacion from Oficina as oficina where oficina.codigo=:codigo").setParameter("codigo", codigo);
 
          return (String)q.getSingleResult();
+       }
+
+       /**
+       * Convierte los resultados de una query en una lista de {@link es.caib.dir3caib.persistence.model.utils.ObjetoBasico}
+       * @param result
+       * @return
+       * @throws Exception
+       */
+       private List<ObjetoBasico> getObjetoBasicoList(List<Object[]> result) throws Exception{
+
+          List<ObjetoBasico> unidadesReducidas = new ArrayList<ObjetoBasico>();
+
+          for (Object[] object : result){
+              ObjetoBasico objetoBasico = new ObjetoBasico((String)object[0],(String)object[1],"");
+
+              unidadesReducidas.add(objetoBasico);
+          }
+
+          return  unidadesReducidas;
        }
 }

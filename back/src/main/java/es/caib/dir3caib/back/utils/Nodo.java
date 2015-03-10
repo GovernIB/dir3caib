@@ -18,6 +18,11 @@ public class Nodo {
   public Nodo() {
   }
 
+  public Nodo(String nombre, String estado){
+    this.nombre=nombre;
+    this.estado= estado;
+  }
+
   public String getId() {
     return id;
   }

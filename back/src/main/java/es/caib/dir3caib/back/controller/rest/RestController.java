@@ -3,6 +3,7 @@ package es.caib.dir3caib.back.controller.rest;
 import es.caib.dir3caib.back.controller.BaseController;
 import es.caib.dir3caib.persistence.model.Oficina;
 import es.caib.dir3caib.persistence.model.Unidad;
+import es.caib.dir3caib.persistence.model.utils.ObjetoBasico;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -89,13 +90,13 @@ public class RestController extends BaseController{
      */
      @RequestMapping(value = "/busqueda/organismos", method = RequestMethod.GET)
      public @ResponseBody
-     ResponseEntity<List<Unidad>> busquedaOrganismos(@RequestParam String codigo, @RequestParam String denominacion, @RequestParam Long codNivelAdministracion,  @RequestParam Long codComunidadAutonoma) throws Exception {
+     ResponseEntity<List<ObjetoBasico>> busquedaOrganismos(@RequestParam String codigo, @RequestParam String denominacion, @RequestParam Long codNivelAdministracion,  @RequestParam Long codComunidadAutonoma) throws Exception {
         log.info("dentro rest busqueda organismos ");
-        List<Unidad> unidades = dir3RestEjb.busquedaOrganismos(codigo, denominacion, codNivelAdministracion, codComunidadAutonoma);
+        List<ObjetoBasico> unidades = dir3RestEjb.busquedaOrganismos(codigo, denominacion, codNivelAdministracion, codComunidadAutonoma);
         log.info("Organismos encontrados " + unidades.size());
         HttpHeaders headers = addAccessControllAllowOrigin();
 
-        return new ResponseEntity<List<Unidad>>(unidades, headers, HttpStatus.OK);
+        return new ResponseEntity<List<ObjetoBasico>>(unidades, headers, HttpStatus.OK);
 
      }
 
@@ -105,13 +106,13 @@ public class RestController extends BaseController{
      */
      @RequestMapping(value = "/busqueda/oficinas", method = RequestMethod.GET)
      public @ResponseBody
-     ResponseEntity<List<Oficina>> busquedaOficinas(@RequestParam String codigo, @RequestParam String denominacion, @RequestParam Long codNivelAdministracion,  @RequestParam Long codComunidadAutonoma) throws Exception {
+     ResponseEntity<List<ObjetoBasico>> busquedaOficinas(@RequestParam String codigo, @RequestParam String denominacion, @RequestParam Long codNivelAdministracion,  @RequestParam Long codComunidadAutonoma) throws Exception {
         log.info("dentro rest busqueda oficinas ");
-        List<Oficina> oficinas = dir3RestEjb.busquedaOficinas(codigo, denominacion, codNivelAdministracion, codComunidadAutonoma);
+        List<ObjetoBasico> oficinas = dir3RestEjb.busquedaOficinas(codigo, denominacion, codNivelAdministracion, codComunidadAutonoma);
         log.info("Oficinas encontradas " + oficinas.size());
         HttpHeaders headers = addAccessControllAllowOrigin();
 
-        return new ResponseEntity<List<Oficina>>(oficinas, headers, HttpStatus.OK);
+        return new ResponseEntity<List<ObjetoBasico>>(oficinas, headers, HttpStatus.OK);
 
      }
 
