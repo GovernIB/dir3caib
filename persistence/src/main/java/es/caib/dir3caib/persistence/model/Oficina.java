@@ -513,7 +513,7 @@ public class Oficina implements Serializable {
    * @return the sirOfi
    */
   @OneToMany(mappedBy="oficina")
-  @ForeignKey(name="DIR_OFICINA_RELSIROFI_FK")
+  //@ForeignKey(name="DIR_OFICINA_RELSIROFI_FK")
   @JsonIgnore
   public List<RelacionSirOfi> getSirOfi() {
     return sirOfi;
@@ -529,8 +529,8 @@ public class Oficina implements Serializable {
   /**
    * @return the organizativasOfi
    */
-  @OneToMany(mappedBy="oficina")
-  @ForeignKey(name="DIR_OFICINA_RELORGOFI_FK")
+
+  @OneToMany(mappedBy = "oficina" )
   @JsonIgnore
   public List<RelacionOrganizativaOfi> getOrganizativasOfi() {
     return organizativasOfi;

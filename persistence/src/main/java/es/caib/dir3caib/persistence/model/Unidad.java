@@ -676,7 +676,6 @@ public class Unidad implements Serializable {
 
 
   @OneToMany(mappedBy="unidad", cascade=CascadeType.ALL)
-  @ForeignKey(name="DIR_UNIDAD_RELORGOFI_FK")
   @JsonIgnore
   public List<RelacionOrganizativaOfi> getOrganizativaOfi() {
     return organizativaOfi;
@@ -689,7 +688,6 @@ public class Unidad implements Serializable {
 
 
   @OneToMany(mappedBy="unidad", cascade=CascadeType.ALL)
-  @ForeignKey(name="DIR_UNIDAD_RELSIROFI_FK")
   @JsonIgnore
   public List<RelacionSirOfi> getSirOfi() {
     return sirOfi;

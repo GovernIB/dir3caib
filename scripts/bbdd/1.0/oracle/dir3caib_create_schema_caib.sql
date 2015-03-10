@@ -450,12 +450,12 @@
         references DIR_CATESTADOENTIDAD;
 
     alter table DIR_RELACIONORGANIZATIVAOFI 
-        add constraint DIR_UNIDAD_RELORGOFI_FK 
+        add constraint DIR_RELORGOFI_CATUNIDAD_FK 
         foreign key (CODUNIDAD) 
         references DIR_UNIDAD;
 
     alter table DIR_RELACIONORGANIZATIVAOFI 
-        add constraint DIR_OFICINA_RELORGOFI_FK 
+        add constraint DIR_RELORGOFI_CATOFI_FK 
         foreign key (CODOFICINA) 
         references DIR_OFICINA;
 
@@ -465,12 +465,12 @@
         references DIR_CATESTADOENTIDAD;
 
     alter table DIR_RELACIONSIROFI 
-        add constraint DIR_UNIDAD_RELSIROFI_FK 
+        add constraint DIR_RELSIROFI_CATUNIDAD_FK 
         foreign key (CODUNIDAD) 
         references DIR_UNIDAD;
 
     alter table DIR_RELACIONSIROFI 
-        add constraint DIR_OFICINA_RELSIROFI_FK 
+        add constraint DIR_RELSIROFI_CATOFI_FK 
         foreign key (CODOFICINA) 
         references DIR_OFICINA;
 
