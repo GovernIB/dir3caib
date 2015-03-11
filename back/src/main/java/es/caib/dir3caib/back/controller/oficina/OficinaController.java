@@ -321,6 +321,7 @@ public class OficinaController extends BaseController {
        try {
           //Oficina oficinaPadre = oficinaEjb.findById(idOficina);
           ObjetoBasico oficinaPadre = oficinaEjb.findReduceOficina(idOficina);
+          nodo.setId(oficinaPadre.getCodigo());
           nodo.setNombre(oficinaPadre.getDenominacion());
           nodo.setIdPadre(idOficina);
           nodo.setEstado(oficinaPadre.getDescripcionEstado());
@@ -330,6 +331,7 @@ public class OficinaController extends BaseController {
           List<ObjetoBasico> oficinasHijas = oficinaEjb.hijos(idOficina);
           for(ObjetoBasico oficinaHija: oficinasHijas){
             Nodo hijo = new Nodo();
+            hijo.setId(oficinaHija.getCodigo());
             hijo.setNombre(oficinaHija.getDenominacion());
             hijo.setIdPadre(idOficina);
             hijo.setEstado(oficinaHija.getDescripcionEstado());
