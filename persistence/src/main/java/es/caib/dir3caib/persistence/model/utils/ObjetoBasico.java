@@ -4,6 +4,8 @@ package es.caib.dir3caib.persistence.model.utils;
  * Created 10/03/15 12:17
  *
  * @author mgonzalez
+ * Representa un conjunto mínimo de datos de una unidad o oficina. Los datos mínimos son
+ * el código, la denominación y el estado.
  */
 public class ObjetoBasico {
 

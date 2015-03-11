@@ -5,6 +5,7 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.Oficina;
+import es.caib.dir3caib.persistence.model.utils.ObjetoBasico;
 import es.caib.dir3caib.persistence.utils.Paginacion;
 
 import javax.ejb.Local;
@@ -30,9 +31,11 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
 
   public Oficina findFullById(String id) throws Exception;
 
+  public ObjetoBasico findReduceOficina(String id) throws Exception;
+
   public Boolean tieneHijos(String codigo) throws Exception;
 
-  public List<Oficina> hijos(String codigo) throws Exception;
+  public List<ObjetoBasico> hijos(String codigo) throws Exception;
 
   public List<Oficina> obtenerOficinasOrganismo(String codigo, String fechaActualizacion,
       String fechaSincronizacion) throws Exception;

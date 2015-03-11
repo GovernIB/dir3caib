@@ -1,6 +1,7 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.Unidad;
+import es.caib.dir3caib.persistence.model.utils.ObjetoBasico;
 import es.caib.dir3caib.persistence.utils.Paginacion;
 
 import javax.ejb.Local;
@@ -47,7 +48,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
 
     public Boolean tieneHijos(String codigo) throws Exception;
 
-    public List<Unidad> hijos(String codigo) throws Exception;
+    public List<ObjetoBasico> hijos(String codigo) throws Exception;
 
     public List<Unidad> findByDenominacion(String denominacion) throws Exception;
     
@@ -56,6 +57,8 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
     public List<String> getAllCodigos();
     
     public List<Unidad> getListByIds(List<String> ids) throws Exception;
+
+    public ObjetoBasico findReduceUnidad(String id) throws Exception;
 
   
 }

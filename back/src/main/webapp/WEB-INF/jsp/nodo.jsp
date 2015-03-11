@@ -7,11 +7,12 @@
     <ul>
     <c:forEach var="hijo" items="${nodo.hijos}" varStatus="status">
         <!-- TODO: print the node here -->
-        <li><c:if test="${hijo.estado == 'V'}"><span class="badge-arbre btn-success" style="display:closed;"><i class=""></i> ${hijo.nombre}</span></c:if>
-            <c:if test="${hijo.estado != 'V'}"><span class="badge-arbre btn-warning" style="display:closed;"><i class=""></i> ${hijo.nombre}</span></c:if>
+        <li><span class="${param.color}" style="display:closed;"><i class=""></i> ${hijo.id} - ${hijo.nombre}</span>
             <c:if test="${not empty  hijo.hijos}">
                 <c:set var="nodo" value="${hijo}" scope="request"/>
-                <jsp:include page="nodo.jsp" flush="true"/>
+                <jsp:include page="nodo.jsp" flush="true">
+                    <jsp:param name="color" value="badge-arbre btn-info"/>
+                </jsp:include>
             </c:if>
         </li>
     </c:forEach>

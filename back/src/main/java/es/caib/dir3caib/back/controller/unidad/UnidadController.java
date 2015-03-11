@@ -8,6 +8,7 @@ import es.caib.dir3caib.back.utils.Mensaje;
 import es.caib.dir3caib.back.utils.Nodo;
 import es.caib.dir3caib.persistence.ejb.ImportadorUnidadesLocal;
 import es.caib.dir3caib.persistence.model.*;
+import es.caib.dir3caib.persistence.model.utils.ObjetoBasico;
 import es.caib.dir3caib.persistence.utils.Paginacion;
 import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
 import es.caib.dir3caib.utils.Utils;
@@ -294,7 +295,7 @@ public class UnidadController extends BaseController{
    * @return
    */
     @RequestMapping(value = "/{idUnidad}/arbol", method = RequestMethod.GET)
-    public ModelAndView mostrarArbolUnidades(HttpServletRequest request, @PathVariable String idUnidad) {
+    public ModelAndView mostrarArbolUnidades(HttpServletRequest request, @PathVariable String idUnidad) throws Exception {
 
       ModelAndView mav = new ModelAndView("/arbolList");
       Nodo nodo = new Nodo();
@@ -310,29 +311,28 @@ public class UnidadController extends BaseController{
    * @param idUnidad  unidad raiz de la que partimos.
    * @return  Nodo (arbol)
    */
-   private void arbolUnidades(String idUnidad, Nodo nodo){
+   private void arbolUnidades(String idUnidad, Nodo nodo) throws Exception {
 
-       try {
-          Unidad unidadPadre = unidadEjb.findById(idUnidad);
+         // Unidad unidadPadre = unidadEjb.findById(idUnidad);
+          ObjetoBasico unidadPadre = unidadEjb.findReduceUnidad(idUnidad);
+          nodo.setId(unidadPadre.getCodigo());
           nodo.setNombre(unidadPadre.getDenominacion());
           nodo.setIdPadre(idUnidad);
-          nodo.setEstado(unidadPadre.getEstado().getCodigoEstadoEntidad());
+          nodo.setEstado(unidadPadre.getDescripcionEstado());
 
           List<Nodo> hijos = new ArrayList<Nodo>();
-          List<Unidad> unidadesHijas = unidadEjb.hijos(idUnidad);
-          for(Unidad unidadHija: unidadesHijas){
+          List<ObjetoBasico> unidadesHijas = unidadEjb.hijos(idUnidad);
+          for(ObjetoBasico unidadHija: unidadesHijas){
             Nodo hijo = new Nodo();
+            hijo.setId(unidadHija.getCodigo());
             hijo.setNombre(unidadHija.getDenominacion());
             hijo.setIdPadre(idUnidad);
-            hijo.setEstado(unidadHija.getEstado().getCodigoEstadoEntidad());
+            hijo.setEstado(unidadHija.getDescripcionEstado());
             hijos.add(hijo);
             // llamada recursiva
             arbolUnidades( unidadHija.getCodigo(), hijo);
           }
           nodo.setHijos(hijos);
-       }catch(Exception e){
-           e.printStackTrace();
-       }
     }
 
     @ModelAttribute("administraciones")

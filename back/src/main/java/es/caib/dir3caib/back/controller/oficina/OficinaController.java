@@ -8,6 +8,7 @@ import es.caib.dir3caib.back.utils.Mensaje;
 import es.caib.dir3caib.back.utils.Nodo;
 import es.caib.dir3caib.persistence.ejb.ImportadorOficinasLocal;
 import es.caib.dir3caib.persistence.model.*;
+import es.caib.dir3caib.persistence.model.utils.ObjetoBasico;
 import es.caib.dir3caib.persistence.utils.Paginacion;
 import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
 import es.caib.dir3caib.utils.Utils;
@@ -318,18 +319,20 @@ public class OficinaController extends BaseController {
     private void arbolOficinas(String idOficina, Nodo nodo){
 
        try {
-          Oficina oficinaPadre = oficinaEjb.findById(idOficina);
+          //Oficina oficinaPadre = oficinaEjb.findById(idOficina);
+          ObjetoBasico oficinaPadre = oficinaEjb.findReduceOficina(idOficina);
           nodo.setNombre(oficinaPadre.getDenominacion());
           nodo.setIdPadre(idOficina);
-          nodo.setEstado(oficinaPadre.getEstado().getCodigoEstadoEntidad());
+          nodo.setEstado(oficinaPadre.getDescripcionEstado());
 
           List<Nodo> hijos = new ArrayList<Nodo>();
-          List<Oficina> oficinasHijas = oficinaEjb.hijos(idOficina);
-          for(Oficina oficinaHija: oficinasHijas){
+         // List<Oficina> oficinasHijas = oficinaEjb.hijos(idOficina);
+          List<ObjetoBasico> oficinasHijas = oficinaEjb.hijos(idOficina);
+          for(ObjetoBasico oficinaHija: oficinasHijas){
             Nodo hijo = new Nodo();
             hijo.setNombre(oficinaHija.getDenominacion());
             hijo.setIdPadre(idOficina);
-            hijo.setEstado(oficinaHija.getEstado().getCodigoEstadoEntidad());
+            hijo.setEstado(oficinaHija.getDescripcionEstado());
             hijos.add(hijo);
             // llamada recursiva
             arbolOficinas(oficinaHija.getCodigo(), hijo);
