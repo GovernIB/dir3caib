@@ -1,7 +1,6 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.RelacionOrganizativaOfi;
-import es.caib.dir3caib.persistence.model.RelacionOrganizativaOfiPK;
 
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.SecurityDomain;
@@ -22,7 +21,7 @@ import javax.annotation.security.RolesAllowed;
 @Stateless(name = "RelacionOrganizativaOfiEJB")
 @SecurityDomain("seycon")
 @RolesAllowed("DIR_ADMIN")
-public class RelacionOrganizativaOfiBean extends BaseEjbJPA<RelacionOrganizativaOfi, RelacionOrganizativaOfiPK>
+public class RelacionOrganizativaOfiBean extends BaseEjbJPA<RelacionOrganizativaOfi, Long>
     implements RelacionOrganizativaOfiLocal{
 
     protected final Logger log = Logger.getLogger(getClass());
@@ -31,7 +30,7 @@ public class RelacionOrganizativaOfiBean extends BaseEjbJPA<RelacionOrganizativa
     private EntityManager em;
 
     @Override
-    public RelacionOrganizativaOfi findById(RelacionOrganizativaOfiPK id) throws Exception {
+    public RelacionOrganizativaOfi findById(Long id) throws Exception {
 
         return em.find(RelacionOrganizativaOfi.class, id);
     }

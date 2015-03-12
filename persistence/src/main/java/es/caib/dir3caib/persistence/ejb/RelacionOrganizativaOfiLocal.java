@@ -3,7 +3,6 @@ package es.caib.dir3caib.persistence.ejb;
 import java.util.List;
 
 import es.caib.dir3caib.persistence.model.RelacionOrganizativaOfi;
-import es.caib.dir3caib.persistence.model.RelacionOrganizativaOfiPK;
 
 import javax.ejb.Local;
 
@@ -14,7 +13,7 @@ import javax.ejb.Local;
  * Date: 10/10/13
  */
 @Local
-public interface RelacionOrganizativaOfiLocal extends BaseEjb<RelacionOrganizativaOfi, RelacionOrganizativaOfiPK> {
+public interface RelacionOrganizativaOfiLocal extends BaseEjb<RelacionOrganizativaOfi, Long> {
 
   public void deleteAll() throws Exception;
 

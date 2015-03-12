@@ -3,7 +3,6 @@ import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -16,7 +15,6 @@ import org.hibernate.annotations.Index;
  * @created 28-oct-2013 14:41:39
  * Esta relación representa la dependencia funcional entre unidades y oficinas
  */
-@IdClass(es.caib.dir3caib.persistence.model.RelacionOrganizativaOfiPK.class)
 @Table(name = "DIR_RELACIONORGANIZATIVAOFI", schema = "", catalog = "")
 @org.hibernate.annotations.Table(appliesTo = "DIR_RELACIONORGANIZATIVAOFI", indexes = {
     @Index(name="DIR_RELORGANOFI_CATESTENT_FK_I", columnNames = {"ESTADO"}),
@@ -26,6 +24,7 @@ import org.hibernate.annotations.Index;
 @Entity
 public class RelacionOrganizativaOfi implements Serializable {
 
+  private Long id;
 	private Oficina oficina;
 	private Unidad unidad;
 	private CatEstadoEntidad estado;
@@ -41,7 +40,7 @@ public class RelacionOrganizativaOfi implements Serializable {
   /**
    * @return the oficina
    */
-  @Id
+
   @ManyToOne(cascade=CascadeType.PERSIST)
   @JoinColumn (name="CODOFICINA")
   @ForeignKey(name="DIR_RELORGOFI_CATOFI_FK")
@@ -59,7 +58,7 @@ public class RelacionOrganizativaOfi implements Serializable {
   /**
    * @return the unidad
    */
-  @Id
+
   @ManyToOne(cascade=CascadeType.PERSIST)
   @JoinColumn (name="CODUNIDAD")
   @ForeignKey(name="DIR_RELORGOFI_CATUNIDAD_FK")
@@ -89,6 +88,19 @@ public class RelacionOrganizativaOfi implements Serializable {
    */
   public void setEstado(CatEstadoEntidad estado) {
     this.estado = estado;
+  }
+  
+  
+  
+  
+  @Id
+  @JoinColumn(name="ID")
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 
   @Override

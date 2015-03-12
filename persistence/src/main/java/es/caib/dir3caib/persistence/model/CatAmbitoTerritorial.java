@@ -14,7 +14,6 @@ import java.io.Serializable;
  * @created 28-oct-2013 14:41:38
  */
 @Entity
-@IdClass(es.caib.dir3caib.persistence.model.CatAmbitoTerritorialPK.class)
 @Table(name = "DIR_CATAMBITOTERRITORIAL")
 @org.hibernate.annotations.Table(appliesTo = "DIR_CATAMBITOTERRITORIAL", indexes = {
     @Index(name="DIR_CATAMBITOTERRITORIAL_PK_I", columnNames = {"CODIGOAMBITO", "NIVELADMINISTRACION" })
@@ -22,6 +21,9 @@ import java.io.Serializable;
  })
 public class CatAmbitoTerritorial implements Serializable {
 
+    @XmlTransient
+    private Long id;
+     
     @XmlAttribute(name = "id")
     private String codigoAmbito;
     @XmlAttribute(name = "nombre")
@@ -43,7 +45,7 @@ public class CatAmbitoTerritorial implements Serializable {
   /**
    * @return the codigoAmbito
    */
-  @Id
+
   @Column(name = "CODIGOAMBITO", nullable = false, length = 2)
   public String getCodigoAmbito() {
     return codigoAmbito;
@@ -74,7 +76,7 @@ public class CatAmbitoTerritorial implements Serializable {
   /**
    * @return the nivelAdministracion
    */
-  @Id
+
   //@Index(name="DIR_CATAMBTERR_CATNIVADM_FK_I", columnNames="NIVELADMINISTRACION")
   @ManyToOne(cascade=CascadeType.PERSIST)
   @JoinColumn (name="NIVELADMINISTRACION")
@@ -89,6 +91,23 @@ public class CatAmbitoTerritorial implements Serializable {
   public void setNivelAdministracion(CatNivelAdministracion nivelAdministracion) {
     this.nivelAdministracion = nivelAdministracion;
   }
+  
+  
+  
+  
+  @Id
+  @Column (name = "ID")
+  public Long getId() {
+    return id;
+  }
+
+
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+
 
   @Override
   public int hashCode() {

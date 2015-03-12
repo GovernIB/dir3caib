@@ -56,7 +56,7 @@ public interface ImportarLocal {
     public void persistContactoOfi(ContactoOfi contactoOfi) throws Exception;
     public ContactoOfi findContactoOfi(Long idContactoOfi) throws Exception;
     public void persistRelacionOrgOfi(RelacionOrganizativaOfi relOrganizativaOfi) throws Exception;
-    public RelacionOrganizativaOfi findRelOrganizativaOfi(RelacionOrganizativaOfiPK idRelOrgOfi) throws Exception;
+    public RelacionOrganizativaOfi findRelOrganizativaOfi(String codigoUnidad, String codigoOficina) throws Exception;
     public void persistRelacionSirOfi(RelacionSirOfi relacionSirOfi) throws Exception;
     public RelacionSirOfi findRelSirOfi(RelacionSirOfiPK idRelSirOfi) throws Exception;
     public void persistServicio(Servicio servicio) throws Exception;

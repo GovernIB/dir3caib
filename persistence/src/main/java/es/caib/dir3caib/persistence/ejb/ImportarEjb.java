@@ -535,8 +535,8 @@ public class ImportarEjb implements ImportarLocal {
       * @throws Exception
       */
       @Override
-      public RelacionOrganizativaOfi findRelOrganizativaOfi(RelacionOrganizativaOfiPK idRelOrgOfi) throws Exception {
-         return relOrgOfiEjb.findById(idRelOrgOfi);
+      public RelacionOrganizativaOfi findRelOrganizativaOfi(String codigoUnidad, String codigoOficina) throws Exception {
+         return relOrgOfiEjb.findByPKs(codigoUnidad, codigoOficina);
       }
 
 
