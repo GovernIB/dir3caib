@@ -283,7 +283,7 @@ public class Unidad implements Serializable {
 
 
   @ManyToOne
-  @JoinColumn(name="CODAMBENTGEOGRAFICA", referencedColumnName = "CODIGOENTIDADGEOGRAFICA", insertable = false,updatable = false)
+  @JoinColumn(name="CODAMBENTGEOGRAFICA", referencedColumnName = "CODIGOENTIDADGEOGRAFICA")
   @ForeignKey(name="DIR_UNIDAD_CATENTGEOGRAF_FK")
   @JsonIgnore
   public CatEntidadGeografica getCodAmbEntGeografica() {
@@ -324,7 +324,7 @@ public class Unidad implements Serializable {
 
 
   @ManyToOne(cascade=CascadeType.PERSIST)
-  @JoinColumn(name="CODAMBPROVINCIA", insertable = false, updatable = false)
+  @JoinColumn(name="CODAMBPROVINCIA")
   @ForeignKey(name="DIR_UNIDAD_CATPROVINCIA_FK")
   @JsonIgnore
   public CatProvincia getCodAmbProvincia() {

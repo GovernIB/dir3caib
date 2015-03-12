@@ -193,10 +193,15 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
     }
     log.info(" Localidad: " + cacheLocalidad.size());
 
+    
+    
     Map<Long,CatProvincia> cacheProvincia = new TreeMap<Long,CatProvincia>();
     for (CatProvincia ca : catProvinciaEjb.getAll()) {
+      //log.info("CodigoProvincia("  + ca.getDescripcionProvincia()  + ") = " + ca.getCodigoProvincia());
       cacheProvincia.put(ca.getCodigoProvincia(), ca);
     }
+    
+    
 
     
     
@@ -382,11 +387,15 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
                         //Provincia
                         CatProvincia provincia = null;
                         String codigoProvincia = fila[20].trim();
-                        if(!codigoProvincia.isEmpty()){
-                          
+                        if(codigoProvincia.isEmpty()) {
+                          log.warn("Unidad[" + codigoUnidad  + "] => codigoProvincia BUIT !!!!!");
+                        } else {
                           provincia = cacheProvincia.get(new Long(codigoProvincia));
-                          
-                          unidad.setCodAmbProvincia(provincia);
+                          if (provincia == null) {
+                            log.warn("Unidad[" + codigoUnidad  + "] => Provincia amb codi " + codigoProvincia + " is NULL");
+                          } else {
+                            unidad.setCodAmbProvincia(provincia);
+                          }
                         }
                         //log.info("Amb Provincia");
 
@@ -1040,4 +1049,5 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
          e.printStackTrace();
        }
   }
+  
 }

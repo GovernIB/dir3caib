@@ -49,9 +49,9 @@ public class InitServlet extends HttpServlet {
      // Mostrar Versió
     String ver = Versio.VERSIO + (Configuracio.isCAIB()?"-caib" : "");
     try {
-      log.info("RegWeb Version: " + ver);
+      log.info("Dir3Caib Version: " + ver);
     } catch (Throwable e) {
-      System.out.println("RegWeb Version: " + ver);
+      System.out.println("Dir3Caib Version: " + ver);
     }
 
   }
