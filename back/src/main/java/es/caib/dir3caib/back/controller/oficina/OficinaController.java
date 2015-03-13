@@ -6,7 +6,16 @@ import es.caib.dir3caib.back.form.OficinaBusquedaForm;
 import es.caib.dir3caib.back.utils.CodigoValor;
 import es.caib.dir3caib.back.utils.Mensaje;
 import es.caib.dir3caib.back.utils.Nodo;
+import es.caib.dir3caib.persistence.ejb.CatComunidadAutonomaLocal;
+import es.caib.dir3caib.persistence.ejb.CatNivelAdministracionLocal;
+import es.caib.dir3caib.persistence.ejb.CatProvinciaLocal;
+import es.caib.dir3caib.persistence.ejb.ContactoOfiLocal;
+import es.caib.dir3caib.persistence.ejb.DescargaLocal;
 import es.caib.dir3caib.persistence.ejb.ImportadorOficinasLocal;
+import es.caib.dir3caib.persistence.ejb.OficinaLocal;
+import es.caib.dir3caib.persistence.ejb.RelacionOrganizativaOfiLocal;
+import es.caib.dir3caib.persistence.ejb.RelacionSirOfiLocal;
+import es.caib.dir3caib.persistence.ejb.ServicioLocal;
 import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.model.utils.ObjetoBasico;
 import es.caib.dir3caib.persistence.utils.Paginacion;
@@ -24,6 +33,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
+
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -37,11 +47,38 @@ import java.util.*;
 @Controller
 @RequestMapping(value = "/oficina")
 public class OficinaController extends BaseController {
+  
+  @EJB(mappedName = "dir3caib/OficinaEJB/local")
+  protected OficinaLocal oficinaEjb;
+  
+  @EJB(mappedName = "dir3caib/CatNivelAdministracionEJB/local")
+  protected CatNivelAdministracionLocal catNivelAdministracionEjb;
+  
+  @EJB(mappedName = "dir3caib/CatComunidadAutonomaEJB/local")
+  protected CatComunidadAutonomaLocal catComunidadAutonomaEjb;
+  
+  @EJB(mappedName = "dir3caib/CatProvinciaEJB/local")
+  protected CatProvinciaLocal catProvinciaEjb;
+  
+  @EJB(mappedName = "dir3caib/ContactoOfiEJB/local")
+  protected ContactoOfiLocal contactoOfiEjb;
+  
+  @EJB(mappedName = "dir3caib/RelacionOrganizativaOfiEJB/local")
+  protected RelacionOrganizativaOfiLocal relOrgOfiEjb;
+  
+  @EJB(mappedName = "dir3caib/DescargaEJB/local")
+  protected DescargaLocal descargaEjb;
+  
+  @EJB(mappedName = "dir3caib/ServicioEJB/local")
+  protected ServicioLocal servicioEjb;
 
     protected final Logger log = Logger.getLogger(getClass());
 
     @EJB(mappedName = "dir3caib/ImportadorOficinasEJB/local")
     private ImportadorOficinasLocal importadorOficinas;
+    
+    @EJB(mappedName = "dir3caib/RelacionSirOfiEJB/local")
+    protected RelacionSirOfiLocal relSirOfiEjb;
 
     // Indicamos el formato de fecha dd/MM/yyyy hh:mm:ss
     SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);

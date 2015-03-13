@@ -4,10 +4,12 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.ForeignKey;
 
 import javax.persistence.*;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+
 import org.hibernate.annotations.Index;
 
 
@@ -28,13 +30,13 @@ import org.hibernate.annotations.Index;
     @Index(name="DIR_UNIDAD_CATENTGEOGRAF_FK_I", columnNames = {"CODAMBENTGEOGRAFICA"}),
     @Index(name="DIR_UNIDAD_CATAMBPAIS_FK_I", columnNames = {"CODAMBPAIS"}),
     @Index(name="DIR_UNIDAD_CATTIPENTPUBL_FK_I", columnNames = {"CODTIPOENTPUBLICA"}),
-    @Index(name="DIR_UNIDAD_MUNICIPIO_FK_I", columnNames = {"CODAMBPROVINCIA", "CODAMBENTGEOGRAFICA", "CODAMBMUNICIPIO"}),
+    @Index(name="DIR_UNIDAD_MUNICIPIO_FK_I", columnNames = {"CODAMBLOCALIDADID"}),
     @Index(name="DIR_UNIDAD_CATISLA_FK_I", columnNames = {"CODAMBISLA"}),
     @Index(name="DIR_UNIDAD_CATTIPUNIORG_FK_I", columnNames = {"CODTIPOUNIDAD"}),
     @Index(name="DIR_UNIDAD_CATNIVELADMIN_FK_I", columnNames = {"NIVELADMINISTRACION"}),
     @Index(name="DIR_UNIDAD_CATESTENTIDAD_FK_I", columnNames = {"ESTADO"}),
-    @Index(name="DIR_UNIDAD_CATAMBITTERR_FK_I", columnNames = {"NIVELADMINISTRACION", "CODAMBITOTERRITORIAL"}),
-    @Index(name="DIR_UNIDAD_CATLOCAL_FK_I", columnNames = {"CODPROVINCIA", "CODENTGEOGRAFICA", "CODLOCALIDAD"}),
+    @Index(name="DIR_UNIDAD_CATAMBITTERR_FK_I", columnNames = {"CODAMBITOTERRITORIALID"}),
+    @Index(name="DIR_UNIDAD_CATLOCAL_FK_I", columnNames = {"CODLOCALIDADID"}),
     @Index(name="DIR_UNIDAD_UNIDADEDPPRINC_FK_I", columnNames = {"CODEDPPRINCIPAL"})
 })
 @Entity
@@ -266,10 +268,7 @@ public class Unidad implements Serializable {
 
 
   @ManyToOne(cascade=CascadeType.PERSIST)
-  @JoinColumns({
-        @JoinColumn(name="CODAMBITOTERRITORIAL", referencedColumnName="CODIGOAMBITO"),
-        @JoinColumn(name="NIVELADMINISTRACION2", referencedColumnName="NIVELADMINISTRACION")
-    })
+  @JoinColumn(name="CODAMBITOTERRITORIALID")
   @ForeignKey(name="DIR_UNIDAD_CATAMBITTERR_FK")
   @JsonIgnore
   public CatAmbitoTerritorial getCodAmbitoTerritorial() {
@@ -337,11 +336,7 @@ public class Unidad implements Serializable {
 
 
   @ManyToOne()
-   @JoinColumns({
-        @JoinColumn(name="CODAMBMUNICIPIO", referencedColumnName="CODIGOLOCALIDAD"),
-        @JoinColumn(name="CODAMBPROVINCIA2", referencedColumnName="PROVINCIA"),
-        @JoinColumn(name="CODAMBENTGEOGRAFICA2", referencedColumnName="ENTIDADGEOGRAFICA")
-    })
+  @JoinColumn(name="CODAMBLOCALIDADID")
   @ForeignKey(name="DIR_UNIDAD_MUNICIPIO_FK")
   @JsonIgnore
   public CatLocalidad getCatLocalidad() {
@@ -610,11 +605,7 @@ public class Unidad implements Serializable {
 
 
  @ManyToOne(cascade=CascadeType.PERSIST)
-  @JoinColumns({
-       @JoinColumn(name="CODLOCALIDAD", referencedColumnName="CODIGOLOCALIDAD"),
-       @JoinColumn(name="CODPROVINCIA", referencedColumnName="PROVINCIA"),
-       @JoinColumn(name="CODENTGEOGRAFICA", referencedColumnName="ENTIDADGEOGRAFICA")
-   })
+ @JoinColumn(name="CODLOCALIDADID")
  @ForeignKey(name="DIR_UNIDAD_LOCDIRECCION_FK")
  @JsonIgnore
   public CatLocalidad getCodLocalidad() {

@@ -1,9 +1,11 @@
 
     create table DIR_CATAMBITOTERRITORIAL (
+        ID int8 not null,
         CODIGOAMBITO varchar(2) not null,
         DESCRIPCIONAMBITO varchar(30) not null,
         NIVELADMINISTRACION int8,
-        primary key (NIVELADMINISTRACION, CODIGOAMBITO)
+        primary key (ID),
+        unique (CODIGOAMBITO, NIVELADMINISTRACION)
     );
 
     create table DIR_CATCOMUNIDADAUTONOMA (
@@ -41,11 +43,13 @@
     );
 
     create table DIR_CATLOCALIDAD (
+        ID int8 not null,
         CODIGOLOCALIDAD int8 not null,
         DESCRIPCIONLOCALIDAD varchar(50),
         ENTIDADGEOGRAFICA varchar(2),
         PROVINCIA int8,
-        primary key (PROVINCIA, ENTIDADGEOGRAFICA, CODIGOLOCALIDAD)
+        primary key (ID),
+        unique (CODIGOLOCALIDAD, PROVINCIA, ENTIDADGEOGRAFICA)
     );
 
     create table DIR_CATMOTIVOEXTINCION (
@@ -166,9 +170,7 @@
         CODPAIS int8,
         CODUORESPONSABLE varchar(9),
         ESTADO varchar(2),
-        CODPROVINCIA int8,
-        CODENTGEOGRAFICA varchar(2),
-        CODLOCALIDAD int8,
+        LOCALIDADID int8,
         NIVELADMINISTRACION int8,
         TIPOOFICINA int8,
         TIPOVIA int8,
@@ -176,17 +178,21 @@
     );
 
     create table DIR_RELACIONORGANIZATIVAOFI (
-        CODUNIDAD varchar(9),
-        CODOFICINA varchar(9),
+        id int8 not null,
         ESTADO varchar(2),
-        primary key (CODUNIDAD, CODOFICINA)
+        CODOFICINA varchar(9),
+        CODUNIDAD varchar(9),
+        primary key (id),
+        unique (CODOFICINA, CODUNIDAD)
     );
 
     create table DIR_RELACIONSIROFI (
-        CODUNIDAD varchar(9),
-        CODOFICINA varchar(9),
+        ID int8 not null,
         ESTADO varchar(2),
-        primary key (CODUNIDAD, CODOFICINA)
+        CODOFICINA varchar(9),
+        CODUNIDAD varchar(9),
+        primary key (ID),
+        unique (CODOFICINA, CODUNIDAD)
     );
 
     create table DIR_SERVICIOOFI (
@@ -221,21 +227,16 @@
         OBSERVGENERALES varchar(400),
         OBSERVACIONES varchar(400),
         SIGLAS varchar(10),
-        CODAMBPROVINCIA2 int8,
-        CODAMBENTGEOGRAFICA2 varchar(2),
-        CODAMBMUNICIPIO int8,
+        CODAMBLOCALIDADID int8,
         CODAMBCOMUNIDAD int8,
         CODAMBENTGEOGRAFICA varchar(2),
         CODAMBISLA int8,
         CODAMBPAIS int8,
         CODAMBPROVINCIA int8,
-        NIVELADMINISTRACION2 int8,
-        CODAMBITOTERRITORIAL varchar(2),
+        CODAMBITOTERRITORIALID int8,
         CODCOMUNIDAD int8,
         CODEDPPRINCIPAL varchar(9),
-        CODPROVINCIA int8,
-        CODENTGEOGRAFICA varchar(2),
-        CODLOCALIDAD int8,
+        CODLOCALIDADID int8,
         CODPAIS int8,
         CODTIPOENTPUBLICA varchar(2),
         CODTIPOUNIDAD varchar(3),
@@ -347,7 +348,7 @@
 
     create index DIR_OFICINA_CATPAIS_FK_I on DIR_OFICINA (CODPAIS);
 
-    create index DIR_OFICINA_CATLOCAL_FK_I on DIR_OFICINA (CODPROVINCIA, CODENTGEOGRAFICA, CODLOCALIDAD);
+    create index DIR_OFICINA_CATLOCAL_FK_I on DIR_OFICINA (LOCALIDADID);
 
     create index DIR_OFICINA_CATNIVELADMIN_FK_I on DIR_OFICINA (NIVELADMINISTRACION);
 
@@ -361,6 +362,11 @@
         add constraint DIR_OFICINA_CATTIPOVIA_FK 
         foreign key (TIPOVIA) 
         references DIR_CATTIPOVIA;
+
+    alter table DIR_OFICINA 
+        add constraint DIR_OFICINA_CATLOCAL_FK 
+        foreign key (LOCALIDADID) 
+        references DIR_CATLOCALIDAD;
 
     alter table DIR_OFICINA 
         add constraint DIR_OFICINA_CATPAIS_FK 
@@ -391,11 +397,6 @@
         add constraint DIR_OFICINA_CATESTADENTIDAD_FK 
         foreign key (ESTADO) 
         references DIR_CATESTADOENTIDAD;
-
-    alter table DIR_OFICINA 
-        add constraint DIR_OFICINA_CATLOCAL_FK 
-        foreign key (CODPROVINCIA, CODENTGEOGRAFICA, CODLOCALIDAD) 
-        references DIR_CATLOCALIDAD;
 
     alter table DIR_OFICINA 
         add constraint DIR_OFICINA_UNIDAD_FK 
@@ -454,7 +455,7 @@
         foreign key (CODOFICINA) 
         references DIR_OFICINA;
 
-    create index DIR_UNIDAD_CATAMBITTERR_FK_I on DIR_UNIDAD (NIVELADMINISTRACION, CODAMBITOTERRITORIAL);
+    create index DIR_UNIDAD_CATAMBITTERR_FK_I on DIR_UNIDAD (CODAMBITOTERRITORIALID);
 
     create index DIR_UNIDAD_CATTIPOVIA_FK_I on DIR_UNIDAD (TIPOVIA);
 
@@ -462,7 +463,7 @@
 
     create index DIR_UNIDAD_CATAMBPAIS_FK_I on DIR_UNIDAD (CODAMBPAIS);
 
-    create index DIR_UNIDAD_MUNICIPIO_FK_I on DIR_UNIDAD (CODAMBPROVINCIA, CODAMBENTGEOGRAFICA, CODAMBMUNICIPIO);
+    create index DIR_UNIDAD_MUNICIPIO_FK_I on DIR_UNIDAD (CODAMBLOCALIDADID);
 
     create index DIR_UNIDAD_CATAMBCOMAUTO_FK_I on DIR_UNIDAD (CODAMBCOMUNIDAD);
 
@@ -486,7 +487,7 @@
 
     create index DIR_UNIDAD_CATENTGEOGRAF_FK_I on DIR_UNIDAD (CODAMBENTGEOGRAFICA);
 
-    create index DIR_UNIDAD_CATLOCAL_FK_I on DIR_UNIDAD (CODPROVINCIA, CODENTGEOGRAFICA, CODLOCALIDAD);
+    create index DIR_UNIDAD_CATLOCAL_FK_I on DIR_UNIDAD (CODLOCALIDADID);
 
     create index DIR_UNIDAD_UNIDADSUPERIOR_FK_I on DIR_UNIDAD (CODUNIDADSUPERIOR);
 
@@ -511,6 +512,11 @@
         add constraint DIR_UNIDAD_CATCOMUNIAUTO_FK 
         foreign key (CODCOMUNIDAD) 
         references DIR_CATCOMUNIDADAUTONOMA;
+
+    alter table DIR_UNIDAD 
+        add constraint DIR_UNIDAD_CATAMBITTERR_FK 
+        foreign key (CODAMBITOTERRITORIALID) 
+        references DIR_CATAMBITOTERRITORIAL;
 
     alter table DIR_UNIDAD 
         add constraint DIR_UNIDAD_UNIDADSUPERIOR_FK 
@@ -538,14 +544,14 @@
         references DIR_CATPAIS;
 
     alter table DIR_UNIDAD 
-        add constraint DIR_UNIDAD_CATAMBITTERR_FK 
-        foreign key (NIVELADMINISTRACION2, CODAMBITOTERRITORIAL) 
-        references DIR_CATAMBITOTERRITORIAL;
-
-    alter table DIR_UNIDAD 
         add constraint DIR_UNIDAD_CATTIPENTPUBLICA_FK 
         foreign key (CODTIPOENTPUBLICA) 
         references DIR_CATTIPOENTIDADPUBLICA;
+
+    alter table DIR_UNIDAD 
+        add constraint DIR_UNIDAD_MUNICIPIO_FK 
+        foreign key (CODAMBLOCALIDADID) 
+        references DIR_CATLOCALIDAD;
 
     alter table DIR_UNIDAD 
         add constraint DIR_UNIDAD_CATISLA_FK 
@@ -553,8 +559,8 @@
         references DIR_CATISLA;
 
     alter table DIR_UNIDAD 
-        add constraint DIR_UNIDAD_MUNICIPIO_FK 
-        foreign key (CODAMBPROVINCIA2, CODAMBENTGEOGRAFICA2, CODAMBMUNICIPIO) 
+        add constraint DIR_UNIDAD_LOCDIRECCION_FK 
+        foreign key (CODLOCALIDADID) 
         references DIR_CATLOCALIDAD;
 
     alter table DIR_UNIDAD 
@@ -571,11 +577,6 @@
         add constraint DIR_UNIDAD_CATESTENTIDAD_FK 
         foreign key (ESTADO) 
         references DIR_CATESTADOENTIDAD;
-
-    alter table DIR_UNIDAD 
-        add constraint DIR_UNIDAD_LOCDIRECCION_FK 
-        foreign key (CODPROVINCIA, CODENTGEOGRAFICA, CODLOCALIDAD) 
-        references DIR_CATLOCALIDAD;
 
     alter table DIR_UNIDAD 
         add constraint DIR_UNIDAD_UNIDADEDPPRINC_FK 

@@ -3,7 +3,6 @@ package es.caib.dir3caib.persistence.ejb;
 import java.util.List;
 
 import es.caib.dir3caib.persistence.model.RelacionSirOfi;
-import es.caib.dir3caib.persistence.model.RelacionSirOfiPK;
 
 import javax.ejb.Local;
 
@@ -11,11 +10,11 @@ import javax.ejb.Local;
  * Created by Fundació BIT.
  *
  * @author earrivi
- * @author anadal
+ * @author anadal (Eliminar PKs multiples)
  * Date: 10/10/13
  */
 @Local
-public interface RelacionSirOfiLocal extends BaseEjb<RelacionSirOfi, RelacionSirOfiPK> {
+public interface RelacionSirOfiLocal extends BaseEjb<RelacionSirOfi, Long> {
   
   public void deleteAll() throws Exception;
   

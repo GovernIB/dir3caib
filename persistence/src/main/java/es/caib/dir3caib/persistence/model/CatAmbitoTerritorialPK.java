@@ -1,10 +1,6 @@
 package es.caib.dir3caib.persistence.model;
 import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import org.hibernate.annotations.ForeignKey;
+
 
 
 /**
@@ -16,13 +12,13 @@ public class CatAmbitoTerritorialPK implements Serializable {
  
 	public String codigoAmbito;
   
-	public CatNivelAdministracion nivelAdministracion;
+	public Long nivelAdministracion;
 
 	public CatAmbitoTerritorialPK(){
 
 	}
   
-  public CatAmbitoTerritorialPK(String codigoAmbito, CatNivelAdministracion nivelAdministracion){
+  public CatAmbitoTerritorialPK(String codigoAmbito, Long nivelAdministracion){
     this.codigoAmbito = codigoAmbito;
     this.nivelAdministracion = nivelAdministracion;
 	}
@@ -30,8 +26,6 @@ public class CatAmbitoTerritorialPK implements Serializable {
   /**
    * @return the codigoAmbito
    */
-   @Id
-   @Column(name = "CODIGOAMBITO", nullable = false, length = 2)
   public String getCodigoAmbito() {
     return codigoAmbito;
   }
@@ -46,18 +40,14 @@ public class CatAmbitoTerritorialPK implements Serializable {
   /**
    * @return the nivelAdministracion
    */
-  @Id
-  @ManyToOne
-  @JoinColumn (name="NIVELADMINISTRACION")
-  @ForeignKey(name="DIR_CATAMBTERR_CATNIVADM_FK")
-  public CatNivelAdministracion getNivelAdministracion() {
+  public Long getNivelAdministracion() {
     return nivelAdministracion;
   }
 
   /**
    * @param nivelAdministracion the nivelAdministracion to set
    */
-  public void setNivelAdministracion(CatNivelAdministracion nivelAdministracion) {
+  public void setNivelAdministracion(Long nivelAdministracion) {
     this.nivelAdministracion = nivelAdministracion;
   }
 

@@ -43,6 +43,7 @@ import java.util.zip.ZipInputStream;
  *
  * @author mgonzalez
  * @author anadal (Cache & EJB)
+ * @author anadal (Eliminar PKs multiples)
  */
 @Stateless(name = "ImportadorUnidadesEJB")
 @SecurityDomain("seycon")
@@ -227,7 +228,7 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
     
     Map<CatAmbitoTerritorialPK,CatAmbitoTerritorial> cacheAmbitoTerritorial = new HashMap<CatAmbitoTerritorialPK,CatAmbitoTerritorial>();
     for (CatAmbitoTerritorial at : catAmbitoTerritorialEjb.getAll()) {
-      CatAmbitoTerritorialPK catAmbitoTerritorialPk = new CatAmbitoTerritorialPK(at.getCodigoAmbito(), at.getNivelAdministracion());
+      CatAmbitoTerritorialPK catAmbitoTerritorialPk = new CatAmbitoTerritorialPK(at.getCodigoAmbito(), at.getNivelAdministracion().getCodigoNivelAdministracion());
       cacheAmbitoTerritorial.put(catAmbitoTerritorialPk, at);
     }
 
@@ -325,12 +326,14 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
 
                         //Ambito territorial y nivel de administracion
                         String codigoNivelAdmin = fila[5].trim();
+                        
                         CatNivelAdministracion nivelAdministracion = null;
                         if(!codigoNivelAdmin.isEmpty()){
                           nivelAdministracion = cacheNivelAdministracion.get(new Long(codigoNivelAdmin));
                         }
+                        
 
-                        CatAmbitoTerritorialPK catAmbitoTerritorialPk = new CatAmbitoTerritorialPK(fila[16], nivelAdministracion);
+                        CatAmbitoTerritorialPK catAmbitoTerritorialPk = new CatAmbitoTerritorialPK(fila[16],new Long(codigoNivelAdmin));
                         CatAmbitoTerritorial ambitoTerritorial;
                         ambitoTerritorial = cacheAmbitoTerritorial.get(catAmbitoTerritorialPk);
                         unidad.setCodAmbitoTerritorial(ambitoTerritorial);
@@ -386,10 +389,8 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
 
                         //Provincia
                         CatProvincia provincia = null;
-                        String codigoProvincia = fila[20].trim();
-                        if(codigoProvincia.isEmpty()) {
-                          log.warn("Unidad[" + codigoUnidad  + "] => codigoProvincia BUIT !!!!!");
-                        } else {
+                        final String codigoProvincia = fila[20].trim();
+                        if(!codigoProvincia.isEmpty()) {
                           provincia = cacheProvincia.get(new Long(codigoProvincia));
                           if (provincia == null) {
                             log.warn("Unidad[" + codigoUnidad  + "] => Provincia amb codi " + codigoProvincia + " is NULL");

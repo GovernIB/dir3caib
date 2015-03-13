@@ -28,6 +28,7 @@ import java.util.zip.ZipInputStream;
  *
  * @author mgonzalez
  * @author anadal (Cache & EJB)
+ * @author anadal (Eliminar PKs multiples)
  * 
  */
 @Stateless(name = "ImportadorOficinasEJB")

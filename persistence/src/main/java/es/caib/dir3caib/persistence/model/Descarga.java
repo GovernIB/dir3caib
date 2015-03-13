@@ -25,7 +25,7 @@ public class Descarga implements Serializable {
   private Long codigo;
   private String fechaInicio;
   private String fechaFin;
-  private String fechaImportacion;  
+  private String fechaImportacion;
   private String tipo;
 
   public Descarga() {

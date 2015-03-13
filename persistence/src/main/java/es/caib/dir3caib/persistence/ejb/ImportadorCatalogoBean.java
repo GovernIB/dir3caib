@@ -37,6 +37,7 @@ import java.util.zip.ZipInputStream;
  *
  * @author mgonzalez
  * @author anadal (Cache & EJB)
+ * @author anadal (Eliminar PKs multiples)
  * 
  */
 @Stateless(name = "ImportadorCatalogoEJB")
@@ -692,17 +693,17 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                        // cargamos el nivel de Administracion correspondiente.
                        CatNivelAdministracion catNivelAdministracion;
                        catNivelAdministracion = cacheNivelAdministracion.get(Long.parseLong(fila[2]));
-                       CatAmbitoTerritorialPK catAmbitoTerritorialPK = new CatAmbitoTerritorialPK(codigoAmbito, catNivelAdministracion);
+                       //CatAmbitoTerritorialPK2 catAmbitoTerritorialPK = new CatAmbitoTerritorialPK2(codigoAmbito, Long.parseLong(fila[2]));
 
                        // Miramos si ya existe el ambitoTerritorial
                        CatAmbitoTerritorial ambitoTerritorial;
                        {
-                          ambitoTerritorial = catAmbitoTerritorialEjb.findById(catAmbitoTerritorialPK);
+                          ambitoTerritorial = catAmbitoTerritorialEjb.findByPKs(codigoAmbito, Long.parseLong(fila[2]));
                        }
                        if(ambitoTerritorial == null){ // Si es nuevo creamos el objeto a introducir
                          ambitoTerritorial = new CatAmbitoTerritorial();
-                         ambitoTerritorial.setCodigoAmbito(catAmbitoTerritorialPK.getCodigoAmbito());
-                         ambitoTerritorial.setNivelAdministracion(catAmbitoTerritorialPK.getNivelAdministracion());
+                         ambitoTerritorial.setCodigoAmbito(codigoAmbito);
+                         ambitoTerritorial.setNivelAdministracion(catNivelAdministracion);
                        }
                        ambitoTerritorial.setDescripcionAmbito(fila[1]);
                        /*if(quartz){
@@ -727,31 +728,36 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                      // Obtenemos codigo y miramos si ya existe en la BD
                      // Creamos la clave compuesta primero.
                      try{
-                       Long codigoLocalidad = new Long(fila[0]);
+                       final Long codigoLocalidad = new Long(fila[0]);
                        // cargamos el nivel de Administracion correspondiente.
-                       CatProvincia catProvincia ;
-                       catProvincia = cacheProvincia.get(new Long(fila[2]));
-                  
                        
-                       CatEntidadGeografica catEntidadGeografica;
-                       catEntidadGeografica = cacheEntidadGeografica.get(fila[3]);
+                       final Long codigoProvincia = new Long(fila[2]);
+
+                       final String codigoEntidadGeografica = fila[3];
+                       
 
                        
-                       CatLocalidadPK catLocalidadPK = new CatLocalidadPK(codigoLocalidad, catProvincia, catEntidadGeografica);
+                       //CatLocalidadPK2 catLocalidadPK = new CatLocalidadPK2(codigoLocalidad, catProvincia, catEntidadGeografica);
 
                        // Miramos si ya existe el ambitoTerritorial
                        CatLocalidad localidad;
-                       /*if(quartz){
-                          localidad = importarEjb.findLocalidad(catLocalidadPK);
-                       }else */{
-                          localidad = catLocalidadEjb.findById(catLocalidadPK);
-                       }
+                       
+                       localidad = catLocalidadEjb.findByPKs(codigoLocalidad, codigoProvincia,
+                              codigoEntidadGeografica);
+                       
                        if(localidad == null){ // Si es nuevo creamos el objeto a introducir
                          localidad = new CatLocalidad();
-                         localidad.setCodigoLocalidad(catLocalidadPK.getCodigoLocalidad());
+                         localidad.setCodigoLocalidad(codigoLocalidad);
+                         
+                         CatProvincia catProvincia = cacheProvincia.get(codigoProvincia);                       
+                         localidad.setProvincia(catProvincia);
+                         
+                         CatEntidadGeografica catEntidadGeografica;
+                         catEntidadGeografica = cacheEntidadGeografica.get(fila[3]);
+                         localidad.setEntidadGeografica(catEntidadGeografica);
                        }
-                       localidad.setProvincia(catProvincia);
-                       localidad.setEntidadGeografica(catEntidadGeografica);
+                       
+                       
                        //Controlamos que no sea null o cadena vacía, ya que en bd no puede serlo.
                        if(fila[1] == null || fila[1].length() == 0){
                          localidad.setDescripcionLocalidad("-");
@@ -759,11 +765,9 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                          localidad.setDescripcionLocalidad( fila[1]);
                        }
 
-                       /*if(quartz){
-                          importarEjb.persistLocalidad(localidad);
-                       }else */{
-                          catLocalidadEjb.persist(localidad);
-                       }
+                       
+                       catLocalidadEjb.persist(localidad);
+                       
                      }catch(Exception e){
                          log.error(" Error important Localidad " + e.getMessage());
                      }

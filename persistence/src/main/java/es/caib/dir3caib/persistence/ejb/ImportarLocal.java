@@ -1,13 +1,18 @@
 package es.caib.dir3caib.persistence.ejb;
 
+import javax.ejb.Local;
+
+
+
 import es.caib.dir3caib.persistence.model.*;
 
 /**
  * Created 8/09/14 10:13
  *
  * @author mgonzalez
+ * @author anadal (Eliminar PKs multiples)
  */
-
+@Local
 public interface ImportarLocal {
 
 
@@ -15,8 +20,11 @@ public interface ImportarLocal {
     public void persistDescarga(Descarga descarga) throws Exception;
     public void mergeDescarga(Descarga descarga) throws Exception;
     public Descarga findDescargaByTipo(String tipo) throws Exception;
-    public void persistAmbitoTerritorial(CatAmbitoTerritorial ambitoTerritorial) throws Exception;
-    public CatAmbitoTerritorial findAmbitoTerritorial(CatAmbitoTerritorialPK idAmbito) throws Exception;
+    //public void persistAmbitoTerritorial(CatAmbitoTerritorial ambitoTerritorial) throws Exception;
+    public void persistAmbitoTerritorial(String codigoAmbito, 
+        CatNivelAdministracion nivelAdministracion) throws Exception;
+    
+    public CatAmbitoTerritorial findAmbitoTerritorial(String codigoAmbito, Long codigoNivelAdministracion ) throws Exception;
     public void persistEntidadGeografica(CatEntidadGeografica entidadGeografica) throws Exception;
     public CatEntidadGeografica findEntidadGeografica(String idEntidad) throws Exception;
     public void persistEstadoEntidad(CatEstadoEntidad estadoEntidad) throws Exception;
@@ -44,7 +52,7 @@ public interface ImportarLocal {
     public void persistTipoVia(CatTipoVia tipoVia) throws Exception;
     public CatTipoVia findTipoVia(Long idTipoVia) throws Exception;
     public void persistLocalidad(CatLocalidad localidad) throws Exception;
-    public CatLocalidad findLocalidad(CatLocalidadPK idLocalidad) throws Exception;
+    public CatLocalidad findLocalidad(Long codigoLocalidad, Long codigoProvincia, String codigoEntidadGeografica) throws Exception;
     public Unidad persistUnidad(Unidad unidad) throws Exception;
     public Unidad findUnidad(String idUnidad) throws Exception;
     public Unidad mergeUnidad(Unidad unidad) throws Exception;
@@ -58,7 +66,7 @@ public interface ImportarLocal {
     public void persistRelacionOrgOfi(RelacionOrganizativaOfi relOrganizativaOfi) throws Exception;
     public RelacionOrganizativaOfi findRelOrganizativaOfi(String codigoUnidad, String codigoOficina) throws Exception;
     public void persistRelacionSirOfi(RelacionSirOfi relacionSirOfi) throws Exception;
-    public RelacionSirOfi findRelSirOfi(RelacionSirOfiPK idRelSirOfi) throws Exception;
+    public RelacionSirOfi findRelSirOfi(String codigoUnidad, String codigoOficina) throws Exception;
     public void persistServicio(Servicio servicio) throws Exception;
     public Servicio findServicio(Long idServicio) throws Exception;
 

@@ -2,12 +2,6 @@ package es.caib.dir3caib.persistence.model;
 import es.caib.dir3caib.persistence.model.CatProvincia;
 import es.caib.dir3caib.persistence.model.CatEntidadGeografica;
 import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import org.hibernate.annotations.ForeignKey;
-
 
 /**
  * @version 1.0
@@ -40,8 +34,6 @@ public class CatLocalidadPK  implements Serializable {
   /**
    * @return the codigoLocalidad
    */
-  @Column(name = "CODIGOLOCALIDAD", nullable = false, length = 4)
-  @Id
   public Long getCodigoLocalidad() {
     return codigoLocalidad;
   }
@@ -56,10 +48,6 @@ public class CatLocalidadPK  implements Serializable {
   /**
    * @return the provincia
    */
-  @Id
-  @ManyToOne
-  @JoinColumn (name="PROVINCIA")
-  @ForeignKey(name="DIR_CATLOCAL_CATPROVIN_FK")
   public CatProvincia getProvincia() {
     return provincia;
   }
@@ -75,10 +63,7 @@ public class CatLocalidadPK  implements Serializable {
    * @return the entidadGeografica
    */
 
-  @Id
-  @ManyToOne
-  @JoinColumn (name="ENTIDADGEOGRAFICA")
-  @ForeignKey(name="DIR_CATLOCAL_CATENTGEOGR_FK")
+
   public CatEntidadGeografica getEntidadGeografica() {
     return entidadGeografica;
   }

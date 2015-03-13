@@ -10,7 +10,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -35,7 +34,7 @@ import org.hibernate.annotations.Index;
     @Index(name="DIR_OFICINA_CATCOMUNIAUT_FK_I", columnNames = {"CODCOMUNIDAD"}),
     @Index(name="DIR_OFICINA_CATNIVELADMIN_FK_I", columnNames = {"NIVELADMINISTRACION"}),
     @Index(name="DIR_OFICINA_CATESTADENTI_FK_I", columnNames = {"ESTADO"}),
-    @Index(name="DIR_OFICINA_CATLOCAL_FK_I", columnNames = {"CODPROVINCIA", "CODENTGEOGRAFICA", "CODLOCALIDAD"}),
+    @Index(name="DIR_OFICINA_CATLOCAL_FK_I", columnNames = {"LOCALIDADID"}),
     @Index(name="DIR_OFICINA_UNIDAD_FK_I", columnNames = {"CODUORESPONSABLE"})
 })
 @Entity
@@ -443,11 +442,7 @@ public class Oficina implements Serializable {
    * @return the codLocalidad
    */
   @ManyToOne
-  @JoinColumns({
-        @JoinColumn(name="CODLOCALIDAD", referencedColumnName="CODIGOLOCALIDAD"),
-        @JoinColumn(name="CODPROVINCIA", referencedColumnName="PROVINCIA"),
-        @JoinColumn(name="CODENTGEOGRAFICA", referencedColumnName="ENTIDADGEOGRAFICA")
-    })
+  @JoinColumn(name="LOCALIDADID")
   @ForeignKey(name="DIR_OFICINA_CATLOCAL_FK")
   @JsonIgnore
   public CatLocalidad getLocalidad() {

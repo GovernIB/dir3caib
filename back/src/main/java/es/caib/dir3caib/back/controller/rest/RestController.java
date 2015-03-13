@@ -1,6 +1,7 @@
 package es.caib.dir3caib.back.controller.rest;
 
 import es.caib.dir3caib.back.controller.BaseController;
+import es.caib.dir3caib.persistence.ejb.Dir3RestLocal;
 import es.caib.dir3caib.persistence.model.Oficina;
 import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.persistence.model.utils.ObjetoBasico;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
+import javax.ejb.EJB;
+
 /**
  * Created 25/03/14 13:32
  *
@@ -22,7 +25,10 @@ import java.util.List;
  */
 @Controller
 @RequestMapping(value = "/rest")
-public class RestController extends BaseController{
+public class RestController extends BaseController {
+  
+  @EJB(mappedName = "dir3caib/Dir3RestEJB/local")
+  protected Dir3RestLocal dir3RestEjb;
 
       /**
        * Obtiene los {@link es.caib.dir3caib.persistence.model.Unidad} por denominacion

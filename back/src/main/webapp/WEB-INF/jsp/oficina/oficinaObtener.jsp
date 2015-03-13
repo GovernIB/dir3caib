@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/jsp/modulos/includes.jsp" %>
 
 <!DOCTYPE html>
-<html">
+<html>
     <head>
         <c:import url="../modulos/imports.jsp"/>
     </head>

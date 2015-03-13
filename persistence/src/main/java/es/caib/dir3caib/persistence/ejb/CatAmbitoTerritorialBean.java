@@ -1,7 +1,7 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.CatAmbitoTerritorial;
-import es.caib.dir3caib.persistence.model.CatAmbitoTerritorialPK;
+
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.SecurityDomain;
 
@@ -10,18 +10,20 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+
 import java.util.List;
 
 /**
  * Created by Fundació BIT.
  *
  * @author earrivi
+ * @author anadal (Eliminar PKs multiples)
  * Date: 10/10/13
  */
 @Stateless(name = "CatAmbitoTerritorialEJB")
 @SecurityDomain("seycon")
 @RolesAllowed("DIR_ADMIN")
-public class CatAmbitoTerritorialBean extends BaseEjbJPA<CatAmbitoTerritorial, CatAmbitoTerritorialPK> implements CatAmbitoTerritorialLocal{
+public class CatAmbitoTerritorialBean extends BaseEjbJPA<CatAmbitoTerritorial, Long> implements CatAmbitoTerritorialLocal{
 
     protected final Logger log = Logger.getLogger(getClass());
 
@@ -29,7 +31,7 @@ public class CatAmbitoTerritorialBean extends BaseEjbJPA<CatAmbitoTerritorial, C
     private EntityManager em;
 
     @Override
-    public CatAmbitoTerritorial findById(CatAmbitoTerritorialPK id) throws Exception {
+    public CatAmbitoTerritorial findById(Long id) throws Exception {
 
         return em.find(CatAmbitoTerritorial.class, id);
     }
@@ -74,4 +76,22 @@ public class CatAmbitoTerritorialBean extends BaseEjbJPA<CatAmbitoTerritorial, C
 
         return q.getResultList();
     }
+    
+    
+    public CatAmbitoTerritorial findByPKs(String codigoAmbito, Long codigoNivelAdministracion) throws Exception {
+      Query q = em.createQuery("Select catAmbitoTerritorial from CatAmbitoTerritorial as catAmbitoTerritorial "
+          + " where catAmbitoTerritorial.nivelAdministracion.codigoNivelAdministracion = :nivelAdministracion "
+          + " AND catAmbitoTerritorial.codigoAmbito = :codigoAmbito "
+          );
+
+      q.setParameter("nivelAdministracion", codigoNivelAdministracion);
+      q.setParameter("codigoAmbito", codigoAmbito);
+
+      try {
+        return (CatAmbitoTerritorial) q.getSingleResult();
+      } catch(Throwable th) {
+        return null;
+      }
+    }
+    
 }

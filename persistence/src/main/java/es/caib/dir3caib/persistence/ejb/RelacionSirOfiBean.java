@@ -1,7 +1,6 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.RelacionSirOfi;
-import es.caib.dir3caib.persistence.model.RelacionSirOfiPK;
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.SecurityDomain;
 
@@ -16,13 +15,13 @@ import javax.annotation.security.RolesAllowed;
  * Created by Fundació BIT.
  *
  * @author earrivi
- * @author anadal
+ * @author anadal (Eliminar PKs multiples)
  * Date: 10/10/13
  */
 @Stateless(name = "RelacionSirOfiEJB")
 @SecurityDomain("seycon")
 @RolesAllowed("DIR_ADMIN")
-public class RelacionSirOfiBean extends BaseEjbJPA<RelacionSirOfi, RelacionSirOfiPK>
+public class RelacionSirOfiBean extends BaseEjbJPA<RelacionSirOfi, Long>
    implements RelacionSirOfiLocal{
 
     protected final Logger log = Logger.getLogger(getClass());
@@ -31,7 +30,7 @@ public class RelacionSirOfiBean extends BaseEjbJPA<RelacionSirOfi, RelacionSirOf
     private EntityManager em;
 
     @Override
-    public RelacionSirOfi findById(RelacionSirOfiPK id) throws Exception {
+    public RelacionSirOfi findById(Long id) throws Exception {
 
         return em.find(RelacionSirOfi.class, id);
     }

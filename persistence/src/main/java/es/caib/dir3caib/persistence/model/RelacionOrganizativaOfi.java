@@ -1,13 +1,18 @@
 package es.caib.dir3caib.persistence.model;
 import java.io.Serializable;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import org.hibernate.annotations.ForeignKey;
+import javax.persistence.UniqueConstraint;
 
+import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.Index;
 
 /**
@@ -15,13 +20,15 @@ import org.hibernate.annotations.Index;
  * @created 28-oct-2013 14:41:39
  * Esta relación representa la dependencia funcional entre unidades y oficinas
  */
-@Table(name = "DIR_RELACIONORGANIZATIVAOFI", schema = "", catalog = "")
+@Table(name = "DIR_RELACIONORGANIZATIVAOFI",
+    uniqueConstraints= @UniqueConstraint(columnNames={"CODOFICINA", "CODUNIDAD"}))
 @org.hibernate.annotations.Table(appliesTo = "DIR_RELACIONORGANIZATIVAOFI", indexes = {
     @Index(name="DIR_RELORGANOFI_CATESTENT_FK_I", columnNames = {"ESTADO"}),
     @Index(name="DIR_UNIDAD_RELORGOFI_FK_I", columnNames = {"CODUNIDAD"}),
     @Index(name="DIR_OFICINA_RELORGOFI_FK_I", columnNames = {"CODOFICINA"})
 })
 @Entity
+@SequenceGenerator(name="generator",sequenceName = "DIR_SEQ_ALL", allocationSize=1)
 public class RelacionOrganizativaOfi implements Serializable {
 
   private Long id;
@@ -95,6 +102,7 @@ public class RelacionOrganizativaOfi implements Serializable {
   
   @Id
   @JoinColumn(name="ID")
+  @GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "generator")
   public Long getId() {
     return id;
   }

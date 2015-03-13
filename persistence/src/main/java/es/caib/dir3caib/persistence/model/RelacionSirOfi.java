@@ -1,12 +1,18 @@
 package es.caib.dir3caib.persistence.model;
 import java.io.Serializable;
+
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
 import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.Index;
 
@@ -15,16 +21,18 @@ import org.hibernate.annotations.Index;
  * @created 28-oct-2013 14:41:39
  * Esta relación es la referente al intercambio de Registros (SIR). Determina que oficina da servicio a una unidad.
  */
-@IdClass(es.caib.dir3caib.persistence.model.RelacionSirOfiPK.class)
-@Table(name = "DIR_RELACIONSIROFI", schema = "", catalog = "")
+@Table(name = "DIR_RELACIONSIROFI",
+  uniqueConstraints= @UniqueConstraint(columnNames={"CODOFICINA", "CODUNIDAD"}))
 @org.hibernate.annotations.Table(appliesTo = "DIR_RELACIONSIROFI", indexes = {
     @Index(name="DIR_RELSIROFI_CATESTENTI_FK_I", columnNames = {"ESTADO"}),
     @Index(name="DIR_UNIDAD_RELSIROFI_FK_I", columnNames = {"CODUNIDAD"}),
     @Index(name="DIR_OFICINA_RELSIROFI_FK_I", columnNames = {"CODOFICINA"})
 })
 @Entity
+@SequenceGenerator(name="generator",sequenceName = "DIR_SEQ_ALL", allocationSize=1)
 public class RelacionSirOfi implements Serializable {
 
+  private Long id;
 	private Oficina oficina;
 	private Unidad unidad;
 	private CatEstadoEntidad estado;
@@ -36,12 +44,23 @@ public class RelacionSirOfi implements Serializable {
 	public void finalize() throws Throwable {
 
 	}
+	
+	
+	@Id
+  @Column(name = "ID", nullable = false)
+	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "generator")
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
 
   /**
    * @return the oficina
    */
-//  @Column(name = "CODOFICINA", nullable = false, length = 9)
-  @Id
+
   @ManyToOne(cascade=CascadeType.PERSIST)
   @JoinColumn (name="CODOFICINA")
   @ForeignKey(name="DIR_RELSIROFI_CATOFI_FK")
@@ -60,7 +79,6 @@ public class RelacionSirOfi implements Serializable {
    * @return the unidad
    */
 
-  @Id
   @ManyToOne(cascade=CascadeType.PERSIST)
   @JoinColumn (name="CODUNIDAD")
   @ForeignKey(name="DIR_RELSIROFI_CATUNIDAD_FK")

@@ -3,6 +3,22 @@ package es.caib.dir3caib.back.controller.catalogo;
 import es.caib.dir3caib.back.controller.BaseController;
 import es.caib.dir3caib.back.form.FechasForm;
 import es.caib.dir3caib.back.utils.Mensaje;
+import es.caib.dir3caib.persistence.ejb.CatAmbitoTerritorialLocal;
+import es.caib.dir3caib.persistence.ejb.CatComunidadAutonomaLocal;
+import es.caib.dir3caib.persistence.ejb.CatEntidadGeograficaLocal;
+import es.caib.dir3caib.persistence.ejb.CatEstadoEntidadLocal;
+import es.caib.dir3caib.persistence.ejb.CatIslaLocal;
+import es.caib.dir3caib.persistence.ejb.CatJerarquiaOficinaLocal;
+import es.caib.dir3caib.persistence.ejb.CatLocalidadLocal;
+import es.caib.dir3caib.persistence.ejb.CatMotivoExtincionLocal;
+import es.caib.dir3caib.persistence.ejb.CatNivelAdministracionLocal;
+import es.caib.dir3caib.persistence.ejb.CatPaisLocal;
+import es.caib.dir3caib.persistence.ejb.CatProvinciaLocal;
+import es.caib.dir3caib.persistence.ejb.CatTipoContactoLocal;
+import es.caib.dir3caib.persistence.ejb.CatTipoEntidadPublicaLocal;
+import es.caib.dir3caib.persistence.ejb.CatTipoUnidadOrganicaLocal;
+import es.caib.dir3caib.persistence.ejb.CatTipoViaLocal;
+import es.caib.dir3caib.persistence.ejb.DescargaLocal;
 import es.caib.dir3caib.persistence.ejb.ImportadorCatalogoLocal;
 import es.caib.dir3caib.persistence.model.Descarga;
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
@@ -23,6 +39,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -40,14 +57,61 @@ import java.util.Date;
 @Controller
 @RequestMapping(value = "/catalogo")
 public class CatalogoController extends BaseController{
+  
+  @EJB(mappedName = "dir3caib/CatAmbitoTerritorialEJB/local")
+  protected CatAmbitoTerritorialLocal catAmbitoTerritorialEjb;
+  
+  @EJB(mappedName = "dir3caib/CatEntidadGeograficaEJB/local")
+  protected CatEntidadGeograficaLocal catEntidadGeograficaEjb;
 
-
-    @EJB(mappedName = "dir3caib/ImportadorCatalogoEJB/local")
-    private ImportadorCatalogoLocal importadorCatalogo;
-    
-    // Indicamos el formato de fecha dd/MM/yyyy hh:mm:ss
-    SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
-    
+  @EJB(mappedName = "dir3caib/ImportadorCatalogoEJB/local")
+  private ImportadorCatalogoLocal importadorCatalogo;
+  
+  @EJB(mappedName = "dir3caib/CatEstadoEntidadEJB/local")
+  protected CatEstadoEntidadLocal catEstadoEntidadEjb;
+  
+  @EJB(mappedName = "dir3caib/CatIslaEJB/local")
+  protected CatIslaLocal catIslaEjb;
+  
+  @EJB(mappedName = "dir3caib/CatJerarquiaOficinaEJB/local")
+  protected CatJerarquiaOficinaLocal catJerarquiaOficinaEjb;
+  
+  @EJB(mappedName = "dir3caib/CatMotivoExtincionEJB/local")
+  protected CatMotivoExtincionLocal catMotivoExtincionEjb;
+  
+  @EJB(mappedName = "dir3caib/CatNivelAdministracionEJB/local")
+  protected CatNivelAdministracionLocal catNivelAdministracionEjb;
+  
+  @EJB(mappedName = "dir3caib/CatPaisEJB/local")
+  protected CatPaisLocal catPaisEjb;
+  
+  @EJB(mappedName = "dir3caib/CatTipoContactoEJB/local")
+  protected CatTipoContactoLocal catTipoContactoEjb;
+  
+  @EJB(mappedName = "dir3caib/CatTipoEntidadPublicaEJB/local")
+  protected CatTipoEntidadPublicaLocal catTipoEntidadPublicaEjb;
+  
+  @EJB(mappedName = "dir3caib/CatTipoUnidadOrganicaEJB/local")
+  protected CatTipoUnidadOrganicaLocal catTipoUnidadOrganicaEjb;
+  
+  @EJB(mappedName = "dir3caib/CatTipoViaEJB/local")
+  protected CatTipoViaLocal catTipoViaEjb;
+  
+  @EJB(mappedName = "dir3caib/CatComunidadAutonomaEJB/local")
+  protected CatComunidadAutonomaLocal catComunidadAutonomaEjb;
+  
+  @EJB(mappedName = "dir3caib/CatProvinciaEJB/local")
+  protected CatProvinciaLocal catProvinciaEjb;
+  
+  @EJB(mappedName = "dir3caib/CatLocalidadEJB/local")
+  protected CatLocalidadLocal catLocalidadEjb;
+  
+  @EJB(mappedName = "dir3caib/DescargaEJB/local")
+  protected DescargaLocal descargaEjb;
+  
+  // Indicamos el formato de fecha dd/MM/yyyy hh:mm:ss
+  SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
+  
     /**
      * Muestra los ficheros de catalogos que hay en el directorio
      * @param request

@@ -1,14 +1,20 @@
 package es.caib.dir3caib.persistence.model;
 import es.caib.dir3caib.persistence.model.CatProvincia;
 import es.caib.dir3caib.persistence.model.CatEntidadGeografica;
+
 import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
 import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.Index;
 
@@ -17,16 +23,19 @@ import org.hibernate.annotations.Index;
  * @version 1.0
  * @created 28-oct-2013 14:41:38
  */
-@IdClass(es.caib.dir3caib.persistence.model.CatLocalidadPK.class)
-@Table(name = "DIR_CATLOCALIDAD", schema = "", catalog = "" )
+
+@Table(name = "DIR_CATLOCALIDAD", 
+  uniqueConstraints= @UniqueConstraint(columnNames={"CODIGOLOCALIDAD", "PROVINCIA", "ENTIDADGEOGRAFICA"}))
 @org.hibernate.annotations.Table(appliesTo="DIR_CATLOCALIDAD", 
     indexes = {
     @Index(name="DIR_CATLOCAL_CATPROVIN_FK_I", columnNames="PROVINCIA"),
     @Index(name="DIR_CATLOCAL_CATENTGEOGR_FK_I", columnNames="ENTIDADGEOGRAFICA")
  })
 @Entity
+@SequenceGenerator(name="generator",sequenceName = "DIR_SEQ_ALL", allocationSize=1)
 public class CatLocalidad implements Serializable {
 
+  private Long id;
 	private Long codigoLocalidad;
 	private CatProvincia provincia;
 	private String descripcionLocalidad;
@@ -36,14 +45,23 @@ public class CatLocalidad implements Serializable {
 
 	}
 
-	public void finalize() throws Throwable {
 
-	}
+	@Id
+	@Column(name="ID")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "generator")
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
 
   /**
    * @return the codigoLocalidad
    */
-  @Id
+
   @Column(name = "CODIGOLOCALIDAD", nullable = false, length = 4)  
   public Long getCodigoLocalidad() {
     return codigoLocalidad;
@@ -59,7 +77,7 @@ public class CatLocalidad implements Serializable {
   /**
    * @return the provincia
    */
-  @Id
+
   @ManyToOne
   @JoinColumn (name="PROVINCIA")
   @ForeignKey(name="DIR_CATLOCAL_CATPROVIN_FK")
@@ -94,7 +112,7 @@ public class CatLocalidad implements Serializable {
    */
   @ManyToOne
   @JoinColumn (name="ENTIDADGEOGRAFICA")
-  @Id
+  @ForeignKey (name="DIR_CATLOCAL_CATENTGEOGR_FK")
   public CatEntidadGeografica getEntidadGeografica() {
     return entidadGeografica;
   }

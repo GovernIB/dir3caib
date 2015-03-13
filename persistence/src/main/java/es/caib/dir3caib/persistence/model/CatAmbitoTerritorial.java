@@ -14,11 +14,13 @@ import java.io.Serializable;
  * @created 28-oct-2013 14:41:38
  */
 @Entity
-@Table(name = "DIR_CATAMBITOTERRITORIAL")
+@Table(name = "DIR_CATAMBITOTERRITORIAL",
+  uniqueConstraints= @UniqueConstraint(columnNames={"CODIGOAMBITO", "NIVELADMINISTRACION"}))
 @org.hibernate.annotations.Table(appliesTo = "DIR_CATAMBITOTERRITORIAL", indexes = {
     @Index(name="DIR_CATAMBITOTERRITORIAL_PK_I", columnNames = {"CODIGOAMBITO", "NIVELADMINISTRACION" })
     ,@Index(name="DIR_CATAMBTERR_CATNIVADM_FK_I", columnNames = "NIVELADMINISTRACION")
  })
+@SequenceGenerator(name="generator",sequenceName = "DIR_SEQ_ALL", allocationSize=1)
 public class CatAmbitoTerritorial implements Serializable {
 
     @XmlTransient
@@ -97,6 +99,7 @@ public class CatAmbitoTerritorial implements Serializable {
   
   @Id
   @Column (name = "ID")
+  @GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "generator")
   public Long getId() {
     return id;
   }

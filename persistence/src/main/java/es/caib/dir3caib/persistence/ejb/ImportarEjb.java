@@ -13,6 +13,7 @@ import javax.ejb.Stateless;
  *  capa superior a los que ya existen y que necesitan autenticación.
  *
  * @author mgonzalez
+ * @author anadal (Eliminar PKs multiples)
  */
 @Stateless(name = "ImportarEJB")
 @RunAs("DIR_ADMIN")
@@ -125,7 +126,14 @@ public class ImportarEjb implements ImportarLocal {
     * @throws Exception
     */
      @Override
-     public void persistAmbitoTerritorial(CatAmbitoTerritorial ambitoTerritorial) throws Exception {
+     public void persistAmbitoTerritorial(String codigoAmbito, 
+         CatNivelAdministracion nivelAdministracion) throws Exception {
+       
+       CatAmbitoTerritorial ambitoTerritorial = new CatAmbitoTerritorial();
+       
+       ambitoTerritorial.setNivelAdministracion(nivelAdministracion);
+       ambitoTerritorial.setCodigoAmbito(codigoAmbito);
+
        catAmbitoTerritorialEjb.persist(ambitoTerritorial);
      }
 
@@ -135,8 +143,8 @@ public class ImportarEjb implements ImportarLocal {
     * @throws Exception
     */
      @Override
-     public CatAmbitoTerritorial findAmbitoTerritorial(CatAmbitoTerritorialPK idAmbito) throws Exception {
-       return catAmbitoTerritorialEjb.findById(idAmbito);
+     public CatAmbitoTerritorial findAmbitoTerritorial(String codigoAmbito, Long codigoNivelAdministracion) throws Exception {
+       return catAmbitoTerritorialEjb.findByPKs(codigoAmbito, codigoNivelAdministracion);
      }
 
      /**
@@ -415,8 +423,8 @@ public class ImportarEjb implements ImportarLocal {
     * @throws Exception
     */
      @Override
-     public CatLocalidad findLocalidad(CatLocalidadPK idLocalidad) throws Exception {
-       return catLocalidadEjb.findById(idLocalidad);
+     public CatLocalidad findLocalidad(Long codigoLocalidad, Long codigoProvincia, String codigoEntidadGeografica) throws Exception {
+       return catLocalidadEjb.findByPKs(codigoLocalidad, codigoProvincia, codigoEntidadGeografica);
      }
 
      /**
@@ -556,8 +564,8 @@ public class ImportarEjb implements ImportarLocal {
       * @throws Exception
       */
       @Override
-      public RelacionSirOfi findRelSirOfi(RelacionSirOfiPK idRelSirOfi) throws Exception {
-         return relSirOfiEjb.findById(idRelSirOfi);
+      public RelacionSirOfi findRelSirOfi(String codigoUnidad, String codigoOficina) throws Exception {
+         return relSirOfiEjb.findByPKs(codigoUnidad, codigoOficina);
       }
 
       /**

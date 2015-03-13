@@ -6,7 +6,14 @@ import es.caib.dir3caib.back.form.UnidadBusquedaForm;
 import es.caib.dir3caib.back.utils.CodigoValor;
 import es.caib.dir3caib.back.utils.Mensaje;
 import es.caib.dir3caib.back.utils.Nodo;
+import es.caib.dir3caib.persistence.ejb.CatAmbitoTerritorialLocal;
+import es.caib.dir3caib.persistence.ejb.CatComunidadAutonomaLocal;
+import es.caib.dir3caib.persistence.ejb.CatNivelAdministracionLocal;
+import es.caib.dir3caib.persistence.ejb.CatProvinciaLocal;
+import es.caib.dir3caib.persistence.ejb.ContactoUOLocal;
+import es.caib.dir3caib.persistence.ejb.DescargaLocal;
 import es.caib.dir3caib.persistence.ejb.ImportadorUnidadesLocal;
+import es.caib.dir3caib.persistence.ejb.UnidadLocal;
 import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.model.utils.ObjetoBasico;
 import es.caib.dir3caib.persistence.utils.Paginacion;
@@ -24,6 +31,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
+
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -43,7 +51,28 @@ public class UnidadController extends BaseController{
     
     @EJB(mappedName = "dir3caib/ImportadorUnidadesEJB/local")
     private ImportadorUnidadesLocal importadorUnidades;
+    
+    @EJB(mappedName = "dir3caib/UnidadEJB/local")
+    protected UnidadLocal unidadEjb;
+    
+    @EJB(mappedName = "dir3caib/CatAmbitoTerritorialEJB/local")
+    protected CatAmbitoTerritorialLocal catAmbitoTerritorialEjb;
 
+    @EJB(mappedName = "dir3caib/CatNivelAdministracionEJB/local")
+    protected CatNivelAdministracionLocal catNivelAdministracionEjb;
+    
+    @EJB(mappedName = "dir3caib/CatComunidadAutonomaEJB/local")
+    protected CatComunidadAutonomaLocal catComunidadAutonomaEjb;
+    
+    @EJB(mappedName = "dir3caib/CatProvinciaEJB/local")
+    protected CatProvinciaLocal catProvinciaEjb;
+    
+    @EJB(mappedName = "dir3caib/ContactoUOEJB/local")
+    protected ContactoUOLocal contactoUOEjb;
+    
+    @EJB(mappedName = "dir3caib/DescargaEJB/local")
+    protected DescargaLocal descargaEjb;
+    
     
     // Indicamos el formato de fecha dd/MM/yyyy hh:mm:ss
     SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
