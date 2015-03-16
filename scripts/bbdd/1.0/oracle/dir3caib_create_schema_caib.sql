@@ -109,9 +109,9 @@
 
     create table DIR_DESCARGA (
         CODIGO number(19,0) not null,
-        FECHAFIN varchar2(255 char),
-        FECHAIMPORTACION varchar2(255 char),
-        FECHAINICIO varchar2(255 char),
+        FECHAFIN timestamp,
+        FECHAIMPORTACION timestamp,
+        FECHAINICIO timestamp,
         TIPO varchar2(255 char)
     );
 

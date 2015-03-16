@@ -129,9 +129,9 @@
 
     create table DIR_DESCARGA (
         CODIGO int8 not null,
-        FECHAFIN varchar(255),
-        FECHAIMPORTACION varchar(255),
-        FECHAINICIO varchar(255),
+        FECHAFIN timestamp,
+        FECHAIMPORTACION timestamp,
+        FECHAINICIO timestamp,
         TIPO varchar(255),
         primary key (CODIGO)
     );
