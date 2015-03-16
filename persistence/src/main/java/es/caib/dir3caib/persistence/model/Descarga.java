@@ -4,14 +4,9 @@
  */
 package es.caib.dir3caib.persistence.model;
 
+import javax.persistence.*;
 import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import java.util.Date;
 
 /**
  *
@@ -23,9 +18,11 @@ import javax.persistence.Table;
 public class Descarga implements Serializable {
   
   private Long codigo;
-  private String fechaInicio;
-  private String fechaFin;
-  private String fechaImportacion;
+
+  private Date fechaInicio;
+  private Date fechaFin;
+  private Date fechaImportacion;
+
   private String tipo;
 
   public Descarga() {
@@ -42,30 +39,30 @@ public class Descarga implements Serializable {
     this.codigo = codigo;
   }
   
-  @Column(name = "FECHAINICIO")  
-  public String getFechaInicio() {
+  @Column(name = "FECHAINICIO")
+  public Date getFechaInicio() {
     return fechaInicio;
   }
 
-  public void setFechaInicio(String fechaInicio) {
+  public void setFechaInicio(Date fechaInicio) {
     this.fechaInicio = fechaInicio;
   }
 
   @Column(name = "FECHAFIN")  
-  public String getFechaFin() {
+  public Date getFechaFin() {
     return fechaFin;
   }
 
-  public void setFechaFin(String fechaFin) {
+  public void setFechaFin(Date fechaFin) {
     this.fechaFin = fechaFin;
   }
   
   @Column(name = "FECHAIMPORTACION")
-  public String getFechaImportacion() {
+  public Date getFechaImportacion() {
     return fechaImportacion;
   }
 
-  public void setFechaImportacion(String fechaImportacion) {
+  public void setFechaImportacion(Date fechaImportacion) {
     this.fechaImportacion = fechaImportacion;
   }
   

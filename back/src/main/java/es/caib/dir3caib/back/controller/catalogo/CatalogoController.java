@@ -3,29 +3,12 @@ package es.caib.dir3caib.back.controller.catalogo;
 import es.caib.dir3caib.back.controller.BaseController;
 import es.caib.dir3caib.back.form.FechasForm;
 import es.caib.dir3caib.back.utils.Mensaje;
-import es.caib.dir3caib.persistence.ejb.CatAmbitoTerritorialLocal;
-import es.caib.dir3caib.persistence.ejb.CatComunidadAutonomaLocal;
-import es.caib.dir3caib.persistence.ejb.CatEntidadGeograficaLocal;
-import es.caib.dir3caib.persistence.ejb.CatEstadoEntidadLocal;
-import es.caib.dir3caib.persistence.ejb.CatIslaLocal;
-import es.caib.dir3caib.persistence.ejb.CatJerarquiaOficinaLocal;
-import es.caib.dir3caib.persistence.ejb.CatLocalidadLocal;
-import es.caib.dir3caib.persistence.ejb.CatMotivoExtincionLocal;
-import es.caib.dir3caib.persistence.ejb.CatNivelAdministracionLocal;
-import es.caib.dir3caib.persistence.ejb.CatPaisLocal;
-import es.caib.dir3caib.persistence.ejb.CatProvinciaLocal;
-import es.caib.dir3caib.persistence.ejb.CatTipoContactoLocal;
-import es.caib.dir3caib.persistence.ejb.CatTipoEntidadPublicaLocal;
-import es.caib.dir3caib.persistence.ejb.CatTipoUnidadOrganicaLocal;
-import es.caib.dir3caib.persistence.ejb.CatTipoViaLocal;
-import es.caib.dir3caib.persistence.ejb.DescargaLocal;
-import es.caib.dir3caib.persistence.ejb.ImportadorCatalogoLocal;
+import es.caib.dir3caib.persistence.ejb.*;
 import es.caib.dir3caib.persistence.model.Descarga;
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.model.FileSystemManager;
 import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
 import es.caib.dir3caib.utils.Utils;
-
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -39,7 +22,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
-
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -118,7 +100,7 @@ public class CatalogoController extends BaseController{
      * @return 
      */
     @RequestMapping(value = "/ficheros", method = RequestMethod.GET)
-     public ModelAndView ficherosList(HttpServletRequest request){
+     public ModelAndView ficherosList(HttpServletRequest request)  throws Exception{
          ModelAndView mav = new ModelAndView("/catalogo/catalogoFicheros");
          
          // Obtenemos el listado de ficheros que hay dentro del directorio indicado
@@ -132,28 +114,26 @@ public class CatalogoController extends BaseController{
            existentes.addAll(Arrays.asList(f.list()));
          }
 
-         try{
-            Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.CATALOGO);
-            if(descarga != null){
-              // Miramos si debemos mostrar el botón de importación, 
-              // solo se muestra si la fecha de Inicio descarga es superior a la fechaImportacion
-              String fechaInicio = descarga.getFechaInicio();
-              String fechaImportacion = descarga.getFechaImportacion();
-              //formateamos fechas para compararlas
-              Date fInicio = formatoFecha.parse(fechaInicio);
-              if(fechaImportacion != null){
-                Date fImportacion = formatoFecha.parse(fechaImportacion);  
-                if(fInicio.after(fImportacion)){
-                  mav.addObject("mostrarimportacion", "mostrarImportacion");
-                }      
-              }else {
+
+         Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.CATALOGO);
+         if(descarga != null){
+          // Miramos si debemos mostrar el botón de importación,
+          // solo se muestra si la fecha de Inicio descarga es superior a la fechaImportacion
+          Date fechaInicio = descarga.getFechaInicio();
+          Date fechaImportacion = descarga.getFechaImportacion();
+
+          if(fechaImportacion != null){
+            if(fechaInicio != null) {
+              if (fechaInicio.after(fechaImportacion)) {
                 mav.addObject("mostrarimportacion", "mostrarImportacion");
               }
-              mav.addObject("descarga", descarga);
             }
-         }catch(Exception e){
-           e.printStackTrace();
-         }
+          }else {
+            mav.addObject("mostrarimportacion", "mostrarImportacion");
+          }
+          mav.addObject("descarga", descarga);
+        }
+
          
          mav.addObject("existentes", existentes);
          mav.addObject("path", "Dir3caibConstantes.CATALOGOS_LOCATION_PROPERTY");
@@ -181,14 +161,16 @@ public class CatalogoController extends BaseController{
     public String obtenerCatalogos(@ModelAttribute FechasForm fechasForm, HttpServletRequest request)throws Exception {
 
         
-        log.info("fechaInicio: " + fechasForm.getFechaInicioFormateada(Dir3caibConstantes.FORMATO_FECHA));
+      /*  log.info("fechaInicio: " + fechasForm.getFechaInicioFormateada(Dir3caibConstantes.FORMATO_FECHA));
         log.info("fechaFin: " + fechasForm.getFechaFinFormateada(Dir3caibConstantes.FORMATO_FECHA));
         
           //Fechas de descarga
         String fechaInicio = fechasForm.getFechaInicioFormateada(Dir3caibConstantes.FORMATO_FECHA);
-        String fechaFin = fechasForm.getFechaFinFormateada(Dir3caibConstantes.FORMATO_FECHA);
+        String fechaFin = fechasForm.getFechaFinFormateada(Dir3caibConstantes.FORMATO_FECHA);*/
+
+
         
-        descargarCatalogoWS(request, fechaInicio, fechaFin);
+        descargarCatalogoWS(request, fechasForm.getFechaInicio(), fechasForm.getFechaFin());
 
         /*log.info("Codigo: " + respuestaXml.getCodigo());
         log.info("Descripcion: " + respuestaXml.getDescripcion());
@@ -282,7 +264,7 @@ public class CatalogoController extends BaseController{
      * @param fechaInicio
      * @param fechaFin
      */      
-    public void descargarCatalogoWS(HttpServletRequest request, String fechaInicio, String fechaFin ) throws Exception{
+    public void descargarCatalogoWS(HttpServletRequest request, Date fechaInicio, Date fechaFin ) throws Exception{
 
          try{
 

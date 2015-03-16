@@ -6,22 +6,12 @@ import es.caib.dir3caib.back.form.OficinaBusquedaForm;
 import es.caib.dir3caib.back.utils.CodigoValor;
 import es.caib.dir3caib.back.utils.Mensaje;
 import es.caib.dir3caib.back.utils.Nodo;
-import es.caib.dir3caib.persistence.ejb.CatComunidadAutonomaLocal;
-import es.caib.dir3caib.persistence.ejb.CatNivelAdministracionLocal;
-import es.caib.dir3caib.persistence.ejb.CatProvinciaLocal;
-import es.caib.dir3caib.persistence.ejb.ContactoOfiLocal;
-import es.caib.dir3caib.persistence.ejb.DescargaLocal;
-import es.caib.dir3caib.persistence.ejb.ImportadorOficinasLocal;
-import es.caib.dir3caib.persistence.ejb.OficinaLocal;
-import es.caib.dir3caib.persistence.ejb.RelacionOrganizativaOfiLocal;
-import es.caib.dir3caib.persistence.ejb.RelacionSirOfiLocal;
-import es.caib.dir3caib.persistence.ejb.ServicioLocal;
+import es.caib.dir3caib.persistence.ejb.*;
 import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.model.utils.ObjetoBasico;
 import es.caib.dir3caib.persistence.utils.Paginacion;
 import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
 import es.caib.dir3caib.utils.Utils;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -33,10 +23,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
-
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Fundació BIT.
@@ -146,41 +139,37 @@ public class OficinaController extends BaseController {
      * @return 
      */
     @RequestMapping(value = "/ficheros", method = RequestMethod.GET)
-     public ModelAndView ficherosList(HttpServletRequest request){
+     public ModelAndView ficherosList(HttpServletRequest request) throws Exception {
          ModelAndView mav = new ModelAndView("/oficina/oficinaFicheros");
          
          // Obtenemos el listado de ficheros que hay dentro del directorio indicado
          File f = FileSystemManager.getArchivosPath(Dir3caibConstantes.OFICINAS_LOCATION_PROPERTY);
          ArrayList<String> existentes = new ArrayList<String>(Arrays.asList(f.list()));
          
-         try{
-            Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.OFICINA);
-            log.info("DESCARGA OBTENIDA " + descarga.getCodigo());
-            if(descarga != null){              
-              // Miramos si debemos mostrar el botón de importación, 
-              // solo se muestra si la fecha de Inicio descarga es superior a la fechaImportacion
-              String fechaInicio = descarga.getFechaInicio();
-              String fechaImportacion = descarga.getFechaImportacion();
-              //formateamos fechas para compararlas
-              Date fInicio = formatoFecha.parse(fechaInicio);
-              if(fechaImportacion != null){
-                Date fImportacion = formatoFecha.parse(fechaImportacion);  
-                if(fInicio.after(fImportacion)){
+
+          Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.OFICINA);
+          log.info("DESCARGA OBTENIDA " + descarga.getCodigo());
+          if(descarga != null){
+            // Miramos si debemos mostrar el botón de importación,
+            // solo se muestra si la fecha de Inicio descarga es superior a la fechaImportacion
+            Date fechaInicio = descarga.getFechaInicio();
+            Date fechaImportacion = descarga.getFechaImportacion();
+
+            if(fechaImportacion != null){
+              if(fechaInicio != null) {
+                if (fechaInicio.after(fechaImportacion)) {
                   mav.addObject("mostrarimportacion", "mostrarImportacion");
-                }      
-              }else {
-                mav.addObject("mostrarimportacion", "mostrarImportacion");
+                }
               }
-                          
-              mav.addObject("descarga", descarga);
+            }else {
+              mav.addObject("mostrarimportacion", "mostrarImportacion");
             }
-         }catch(Exception e){
-           e.printStackTrace();
-         }
+
+            mav.addObject("descarga", descarga);
+          }
+          mav.addObject("existentes", existentes);
          
-         mav.addObject("existentes", existentes);
-         
-         return mav;
+          return mav;
      }
     
     /**
@@ -200,15 +189,15 @@ public class OficinaController extends BaseController {
     @RequestMapping(value = "/obtener", method = RequestMethod.POST)
     public String descargaOficinas(@ModelAttribute FechasForm fechasForm, HttpServletRequest request)throws Exception {
         
-        log.info("fechaInicio: " + fechasForm.getFechaInicioFormateada(Dir3caibConstantes.FORMATO_FECHA));
+        /*log.info("fechaInicio: " + fechasForm.getFechaInicioFormateada(Dir3caibConstantes.FORMATO_FECHA));
         log.info("fechaFin: " + fechasForm.getFechaFinFormateada(Dir3caibConstantes.FORMATO_FECHA));
         
           //Fechas de descarga
         String fechaInicio = fechasForm.getFechaInicioFormateada(Dir3caibConstantes.FORMATO_FECHA);
-        String fechaFin = fechasForm.getFechaFinFormateada(Dir3caibConstantes.FORMATO_FECHA);
+        String fechaFin = fechasForm.getFechaFinFormateada(Dir3caibConstantes.FORMATO_FECHA);*/
         
         
-        descargarOficinasWS(request, fechaInicio, fechaFin);
+        descargarOficinasWS(request, fechasForm.getFechaInicio(), fechasForm.getFechaFin());
         
         return "redirect:/oficina/ficheros ";
 
@@ -293,7 +282,7 @@ public class OficinaController extends BaseController {
           // Obtenemos la fecha de la ultima descarga/sincronizacion
           Descarga ultimaDescarga = descargaEjb.findByTipo(Dir3caibConstantes.OFICINA);
           // Establecemmos la fecha de hoy
-          String hoy = formatoFecha.format(new Date());
+          Date hoy = new Date();
           // Obtenemos los archivos por WS
           descargarOficinasWS(request, ultimaDescarga.getFechaFin(), hoy);
           // Importamos los datos a la BD.
@@ -314,7 +303,7 @@ public class OficinaController extends BaseController {
      * @param fechaInicio
      * @param fechaFin
      */
-    public void descargarOficinasWS(HttpServletRequest request, String fechaInicio, String fechaFin) throws Exception {
+    public void descargarOficinasWS(HttpServletRequest request, Date fechaInicio, Date fechaFin) throws Exception {
 
         try{
             importadorOficinas.descargarOficinasWS(fechaInicio, fechaFin);

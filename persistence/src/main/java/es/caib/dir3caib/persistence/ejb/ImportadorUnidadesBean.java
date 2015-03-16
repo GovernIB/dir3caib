@@ -16,25 +16,9 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -129,11 +113,6 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
    /**
   * Método que importa el contenido de los archivos de las unidades descargados previamente a través
   * de los WS.
-  * @param procesados Lista de archivos que han sido procesados al finalizar la importación
-  * @param inexistentes Lista de archivos que no existen y deberian existir
-  * @param descarga objeto donde guardar los datos de la descarga realizada. Se hace al finalizar la importación
-  * @param quartz booleano que indica si la llamada proviene de una tarea quartz.
-  *             Esto nos permite usar un ejb o otro para controlar los permisos(autenticación)
   * */
   @Override
   @TransactionTimeout(value=13600)
@@ -142,16 +121,12 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
     ResultadosImportacion results = new ResultadosImportacion();
     
     
-    
+    //Lista de archivos que han sido procesados al finalizar la importación
     List<String> procesados = results.getProcesados();
+    //Lista de archivos que no existen y deberian existir
     List<String> inexistentes = results.getInexistentes();
-    
-    
-    // TODO Eliminar
-    //boolean quartz = false;
-    
 
-   
+
     /*  CACHES */
     
     long start = System.currentTimeMillis();
@@ -452,13 +427,6 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
                         
                         if( !codigoProvD.isEmpty()){
                           provinciaD = cacheProvincia.get(new Long(codigoProvD));
-                          /*
-                          if(quartz){
-                            provinciaD = importarEjb.findProvincia(new Long(codigoProvD));
-                          }else {
-                            provinciaD = catProvinciaEjb.findById(new Long(codigoProvD));
-                          }
-                          */
                         }
                         
                         //log.info("CodProvincia");
@@ -597,12 +565,6 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
                         
                         
                         //log.info(" Tipo Via");
-
-                        //Persistimos
-                        /*
-                        if(quartz){
-                          unidad= importarEjb.persistUnidad(unidad);
-                        }else */ 
                         
                         s = System.currentTimeMillis();
                        if (existeix){
@@ -626,13 +588,10 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
                             unidadRaiz = unidadVacia();
                             unidadRaiz.setCodigo(codigoUnidadRaiz);
                           }
-                          /*
-                          if(quartz){
-                            unidadRaiz = importarEjb.persistUnidad(unidadRaiz);
-                          }else */ {
-                            unidadRaiz = unidadEjb.persist(unidadRaiz);
-                            existInBBDD.add(codigoUnidadRaiz);
-                          }
+
+                          unidadRaiz = unidadEjb.persist(unidadRaiz);
+                          existInBBDD.add(codigoUnidadRaiz);
+
                           unidad.setCodUnidadRaiz(unidadRaiz);
                           
                           
@@ -708,8 +667,6 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
 
           reader.close();
 
-
-          
           
       } catch (FileNotFoundException ex) {
           inexistentes.add(fichero);
@@ -732,20 +689,15 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
     
     // Guardamos fecha Importacion y tipo
     Descarga descarga;
-    /*
-    if(quartz){
-      descarga = importarEjb.findDescargaByTipo(Dir3caibConstantes.UNIDAD);
-      descarga.setFechaImportacion(formatoFecha.format(hoy));
-      importarEjb.mergeDescarga(descarga);
-    }else */ {
-      descarga = descargaEjb.findByTipo(Dir3caibConstantes.UNIDAD);
-      if (descarga == null) {
-        descarga = new Descarga();
-        descarga.setTipo(Dir3caibConstantes.UNIDAD);
-      }
-      descarga.setFechaImportacion(formatoFecha.format(hoy));
-      descargaEjb.merge(descarga);
+
+    descarga = descargaEjb.findByTipo(Dir3caibConstantes.UNIDAD);
+    if (descarga == null) {
+      descarga = new Descarga();
+      descarga.setTipo(Dir3caibConstantes.UNIDAD);
     }
+    descarga.setFechaImportacion(hoy);
+    descargaEjb.merge(descarga);
+
 
     results.setDescarga(descarga);
     results.setExistentes(existentes);
@@ -764,9 +716,7 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
       
          String[] fila ;
          reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
-         
-         
-         
+
          while ((fila = reader.readNext()) != null) {
            String codigoUnidadAnterior = fila[0];
            String codigoUnidadUltima = fila[2];
@@ -774,21 +724,11 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
            Unidad unidadAnterior = null;
            try{
            //Obtenemos codigo y miramos si ya existe en la BD
-             
-
-
              if(!codigoUnidadUltima.isEmpty()){
-                {
                   unidadUltima = unidadEjb.findById(codigoUnidadUltima);
-               }
              }
              if(!codigoUnidadAnterior.isEmpty()){
-               /*
-               if(quartz){
-                  unidadAnterior = importarEjb.findUnidad(codigoUnidadAnterior);
-               }else */ {
                   unidadAnterior = unidadEjb.findById(codigoUnidadAnterior);
-               }
              }
 
              Set<Unidad> historicosAnterior = unidadAnterior.getHistoricoUO();
@@ -803,13 +743,9 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
              }
              
              historicosAnterior.add(unidadUltima);
-             
-             /* 
-             if(quartz){
-                importarEjb.persistUnidad(unidadAnterior);
-             }else */ {
-                unidadEjb.persist(unidadAnterior);
-             }
+
+             unidadEjb.persist(unidadAnterior);
+
            } catch(Exception e) {
              log.error(" --------------------------------------------------");
              log.error(" codigoUnidadAnterior = " + codigoUnidadAnterior);
@@ -854,12 +790,7 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
                String sUnidad = fila[0].trim();
                if(!sUnidad.isEmpty()){
                  Unidad unidad;
-                 /*
-                 if(quartz){
-                  unidad = importarEjb.findUnidad(sUnidad);
-                 }else */ {
-                  unidad = unidadEjb.findById(sUnidad);
-                 }
+                 unidad = unidadEjb.findById(sUnidad);
                  contacto.setUnidad(unidad);
                }
 
@@ -868,13 +799,6 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
                if(!stipoContacto.isEmpty()){
                  CatTipoContacto tipoContacto;
                  tipoContacto = cacheCatTipoContacto.get(stipoContacto);
-                 /*
-                 if(quartz){
-                  tipoContacto = importarEjb.findTipoContacto(stipoContacto);
-                 }else {
-                  tipoContacto = catTipoContactoEjb.findById(stipoContacto);
-                 }
-                 */
                  contacto.setTipoContacto(tipoContacto);
                }
 
@@ -883,12 +807,9 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
                contacto.setValorContacto(valorContacto);
                Boolean visibilidad = fila[3].equals("S")?true:false;
                contacto.setVisibilidad(visibilidad);
-               /* 
-               if(quartz){
-                  importarEjb.persistContactoUO(contacto);
-               }else */ {
-                  contactoUOEjb.persist(contacto);
-               }
+
+               contactoUOEjb.persist(contacto);
+
            }
        }catch(Exception e){
           log.error("Error important Contacto: " + e.getMessage(), e);
@@ -910,114 +831,107 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
 
    * @param fechaInicio
    * @param fechaFin
-   * @param quartz booleano que indica si la llamada proviene de una tarea quartz.
-  *             Esto nos permite usar un ejb o otro para controlar los permisos(autenticación)
    */
-  public void descargarUnidadesWS(String fechaInicio, String fechaFin) throws Exception {
+  public void descargarUnidadesWS(Date fechaInicio, Date fechaFin) throws Exception {
 
-      byte[] buffer = new byte[1024];
+    byte[] buffer = new byte[1024];
 
-      try{
-          log.info( "Fecha Inicio " + fechaInicio);
-          log.info( "Fecha Fin " + fechaFin);
 
-          // Guardaremos la fecha de la ultima descarga
-          Descarga descarga = new Descarga();
-          descarga.setTipo(Dir3caibConstantes.UNIDAD);
+    log.info("Fecha Inicio " + fechaInicio);
+    log.info("Fecha Fin " + fechaFin);
 
-          //guardamos todas las fechas de la descarga
-          if(fechaInicio!= null){
-            descarga.setFechaInicio(fechaInicio);
-          }
-          if(fechaFin!=null){
-            descarga.setFechaFin(fechaFin);
-          }
+    // Guardaremos la fecha de la ultima descarga
+    Descarga descarga = new Descarga();
+    descarga.setTipo(Dir3caibConstantes.UNIDAD);
 
-          // Las convertimos en String
-          Date hoy = new Date();
-          String sHoy = formatoFecha.format(hoy);
-          if(fechaInicio.isEmpty()){
-            descarga.setFechaInicio(sHoy);
-          }
+    //guardamos todas las fechas de la descarga
+    if (fechaInicio != null) {
+      descarga.setFechaInicio(fechaInicio);
+    }
+    if (fechaFin != null) {
+      descarga.setFechaFin(fechaFin);
+    }
 
-          if(fechaFin.isEmpty()){
-            descarga.setFechaFin(sHoy);
-          }
+    Date hoy = new Date();
+    //Si no indican fechas es una sincro desde el principio de los tiempos.
+      /*if(fechaInicio == null){
+        descarga.setFechaInicio(hoy);
+      }*/
 
-          // Obtenemos rutas y usuario para el WS
-          String usuario = System.getProperty(Dir3caibConstantes.DIR3WS_USUARIO_PROPERTY);
-          String password = System.getProperty(Dir3caibConstantes.DIR3WS_PASSWORD_PROPERTY);
-          String ruta = System.getProperty(Dir3caibConstantes.ARCHIVOS_LOCATION_PROPERTY);
-          String rutaUnidades = System.getProperty(Dir3caibConstantes.UNIDADES_LOCATION_PROPERTY);
+    if (fechaFin == null) {
+      descarga.setFechaFin(hoy);
+    }
 
-          SD01UNDescargaUnidadesService service = new SD01UNDescargaUnidadesService();
+    // Obtenemos rutas y usuario para el WS
+    String usuario = System.getProperty(Dir3caibConstantes.DIR3WS_USUARIO_PROPERTY);
+    String password = System.getProperty(Dir3caibConstantes.DIR3WS_PASSWORD_PROPERTY);
+    String ruta = System.getProperty(Dir3caibConstantes.ARCHIVOS_LOCATION_PROPERTY);
+    String rutaUnidades = System.getProperty(Dir3caibConstantes.UNIDADES_LOCATION_PROPERTY);
 
-          // Establecemos parametros de WS
-          UnidadesWs parametros = new UnidadesWs();
-          parametros.setUsuario(usuario);
-          parametros.setClave(password);
-          parametros.setFormatoFichero(FormatoFichero.CSV);
-          parametros.setTipoConsulta(TipoConsultaUO.COMPLETO);
-          //parametros.setUnidadesDependientes(Boolean.TRUE);
+    SD01UNDescargaUnidadesService service = new SD01UNDescargaUnidadesService();
 
-          parametros.setFechaInicio(fechaInicio);
-          parametros.setFechaFin(fechaFin);
+    // Establecemos parametros de WS
+    UnidadesWs parametros = new UnidadesWs();
+    parametros.setUsuario(usuario);
+    parametros.setClave(password);
+    parametros.setFormatoFichero(FormatoFichero.CSV);
+    parametros.setTipoConsulta(TipoConsultaUO.COMPLETO);
+    //parametros.setUnidadesDependientes(Boolean.TRUE);
 
-          // Invocamos el WS
-          RespuestaWS respuesta = service.getSD01UNDescargaUnidades().exportar(parametros);
+    if (fechaInicio != null) {
+      parametros.setFechaInicio(formatoFecha.format(fechaInicio));
+    }
+    if (fechaFin != null){
+      parametros.setFechaFin(formatoFecha.format(fechaFin));
+    }
 
-          Base64 decoder = new Base64();
+      // Invocamos el WS
+      RespuestaWS respuesta = service.getSD01UNDescargaUnidades().exportar(parametros);
 
-          log.info("Codigo: " + respuesta.getCodigo());
-          log.info("Descripcion: " + respuesta.getDescripcion());
+      Base64 decoder = new Base64();
 
-          // Realizamos una copia del archivo de la última descarga
-          File file = new File(ruta + Dir3caibConstantes.UNIDADES_ARCHIVO_ZIP);
-          if(file.exists()){
-            FileUtils.copyFile(file, new File(ruta + "old_" + Dir3caibConstantes.UNIDADES_ARCHIVO_ZIP));
-          }
-          // Guardamos el archivo descargado
-          FileUtils.writeByteArrayToFile(new File(ruta + Dir3caibConstantes.UNIDADES_ARCHIVO_ZIP), decoder.decode(respuesta.getFichero()));
+      log.info("Codigo: " + respuesta.getCodigo());
+      log.info("Descripcion: " + respuesta.getDescripcion());
 
-          // Borramos contenido
-          FileUtils.cleanDirectory(new File(rutaUnidades));
-          //Descomprimir el archivo
-          ZipInputStream zis = new ZipInputStream(new FileInputStream(ruta + Dir3caibConstantes.UNIDADES_ARCHIVO_ZIP));
-          ZipEntry zipEntry = zis.getNextEntry();
-
-          while(zipEntry != null){
-             String fileName = zipEntry.getName();
-             File newFile = new File(rutaUnidades + fileName);
-
-             log.info("Fichero descomprimido: "+ newFile.getAbsoluteFile());
-
-             //create all non exists folders
-             //else you will hit FileNotFoundException for compressed folder
-             new File(newFile.getParent()).mkdirs();
-             FileOutputStream fos = new FileOutputStream(newFile);
-
-             int len;
-             while ((len = zis.read(buffer)) > 0) {
-                  fos.write(buffer, 0, len);
-             }
-             fos.close();
-             zipEntry = zis.getNextEntry();
-          }
-          zis.closeEntry();
-          zis.close();
-
-          // Guardamos la descarga en BD.
-          /*
-          if(quartz){
-            importarEjb.persistDescarga(descarga);
-          }else*/{
-            descargaEjb.persist(descarga);
-          }
-      }catch(IOException ex){
-          ex.printStackTrace();
-      }catch (Exception e){
-          e.printStackTrace();
+      // Realizamos una copia del archivo de la última descarga
+      File file = new File(ruta + Dir3caibConstantes.UNIDADES_ARCHIVO_ZIP);
+      if(file.exists()){
+        FileUtils.copyFile(file, new File(ruta + "old_" + Dir3caibConstantes.UNIDADES_ARCHIVO_ZIP));
       }
+      // Guardamos el archivo descargado
+      FileUtils.writeByteArrayToFile(new File(ruta + Dir3caibConstantes.UNIDADES_ARCHIVO_ZIP), decoder.decode(respuesta.getFichero()));
+
+      // Borramos contenido
+      FileUtils.cleanDirectory(new File(rutaUnidades));
+      //Descomprimir el archivo
+      ZipInputStream zis = new ZipInputStream(new FileInputStream(ruta + Dir3caibConstantes.UNIDADES_ARCHIVO_ZIP));
+      ZipEntry zipEntry = zis.getNextEntry();
+
+      while(zipEntry != null){
+         String fileName = zipEntry.getName();
+         File newFile = new File(rutaUnidades + fileName);
+
+         log.info("Fichero descomprimido: "+ newFile.getAbsoluteFile());
+
+         //create all non exists folders
+         //else you will hit FileNotFoundException for compressed folder
+         new File(newFile.getParent()).mkdirs();
+         FileOutputStream fos = new FileOutputStream(newFile);
+
+         int len;
+         while ((len = zis.read(buffer)) > 0) {
+              fos.write(buffer, 0, len);
+         }
+         fos.close();
+         zipEntry = zis.getNextEntry();
+      }
+      zis.closeEntry();
+      zis.close();
+
+      // Guardamos la descarga en BD.
+      descargaEjb.persist(descarga);
+
+
   }
 
    /* Tarea que en un primer paso descarga los archivos csv de las unidades y posteriormente importa el contenido en
@@ -1033,19 +947,16 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
 
             // obtenemos los datos de la última descarga
             Descarga ultimaDescarga = descargaEjb.findByTipo(Dir3caibConstantes.UNIDAD);
-            String fechaInicio =ultimaDescarga.getFechaFin(); // fecha de la ultima descarga
-
+            Date fechaInicio =ultimaDescarga.getFechaFin(); // fecha de la ultima descarga
 
             // obtenemos la fecha de hoy
-            Date hoy = new Date();
-            String fechaFin = formatoFecha.format(hoy);
+            Date fechaFin = new Date();
 
+            // Obtiene los archivos csv via WS
+            descargarUnidadesWS(fechaInicio, fechaFin);
 
-             // Obtiene los archivos csv via WS
-             descargarUnidadesWS(fechaInicio, fechaFin);
-
-             // importamos el catálogo a la bd.
-             importarUnidades();
+            // importamos el catálogo a la bd.
+            importarUnidades();
        } catch(Exception e){
          e.printStackTrace();
        }

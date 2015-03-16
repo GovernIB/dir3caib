@@ -1,7 +1,9 @@
 package es.caib.dir3caib.persistence.ejb;
 
-import javax.ejb.Local;
 import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
+
+import javax.ejb.Local;
+import java.util.Date;
 
 /**
  * 
@@ -11,7 +13,7 @@ import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
 @Local
 public interface ImportadorCatalogoLocal {
 
-  public void descargarCatalogoWS(String fechaInicio, String fechaFin)
+  public void descargarCatalogoWS(Date fechaInicio, Date fechaFin)
       throws Exception;
 
   public void importarCatalogoTask();

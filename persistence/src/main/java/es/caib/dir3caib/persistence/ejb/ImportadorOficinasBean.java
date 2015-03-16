@@ -16,7 +16,6 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -312,7 +311,7 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
    /**
   * Método que importa el contenido de los archivos de las oficinas y sus relaciones descargados previamente a través
   * de los WS.
-  * @param sincro booleano que indica si la llamada es una sincronización(actualizacion)
+  * @param isUpdate booleano que indica si la llamada es una sincronización(actualizacion)
   * */
   @Override
   @TransactionTimeout(value=13600)
@@ -325,9 +324,7 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
     
     List<String> procesados = results.getProcesados();
     List<String> inexistentes = results.getInexistentes();
-  
-    //  Descarga descarga, 
-    //boolean quartz = false;
+
     
     /*  CACHES */
     log.info("Inicialitzant Cache de Unidades per Importar Oficinas ...");
@@ -456,10 +453,7 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                           String codigoOficina = fila[0];
                           Oficina oficina = null;
                           boolean existeix;
-                          /*
-                          if(quartz){
-                            oficina = importarEjb.findOficina(codigoOficina);
-                          }else */
+
                           if (existInBBDD.contains(codigoOficina)) {
                             oficina = oficinaEjb.findById(codigoOficina);
                           }
@@ -479,13 +473,7 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                           if(!codigoComunidadAutonoma.isEmpty()){
                             CatComunidadAutonoma comunidadAutonoma;
                             comunidadAutonoma = cacheComunidadAutonoma.get(new Long(codigoComunidadAutonoma));
-                            /*
-                            if(quartz){
-                              comunidadAutonoma = importarEjb.findComunidadAutonoma(new Long(codigoComunidadAutonoma));
-                            }else {
-                              comunidadAutonoma = catComunidadAutonomaEjb.findById(new Long(codigoComunidadAutonoma));
-                            }
-                            */
+
                             oficina.setCodComunidad(comunidadAutonoma);
                           }
 
@@ -494,13 +482,6 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                           if(!codigoPais.isEmpty()){
                             CatPais pais;
                             pais = cachePais.get(new Long(codigoPais));
-                            /*
-                            if(quartz){
-                              pais = importarEjb.findPais(new Long(codigoPais));
-                            }else {
-                              pais = catPaisEjb.findById(new Long(codigoPais));
-                            }
-                            */
                             oficina.setCodPais(pais);
                           }
 
@@ -511,15 +492,7 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                           String codUOResponsable = fila[5].trim();
                           if(!codUOResponsable.isEmpty()){
                             Unidad uoResponsable;
-                            
                             uoResponsable = cacheUnidad.get(codUOResponsable);
-                            /*
-                            if(quartz){
-                               uoResponsable = importarEjb.findUnidad(codUOResponsable);
-                            }else {
-                               uoResponsable = unidadEjb.findById(codUOResponsable);
-                            }
-                            */
                             oficina.setCodUoResponsable(uoResponsable);
                           }
 
@@ -537,13 +510,6 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                           if(!codigoEstado.isEmpty()){
                              CatEstadoEntidad estado;
                              estado = cacheEstadoEntidad.get(codigoEstado);
-                             /*
-                             if(quartz){
-                               estado = importarEjb.findEstadoEntidad(codigoEstado);
-                             }else {
-                               estado = catEstadoEntidadEjb.findById(codigoEstado);
-                             }
-                             */
                              oficina.setEstado(estado);
                           }
 
@@ -577,25 +543,11 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                           CatProvincia provincia = null;
                           if( !codigoProv.isEmpty()){
                             provincia = cacheProvincia.get(new Long(codigoProv));
-                            /*
-                            if(quartz){
-                              provincia = importarEjb.findProvincia(new Long(codigoProv));
-                            }else {
-                              provincia = catProvinciaEjb.findById(new Long(codigoProv));
-                            }
-                            */
                           }
                           //log.info("CodProvincia");
                           CatEntidadGeografica entidadGeograficaD = null;
                           if( !codigoEntGeog.isEmpty()){
                             entidadGeograficaD = cacheEntidadGeografica.get(codigoEntGeog);
-                            /*
-                            if(quartz){
-                              entidadGeograficaD = importarEjb.findEntidadGeografica(codigoEntGeog);
-                            }else {
-                              entidadGeograficaD = catEntidadGeograficaEjb.findById(codigoEntGeog);
-                            }
-                            */
                           }
 
                           String codigoLocalidad = fila[23].trim();
@@ -603,26 +555,12 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                             CatLocalidadPK catLocalidadPKD = new CatLocalidadPK(new Long(codigoLocalidad), provincia, entidadGeograficaD);
                             CatLocalidad localidadD;
                             localidadD = cacheLocalidad.get(catLocalidadPKD);
-                            /*
-                            if(quartz){
-                              localidadD = importarEjb.findLocalidad(catLocalidadPKD);
-                            }else {
-                              localidadD = catLocalidadEjb.findById(catLocalidadPKD);
-                            }
-                            */
                             oficina.setLocalidad(localidadD);
                           }
                           String codigoNivelAdmin = fila[3].trim();
                           CatNivelAdministracion nivelAdministracion = null;
                           if(!codigoNivelAdmin.isEmpty()){
                             nivelAdministracion = cacheNivelAdministracion.get(new Long(codigoNivelAdmin));
-                            /*
-                            if(quartz){
-                              nivelAdministracion = importarEjb.findNivelAdministracion(new Long(codigoNivelAdmin));
-                            }else {
-                              nivelAdministracion = catNivelAdministracionEjb.findById(new Long(codigoNivelAdmin));
-                            }
-                            */
                             oficina.setNivelAdministracion(nivelAdministracion);
                           }
 
@@ -630,13 +568,8 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                           String tipoOficina = fila[4].trim();
                           CatJerarquiaOficina jerarquiaOficina = null;
                           if(!tipoOficina.isEmpty()){
-                            /*
-                            if(quartz){
-                              jerarquiaOficina = importarEjb.findJerarquiaOficina(new Long(tipoOficina));
-                            }else */ {
-                              jerarquiaOficina = catJerarquiaOficinaEjb.findById(new Long(tipoOficina));
-                            }
-                           oficina.setTipoOficina(jerarquiaOficina);
+                            jerarquiaOficina = catJerarquiaOficinaEjb.findById(new Long(tipoOficina));
+                            oficina.setTipoOficina(jerarquiaOficina);
                           }
 
                           //Tipo Via
@@ -644,20 +577,9 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                           CatTipoVia catTipoVia = null;
                           if(!tipoVia.isEmpty()){
                             catTipoVia = cacheTipoVia.get(new Long(tipoVia));
-                            /*
-                            if(quartz){
-                              catTipoVia = importarEjb.findTipoVia(new Long(tipoVia));
-                            }else {
-                              catTipoVia = catTipoViaEjb.findById(new Long(tipoVia));
-                            }
-                            */
                             oficina.setTipoVia(catTipoVia);
                           }
 
-                          /*
-                          if(quartz){
-                            oficina = importarEjb.persistOficina(oficina);
-                          }else */ 
                           if (existeix) {
                             oficina = oficinaEjb.merge(oficina);
                           } else {
@@ -669,32 +591,23 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                           String codigoOfiResponsable = fila[7].trim();
                           Oficina ofiResponsable = null;
                           if(!codigoOfiResponsable.isEmpty()){
-                            /*
-                            if(quartz){
-                              ofiResponsable = importarEjb.findOficina(codigoOfiResponsable);
-                            }else */ 
+
                             if (existInBBDD.contains(codigoOfiResponsable)){
                               ofiResponsable = oficinaEjb.findById(codigoOfiResponsable);
                             }
                             if(ofiResponsable == null){
                               ofiResponsable = oficinaVacia();
                               ofiResponsable.setCodigo(codigoOfiResponsable);
-                              /*
-                              if(quartz){
-                                ofiResponsable = importarEjb.persistOficina(ofiResponsable);
-                              }else */ {
-                                ofiResponsable = oficinaEjb.persist(ofiResponsable);
-                                existInBBDD.add(codigoOfiResponsable);
-                              }
+
+                              ofiResponsable = oficinaEjb.persist(ofiResponsable);
+                              existInBBDD.add(codigoOfiResponsable);
+
                             }
                             oficina.setCodOfiResponsable(ofiResponsable);
                           }
-                          /*
-                          if(quartz){
-                            importarEjb.mergeOficina(oficina);
-                          }else */ {
-                            oficinaEjb.merge(oficina);
-                          }
+
+                          oficinaEjb.merge(oficina);
+
                           oficinesCache.put(oficina.getCodigo(), oficina);
                       }catch(Exception e ){
                         log.error("Error  important oficines  " + e.getMessage(), e);
@@ -729,11 +642,6 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                       String sOficina = fila[0].trim();
                       if(!sOficina.isEmpty()){
                         Oficina oficina;
-                        /*
-                        if(quartz){
-                          oficina = importarEjb.findOficina(sOficina);
-                        }else */
-                        
                         oficina = oficinesCache.get(sOficina);
                         if (oficina == null) {
                           oficina = oficinaEjb.findById(sOficina);
@@ -746,13 +654,6 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                       if(!stipoContacto.isEmpty()){
                         CatTipoContacto tipoContacto;
                         tipoContacto = cacheTipoContacto.get(stipoContacto);
-                        /*
-                        if(quartz){
-                          tipoContacto = importarEjb.findTipoContacto(stipoContacto);
-                        }else {
-                          tipoContacto = catTipoContactoEjb.findById(stipoContacto);
-                        }
-                        */
                         contacto.setTipoContacto(tipoContacto);
                       }
 
@@ -762,12 +663,9 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                       Boolean visibilidad = fila[3].equals("S")?true:false;
                       contacto.setVisibilidad(visibilidad);
  
-                      /*
-                      if(quartz){
-                        importarEjb.persistContactoOfi(contacto);
-                      }else  */{
-                        contactoOfiEjb.persistReal(contacto);
-                      }
+
+                      contactoOfiEjb.persistReal(contacto);
+
                     } catch(Exception e){
                       log.error("Error important contactos: " + e.getMessage(), e);
                     }
@@ -788,20 +686,12 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                     try{
 
                       if(!codigoOficinaUltima.isEmpty()){
-                        /*
-                        if(quartz){
-                          oficinaUltima = importarEjb.findOficina(codigoOficinaUltima);
-                        }else */ 
                         oficinaUltima = oficinesCache.get(codigoOficinaUltima);
                         if (oficinaUltima == null){
                           oficinaUltima = oficinaEjb.findById(codigoOficinaUltima);
                         }
                       }
                       if(!codigoOficinaAnterior.isEmpty()){
-                        /*
-                        if(quartz){
-                          oficinaAnterior = importarEjb.findOficina(codigoOficinaAnterior);
-                        }else */ 
                         oficinaAnterior = oficinesCache.get(codigoOficinaAnterior);
                         if (oficinaAnterior == null){
                           oficinaAnterior = oficinaEjb.findById(codigoOficinaAnterior);
@@ -900,22 +790,12 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                         CatEstadoEntidad estado = null;
                         if(!codigoEstado.isEmpty()){
                           estado = cacheEstadoEntidad.get(codigoEstado);
-                          /*
-                          if(quartz){
-                            estado = importarEjb.findEstadoEntidad(codigoEstado);
-                          }else {
-                            estado = catEstadoEntidadEjb.findById(codigoEstado);
-                          }
-                          */
                           relacionOrganizativaOfi.setEstado(estado);
                         }
 
-                        /*
-                        if(quartz){
-                           importarEjb.persistRelacionOrgOfi(relacionOrganizativaOfi);
-                        }else */ {
-                           relOrgOfiEjb.persist(relacionOrganizativaOfi);
-                        }
+
+                        relOrgOfiEjb.persist(relacionOrganizativaOfi);
+
                         
                         c++;
                         if (c % 100 == 0) {
@@ -989,23 +869,12 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                         CatEstadoEntidad estado = null;
                         if(!codigoEstado.isEmpty()){
                           estado = cacheEstadoEntidad.get(codigoEstado);
-                          /*
-                          if(quartz){
-                            estado = importarEjb.findEstadoEntidad(codigoEstado);
-                          }else {
-                            estado = catEstadoEntidadEjb.findById(codigoEstado);
-                          }
-                          */
                           relacionSirOfi.setEstado(estado);
                         }
-                        /*
-                        if(quartz){
-                           importarEjb.persistRelacionSirOfi(relacionSirOfi);
-                        }else */ {
-                           relSirOfiEjb.persist(relacionSirOfi);
-                        }
-                        
-                                        
+
+                        relSirOfiEjb.persist(relacionSirOfi);
+
+
                         c++;
                         if (c % 100 == 0) {
                           log.info("   RelacionesSIROFI:  (" + c + ") "
@@ -1035,10 +904,6 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                       Long codServicio = new Long(codigoServicio);
 
                       Oficina oficina;
-                      /*
-                      if(quartz){
-                        oficina = importarEjb.findOficina(codigoOficina);
-                      }else */ 
                       oficina = oficinesCache.get(codigoOficina);
                       
                       if (oficina == null) {
@@ -1047,24 +912,17 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                       //  log.info("obtenemos oficina");
 
                       Servicio servicio;
-                      /*
-                      if(quartz){
-                        servicio = importarEjb.findServicio(codServicio);
-                      }else */ {
-                        servicio = servicioEjb.findById(codServicio);
-                      }
+
+                      servicio = servicioEjb.findById(codServicio);
+
                       //  log.info("obtenemos servicio");
                       if(servicio == null){
                         servicio = new Servicio();
                         servicio.setCodServicio(codServicio);
                         servicio.setDescServicio(fila[2].trim());
                        // log.info("Antes del persist servicio");
-                        /*
-                        if(quartz){
-                          importarEjb.persistServicio(servicio);
-                        }else */ {
-                          servicioEjb.persist(servicio);
-                        }
+                        servicioEjb.persist(servicio);
+
                       }
                       Set<Servicio> servicios = oficina.getServicios();
                       if (servicios == null) {
@@ -1072,13 +930,9 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                         oficina.setServicios(servicios);
                       }
                       servicios.add(servicio);
-                      
-                      /*
-                      if(quartz){
-                        importarEjb.mergeOficina(oficina);
-                      }else */ {
-                        oficinaEjb.merge(oficina);
-                      }
+
+                      oficinaEjb.merge(oficina);
+
                       // log.info("Despues del merge oficina");
                     }
                   }catch(Exception e){
@@ -1111,20 +965,15 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
         }
         
         Descarga descarga;
-        /*if(quartz){
-          // Guardamos fecha Importacion y tipo
-          descarga = importarEjb.findDescargaByTipo(Dir3caibConstantes.OFICINA);
-          descarga.setFechaImportacion(formatoFecha.format(hoy));
-          importarEjb.mergeDescarga(descarga);
-        } else */ {
-          descarga = descargaEjb.findByTipo(Dir3caibConstantes.OFICINA);
-          if (descarga == null) {
-            descarga = new Descarga();
-            descarga.setTipo(Dir3caibConstantes.OFICINA);
-          }
-          descarga.setFechaImportacion(formatoFecha.format(hoy));
-          descargaEjb.merge(descarga);
+
+        descarga = descargaEjb.findByTipo(Dir3caibConstantes.OFICINA);
+        if (descarga == null) {
+          descarga = new Descarga();
+          descarga.setTipo(Dir3caibConstantes.OFICINA);
         }
+        descarga.setFechaImportacion(hoy);
+        descargaEjb.merge(descarga);
+
         
         results.setDescarga(descarga);
 
@@ -1150,114 +999,110 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
    * @param fechaFin
    */
   @Override
-  public void descargarOficinasWS(String fechaInicio, String fechaFin) throws Exception {
+  public void descargarOficinasWS(Date fechaInicio, Date fechaFin) throws Exception {
 
       byte[] buffer = new byte[1024];
-      try{
 
-         //Definimos el formato de la fecha para las descargas de los WS.
-          log.info( "Fecha Inicio " + fechaInicio);
-          log.info( "Fecha Fin " + fechaFin);
 
-          // Guardaremos la fecha de la ultima descarga
-          Descarga descarga = new Descarga();
-          descarga.setTipo(Dir3caibConstantes.OFICINA);
+     //Definimos el formato de la fecha para las descargas de los WS.
+      log.info( "Fecha Inicio " + fechaInicio);
+      log.info( "Fecha Fin " + fechaFin);
 
-          //guardamos todas las fechas de la descarga
-          if(fechaInicio!= null){
-            descarga.setFechaInicio(fechaInicio);
-          }
-          if(fechaFin!=null){
-            descarga.setFechaFin(fechaFin);
-          }
+      // Guardaremos la fecha de la ultima descarga
+      Descarga descarga = new Descarga();
+      descarga.setTipo(Dir3caibConstantes.OFICINA);
 
-          // Si las fechas estan vacias, las de descarga tenemos que fijar la fecha de hoy.
-          Date hoy = new Date();
-          String sHoy = formatoFecha.format(hoy);
-          if(fechaInicio.isEmpty()){
-            descarga.setFechaInicio(sHoy);
-          }
-
-          if(fechaFin.isEmpty()){
-            descarga.setFechaFin(sHoy);
-          }
-
-          log.info("DESCARGA FECHA INICIO " + descarga.getFechaInicio());
-
-          //Obtenemos las diferentes rutas para invocar a los WS y almacenar la información obtenida
-          String usuario = System.getProperty(Dir3caibConstantes.DIR3WS_USUARIO_PROPERTY);
-          String password = System.getProperty(Dir3caibConstantes.DIR3WS_PASSWORD_PROPERTY);
-          String ruta = System.getProperty(Dir3caibConstantes.ARCHIVOS_LOCATION_PROPERTY);
-          String rutaOficinas = System.getProperty(Dir3caibConstantes.OFICINAS_LOCATION_PROPERTY);
-
-          SD02OFDescargaOficinasService service = new SD02OFDescargaOficinasService();
-
-          // Establecemos los parametros necesarios para el WS
-          OficinasWs parametros = new OficinasWs();
-          parametros.setUsuario(usuario);
-          parametros.setClave(password);
-          parametros.setFormatoFichero(FormatoFichero.CSV);
-          parametros.setTipoConsulta(TipoConsultaOF.COMPLETO);
-
-          // definimos fechas
-          parametros.setFechaInicio(fechaInicio);
-          parametros.setFechaFin(fechaFin);
-
-          // Invocamos el WS
-          RespuestaWS respuesta = service.getSD02OFDescargaOficinas().exportar(parametros);
-          Base64 decoder = new Base64();
-
-          log.info("Codigo: " + respuesta.getCodigo());
-          log.info("Descripcion: " + respuesta.getDescripcion());
-
-          // Realizamos una copia del archivo zip de la ultima descarga
-          File file = new File(ruta + Dir3caibConstantes.OFICINAS_ARCHIVO_ZIP);
-          if(file.exists()){
-            FileUtils.copyFile(file, new File(ruta + "old_" + Dir3caibConstantes.OFICINAS_ARCHIVO_ZIP));
-          }
-
-          //Guardamos el zip devuelto por el WS en el directorio.
-          FileUtils.writeByteArrayToFile(new File(ruta + Dir3caibConstantes.OFICINAS_ARCHIVO_ZIP), decoder.decode(respuesta.getFichero()));
-
-          // Borramos contenido
-          FileUtils.cleanDirectory(new File(rutaOficinas));
-          //Descomprimir el archivo
-          ZipInputStream zis = new ZipInputStream(new FileInputStream(ruta + Dir3caibConstantes.OFICINAS_ARCHIVO_ZIP));
-          ZipEntry zipEntry = zis.getNextEntry();
-
-          while(zipEntry != null){
-             String fileName = zipEntry.getName();
-             File newFile = new File(rutaOficinas + fileName);
-             log.info("Fichero descomprimido: "+ newFile.getAbsoluteFile());
-
-             //create all non exists folders
-              //else you will hit FileNotFoundException for compressed folder
-              new File(newFile.getParent()).mkdirs();
-              FileOutputStream fos = new FileOutputStream(newFile);
-
-              int len;
-              while ((len = zis.read(buffer)) > 0) {
-                  fos.write(buffer, 0, len);
-              }
-              fos.close();
-              zipEntry = zis.getNextEntry();
-
-          }
-          zis.closeEntry();
-          zis.close();
-
-          // Guardamos los datos de la descarga.
-          /*
-          if(quartz){
-            importarEjb.persistDescarga(descarga);
-          }else */ {
-            descargaEjb.persist(descarga);
-          }
-      }catch(IOException ex){
-          ex.printStackTrace();
-      }catch (Exception e){
-          e.printStackTrace();
+      //guardamos todas las fechas de la descarga
+      if(fechaInicio!= null){
+        descarga.setFechaInicio(fechaInicio);
       }
+      if(fechaFin!=null){
+        descarga.setFechaFin(fechaFin);
+      }
+
+      // Si las fechas estan vacias, las de descarga tenemos que fijar la fecha de hoy.
+      Date hoy = new Date();
+      //Si no indican fechas es una sincro desde el principio de los tiempos.
+      /*if(fechaInicio == null){
+        descarga.setFechaInicio(hoy);
+      }*/
+
+      if(fechaFin == null){
+        descarga.setFechaFin(hoy);
+      }
+
+      log.info("DESCARGA FECHA INICIO " + descarga.getFechaInicio());
+
+      //Obtenemos las diferentes rutas para invocar a los WS y almacenar la información obtenida
+      String usuario = System.getProperty(Dir3caibConstantes.DIR3WS_USUARIO_PROPERTY);
+      String password = System.getProperty(Dir3caibConstantes.DIR3WS_PASSWORD_PROPERTY);
+      String ruta = System.getProperty(Dir3caibConstantes.ARCHIVOS_LOCATION_PROPERTY);
+      String rutaOficinas = System.getProperty(Dir3caibConstantes.OFICINAS_LOCATION_PROPERTY);
+
+      SD02OFDescargaOficinasService service = new SD02OFDescargaOficinasService();
+
+      // Establecemos los parametros necesarios para el WS
+      OficinasWs parametros = new OficinasWs();
+      parametros.setUsuario(usuario);
+      parametros.setClave(password);
+      parametros.setFormatoFichero(FormatoFichero.CSV);
+      parametros.setTipoConsulta(TipoConsultaOF.COMPLETO);
+
+      // definimos fechas
+      if (fechaInicio != null) {
+        parametros.setFechaInicio(formatoFecha.format(fechaInicio));
+      }
+      if (fechaFin != null){
+        parametros.setFechaFin(formatoFecha.format(fechaFin));
+      }
+
+      // Invocamos el WS
+      RespuestaWS respuesta = service.getSD02OFDescargaOficinas().exportar(parametros);
+      Base64 decoder = new Base64();
+
+      log.info("Codigo: " + respuesta.getCodigo());
+      log.info("Descripcion: " + respuesta.getDescripcion());
+
+      // Realizamos una copia del archivo zip de la ultima descarga
+      File file = new File(ruta + Dir3caibConstantes.OFICINAS_ARCHIVO_ZIP);
+      if(file.exists()){
+        FileUtils.copyFile(file, new File(ruta + "old_" + Dir3caibConstantes.OFICINAS_ARCHIVO_ZIP));
+      }
+
+      //Guardamos el zip devuelto por el WS en el directorio.
+      FileUtils.writeByteArrayToFile(new File(ruta + Dir3caibConstantes.OFICINAS_ARCHIVO_ZIP), decoder.decode(respuesta.getFichero()));
+
+      // Borramos contenido
+      FileUtils.cleanDirectory(new File(rutaOficinas));
+      //Descomprimir el archivo
+      ZipInputStream zis = new ZipInputStream(new FileInputStream(ruta + Dir3caibConstantes.OFICINAS_ARCHIVO_ZIP));
+      ZipEntry zipEntry = zis.getNextEntry();
+
+      while(zipEntry != null){
+         String fileName = zipEntry.getName();
+         File newFile = new File(rutaOficinas + fileName);
+         log.info("Fichero descomprimido: "+ newFile.getAbsoluteFile());
+
+         //create all non exists folders
+          //else you will hit FileNotFoundException for compressed folder
+          new File(newFile.getParent()).mkdirs();
+          FileOutputStream fos = new FileOutputStream(newFile);
+
+          int len;
+          while ((len = zis.read(buffer)) > 0) {
+              fos.write(buffer, 0, len);
+          }
+          fos.close();
+          zipEntry = zis.getNextEntry();
+
+      }
+      zis.closeEntry();
+      zis.close();
+
+
+      descargaEjb.persist(descarga);
+
+
   }
 
   /* Tarea que en un primer paso descarga los archivos csv de las oficinas y posteriormente importa el contenido
@@ -1272,12 +1117,11 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
 
             // obtenemos los datos de la última descarga
             Descarga ultimaDescarga = descargaEjb.findByTipo(Dir3caibConstantes.OFICINA);
-            String fechaInicio =ultimaDescarga.getFechaFin(); // fecha de la ultima descarga
+            Date fechaInicio =ultimaDescarga.getFechaFin(); // fecha de la ultima descarga
 
 
             // obtenemos la fecha de hoy
-            Date hoy = new Date();
-            String fechaFin = formatoFecha.format(hoy);
+            Date fechaFin = new Date();
 
             // Obtiene los archivos csv via WS
             descargarOficinasWS(fechaInicio, fechaFin);

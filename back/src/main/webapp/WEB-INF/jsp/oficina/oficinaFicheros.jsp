@@ -48,8 +48,8 @@
                                         <c:forEach var="existente" items="${existentes}">
                                             <tr>
                                                 <td><a href="<c:url value="/archivo/${existente}/oficina"/>" target="_blank">${existente}</a></td>
-                                                <td>${descarga.fechaFin}</td>
-                                                <td>${descarga.fechaImportacion}</td>
+                                                <td><fmt:formatDate pattern="dd/MM/yyyy" value="${descarga.fechaFin}" /></td>
+                                                <td><fmt:formatDate pattern="dd/MM/yyyy" value="${descarga.fechaImportacion}" /></td>
                                             </tr>
                                         </c:forEach>
                                       </tbody>

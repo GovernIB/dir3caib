@@ -6,20 +6,12 @@ import es.caib.dir3caib.back.form.UnidadBusquedaForm;
 import es.caib.dir3caib.back.utils.CodigoValor;
 import es.caib.dir3caib.back.utils.Mensaje;
 import es.caib.dir3caib.back.utils.Nodo;
-import es.caib.dir3caib.persistence.ejb.CatAmbitoTerritorialLocal;
-import es.caib.dir3caib.persistence.ejb.CatComunidadAutonomaLocal;
-import es.caib.dir3caib.persistence.ejb.CatNivelAdministracionLocal;
-import es.caib.dir3caib.persistence.ejb.CatProvinciaLocal;
-import es.caib.dir3caib.persistence.ejb.ContactoUOLocal;
-import es.caib.dir3caib.persistence.ejb.DescargaLocal;
-import es.caib.dir3caib.persistence.ejb.ImportadorUnidadesLocal;
-import es.caib.dir3caib.persistence.ejb.UnidadLocal;
+import es.caib.dir3caib.persistence.ejb.*;
 import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.model.utils.ObjetoBasico;
 import es.caib.dir3caib.persistence.utils.Paginacion;
 import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
 import es.caib.dir3caib.utils.Utils;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -31,10 +23,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
-
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -142,7 +137,7 @@ public class UnidadController extends BaseController{
      * @return 
      */
     @RequestMapping(value = "/ficheros", method = RequestMethod.GET)
-     public ModelAndView ficherosList(HttpServletRequest request){
+     public ModelAndView ficherosList(HttpServletRequest request) throws Exception{
 
          ModelAndView mav = new ModelAndView("/unidad/unidadFicheros");
          
@@ -151,33 +146,29 @@ public class UnidadController extends BaseController{
          ArrayList<String> existentes = new ArrayList<String>(Arrays.asList(f.list()));
          
          // Mostramos la fecha de la ultima descarga
-         try{
-            Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.UNIDAD);
-            if(descarga != null){              
-              // Miramos si debemos mostrar el botón de importación, 
-              // solo se muestra si la fecha de Inicio descarga es superior a la fechaImportacion
-              String fechaInicio = descarga.getFechaInicio();
-              String fechaImportacion = descarga.getFechaImportacion();
 
-              //formateamos fechas para compararlas
-              Date fInicio = formatoFecha.parse(fechaInicio);  
-              if(fechaImportacion != null){
-                Date fImportacion = formatoFecha.parse(fechaImportacion);  
-                if(fInicio.after(fImportacion)){
-                  mav.addObject("mostrarimportacion", "mostrarImportacion");
-                }      
-              }else {
+        Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.UNIDAD);
+        if(descarga != null) {
+          // Miramos si debemos mostrar el botón de importación,
+          // solo se muestra si la fecha de Inicio descarga es superior a la fechaImportacion
+          Date fechaInicio = descarga.getFechaInicio();
+          Date fechaImportacion = descarga.getFechaImportacion();
+
+          if (fechaImportacion != null) {
+            if (fechaInicio != null) {
+              if (fechaInicio.after(fechaImportacion)) {
                 mav.addObject("mostrarimportacion", "mostrarImportacion");
-              }             
-              mav.addObject("descarga", descarga);
+              }
             }
-         }catch(Exception e){
-           e.printStackTrace();
-         }
+          } else {
+            mav.addObject("mostrarimportacion", "mostrarImportacion");
+          }
+
+          mav.addObject("descarga", descarga);
+        }
+        mav.addObject("existentes", existentes);
          
-         mav.addObject("existentes", existentes);
-         
-         return mav;
+        return mav;
      }
     
     /**
@@ -196,16 +187,16 @@ public class UnidadController extends BaseController{
      * Obtiene las unidades mediante el WS de DIR3
      */
     @RequestMapping(value = "/obtener", method = RequestMethod.POST)
-    public String descargaUnidades(@ModelAttribute FechasForm fechasForm, HttpServletRequest request)throws Exception {
+    public String descargaUnidades(@ModelAttribute FechasForm fechasForm, HttpServletRequest request) throws Exception {
         
-        log.info("fechaInicio: " + fechasForm.getFechaInicioFormateada(Dir3caibConstantes.FORMATO_FECHA));
+      /*  log.info("fechaInicio: " + fechasForm.getFechaInicioFormateada(Dir3caibConstantes.FORMATO_FECHA));
         log.info("fechaFin: " + fechasForm.getFechaFinFormateada(Dir3caibConstantes.FORMATO_FECHA));
         
           //Fechas de descarga
         String fechaInicio = fechasForm.getFechaInicioFormateada(Dir3caibConstantes.FORMATO_FECHA);
-        String fechaFin = fechasForm.getFechaFinFormateada(Dir3caibConstantes.FORMATO_FECHA);
+        String fechaFin = fechasForm.getFechaFinFormateada(Dir3caibConstantes.FORMATO_FECHA);*/
         
-        descargarUnidadesWS(request, fechaInicio, fechaFin);
+        descargarUnidadesWS(request, fechasForm.getFechaInicio(), fechasForm.getFechaFin());
         
         // TODO: Añadir objeto descarga al request (modelAndView)
          
@@ -283,8 +274,7 @@ public class UnidadController extends BaseController{
         try{
           // Obtenemos la fecha de la ultima descarga/sincronizacion
           Descarga ultimaDescarga = descargaEjb.findByTipo(Dir3caibConstantes.UNIDAD);
-          // Establecemmos la fecha de hoy
-          String hoy = formatoFecha.format(new Date());
+          Date hoy = new Date();
           // Obtenemos los archivos por WS
           descargarUnidadesWS(request, ultimaDescarga.getFechaFin(), hoy);
           // Importamos los datos a la BD.
@@ -304,7 +294,7 @@ public class UnidadController extends BaseController{
      * @param fechaInicio
      * @param fechaFin
      */     
-    public void descargarUnidadesWS(HttpServletRequest request, String fechaInicio, String fechaFin) throws Exception {
+    public void descargarUnidadesWS(HttpServletRequest request, Date fechaInicio, Date fechaFin) throws Exception {
         try{
             importadorUnidades.descargarUnidadesWS(fechaInicio, fechaFin);
             Mensaje.saveMessageInfo(request, "Se han obtenido correctamente las unidades");

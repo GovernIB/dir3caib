@@ -16,15 +16,9 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-
 import java.io.*;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -132,27 +126,17 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
    /**
   * Método que importa el contenido de los archivos del catálog  descargados previamente a través
   * de los WS.
-  * @param procesados Lista de archivos que han sido procesados al finalizar la importación
-  * @param inexistentes Lista de archivos que no existen y deberian existir
-  * @param descarga objeto donde guardar los datos de la descarga realizada. Se hace al finalizar la importación
-  * @param quartz booleano que indica si la llamada proviene de una tarea quartz.
-  *             Esto nos permite usar un ejb o otro para controlar los permisos(autenticación)
   * */
   @Override
   @TransactionTimeout(value=3600)
   public ResultadosImportacion importarCatalogo() throws Exception  {
     
      
-    ResultadosImportacion results = new ResultadosImportacion();
-    
-    List<String> procesados = results.getProcesados();
-    List<String> inexistentes = results.getInexistentes();
-  
-    //  Descarga descarga, 
-    //boolean quartz = false;
-
-     //Date hoy = new Date();
-     //SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
+     ResultadosImportacion results = new ResultadosImportacion();
+     //Lista de archivos que han sido procesados al finalizar la importación
+     List<String> procesados = results.getProcesados();
+     //Lista de archivos que no existen y deberian existir
+     List<String> inexistentes = results.getInexistentes();
 
      // Obtenemos el listado de ficheros que hay dentro del directorio indicado
      File f = FileSystemManager.getArchivosPath(Dir3caibConstantes.CATALOGOS_LOCATION_PROPERTY);
@@ -203,12 +187,9 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                          String codigoEntidadGeografica = fila[0];
                          CatEntidadGeografica entidadGeografica;
                          entidadGeografica = cacheEntidadGeografica.get(codigoEntidadGeografica);
-/*
-                         if(quartz){
-                            entidadGeografica = importarEjb.findEntidadGeografica(codigoEntidadGeografica);
-                         }else */{
-                            entidadGeografica = catEntidadGeograficaEjb.findById(codigoEntidadGeografica);
-                         }
+
+                         entidadGeografica = catEntidadGeograficaEjb.findById(codigoEntidadGeografica);
+
                          
 
                          if(entidadGeografica == null){ // Si es nuevo creamos el objeto a introducir
@@ -217,11 +198,9 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                          }
 
                          entidadGeografica.setDescripcionEntidadGeografica(fila[1]);
-                         /*if(quartz){
-                            importarEjb.persistEntidadGeografica(entidadGeografica);
-                         }else*/{
-                            catEntidadGeograficaEjb.persist(entidadGeografica);
-                         }
+
+                         catEntidadGeograficaEjb.persist(entidadGeografica);
+
                          
                          cacheEntidadGeografica.put(codigoEntidadGeografica, entidadGeografica);
                          
@@ -243,22 +222,18 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                          // Miramos si existe ya en la BD
                          String codigoEstadoEntidad = fila[0];
                          CatEstadoEntidad estadoEntidad;
-                         /*if(quartz){
-                            estadoEntidad = importarEjb.findEstadoEntidad(codigoEstadoEntidad);
-                         }else*/ {
-                            estadoEntidad = catEstadoEntidadEjb.findById(codigoEstadoEntidad);
-                         }
+
+                         estadoEntidad = catEstadoEntidadEjb.findById(codigoEstadoEntidad);
+
 
                          if(estadoEntidad == null){ // Si es nuevo creamos el objeto a introducir
                            estadoEntidad = new CatEstadoEntidad();
                            estadoEntidad.setCodigoEstadoEntidad(codigoEstadoEntidad);
                          }
                          estadoEntidad.setDescripcionEstadoEntidad(fila[1]);
-                         /*if(quartz){
-                            importarEjb.persistEstadoEntidad(estadoEntidad);
-                         }else */{
-                            catEstadoEntidadEjb.persist(estadoEntidad);
-                         }
+
+                         catEstadoEntidadEjb.persist(estadoEntidad);
+
                      }catch(Exception e){
                          log.info(e.getMessage());
                      }
@@ -282,22 +257,18 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                          if(!sCodigoJerarquiaOficina.isEmpty()){
                            Long codigoJerarquiaOficina= new Long(sCodigoJerarquiaOficina);
                            CatJerarquiaOficina jerarquiaOficina;
-                           /*if(quartz){
-                             jerarquiaOficina = importarEjb.findJerarquiaOficina(codigoJerarquiaOficina);
-                           }else*/ {
-                             jerarquiaOficina = catJerarquiaOficinaEjb.findById(codigoJerarquiaOficina);
-                           }
+
+                           jerarquiaOficina = catJerarquiaOficinaEjb.findById(codigoJerarquiaOficina);
+
 
                            if(jerarquiaOficina == null){ // Si es nuevo creamos el objeto a introducir
                              jerarquiaOficina = new CatJerarquiaOficina();
                              jerarquiaOficina.setCodigoJerarquiaOficina(codigoJerarquiaOficina);
                            }
                            jerarquiaOficina.setDescripcionJerarquiaOficina(fila[1]);
-                           /*if(quartz){
-                              importarEjb.persistJerarquiaOficina(jerarquiaOficina);
-                           }else */ {
-                              catJerarquiaOficinaEjb.persist(jerarquiaOficina);
-                           }
+
+                           catJerarquiaOficinaEjb.persist(jerarquiaOficina);
+
                          }
                      }catch(Exception e){
                          log.info(e.getMessage());
@@ -318,21 +289,17 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                          String codigoMotivoExtincion = fila[0];
 
                          CatMotivoExtincion motivoExtincion;
-                         /*if(quartz){
-                             motivoExtincion = importarEjb.findMotivoExtincion(codigoMotivoExtincion);
-                         }else */{
-                             motivoExtincion = catMotivoExtincionEjb.findById(codigoMotivoExtincion);
-                         }
+
+                         motivoExtincion = catMotivoExtincionEjb.findById(codigoMotivoExtincion);
+
                          if(motivoExtincion == null){ // Si es nuevo creamos el objeto a introducir
                            motivoExtincion = new CatMotivoExtincion();
                            motivoExtincion.setCodigoMotivoExtincion(codigoMotivoExtincion);
                          }
                          motivoExtincion.setDescripcionMotivoExtincion(fila[1]);
-                         /*if(quartz){
-                             importarEjb.persistMotivoExtincion(motivoExtincion);
-                         }else */{
-                             catMotivoExtincionEjb.persist(motivoExtincion);
-                         }
+
+                         catMotivoExtincionEjb.persist(motivoExtincion);
+
                      }catch(Exception e){
                          log.info(e.getMessage());
                      }
@@ -353,11 +320,9 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                          Long codigoNivelAdministracion = new Long(sCodigoNivelAdministracion);
 
                            CatNivelAdministracion nivelAdministracion;
-                           /*if(quartz){
-                               nivelAdministracion = importarEjb.findNivelAdministracion(codigoNivelAdministracion);
-                           }else */{
-                               nivelAdministracion = catNivelAdministracionEjb.findById(codigoNivelAdministracion);
-                           }
+
+                           nivelAdministracion = catNivelAdministracionEjb.findById(codigoNivelAdministracion);
+
 
                            if(nivelAdministracion == null){ // Si es nuevo creamos el objeto a introducir
                             nivelAdministracion = new CatNivelAdministracion();
@@ -365,11 +330,9 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                            }
                            nivelAdministracion.setDescripcionNivelAdministracion(fila[1]);
 
-                           /*if(quartz){
-                               importarEjb.persistNivelAdministracion(nivelAdministracion);
-                           }else */{
-                               catNivelAdministracionEjb.persist(nivelAdministracion);
-                           }
+
+                           catNivelAdministracionEjb.persist(nivelAdministracion);
+
                            
                            cacheNivelAdministracion.put(codigoNivelAdministracion, nivelAdministracion);
 
@@ -391,11 +354,9 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                          // Miramos si existe ya en la BD
                          Long codigoPais = new Long(fila[0].trim());
                          CatPais pais;
-                         /*if(quartz){
-                             pais = importarEjb.findPais(codigoPais);
-                         }else */{
-                             pais = catPaisEjb.findById(codigoPais);
-                         }
+
+                         pais = catPaisEjb.findById(codigoPais);
+
                          if(pais == null){ // Si es nuevo creamos el objeto a introducir
                            pais = new CatPais();
                            pais.setCodigoPais(codigoPais);
@@ -442,12 +403,9 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                        comunidadAutonoma.setDescripcionComunidad(fila[1]);
                        comunidadAutonoma.setC_comunidad_rpc(fila[3]);
                        comunidadAutonoma.setC_codigo_dir2(new Long(fila[4]));
-                       /*
-                       if(quartz){
-                          importarEjb.persistComunidadAutonoma(comunidadAutonoma);
-                       }else */{
-                          catComunidadAutonomaEjb.persist(comunidadAutonoma);
-                       }
+
+                       catComunidadAutonomaEjb.persist(comunidadAutonoma);
+
                       
                        cacheComunidadAutonoma.put(codigoComunidad,comunidadAutonoma);
                      }catch(Exception e){
@@ -487,11 +445,9 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                        provincia.setComunidadAutonoma(catComunidadAutonoma);
                        provincia.setDescripcionProvincia(fila[1]);
 
-                       /*if(quartz){
-                          importarEjb.persistProvincia(provincia);
-                       }else*/ {
-                          catProvinciaEjb.persist(provincia);
-                       }
+
+                       catProvinciaEjb.persist(provincia);
+
                        
                        cacheProvincia.put(codigoProvincia, provincia);
                      }catch(Exception e){
@@ -515,11 +471,9 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                          // Miramos si existe ya en la BD
                          Long codigoIsla = new Long(fila[0]);
                          CatIsla isla;
-                         /*if(quartz){
-                            isla = importarEjb.findIsla(codigoIsla);
-                         }else */{
-                            isla = catIslaEjb.findById(codigoIsla);
-                         }
+
+                         isla = catIslaEjb.findById(codigoIsla);
+
                          if(isla == null){ // Si es nuevo creamos el objeto a introducir
                            isla = new CatIsla();
                            isla.setCodigoIsla(codigoIsla);
@@ -527,19 +481,11 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                          isla.setDescripcionIsla(fila[1]);
                          CatProvincia provincia;
                          provincia = cacheProvincia.get(new Long(fila[2]));
-                         /*
-                         if(quartz){
-                            provincia = importarEjb.findProvincia(new Long(fila[2]));
-                         }else {
-                            provincia = catProvinciaEjb.findById(new Long(fila[2]));
-                         }
-                         */
+
                          isla.setProvincia(provincia);
-                         /*if(quartz){
-                            importarEjb.persistIsla(isla);
-                         }else */{
-                            catIslaEjb.persist(isla);
-                         }
+
+                         catIslaEjb.persist(isla);
+
                      }catch(Exception e){
                          log.info(e.getMessage());
                      }
@@ -558,21 +504,17 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                          // Miramos si existe ya en la BD
                          String codigoTipoContacto = fila[0];
                          CatTipoContacto tipoContacto;
-                         /*if(quartz){
-                            tipoContacto = importarEjb.findTipoContacto(codigoTipoContacto);
-                         }else */{
-                            tipoContacto = catTipoContactoEjb.findById(codigoTipoContacto);
-                         }
+
+                         tipoContacto = catTipoContactoEjb.findById(codigoTipoContacto);
+
                          if(tipoContacto == null){ // Si es nuevo creamos el objeto a introducir
                            tipoContacto = new CatTipoContacto();
                            tipoContacto.setCodigoTipoContacto(codigoTipoContacto);
                          }
                          tipoContacto.setDescripcionTipoContacto(fila[1]);
-                         /*if(quartz){
-                            importarEjb.persistTipoContacto(tipoContacto);
-                         }else*/{
-                            catTipoContactoEjb.persist(tipoContacto);
-                         }
+
+                         catTipoContactoEjb.persist(tipoContacto);
+
                      }catch(Exception e){
                          log.info(e.getMessage());
                      }
@@ -591,21 +533,17 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                          // Miramos si existe ya en la BD
                          String codigoTipoEntidadPublica = fila[0];
                          CatTipoEntidadPublica tipoEntidadPublica;
-                         /*if(quartz){
-                            tipoEntidadPublica = importarEjb.findTipoEntidadPublica(codigoTipoEntidadPublica);
-                         }else */{
-                            tipoEntidadPublica = catTipoEntidadPublicaEjb.findById(codigoTipoEntidadPublica);
-                         }
+
+                         tipoEntidadPublica = catTipoEntidadPublicaEjb.findById(codigoTipoEntidadPublica);
+
                          if(tipoEntidadPublica == null){ // Si es nuevo creamos el objeto a introducir
                            tipoEntidadPublica = new CatTipoEntidadPublica();
                            tipoEntidadPublica.setCodigoTipoEntidadPublica(codigoTipoEntidadPublica);
                          }
                          tipoEntidadPublica.setDescripcionTipoEntidadPublica(fila[1]);
-                         /*if(quartz){
-                            importarEjb.persistTipoEntidadPublica(tipoEntidadPublica);
-                         }else*/ {
-                            catTipoEntidadPublicaEjb.persist(tipoEntidadPublica);
-                         }
+
+                         catTipoEntidadPublicaEjb.persist(tipoEntidadPublica);
+
                      }catch(Exception e){
                          log.info(e.getMessage());
                      }
@@ -634,11 +572,9 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                            tipoUnidadOrganica.setCodigoTipoUnidadOrganica(codigoTipoUnidadOrganica);
                          }
                          tipoUnidadOrganica.setDescripcionTipoUnidadOrganica(fila[1]);
-                         /*if(quartz){
-                            importarEjb.persistTipoUnidadOrganica(tipoUnidadOrganica);
-                         }else */{
-                            catTipoUnidadOrganicaEjb.persist(tipoUnidadOrganica);
-                         }
+
+                         catTipoUnidadOrganicaEjb.persist(tipoUnidadOrganica);
+
                      }catch(Exception e){
                          log.info(e.getMessage());
                      }
@@ -657,21 +593,17 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                          // Miramos si existe ya en la BD
                          Long codigoTipoVia = new Long(fila[0]);
                          CatTipoVia tipoVia;
-                         /*if(quartz){
-                            tipoVia = importarEjb.findTipoVia(codigoTipoVia);
-                         }else */{
-                            tipoVia = catTipoViaEjb.findById(codigoTipoVia);
-                         }
+
+                         tipoVia = catTipoViaEjb.findById(codigoTipoVia);
+
                          if(tipoVia == null){ // Si es nuevo creamos el objeto a introducir
                            tipoVia = new CatTipoVia();
                            tipoVia.setCodigoTipoVia(codigoTipoVia);
                          }
                          tipoVia.setDescripcionTipoVia(fila[1]);
-                         /*if(quartz){
-                            importarEjb.persistTipoVia(tipoVia);
-                         }else*/ {
-                            catTipoViaEjb.persist(tipoVia);
-                         }
+
+                         catTipoViaEjb.persist(tipoVia);
+
                      }catch(Exception e){
                          log.info(e.getMessage());
                      }
@@ -706,11 +638,9 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                          ambitoTerritorial.setNivelAdministracion(catNivelAdministracion);
                        }
                        ambitoTerritorial.setDescripcionAmbito(fila[1]);
-                       /*if(quartz){
-                          importarEjb.persistAmbitoTerritorial(ambitoTerritorial);
-                       }else */{
-                          catAmbitoTerritorialEjb.persist(ambitoTerritorial);
-                       }
+
+                       catAmbitoTerritorialEjb.persist(ambitoTerritorial);
+
                      }catch(Exception e){
                          log.info(e.getMessage());
                      }
@@ -811,20 +741,15 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
      
      // Guardamos fecha Importacion y tipo
      Descarga descarga;
-     /*if(quartz) {
-       // TODO BORRAR
-       descarga = importarEjb.findDescargaByTipo(Dir3caibConstantes.CATALOGO);
-       descarga.setFechaImportacion(formatoFecha.format(new Date()));
-       importarEjb.mergeDescarga(descarga);
-     } else */{
-       descarga = descargaEjb.findByTipo(Dir3caibConstantes.CATALOGO);
-       if (descarga == null) {
-         descarga = new Descarga();
-         descarga.setTipo(Dir3caibConstantes.CATALOGO);
-       }
-       descarga.setFechaImportacion(formatoFecha.format(new Date()));
-       descargaEjb.merge(descarga);
+
+     descarga = descargaEjb.findByTipo(Dir3caibConstantes.CATALOGO);
+     if (descarga == null) {
+       descarga = new Descarga();
+       descarga.setTipo(Dir3caibConstantes.CATALOGO);
      }
+     descarga.setFechaImportacion(new Date());
+     descargaEjb.merge(descarga);
+
      results.setDescarga(descarga);
      
      System.gc();
@@ -864,122 +789,110 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
    * @param fechaInicio
    * @param fechaFin
-   * @param quartz booleano que indica si la llamada proviene de una tarea quartz.
-  *             Esto nos permite usar un ejb o otro para controlar los permisos(autenticación)
    */
    @Override
-   public void descargarCatalogoWS(String fechaInicio, String fechaFin) throws Exception{
+   public void descargarCatalogoWS(Date fechaInicio, Date fechaFin) throws Exception{
 
       byte[] buffer = new byte[1024];
-      try{
-
-         //Definimos el formato de la fecha para las descargas de los WS.
-
-          // Guardaremos la fecha de la ultima descarga
-          Descarga descarga = new Descarga();
-          descarga.setTipo(Dir3caibConstantes.CATALOGO);
 
 
-          //guardamos todas las fechas de la descarga
-          if(fechaInicio!= null){
-            descarga.setFechaInicio(fechaInicio);
+     //Definimos el formato de la fecha para las descargas de los WS.
 
-          }
-          if(fechaFin!=null){
-            descarga.setFechaFin(fechaFin);
-
-          }
-          // establecemos la fecha de hoy si las fechas estan vacias.
-          Date hoy = new Date();
-          String sHoy = formatoFecha.format(hoy);
-          if(fechaInicio.isEmpty()){
-            descarga.setFechaInicio(sHoy);
-          }
-          if(fechaFin.isEmpty()){
-            descarga.setFechaFin(sHoy);
-          }
-
-          log.info("DESCARGA FECHA INICIO " + descarga.getFechaInicio());
-
-          // Obtenemos  usuario y rutas para los WS.
-          String usuario = System.getProperty(Dir3caibConstantes.DIR3WS_USUARIO_PROPERTY);
-          String password = System.getProperty(Dir3caibConstantes.DIR3WS_PASSWORD_PROPERTY);
-          String ruta = System.getProperty(Dir3caibConstantes.ARCHIVOS_LOCATION_PROPERTY);
-          String rutaCatalogos = System.getProperty(Dir3caibConstantes.CATALOGOS_LOCATION_PROPERTY);
-
-          SC21CTVolcadoCatalogosService service = new SC21CTVolcadoCatalogosService();
-
-          // Invocamos al WS
-          RespuestaWS respuestaCsv = service.getSC21CTVolcadoCatalogos().exportar(usuario,password,"csv","COMPLETO");
-          //RespuestaWS respuestaXml = service.getSC21CTVolcadoCatalogos().exportar(usuario,password,"xml","COMPLETO")
-          Base64 decoder = new Base64();
-
-          log.info("Codigo: " + respuestaCsv.getCodigo());
-          log.info("Descripcion: " + respuestaCsv.getDescripcion());
-
-          // Realizamos copia del fichero de la ultima descarga
-          File file = new File(ruta + Dir3caibConstantes.CATALOGOS_ARCHIVO_ZIP);
-        log.info("Directorio :" + file.getAbsolutePath());
-        log.info("Tamaño :" +respuestaCsv.getFichero().length());
-          if(file.exists()){
-            FileUtils.copyFile(file, new File(ruta + "old_" + Dir3caibConstantes.CATALOGOS_ARCHIVO_ZIP));
-          }
-          // guardamos el nuevo fichero descargado
-          FileUtils.writeByteArrayToFile(file, decoder.decode(respuestaCsv.getFichero()));
+      // Guardaremos la fecha de la ultima descarga
+      Descarga descarga = new Descarga();
+      descarga.setTipo(Dir3caibConstantes.CATALOGO);
 
 
+      //guardamos todas las fechas de la descarga
+      if(fechaInicio!= null){
+        descarga.setFechaInicio(fechaInicio);
 
-          // Borramos contenido
-          FileUtils.cleanDirectory(new File(rutaCatalogos));
-
-          //Descomprimir el archivo
-          ZipInputStream zis = new ZipInputStream(new FileInputStream(ruta + Dir3caibConstantes.CATALOGOS_ARCHIVO_ZIP));
-          ZipEntry zipEntry = zis.getNextEntry();
-
-
-
-          while(zipEntry != null){
-
-             String fileName = zipEntry.getName();
-             File newFile = new File(rutaCatalogos + fileName);
-
-             log.info("Fichero descomprimido: "+ newFile.getAbsoluteFile());
-
-             //create all non exists folders
-              //else you will hit FileNotFoundException for compressed folder
-              new File(newFile.getParent()).mkdirs();
-
-
-
-
-              FileOutputStream fos = new FileOutputStream(newFile);
-
-              int len;
-              while ((len = zis.read(buffer)) > 0) {
-                  fos.write(buffer, 0, len);
-              }
-
-              fos.close();
-              zipEntry = zis.getNextEntry();
-
-          }
-          zis.closeEntry();
-          zis.close();
-
-          // guardamos datos de la descarga en función de quien nos invoque
-          /*
-          if(quartz){
-            importarEjb.persistDescarga(descarga);
-          } else */ {
-            descargaEjb.persist(descarga);
-          }
-      }catch(IOException ex){
-
-         ex.printStackTrace();
-      }catch(Exception e){
-
-          e.printStackTrace();
       }
+      if(fechaFin!=null){
+        descarga.setFechaFin(fechaFin);
+
+      }
+      // establecemos la fecha de hoy si las fechas estan vacias.
+      Date hoy = new Date();
+
+      if(fechaInicio == null){
+        descarga.setFechaInicio(hoy);
+      }
+      if(fechaFin == null){
+        descarga.setFechaFin(hoy);
+      }
+
+      log.info("DESCARGA FECHA INICIO " + descarga.getFechaInicio());
+
+      // Obtenemos  usuario y rutas para los WS.
+      String usuario = System.getProperty(Dir3caibConstantes.DIR3WS_USUARIO_PROPERTY);
+      String password = System.getProperty(Dir3caibConstantes.DIR3WS_PASSWORD_PROPERTY);
+      String ruta = System.getProperty(Dir3caibConstantes.ARCHIVOS_LOCATION_PROPERTY);
+      String rutaCatalogos = System.getProperty(Dir3caibConstantes.CATALOGOS_LOCATION_PROPERTY);
+
+      SC21CTVolcadoCatalogosService service = new SC21CTVolcadoCatalogosService();
+
+      // Invocamos al WS
+      RespuestaWS respuestaCsv = service.getSC21CTVolcadoCatalogos().exportar(usuario,password,"csv","COMPLETO");
+      //RespuestaWS respuestaXml = service.getSC21CTVolcadoCatalogos().exportar(usuario,password,"xml","COMPLETO")
+      Base64 decoder = new Base64();
+
+      log.info("Codigo: " + respuestaCsv.getCodigo());
+      log.info("Descripcion: " + respuestaCsv.getDescripcion());
+
+      // Realizamos copia del fichero de la ultima descarga
+      File file = new File(ruta + Dir3caibConstantes.CATALOGOS_ARCHIVO_ZIP);
+      log.info("Directorio :" + file.getAbsolutePath());
+      log.info("Tamaño :" +respuestaCsv.getFichero().length());
+      if(file.exists()){
+        FileUtils.copyFile(file, new File(ruta + "old_" + Dir3caibConstantes.CATALOGOS_ARCHIVO_ZIP));
+      }
+      // guardamos el nuevo fichero descargado
+      FileUtils.writeByteArrayToFile(file, decoder.decode(respuestaCsv.getFichero()));
+
+
+
+      // Borramos contenido
+      FileUtils.cleanDirectory(new File(rutaCatalogos));
+
+      //Descomprimir el archivo
+      ZipInputStream zis = new ZipInputStream(new FileInputStream(ruta + Dir3caibConstantes.CATALOGOS_ARCHIVO_ZIP));
+      ZipEntry zipEntry = zis.getNextEntry();
+
+
+
+      while(zipEntry != null){
+
+         String fileName = zipEntry.getName();
+         File newFile = new File(rutaCatalogos + fileName);
+
+         log.info("Fichero descomprimido: "+ newFile.getAbsoluteFile());
+
+         //create all non exists folders
+          //else you will hit FileNotFoundException for compressed folder
+          new File(newFile.getParent()).mkdirs();
+
+
+
+
+          FileOutputStream fos = new FileOutputStream(newFile);
+
+          int len;
+          while ((len = zis.read(buffer)) > 0) {
+              fos.write(buffer, 0, len);
+          }
+
+          fos.close();
+        zipEntry = zis.getNextEntry();
+
+      }
+      zis.closeEntry();
+      zis.close();
+
+
+      descargaEjb.persist(descarga);
+
+
    }
    
    
@@ -997,11 +910,11 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
              // obtenemos los datos de la última descarga
              Descarga ultimaDescarga = descargaEjb.findByTipo(Dir3caibConstantes.CATALOGO);
-             String fechaInicio =ultimaDescarga.getFechaFin(); // fecha de la ultima descarga
+             Date fechaInicio =ultimaDescarga.getFechaFin(); // fecha de la ultima descarga
 
              // obtenemos la fecha de hoy
-             Date hoy = new Date();
-             String fechaFin = formatoFecha.format(hoy);
+             Date fechaFin = new Date();
+
 
              // Obtiene los archivos csv via WS
              descargarCatalogoWS(fechaInicio, fechaFin);
