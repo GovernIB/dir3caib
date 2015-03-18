@@ -28,7 +28,7 @@ public class TestWs {
     // Propietats del Servidor
     try {
       System.out.println(new File(".").getAbsolutePath());
-      testProperties.load(new FileInputStream("D:\\dades\\dades\\SICRES3\\DIR3CAIB\\repositorio\\dir3\\ws\\dir3caib-api\\test.properties"));
+      testProperties.load(new FileInputStream("test.properties"));
     } catch (Exception e) {
       e.printStackTrace();
     }

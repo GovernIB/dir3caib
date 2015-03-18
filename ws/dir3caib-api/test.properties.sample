@@ -1,3 +1,5 @@
+# Rename this flie to test.properties and set your specific properties
+
 test_host=http://localhost:8080/dir3caib/ws/
 test_usr=caibapp
 test_pwd=caibapp
