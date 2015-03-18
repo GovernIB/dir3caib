@@ -5,7 +5,6 @@ import es.caib.dir3caib.persistence.model.ws.OficinaTF;
 import es.caib.dir3caib.persistence.utils.Versio;
 import es.caib.dir3caib.utils.Configuracio;
 import es.caib.dir3caib.utils.Constants;
-
 import org.jboss.ejb3.annotation.SecurityDomain;
 import org.jboss.wsf.spi.annotation.TransportGuarantee;
 import org.jboss.wsf.spi.annotation.WebContext;
@@ -15,7 +14,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
-
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -65,7 +64,7 @@ public class Dir3CaibObtenerOficinasImpl /* extends CommonMethodsImpl */implemen
    *          fecha en la que se realiza la actualizacion.
    */
   @Override
-  public OficinaTF obtenerOficina(String codigo, String fechaActualizacion, String fechaSincronizacion) throws Exception {
+  public OficinaTF obtenerOficina(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
 
     return obtenerOficinasEjb.obtenerOficina(codigo, fechaActualizacion,fechaSincronizacion);
   }
@@ -80,7 +79,7 @@ public class Dir3CaibObtenerOficinasImpl /* extends CommonMethodsImpl */implemen
    *          fecha en la que se realiza la actualizacion.
    */
   @Override
-  public List<OficinaTF> obtenerArbolOficinas(String codigo, String fechaActualizacion, String fechaSincronizacion)
+  public List<OficinaTF> obtenerArbolOficinas(String codigo, Date fechaActualizacion, Date fechaSincronizacion)
       throws Exception {
 
     return obtenerOficinasEjb.obtenerArbolOficinas(codigo, fechaActualizacion, fechaSincronizacion);

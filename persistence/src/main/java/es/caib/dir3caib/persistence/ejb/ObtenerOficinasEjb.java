@@ -36,20 +36,20 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
       * @param fechaActualizacion fecha en la que se realiza la actualizacion.
       */
     @Override
-    public OficinaTF obtenerOficina(String codigo, String fechaActualizacion, String fechaSincronizacion) throws Exception{
+    public OficinaTF obtenerOficina(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception{
 
         Oficina oficina = oficinaEjb.findFullById(codigo);
 
         OficinaTF oficinaTF= null;
         if(fechaActualizacion != null){
-          Date fechaAct = formatoFecha.parse(fechaActualizacion);
-          Date fechaSincro = formatoFecha.parse(fechaSincronizacion);
-          if(fechaAct.before(oficina.getFechaImportacion())){
+          //Date fechaAct = formatoFecha.parse(fechaActualizacion);
+         // Date fechaSincro = formatoFecha.parse(fechaSincronizacion);
+          if(fechaActualizacion.before(oficina.getFechaImportacion())){
             // Cogemos solo las relaciones organizativas posteriores a la fecha de sincronizacion
             Set<RelacionOrganizativaOfi> todasRelaciones = new HashSet<RelacionOrganizativaOfi>(oficina.getOrganizativasOfi());
             Set<RelacionOrganizativaOfi> relacionesValidas= new HashSet<RelacionOrganizativaOfi>();
             for(RelacionOrganizativaOfi relOrg: todasRelaciones){
-              if(relOrg.getUnidad().getFechaExtincion().before(fechaSincro)){
+              if(relOrg.getUnidad().getFechaExtincion().before(fechaSincronizacion)){
                 relacionesValidas.add(relOrg);
               }
             }
@@ -73,7 +73,7 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
       * @param fechaActualizacion fecha en la que se realiza la actualizacion.
       */
     @Override
-    public List<OficinaTF> obtenerArbolOficinas(String codigo, String fechaActualizacion, String fechaSincronizacion) throws Exception{
+    public List<OficinaTF> obtenerArbolOficinas(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception{
 
         List<Oficina> oficinas = oficinaEjb.obtenerOficinasOrganismo(codigo, fechaActualizacion,fechaSincronizacion);
 

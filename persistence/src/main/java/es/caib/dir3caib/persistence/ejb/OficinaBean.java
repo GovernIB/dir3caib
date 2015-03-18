@@ -215,13 +215,13 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
      * teniendo en cuenta la fecha de la ultima actualización de regweb.
      * Se emplea para la sincronizacion y actualización con regweb
      * @param codigo código de la unidad
-     * @param fechaActualizacion
-     * @param fechaSincronizacion
+     * @param fechaActualizacion   fecha de la ultima actualización
+     * @param fechaSincronizacion  fecha de la primera sincronización
      * @return
      * @throws Exception
      */
       @Override
-    public List<Oficina> obtenerOficinasOrganismo(String codigo, String fechaActualizacion, String fechaSincronizacion) throws Exception{
+    public List<Oficina> obtenerOficinasOrganismo(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception{
 
         log.info("obtenerOficinasOrganismo");
         // En un primer paso obtenemos las oficinas en función de si es SINCRO o ACTUALIZACION
@@ -264,16 +264,14 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
         }else{ // ES UNA ACTUALIZACION
           // Si hay fecha de actualización y es anterior o igual a la fecha de importación se debe
           // incluir en la lista de actualizadas
-          Date fechaAct = formatoFecha.parse(fechaActualizacion);
-          // Fecha de la primera sincronizacion de regweb
-          Date fechaSincro = formatoFecha.parse(fechaSincronizacion);
+
           for(Oficina oficina: oficinas){
-             if(fechaAct.before(oficina.getFechaImportacion()) || fechaAct.equals(oficina.getFechaImportacion())){
+             if(fechaActualizacion.before(oficina.getFechaImportacion()) || fechaActualizacion.equals(oficina.getFechaImportacion())){
                 // Cogemos solo las relaciones organizativas posteriores a la fecha de sincronizacion
                 Set<RelacionOrganizativaOfi> todasRelaciones = new HashSet<RelacionOrganizativaOfi>(oficina.getOrganizativasOfi());
                 Set<RelacionOrganizativaOfi> relacionesValidas= new HashSet<RelacionOrganizativaOfi>();
                 for(RelacionOrganizativaOfi relOrg: todasRelaciones){
-                  if(relacionValida(relOrg, fechaSincro)){
+                  if(relacionValida(relOrg, fechaSincronizacion)){
                     relacionesValidas.add(relOrg);
                   }
                 }
@@ -300,7 +298,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
      * @throws Exception
      */
     @Override
-     public List<Oficina> obtenerArbolOficinas(String codigo, String fechaActualizacion, String fechaSincronizacion) throws Exception{
+     public List<Oficina> obtenerArbolOficinas(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception{
 
         Query q;
         if(fechaActualizacion == null){ // SINCRONIZACION solo traemos las vigentes
@@ -326,16 +324,16 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
         // si hay fecha de actualización solo se envian las actualizadas
         // posterior a la fecha indicada
         if(fechaActualizacion!= null){
-            Date fechaAct = formatoFecha.parse(fechaActualizacion);
+          //  Date fechaAct = formatoFecha.parse(fechaActualizacion);
             // Fecha de la primera sincronizacion de regweb
-            Date fechaSincro = formatoFecha.parse(fechaSincronizacion);
+          //  Date fechaSincro = formatoFecha.parse(fechaSincronizacion);
             for(Oficina oficina : padres){
-              if(fechaAct.before(oficina.getFechaImportacion()) || fechaAct.equals(oficina.getFechaImportacion())){
+              if(fechaActualizacion.before(oficina.getFechaImportacion()) || fechaActualizacion.equals(oficina.getFechaImportacion())){
                 // Cogemos solo las relaciones organizativas posteriores a la fecha de sincronizacion
                 Set<RelacionOrganizativaOfi> todasRelaciones = new HashSet<RelacionOrganizativaOfi>(oficina.getOrganizativasOfi());
                 Set<RelacionOrganizativaOfi> relacionesValidas= new HashSet<RelacionOrganizativaOfi>();
                 for(RelacionOrganizativaOfi relOrg: todasRelaciones){
-                  if(relacionValida(relOrg, fechaSincro)){
+                  if(relacionValida(relOrg, fechaSincronizacion)){
                     relacionesValidas.add(relOrg);
                   }
                 }

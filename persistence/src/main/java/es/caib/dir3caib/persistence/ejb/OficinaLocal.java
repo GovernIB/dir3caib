@@ -9,6 +9,7 @@ import es.caib.dir3caib.persistence.model.utils.ObjetoBasico;
 import es.caib.dir3caib.persistence.utils.Paginacion;
 
 import javax.ejb.Local;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,8 +38,8 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
 
   public List<ObjetoBasico> hijos(String codigo) throws Exception;
 
-  public List<Oficina> obtenerOficinasOrganismo(String codigo, String fechaActualizacion,
-      String fechaSincronizacion) throws Exception;
+  public List<Oficina> obtenerOficinasOrganismo(String codigo, Date fechaActualizacion,
+      Date fechaSincronizacion) throws Exception;
   /**
      *  Método que devuelve  el arbol de oficinas de una oficina padre,
      * teniendo en cuenta la fecha de la ultima actualización de regweb.
@@ -49,8 +50,8 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      * @return
      * @throws Exception
      */
-  public List<Oficina> obtenerArbolOficinas(String codigo, String fechaActualizacion,
-      String fechaSincronizacion) throws Exception;
+  public List<Oficina> obtenerArbolOficinas(String codigo, Date fechaActualizacion,
+      Date fechaSincronizacion) throws Exception;
 
   /**
      * Obtiene las oficinas SIR de una unidad que están vigentes

@@ -3,6 +3,7 @@ package es.caib.dir3caib.persistence.ejb;
 import es.caib.dir3caib.persistence.model.ws.UnidadTF;
 
 import javax.ejb.Local;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -14,8 +15,8 @@ import java.util.List;
 @Local
 public interface ObtenerUnidadesLocal {
 
-    public UnidadTF obtenerUnidad(String codigo, String fechaActualizacion, String fechaSincronizacion) throws Exception;
+    public UnidadTF obtenerUnidad(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception;
 
-    public List<UnidadTF> obtenerArbolUnidades(String codigo,String fechaActualizada, String fechaSincronizacion) throws Exception;
+    public List<UnidadTF> obtenerArbolUnidades(String codigo, Date fechaActualizada, Date fechaSincronizacion) throws Exception;
 
 }

@@ -5,6 +5,7 @@ import es.caib.dir3caib.persistence.model.utils.ObjetoBasico;
 import es.caib.dir3caib.persistence.utils.Paginacion;
 
 import javax.ejb.Local;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -44,7 +45,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @return
      * @throws Exception
      */
-    public List<Unidad> obtenerArbolUnidades(String codigo, String fechaActualizacion, String fechaSincronizacion) throws Exception;
+    public List<Unidad> obtenerArbolUnidades(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception;
 
     public Boolean tieneHijos(String codigo) throws Exception;
 

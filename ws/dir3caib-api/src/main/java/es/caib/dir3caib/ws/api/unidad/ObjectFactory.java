@@ -57,11 +57,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetVersionResponse }
+     * Create an instance of {@link ObtenerArbolUnidades }
      * 
      */
-    public GetVersionResponse createGetVersionResponse() {
-        return new GetVersionResponse();
+    public ObtenerArbolUnidades createObtenerArbolUnidades() {
+        return new ObtenerArbolUnidades();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerArbolUnidadesResponse }
+     * 
+     */
+    public ObtenerArbolUnidadesResponse createObtenerArbolUnidadesResponse() {
+        return new ObtenerArbolUnidadesResponse();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerUnidadResponse }
+     * 
+     */
+    public ObtenerUnidadResponse createObtenerUnidadResponse() {
+        return new ObtenerUnidadResponse();
     }
 
     /**
@@ -81,19 +97,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ObtenerUnidadResponse }
+     * Create an instance of {@link GetVersionResponse }
      * 
      */
-    public ObtenerUnidadResponse createObtenerUnidadResponse() {
-        return new ObtenerUnidadResponse();
-    }
-
-    /**
-     * Create an instance of {@link ObtenerArbolUnidadesResponse }
-     * 
-     */
-    public ObtenerArbolUnidadesResponse createObtenerArbolUnidadesResponse() {
-        return new ObtenerArbolUnidadesResponse();
+    public GetVersionResponse createGetVersionResponse() {
+        return new GetVersionResponse();
     }
 
     /**
@@ -102,14 +110,6 @@ public class ObjectFactory {
      */
     public UnidadTF createUnidadTF() {
         return new UnidadTF();
-    }
-
-    /**
-     * Create an instance of {@link ObtenerArbolUnidades }
-     * 
-     */
-    public ObtenerArbolUnidades createObtenerArbolUnidades() {
-        return new ObtenerArbolUnidades();
     }
 
     /**

@@ -1,18 +1,17 @@
 package es.caib.dir3caib.ws.api.test;
 
+import es.caib.dir3caib.ws.api.catalogo.CatComunidadAutonomaTF;
+import es.caib.dir3caib.ws.api.catalogo.Dir3CaibObtenerCatalogosWs;
+import es.caib.dir3caib.ws.api.catalogo.Dir3CaibObtenerCatalogosWsService;
+import org.junit.Test;
+
+import javax.xml.ws.BindingProvider;
+import java.io.File;
 import java.io.FileInputStream;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-
-import javax.xml.ws.BindingProvider;
-
-import org.junit.Test;
-
-import es.caib.dir3caib.ws.api.catalogo.CatComunidadAutonomaTF;
-import es.caib.dir3caib.ws.api.catalogo.Dir3CaibObtenerCatalogosWs;
-import es.caib.dir3caib.ws.api.catalogo.Dir3CaibObtenerCatalogosWsService;
 
 /**
  * 
@@ -28,7 +27,8 @@ public class TestWs {
   static {
     // Propietats del Servidor
     try {
-      testProperties.load(new FileInputStream("test.properties"));
+      System.out.println(new File(".").getAbsolutePath());
+      testProperties.load(new FileInputStream("D:\\dades\\dades\\SICRES3\\DIR3CAIB\\repositorio\\dir3\\ws\\dir3caib-api\\test.properties"));
     } catch (Exception e) {
       e.printStackTrace();
     }

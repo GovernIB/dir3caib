@@ -246,7 +246,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
       * Se emplea para la sincronizacion y actualización con regweb
       * */
     @Override
-    public List<Unidad> obtenerArbolUnidades(String codigo, String fechaActualizacion, String fechaSincronizacion) throws Exception{
+    public List<Unidad> obtenerArbolUnidades(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception{
         log.info("CODIGO QUE NOS PASAN " + codigo);
         Query q;
         if(fechaActualizacion == null){ // Es una sincronizacion, solo traemos vigentes
@@ -269,13 +269,13 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         log.info("Número de PADRES UNIDADES: " + padres.size());
 
         if(fechaActualizacion!= null){ // Si hay fecha de actualizacion solo se envian las actualizadas
-           Date fechaAct = formatoFecha.parse(fechaActualizacion);
-           Date fechaSincro = formatoFecha.parse(fechaSincronizacion);
+          // Date fechaAct = formatoFecha.parse(fechaActualizacion);
+          // Date fechaSincro = formatoFecha.parse(fechaSincronizacion);
 
            for(Unidad unidad: padres){
-             if(fechaAct.before(unidad.getFechaImportacion()) || fechaAct.equals(unidad.getFechaImportacion())){
+             if(fechaActualizacion.before(unidad.getFechaImportacion()) || fechaActualizacion.equals(unidad.getFechaImportacion())){
                   // Miramos que la unidad no este extinguida o anulada anterior a la fecha de sincronizacion de regweb
-                  if(unidadValida(unidad,fechaSincro)){
+                  if(unidadValida(unidad,fechaSincronizacion)){
                     padresActualizados.add(unidad);
                   }
              }

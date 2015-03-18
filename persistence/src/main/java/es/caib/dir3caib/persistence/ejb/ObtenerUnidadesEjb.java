@@ -38,18 +38,18 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
      *  @param fechaActualizacion fecha en la que se realiza la actualización
      */
     @Override
-    public UnidadTF obtenerUnidad(String codigo, String fechaActualizacion, String fechaSincronizacion) throws Exception{
+    public UnidadTF obtenerUnidad(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception{
 
         Unidad unidad = unidadEjb.findFullById(codigo);
         UnidadTF unidadTF= null;
         // Si hay fecha de actualización y es anterior a la fecha de importación se debe transmitir
         if(fechaActualizacion != null){
-          Date fechaAct = formatoFecha.parse(fechaActualizacion);
-          Date fechaSincro = formatoFecha.parse(fechaSincronizacion);
+          //Date fechaAct = formatoFecha.parse(fechaActualizacion);
+          //Date fechaSincro = formatoFecha.parse(fechaSincronizacion);
           // Miramos si ha sido actualizada
-          if(fechaAct.before(unidad.getFechaImportacion()) || fechaAct.equals(unidad.getFechaImportacion())){
+          if(fechaActualizacion.before(unidad.getFechaImportacion()) || fechaActualizacion.equals(unidad.getFechaImportacion())){
               // miramos que no esté extinguida o anulada antes de la primera sincro.
-              if(unidadValida(unidad, fechaSincro)){
+              if(unidadValida(unidad, fechaSincronizacion)){
                  unidadTF = UnidadTF.generar(unidad);
               }
           }
@@ -67,7 +67,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
      * @param fechaSincronizacion fecha en la que se realiza la primera sincronizacion por parte del sistema que se sincroniza(regweb)
      */
     @Override
-    public List<UnidadTF> obtenerArbolUnidades(String codigo, String fechaActualizacion, String fechaSincronizacion) throws Exception{
+    public List<UnidadTF> obtenerArbolUnidades(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception{
 
         List<Unidad> arbol = unidadEjb.obtenerArbolUnidades(codigo,fechaActualizacion, fechaSincronizacion );
         List<UnidadTF> arbolTF = new ArrayList<UnidadTF>();

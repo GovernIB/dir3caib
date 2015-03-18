@@ -5,7 +5,6 @@ import es.caib.dir3caib.persistence.model.ws.UnidadTF;
 import es.caib.dir3caib.persistence.utils.Versio;
 import es.caib.dir3caib.utils.Configuracio;
 import es.caib.dir3caib.utils.Constants;
-
 import org.jboss.ejb3.annotation.SecurityDomain;
 import org.jboss.wsf.spi.annotation.TransportGuarantee;
 import org.jboss.wsf.spi.annotation.WebContext;
@@ -15,7 +14,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
-
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -63,7 +62,7 @@ public class Dir3CaibObtenerUnidadesImpl implements Dir3CaibObtenerUnidadesWs {
    *          fecha en la que se realiza la actualización
    */
   @Override
-  public UnidadTF obtenerUnidad(String codigo, String fechaActualizacion, String fechaSincronizacion) throws Exception {
+  public UnidadTF obtenerUnidad(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
 
     return obtenerUnidadesEjb.obtenerUnidad(codigo, fechaActualizacion, fechaSincronizacion);
   }
@@ -78,7 +77,7 @@ public class Dir3CaibObtenerUnidadesImpl implements Dir3CaibObtenerUnidadesWs {
    *          fecha en la que se realiza la actualización
    */
   @Override
-  public List<UnidadTF> obtenerArbolUnidades(String codigo, String fechaActualizacion, String fechaSincronizacion)
+  public List<UnidadTF> obtenerArbolUnidades(String codigo, Date fechaActualizacion, Date fechaSincronizacion)
       throws Exception {
 
     return obtenerUnidadesEjb.obtenerArbolUnidades(codigo, fechaActualizacion, fechaSincronizacion);

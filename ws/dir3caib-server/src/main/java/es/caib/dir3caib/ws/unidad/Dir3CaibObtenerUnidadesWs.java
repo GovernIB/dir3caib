@@ -7,6 +7,7 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -31,11 +32,11 @@ public interface Dir3CaibObtenerUnidadesWs {
 
   @WebMethod
   @RolesAllowed({ Constants.DIR_ADMIN })
-  public UnidadTF obtenerUnidad(String codigo, String fechaActualizacion, String fechaSincronizacion) throws Exception;
+  public UnidadTF obtenerUnidad(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception;
 
   @WebMethod
   @RolesAllowed({ Constants.DIR_ADMIN })
-  public List<UnidadTF> obtenerArbolUnidades(String codigo, String fechaActualizacion, String fechaSincronizacion)
+  public List<UnidadTF> obtenerArbolUnidades(String codigo, Date fechaActualizacion, Date fechaSincronizacion)
       throws Exception;
 
 }
