@@ -41,19 +41,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetVersion }
+     * Create an instance of {@link GetVersionWsResponse }
      * 
      */
-    public GetVersion createGetVersion() {
-        return new GetVersion();
-    }
-
-    /**
-     * Create an instance of {@link GetVersionWs }
-     * 
-     */
-    public GetVersionWs createGetVersionWs() {
-        return new GetVersionWs();
+    public GetVersionWsResponse createGetVersionWsResponse() {
+        return new GetVersionWsResponse();
     }
 
     /**
@@ -62,6 +54,14 @@ public class ObjectFactory {
      */
     public ObtenerArbolUnidades createObtenerArbolUnidades() {
         return new ObtenerArbolUnidades();
+    }
+
+    /**
+     * Create an instance of {@link UnidadTF }
+     * 
+     */
+    public UnidadTF createUnidadTF() {
+        return new UnidadTF();
     }
 
     /**
@@ -81,14 +81,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetVersionWsResponse }
-     * 
-     */
-    public GetVersionWsResponse createGetVersionWsResponse() {
-        return new GetVersionWsResponse();
-    }
-
-    /**
      * Create an instance of {@link ObtenerUnidad }
      * 
      */
@@ -97,19 +89,27 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link GetVersion }
+     * 
+     */
+    public GetVersion createGetVersion() {
+        return new GetVersion();
+    }
+
+    /**
+     * Create an instance of {@link GetVersionWs }
+     * 
+     */
+    public GetVersionWs createGetVersionWs() {
+        return new GetVersionWs();
+    }
+
+    /**
      * Create an instance of {@link GetVersionResponse }
      * 
      */
     public GetVersionResponse createGetVersionResponse() {
         return new GetVersionResponse();
-    }
-
-    /**
-     * Create an instance of {@link UnidadTF }
-     * 
-     */
-    public UnidadTF createUnidadTF() {
-        return new UnidadTF();
     }
 
     /**

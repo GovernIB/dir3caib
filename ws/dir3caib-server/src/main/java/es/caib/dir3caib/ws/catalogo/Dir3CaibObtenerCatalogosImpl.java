@@ -40,7 +40,6 @@ import java.util.List;
 @RolesAllowed({ Constants.DIR_ADMIN })
 @WebService(name = Dir3CaibObtenerCatalogosImpl.NAME_WS, portName = Dir3CaibObtenerCatalogosImpl.NAME_WS,
     serviceName = Dir3CaibObtenerCatalogosImpl.NAME_WS + "Service",
-    targetNamespace = "http://www.caib.es/dir3caib" ,
     endpointInterface = "es.caib.dir3caib.ws.catalogo.Dir3CaibObtenerCatalogosWs"
    )
 @WebContext(contextRoot = "/dir3caib/ws", urlPattern = "/" + Dir3CaibObtenerCatalogosImpl.NAME,

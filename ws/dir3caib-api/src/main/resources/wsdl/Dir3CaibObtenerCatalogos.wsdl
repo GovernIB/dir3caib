@@ -1,93 +1,362 @@
-<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions name="Dir3CaibObtenerCatalogosWsService" targetNamespace="http://www.caib.es/dir3caib" xmlns:ns1="http://catalogo.ws.dir3caib.caib.es/" xmlns:ns2="http://schemas.xmlsoap.org/wsdl/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.caib.es/dir3caib" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <wsdl:import location="http://localhost:8080/dir3caib/ws/Dir3CaibObtenerCatalogos?wsdl=Dir3CaibObtenerCatalogosWs.wsdl" namespace="http://catalogo.ws.dir3caib.caib.es/">
-    </wsdl:import>
-  <wsdl:binding name="Dir3CaibObtenerCatalogosWsServiceSoapBinding" type="ns1:Dir3CaibObtenerCatalogosWs">
-    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="Dir3CaibObtenerCatalogosWsService" targetNamespace="http://catalogo.ws.dir3caib.caib.es/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://catalogo.ws.dir3caib.caib.es/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://catalogo.ws.dir3caib.caib.es/" elementFormDefault="unqualified" targetNamespace="http://catalogo.ws.dir3caib.caib.es/" version="1.0">
+<xs:element name="getVersion" type="tns:getVersion"/>
+<xs:element name="getVersionResponse" type="tns:getVersionResponse"/>
+<xs:element name="getVersionWs" type="tns:getVersionWs"/>
+<xs:element name="getVersionWsResponse" type="tns:getVersionWsResponse"/>
+<xs:element name="obtenerCatComunidadAutonoma" type="tns:obtenerCatComunidadAutonoma"/>
+<xs:element name="obtenerCatComunidadAutonomaResponse" type="tns:obtenerCatComunidadAutonomaResponse"/>
+<xs:element name="obtenerCatEntidadGeografica" type="tns:obtenerCatEntidadGeografica"/>
+<xs:element name="obtenerCatEntidadGeograficaResponse" type="tns:obtenerCatEntidadGeograficaResponse"/>
+<xs:element name="obtenerCatEstadoEntidad" type="tns:obtenerCatEstadoEntidad"/>
+<xs:element name="obtenerCatEstadoEntidadResponse" type="tns:obtenerCatEstadoEntidadResponse"/>
+<xs:element name="obtenerCatLocalidad" type="tns:obtenerCatLocalidad"/>
+<xs:element name="obtenerCatLocalidadResponse" type="tns:obtenerCatLocalidadResponse"/>
+<xs:element name="obtenerCatNivelAdministracion" type="tns:obtenerCatNivelAdministracion"/>
+<xs:element name="obtenerCatNivelAdministracionResponse" type="tns:obtenerCatNivelAdministracionResponse"/>
+<xs:element name="obtenerCatPais" type="tns:obtenerCatPais"/>
+<xs:element name="obtenerCatPaisResponse" type="tns:obtenerCatPaisResponse"/>
+<xs:element name="obtenerCatProvincia" type="tns:obtenerCatProvincia"/>
+<xs:element name="obtenerCatProvinciaResponse" type="tns:obtenerCatProvinciaResponse"/>
+<xs:complexType name="obtenerCatComunidadAutonoma">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="obtenerCatComunidadAutonomaResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:catComunidadAutonomaTF"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="catComunidadAutonomaTF">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codigoComunidad" type="xs:long"/>
+      <xs:element minOccurs="0" name="codigoPais" type="xs:long"/>
+      <xs:element minOccurs="0" name="descripcionComunidad" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="obtenerCatEntidadGeografica">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="obtenerCatEntidadGeograficaResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:catEntidadGeograficaTF"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="catEntidadGeograficaTF">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codigoEntidadGeografica" type="xs:string"/>
+      <xs:element minOccurs="0" name="descripcionEntidadGeografica" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="obtenerCatProvincia">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="obtenerCatProvinciaResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:catProvinciaTF"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="catProvinciaTF">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codigoComunidadAutonoma" type="xs:long"/>
+      <xs:element minOccurs="0" name="codigoProvincia" type="xs:long"/>
+      <xs:element minOccurs="0" name="descripcionProvincia" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="obtenerCatNivelAdministracion">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="obtenerCatNivelAdministracionResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:catNivelAdministracion"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="catNivelAdministracion">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codigoNivelAdministracion" type="xs:long"/>
+      <xs:element minOccurs="0" name="descripcionNivelAdministracion" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="obtenerCatLocalidad">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="obtenerCatLocalidadResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:catLocalidadTF"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="catLocalidadTF">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codigoEntidadGeografica" type="xs:string"/>
+      <xs:element minOccurs="0" name="codigoLocalidad" type="xs:long"/>
+      <xs:element minOccurs="0" name="codigoProvincia" type="xs:long"/>
+      <xs:element minOccurs="0" name="descripcionLocalidad" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="obtenerCatEstadoEntidad">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="obtenerCatEstadoEntidadResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:catEstadoEntidad"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="catEstadoEntidad">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codigoEstadoEntidad" type="xs:string"/>
+      <xs:element minOccurs="0" name="descripcionEstadoEntidad" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="obtenerCatPais">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="obtenerCatPaisResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:catPais"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="catPais">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="alfa2Pais" type="xs:string"/>
+      <xs:element minOccurs="0" name="alfa3Pais" type="xs:string"/>
+      <xs:element minOccurs="0" name="codigoPais" type="xs:long"/>
+      <xs:element minOccurs="0" name="descripcionPais" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="getVersionWs">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="getVersionWsResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="getVersion">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="getVersionResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="getVersionWsResponse">
+    <wsdl:part name="parameters" element="tns:getVersionWsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getVersion">
+    <wsdl:part name="parameters" element="tns:getVersion">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatProvinciaResponse">
+    <wsdl:part name="parameters" element="tns:obtenerCatProvinciaResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatProvincia">
+    <wsdl:part name="parameters" element="tns:obtenerCatProvincia">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatEstadoEntidad">
+    <wsdl:part name="parameters" element="tns:obtenerCatEstadoEntidad">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getVersionWs">
+    <wsdl:part name="parameters" element="tns:getVersionWs">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatEntidadGeograficaResponse">
+    <wsdl:part name="parameters" element="tns:obtenerCatEntidadGeograficaResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatEstadoEntidadResponse">
+    <wsdl:part name="parameters" element="tns:obtenerCatEstadoEntidadResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatPais">
+    <wsdl:part name="parameters" element="tns:obtenerCatPais">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatPaisResponse">
+    <wsdl:part name="parameters" element="tns:obtenerCatPaisResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatComunidadAutonomaResponse">
+    <wsdl:part name="parameters" element="tns:obtenerCatComunidadAutonomaResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatComunidadAutonoma">
+    <wsdl:part name="parameters" element="tns:obtenerCatComunidadAutonoma">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatNivelAdministracion">
+    <wsdl:part name="parameters" element="tns:obtenerCatNivelAdministracion">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatLocalidadResponse">
+    <wsdl:part name="parameters" element="tns:obtenerCatLocalidadResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatLocalidad">
+    <wsdl:part name="parameters" element="tns:obtenerCatLocalidad">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getVersionResponse">
+    <wsdl:part name="parameters" element="tns:getVersionResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatEntidadGeografica">
+    <wsdl:part name="parameters" element="tns:obtenerCatEntidadGeografica">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatNivelAdministracionResponse">
+    <wsdl:part name="parameters" element="tns:obtenerCatNivelAdministracionResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="Dir3CaibObtenerCatalogosWs">
     <wsdl:operation name="obtenerCatComunidadAutonoma">
-      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="obtenerCatComunidadAutonoma" message="tns:obtenerCatComunidadAutonoma">
+    </wsdl:input>
+      <wsdl:output name="obtenerCatComunidadAutonomaResponse" message="tns:obtenerCatComunidadAutonomaResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatEntidadGeografica">
+      <wsdl:input name="obtenerCatEntidadGeografica" message="tns:obtenerCatEntidadGeografica">
+    </wsdl:input>
+      <wsdl:output name="obtenerCatEntidadGeograficaResponse" message="tns:obtenerCatEntidadGeograficaResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatProvincia">
+      <wsdl:input name="obtenerCatProvincia" message="tns:obtenerCatProvincia">
+    </wsdl:input>
+      <wsdl:output name="obtenerCatProvinciaResponse" message="tns:obtenerCatProvinciaResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatNivelAdministracion">
+      <wsdl:input name="obtenerCatNivelAdministracion" message="tns:obtenerCatNivelAdministracion">
+    </wsdl:input>
+      <wsdl:output name="obtenerCatNivelAdministracionResponse" message="tns:obtenerCatNivelAdministracionResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatLocalidad">
+      <wsdl:input name="obtenerCatLocalidad" message="tns:obtenerCatLocalidad">
+    </wsdl:input>
+      <wsdl:output name="obtenerCatLocalidadResponse" message="tns:obtenerCatLocalidadResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatEstadoEntidad">
+      <wsdl:input name="obtenerCatEstadoEntidad" message="tns:obtenerCatEstadoEntidad">
+    </wsdl:input>
+      <wsdl:output name="obtenerCatEstadoEntidadResponse" message="tns:obtenerCatEstadoEntidadResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatPais">
+      <wsdl:input name="obtenerCatPais" message="tns:obtenerCatPais">
+    </wsdl:input>
+      <wsdl:output name="obtenerCatPaisResponse" message="tns:obtenerCatPaisResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getVersionWs">
+      <wsdl:input name="getVersionWs" message="tns:getVersionWs">
+    </wsdl:input>
+      <wsdl:output name="getVersionWsResponse" message="tns:getVersionWsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getVersion">
+      <wsdl:input name="getVersion" message="tns:getVersion">
+    </wsdl:input>
+      <wsdl:output name="getVersionResponse" message="tns:getVersionResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="Dir3CaibObtenerCatalogosWsServiceSoapBinding" type="tns:Dir3CaibObtenerCatalogosWs">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="obtenerCatComunidadAutonoma">
+      <soap:operation soapAction="" style="document"/>
       <wsdl:input name="obtenerCatComunidadAutonoma">
-        <soap:body use="literal" />
+        <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output name="obtenerCatComunidadAutonomaResponse">
-        <soap:body use="literal" />
+        <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="obtenerCatEntidadGeografica">
-      <soap:operation soapAction="" style="document" />
+      <soap:operation soapAction="" style="document"/>
       <wsdl:input name="obtenerCatEntidadGeografica">
-        <soap:body use="literal" />
+        <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output name="obtenerCatEntidadGeograficaResponse">
-        <soap:body use="literal" />
+        <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="obtenerCatProvincia">
-      <soap:operation soapAction="" style="document" />
+      <soap:operation soapAction="" style="document"/>
       <wsdl:input name="obtenerCatProvincia">
-        <soap:body use="literal" />
+        <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output name="obtenerCatProvinciaResponse">
-        <soap:body use="literal" />
+        <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="obtenerCatLocalidad">
-      <soap:operation soapAction="" style="document" />
+      <soap:operation soapAction="" style="document"/>
       <wsdl:input name="obtenerCatLocalidad">
-        <soap:body use="literal" />
+        <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output name="obtenerCatLocalidadResponse">
-        <soap:body use="literal" />
+        <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="obtenerCatNivelAdministracion">
-      <soap:operation soapAction="" style="document" />
+      <soap:operation soapAction="" style="document"/>
       <wsdl:input name="obtenerCatNivelAdministracion">
-        <soap:body use="literal" />
+        <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output name="obtenerCatNivelAdministracionResponse">
-        <soap:body use="literal" />
+        <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="obtenerCatEstadoEntidad">
-      <soap:operation soapAction="" style="document" />
+      <soap:operation soapAction="" style="document"/>
       <wsdl:input name="obtenerCatEstadoEntidad">
-        <soap:body use="literal" />
+        <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output name="obtenerCatEstadoEntidadResponse">
-        <soap:body use="literal" />
+        <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="obtenerCatPais">
-      <soap:operation soapAction="" style="document" />
+      <soap:operation soapAction="" style="document"/>
       <wsdl:input name="obtenerCatPais">
-        <soap:body use="literal" />
+        <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output name="obtenerCatPaisResponse">
-        <soap:body use="literal" />
+        <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getVersionWs">
-      <soap:operation soapAction="" style="document" />
+      <soap:operation soapAction="" style="document"/>
       <wsdl:input name="getVersionWs">
-        <soap:body use="literal" />
+        <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output name="getVersionWsResponse">
-        <soap:body use="literal" />
+        <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getVersion">
-      <soap:operation soapAction="" style="document" />
+      <soap:operation soapAction="" style="document"/>
       <wsdl:input name="getVersion">
-        <soap:body use="literal" />
+        <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output name="getVersionResponse">
-        <soap:body use="literal" />
+        <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="Dir3CaibObtenerCatalogosWsService">
-    <wsdl:port binding="tns:Dir3CaibObtenerCatalogosWsServiceSoapBinding" name="Dir3CaibObtenerCatalogosWs">
-      <soap:address location="http://ibit157:8080/dir3caib/ws/Dir3CaibObtenerCatalogos" />
+    <wsdl:port name="Dir3CaibObtenerCatalogosWs" binding="tns:Dir3CaibObtenerCatalogosWsServiceSoapBinding">
+      <soap:address location="http://localhost:8080/dir3caib/ws/Dir3CaibObtenerCatalogos"/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

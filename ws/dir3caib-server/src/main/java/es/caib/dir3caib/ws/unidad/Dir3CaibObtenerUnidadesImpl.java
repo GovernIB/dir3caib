@@ -29,7 +29,7 @@ import java.util.List;
 @SOAPBinding(style = SOAPBinding.Style.RPC)
 @RolesAllowed({ Constants.DIR_ADMIN })
 @WebService(name = Dir3CaibObtenerUnidadesImpl.NAME_WS, portName = Dir3CaibObtenerUnidadesImpl.NAME_WS, serviceName = Dir3CaibObtenerUnidadesImpl.NAME_WS
-    + "Service", targetNamespace = "http://www.caib.es/dir3caib", endpointInterface = "es.caib.dir3caib.ws.unidad.Dir3CaibObtenerUnidadesWs")
+    + "Service", endpointInterface = "es.caib.dir3caib.ws.unidad.Dir3CaibObtenerUnidadesWs")
 @WebContext(contextRoot = "/dir3caib/ws", urlPattern = "/" + Dir3CaibObtenerUnidadesImpl.NAME, transportGuarantee = TransportGuarantee.NONE, secureWSDLAccess = false, authMethod = "WSBASIC")
 public class Dir3CaibObtenerUnidadesImpl implements Dir3CaibObtenerUnidadesWs {
 

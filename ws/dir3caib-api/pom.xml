@@ -15,9 +15,194 @@
     <version>1.0.0</version>
 	
 	<name>Dir3Caib - WS - Dir3Caib WS API</name>
+	
+	<properties>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  
+      <!-- JBoss dependency versions -->  
+      <version.org.jboss.spec.jboss.javaee.6.0>3.0.0.Final</version.org.jboss.spec.jboss.javaee.6.0>  
+		
+    </properties>
+	
+	<dependencyManagement>  
+      <dependencies>
+         <dependency>
+            <groupId>org.jboss.spec</groupId>
+            <artifactId>jboss-javaee-6.0</artifactId>
+            <version>${version.org.jboss.spec.jboss.javaee.6.0}</version>
+            <type>pom</type>
+            <scope>import</scope>
+         </dependency>
+      </dependencies>  
+   </dependencyManagement> 
+	
+		
+	<profiles>
+	  <profile>
+		<id>regenerateapi</id>
+		<activation>
+		   <activeByDefault>false</activeByDefault>
+		   <property>				    
+				<name>regenerateapi</name>
+			</property>
+		</activation>
+		<build>
+			<plugins>
+			
+			
+			<plugin>
+				<groupId>org.apache.cxf</groupId>
+				<artifactId>cxf-java2ws-plugin</artifactId>
+				<version>${cxf.version}</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.cxf</groupId>
+						<artifactId>cxf-rt-frontend-jaxws</artifactId>
+						<version>${cxf.version}</version>
+					</dependency>
+
+					<dependency>
+						<groupId>org.apache.cxf</groupId>
+						<artifactId>cxf-rt-frontend-simple</artifactId>
+						<version>${cxf.version}</version>
+					</dependency>
+
+					<dependency>
+						<groupId>es.caib.dir3caib</groupId>
+						<artifactId>dir3caib-ws-server</artifactId>
+						<version>1.0.0</version>
+					   <scope>compile</scope>
+				   </dependency>
+
+					<dependency>
+						<groupId>es.caib.dir3caib</groupId>
+						<artifactId>dir3caib-persistence</artifactId>
+						<version>1.0.0</version>
+						<scope>compile</scope>
+					</dependency>
+					
+					 <dependency>
+						<groupId>log4j</groupId>
+						<artifactId>log4j</artifactId>
+						<version>1.2.14</version>
+						<scope>compile</scope>
+					</dependency>
+					
+				</dependencies>
+			 
+				<executions>
+
+				    <execution>
+						<id>generate-wsdl-Dir3CaibObtenerCatalogosWs</id>
+						<phase>generate-sources</phase>
+						<configuration>
+							<className>es.caib.dir3caib.ws.catalogo.Dir3CaibObtenerCatalogosWs</className>
+							<genWsdl>true</genWsdl>							
+							<verbose>true</verbose>
+							<frontend>jaxws</frontend>
+							<databinding>jaxb</databinding>
+							<outputFile>${basedir}/src/main/resources/wsdl/Dir3CaibObtenerCatalogos.wsdl</outputFile>
+							<argline>-s ${basedir}/code -portname Dir3CaibObtenerCatalogosWs -address http://localhost:8080/dir3caib/ws/Dir3CaibObtenerCatalogos</argline>
+						</configuration>
+						<goals><goal>java2ws</goal></goals>
+					</execution>
+					<execution>
+						<id>generate-wsdl-Dir3CaibObtenerOficinasWs</id>
+						<phase>generate-sources</phase>
+						<configuration>
+							<className> es.caib.dir3caib.ws.oficina.Dir3CaibObtenerOficinasWs</className>
+							<genWsdl>true</genWsdl>							
+							<verbose>true</verbose>
+							<outputFile>${basedir}/src/main/resources/wsdl/Dir3CaibObtenerOficinas.wsdl</outputFile>
+							<argline>-s ${basedir}/code -portname Dir3CaibObtenerOficinasWs -address http://localhost:8080/dir3caib/ws/Dir3CaibObtenerOficinas</argline>
+						</configuration>
+						<goals><goal>java2ws</goal></goals>
+					</execution>
+					
+					<execution>
+						<id>generate-wsdl-Dir3CaibObtenerUnidadesWs</id>
+						<phase>generate-sources</phase>
+						<configuration>
+							<className>es.caib.dir3caib.ws.unidad.Dir3CaibObtenerUnidadesWs</className>
+							<genWsdl>true</genWsdl>							
+							<verbose>true</verbose>
+							<outputFile>${basedir}/src/main/resources/wsdl/Dir3CaibObtenerUnidades.wsdl</outputFile>
+							<argline>-s ${basedir}/code -portname Dir3CaibObtenerUnidadesWs -address http://localhost:8080/dir3caib/ws/Dir3CaibObtenerUnidades</argline>
+						</configuration>
+						<goals><goal>java2ws</goal></goals>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>  
+				  <groupId>org.jboss.ws.plugins</groupId>  
+				  <artifactId>maven-jaxws-tools-plugin</artifactId>  
+				  <version>1.1.1.Final</version>
+				  <configuration>  
+					<verbose>true</verbose>  
+					<goalPrefix>wsconsume</goalPrefix>	
+                    <extension>true</extension>					
+					<sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>					
+				  </configuration>  
+				  <executions>  
+					<execution>  
+					  <id>WSDL to Java API Dir3CaibObtenerCatalogos</id>  
+					  <goals><goal>wsconsume</goal></goals>  
+					  <configuration>  
+						<wsdls> 
+						  <wsdl>${basedir}/src/main/resources/wsdl/Dir3CaibObtenerCatalogos.wsdl</wsdl>  
+     					</wsdls>
+						<wsdlLocation>http://localhost:8080/dir3caib/ws/Dir3CaibObtenerCatalogos?wsdl</wsdlLocation>
+						<targetPackage>es.caib.dir3caib.ws.api.catalogo</targetPackage>
+						<argLine>-n</argLine>
+					  </configuration>  
+					</execution> 
+					<execution>  
+					  <id>WSDL to Java API Dir3CaibObtenerOficinas </id>  
+					  <goals><goal>wsconsume</goal></goals>  
+					  <configuration>  
+						<wsdls> 
+						  <wsdl>${basedir}/src/main/resources/wsdl/Dir3CaibObtenerOficinas.wsdl</wsdl>  
+     					</wsdls>
+						<wsdlLocation>http://localhost:8080/dir3caib/ws/Dir3CaibObtenerOficinas?wsdl</wsdlLocation>
+						<targetPackage>es.caib.dir3caib.ws.api.oficina</targetPackage>
+						<argLine>-n</argLine>
+					  </configuration>  
+					</execution> 
+					<execution>  
+					  <id>WSDL to Java API Dir3CaibObtenerUnidades</id>  
+					  <goals><goal>wsconsume</goal></goals>  
+					  <configuration>  
+						<wsdls> 
+						  <wsdl>${basedir}/src/main/resources/wsdl/Dir3CaibObtenerUnidades.wsdl</wsdl>  
+     					</wsdls>
+						<wsdlLocation>http://localhost:8080/dir3caib/ws/Dir3CaibObtenerUnidades?wsdl</wsdlLocation>
+						<targetPackage>es.caib.dir3caib.ws.api.unidad</targetPackage>
+						<argLine>-n</argLine>
+					  </configuration>  
+					</execution> 
+		
+				  </executions>  
+			</plugin> 
+
+		  </plugins>
+
+        </build>
+	  </profile>
+	</profiles>
+
+	
+	
+	
 
     <dependencies>
-
+	
+		   <dependency>  
+			<groupId>org.jboss.ws.cxf</groupId>  
+			<artifactId>jbossws-cxf-client</artifactId>  
+			<version>4.1.1.Final</version>  
+			<scope>provided</scope>  
+      </dependency>  
 
     </dependencies>
 

@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="Dir3CaibObtenerOficinasWsService" targetNamespace="http://oficina.ws.dir3caib.caib.es/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://oficina.ws.dir3caib.caib.es/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://oficina.ws.dir3caib.caib.es/" elementFormDefault="unqualified" targetNamespace="http://oficina.ws.dir3caib.caib.es/" version="1.0">
+<xs:element name="getVersion" type="tns:getVersion"/>
+<xs:element name="getVersionResponse" type="tns:getVersionResponse"/>
+<xs:element name="getVersionWs" type="tns:getVersionWs"/>
+<xs:element name="getVersionWsResponse" type="tns:getVersionWsResponse"/>
+<xs:element name="obtenerArbolOficinas" type="tns:obtenerArbolOficinas"/>
+<xs:element name="obtenerArbolOficinasResponse" type="tns:obtenerArbolOficinasResponse"/>
+<xs:element name="obtenerOficina" type="tns:obtenerOficina"/>
+<xs:element name="obtenerOficinaResponse" type="tns:obtenerOficinaResponse"/>
+<xs:element name="obtenerOficinasSIRUnidad" type="tns:obtenerOficinasSIRUnidad"/>
+<xs:element name="obtenerOficinasSIRUnidadResponse" type="tns:obtenerOficinasSIRUnidadResponse"/>
+<xs:complexType name="getVersionWs">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="getVersionWsResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="obtenerOficinasSIRUnidad">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="obtenerOficinasSIRUnidadResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:oficinaTF"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="oficinaTF">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codOfiResponsable" type="xs:string"/>
+      <xs:element minOccurs="0" name="codUoResponsable" type="xs:string"/>
+      <xs:element minOccurs="0" name="codigo" type="xs:string"/>
+      <xs:element minOccurs="0" name="denominacion" type="xs:string"/>
+      <xs:element minOccurs="0" name="estado" type="xs:string"/>
+      <xs:element minOccurs="0" name="nivelAdministracion" type="xs:long"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="organizativasOfi" nillable="true" type="tns:relacionOrganizativaOfiTF"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="sirOfi" nillable="true" type="tns:relacionSirOfiTF"/>
+      <xs:element minOccurs="0" name="tipoOficina" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="relacionOrganizativaOfiTF">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="estado" type="xs:string"/>
+      <xs:element minOccurs="0" name="oficina" type="xs:string"/>
+      <xs:element minOccurs="0" name="unidad" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="relacionSirOfiTF">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="estado" type="xs:string"/>
+      <xs:element minOccurs="0" name="oficina" type="xs:string"/>
+      <xs:element minOccurs="0" name="unidad" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="getVersion">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="getVersionResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="obtenerArbolOficinas">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+      <xs:element minOccurs="0" name="arg1" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="arg2" type="xs:dateTime"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="obtenerArbolOficinasResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:oficinaTF"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="obtenerOficina">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+      <xs:element minOccurs="0" name="arg1" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="arg2" type="xs:dateTime"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="obtenerOficinaResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:oficinaTF"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="obtenerOficinasSIRUnidad">
+    <wsdl:part name="parameters" element="tns:obtenerOficinasSIRUnidad">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getVersionResponse">
+    <wsdl:part name="parameters" element="tns:getVersionResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getVersionWs">
+    <wsdl:part name="parameters" element="tns:getVersionWs">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerArbolOficinas">
+    <wsdl:part name="parameters" element="tns:obtenerArbolOficinas">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerArbolOficinasResponse">
+    <wsdl:part name="parameters" element="tns:obtenerArbolOficinasResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getVersionWsResponse">
+    <wsdl:part name="parameters" element="tns:getVersionWsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerOficinaResponse">
+    <wsdl:part name="parameters" element="tns:obtenerOficinaResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerOficinasSIRUnidadResponse">
+    <wsdl:part name="parameters" element="tns:obtenerOficinasSIRUnidadResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getVersion">
+    <wsdl:part name="parameters" element="tns:getVersion">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerOficina">
+    <wsdl:part name="parameters" element="tns:obtenerOficina">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="Dir3CaibObtenerOficinasWs">
+    <wsdl:operation name="getVersionWs">
+      <wsdl:input name="getVersionWs" message="tns:getVersionWs">
+    </wsdl:input>
+      <wsdl:output name="getVersionWsResponse" message="tns:getVersionWsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerOficinasSIRUnidad">
+      <wsdl:input name="obtenerOficinasSIRUnidad" message="tns:obtenerOficinasSIRUnidad">
+    </wsdl:input>
+      <wsdl:output name="obtenerOficinasSIRUnidadResponse" message="tns:obtenerOficinasSIRUnidadResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getVersion">
+      <wsdl:input name="getVersion" message="tns:getVersion">
+    </wsdl:input>
+      <wsdl:output name="getVersionResponse" message="tns:getVersionResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerArbolOficinas">
+      <wsdl:input name="obtenerArbolOficinas" message="tns:obtenerArbolOficinas">
+    </wsdl:input>
+      <wsdl:output name="obtenerArbolOficinasResponse" message="tns:obtenerArbolOficinasResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerOficina">
+      <wsdl:input name="obtenerOficina" message="tns:obtenerOficina">
+    </wsdl:input>
+      <wsdl:output name="obtenerOficinaResponse" message="tns:obtenerOficinaResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="Dir3CaibObtenerOficinasWsServiceSoapBinding" type="tns:Dir3CaibObtenerOficinasWs">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getVersionWs">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getVersionWs">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getVersionWsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerOficinasSIRUnidad">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="obtenerOficinasSIRUnidad">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="obtenerOficinasSIRUnidadResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getVersion">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getVersion">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getVersionResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerArbolOficinas">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="obtenerArbolOficinas">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="obtenerArbolOficinasResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerOficina">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="obtenerOficina">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="obtenerOficinaResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Dir3CaibObtenerOficinasWsService">
+    <wsdl:port name="Dir3CaibObtenerOficinasWs" binding="tns:Dir3CaibObtenerOficinasWsServiceSoapBinding">
+      <soap:address location="http://localhost:8080/dir3caib/ws/Dir3CaibObtenerOficinas"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
