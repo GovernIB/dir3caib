@@ -197,7 +197,7 @@
 
     <dependencies>
 	
-		   <dependency>  
+	   <dependency>  
 			<groupId>org.jboss.ws.cxf</groupId>  
 			<artifactId>jbossws-cxf-client</artifactId>  
 			<version>4.1.1.Final</version>  
