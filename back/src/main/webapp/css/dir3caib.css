@@ -23,16 +23,15 @@ body { background-image:url(../img/background-pattern.png); color:#666666; paddi
     box-shadow: 0 0 5px #888;
     z-index: 1000;
 }
-.nav-container .govern-logo, .nav-container .aplication-logo, .nav-container .main-menu {padding: 20px 40px;}
+.nav-container .govern-logo, .nav-container .aplication-logo, .nav-container .main-menu {padding: 0px 0px;}
 .formbox select option:first-child { font-style:italic;}
 .main {padding-top: 125px;}
 
 .nav-container { background-color:#ff9523;}
 .nav-container .govern-logo{
+    margin: 20px 10px 0px 20px;
+    padding: 0px 20px 0px 0px;
     border-right: 1px solid #FFFFFF;
-    display: block;
-    margin-top: 24px;
-    padding: 5px 33px 12px 40px;
 }
 
 /* Navigation */
@@ -42,16 +41,12 @@ body { background-image:url(../img/background-pattern.png); color:#666666; paddi
 .navbar-inner { background:none; padding: 0; border:0;  box-shadow:none;}
 
 .navbar .nav { float:right;}
-.user-nav { list-style:none; font-weight:bold; font-weight:bold; font-size:12px;}
+.user-nav { list-style:none; font-weight:bold; font-weight:bold; font-size:12px; margin-right:10px;}
 .user-nav > li { float:left; padding-right:5px; margin-right:5px;}
 .user-nav > li:last-child { border:none; padding-right:0; margin-right:0;}
 
 .nav-container .aplication-logo{
-    margin-top: 15px;
-    padding-top: 5px;
-    padding-right: 33px;
-    padding-bottom: 12px;
-    padding-left: 40px;
+    padding: 15px 0px 20px 20px;
 }
 
 .navigationbar, .navigationbar a { color:#fff;}
