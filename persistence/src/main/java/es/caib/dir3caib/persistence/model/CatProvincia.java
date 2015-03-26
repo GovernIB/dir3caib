@@ -38,7 +38,7 @@ public class CatProvincia implements Serializable {
    * @return the codigoProvincia
    */
 	@Id
-	@Index(name="RWE_CATPROVINCIA_PK_I")
+	@Index(name="DIR_CATPROVINCIA_PK_I")
   @Column(name = "CODIGOPROVINCIA", nullable = false, length = 2)
   public Long getCodigoProvincia() {
     return codigoProvincia;
