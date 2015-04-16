@@ -148,7 +148,6 @@ public class OficinaController extends BaseController {
          
 
           Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.OFICINA);
-          log.info("DESCARGA OBTENIDA " + descarga.getCodigo());
           if(descarga != null){
             // Miramos si debemos mostrar el botón de importación,
             // solo se muestra si la fecha de Inicio descarga es superior a la fechaImportacion
