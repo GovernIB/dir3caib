@@ -11,7 +11,9 @@ import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.model.utils.ObjetoBasico;
 import es.caib.dir3caib.persistence.utils.Paginacion;
 import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
+import es.caib.dir3caib.utils.Configuracio;
 import es.caib.dir3caib.utils.Utils;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -23,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -142,7 +145,7 @@ public class UnidadController extends BaseController{
          ModelAndView mav = new ModelAndView("/unidad/unidadFicheros");
          
          // Obtenemos el listado de ficheros que hay dentro del directorio indicado
-         File f = FileSystemManager.getArchivosPath(Dir3caibConstantes.UNIDADES_LOCATION_PROPERTY);
+         File f = new File(Configuracio.getUnidadesPath());
          ArrayList<String> existentes = new ArrayList<String>(Arrays.asList(f.list()));
          
          // Mostramos la fecha de la ultima descarga
@@ -241,7 +244,7 @@ public class UnidadController extends BaseController{
      public ModelAndView eliminarUnidadesCompleto(HttpServletRequest request){
          ModelAndView mav = new ModelAndView("/unidad/unidadFicheros");
          
-         File directorio = FileSystemManager.getArchivosPath(Dir3caibConstantes.UNIDADES_LOCATION_PROPERTY);
+         File directorio = new File(Configuracio.getUnidadesPath());
          
          try {     
            // Contactos 

@@ -3,6 +3,8 @@ package es.caib.dir3caib.back.controller;
 
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.model.FileSystemManager;
+import es.caib.dir3caib.utils.Configuracio;
+
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStream;
@@ -45,13 +48,13 @@ public class ArchivoController extends BaseController{
         try {
             if (nombre != null) {
                 if(Dir3caibConstantes.CATALOGO.equals(tipo)){
-                  file = FileSystemManager.getArchivo(Dir3caibConstantes.CATALOGOS_LOCATION_PROPERTY, nombre);
+                  file = new File(Configuracio.getCatalogosPath(), nombre);
                 }
                 if(Dir3caibConstantes.UNIDAD.equals(tipo)){
-                  file = FileSystemManager.getArchivo(Dir3caibConstantes.UNIDADES_LOCATION_PROPERTY, nombre);
+                  file = new File(Configuracio.getUnidadesPath(), nombre);
                 }
                 if(Dir3caibConstantes.OFICINA.equals(tipo)){
-                  file = FileSystemManager.getArchivo(Dir3caibConstantes.OFICINAS_LOCATION_PROPERTY, nombre);
+                  file = new File(Configuracio.getOficinasPath(), nombre);
                 }
 
 

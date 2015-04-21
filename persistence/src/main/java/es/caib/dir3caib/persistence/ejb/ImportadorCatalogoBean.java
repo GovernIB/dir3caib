@@ -3,9 +3,12 @@ package es.caib.dir3caib.persistence.ejb;
 import au.com.bytecode.opencsv.CSVReader;
 import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
+import es.caib.dir3caib.utils.Configuracio;
 import es.caib.dir3caib.utils.Constants;
 import es.caib.dir3caib.ws.dir3.catalogo.client.RespuestaWS;
+import es.caib.dir3caib.ws.dir3.catalogo.client.SC21CTVolcadoCatalogos;
 import es.caib.dir3caib.ws.dir3.catalogo.client.SC21CTVolcadoCatalogosService;
+
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -16,7 +19,10 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.xml.ws.BindingProvider;
+
 import java.io.*;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.zip.ZipEntry;
@@ -139,7 +145,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
      List<String> inexistentes = results.getInexistentes();
 
      // Obtenemos el listado de ficheros que hay dentro del directorio indicado
-     File f = FileSystemManager.getArchivosPath(Dir3caibConstantes.CATALOGOS_LOCATION_PROPERTY);
+     File f = new File(Configuracio.getCatalogosPath());
      ArrayList<String> existentes = new ArrayList<String>(Arrays.asList(f.list()));
      results.setExistentes(existentes);
 
@@ -765,8 +771,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
     log.info("------------------------------------");
 
     // Obtenemos el fichero del sistema de archivos
-    File file = FileSystemManager.getArchivo(Dir3caibConstantes.CATALOGOS_LOCATION_PROPERTY,
-        fichero);
+    File file = new File(Configuracio.getCatalogosPath(), fichero);
     if (file.exists()) {
       FileInputStream is1 = new FileInputStream(file);
       BufferedReader is = new BufferedReader(new InputStreamReader(is1, "UTF-8"));
@@ -825,15 +830,21 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
       log.info("DESCARGA FECHA INICIO " + descarga.getFechaInicio());
 
       // Obtenemos  usuario y rutas para los WS.
-      String usuario = System.getProperty(Dir3caibConstantes.DIR3WS_USUARIO_PROPERTY);
-      String password = System.getProperty(Dir3caibConstantes.DIR3WS_PASSWORD_PROPERTY);
-      String ruta = System.getProperty(Dir3caibConstantes.ARCHIVOS_LOCATION_PROPERTY);
-      String rutaCatalogos = System.getProperty(Dir3caibConstantes.CATALOGOS_LOCATION_PROPERTY);
+      String usuario = Configuracio.getDir3WsUser();
+      String password = Configuracio.getDir3WsPassword();
+      String ruta = Configuracio.getArchivosPath();
+      String rutaCatalogos = Configuracio.getCatalogosPath();
+      
+      String endpoint = Configuracio.getCatalogoEndPoint();
 
-      SC21CTVolcadoCatalogosService service = new SC21CTVolcadoCatalogosService();
+      SC21CTVolcadoCatalogosService catalogoService = new SC21CTVolcadoCatalogosService(new URL(endpoint + "?wsdl"));
+      SC21CTVolcadoCatalogos service = catalogoService.getSC21CTVolcadoCatalogos();
+      Map<String, Object> reqContext = ((BindingProvider) service).getRequestContext();
+      reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpoint);
+
 
       // Invocamos al WS
-      RespuestaWS respuestaCsv = service.getSC21CTVolcadoCatalogos().exportar(usuario,password,"csv","COMPLETO");
+      RespuestaWS respuestaCsv = service.exportar(usuario,password,"csv","COMPLETO");
       //RespuestaWS respuestaXml = service.getSC21CTVolcadoCatalogos().exportar(usuario,password,"xml","COMPLETO")
       Base64 decoder = new Base64();
 

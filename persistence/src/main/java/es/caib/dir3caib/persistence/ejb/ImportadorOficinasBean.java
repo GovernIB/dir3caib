@@ -3,9 +3,11 @@ package es.caib.dir3caib.persistence.ejb;
 import au.com.bytecode.opencsv.CSVReader;
 import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
+import es.caib.dir3caib.utils.Configuracio;
 import es.caib.dir3caib.utils.Constants;
 import es.caib.dir3caib.utils.Utils;
 import es.caib.dir3caib.ws.dir3.oficina.client.*;
+
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -16,7 +18,10 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.xml.ws.BindingProvider;
+
 import java.io.*;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.zip.ZipEntry;
@@ -422,7 +427,7 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
     
 
     // Obtenemos el listado de ficheros que hay dentro del directorio indicado
-     File f = FileSystemManager.getArchivosPath(Dir3caibConstantes.OFICINAS_LOCATION_PROPERTY);
+     File f = new File(Configuracio.getOficinasPath());
      ArrayList<String> existentes = new ArrayList<String>(Arrays.asList(f.list()));
      
 
@@ -436,7 +441,7 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
          log.info("------------------------------------");
          try {
             // Obtenemos el fichero del sistema de archivos
-           FileInputStream is1 = new FileInputStream(FileSystemManager.getArchivo(Dir3caibConstantes.OFICINAS_LOCATION_PROPERTY,fichero));
+           FileInputStream is1 = new FileInputStream(new File(Configuracio.getOficinasPath(),fichero));
            BufferedReader is = new BufferedReader(new InputStreamReader(is1, "UTF-8"));
             reader = new CSVReader(is,';');
             if(reader != null){
@@ -1034,12 +1039,18 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
       log.info("DESCARGA FECHA INICIO " + descarga.getFechaInicio());
 
       //Obtenemos las diferentes rutas para invocar a los WS y almacenar la información obtenida
-      String usuario = System.getProperty(Dir3caibConstantes.DIR3WS_USUARIO_PROPERTY);
-      String password = System.getProperty(Dir3caibConstantes.DIR3WS_PASSWORD_PROPERTY);
-      String ruta = System.getProperty(Dir3caibConstantes.ARCHIVOS_LOCATION_PROPERTY);
-      String rutaOficinas = System.getProperty(Dir3caibConstantes.OFICINAS_LOCATION_PROPERTY);
+      String usuario = Configuracio.getDir3WsUser();
+      String password = Configuracio.getDir3WsPassword();
+      String ruta = Configuracio.getArchivosPath();
 
-      SD02OFDescargaOficinasService service = new SD02OFDescargaOficinasService();
+      String rutaOficinas = Configuracio.getOficinasPath();
+
+      String endPoint = Configuracio.getOficinaEndPoint();
+      
+      SD02OFDescargaOficinasService oficinasService = new SD02OFDescargaOficinasService(new URL(endPoint + "?wsdl"));
+      SD02OFDescargaOficinas service = oficinasService.getSD02OFDescargaOficinas();
+      Map<String, Object> reqContext = ((BindingProvider) service).getRequestContext();
+      reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endPoint);
 
       // Establecemos los parametros necesarios para el WS
       OficinasWs parametros = new OficinasWs();
@@ -1057,7 +1068,7 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
       }
 
       // Invocamos el WS
-      RespuestaWS respuesta = service.getSD02OFDescargaOficinas().exportar(parametros);
+      RespuestaWS respuesta = service.exportar(parametros);
       Base64 decoder = new Base64();
 
       log.info("Codigo: " + respuesta.getCodigo());
@@ -1149,7 +1160,7 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
     int count = 0;
     int allCount = 0;
     try {
-      File file = FileSystemManager.getArchivo(Dir3caibConstantes.OFICINAS_LOCATION_PROPERTY,Dir3caibConstantes.OFI_OFICINAS);
+      File file = new File(Configuracio.getOficinasPath(),Dir3caibConstantes.OFI_OFICINAS);
       is1 = new FileInputStream(file);
       BufferedReader is = new BufferedReader(new InputStreamReader(is1, "UTF-8"));
       reader = new CSVReader(is,';');

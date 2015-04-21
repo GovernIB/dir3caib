@@ -4,17 +4,18 @@ package es.caib.dir3caib.persistence.model;
  * Created by Fundació BIT.
  *
  * @author earrivi
+ * @author anadal
  * Date: 2/10/13
  */
 public class Dir3caibConstantes {
 
     // Propiedades
-    public static final String ARCHIVOS_LOCATION_PROPERTY = "es.caib.dir3caib.archivos.path";
-    public static final String DIR3WS_USUARIO_PROPERTY = "es.caib.dir3caib.dir3ws.user";
-    public static final String DIR3WS_PASSWORD_PROPERTY = "es.caib.dir3caib.dir3ws.pass";
+    //public static final String ARCHIVOS_LOCATION_PROPERTY = "es.caib.dir3caib.archivos.path";
+    //public static final String DIR3WS_USUARIO_PROPERTY = "es.caib.dir3caib.dir3ws.user";
+    //public static final String DIR3WS_PASSWORD_PROPERTY = "es.caib.dir3caib.dir3ws.pass";
     
     // Importación Catalogo
-    public static final String CATALOGOS_LOCATION_PROPERTY = "es.caib.dir3caib.catalogos.path";
+    //public static final String CATALOGOS_LOCATION_PROPERTY = "es.caib.dir3caib.catalogos.path";
     public static final String CATALOGOS_ARCHIVO_ZIP = "catalogosCSV.zip";
     public static final String CAT_AMBITO_TERRITORIAL = "CAT_AMBITO_TERRITORIAL.CSV"; 
     public static final String CAT_COMUNIDAD_AUTONOMA = "CAT_COMUNIDAD_AUTONOMA.CSV"; 
@@ -54,7 +55,7 @@ public class Dir3caibConstantes {
     
     
     // Importación Oficinas
-    public static final String OFICINAS_LOCATION_PROPERTY = "es.caib.dir3caib.oficinas.path";
+    //public static final String OFICINAS_LOCATION_PROPERTY = "es.caib.dir3caib.oficinas.path";
     public static final String OFICINAS_ARCHIVO_ZIP = "oficinasCSV.zip";
     public static final String OFI_CONTACTO_OFI = "ContactoOFI.csv"; 
     public static final String OFI_HISTORICOS_OFI = "HistoricosOFI.csv"; 
@@ -65,7 +66,7 @@ public class Dir3caibConstantes {
     public static final String[] OFI_FICHEROS = {OFI_OFICINAS,OFI_CONTACTO_OFI,OFI_HISTORICOS_OFI,OFI_RELACIONES_ORGANIZATIVAS_OFI,OFI_RELACIONES_SIROFI,OFI_SERVICIOS_OFI};
     
      // Importación UNIDADES
-    public static final String UNIDADES_LOCATION_PROPERTY = "es.caib.dir3caib.unidades.path";
+    //public static final String UNIDADES_LOCATION_PROPERTY = "es.caib.dir3caib.unidades.path";
     public static final String UNIDADES_ARCHIVO_ZIP = "unidadesCSV.zip";
     public static final String UO_CONTACTO_UO = "ContactoUO.csv"; 
     public static final String UO_HISTORICOS_UO = "HistoricosUO.csv"; 

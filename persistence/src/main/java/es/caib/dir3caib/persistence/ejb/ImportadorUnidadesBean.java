@@ -3,9 +3,11 @@ package es.caib.dir3caib.persistence.ejb;
 import au.com.bytecode.opencsv.CSVReader;
 import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
+import es.caib.dir3caib.utils.Configuracio;
 import es.caib.dir3caib.utils.Constants;
 import es.caib.dir3caib.utils.Utils;
 import es.caib.dir3caib.ws.dir3.unidad.client.*;
+
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -16,7 +18,10 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.xml.ws.BindingProvider;
+
 import java.io.*;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.zip.ZipEntry;
@@ -241,7 +246,7 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
     long s;
 
     // Obtenemos el listado de ficheros que hay dentro del directorio indicado
-    File f = FileSystemManager.getArchivosPath(Dir3caibConstantes.UNIDADES_LOCATION_PROPERTY);
+    File f = new File(Configuracio.getUnidadesPath());
     ArrayList<String> existentes = new ArrayList<String>(Arrays.asList(f.list()));
 
     // Buscamos los posibles ficheros de las unidades que pueden existir en el directorio
@@ -254,7 +259,7 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
        log.info("------------------------------------");
        try {
           // Obtenemos el fichero del sistema de archivos
-         File file = FileSystemManager.getArchivo(Dir3caibConstantes.UNIDADES_LOCATION_PROPERTY,fichero);
+         File file = new File(Configuracio.getUnidadesPath(),fichero);
          FileInputStream is1 = new FileInputStream(file);
          BufferedReader is = new BufferedReader(new InputStreamReader(is1, "UTF-8"));
          reader = new CSVReader(is,';');
@@ -863,12 +868,18 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
     }
 
     // Obtenemos rutas y usuario para el WS
-    String usuario = System.getProperty(Dir3caibConstantes.DIR3WS_USUARIO_PROPERTY);
-    String password = System.getProperty(Dir3caibConstantes.DIR3WS_PASSWORD_PROPERTY);
-    String ruta = System.getProperty(Dir3caibConstantes.ARCHIVOS_LOCATION_PROPERTY);
-    String rutaUnidades = System.getProperty(Dir3caibConstantes.UNIDADES_LOCATION_PROPERTY);
+    String usuario = Configuracio.getDir3WsUser();
+    String password = Configuracio.getDir3WsPassword();
+    String ruta = Configuracio.getArchivosPath();
 
-    SD01UNDescargaUnidadesService service = new SD01UNDescargaUnidadesService();
+    String rutaUnidades = Configuracio.getUnidadesPath();
+
+    String endPoint = Configuracio.getUnidadEndPoint();
+    
+    SD01UNDescargaUnidadesService unidadesService = new SD01UNDescargaUnidadesService(new URL(endPoint + "?wsdl"));
+    SD01UNDescargaUnidades service = unidadesService.getSD01UNDescargaUnidades();
+    Map<String, Object> reqContext = ((BindingProvider) service).getRequestContext();
+    reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endPoint);
 
     // Establecemos parametros de WS
     UnidadesWs parametros = new UnidadesWs();
@@ -886,7 +897,7 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
     }
 
       // Invocamos el WS
-      RespuestaWS respuesta = service.getSD01UNDescargaUnidades().exportar(parametros);
+      RespuestaWS respuesta = service.exportar(parametros);
 
       Base64 decoder = new Base64();
 

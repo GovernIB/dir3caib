@@ -16,8 +16,8 @@ public class Configuracio implements Constants {
     return Boolean.getBoolean(DIR3CAIB_PROPERTY_BASE + "development");
   }
 
-  public static boolean getArchivosPath() {
-    return Boolean.getBoolean(DIR3CAIB_PROPERTY_BASE + "archivos.path");
+  public static String getArchivosPath() {
+    return System.getProperty(DIR3CAIB_PROPERTY_BASE + "archivos.path");
   }
 
   public static String getCatalogosPath() {
@@ -26,6 +26,10 @@ public class Configuracio implements Constants {
 
   public static String getOficinasPath() {
     return System.getProperty(DIR3CAIB_PROPERTY_BASE + "oficinas.path");
+  }
+  
+  public static String getUnidadesPath() {
+    return System.getProperty(DIR3CAIB_PROPERTY_BASE + "unidades.path");
   }
 
   public static String getCatalogoEndPoint() {

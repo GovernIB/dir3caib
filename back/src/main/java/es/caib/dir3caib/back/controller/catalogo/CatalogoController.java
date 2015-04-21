@@ -6,9 +6,10 @@ import es.caib.dir3caib.back.utils.Mensaje;
 import es.caib.dir3caib.persistence.ejb.*;
 import es.caib.dir3caib.persistence.model.Descarga;
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
-import es.caib.dir3caib.persistence.model.FileSystemManager;
 import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
+import es.caib.dir3caib.utils.Configuracio;
 import es.caib.dir3caib.utils.Utils;
+
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -106,7 +108,7 @@ public class CatalogoController extends BaseController{
          // Obtenemos el listado de ficheros que hay dentro del directorio indicado
          ArrayList<String> existentes = new ArrayList<String>();
          
-         File f = FileSystemManager.getArchivosPath(Dir3caibConstantes.CATALOGOS_LOCATION_PROPERTY);
+         File f = new File(Configuracio.getCatalogosPath());
          
          if (!f.exists()) {
            f.mkdirs();
@@ -219,7 +221,7 @@ public class CatalogoController extends BaseController{
      public ModelAndView eliminarCatalogoCompleto(HttpServletRequest request){
          ModelAndView mav = new ModelAndView("/catalogo/catalogoFicheros");
          
-         File directorio = FileSystemManager.getArchivosPath(Dir3caibConstantes.CATALOGOS_LOCATION_PROPERTY);
+         File directorio = new File(Configuracio.getCatalogosPath());
          
          try {
              FileUtils.cleanDirectory(directorio);

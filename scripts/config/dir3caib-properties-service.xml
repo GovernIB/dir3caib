@@ -23,9 +23,9 @@
             <!-- Autentificación para los dir3ws -->
 
             <!--endpoints de ws-->
-            es.caib.dir3caib.catalogo.endpoint=http://pre-dir3ws.redsara.es/directorio/services/SC21CT_VolcadoCatalogos?wsdl
-            es.caib.dir3caib.unidad.endpoint=http://pre-dir3ws.redsara.es/directorio/services/SD01UN_DescargaUnidades?wsdl
-            es.caib.dir3caib.oficina.endpoint=http://pre-dir3ws.redsara.es/directorio/services/SD02OF_DescargaOficinas?wsdl
+            es.caib.dir3caib.catalogo.endpoint=http://pre-dir3ws.redsara.es/directorio/services/SC21CT_VolcadoCatalogos
+            es.caib.dir3caib.unidad.endpoint=http://pre-dir3ws.redsara.es/directorio/services/SD01UN_DescargaUnidades
+            es.caib.dir3caib.oficina.endpoint=http://pre-dir3ws.redsara.es/directorio/services/SD02OF_DescargaOficinas
 
 			es.caib.dir3caib.dir3ws.user=regwebCAIB
             es.caib.dir3caib.dir3ws.pass=4a0a4bb5a611a85eb6e7d6d96521a934
