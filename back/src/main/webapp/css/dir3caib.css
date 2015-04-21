@@ -12,7 +12,7 @@
 }
 /* Structure */
 body { background-image:url(../img/background-pattern.png); color:#666666; padding:0 !important;}
-.container { min-width:960px !important; }
+.container { min-width:800px !important; }
 .nav-container {
     height: 100px;
     margin-bottom: 20px;
@@ -23,7 +23,7 @@ body { background-image:url(../img/background-pattern.png); color:#666666; paddi
     box-shadow: 0 0 5px #888;
     z-index: 1000;
 }
-.nav-container .govern-logo, .nav-container .aplication-logo, .nav-container .main-menu {padding: 0px 0px;}
+.nav-container .govern-logo, .nav-container .aplication-logo, .nav-container .main-menu {padding: 20px 40px 40px 20px;}
 .formbox select option:first-child { font-style:italic;}
 .main {padding-top: 125px;}
 
@@ -35,7 +35,8 @@ body { background-image:url(../img/background-pattern.png); color:#666666; paddi
 }
 
 /* Navigation */
-.navbar { min-width:600px !important; width:100%;}
+/*min-width:300px !important; */
+.navbar {  width:100%;}
 .navbar, .navbar a, .navbar .btn, .user-nav, .user-nav a { color:#FFF;}
 .navbar .govern-logo{ display:none;}
 .navbar-inner { background:none; padding: 0; border:0;  box-shadow:none;}

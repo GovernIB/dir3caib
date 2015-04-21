@@ -28,7 +28,7 @@ public class Configuracio implements Constants {
     return System.getProperty(DIR3CAIB_PROPERTY_BASE + "oficinas.path");
   }
 
-  public static String getcatalogoEndPoint() {
+  public static String getCatalogoEndPoint() {
     return System.getProperty(DIR3CAIB_PROPERTY_BASE + "catalogo.endpoint");
   }
 
