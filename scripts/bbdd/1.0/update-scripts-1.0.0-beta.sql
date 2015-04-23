@@ -25,5 +25,16 @@ alter table DIR_DESCARGA RENAME COLUMN FECHAIMPORTACION2 to FECHAIMPORTACION;
 drop index RWE_CATPROVINCIA_PK_I;
 create index DIR_CATPROVINCIA_PK_I on DIR_CATPROVINCIA (CODIGOPROVINCIA);
 
+-- 23/04/2015 Ampliació longitud camps (ve de dir3 madrid)   (POSTGRESQL)
+ALTER TABLE dir_cattipoentidadpublica alter column descripciontipoentidadpublica type character varying(100);
+ALTER TABLE dir_catpais  alter column descripcionpais type character varying(100);
+
+-- 23/04/2015 Ampliació longitud camps (ve de dir3 madrid)     (ORACLE)
+ALTER TABLE dir_cattipoentidadpublica MODIFY descripciontipoentidadpublica VARCHAR2(100 CHAR);
+ALTER TABLE dir_catpais MODIFY descripcionpais VARCHAR2(100 CHAR);
+
+
+
+
 
 
