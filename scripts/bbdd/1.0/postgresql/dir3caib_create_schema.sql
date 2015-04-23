@@ -68,7 +68,7 @@
         CODIGOPAIS int8 not null,
         ALFA2PAIS varchar(2),
         ALFA3PAIS varchar(3),
-        DESCRIPCIONPAIS varchar(50) not null,
+        DESCRIPCIONPAIS varchar(100) not null,
         primary key (CODIGOPAIS)
     );
 
@@ -93,7 +93,7 @@
 
     create table DIR_CATTIPOENTIDADPUBLICA (
         CODIGOTIPOENTIDADPUBLICA varchar(2) not null,
-        DESCRIPCIONTIPOENTIDADPUBLICA varchar(50) not null,
+        DESCRIPCIONTIPOENTIDADPUBLICA varchar(100) not null,
         primary key (CODIGOTIPOENTIDADPUBLICA)
     );
 

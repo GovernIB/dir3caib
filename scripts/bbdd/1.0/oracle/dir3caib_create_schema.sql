@@ -57,7 +57,7 @@
         CODIGOPAIS number(19,0) not null,
         ALFA2PAIS varchar2(2 char),
         ALFA3PAIS varchar2(3 char),
-        DESCRIPCIONPAIS varchar2(50 char) not null
+        DESCRIPCIONPAIS varchar2(100 char) not null
     );
 
     create table DIR_CATPROVINCIA (
@@ -78,7 +78,7 @@
 
     create table DIR_CATTIPOENTIDADPUBLICA (
         CODIGOTIPOENTIDADPUBLICA varchar2(2 char) not null,
-        DESCRIPCIONTIPOENTIDADPUBLICA varchar2(50 char) not null
+        DESCRIPCIONTIPOENTIDADPUBLICA varchar2(100 char) not null
     );
 
     create table DIR_CATTIPOUNIDADORGANICA (
@@ -574,8 +574,12 @@
 
  -- INICI UNIQUES
     alter table DIR_CATAMBITOTERRITORIAL add constraint DIR_CATAMBTER_CODAMB_NIVADM_UK unique (CODIGOAMBITO, NIVELADMINISTRACION);
+
     alter table DIR_CATLOCALIDAD add constraint DIR_CATLOC_LOC_PRO_ENTGEO_UK unique (CODIGOLOCALIDAD, PROVINCIA, ENTIDADGEOGRAFICA);
+
     alter table DIR_RELACIONORGANIZATIVAOFI add constraint DIR_RELORG_CODOFI_CODUNI_UK unique (CODOFICINA, CODUNIDAD);
+
     alter table DIR_RELACIONSIROFI add constraint DIR_RELSIROFI_OFI_UNI_UK unique (CODOFICINA, CODUNIDAD);
+
  -- FINAL UNIQUES
 
