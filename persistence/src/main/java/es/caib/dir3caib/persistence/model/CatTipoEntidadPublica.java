@@ -1,10 +1,10 @@
 package es.caib.dir3caib.persistence.model;
 
-import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 
 /**
@@ -45,7 +45,7 @@ public class CatTipoEntidadPublica implements Serializable {
   /**
    * @return the descripcionTipoEntidadPublica
    */
-  @Column(name = "DESCRIPCIONTIPOENTIDADPUBLICA", nullable = false, length = 50)
+  @Column(name = "DESCRIPCIONTIPOENTIDADPUBLICA", nullable = false, length = 100)
   public String getDescripcionTipoEntidadPublica() {
     return descripcionTipoEntidadPublica;
   }
