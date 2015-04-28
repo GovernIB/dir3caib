@@ -24,49 +24,53 @@
 
                         <c:import url="../modulos/mensajes.jsp"/>
                        
-                        <div class="box-content"> 
-                            <c:if test="${empty existentes}">
+                        <div class="box-content">
+                           <c:if test="${empty descarga}">
                                 <div class="alert fade in">
                                 <fmt:message key="oficina.existentes.notfound"/><strong><a href="<c:url value="/oficina/obtener"/>"><fmt:message key="dir3caib.obtenerws"/></a></strong>
                             </div>
                             </c:if>
-                            <c:if test="${not empty existentes}">
-                                
-                                <table class="table table-bordered">
-                                    <colgroup>
-                                        <col>
-                                    </colgroup>
-                                    <thead>
-                                        <tr>
-                                            <th><fmt:message key="dir3caib.fichero"/></th>
-                                            <th><fmt:message key="dir3caib.fechasincronizacion"/></th>
-                                            <th><fmt:message key="dir3caib.fechaimportacion"/></th>
-                                        </tr>
-                                    </thead>
+                            <c:if test="${not empty descarga}">
+                                <c:if test="${not empty existentes}">
 
-                                    <tbody>
-                                        <c:forEach var="existente" items="${existentes}">
+                                    <table class="table table-bordered">
+                                        <colgroup>
+                                            <col>
+                                        </colgroup>
+                                        <thead>
                                             <tr>
-                                                <td><a href="<c:url value="/archivo/${existente}/oficina"/>" target="_blank">${existente}</a></td>
-                                                <td><fmt:formatDate pattern="dd/MM/yyyy" value="${descarga.fechaFin}" /></td>
-                                                <td><fmt:formatDate pattern="dd/MM/yyyy" value="${descarga.fechaImportacion}" /></td>
+                                                <th><fmt:message key="dir3caib.fichero"/></th>
+                                                <th><fmt:message key="dir3caib.fechasincronizacion"/></th>
+                                                <th><fmt:message key="dir3caib.fechaimportacion"/></th>
                                             </tr>
-                                        </c:forEach>
-                                      </tbody>
-                                  </table>
-                                <div class="form-horizontal">
-                                  <div class="form-actions">
-                                    <%--<c:if test="${not empty mostrarimportacion}">--%>
-                                      <input type="button" value="<fmt:message key="dir3caib.boton.importar"/>" onclick="javascript:confirm('<c:url value="/oficina/importar"/>','<fmt:message key="dir3caib.confirm.importar"/>');" class="btn btn-primary">
-                                   <%-- </c:if>
-                                    <c:if test="${empty mostrarimportacion}">
-                                          <input type="button" value="<fmt:message key="dir3caib.boton.importar"/>" class="btn btn-primary disabled">
-                                    </c:if>--%>
-                                    <input type="button" value="<fmt:message key="dir3caib.boton.eliminartodos"/>" onclick="javascript:confirm('<c:url value="/oficina/eliminar"/>','<fmt:message key="dir3caib.confirm.eliminar"  />');" class="btn btn-primary">
-                                   </div>  
-                                </div>
+                                        </thead>
+
+                                        <tbody>
+                                            <c:forEach var="existente" items="${existentes}">
+                                                <tr>
+                                                    <td><a href="<c:url value="/archivo/${existente}/oficina"/>" target="_blank">${existente}</a></td>
+                                                    <td><fmt:formatDate pattern="dd/MM/yyyy" value="${descarga.fechaFin}" /></td>
+                                                    <td><fmt:formatDate pattern="dd/MM/yyyy" value="${descarga.fechaImportacion}" /></td>
+                                                </tr>
+                                            </c:forEach>
+                                          </tbody>
+                                      </table>
+                                    <div class="form-horizontal">
+                                      <div class="form-actions">
+                                        <%--<c:if test="${not empty mostrarimportacion}">--%>
+                                          <input type="button" value="<fmt:message key="dir3caib.boton.importar"/>" onclick="javascript:confirm('<c:url value="/oficina/importar"/>','<fmt:message key="dir3caib.confirm.importar"/>');" class="btn btn-primary">
+                                       <%-- </c:if>
+                                        <c:if test="${empty mostrarimportacion}">
+                                              <input type="button" value="<fmt:message key="dir3caib.boton.importar"/>" class="btn btn-primary disabled">
+                                        </c:if>--%>
+                                        <input type="button" value="<fmt:message key="dir3caib.boton.eliminartodos"/>" onclick="javascript:confirm('<c:url value="/oficina/eliminar"/>','<fmt:message key="dir3caib.confirm.eliminar"  />');" class="btn btn-primary">
+                                       </div>
+                                    </div>
+                                </c:if>
+                                <c:if test="${empty existentes}">
+                                    <fmt:message key="dir3caib.datos.nohay"/>
+                                </c:if>
                              </c:if>
-                        
                         </div>
 
                     </div>

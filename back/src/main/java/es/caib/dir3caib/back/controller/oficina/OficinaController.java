@@ -13,7 +13,6 @@ import es.caib.dir3caib.persistence.utils.Paginacion;
 import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
 import es.caib.dir3caib.utils.Configuracio;
 import es.caib.dir3caib.utils.Utils;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -25,7 +24,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
-
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -170,6 +168,7 @@ public class OficinaController extends BaseController {
             mav.addObject("descarga", descarga);
           }
           mav.addObject("existentes", existentes);
+
          
           return mav;
      }
@@ -179,7 +178,10 @@ public class OficinaController extends BaseController {
      */
     @RequestMapping(value = "/obtener", method = RequestMethod.GET)
     public String obtenerOficinas(Model model)throws Exception {
-        
+        Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.OFICINA);
+        if(descarga != null){
+          model.addAttribute("descarga", descarga);
+        }
         model.addAttribute("oficina", new FechasForm());
         
         return "/oficina/oficinaObtener";

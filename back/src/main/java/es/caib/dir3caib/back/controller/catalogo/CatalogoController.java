@@ -9,7 +9,6 @@ import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
 import es.caib.dir3caib.utils.Configuracio;
 import es.caib.dir3caib.utils.Utils;
-
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -23,7 +22,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
-
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -148,7 +146,11 @@ public class CatalogoController extends BaseController{
      */
     @RequestMapping(value = "/obtener", method = RequestMethod.GET)
     public String obtenerCatalogos(Model model)throws Exception {
-        
+
+        Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.CATALOGO);
+        if(descarga != null){
+          model.addAttribute("descarga", descarga);
+        }
         model.addAttribute("catalogo", new FechasForm());
         
         return "/catalogo/catalogoObtener";

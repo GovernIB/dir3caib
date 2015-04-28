@@ -27,21 +27,19 @@
                         <div class="box-content">
                             <div class="well formbox">
 
-                            <div class="page-header"><fmt:message key="catalogo.catalogo"/></div>
 
-                            <form:form modelAttribute="catalogo" method="post" cssClass="form-horizontal">
-                                <fieldset>
-                                    <div class="alert fade in">
-                                       <fmt:message key="catalogo.obtener.etiqueta"/>  <input type="submit" value="<fmt:message key="dir3caib.boton.obtener"/>" class="btn btn-primary">
-                                    </div>
+                                <div class="page-header"><fmt:message key="catalogo.catalogo"/></div>
 
-                                 </fieldset>
+                                <form:form modelAttribute="catalogo" method="post" cssClass="form-horizontal">
+                                    <fieldset>
+                                        <div class="alert fade in">
+                                            <c:if test="${empty descarga}"><fmt:message key="catalogo.obtener.etiqueta"/></c:if><c:if test="${not empty descarga}"><fmt:message key="catalogo.actualizar.etiqueta"/></c:if>  <input type="submit" value="<fmt:message key="dir3caib.boton.obtener"/>" class="btn btn-primary">
+                                        </div>
 
-
-                            </form:form>
+                                     </fieldset>
 
 
-
+                                </form:form>
 
                         </div>
                     </div>
