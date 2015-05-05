@@ -55,7 +55,7 @@ public class Dir3RestBean implements Dir3RestLocal {
     @Override
     public Boolean tieneHijos(String codigo) throws Exception{
 
-        Query q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo order by unidad.codigo");
+        Query q = em.createQuery("Select unidad.codigo from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo order by unidad.codigo");
 
         q.setParameter("codigo",codigo);
 
@@ -107,6 +107,41 @@ public class Dir3RestBean implements Dir3RestLocal {
       return listaCompleta;
   }
 
+  /**
+   * Función que obtiene los hijos vigentes de una Unidad pero como ObjetoBasico ya que solo interesa
+   * el código y la denominación.
+   * @param codigo
+   * @return
+   * @throws Exception
+   */
+  @Override
+  public List<ObjetoBasico> obtenerArbolUnidades(String codigo) throws Exception{
+      Query q;
+
+      q = em.createQuery("Select unidad.codigo, unidad.denominacion from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.codigo");
+      q.setParameter("codigo",codigo);
+      q.setParameter("vigente",Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+
+
+      List<ObjetoBasico> padres = getObjetoBasicoList(q.getResultList());
+      List<ObjetoBasico> listaCompleta;
+
+
+
+
+      listaCompleta = new ArrayList<ObjetoBasico>(padres);
+
+
+      for (ObjetoBasico unidad : padres) {
+          if(tieneHijos(unidad.getCodigo())){
+              List<ObjetoBasico> hijos = obtenerArbolUnidades(unidad.getCodigo());
+              listaCompleta.addAll(hijos);
+          }
+      }
+
+      return listaCompleta;
+  }
+
 
   /*
     * Método que devuelve las oficinas de un organismo,
@@ -141,11 +176,22 @@ public class Dir3RestBean implements Dir3RestLocal {
 
     }
 
+  /**
+   * Búsqueda de organismos según los parámetros indicados que esten vigentes y que tengan
+   * al menos una oficina asociada
+   * @param codigo  código de la unidad
+   * @param denominacion  denominación de la unidad
+   * @param codigoNivelAdministracion  nivel de administración de la unidad
+   * @param codComunidad  comunidad autónoma a la que pertenece.
+   * @return   List<ObjetoBasico> devuelve un listado con el codigo y la denominación que
+   * coincide con los parámetros de búsqueda
+   * @throws Exception
+   */
      public List<ObjetoBasico> busquedaOrganismos(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad) throws Exception {
        Query q;
        Map<String, Object> parametros = new HashMap<String, Object>();
        List<String> where = new ArrayList<String>();
-       StringBuffer query = new StringBuffer("Select unidad.codigo, unidad.denominacion from Unidad as unidad ");
+       StringBuffer query = new StringBuffer("Select distinct(unidad.codigo), unidad.denominacion from Unidad as unidad, Oficina as ofi, RelacionOrganizativaOfi as relorg  ");
 
        // Parametros de busqueda
 
@@ -153,7 +199,9 @@ public class Dir3RestBean implements Dir3RestLocal {
        if(denominacion!= null && denominacion.length() > 0){where.add(DataBaseUtils.like("unidad.denominacion", "denominacion", parametros, denominacion));}
        if(codigoNivelAdministracion!= null && codigoNivelAdministracion != -1){where.add(" unidad.nivelAdministracion.codigoNivelAdministracion = :codigoNivelAdministracion "); parametros.put("codigoNivelAdministracion",codigoNivelAdministracion);}
        if(codComunidad!= null && codComunidad != -1){where.add(" unidad.codAmbComunidad.codigoComunidad = :codComunidad "); parametros.put("codComunidad",codComunidad);}
-       where.add(" unidad.estado.codigoEstadoEntidad =:vigente ");parametros.put("vigente",Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE );
+       where.add(" unidad.codigo = ofi.codUoResponsable.codigo and ofi.codUoResponsable.codigo is not null and unidad.codigo = relorg.unidad.codigo and relorg.estado.codigoEstadoEntidad =:vigente"); parametros.put("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+       where.add(" unidad.estado.codigoEstadoEntidad =:vigente ");parametros.put("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+
 
 
        // Añadimos los parametros a la query

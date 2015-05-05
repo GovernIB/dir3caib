@@ -19,6 +19,7 @@ public interface Dir3RestLocal  {
   public List<Oficina> findOficinasByDenominacion(String denominacion) throws Exception;
   public Boolean tieneHijos(String codigo) throws Exception;
   public List<Unidad> obtenerArbolUnidades(String codigo, String fechaActualizacion) throws Exception;
+  public List<ObjetoBasico> obtenerArbolUnidades(String codigo) throws Exception;
   public List<Oficina> obtenerOficinasOrganismo(String codigo, String fechaActualizacion) throws Exception;
   public List<ObjetoBasico> busquedaOrganismos(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad) throws Exception;
   public List<ObjetoBasico> busquedaOficinas(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad) throws Exception;
