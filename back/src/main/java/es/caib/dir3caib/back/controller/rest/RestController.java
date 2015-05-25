@@ -14,9 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.List;
-
 import javax.ejb.EJB;
+import java.util.List;
 
 /**
  * Created 25/03/14 13:32
@@ -59,7 +58,7 @@ public class RestController extends BaseController {
 
 
      /**
-      * Obtiene los {@link es.caib.dir3caib.persistence.model.Unidad} por denominacion
+      * Obtiene el arbol de  {@link es.caib.dir3caib.persistence.model.Unidad} del código indicado
       */
      @RequestMapping(value = "/unidad/arbolUnidades", method = RequestMethod.GET)
      public @ResponseBody
@@ -76,7 +75,7 @@ public class RestController extends BaseController {
 
 
      /**
-      * Obtiene los {@link es.caib.dir3caib.persistence.model.Unidad} por denominacion
+      * Obtiene las {@link es.caib.dir3caib.persistence.model.Oficina} del organismo indicado
       */
      @RequestMapping(value = "/oficina/oficinasOrganismo", method = RequestMethod.GET)
      public @ResponseBody

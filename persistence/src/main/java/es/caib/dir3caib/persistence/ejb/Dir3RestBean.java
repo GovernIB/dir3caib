@@ -2,6 +2,7 @@ package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.model.Oficina;
+import es.caib.dir3caib.persistence.model.RelacionOrganizativaOfi;
 import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.persistence.model.utils.ObjetoBasico;
 import es.caib.dir3caib.persistence.utils.DataBaseUtils;
@@ -177,8 +178,38 @@ public class Dir3RestBean implements Dir3RestLocal {
     }
 
   /**
+   *  Método que nos dice sin una unidad tiene oficinas donde registrar.
+   *  Solo mira relacion funcional y organizativa. Pendiente SIR y Oficinas Virtuales.
+   * @param codigo de la unidad que queremos consultar
+   * @return
+   * @throws Exception
+   *
+   */
+    @Override
+    public Boolean tieneOficinasOrganismo(String codigo) throws Exception {
+
+      Query q = em.createQuery("Select oficina from Oficina as oficina where oficina.codUoResponsable.codigo =:codigo and oficina.estado.codigoEstadoEntidad=:vigente order by oficina.codigo");
+
+      q.setParameter("codigo", codigo);
+      q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+
+      List<Oficina> oficinas =  q.getResultList();
+      if (oficinas.size() > 0) {
+        return true;
+      }else{
+        q = em.createQuery("Select relorg from RelacionOrganizativaOfi as relorg where relorg.unidad.codigo=:codigo and relorg.estado.codigoEstadoEntidad=:vigente order by relorg.id ");
+
+        q.setParameter("codigo", codigo);
+        q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+        List<RelacionOrganizativaOfi> relorg= q.getResultList();
+        return relorg.size() > 0;
+      }
+
+    }
+
+  /**
    * Búsqueda de organismos según los parámetros indicados que esten vigentes y que tengan
-   * al menos una oficina asociada
+   * al menos una oficina asociada (ya sea organizativa o funcional)
    * @param codigo  código de la unidad
    * @param denominacion  denominación de la unidad
    * @param codigoNivelAdministracion  nivel de administración de la unidad
@@ -191,7 +222,7 @@ public class Dir3RestBean implements Dir3RestLocal {
        Query q;
        Map<String, Object> parametros = new HashMap<String, Object>();
        List<String> where = new ArrayList<String>();
-       StringBuffer query = new StringBuffer("Select distinct(unidad.codigo), unidad.denominacion from Unidad as unidad, Oficina as ofi, RelacionOrganizativaOfi as relorg  ");
+       StringBuffer query = new StringBuffer("Select distinct(unidad.codigo),unidad.denominacion  from Unidad  as unidad ");
 
        // Parametros de busqueda
 
@@ -199,10 +230,7 @@ public class Dir3RestBean implements Dir3RestLocal {
        if(denominacion!= null && denominacion.length() > 0){where.add(DataBaseUtils.like("unidad.denominacion", "denominacion", parametros, denominacion));}
        if(codigoNivelAdministracion!= null && codigoNivelAdministracion != -1){where.add(" unidad.nivelAdministracion.codigoNivelAdministracion = :codigoNivelAdministracion "); parametros.put("codigoNivelAdministracion",codigoNivelAdministracion);}
        if(codComunidad!= null && codComunidad != -1){where.add(" unidad.codAmbComunidad.codigoComunidad = :codComunidad "); parametros.put("codComunidad",codComunidad);}
-       where.add(" unidad.codigo = ofi.codUoResponsable.codigo and ofi.codUoResponsable.codigo is not null and unidad.codigo = relorg.unidad.codigo and relorg.estado.codigoEstadoEntidad =:vigente"); parametros.put("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
        where.add(" unidad.estado.codigoEstadoEntidad =:vigente ");parametros.put("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-
-
 
        // Añadimos los parametros a la query
        if (parametros.size() != 0) {
@@ -227,8 +255,17 @@ public class Dir3RestBean implements Dir3RestLocal {
            q = em.createQuery(query.toString());
        }
 
+       //Miramos los que tienen oficinas
+       List<ObjetoBasico> unidades = getObjetoBasicoList(q.getResultList());
+       List<ObjetoBasico> unidadesConOficinas= new ArrayList<ObjetoBasico>();
+       for(ObjetoBasico unidad :unidades){
 
-       return getObjetoBasicoList(q.getResultList());
+           if(tieneOficinasOrganismo(unidad.getCodigo())){
+             unidadesConOficinas.add(unidad);
+           }
+       }
+
+       return unidadesConOficinas;
 
      }
 
