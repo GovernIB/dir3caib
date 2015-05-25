@@ -19,4 +19,6 @@ public interface ObtenerUnidadesLocal {
 
     public List<UnidadTF> obtenerArbolUnidades(String codigo, Date fechaActualizada, Date fechaSincronizacion) throws Exception;
 
+    public List<UnidadTF> obtenerArbolUnidadesDestinatarias(String codigo) throws Exception;
+
 }

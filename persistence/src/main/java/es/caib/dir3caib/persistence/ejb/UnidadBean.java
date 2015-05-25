@@ -14,6 +14,7 @@ import org.hibernate.Hibernate;
 import org.jboss.ejb3.annotation.SecurityDomain;
 
 import javax.annotation.security.RolesAllowed;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -31,6 +32,9 @@ import java.util.*;
 @RolesAllowed("DIR_ADMIN")
 public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLocal {
 
+    @EJB(mappedName = "dir3caib/OficinaEJB/local")
+    public OficinaLocal oficinaEjb;
+
     protected final Logger log = Logger.getLogger(getClass());
     protected SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
 
@@ -44,7 +48,10 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     }
     
     public Unidad findFullById(String id) throws Exception {
-      Unidad unidad = em.find(Unidad.class, id);
+     Query q = em.createQuery("select unidad from Unidad as unidad where unidad.codigo=:id and unidad.estado.codigoEstadoEntidad=:vigente");
+      q.setParameter("id", id);
+      q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);;
+      Unidad unidad = (Unidad)q.getSingleResult();
       Hibernate.initialize(unidad.getHistoricoUO());
       return unidad;
     }
@@ -294,6 +301,38 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         }
 
         return listaCompleta;
+    }
+
+  /**
+   * Método que devuelve el árbol de unidades de la unidad indicada por codigo,
+   * que esté vigente y que sean destinatarios( es decir que tengan oficinas donde registrar)
+   * solicitado por SISTRA
+   * @param codigo código de la unidad raiz de la que partimos.
+   * @return
+   * @throws Exception
+   */
+    @Override
+    public List<Unidad> obtenerArbolUnidadesDestinatarias(String codigo) throws Exception{
+
+      Query q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.codigo");
+      q.setParameter("codigo", codigo);
+      q.setParameter("vigente",  Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+
+      List<Unidad> unidadesDestinatariasPadres  = q.getResultList();
+      List<Unidad> unidadesDestConOficinas= new ArrayList<Unidad>();
+
+      for(Unidad unidad: unidadesDestinatariasPadres){
+        Boolean tiene = oficinaEjb.tieneOficinasOrganismo(unidad.getCodigo());
+        if(tiene){
+          unidadesDestConOficinas.add(unidad);
+        }
+        if(tieneHijos(unidad.getCodigo())){
+          List<Unidad> hijos = obtenerArbolUnidadesDestinatarias(unidad.getCodigo());
+          unidadesDestConOficinas.addAll(hijos);
+        }
+      }
+
+      return unidadesDestConOficinas;
     }
 
 

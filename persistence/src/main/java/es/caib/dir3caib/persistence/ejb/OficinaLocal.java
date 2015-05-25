@@ -60,6 +60,7 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      * @throws Exception
      */
   public List<Oficina> obtenerOficinasSIRUnidad(String codigo) throws Exception;
+  public Boolean tieneOficinasOrganismo(String codigo) throws Exception;
 
   public List<String> getAllCodigos() throws Exception;
 }

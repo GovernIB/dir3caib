@@ -80,7 +80,25 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
         return arbolTF;
     }
 
+  /**
+   * Método que devuelve el arbol de Unidades que estan vigentes y tienen oficinas donde registrar
+   * @param codigo
+   * @return
+   * @throws Exception
+   */
+    @Override
+    public List<UnidadTF> obtenerArbolUnidadesDestinatarias(String codigo) throws Exception{
 
+        List<Unidad> arbol = unidadEjb.obtenerArbolUnidadesDestinatarias(codigo);
+        List<UnidadTF> arbolTF = new ArrayList<UnidadTF>();
+
+
+        for (Unidad unidad : arbol) {
+            arbolTF.add(UnidadTF.generar(unidad));
+        }
+
+        return arbolTF;
+    }
 
     /**
      *

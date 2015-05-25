@@ -46,6 +46,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @throws Exception
      */
     public List<Unidad> obtenerArbolUnidades(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception;
+    public List<Unidad> obtenerArbolUnidadesDestinatarias(String codigo) throws Exception;
 
     public Boolean tieneHijos(String codigo) throws Exception;
 

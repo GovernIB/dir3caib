@@ -51,43 +51,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ObtenerArbolOficinasResponse }
-     * 
-     */
-    public ObtenerArbolOficinasResponse createObtenerArbolOficinasResponse() {
-        return new ObtenerArbolOficinasResponse();
-    }
-
-    /**
      * Create an instance of {@link RelacionOrganizativaOfiTF }
      * 
      */
     public RelacionOrganizativaOfiTF createRelacionOrganizativaOfiTF() {
         return new RelacionOrganizativaOfiTF();
-    }
-
-    /**
-     * Create an instance of {@link GetVersionResponse }
-     * 
-     */
-    public GetVersionResponse createGetVersionResponse() {
-        return new GetVersionResponse();
-    }
-
-    /**
-     * Create an instance of {@link OficinaTF }
-     * 
-     */
-    public OficinaTF createOficinaTF() {
-        return new OficinaTF();
-    }
-
-    /**
-     * Create an instance of {@link ObtenerOficina }
-     * 
-     */
-    public ObtenerOficina createObtenerOficina() {
-        return new ObtenerOficina();
     }
 
     /**
@@ -99,11 +67,43 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link GetVersion }
+     * 
+     */
+    public GetVersion createGetVersion() {
+        return new GetVersion();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerArbolOficinasResponse }
+     * 
+     */
+    public ObtenerArbolOficinasResponse createObtenerArbolOficinasResponse() {
+        return new ObtenerArbolOficinasResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetVersionResponse }
+     * 
+     */
+    public GetVersionResponse createGetVersionResponse() {
+        return new GetVersionResponse();
+    }
+
+    /**
      * Create an instance of {@link GetVersionWsResponse }
      * 
      */
     public GetVersionWsResponse createGetVersionWsResponse() {
         return new GetVersionWsResponse();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerOficina }
+     * 
+     */
+    public ObtenerOficina createObtenerOficina() {
+        return new ObtenerOficina();
     }
 
     /**
@@ -115,11 +115,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ObtenerOficinaResponse }
+     * Create an instance of {@link ObtenerOficinasSIRUnidad }
      * 
      */
-    public ObtenerOficinaResponse createObtenerOficinaResponse() {
-        return new ObtenerOficinaResponse();
+    public ObtenerOficinasSIRUnidad createObtenerOficinasSIRUnidad() {
+        return new ObtenerOficinasSIRUnidad();
     }
 
     /**
@@ -131,19 +131,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ObtenerOficinasSIRUnidad }
+     * Create an instance of {@link OficinaTF }
      * 
      */
-    public ObtenerOficinasSIRUnidad createObtenerOficinasSIRUnidad() {
-        return new ObtenerOficinasSIRUnidad();
+    public OficinaTF createOficinaTF() {
+        return new OficinaTF();
     }
 
     /**
-     * Create an instance of {@link GetVersion }
+     * Create an instance of {@link ObtenerOficinaResponse }
      * 
      */
-    public GetVersion createGetVersion() {
-        return new GetVersion();
+    public ObtenerOficinaResponse createObtenerOficinaResponse() {
+        return new ObtenerOficinaResponse();
     }
 
     /**

@@ -416,6 +416,34 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
            }
            return false;
       }
+
+      /**
+      * Método que comprueba si una unidad tiene oficinas donde registrar
+      * @param codigo
+      * @return
+      * @throws Exception
+      */
+      @Override
+      public Boolean tieneOficinasOrganismo(String codigo) throws Exception {
+
+        Query q = em.createQuery("Select oficina from Oficina as oficina where oficina.codUoResponsable.codigo =:codigo and oficina.estado.codigoEstadoEntidad=:vigente order by oficina.codigo");
+
+        q.setParameter("codigo", codigo);
+        q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+
+        List<Oficina> oficinas =  q.getResultList();
+        if (oficinas.size() > 0) {
+          return true;
+        }else{
+          q = em.createQuery("Select relorg from RelacionOrganizativaOfi as relorg where relorg.unidad.codigo=:codigo and relorg.estado.codigoEstadoEntidad=:vigente order by relorg.id ");
+
+          q.setParameter("codigo", codigo);
+          q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+          List<RelacionOrganizativaOfi> relorg= q.getResultList();
+          return relorg.size() > 0;
+        }
+
+      }
       
       
       @Override

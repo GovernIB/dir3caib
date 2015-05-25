@@ -20,16 +20,20 @@ public class Configuracio implements Constants {
     return System.getProperty(DIR3CAIB_PROPERTY_BASE + "archivos.path");
   }
 
-  public static String getCatalogosPath() {
-    return System.getProperty(DIR3CAIB_PROPERTY_BASE + "catalogos.path");
+  public static  String getCatalogosPath(Long idDescarga){
+      return getArchivosPath()+"catalogo"+idDescarga+"/";
   }
 
-  public static String getOficinasPath() {
+ /* public static String getOficinasPath() {
     return System.getProperty(DIR3CAIB_PROPERTY_BASE + "oficinas.path");
+  }*/
+
+  public static  String getUnidadesPath(Long idDescarga){
+      return getArchivosPath()+"unidad"+idDescarga+"/";
   }
-  
-  public static String getUnidadesPath() {
-    return System.getProperty(DIR3CAIB_PROPERTY_BASE + "unidades.path");
+
+  public static  String getOficinasPath(Long idDescarga){
+      return getArchivosPath()+"oficina"+idDescarga+"/";
   }
 
   public static String getCatalogoEndPoint() {

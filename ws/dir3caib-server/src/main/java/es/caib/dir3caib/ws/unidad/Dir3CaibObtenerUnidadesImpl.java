@@ -83,4 +83,20 @@ public class Dir3CaibObtenerUnidadesImpl implements Dir3CaibObtenerUnidadesWs {
     return obtenerUnidadesEjb.obtenerArbolUnidades(codigo, fechaActualizacion, fechaSincronizacion);
   }
 
+  /**
+   * Método que devuelve la lista de UnidadTF a partir del
+   * código indicado y que estan vigentes y tienen oficinas
+   *
+   * @param codigo
+   *          código de la unidad raiz
+   *
+   */
+  @Override
+  public List<UnidadTF> obtenerArbolUnidadesDestinatarias(String codigo)
+      throws Exception {
+
+    return obtenerUnidadesEjb.obtenerArbolUnidadesDestinatarias(codigo);
+  }
+
+
 }
