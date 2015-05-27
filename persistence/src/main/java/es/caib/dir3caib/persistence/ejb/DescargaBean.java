@@ -4,12 +4,12 @@ import es.caib.dir3caib.persistence.model.Descarga;
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.SecurityDomain;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
-import javax.annotation.security.RolesAllowed;
 
 /**
  * Created by Fundació BIT.
@@ -71,11 +71,14 @@ public class DescargaBean extends BaseEjbJPA<Descarga, Long> implements Descarga
     }
     
     public void deleteByTipo(String tipo) throws Exception {
-        
-        Query query = em.createQuery( "delete from Descarga as descarga where descarga.tipo=?");
-        query.setParameter(1, tipo);
-        query.executeUpdate();
+      Descarga descarga = findByTipo(tipo);
+      em.remove(descarga);
          
     }
-    
+
+    public void deleteAllByTipo(String tipo) throws Exception {
+        Query query = em.createQuery( "delete from Descarga as descarga where descarga.tipo=? ");
+        query.setParameter(1, tipo);
+        query.executeUpdate();
+    }
 }

@@ -1,7 +1,5 @@
 package es.caib.dir3caib.back.controller;
 
-import java.util.Locale;
-
 import org.apache.log4j.Logger;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
@@ -14,33 +12,36 @@ import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Locale;
 
 /**
  * Created by Fundació BIT.
  * @author earrivi
  * Date: 2/10/13
  */
+
 @Controller
-public class PrincipalController {
+public class PrincipalController extends BaseController {
+
 
     protected final Logger log = Logger.getLogger(getClass());
 
     @RequestMapping(value = "/inicio")
-    public ModelAndView principal(HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView principal(HttpServletRequest request, HttpServletResponse response) throws Exception {
         ModelAndView mav = new ModelAndView("principal");
         return mav;
     }
     
     @RequestMapping(value = "/inicio/{lang}")
     public ModelAndView principal(HttpServletRequest request, 
-        HttpServletResponse response, @PathVariable(value="lang") String lang) {
+        HttpServletResponse response, @PathVariable(value="lang") String lang) throws Exception {
       
       Locale loc = new Locale(lang);
       LocaleContextHolder.setLocale(loc);
       WebUtils.setSessionAttribute(request, SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, loc);
-      
-      return new ModelAndView(new RedirectView("/inicio", true));
-    }
 
+      ModelAndView mav = new ModelAndView(new RedirectView("/inicio", true));
+      return mav;
+    }
 
 }

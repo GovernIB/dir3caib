@@ -16,4 +16,6 @@ public interface DescargaLocal extends BaseEjb<Descarga, Long> {
   public Descarga findByTipo(String tipo) throws Exception;
   
   public void deleteByTipo(String tipo) throws Exception;
+
+  public void deleteAllByTipo(String tipo) throws Exception;
 }

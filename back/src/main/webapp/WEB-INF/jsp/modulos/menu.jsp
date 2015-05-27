@@ -1,7 +1,9 @@
-﻿<%@page import="org.springframework.context.i18n.LocaleContextHolder"%>
+﻿<%@page import="es.caib.dir3caib.back.security.LoginInfo"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
+<% request.getSession().setAttribute("loginInfo", LoginInfo.getInstance());%>
 
 <div class="row-fluid container nav-container">
       <div class="govern-logo pull-left" style="height:63px; width:159px"><img src="<c:url value="/img/govern-logo.png"/>" width="159" height="36" alt="Govern de les Illes Balears" /></div>
@@ -37,8 +39,8 @@
                               <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
                                   <li><a href="<c:url value="/oficina/ficheros"/>"><fmt:message key="menu.listado.ficheros"/></a></li>
                                   <li class="divider"></li>
-                                  <li><a href="<c:url value="/oficina/obtener"/>"><fmt:message key="oficina.obtener"/></a></li>
-                                  <li><a href="<c:url value="/oficina/sincronizar"/>"><fmt:message key="menu.sincronizar.oficina"/></a></li>
+                                   <c:if test="${loginInfo.descargaOficina == false}"><li><a href="<c:url value="/oficina/obtener"/>"><fmt:message key="oficina.obtener"/></a></li></c:if>
+                                   <c:if test="${loginInfo.descargaOficina == true}"><li><a href="<c:url value="/oficina/sincronizar"/>"><fmt:message key="menu.sincronizar.oficina"/></a></li></c:if>
                                   <li><a href="<c:url value="/oficina/list/"/>"><fmt:message key="menu.buscar.oficina"/></a></li>
                               </ul>
                           </li>                          
@@ -47,8 +49,8 @@
                               <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
                                   <li><a href="<c:url value="/unidad/ficheros"/>"><fmt:message key="menu.listado.ficheros"/></a></li>
                                   <li class="divider"></li>
-                                  <li><a href="<c:url value="/unidad/obtener"/>"><fmt:message key="unidad.obtener"/></a></li>
-                                  <li><a href="<c:url value="/unidad/sincronizar"/>"><fmt:message key="menu.sincronizar.unidad"/></a></li>
+                                  <c:if test="${loginInfo.descargaUnidad == false}"><li><a href="<c:url value="/unidad/obtener"/>"><fmt:message key="unidad.obtener"/></a></li></c:if>
+                                  <c:if test="${loginInfo.descargaUnidad == true}"><li><a href="<c:url value="/unidad/sincronizar"/>"><fmt:message key="menu.sincronizar.unidad"/></a></li></c:if>
                                   <li><a href="<c:url value="/unidad/list/"/>"><fmt:message key="menu.buscar.unidad"/></a></li>
                               </ul>
                           </li>

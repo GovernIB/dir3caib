@@ -144,11 +144,10 @@ public class OficinaController extends BaseController {
          ModelAndView mav = new ModelAndView("/oficina/oficinaFicheros");
          
          // Obtenemos el listado de ficheros que hay dentro del directorio indicado
-         File f = new File(Configuracio.getOficinasPath());
+         Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.OFICINA);
+         File f = new File(Configuracio.getOficinasPath(descarga.getCodigo()));
          ArrayList<String> existentes = new ArrayList<String>(Arrays.asList(f.list()));
-         
 
-          Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.OFICINA);
           if(descarga != null){
             // Miramos si debemos mostrar el botón de importación,
             // solo se muestra si la fecha de Inicio descarga es superior a la fechaImportacion
@@ -182,6 +181,7 @@ public class OficinaController extends BaseController {
         if(descarga != null){
           model.addAttribute("descarga", descarga);
         }
+        model.addAttribute("development", Configuracio.isDevelopment());
         model.addAttribute("oficina", new FechasForm());
         
         return "/oficina/oficinaObtener";
@@ -247,9 +247,10 @@ public class OficinaController extends BaseController {
      public ModelAndView eliminarOficinasCompleto(HttpServletRequest request){
          ModelAndView mav = new ModelAndView("/oficina/oficinaFicheros");
          
-         File directorio = new File(Configuracio.getOficinasPath());
+
          try {
-             
+             Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.OFICINA);
+             File directorio = new File(Configuracio.getOficinasPath(descarga.getCodigo()));
              relSirOfiEjb.deleteAll();
              relOrgOfiEjb.deleteAll();
              contactoOfiEjb.deleteAll();
@@ -257,7 +258,7 @@ public class OficinaController extends BaseController {
              oficinaEjb.deleteServiciosOficina();
              oficinaEjb.deleteAll();
              servicioEjb.deleteAll();
-             descargaEjb.deleteByTipo(Dir3caibConstantes.OFICINA);
+             descargaEjb.deleteAllByTipo(Dir3caibConstantes.OFICINA);
              
              FileUtils.cleanDirectory(directorio);
              Mensaje.saveMessageInfo(request, "Se han eliminado correctamente todos los ficheros de oficinas");

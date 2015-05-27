@@ -7,7 +7,6 @@ import es.caib.dir3caib.utils.Configuracio;
 import es.caib.dir3caib.utils.Constants;
 import es.caib.dir3caib.utils.Utils;
 import es.caib.dir3caib.ws.dir3.oficina.client.*;
-
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -19,7 +18,6 @@ import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.xml.ws.BindingProvider;
-
 import java.io.*;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -426,8 +424,11 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
     
     
 
-    // Obtenemos el listado de ficheros que hay dentro del directorio indicado
-     File f = new File(Configuracio.getOficinasPath());
+
+     // Obtenemos el listado de ficheros que hay dentro del directorio indicado que se
+     // corresponde con la descarga hecha previamente
+     Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.OFICINA);
+     File f = new File(Configuracio.getOficinasPath(descarga.getCodigo()));
      ArrayList<String> existentes = new ArrayList<String>(Arrays.asList(f.list()));
      
 
@@ -441,7 +442,7 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
          log.info("------------------------------------");
          try {
             // Obtenemos el fichero del sistema de archivos
-           FileInputStream is1 = new FileInputStream(new File(Configuracio.getOficinasPath(),fichero));
+           FileInputStream is1 = new FileInputStream(new File(Configuracio.getOficinasPath(descarga.getCodigo()),fichero));
            BufferedReader is = new BufferedReader(new InputStreamReader(is1, "UTF-8"));
             reader = new CSVReader(is,';');
             if(reader != null){
@@ -968,8 +969,6 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                  }
             }
         }
-        
-        Descarga descarga;
 
         descarga = descargaEjb.findByTipo(Dir3caibConstantes.OFICINA);
         if (descarga == null) {
@@ -1036,82 +1035,95 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
         descarga.setFechaFin(hoy);
       }
 
+      descarga = descargaEjb.persist(descarga);
       log.info("DESCARGA FECHA INICIO " + descarga.getFechaInicio());
 
-      //Obtenemos las diferentes rutas para invocar a los WS y almacenar la información obtenida
-      String usuario = Configuracio.getDir3WsUser();
-      String password = Configuracio.getDir3WsPassword();
-      String ruta = Configuracio.getArchivosPath();
+      try {
 
-      String rutaOficinas = Configuracio.getOficinasPath();
+        //Obtenemos las diferentes rutas para invocar a los WS y almacenar la información obtenida
+        String usuario = Configuracio.getDir3WsUser();
+        String password = Configuracio.getDir3WsPassword();
+        String ruta = Configuracio.getArchivosPath();
 
-      String endPoint = Configuracio.getOficinaEndPoint();
-      
-      SD02OFDescargaOficinasService oficinasService = new SD02OFDescargaOficinasService(new URL(endPoint + "?wsdl"));
-      SD02OFDescargaOficinas service = oficinasService.getSD02OFDescargaOficinas();
-      Map<String, Object> reqContext = ((BindingProvider) service).getRequestContext();
-      reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endPoint);
+        String rutaOficinas = Configuracio.getOficinasPath(descarga.getCodigo());
 
-      // Establecemos los parametros necesarios para el WS
-      OficinasWs parametros = new OficinasWs();
-      parametros.setUsuario(usuario);
-      parametros.setClave(password);
-      parametros.setFormatoFichero(FormatoFichero.CSV);
-      parametros.setTipoConsulta(TipoConsultaOF.COMPLETO);
+        String endPoint = Configuracio.getOficinaEndPoint();
 
-      // definimos fechas
-      if (fechaInicio != null) {
-        parametros.setFechaInicio(formatoFecha.format(fechaInicio));
-      }
-      if (fechaFin != null){
-        parametros.setFechaFin(formatoFecha.format(fechaFin));
-      }
+        SD02OFDescargaOficinasService oficinasService = new SD02OFDescargaOficinasService(new URL(endPoint + "?wsdl"));
+        SD02OFDescargaOficinas service = oficinasService.getSD02OFDescargaOficinas();
+        Map<String, Object> reqContext = ((BindingProvider) service).getRequestContext();
+        reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endPoint);
 
-      // Invocamos el WS
-      RespuestaWS respuesta = service.exportar(parametros);
-      Base64 decoder = new Base64();
+        // Establecemos los parametros necesarios para el WS
+        OficinasWs parametros = new OficinasWs();
+        parametros.setUsuario(usuario);
+        parametros.setClave(password);
+        parametros.setFormatoFichero(FormatoFichero.CSV);
+        parametros.setTipoConsulta(TipoConsultaOF.COMPLETO);
 
-      log.info("Codigo: " + respuesta.getCodigo());
-      log.info("Descripcion: " + respuesta.getDescripcion());
+        // definimos fechas
+        if (fechaInicio != null) {
+          parametros.setFechaInicio(formatoFecha.format(fechaInicio));
+        }
+        if (fechaFin != null) {
+          parametros.setFechaFin(formatoFecha.format(fechaFin));
+        }
 
-      // Realizamos una copia del archivo zip de la ultima descarga
-      File file = new File(ruta + Dir3caibConstantes.OFICINAS_ARCHIVO_ZIP);
-      if(file.exists()){
-        FileUtils.copyFile(file, new File(ruta + "old_" + Dir3caibConstantes.OFICINAS_ARCHIVO_ZIP));
-      }
+        // Invocamos el WS
+        RespuestaWS respuesta = service.exportar(parametros);
+        Base64 decoder = new Base64();
 
-      //Guardamos el zip devuelto por el WS en el directorio.
-      FileUtils.writeByteArrayToFile(new File(ruta + Dir3caibConstantes.OFICINAS_ARCHIVO_ZIP), decoder.decode(respuesta.getFichero()));
+        log.info("Codigo: " + respuesta.getCodigo());
+        log.info("Descripcion: " + respuesta.getDescripcion());
 
-      // Borramos contenido
-      FileUtils.cleanDirectory(new File(rutaOficinas));
-      //Descomprimir el archivo
-      ZipInputStream zis = new ZipInputStream(new FileInputStream(ruta + Dir3caibConstantes.OFICINAS_ARCHIVO_ZIP));
-      ZipEntry zipEntry = zis.getNextEntry();
+        // Realizamos una copia del archivo zip de la ultima descarga
+        String archivoOficinaZip = ruta + Dir3caibConstantes.OFICINAS_ARCHIVO_ZIP + descarga.getCodigo() + ".zip";
+        File file = new File(archivoOficinaZip);
 
-      while(zipEntry != null){
-         String fileName = zipEntry.getName();
-         File newFile = new File(rutaOficinas + fileName);
-         log.info("Fichero descomprimido: "+ newFile.getAbsoluteFile());
 
-         //create all non exists folders
+        //Guardamos el zip devuelto por el WS en el directorio.
+        FileUtils.writeByteArrayToFile(file, decoder.decode(respuesta.getFichero()));
+
+        // Se crea el directorio para el catálogo
+        File dir = new File(rutaOficinas);
+        if (!dir.exists()) {
+          if (!dir.mkdirs()) {
+            //Borramos la descarga creada previamente.
+            descargaEjb.deleteByTipo(Dir3caibConstantes.OFICINA);
+            log.error(" No se ha podido crear el directorio");
+          }
+        }
+
+        //Descomprimir el archivo
+        ZipInputStream zis = new ZipInputStream(new FileInputStream(archivoOficinaZip));
+        ZipEntry zipEntry = zis.getNextEntry();
+
+        while (zipEntry != null) {
+          String fileName = zipEntry.getName();
+          File newFile = new File(rutaOficinas + fileName);
+          log.info("Fichero descomprimido: " + newFile.getAbsoluteFile());
+
+          //create all non exists folders
           //else you will hit FileNotFoundException for compressed folder
           new File(newFile.getParent()).mkdirs();
           FileOutputStream fos = new FileOutputStream(newFile);
 
           int len;
           while ((len = zis.read(buffer)) > 0) {
-              fos.write(buffer, 0, len);
+            fos.write(buffer, 0, len);
           }
           fos.close();
           zipEntry = zis.getNextEntry();
 
+        }
+        zis.closeEntry();
+        zis.close();
+
+
+      }catch(Exception e){
+        descargaEjb.deleteByTipo(Dir3caibConstantes.OFICINA);
+        e.printStackTrace();
       }
-      zis.closeEntry();
-      zis.close();
-
-
-      descargaEjb.persist(descarga);
 
 
   }
@@ -1160,7 +1172,8 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
     int count = 0;
     int allCount = 0;
     try {
-      File file = new File(Configuracio.getOficinasPath(),Dir3caibConstantes.OFI_OFICINAS);
+      Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.OFICINA);
+      File file = new File(Configuracio.getOficinasPath(descarga.getCodigo()),Dir3caibConstantes.OFI_OFICINAS);
       is1 = new FileInputStream(file);
       BufferedReader is = new BufferedReader(new InputStreamReader(is1, "UTF-8"));
       reader = new CSVReader(is,';');

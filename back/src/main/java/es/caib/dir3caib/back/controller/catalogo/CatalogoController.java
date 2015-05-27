@@ -105,8 +105,8 @@ public class CatalogoController extends BaseController{
          
          // Obtenemos el listado de ficheros que hay dentro del directorio indicado
          ArrayList<String> existentes = new ArrayList<String>();
-         
-         File f = new File(Configuracio.getCatalogosPath());
+         Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.CATALOGO);
+         File f = new File(Configuracio.getCatalogosPath(descarga.getCodigo()));
          
          if (!f.exists()) {
            f.mkdirs();
@@ -115,7 +115,7 @@ public class CatalogoController extends BaseController{
          }
 
 
-         Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.CATALOGO);
+
          if(descarga != null){
           // Miramos si debemos mostrar el botón de importación,
           // solo se muestra si la fecha de Inicio descarga es superior a la fechaImportacion
@@ -136,7 +136,6 @@ public class CatalogoController extends BaseController{
 
          
          mav.addObject("existentes", existentes);
-         mav.addObject("path", "Dir3caibConstantes.CATALOGOS_LOCATION_PROPERTY");
 
          return mav;
      }
@@ -222,10 +221,12 @@ public class CatalogoController extends BaseController{
      @RequestMapping(value = "/eliminar", method = RequestMethod.GET)
      public ModelAndView eliminarCatalogoCompleto(HttpServletRequest request){
          ModelAndView mav = new ModelAndView("/catalogo/catalogoFicheros");
-         
-         File directorio = new File(Configuracio.getCatalogosPath());
+
+
          
          try {
+             Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.CATALOGO);
+             File directorio = new File(Configuracio.getCatalogosPath(descarga.getCodigo()));
              FileUtils.cleanDirectory(directorio);
              
              // Borrado del catalago de la BD
@@ -246,7 +247,7 @@ public class CatalogoController extends BaseController{
              //catIslaEjb.deleteAll();
              catEstadoEntidadEjb.deleteAll();
              catEntidadGeograficaEjb.deleteAll(); 
-             descargaEjb.deleteByTipo(Dir3caibConstantes.CATALOGO);
+             descargaEjb.deleteAllByTipo(Dir3caibConstantes.CATALOGO);
              
              
              Mensaje.saveMessageInfo(request, "Se han eliminado correctamente todos los ficheros de catalogos");

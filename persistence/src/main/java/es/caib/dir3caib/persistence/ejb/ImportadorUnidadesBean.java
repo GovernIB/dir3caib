@@ -7,7 +7,6 @@ import es.caib.dir3caib.utils.Configuracio;
 import es.caib.dir3caib.utils.Constants;
 import es.caib.dir3caib.utils.Utils;
 import es.caib.dir3caib.ws.dir3.unidad.client.*;
-
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -19,7 +18,6 @@ import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.xml.ws.BindingProvider;
-
 import java.io.*;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -245,8 +243,10 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
     long persist = 0;
     long s;
 
-    // Obtenemos el listado de ficheros que hay dentro del directorio indicado
-    File f = new File(Configuracio.getUnidadesPath());
+    // Obtenemos el listado de ficheros que hay dentro del directorio indicado que se
+    // corresponde con la descarga hecha previamente
+    Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.UNIDAD);
+    File f = new File(Configuracio.getUnidadesPath(descarga.getCodigo()));
     ArrayList<String> existentes = new ArrayList<String>(Arrays.asList(f.list()));
 
     // Buscamos los posibles ficheros de las unidades que pueden existir en el directorio
@@ -259,7 +259,7 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
        log.info("------------------------------------");
        try {
           // Obtenemos el fichero del sistema de archivos
-         File file = new File(Configuracio.getUnidadesPath(),fichero);
+         File file = new File(Configuracio.getUnidadesPath(descarga.getCodigo()),fichero);
          FileInputStream is1 = new FileInputStream(file);
          BufferedReader is = new BufferedReader(new InputStreamReader(is1, "UTF-8"));
          reader = new CSVReader(is,';');
@@ -693,7 +693,7 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
     }
     
     // Guardamos fecha Importacion y tipo
-    Descarga descarga;
+
 
     descarga = descargaEjb.findByTipo(Dir3caibConstantes.UNIDAD);
     if (descarga == null) {
@@ -867,34 +867,38 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
       descarga.setFechaFin(hoy);
     }
 
-    // Obtenemos rutas y usuario para el WS
-    String usuario = Configuracio.getDir3WsUser();
-    String password = Configuracio.getDir3WsPassword();
-    String ruta = Configuracio.getArchivosPath();
+    // Guardamos la descarga porque emplearemos el identificador para el nombre del directorio y el archivo.
+    descarga = descargaEjb.persist(descarga);
 
-    String rutaUnidades = Configuracio.getUnidadesPath();
+    try {
+      // Obtenemos rutas y usuario para el WS
+      String usuario = Configuracio.getDir3WsUser();
+      String password = Configuracio.getDir3WsPassword();
+      String ruta = Configuracio.getArchivosPath();
 
-    String endPoint = Configuracio.getUnidadEndPoint();
-    
-    SD01UNDescargaUnidadesService unidadesService = new SD01UNDescargaUnidadesService(new URL(endPoint + "?wsdl"));
-    SD01UNDescargaUnidades service = unidadesService.getSD01UNDescargaUnidades();
-    Map<String, Object> reqContext = ((BindingProvider) service).getRequestContext();
-    reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endPoint);
+      String rutaUnidades = Configuracio.getUnidadesPath(descarga.getCodigo());
 
-    // Establecemos parametros de WS
-    UnidadesWs parametros = new UnidadesWs();
-    parametros.setUsuario(usuario);
-    parametros.setClave(password);
-    parametros.setFormatoFichero(FormatoFichero.CSV);
-    parametros.setTipoConsulta(TipoConsultaUO.COMPLETO);
-    //parametros.setUnidadesDependientes(Boolean.TRUE);
+      String endPoint = Configuracio.getUnidadEndPoint();
 
-    if (fechaInicio != null) {
-      parametros.setFechaInicio(formatoFecha.format(fechaInicio));
-    }
-    if (fechaFin != null){
-      parametros.setFechaFin(formatoFecha.format(fechaFin));
-    }
+      SD01UNDescargaUnidadesService unidadesService = new SD01UNDescargaUnidadesService(new URL(endPoint + "?wsdl"));
+      SD01UNDescargaUnidades service = unidadesService.getSD01UNDescargaUnidades();
+      Map<String, Object> reqContext = ((BindingProvider) service).getRequestContext();
+      reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endPoint);
+
+      // Establecemos parametros de WS
+      UnidadesWs parametros = new UnidadesWs();
+      parametros.setUsuario(usuario);
+      parametros.setClave(password);
+      parametros.setFormatoFichero(FormatoFichero.CSV);
+      parametros.setTipoConsulta(TipoConsultaUO.COMPLETO);
+      //parametros.setUnidadesDependientes(Boolean.TRUE);
+
+      if (fechaInicio != null) {
+        parametros.setFechaInicio(formatoFecha.format(fechaInicio));
+      }
+      if (fechaFin != null) {
+        parametros.setFechaFin(formatoFecha.format(fechaFin));
+      }
 
       // Invocamos el WS
       RespuestaWS respuesta = service.exportar(parametros);
@@ -904,44 +908,53 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
       log.info("Codigo: " + respuesta.getCodigo());
       log.info("Descripcion: " + respuesta.getDescripcion());
 
-      // Realizamos una copia del archivo de la última descarga
-      File file = new File(ruta + Dir3caibConstantes.UNIDADES_ARCHIVO_ZIP);
-      if(file.exists()){
-        FileUtils.copyFile(file, new File(ruta + "old_" + Dir3caibConstantes.UNIDADES_ARCHIVO_ZIP));
-      }
-      // Guardamos el archivo descargado
-      FileUtils.writeByteArrayToFile(new File(ruta + Dir3caibConstantes.UNIDADES_ARCHIVO_ZIP), decoder.decode(respuesta.getFichero()));
+      // definimos el archivo zip a descargar
+      String archivoUnidadZip = ruta + Dir3caibConstantes.UNIDADES_ARCHIVO_ZIP + descarga.getCodigo() + ".zip";
+      File file = new File(archivoUnidadZip);
 
-      // Borramos contenido
-      FileUtils.cleanDirectory(new File(rutaUnidades));
+      // Guardamos el archivo descargado
+      FileUtils.writeByteArrayToFile(file, decoder.decode(respuesta.getFichero()));
+
+      // Se crea el directorio para el catálogo
+      File dir = new File(rutaUnidades);
+      if (!dir.exists()) {
+        if (!dir.mkdirs()) {
+          //Borramos la descarga creada previamente.
+          descargaEjb.deleteByTipo(Dir3caibConstantes.UNIDAD);
+          log.error(" No se ha podido crear el directorio");
+        }
+      }
+
       //Descomprimir el archivo
-      ZipInputStream zis = new ZipInputStream(new FileInputStream(ruta + Dir3caibConstantes.UNIDADES_ARCHIVO_ZIP));
+      ZipInputStream zis = new ZipInputStream(new FileInputStream(archivoUnidadZip));
       ZipEntry zipEntry = zis.getNextEntry();
 
-      while(zipEntry != null){
-         String fileName = zipEntry.getName();
-         File newFile = new File(rutaUnidades + fileName);
+      while (zipEntry != null) {
+        String fileName = zipEntry.getName();
+        File newFile = new File(rutaUnidades + fileName);
 
-         log.info("Fichero descomprimido: "+ newFile.getAbsoluteFile());
+        log.info("Fichero descomprimido: " + newFile.getAbsoluteFile());
 
-         //create all non exists folders
-         //else you will hit FileNotFoundException for compressed folder
-         new File(newFile.getParent()).mkdirs();
-         FileOutputStream fos = new FileOutputStream(newFile);
+        //create all non exists folders
+        //else you will hit FileNotFoundException for compressed folder
+        new File(newFile.getParent()).mkdirs();
+        FileOutputStream fos = new FileOutputStream(newFile);
 
-         int len;
-         while ((len = zis.read(buffer)) > 0) {
-              fos.write(buffer, 0, len);
-         }
-         fos.close();
-         zipEntry = zis.getNextEntry();
+        int len;
+        while ((len = zis.read(buffer)) > 0) {
+          fos.write(buffer, 0, len);
+        }
+        fos.close();
+        zipEntry = zis.getNextEntry();
       }
       zis.closeEntry();
       zis.close();
 
-      // Guardamos la descarga en BD.
-      descargaEjb.persist(descarga);
 
+    }catch (Exception e){
+       descargaEjb.deleteByTipo(Dir3caibConstantes.UNIDAD);
+       e.printStackTrace();
+    }
 
   }
 

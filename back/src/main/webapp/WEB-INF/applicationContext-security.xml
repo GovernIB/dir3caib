@@ -54,5 +54,6 @@
           <property name="authenticationManager" ref="authenticationManager"/>
       </bean>
 
+       <bean class="es.caib.dir3caib.back.security.AuthenticationSuccessListener" />
 
 </beans>

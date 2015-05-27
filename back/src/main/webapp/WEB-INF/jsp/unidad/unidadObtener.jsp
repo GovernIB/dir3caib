@@ -26,31 +26,33 @@
                        
                         <div class="box-content">
                             <div class="well formbox">
-
-                            <div class="page-header"><fmt:message key="dir3caib.fechas"/></div>
+                            <!-- Solo mostramos las fechas si es desarrollo-->
+                            <c:if test="${development}">
+                                <div class="page-header"><fmt:message key="dir3caib.fechas"/></div>
+                            </c:if>
 
                             <form:form modelAttribute="unidad" method="post" cssClass="form-horizontal" onsubmit="return validateDates($('#fechaInicio'),$('#fechaFin'));">
                                 <fieldset>
-
-                                    <div class="row-fluid">
-                                        <div class="span6">
-                                            <div class="control-group">
-                                                    <form:label path="fechaInicio" cssClass="control-label"><fmt:message key="dir3caib.fechainicio"/></form:label>
-                                                    <div class="controls">
-                                                        <form:input path="fechaInicio" maxlength="10" cssClass="input-xlarge datepicker" type="text" placeholder="dd/mm/yyyy"/> <form:errors path="fechaInicio" cssClass="help-inline" element="span"/>
-                                                    </div>
-                                             </div>
+                                    <c:if test="${development}">
+                                        <div class="row-fluid">
+                                            <div class="span6">
+                                                <div class="control-group">
+                                                        <form:label path="fechaInicio" cssClass="control-label"><fmt:message key="dir3caib.fechainicio"/></form:label>
+                                                        <div class="controls">
+                                                            <form:input path="fechaInicio" maxlength="10" cssClass="input-xlarge datepicker" type="text" placeholder="dd/mm/yyyy"/> <form:errors path="fechaInicio" cssClass="help-inline" element="span"/>
+                                                        </div>
+                                                 </div>
+                                            </div>
+                                            <div class="span6">
+                                                <div class="control-group">
+                                                        <form:label path="fechaFin" cssClass="control-label"><fmt:message key="dir3caib.fechafin"/></form:label>
+                                                        <div class="controls">
+                                                            <form:input path="fechaFin" maxlength="10" cssClass="input-xlarge datepicker" type="text" placeholder="dd/mm/yyyy"/> <form:errors path="fechaFin" cssClass="help-inline" element="span"/>
+                                                        </div>
+                                                 </div>
+                                            </div>
                                         </div>
-                                        <div class="span6">
-                                            <div class="control-group">
-                                                    <form:label path="fechaFin" cssClass="control-label"><fmt:message key="dir3caib.fechafin"/></form:label>
-                                                    <div class="controls">
-                                                        <form:input path="fechaFin" maxlength="10" cssClass="input-xlarge datepicker" type="text" placeholder="dd/mm/yyyy"/> <form:errors path="fechaFin" cssClass="help-inline" element="span"/>
-                                                    </div>
-                                             </div>
-                                        </div>
-                                    </div>
-
+                                    </c:if>
                                                  
                                     <div class="form-actions">
                                         <c:if test="${empty descarga}"><fmt:message key="unidad.obtener.etiqueta"/></c:if><c:if test="${not empty descarga}"><fmt:message key="unidad.actualizar.etiqueta"/></c:if>  <input type="submit" value="<fmt:message key="dir3caib.boton.obtener"/>" class="btn btn-primary">

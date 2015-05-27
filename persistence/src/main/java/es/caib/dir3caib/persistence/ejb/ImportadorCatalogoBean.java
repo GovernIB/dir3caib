@@ -8,7 +8,6 @@ import es.caib.dir3caib.utils.Constants;
 import es.caib.dir3caib.ws.dir3.catalogo.client.RespuestaWS;
 import es.caib.dir3caib.ws.dir3.catalogo.client.SC21CTVolcadoCatalogos;
 import es.caib.dir3caib.ws.dir3.catalogo.client.SC21CTVolcadoCatalogosService;
-
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -20,7 +19,6 @@ import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.xml.ws.BindingProvider;
-
 import java.io.*;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -99,8 +97,6 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
   @EJB(mappedName = "dir3caib/DescargaEJB/local")
   protected DescargaLocal descargaEjb;
 
-  //@EJB(mappedName = "dir3caib/ImportarEJB/local")
-  //protected ImportarLocal importarEjb;
 
 
   /*
@@ -144,8 +140,10 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
      //Lista de archivos que no existen y deberian existir
      List<String> inexistentes = results.getInexistentes();
 
-     // Obtenemos el listado de ficheros que hay dentro del directorio indicado
-     File f = new File(Configuracio.getCatalogosPath());
+     // Obtenemos el listado de ficheros que hay dentro del directorio indicado que se
+     // corresponde con la descarga hecha previamente
+     Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.CATALOGO);
+     File f = new File(Configuracio.getCatalogosPath(descarga.getCodigo()));
      ArrayList<String> existentes = new ArrayList<String>(Arrays.asList(f.list()));
      results.setExistentes(existentes);
 
@@ -172,7 +170,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
          
          try {
            
-           reader = getCSVReader(fichero);
+           reader = getCSVReader(fichero, descarga.getCodigo());
 
            //reader=new CSVReader(new InputStreamReader(new FileInputStream(FileSystemManager.getArchivo(Dir3caibConstantes.CATALOGOS_LOCATION_PROPERTY,fichero)), "ISO-8859-15"), '|');
            if(reader != null){
@@ -196,8 +194,6 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
                          entidadGeografica = catEntidadGeograficaEjb.findById(codigoEntidadGeografica);
 
-                         
-
                          if(entidadGeografica == null){ // Si es nuevo creamos el objeto a introducir
                            entidadGeografica = new CatEntidadGeografica();
                            entidadGeografica.setCodigoEntidadGeografica(codigoEntidadGeografica);
@@ -207,7 +203,6 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
                          catEntidadGeograficaEjb.persist(entidadGeografica);
 
-                         
                          cacheEntidadGeografica.put(codigoEntidadGeografica, entidadGeografica);
                          
                      } catch(Exception e) {
@@ -230,7 +225,6 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                          CatEstadoEntidad estadoEntidad;
 
                          estadoEntidad = catEstadoEntidadEjb.findById(codigoEstadoEntidad);
-
 
                          if(estadoEntidad == null){ // Si es nuevo creamos el objeto a introducir
                            estadoEntidad = new CatEstadoEntidad();
@@ -351,7 +345,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
                //CATPAIS
                if(Dir3caibConstantes.CAT_PAIS.equals(nombreFichero)){
-                 //if(numCabeceras == Dir3caibConstantes.CAT_PAIS_CABECERA){
+
                  reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
                  while ((fila = reader.readNext()) != null) {
                      // Obtenemos codigo y miramos si ya existe en la BD
@@ -426,7 +420,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
                //CATPROVINCIA
                if(Dir3caibConstantes.CAT_PROVINCIA.equals(nombreFichero)){
-                 //if(numCabeceras==Dir3caibConstantes.CAT_PROVINCIA_CABECERA){
+
 
                  reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
                  while ((fila = reader.readNext()) != null) {
@@ -631,7 +625,6 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                        // cargamos el nivel de Administracion correspondiente.
                        CatNivelAdministracion catNivelAdministracion;
                        catNivelAdministracion = cacheNivelAdministracion.get(Long.parseLong(fila[2]));
-                       //CatAmbitoTerritorialPK2 catAmbitoTerritorialPK = new CatAmbitoTerritorialPK2(codigoAmbito, Long.parseLong(fila[2]));
 
                        // Miramos si ya existe el ambitoTerritorial
                        CatAmbitoTerritorial ambitoTerritorial;
@@ -670,10 +663,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                        final Long codigoProvincia = new Long(fila[2]);
 
                        final String codigoEntidadGeografica = fila[3];
-                       
 
-                       
-                       //CatLocalidadPK2 catLocalidadPK = new CatLocalidadPK2(codigoLocalidad, catProvincia, catEntidadGeografica);
 
                        // Miramos si ya existe el ambitoTerritorial
                        CatLocalidad localidad;
@@ -743,11 +733,8 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
         }
 
      }
-     
-     
-     // Guardamos fecha Importacion y tipo
-     Descarga descarga;
 
+     // Actualizamos la descarga con la fecha de importación.
      descarga = descargaEjb.findByTipo(Dir3caibConstantes.CATALOGO);
      if (descarga == null) {
        descarga = new Descarga();
@@ -763,7 +750,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
      return results;
   }
 
-  public CSVReader getCSVReader(String fichero) throws FileNotFoundException,
+  public CSVReader getCSVReader(String fichero, Long idDescarga) throws FileNotFoundException,
       UnsupportedEncodingException {
     CSVReader reader;
     log.info("");
@@ -771,7 +758,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
     log.info("------------------------------------");
 
     // Obtenemos el fichero del sistema de archivos
-    File file = new File(Configuracio.getCatalogosPath(), fichero);
+    File file = new File(Configuracio.getCatalogosPath(idDescarga), fichero);
     if (file.exists()) {
       FileInputStream is1 = new FileInputStream(file);
       BufferedReader is = new BufferedReader(new InputStreamReader(is1, "UTF-8"));
@@ -829,80 +816,83 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
       log.info("DESCARGA FECHA INICIO " + descarga.getFechaInicio());
 
-      // Obtenemos  usuario y rutas para los WS.
-      String usuario = Configuracio.getDir3WsUser();
-      String password = Configuracio.getDir3WsPassword();
-      String ruta = Configuracio.getArchivosPath();
-      String rutaCatalogos = Configuracio.getCatalogosPath();
-      
-      String endpoint = Configuracio.getCatalogoEndPoint();
+      // Guardamos la descarga porque emplearemos el identificador para el nombre del directorio y el archivo.
+      descarga = descargaEjb.persist(descarga);
+      try {
+        // Obtenemos  usuario y rutas para los WS.
+        String usuario = Configuracio.getDir3WsUser();
+        String password = Configuracio.getDir3WsPassword();
+        String ruta = Configuracio.getArchivosPath();
+        String rutaCatalogos = Configuracio.getCatalogosPath(descarga.getCodigo());
 
-      SC21CTVolcadoCatalogosService catalogoService = new SC21CTVolcadoCatalogosService(new URL(endpoint + "?wsdl"));
-      SC21CTVolcadoCatalogos service = catalogoService.getSC21CTVolcadoCatalogos();
-      Map<String, Object> reqContext = ((BindingProvider) service).getRequestContext();
-      reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpoint);
+        String endpoint = Configuracio.getCatalogoEndPoint();
 
-
-      // Invocamos al WS
-      RespuestaWS respuestaCsv = service.exportar(usuario,password,"csv","COMPLETO");
-      //RespuestaWS respuestaXml = service.getSC21CTVolcadoCatalogos().exportar(usuario,password,"xml","COMPLETO")
-      Base64 decoder = new Base64();
-
-      log.info("Codigo: " + respuestaCsv.getCodigo());
-      log.info("Descripcion: " + respuestaCsv.getDescripcion());
-
-      // Realizamos copia del fichero de la ultima descarga
-      File file = new File(ruta + Dir3caibConstantes.CATALOGOS_ARCHIVO_ZIP);
-      log.info("Directorio :" + file.getAbsolutePath());
-      log.info("Tamaño :" +respuestaCsv.getFichero().length());
-      if(file.exists()){
-        FileUtils.copyFile(file, new File(ruta + "old_" + Dir3caibConstantes.CATALOGOS_ARCHIVO_ZIP));
-      }
-      // guardamos el nuevo fichero descargado
-      FileUtils.writeByteArrayToFile(file, decoder.decode(respuestaCsv.getFichero()));
+        SC21CTVolcadoCatalogosService catalogoService = new SC21CTVolcadoCatalogosService(new URL(endpoint + "?wsdl"));
+        SC21CTVolcadoCatalogos service = catalogoService.getSC21CTVolcadoCatalogos();
+        Map<String, Object> reqContext = ((BindingProvider) service).getRequestContext();
+        reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpoint);
 
 
+        // Invocamos al WS
+        RespuestaWS respuestaCsv = service.exportar(usuario, password, "csv", "COMPLETO");
+        //RespuestaWS respuestaXml = service.getSC21CTVolcadoCatalogos().exportar(usuario,password,"xml","COMPLETO")
+        Base64 decoder = new Base64();
 
-      // Borramos contenido
-      FileUtils.cleanDirectory(new File(rutaCatalogos));
+        log.info("Codigo: " + respuestaCsv.getCodigo());
+        log.info("Descripcion: " + respuestaCsv.getDescripcion());
 
-      //Descomprimir el archivo
-      ZipInputStream zis = new ZipInputStream(new FileInputStream(ruta + Dir3caibConstantes.CATALOGOS_ARCHIVO_ZIP));
-      ZipEntry zipEntry = zis.getNextEntry();
+        // Definimos el nombre del archivo zip a descargar
+        String archivoCatalogoZip = ruta + Dir3caibConstantes.CATALOGOS_ARCHIVO_ZIP + descarga.getCodigo() + ".zip";
+        File file = new File(archivoCatalogoZip);
+
+        // guardamos el nuevo fichero descargado
+        FileUtils.writeByteArrayToFile(file, decoder.decode(respuestaCsv.getFichero()));
 
 
+        // Se crea el directorio para el catálogo
+        File dir = new File(rutaCatalogos);
+        if (!dir.exists()) {
+          if (!dir.mkdirs()) {
+            //Borramos la descarga creada previamente.
+            descargaEjb.deleteByTipo(Dir3caibConstantes.CATALOGO);
+            log.error(" No se ha podido crear el directorio");
+          }
+        }
 
-      while(zipEntry != null){
+        //Descomprimir el archivo
+        ZipInputStream zis = new ZipInputStream(new FileInputStream(archivoCatalogoZip));
+        ZipEntry zipEntry = zis.getNextEntry();
 
-         String fileName = zipEntry.getName();
-         File newFile = new File(rutaCatalogos + fileName);
 
-         log.info("Fichero descomprimido: "+ newFile.getAbsoluteFile());
+        while (zipEntry != null) {
 
-         //create all non exists folders
+          String fileName = zipEntry.getName();
+          File newFile = new File(rutaCatalogos + fileName);
+
+          log.info("Fichero descomprimido: " + newFile.getAbsoluteFile());
+
+          //create all non exists folders
           //else you will hit FileNotFoundException for compressed folder
           new File(newFile.getParent()).mkdirs();
-
-
 
 
           FileOutputStream fos = new FileOutputStream(newFile);
 
           int len;
           while ((len = zis.read(buffer)) > 0) {
-              fos.write(buffer, 0, len);
+            fos.write(buffer, 0, len);
           }
 
           fos.close();
-        zipEntry = zis.getNextEntry();
+          zipEntry = zis.getNextEntry();
 
+        }
+        zis.closeEntry();
+        zis.close();
+      }catch (Exception e){
+        descargaEjb.deleteByTipo(Dir3caibConstantes.CATALOGO);
+        e.printStackTrace();
       }
-      zis.closeEntry();
-      zis.close();
-
-
-      descargaEjb.persist(descarga);
-
 
    }
    
@@ -943,9 +933,6 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
           e.printStackTrace();
         }
     }
-   
-   
-
 
 
 }

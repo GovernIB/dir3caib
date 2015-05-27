@@ -9,14 +9,13 @@ package es.caib.dir3caib.persistence.model;
  */
 public class Dir3caibConstantes {
 
-    // Propiedades
-    //public static final String ARCHIVOS_LOCATION_PROPERTY = "es.caib.dir3caib.archivos.path";
-    //public static final String DIR3WS_USUARIO_PROPERTY = "es.caib.dir3caib.dir3ws.user";
-    //public static final String DIR3WS_PASSWORD_PROPERTY = "es.caib.dir3caib.dir3ws.pass";
+     /* -------------- ROLES --------------*/
+    public static final String ROL_ADMIN = "DIR_ADMIN";  // Administrador
+
     
     // Importación Catalogo
     //public static final String CATALOGOS_LOCATION_PROPERTY = "es.caib.dir3caib.catalogos.path";
-    public static final String CATALOGOS_ARCHIVO_ZIP = "catalogosCSV.zip";
+    public static final String CATALOGOS_ARCHIVO_ZIP = "catalogosCSV";
     public static final String CAT_AMBITO_TERRITORIAL = "CAT_AMBITO_TERRITORIAL.CSV"; 
     public static final String CAT_COMUNIDAD_AUTONOMA = "CAT_COMUNIDAD_AUTONOMA.CSV"; 
     public static final String CAT_ENTIDAD_GEOGRAFICA = "CAT_ENTIDAD_GEOGRAFICA.CSV"; 
@@ -56,7 +55,7 @@ public class Dir3caibConstantes {
     
     // Importación Oficinas
     //public static final String OFICINAS_LOCATION_PROPERTY = "es.caib.dir3caib.oficinas.path";
-    public static final String OFICINAS_ARCHIVO_ZIP = "oficinasCSV.zip";
+    public static final String OFICINAS_ARCHIVO_ZIP = "oficinasCSV";
     public static final String OFI_CONTACTO_OFI = "ContactoOFI.csv"; 
     public static final String OFI_HISTORICOS_OFI = "HistoricosOFI.csv"; 
     public static final String OFI_OFICINAS = "Oficinas.csv"; 
@@ -67,7 +66,7 @@ public class Dir3caibConstantes {
     
      // Importación UNIDADES
     //public static final String UNIDADES_LOCATION_PROPERTY = "es.caib.dir3caib.unidades.path";
-    public static final String UNIDADES_ARCHIVO_ZIP = "unidadesCSV.zip";
+    public static final String UNIDADES_ARCHIVO_ZIP = "unidadesCSV";
     public static final String UO_CONTACTO_UO = "ContactoUO.csv"; 
     public static final String UO_HISTORICOS_UO = "HistoricosUO.csv"; 
     public static final String UO_UNIDADES = "Unidades.csv"; 

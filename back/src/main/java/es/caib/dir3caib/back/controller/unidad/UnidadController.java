@@ -103,9 +103,7 @@ public class UnidadController extends BaseController{
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     public ModelAndView list(@ModelAttribute UnidadBusquedaForm busqueda)throws Exception {
 
-        ModelAndView mav = new ModelAndView();
-
-        mav = new ModelAndView("unidad/unidadList");
+        ModelAndView mav = new ModelAndView("unidad/unidadList");
 
         Unidad unidad = busqueda.getUnidad();
 
@@ -143,12 +141,10 @@ public class UnidadController extends BaseController{
          ModelAndView mav = new ModelAndView("/unidad/unidadFicheros");
          
          // Obtenemos el listado de ficheros que hay dentro del directorio indicado
-         File f = new File(Configuracio.getUnidadesPath());
+         Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.UNIDAD);
+         File f = new File(Configuracio.getUnidadesPath(descarga.getCodigo()));
          ArrayList<String> existentes = new ArrayList<String>(Arrays.asList(f.list()));
-         
-         // Mostramos la fecha de la ultima descarga
 
-        Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.UNIDAD);
         if(descarga != null) {
           // Miramos si debemos mostrar el botón de importación,
           // solo se muestra si la fecha de Inicio descarga es superior a la fechaImportacion
@@ -181,7 +177,7 @@ public class UnidadController extends BaseController{
         if(descarga != null){
           model.addAttribute("descarga", descarga);
         }
-        
+        model.addAttribute("development", Configuracio.isDevelopment());
         model.addAttribute("unidad", new FechasForm());
         
         return "/unidad/unidadObtener";
@@ -202,8 +198,6 @@ public class UnidadController extends BaseController{
         String fechaFin = fechasForm.getFechaFinFormateada(Dir3caibConstantes.FORMATO_FECHA);*/
         
         descargarUnidadesWS(request, fechasForm.getFechaInicio(), fechasForm.getFechaFin());
-        
-        // TODO: Añadir objeto descarga al request (modelAndView)
          
         return "redirect:/unidad/ficheros ";
 
@@ -246,15 +240,17 @@ public class UnidadController extends BaseController{
      public ModelAndView eliminarUnidadesCompleto(HttpServletRequest request){
          ModelAndView mav = new ModelAndView("/unidad/unidadFicheros");
          
-         File directorio = new File(Configuracio.getUnidadesPath());
+
          
-         try {     
+         try {
+           Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.UNIDAD);
+           File directorio = new File(Configuracio.getUnidadesPath(descarga.getCodigo()));
            // Contactos 
            contactoUOEjb.deleteAll();
            //Unidades 
            unidadEjb.deleteHistoricosUnidad();
            unidadEjb.deleteAll();
-           descargaEjb.deleteByTipo(Dir3caibConstantes.UNIDAD);           
+           descargaEjb.deleteAllByTipo(Dir3caibConstantes.UNIDAD);
          
            FileUtils.cleanDirectory(directorio);
            Mensaje.saveMessageInfo(request, "Se han eliminado correctamente todos los ficheros de unidades");
