@@ -142,11 +142,13 @@ public class OficinaController extends BaseController {
     @RequestMapping(value = "/ficheros", method = RequestMethod.GET)
      public ModelAndView ficherosList(HttpServletRequest request) throws Exception {
          ModelAndView mav = new ModelAndView("/oficina/oficinaFicheros");
-         
+         ArrayList<String> existentes = new ArrayList<String>();
          // Obtenemos el listado de ficheros que hay dentro del directorio indicado
          Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.OFICINA);
-         File f = new File(Configuracio.getOficinasPath(descarga.getCodigo()));
-         ArrayList<String> existentes = new ArrayList<String>(Arrays.asList(f.list()));
+         if(descarga != null) {
+             File f = new File(Configuracio.getOficinasPath(descarga.getCodigo()));
+             existentes = new ArrayList<String>(Arrays.asList(f.list()));
+         }
 
           if(descarga != null){
             // Miramos si debemos mostrar el botón de importación,

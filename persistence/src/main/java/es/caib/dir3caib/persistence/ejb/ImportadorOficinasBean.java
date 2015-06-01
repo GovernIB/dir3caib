@@ -1122,7 +1122,7 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
 
       }catch(Exception e){
         descargaEjb.deleteByTipo(Dir3caibConstantes.OFICINA);
-        e.printStackTrace();
+        throw new Exception();
       }
 
 

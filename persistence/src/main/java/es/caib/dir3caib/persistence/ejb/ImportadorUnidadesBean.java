@@ -953,7 +953,7 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
 
     }catch (Exception e){
        descargaEjb.deleteByTipo(Dir3caibConstantes.UNIDAD);
-       e.printStackTrace();
+        throw new Exception();
     }
 
   }

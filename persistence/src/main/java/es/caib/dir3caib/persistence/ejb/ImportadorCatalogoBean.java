@@ -891,7 +891,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
         zis.close();
       }catch (Exception e){
         descargaEjb.deleteByTipo(Dir3caibConstantes.CATALOGO);
-        e.printStackTrace();
+          throw new Exception();
       }
 
    }

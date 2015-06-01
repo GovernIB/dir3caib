@@ -139,11 +139,14 @@ public class UnidadController extends BaseController{
      public ModelAndView ficherosList(HttpServletRequest request) throws Exception{
 
          ModelAndView mav = new ModelAndView("/unidad/unidadFicheros");
+        ArrayList<String> existentes = new ArrayList<String>();
          
          // Obtenemos el listado de ficheros que hay dentro del directorio indicado
          Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.UNIDAD);
-         File f = new File(Configuracio.getUnidadesPath(descarga.getCodigo()));
-         ArrayList<String> existentes = new ArrayList<String>(Arrays.asList(f.list()));
+         if(descarga != null) {
+             File f = new File(Configuracio.getUnidadesPath(descarga.getCodigo()));
+             existentes = new ArrayList<String>(Arrays.asList(f.list()));
+         }
 
         if(descarga != null) {
           // Miramos si debemos mostrar el botón de importación,

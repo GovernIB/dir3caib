@@ -100,19 +100,21 @@ public class CatalogoController extends BaseController{
      * @return 
      */
     @RequestMapping(value = "/ficheros", method = RequestMethod.GET)
-     public ModelAndView ficherosList(HttpServletRequest request)  throws Exception{
-         ModelAndView mav = new ModelAndView("/catalogo/catalogoFicheros");
-         
-         // Obtenemos el listado de ficheros que hay dentro del directorio indicado
-         ArrayList<String> existentes = new ArrayList<String>();
-         Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.CATALOGO);
-         File f = new File(Configuracio.getCatalogosPath(descarga.getCodigo()));
-         
-         if (!f.exists()) {
-           f.mkdirs();
-         } else {
-           existentes.addAll(Arrays.asList(f.list()));
-         }
+     public ModelAndView ficherosList(HttpServletRequest request)  throws Exception {
+        ModelAndView mav = new ModelAndView("/catalogo/catalogoFicheros");
+
+        // Obtenemos el listado de ficheros que hay dentro del directorio indicado
+        ArrayList<String> existentes = new ArrayList<String>();
+        Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.CATALOGO);
+        if (descarga != null){
+            File f = new File(Configuracio.getCatalogosPath(descarga.getCodigo()));
+            if (!f.exists()) {
+                f.mkdirs();
+            } else {
+                existentes.addAll(Arrays.asList(f.list()));
+            }
+        }
+
 
 
 
