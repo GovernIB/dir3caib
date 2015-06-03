@@ -1,6 +1,7 @@
 
 package es.caib.dir3caib.ws.api.unidad;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -8,7 +9,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
@@ -72,14 +73,22 @@ public class UnidadTF {
     protected String codigoEstadoEntidad;
     protected String competencias;
     protected String denominacion;
+    @XmlElement(type = String.class)
+    @XmlJavaTypeAdapter(Adapter1 .class)
     @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar fechaAltaOficial;
+    protected Timestamp fechaAltaOficial;
+    @XmlElement(type = String.class)
+    @XmlJavaTypeAdapter(Adapter1 .class)
     @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar fechaAnulacion;
+    protected Timestamp fechaAnulacion;
+    @XmlElement(type = String.class)
+    @XmlJavaTypeAdapter(Adapter1 .class)
     @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar fechaBajaOficial;
+    protected Timestamp fechaBajaOficial;
+    @XmlElement(type = String.class)
+    @XmlJavaTypeAdapter(Adapter1 .class)
     @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar fechaExtincion;
+    protected Timestamp fechaExtincion;
     @XmlElement(nillable = true)
     protected List<String> historicosUO;
     protected Long nivelAdministracion;
@@ -282,10 +291,10 @@ public class UnidadTF {
      * 
      * @return
      *     possible object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link String }
      *     
      */
-    public XMLGregorianCalendar getFechaAltaOficial() {
+    public Timestamp getFechaAltaOficial() {
         return fechaAltaOficial;
     }
 
@@ -294,10 +303,10 @@ public class UnidadTF {
      * 
      * @param value
      *     allowed object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link String }
      *     
      */
-    public void setFechaAltaOficial(XMLGregorianCalendar value) {
+    public void setFechaAltaOficial(Timestamp value) {
         this.fechaAltaOficial = value;
     }
 
@@ -306,10 +315,10 @@ public class UnidadTF {
      * 
      * @return
      *     possible object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link String }
      *     
      */
-    public XMLGregorianCalendar getFechaAnulacion() {
+    public Timestamp getFechaAnulacion() {
         return fechaAnulacion;
     }
 
@@ -318,10 +327,10 @@ public class UnidadTF {
      * 
      * @param value
      *     allowed object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link String }
      *     
      */
-    public void setFechaAnulacion(XMLGregorianCalendar value) {
+    public void setFechaAnulacion(Timestamp value) {
         this.fechaAnulacion = value;
     }
 
@@ -330,10 +339,10 @@ public class UnidadTF {
      * 
      * @return
      *     possible object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link String }
      *     
      */
-    public XMLGregorianCalendar getFechaBajaOficial() {
+    public Timestamp getFechaBajaOficial() {
         return fechaBajaOficial;
     }
 
@@ -342,10 +351,10 @@ public class UnidadTF {
      * 
      * @param value
      *     allowed object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link String }
      *     
      */
-    public void setFechaBajaOficial(XMLGregorianCalendar value) {
+    public void setFechaBajaOficial(Timestamp value) {
         this.fechaBajaOficial = value;
     }
 
@@ -354,10 +363,10 @@ public class UnidadTF {
      * 
      * @return
      *     possible object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link String }
      *     
      */
-    public XMLGregorianCalendar getFechaExtincion() {
+    public Timestamp getFechaExtincion() {
         return fechaExtincion;
     }
 
@@ -366,10 +375,10 @@ public class UnidadTF {
      * 
      * @param value
      *     allowed object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link String }
      *     
      */
-    public void setFechaExtincion(XMLGregorianCalendar value) {
+    public void setFechaExtincion(Timestamp value) {
         this.fechaExtincion = value;
     }
 

@@ -43,43 +43,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetVersionWsResponse }
-     * 
-     */
-    public GetVersionWsResponse createGetVersionWsResponse() {
-        return new GetVersionWsResponse();
-    }
-
-    /**
      * Create an instance of {@link UnidadTF }
      * 
      */
     public UnidadTF createUnidadTF() {
         return new UnidadTF();
-    }
-
-    /**
-     * Create an instance of {@link ObtenerArbolUnidadesDestinatariasResponse }
-     * 
-     */
-    public ObtenerArbolUnidadesDestinatariasResponse createObtenerArbolUnidadesDestinatariasResponse() {
-        return new ObtenerArbolUnidadesDestinatariasResponse();
-    }
-
-    /**
-     * Create an instance of {@link ObtenerArbolUnidadesDestinatarias }
-     * 
-     */
-    public ObtenerArbolUnidadesDestinatarias createObtenerArbolUnidadesDestinatarias() {
-        return new ObtenerArbolUnidadesDestinatarias();
-    }
-
-    /**
-     * Create an instance of {@link ObtenerArbolUnidadesResponse }
-     * 
-     */
-    public ObtenerArbolUnidadesResponse createObtenerArbolUnidadesResponse() {
-        return new ObtenerArbolUnidadesResponse();
     }
 
     /**
@@ -91,27 +59,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetVersion }
-     * 
-     */
-    public GetVersion createGetVersion() {
-        return new GetVersion();
-    }
-
-    /**
-     * Create an instance of {@link ObtenerUnidad }
-     * 
-     */
-    public ObtenerUnidad createObtenerUnidad() {
-        return new ObtenerUnidad();
-    }
-
-    /**
      * Create an instance of {@link ObtenerUnidadResponse }
      * 
      */
     public ObtenerUnidadResponse createObtenerUnidadResponse() {
         return new ObtenerUnidadResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetVersionWsResponse }
+     * 
+     */
+    public GetVersionWsResponse createGetVersionWsResponse() {
+        return new GetVersionWsResponse();
     }
 
     /**
@@ -128,6 +88,46 @@ public class ObjectFactory {
      */
     public GetVersionWs createGetVersionWs() {
         return new GetVersionWs();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerArbolUnidadesDestinatariasResponse }
+     * 
+     */
+    public ObtenerArbolUnidadesDestinatariasResponse createObtenerArbolUnidadesDestinatariasResponse() {
+        return new ObtenerArbolUnidadesDestinatariasResponse();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerArbolUnidadesResponse }
+     * 
+     */
+    public ObtenerArbolUnidadesResponse createObtenerArbolUnidadesResponse() {
+        return new ObtenerArbolUnidadesResponse();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerArbolUnidadesDestinatarias }
+     * 
+     */
+    public ObtenerArbolUnidadesDestinatarias createObtenerArbolUnidadesDestinatarias() {
+        return new ObtenerArbolUnidadesDestinatarias();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerUnidad }
+     * 
+     */
+    public ObtenerUnidad createObtenerUnidad() {
+        return new ObtenerUnidad();
+    }
+
+    /**
+     * Create an instance of {@link GetVersion }
+     * 
+     */
+    public GetVersion createGetVersion() {
+        return new GetVersion();
     }
 
     /**

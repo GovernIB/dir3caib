@@ -1,11 +1,13 @@
 
 package es.caib.dir3caib.ws.api.unidad;
 
+import java.sql.Timestamp;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
@@ -38,10 +40,14 @@ import javax.xml.datatype.XMLGregorianCalendar;
 public class ObtenerArbolUnidades {
 
     protected String arg0;
+    @XmlElement(type = String.class)
+    @XmlJavaTypeAdapter(Adapter1 .class)
     @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar arg1;
+    protected Timestamp arg1;
+    @XmlElement(type = String.class)
+    @XmlJavaTypeAdapter(Adapter1 .class)
     @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar arg2;
+    protected Timestamp arg2;
 
     /**
      * Gets the value of the arg0 property.
@@ -72,10 +78,10 @@ public class ObtenerArbolUnidades {
      * 
      * @return
      *     possible object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link String }
      *     
      */
-    public XMLGregorianCalendar getArg1() {
+    public Timestamp getArg1() {
         return arg1;
     }
 
@@ -84,10 +90,10 @@ public class ObtenerArbolUnidades {
      * 
      * @param value
      *     allowed object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link String }
      *     
      */
-    public void setArg1(XMLGregorianCalendar value) {
+    public void setArg1(Timestamp value) {
         this.arg1 = value;
     }
 
@@ -96,10 +102,10 @@ public class ObtenerArbolUnidades {
      * 
      * @return
      *     possible object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link String }
      *     
      */
-    public XMLGregorianCalendar getArg2() {
+    public Timestamp getArg2() {
         return arg2;
     }
 
@@ -108,10 +114,10 @@ public class ObtenerArbolUnidades {
      * 
      * @param value
      *     allowed object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link String }
      *     
      */
-    public void setArg2(XMLGregorianCalendar value) {
+    public void setArg2(Timestamp value) {
         this.arg2 = value;
     }
 
