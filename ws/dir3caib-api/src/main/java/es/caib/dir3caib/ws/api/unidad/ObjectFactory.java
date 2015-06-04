@@ -43,38 +43,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link UnidadTF }
-     * 
-     */
-    public UnidadTF createUnidadTF() {
-        return new UnidadTF();
-    }
-
-    /**
-     * Create an instance of {@link ObtenerArbolUnidades }
-     * 
-     */
-    public ObtenerArbolUnidades createObtenerArbolUnidades() {
-        return new ObtenerArbolUnidades();
-    }
-
-    /**
-     * Create an instance of {@link ObtenerUnidadResponse }
-     * 
-     */
-    public ObtenerUnidadResponse createObtenerUnidadResponse() {
-        return new ObtenerUnidadResponse();
-    }
-
-    /**
-     * Create an instance of {@link GetVersionWsResponse }
-     * 
-     */
-    public GetVersionWsResponse createGetVersionWsResponse() {
-        return new GetVersionWsResponse();
-    }
-
-    /**
      * Create an instance of {@link GetVersionResponse }
      * 
      */
@@ -83,11 +51,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetVersionWs }
+     * Create an instance of {@link ObtenerUnidad }
      * 
      */
-    public GetVersionWs createGetVersionWs() {
-        return new GetVersionWs();
+    public ObtenerUnidad createObtenerUnidad() {
+        return new ObtenerUnidad();
     }
 
     /**
@@ -107,6 +75,30 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link GetVersion }
+     * 
+     */
+    public GetVersion createGetVersion() {
+        return new GetVersion();
+    }
+
+    /**
+     * Create an instance of {@link GetVersionWs }
+     * 
+     */
+    public GetVersionWs createGetVersionWs() {
+        return new GetVersionWs();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerArbolUnidades }
+     * 
+     */
+    public ObtenerArbolUnidades createObtenerArbolUnidades() {
+        return new ObtenerArbolUnidades();
+    }
+
+    /**
      * Create an instance of {@link ObtenerArbolUnidadesDestinatarias }
      * 
      */
@@ -115,19 +107,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ObtenerUnidad }
+     * Create an instance of {@link ObtenerUnidadResponse }
      * 
      */
-    public ObtenerUnidad createObtenerUnidad() {
-        return new ObtenerUnidad();
+    public ObtenerUnidadResponse createObtenerUnidadResponse() {
+        return new ObtenerUnidadResponse();
     }
 
     /**
-     * Create an instance of {@link GetVersion }
+     * Create an instance of {@link GetVersionWsResponse }
      * 
      */
-    public GetVersion createGetVersion() {
-        return new GetVersion();
+    public GetVersionWsResponse createGetVersionWsResponse() {
+        return new GetVersionWsResponse();
+    }
+
+    /**
+     * Create an instance of {@link UnidadTF }
+     * 
+     */
+    public UnidadTF createUnidadTF() {
+        return new UnidadTF();
     }
 
     /**

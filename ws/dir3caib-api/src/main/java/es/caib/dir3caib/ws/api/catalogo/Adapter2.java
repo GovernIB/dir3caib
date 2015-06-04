@@ -1,7 +1,7 @@
 
 package es.caib.dir3caib.ws.api.catalogo;
 
-import java.util.Date;
+import java.sql.Date;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 public class Adapter2
@@ -10,11 +10,11 @@ public class Adapter2
 
 
     public Date unmarshal(String value) {
-        return (org.fundaciobit.genapp.common.ws.WsUtilDateAdapter.parseDate(value));
+        return (org.fundaciobit.genapp.common.ws.WsSqlDateAdapter.parseDate(value));
     }
 
     public String marshal(Date value) {
-        return (org.fundaciobit.genapp.common.ws.WsUtilDateAdapter.printDate(value));
+        return (org.fundaciobit.genapp.common.ws.WsSqlDateAdapter.printDate(value));
     }
 
 }
