@@ -54,16 +54,17 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
     }
 
     /**
-     * Obtiene el codigo y la denominación de una Oficina con estado vigente.
+     * Obtiene el codigo y la denominación de una Oficina con el estado indicado.
      * Se emplea para mostrar el árbol de oficinas.
      * @param id identificador de la oficina
+     * @param estado  de la oficina
      * @return  {@link es.caib.dir3caib.persistence.model.utils.ObjetoBasico}
      * */
-    public ObjetoBasico findReduceOficina(String id) throws Exception {
+    public ObjetoBasico findReduceOficina(String id, String estado) throws Exception {
 
-      Query q = em.createQuery("Select oficina.codigo, oficina.denominacion, oficina.estado.descripcionEstadoEntidad from Oficina as oficina where oficina.codigo=:id and oficina.estado.codigoEstadoEntidad =:vigente");
+      Query q = em.createQuery("Select oficina.codigo, oficina.denominacion, oficina.estado.descripcionEstadoEntidad from Oficina as oficina where oficina.codigo=:id and oficina.estado.descripcionEstadoEntidad =:estado");
              q.setParameter("id", id);
-             q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+             q.setParameter("estado", estado);
 
       Object[] obj = (Object[])q.getSingleResult();
 
@@ -192,17 +193,18 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
     }
 
     /**
-     * Metodo que obtiene los hijos de primer nivel de una oficina que estan vigentes
+     * Metodo que obtiene los hijos de primer nivel de una oficina en funcion del estado del padre.
      * @param codigo identificador de la oficina padre.
+     * @param estado estado de la oficina padre.
      * @return  {@link es.caib.dir3caib.persistence.model.utils.ObjetoBasico}
      */
     @Override
-    public List<ObjetoBasico> hijos(String codigo) throws Exception {
+    public List<ObjetoBasico> hijos(String codigo, String estado) throws Exception {
 
-        Query q = em.createQuery("Select oficina.codigo, oficina.denominacion, oficina.estado.descripcionEstadoEntidad from Oficina as oficina where oficina.codOfiResponsable.codigo =:codigo and oficina.codigo !=:codigo and oficina.estado.codigoEstadoEntidad =:vigente order by oficina.codigo");
+        Query q = em.createQuery("Select oficina.codigo, oficina.denominacion, oficina.estado.descripcionEstadoEntidad from Oficina as oficina where oficina.codOfiResponsable.codigo =:codigo and oficina.codigo !=:codigo and oficina.estado.descripcionEstadoEntidad =:estado order by oficina.codigo");
 
         q.setParameter("codigo",codigo);
-        q.setParameter("vigente",Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+        q.setParameter("estado",estado);
 
         return getObjetoBasicoList(q.getResultList());
     }

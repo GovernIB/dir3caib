@@ -317,12 +317,12 @@ public class UnidadController extends BaseController{
    * @param idUnidad
    * @return
    */
-    @RequestMapping(value = "/{idUnidad}/arbol", method = RequestMethod.GET)
-    public ModelAndView mostrarArbolUnidades(HttpServletRequest request, @PathVariable String idUnidad) throws Exception {
+    @RequestMapping(value = "/{idUnidad}/{estadoUnidad}/arbol", method = RequestMethod.GET)
+    public ModelAndView mostrarArbolUnidades(HttpServletRequest request, @PathVariable String idUnidad, @PathVariable String estadoUnidad) throws Exception {
 
       ModelAndView mav = new ModelAndView("/arbolList");
       Nodo nodo = new Nodo();
-      arbolUnidades(idUnidad, nodo);
+      arbolUnidades(idUnidad, nodo,estadoUnidad);
       mav.addObject("nodo", nodo);
 
       return mav;
@@ -334,17 +334,19 @@ public class UnidadController extends BaseController{
    * @param idUnidad  unidad raiz de la que partimos.
    * @return  Nodo (arbol)
    */
-   private void arbolUnidades(String idUnidad, Nodo nodo) throws Exception {
+   private void arbolUnidades(String idUnidad, Nodo nodo, String estado) throws Exception {
 
          // Unidad unidadPadre = unidadEjb.findById(idUnidad);
-          ObjetoBasico unidadPadre = unidadEjb.findReduceUnidad(idUnidad);
+          log.info("ID UNIDAD " + idUnidad);
+          log.info("ESTADO UNIDAD " + estado);
+          ObjetoBasico unidadPadre = unidadEjb.findReduceUnidad(idUnidad, estado);
           nodo.setId(unidadPadre.getCodigo());
           nodo.setNombre(unidadPadre.getDenominacion());
           nodo.setIdPadre(idUnidad);
           nodo.setEstado(unidadPadre.getDescripcionEstado());
 
           List<Nodo> hijos = new ArrayList<Nodo>();
-          List<ObjetoBasico> unidadesHijas = unidadEjb.hijos(idUnidad);
+          List<ObjetoBasico> unidadesHijas = unidadEjb.hijos(idUnidad,estado);
           for(ObjetoBasico unidadHija: unidadesHijas){
             Nodo hijo = new Nodo();
             hijo.setId(unidadHija.getCodigo());
@@ -353,7 +355,7 @@ public class UnidadController extends BaseController{
             hijo.setEstado(unidadHija.getDescripcionEstado());
             hijos.add(hijo);
             // llamada recursiva
-            arbolUnidades( unidadHija.getCodigo(), hijo);
+            arbolUnidades( unidadHija.getCodigo(), hijo, unidadHija.getDescripcionEstado());
           }
           nodo.setHijos(hijos);
     }

@@ -32,11 +32,11 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
 
   public Oficina findFullById(String id) throws Exception;
 
-  public ObjetoBasico findReduceOficina(String id) throws Exception;
+  public ObjetoBasico findReduceOficina(String id, String estado) throws Exception;
 
   public Boolean tieneHijos(String codigo) throws Exception;
 
-  public List<ObjetoBasico> hijos(String codigo) throws Exception;
+  public List<ObjetoBasico> hijos(String codigo, String estado) throws Exception;
 
   public List<Oficina> obtenerOficinasOrganismo(String codigo, Date fechaActualizacion,
       Date fechaSincronizacion) throws Exception;

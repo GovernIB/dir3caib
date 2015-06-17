@@ -146,7 +146,7 @@
                     <tr>
 
                         <td>${oficina.codigo}</td>
-                        <td><a href="<c:url value="/oficina/${oficina.codigo}/arbol/"/>">${oficina.denominacion}</a></td>
+                        <td><a href="<c:url value="/oficina/${oficina.codigo}/${oficina.estado.descripcionEstadoEntidad}/arbol/"/>">${oficina.denominacion}</a></td>
                         <td>${oficina.estado.descripcionEstadoEntidad}</td>
 
                     </tr>

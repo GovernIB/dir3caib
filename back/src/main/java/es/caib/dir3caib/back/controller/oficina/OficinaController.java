@@ -332,12 +332,12 @@ public class OficinaController extends BaseController {
    * @param idOficina
    * @return
    */
-    @RequestMapping(value = "/{idOficina}/arbol", method = RequestMethod.GET)
-    public ModelAndView mostrarArbolOficinas(HttpServletRequest request, @PathVariable String idOficina) {
+    @RequestMapping(value = "/{idOficina}/{estadoOficina}/arbol", method = RequestMethod.GET)
+    public ModelAndView mostrarArbolOficinas(HttpServletRequest request, @PathVariable String idOficina, @PathVariable String estadoOficina) {
 
       ModelAndView mav = new ModelAndView("/arbolList");
       Nodo nodo = new Nodo();
-      arbolOficinas(idOficina, nodo);
+      arbolOficinas(idOficina, nodo, estadoOficina);
       mav.addObject("nodo", nodo);
 
       return mav;
@@ -349,11 +349,11 @@ public class OficinaController extends BaseController {
    * @param idOficina  oficina raiz de la que partimos.
    * @return  Nodo (árbol)
    */
-    private void arbolOficinas(String idOficina, Nodo nodo){
+    private void arbolOficinas(String idOficina, Nodo nodo,String estado){
 
        try {
           //Oficina oficinaPadre = oficinaEjb.findById(idOficina);
-          ObjetoBasico oficinaPadre = oficinaEjb.findReduceOficina(idOficina);
+          ObjetoBasico oficinaPadre = oficinaEjb.findReduceOficina(idOficina,estado);
           nodo.setId(oficinaPadre.getCodigo());
           nodo.setNombre(oficinaPadre.getDenominacion());
           nodo.setIdPadre(idOficina);
@@ -361,7 +361,7 @@ public class OficinaController extends BaseController {
 
           List<Nodo> hijos = new ArrayList<Nodo>();
          // List<Oficina> oficinasHijas = oficinaEjb.hijos(idOficina);
-          List<ObjetoBasico> oficinasHijas = oficinaEjb.hijos(idOficina);
+          List<ObjetoBasico> oficinasHijas = oficinaEjb.hijos(idOficina, estado);
           for(ObjetoBasico oficinaHija: oficinasHijas){
             Nodo hijo = new Nodo();
             hijo.setId(oficinaHija.getCodigo());
@@ -370,7 +370,7 @@ public class OficinaController extends BaseController {
             hijo.setEstado(oficinaHija.getDescripcionEstado());
             hijos.add(hijo);
             // llamada recursiva
-            arbolOficinas(oficinaHija.getCodigo(), hijo);
+            arbolOficinas(oficinaHija.getCodigo(), hijo, oficinaHija.getDescripcionEstado());
           }
           nodo.setHijos(hijos);
        }catch(Exception e){

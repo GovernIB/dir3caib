@@ -166,7 +166,7 @@
                     <tr>
 
                         <td>${unidad.codigo}</td>
-                        <td><a href="<c:url value="/unidad/${unidad.codigo}/arbol/"/>">${unidad.denominacion}</a></td>
+                        <td><a href="<c:url value="/unidad/${unidad.codigo}/${unidad.estado.descripcionEstadoEntidad}/arbol/"/>">${unidad.denominacion}</a></td>
                         <td>${unidad.estado.descripcionEstadoEntidad}</td>
 
                     </tr>

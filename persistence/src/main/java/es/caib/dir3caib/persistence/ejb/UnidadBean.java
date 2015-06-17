@@ -51,7 +51,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
      Query q = em.createQuery("select unidad from Unidad as unidad where unidad.codigo=:id and unidad.estado.codigoEstadoEntidad=:vigente");
       q.setParameter("id", id);
       q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);;
-      Unidad unidad = (Unidad)q.getSingleResult();
+        Unidad unidad = (Unidad)q.getSingleResult();
       Hibernate.initialize(unidad.getHistoricoUO());
       return unidad;
     }
@@ -59,13 +59,14 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     /**
      * Obtiene el codigo y la denominación de una Unidad con estado vigente. Se emplea para mostrar el arbol de unidades.
      * @param id identificador de la unidad
+     * @param estado estado de la unidad
      * @return  {@link es.caib.dir3caib.persistence.model.utils.ObjetoBasico}
      * */
-    public ObjetoBasico findReduceUnidad(String id) throws Exception {
+    public ObjetoBasico findReduceUnidad(String id, String estado) throws Exception {
 
-      Query q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.estado.descripcionEstadoEntidad from Unidad as unidad where unidad.codigo=:id and unidad.estado.codigoEstadoEntidad =:vigente");
+      Query q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.estado.descripcionEstadoEntidad from Unidad as unidad where unidad.codigo=:id and unidad.estado.descripcionEstadoEntidad =:estado");
              q.setParameter("id", id);
-             q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+             q.setParameter("estado", estado);
 
       Object[] obj = (Object[])q.getSingleResult();
 
@@ -232,17 +233,19 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     }
 
     /**
-     * Metodo que obtiene los hijos de primer nivel de una unidad que estan vigentes
+     * Metodo que obtiene los hijos de primer nivel de una unidad en función del estado de la unidad padre
      * @param codigo identificador de la unidad padre.
+     * @param estado estado de la unidad padre.
+     *
      * @return  {@link es.caib.dir3caib.persistence.model.utils.ObjetoBasico}
      */
     @Override
-    public List<ObjetoBasico> hijos(String codigo) throws Exception {
+    public List<ObjetoBasico> hijos(String codigo, String estado) throws Exception {
 
-        Query q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.estado.descripcionEstadoEntidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.codigo");
+        Query q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.estado.descripcionEstadoEntidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.descripcionEstadoEntidad =:estado order by unidad.codigo");
 
         q.setParameter("codigo",codigo);
-        q.setParameter("vigente",Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+        q.setParameter("estado",estado);
 
         return getObjetoBasicoList(q.getResultList());
     }
@@ -276,11 +279,9 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         log.info("Número de PADRES UNIDADES: " + padres.size());
 
         if(fechaActualizacion!= null){ // Si hay fecha de actualizacion solo se envian las actualizadas
-          // Date fechaAct = formatoFecha.parse(fechaActualizacion);
-          // Date fechaSincro = formatoFecha.parse(fechaSincronizacion);
-
            for(Unidad unidad: padres){
              if(fechaActualizacion.before(unidad.getFechaImportacion()) || fechaActualizacion.equals(unidad.getFechaImportacion())){
+                  log.info("FECHA ACTUALIZACION " +fechaActualizacion +"ANTERIOR O IGUAL A LA FECHA DE IMPORTACION DE LA UNIDAD ID "+ unidad.getCodigo() +" FECHA IMPORT"+ unidad.getFechaImportacion());
                   // Miramos que la unidad no este extinguida o anulada anterior a la fecha de sincronizacion de regweb
                   if(unidadValida(unidad,fechaSincronizacion)){
                     padresActualizados.add(unidad);
@@ -386,7 +387,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
           List<ObjetoBasico> unidadesReducidas = new ArrayList<ObjetoBasico>();
 
           for (Object[] object : result){
-              ObjetoBasico objetoBasico = new ObjetoBasico((String)object[0],(String)object[1],"");
+              ObjetoBasico objetoBasico = new ObjetoBasico((String)object[0],(String)object[1],(String)object[2]);
 
               unidadesReducidas.add(objetoBasico);
           }

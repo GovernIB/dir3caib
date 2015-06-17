@@ -15,7 +15,7 @@
             <div class="row-fluid">
                 <div class="box span12">
                     <div class="box-header well">
-                        <h2><fmt:message key="unidad.organigrama"/>&nbsp;<i> ${nodo.id} -${nodo.nombre}</i></h2>
+                        <h2><fmt:message key="unidad.organigrama"/>&nbsp;<i> ${nodo.id} -${nodo.nombre}-${nodo.estado}</i></h2>
                     </div>
 
                     <c:if test="${empty nodo.hijos}">
@@ -28,7 +28,7 @@
                     <div class="tree">
                             <ul>
                                 <li>
-                                     <span class="badge-arbre btn-success"><i class=""></i> ${nodo.id} -${nodo.nombre}</span>
+                                     <span class="badge-arbre btn-success"><i class=""></i> ${nodo.id} -${nodo.nombre}-${nodo.estado}</span>
                                      <jsp:include page="nodo.jsp">
                                          <jsp:param name="color" value="badge-arbre btn-primary"/>
                                      </jsp:include>
