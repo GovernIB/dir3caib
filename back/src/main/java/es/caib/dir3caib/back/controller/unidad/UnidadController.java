@@ -336,9 +336,6 @@ public class UnidadController extends BaseController{
    */
    private void arbolUnidades(String idUnidad, Nodo nodo, String estado) throws Exception {
 
-         // Unidad unidadPadre = unidadEjb.findById(idUnidad);
-          log.info("ID UNIDAD " + idUnidad);
-          log.info("ESTADO UNIDAD " + estado);
           ObjetoBasico unidadPadre = unidadEjb.findReduceUnidad(idUnidad, estado);
           nodo.setId(unidadPadre.getCodigo());
           nodo.setNombre(unidadPadre.getDenominacion());

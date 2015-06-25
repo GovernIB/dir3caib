@@ -1,14 +1,21 @@
 package es.caib.dir3caib.back.utils;
 
+import es.caib.dir3caib.back.jobs.JobNuevo;
 import es.caib.dir3caib.persistence.utils.DataBaseUtils;
 import es.caib.dir3caib.persistence.utils.Versio;
 import es.caib.dir3caib.utils.Configuracio;
 import org.apache.log4j.Logger;
+import org.quartz.CronTrigger;
+import org.quartz.JobDetail;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerFactory;
+import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
+
 
 /**
  * Created 10/11/14 12:08
@@ -19,6 +26,10 @@ import javax.servlet.http.HttpServlet;
 public class InitServlet extends HttpServlet {
 
   protected final Logger log = Logger.getLogger(getClass());
+
+
+
+  private Scheduler scheduler;
 
 
   @Override
@@ -53,6 +64,35 @@ public class InitServlet extends HttpServlet {
     } catch (Throwable e) {
       System.out.println("Dir3Caib Version: " + ver);
     }
+
+    //Ejecutar CRON de importacion
+    String cronExpression = Configuracio.getCronExpression();
+
+      if(cronExpression != null || cronExpression.length()>0){
+          try {
+
+              // Este código ejecuta el job pero da null al usar un ejb.
+
+
+              JobDetail jobDetail = new JobDetail("job","group",JobNuevo.class);
+
+              CronTrigger trigger = new CronTrigger("trigger","group");
+
+             // trigger.setStartTime(new Date());
+             // trigger.setEndTime(new Date(new Date().getTime() + 10 * 60 * 1000));
+              trigger.setCronExpression(cronExpression);
+
+              /** STEP 4 : INSTANTIATE SCHEDULER FACTORY BEAN AND SET ITS PROPERTIES **/
+              SchedulerFactory sfb = new StdSchedulerFactory();
+              Scheduler scheduler = sfb.getScheduler();
+
+              scheduler.scheduleJob(jobDetail, trigger);
+
+              scheduler.start();
+          }catch(Throwable th){
+
+          }
+      }
 
   }
 }

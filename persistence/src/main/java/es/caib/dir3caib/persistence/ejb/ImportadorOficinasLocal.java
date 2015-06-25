@@ -17,4 +17,6 @@ public interface ImportadorOficinasLocal {
 
   public void descargarOficinasWS(Date fechaInicio, Date fechaFin) throws Exception;
 
+  public void importarOficinasTask();
+
 }

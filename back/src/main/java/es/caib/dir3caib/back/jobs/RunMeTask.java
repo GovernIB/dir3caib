@@ -1,5 +1,11 @@
 package es.caib.dir3caib.back.jobs;
 
+import es.caib.dir3caib.persistence.ejb.ImportadorCatalogoLocal;
+import es.caib.dir3caib.persistence.ejb.ImportadorOficinasLocal;
+import es.caib.dir3caib.persistence.ejb.ImportadorUnidadesLocal;
+
+import javax.ejb.EJB;
+
 /*
 Clase que representa una tarea(task) de Quartz.
 Esta clase básicamente se encarga de realizar la importación del cátalogo,
@@ -8,28 +14,22 @@ unidades y oficinas.
 public class RunMeTask {
 
 
-  //@Autowired
-  //ImportadorCatalogoLocal importadorCatalogo;
-  //@EJB(mappedName = "dir3caib/ImportadorCatalogoEJB/local")
-  //private ImportadorCatalogoLocal importadorCatalogo;
-  
+  @EJB(mappedName = "dir3caib/ImportadorCatalogoEJB/local")
+  private ImportadorCatalogoLocal importadorCatalogo;
+  @EJB(mappedName = "dir3caib/ImportadorUnidadesEJB/local")
+  private ImportadorUnidadesLocal importadorUnidades;
 
-  //@Autowired
-  //ImportadorUnidades importadorUnidades;
-
-  //@Autowired
-  //ImportadorOficinas importadorOficinas;
-  //@EJB(mappedName = "dir3caib/ImportadorOficinasEJB/local")
-  //private ImportadorOficinasLocal importadorOficinas;
+  @EJB(mappedName = "dir3caib/ImportadorOficinasEJB/local")
+  private ImportadorOficinasLocal importadorOficinas;
 
 
 	public void printMe() {
 
-    //importadorCatalogo.importarCatalogoTask();
-    // TODO Como controlo que ha acabado lo anterior.
-   // importadorUnidades.importarUnidadesTask();
-    //importadorOficinas.importarOficinasTask();
+    importadorCatalogo.importarCatalogoTask();
 
-		System.out.println("Spring 3 + Quartz 1.5.2 ~");
+    importadorUnidades.importarUnidadesTask();
+    importadorOficinas.importarOficinasTask();
+
+		//System.out.println("Spring 3 + Quartz 1.5.2 ~");
 	}
 }

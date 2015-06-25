@@ -7,7 +7,7 @@
     <ul>
     <c:forEach var="hijo" items="${nodo.hijos}" varStatus="status">
         <!-- TODO: print the node here -->
-        <li><span class="${param.color}" style="display:closed;"><i class=""></i> ${hijo.id} - ${hijo.nombre}-${hijo.estado}</span>
+        <li><span class="${param.color}" style="display:closed;"><i class=""></i> ${hijo.id} - ${hijo.nombre}</span>
             <c:if test="${not empty  hijo.hijos}">
                 <c:set var="nodo" value="${hijo}" scope="request"/>
                 <jsp:include page="nodo.jsp" flush="true">
