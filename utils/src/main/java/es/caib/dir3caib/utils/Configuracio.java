@@ -60,5 +60,7 @@ public class Configuracio implements Constants {
     return  System.getProperty(DIR3CAIB_PROPERTY_BASE + "hibernate.dialect");
   }
 
-  public static String getCronExpression(){ return System.getProperty(DIR3CAIB_PROPERTY_BASE +  "cronExpression"); }
+  public static String getCronExpression() {
+    return System.getProperty(DIR3CAIB_PROPERTY_BASE +  "cronExpression"); 
+  }
 }
