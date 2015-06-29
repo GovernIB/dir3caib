@@ -31,8 +31,9 @@
 			es.caib.dir3caib.dir3ws.user=regwebCAIB
             es.caib.dir3caib.dir3ws.pass=password
 
-            <!--CronExpression-->
-            es.caib.dir3caib.cronExpression=0 20 15 ? * *
+            <!-- Sincronitzacio DIR3. L'exemple correspon a una sincronització diaria a les 3:00 de la dematinada -->
+			<!-- Per defecte desactivada -->
+            # es.caib.dir3caib.cronExpression=0 0 3 1/1 * ? *
         </attribute>
     </mbean>
 </server>
