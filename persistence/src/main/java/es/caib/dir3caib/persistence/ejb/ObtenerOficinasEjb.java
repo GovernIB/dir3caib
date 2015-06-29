@@ -31,7 +31,7 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
     /**
       * Obtiene los datos de una oficina en función del codigo y la fecha de actualización.
       * Si la fecha de actualización es inferior a la de importación con Madrid se supone
-      * que no ha cambiado y se envia null
+      * que no ha cambiado y se envia null( CREO QUE NO SE UTILIZA..)
       * @param codigo Código de la oficina
       * @param fechaActualizacion fecha en la que se realiza la actualizacion.
       */
@@ -40,15 +40,17 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
 
         Oficina oficina = oficinaEjb.findFullById(codigo);
 
+
         OficinaTF oficinaTF= null;
         if(fechaActualizacion != null){
-          //Date fechaAct = formatoFecha.parse(fechaActualizacion);
-         // Date fechaSincro = formatoFecha.parse(fechaSincronizacion);
+
           if(fechaActualizacion.before(oficina.getFechaImportacion())){
+
             // Cogemos solo las relaciones organizativas posteriores a la fecha de sincronizacion
             Set<RelacionOrganizativaOfi> todasRelaciones = new HashSet<RelacionOrganizativaOfi>(oficina.getOrganizativasOfi());
             Set<RelacionOrganizativaOfi> relacionesValidas= new HashSet<RelacionOrganizativaOfi>();
             for(RelacionOrganizativaOfi relOrg: todasRelaciones){
+                //TODO revisar esta condicion, pero creo que no se utiliza el metodo.
               if(relOrg.getUnidad().getFechaExtincion().before(fechaSincronizacion)){
                 relacionesValidas.add(relOrg);
               }

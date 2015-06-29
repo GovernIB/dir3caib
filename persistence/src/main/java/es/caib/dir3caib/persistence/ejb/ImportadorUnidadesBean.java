@@ -675,7 +675,7 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
           
       } catch (FileNotFoundException ex) {
           inexistentes.add(fichero);
-          ex.printStackTrace();
+          log.warn("Fichero no encontrado " + fichero);
       } catch (IOException io){
           io.printStackTrace();
       } catch (Exception e){

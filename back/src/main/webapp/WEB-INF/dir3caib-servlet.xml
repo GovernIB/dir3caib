@@ -61,9 +61,7 @@
     <!-- Llamadas REST-JSON -->
     <bean id="mappingJacksonHttpMessageConverter"
           class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"/>
-<!-- TODO 
-   <import resource="Spring-Quartz.xml" />
-    -->
+
 
 
 </beans>

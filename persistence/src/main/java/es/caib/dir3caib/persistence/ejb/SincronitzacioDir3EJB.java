@@ -1,24 +1,15 @@
 package es.caib.dir3caib.persistence.ejb;
 
-import java.text.ParseException;
-import java.util.Date;
-import java.util.List;
-
-import javax.annotation.Resource;
-import javax.annotation.security.RunAs;
-import javax.ejb.EJB;
-import javax.ejb.SessionContext;
-import javax.ejb.Stateless;
-import javax.ejb.Timeout;
-import javax.ejb.Timer;
-import javax.ejb.TimerService;
-
+import es.caib.dir3caib.utils.Configuracio;
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.SecurityDomain;
 import org.quartz.impl.triggers.CronTriggerImpl;
 
-import es.caib.dir3caib.persistence.model.CatIsla;
-import es.caib.dir3caib.utils.Configuracio;
+import javax.annotation.Resource;
+import javax.annotation.security.RunAs;
+import javax.ejb.*;
+import java.text.ParseException;
+import java.util.Date;
 
 /**
  * 
@@ -33,6 +24,13 @@ public class SincronitzacioDir3EJB  implements SincronitzacioDir3Local {
   
   @EJB(mappedName = "dir3caib/CatIslaEJB/local")
   protected CatIslaLocal catIslaEjb;
+  @EJB(mappedName = "dir3caib/ImportadorCatalogoEJB/local")
+  private ImportadorCatalogoLocal importadorCatalogo;
+  @EJB(mappedName = "dir3caib/ImportadorUnidadesEJB/local")
+  private ImportadorUnidadesLocal importadorUnidades;
+
+  @EJB(mappedName = "dir3caib/ImportadorOficinasEJB/local")
+  private ImportadorOficinasLocal importadorOficinas;
   
   protected final Logger log = Logger.getLogger(getClass());
   
@@ -122,11 +120,10 @@ public class SincronitzacioDir3EJB  implements SincronitzacioDir3Local {
     log.info("Executa sincronitzar log.info();");
     
     try {
-      List<CatIsla> list = catIslaEjb.getAll();
-      
-      for (CatIsla catIsla : list) {
-        System.out.println("Isla = " + catIsla.getCodigoIsla());
-      }
+
+      importadorCatalogo.importarCatalogoTask();
+      importadorUnidades.importarUnidadesTask();
+      importadorOficinas.importarOficinasTask();
       
     } catch (Exception e) {
       // TODO Auto-generated catch block

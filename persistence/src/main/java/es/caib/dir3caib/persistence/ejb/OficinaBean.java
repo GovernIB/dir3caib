@@ -229,12 +229,10 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
         // En un primer paso obtenemos las oficinas en función de si es SINCRO o ACTUALIZACION
         Query q;
         if(fechaActualizacion == null){// Es una sincronizacion, solo se mandan las vigentes
-          log.info("SINCRONIZACION OFICINAS");
           q = em.createQuery("Select oficina from Oficina as oficina where oficina.codUoResponsable.codigo =:codigo and oficina.estado.codigoEstadoEntidad =:vigente order by oficina.codigo");
           q.setParameter("codigo",codigo);
           q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
         }else{ //Es una actualizacion, se mandan todas
-          log.info("ACTUALIZACION OFICINAS");
           q = em.createQuery("Select oficina from Oficina as oficina where oficina.codUoResponsable.codigo =:codigo order by oficina.codigo");
           q.setParameter("codigo",codigo);
         }
@@ -284,6 +282,8 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
           }
           oficinasCompletas = new ArrayList<Oficina>(oficinasActualizadas);
         }
+
+        log.info("DIR3CAIB OFICINAS ACTUALIZADAS: " + oficinasCompletas.size());
 
         return oficinasCompletas;
 

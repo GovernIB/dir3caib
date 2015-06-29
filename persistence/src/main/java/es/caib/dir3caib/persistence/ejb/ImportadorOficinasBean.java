@@ -955,7 +955,7 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
           
         } catch (FileNotFoundException ex) {
             inexistentes.add(fichero);
-            ex.printStackTrace();
+            log.warn("Fichero no encontrado " + fichero);
         } catch (IOException io){
             io.printStackTrace();
         }catch(Exception e){
