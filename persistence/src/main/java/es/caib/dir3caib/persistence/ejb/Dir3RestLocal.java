@@ -22,7 +22,7 @@ public interface Dir3RestLocal  {
   public List<ObjetoBasico> obtenerArbolUnidades(String codigo) throws Exception;
   public List<Oficina> obtenerOficinasOrganismo(String codigo, String fechaActualizacion) throws Exception;
   public Boolean tieneOficinasOrganismo(String codigo) throws Exception;
-  public List<ObjetoBasico> busquedaOrganismos(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad) throws Exception;
+  public List<ObjetoBasico> busquedaOrganismos(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, String origen) throws Exception;
   public List<ObjetoBasico> busquedaOficinas(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad) throws Exception;
   public String unidadDenominacion(String codigo) throws Exception;
   public String oficinaDenominacion(String codigo) throws Exception;

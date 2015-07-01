@@ -95,9 +95,9 @@ public class RestController extends BaseController {
      */
      @RequestMapping(value = "/busqueda/organismos", method = RequestMethod.GET)
      public @ResponseBody
-     ResponseEntity<List<ObjetoBasico>> busquedaOrganismos(@RequestParam String codigo, @RequestParam String denominacion, @RequestParam Long codNivelAdministracion,  @RequestParam Long codComunidadAutonoma) throws Exception {
+     ResponseEntity<List<ObjetoBasico>> busquedaOrganismos(@RequestParam String codigo, @RequestParam String denominacion, @RequestParam Long codNivelAdministracion,  @RequestParam Long codComunidadAutonoma, @RequestParam String origen) throws Exception {
         log.info("dentro rest busqueda organismos ");
-        List<ObjetoBasico> unidades = dir3RestEjb.busquedaOrganismos(codigo, denominacion, codNivelAdministracion, codComunidadAutonoma);
+        List<ObjetoBasico> unidades = dir3RestEjb.busquedaOrganismos(codigo, denominacion, codNivelAdministracion, codComunidadAutonoma, origen);
         log.info("Organismos encontrados " + unidades.size());
         HttpHeaders headers = addAccessControllAllowOrigin();
 

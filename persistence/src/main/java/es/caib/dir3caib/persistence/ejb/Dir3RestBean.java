@@ -214,11 +214,13 @@ public class Dir3RestBean implements Dir3RestLocal {
    * @param denominacion  denominación de la unidad
    * @param codigoNivelAdministracion  nivel de administración de la unidad
    * @param codComunidad  comunidad autónoma a la que pertenece.
+   * @param origen  indica el origen de la búsqueda desde regweb "OrganismoInteresado" , "OrganismoDestinatario"
    * @return   List<ObjetoBasico> devuelve un listado con el codigo y la denominación que
    * coincide con los parámetros de búsqueda
    * @throws Exception
    */
-     public List<ObjetoBasico> busquedaOrganismos(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad) throws Exception {
+     public List<ObjetoBasico> busquedaOrganismos(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, String origen) throws Exception {
+         log.info("ORIGEN " + origen);
        Query q;
        Map<String, Object> parametros = new HashMap<String, Object>();
        List<String> where = new ArrayList<String>();
@@ -257,15 +259,21 @@ public class Dir3RestBean implements Dir3RestLocal {
 
        //Miramos los que tienen oficinas
        List<ObjetoBasico> unidades = getObjetoBasicoList(q.getResultList());
-       List<ObjetoBasico> unidadesConOficinas= new ArrayList<ObjetoBasico>();
-       for(ObjetoBasico unidad :unidades){
+         //Si el origen de la busqueda es desde los destinatarios miramos si tienen oficinas
+         //si no simplemente devolvemos el resultado de la búsqueda de todos los organismos encontrados con los parámetros indicados
+         if(Dir3caibConstantes.ORIGENDESTINO.equals(origen)){// si origen es OrganismoDestinatario
+             log.info("Entro dentro de busqueda con oficinas");
+           List<ObjetoBasico> unidadesConOficinas= new ArrayList<ObjetoBasico>();
+           for(ObjetoBasico unidad :unidades){
 
-           if(tieneOficinasOrganismo(unidad.getCodigo())){
-             unidadesConOficinas.add(unidad);
+               if(tieneOficinasOrganismo(unidad.getCodigo())){
+                 unidadesConOficinas.add(unidad);
+               }
            }
-       }
+             unidades= unidadesConOficinas;
+         }
 
-       return unidadesConOficinas;
+       return unidades;
 
      }
 

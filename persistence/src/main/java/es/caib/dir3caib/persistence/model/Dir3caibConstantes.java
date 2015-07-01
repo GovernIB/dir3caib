@@ -98,4 +98,7 @@ public class Dir3caibConstantes {
     public static final String ESTADO_ENTIDAD_ANULADO= "A";
     public static final String ESTADO_ENTIDAD_TRANSITORIO= "T";
 
+    //Origen busqueda organismos Rest(Regweb)
+    public static final String ORIGENDESTINO= "OrganismoDestino";
+
 }
