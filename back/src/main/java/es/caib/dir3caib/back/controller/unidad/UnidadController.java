@@ -54,22 +54,16 @@ public class UnidadController extends BaseController{
     @EJB(mappedName = "dir3caib/CatAmbitoTerritorialEJB/local")
     protected CatAmbitoTerritorialLocal catAmbitoTerritorialEjb;
 
-    @EJB(mappedName = "dir3caib/CatNivelAdministracionEJB/local")
-    protected CatNivelAdministracionLocal catNivelAdministracionEjb;
-    
-    @EJB(mappedName = "dir3caib/CatComunidadAutonomaEJB/local")
-    protected CatComunidadAutonomaLocal catComunidadAutonomaEjb;
-    
     @EJB(mappedName = "dir3caib/CatProvinciaEJB/local")
     protected CatProvinciaLocal catProvinciaEjb;
-    
+
     @EJB(mappedName = "dir3caib/ContactoUOEJB/local")
     protected ContactoUOLocal contactoUOEjb;
     
     @EJB(mappedName = "dir3caib/DescargaEJB/local")
     protected DescargaLocal descargaEjb;
-    
-    
+
+
     // Indicamos el formato de fecha dd/MM/yyyy hh:mm:ss
     SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
 
@@ -89,7 +83,12 @@ public class UnidadController extends BaseController{
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list(Model model)throws Exception {
 
-        UnidadBusquedaForm unidadBusqueda = new UnidadBusquedaForm(new Unidad(),1, false);
+        CatEstadoEntidad vigente = catEstadoEntidadEjb.findByCodigo(Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+
+        Unidad unidad = new Unidad();
+        unidad.setEstado(vigente);
+
+        UnidadBusquedaForm unidadBusqueda = new UnidadBusquedaForm(unidad,1, false);
         model.addAttribute("unidadBusqueda",unidadBusqueda);
 
         return "unidad/unidadList";
@@ -111,6 +110,7 @@ public class UnidadController extends BaseController{
         String codAmbitoTerritorial = (unidad.getCodAmbitoTerritorial()!=null) ? unidad.getCodAmbitoTerritorial().getCodigoAmbito() : null;
         Long codComunidad = (unidad.getCodComunidad()!=null) ? unidad.getCodComunidad().getCodigoComunidad() : null;
         Long codAmbProvincia = (unidad.getCodAmbProvincia()!=null) ? unidad.getCodAmbProvincia().getCodigoProvincia(): null;
+        String codEstadoEntidad = (unidad.getEstado()!=null)?unidad.getEstado().getCodigoEstadoEntidad():null;
 
         Paginacion paginacion = unidadEjb.busqueda(busqueda.getPageNumber(),
                         unidad.getCodigo(),
@@ -118,7 +118,7 @@ public class UnidadController extends BaseController{
                         codNivelAdministracion,
                         codAmbitoTerritorial,
                         codComunidad,
-                        codAmbProvincia, busqueda.getUnidadRaiz());
+                        codAmbProvincia, busqueda.getUnidadRaiz(),codEstadoEntidad);
 
         busqueda.setPageNumber(1);
 
@@ -192,14 +192,7 @@ public class UnidadController extends BaseController{
      */
     @RequestMapping(value = "/obtener", method = RequestMethod.POST)
     public String descargaUnidades(@ModelAttribute FechasForm fechasForm, HttpServletRequest request) throws Exception {
-        
-      /*  log.info("fechaInicio: " + fechasForm.getFechaInicioFormateada(Dir3caibConstantes.FORMATO_FECHA));
-        log.info("fechaFin: " + fechasForm.getFechaFinFormateada(Dir3caibConstantes.FORMATO_FECHA));
-        
-          //Fechas de descarga
-        String fechaInicio = fechasForm.getFechaInicioFormateada(Dir3caibConstantes.FORMATO_FECHA);
-        String fechaFin = fechasForm.getFechaFinFormateada(Dir3caibConstantes.FORMATO_FECHA);*/
-        
+
         descargarUnidadesWS(request, fechasForm.getFechaInicio(), fechasForm.getFechaFin());
          
         return "redirect:/unidad/ficheros ";
@@ -355,16 +348,6 @@ public class UnidadController extends BaseController{
             arbolUnidades( unidadHija.getCodigo(), hijo, unidadHija.getDescripcionEstado());
           }
           nodo.setHijos(hijos);
-    }
-
-    @ModelAttribute("administraciones")
-    public List<CatNivelAdministracion> administraciones() throws Exception {
-        return catNivelAdministracionEjb.getAll();
-    }
-
-    @ModelAttribute("comunidades")
-    public List<CatComunidadAutonoma> comunidades() throws Exception {
-        return catComunidadAutonomaEjb.getAll();
     }
 
     /**

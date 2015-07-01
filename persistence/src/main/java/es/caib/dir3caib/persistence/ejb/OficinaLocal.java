@@ -23,7 +23,7 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
   public void deleteAll() throws Exception;
 
   public Paginacion busqueda(Integer pageNumber, String codigo, String denominacion,
-      Long codigoNivelAdministracion, Long codComunidad, Long codigoProvincia)
+      Long codigoNivelAdministracion, Long codComunidad, Long codigoProvincia,String codigoEstado)
       throws Exception;
 
   public void deleteHistoricosOficina() throws Exception;

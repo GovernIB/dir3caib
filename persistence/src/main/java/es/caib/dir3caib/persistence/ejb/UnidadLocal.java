@@ -33,11 +33,12 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @param codAmbitoTerritorial
      * @param codComunidad
      * @param codigoProvincia
+     * @param codigoEstado
      * @return
      * @throws Exception
      */
     public Paginacion busqueda(Integer pageNumber,String codigo, String denominacion,Long codigoNivelAdministracion,
-                               String codAmbitoTerritorial, Long codComunidad, Long codigoProvincia, Boolean unidadRaiz) throws Exception;
+                               String codAmbitoTerritorial, Long codComunidad, Long codigoProvincia, Boolean unidadRaiz, String codigoEstado) throws Exception;
 
     /**
      *

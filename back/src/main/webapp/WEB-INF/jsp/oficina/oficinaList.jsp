@@ -66,6 +66,18 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="span6">
+                            <div class="control-group">
+                                <form:label path="oficina.estado" cssClass="control-label"><fmt:message key="oficina.estado"/></form:label>
+                                <div class="controls">
+                                    <form:select path="oficina.estado.codigoEstadoEntidad"  cssClass="input-xlarge">
+                                        <form:option value="-1" label="..."/>
+                                        <form:options items="${estadosEntidad}" itemValue="codigoEstadoEntidad" itemLabel="descripcionEstadoEntidad"/>
+                                    </form:select>
+                                    <form:errors path="oficina.estado.codigoEstadoEntidad" cssClass="help-inline" element="span"/>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="row-fluid">
@@ -91,8 +103,6 @@
                             </div>
                         </div>
                     </div>
-
-
 
 
                     <div class="form-actions">

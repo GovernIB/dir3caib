@@ -12,6 +12,7 @@ import javax.ejb.Local;
  */
 @Local
 public interface CatEstadoEntidadLocal extends BaseEjb<CatEstadoEntidad, String> {
-  
+
+  public CatEstadoEntidad findByCodigo(String codigo) throws Exception;
   public void deleteAll() throws Exception;
 }

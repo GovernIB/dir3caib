@@ -117,7 +117,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
 
     @Override
-    public Paginacion busqueda(Integer pageNumber, String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, Long codigoProvincia) throws Exception {
+    public Paginacion busqueda(Integer pageNumber, String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, Long codigoProvincia, String codigoEstado) throws Exception {
 
         Query q;
         Query q2;
@@ -132,6 +132,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
         if(codigoNivelAdministracion!= null && codigoNivelAdministracion != -1){where.add(" oficina.nivelAdministracion.codigoNivelAdministracion = :codigoNivelAdministracion "); parametros.put("codigoNivelAdministracion",codigoNivelAdministracion);}
         if(codComunidad!= null && codComunidad != -1){where.add(" oficina.codComunidad.codigoComunidad = :codComunidad "); parametros.put("codComunidad",codComunidad);}
         if(codigoProvincia!= null && codigoProvincia != -1){where.add(" oficina.localidad.provincia.codigoProvincia = :codigoProvincia "); parametros.put("codigoProvincia",codigoProvincia);}
+        if(codigoEstado!= null &&(!"-1".equals(codigoEstado))){where.add(" oficina.estado.codigoEstadoEntidad = :codigoEstado "); parametros.put("codigoEstado",codigoEstado);}
 
 
         // Añadimos los parametros a la query

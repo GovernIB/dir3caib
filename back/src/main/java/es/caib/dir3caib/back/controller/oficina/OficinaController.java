@@ -45,12 +45,6 @@ public class OficinaController extends BaseController {
   @EJB(mappedName = "dir3caib/OficinaEJB/local")
   protected OficinaLocal oficinaEjb;
   
-  @EJB(mappedName = "dir3caib/CatNivelAdministracionEJB/local")
-  protected CatNivelAdministracionLocal catNivelAdministracionEjb;
-  
-  @EJB(mappedName = "dir3caib/CatComunidadAutonomaEJB/local")
-  protected CatComunidadAutonomaLocal catComunidadAutonomaEjb;
-  
   @EJB(mappedName = "dir3caib/CatProvinciaEJB/local")
   protected CatProvinciaLocal catProvinciaEjb;
   
@@ -92,7 +86,12 @@ public class OficinaController extends BaseController {
      @RequestMapping(value = "/list", method = RequestMethod.GET)
      public String list(Model model)throws Exception {
 
-         OficinaBusquedaForm oficinaBusqueda = new OficinaBusquedaForm(new Oficina(),1);
+         CatEstadoEntidad vigente = catEstadoEntidadEjb.findByCodigo(Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+
+         Oficina oficina = new Oficina();
+         oficina.setEstado(vigente);
+
+         OficinaBusquedaForm oficinaBusqueda = new OficinaBusquedaForm(oficina,1);
          model.addAttribute("oficinaBusqueda",oficinaBusqueda);
 
          return "oficina/oficinaList";
@@ -110,18 +109,19 @@ public class OficinaController extends BaseController {
 
          mav = new ModelAndView("oficina/oficinaList");
 
-        Oficina oficina = busqueda.getOficina();
+         Oficina oficina = busqueda.getOficina();
 
          Long codNivelAdministracion = (oficina.getNivelAdministracion()!=null) ? oficina.getNivelAdministracion().getCodigoNivelAdministracion() : null;
          Long codComunidad = (oficina.getCodComunidad()!=null) ? oficina.getCodComunidad().getCodigoComunidad() : null;
          Long codAmbProvincia = (oficina.getLocalidad()!=null) ? oficina.getLocalidad().getProvincia().getCodigoProvincia(): null;
+         String codEstado = (oficina.getEstado()!=null) ? oficina.getEstado().getCodigoEstadoEntidad(): null;
 
          Paginacion paginacion = oficinaEjb.busqueda(busqueda.getPageNumber(),
                          oficina.getCodigo(),
                          oficina.getDenominacion(),
                          codNivelAdministracion,
                          codComunidad,
-                         codAmbProvincia);
+                         codAmbProvincia,codEstado);
 
          busqueda.setPageNumber(1);
 
@@ -377,17 +377,6 @@ public class OficinaController extends BaseController {
            e.printStackTrace();
        }
     }
-
-    @ModelAttribute("administraciones")
-    public List<CatNivelAdministracion> administraciones() throws Exception {
-         return catNivelAdministracionEjb.getAll();
-    }
-
-    @ModelAttribute("comunidades")
-    public List<CatComunidadAutonoma> comunidades() throws Exception {
-         return catComunidadAutonomaEjb.getAll();
-    }
-
 
     /**
      * Obtiene los {@link es.caib.dir3caib.persistence.model.CatProvincia} de la comunidad autonoma seleccionada

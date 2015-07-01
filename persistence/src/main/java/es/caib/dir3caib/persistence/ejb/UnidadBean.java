@@ -145,7 +145,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
 
     @Override
-    public Paginacion busqueda(Integer pageNumber, String codigo, String denominacion, Long codigoNivelAdministracion, String codAmbitoTerritorial, Long codComunidad, Long codigoProvincia, Boolean unidadRaiz) throws Exception {
+    public Paginacion busqueda(Integer pageNumber, String codigo, String denominacion, Long codigoNivelAdministracion, String codAmbitoTerritorial, Long codComunidad, Long codigoProvincia, Boolean unidadRaiz, String codigoEstado) throws Exception {
 
         Query q;
         Query q2;
@@ -161,6 +161,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         if(codAmbitoTerritorial!= null && (!"-1".equals(codAmbitoTerritorial))){where.add(" unidad.codAmbitoTerritorial.codigoAmbito = :codAmbitoTerritorial "); parametros.put("codAmbitoTerritorial",codAmbitoTerritorial);}
         if(codComunidad!= null && codComunidad != -1){where.add(" unidad.codAmbComunidad.codigoComunidad = :codComunidad "); parametros.put("codComunidad",codComunidad);}
         if(codigoProvincia!= null && codigoProvincia != -1){where.add(" unidad.codAmbProvincia.codigoProvincia = :codigoProvincia "); parametros.put("codigoProvincia",codigoProvincia);}
+        if(codigoEstado!= null &&(!"-1".equals(codigoEstado))){where.add(" unidad.estado.codigoEstadoEntidad = :codigoEstado "); parametros.put("codigoEstado",codigoEstado);}
         if(unidadRaiz){where.add(" unidad.codUnidadRaiz.codigo = unidad.codigo ");}
 
         // Añadimos los parametros a la query

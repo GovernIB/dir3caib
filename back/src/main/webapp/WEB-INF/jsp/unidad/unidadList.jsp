@@ -83,10 +83,10 @@
                                 <form:label path="unidad.codComunidad.codigoComunidad" cssClass="control-label"><fmt:message key="unidad.comunidad"/></form:label>
                                 <div class="controls">
                                     <form:select path="unidad.codComunidad.codigoComunidad" onchange='actualizarProvincias()' cssClass="input-xlarge">
-                                       <form:option value="-1" label="..."/>
-                                       <form:options items="${comunidades}" itemValue="codigoComunidad" itemLabel="descripcionComunidad"/>
+                                        <form:option value="-1" label="..."/>
+                                        <form:options items="${comunidades}" itemValue="codigoComunidad" itemLabel="descripcionComunidad"/>
                                     </form:select>
-                                     <form:errors path="unidad.codComunidad.codigoComunidad" cssClass="help-inline" element="span"/>
+                                    <form:errors path="unidad.codComunidad.codigoComunidad" cssClass="help-inline" element="span"/>
                                 </div>
                             </div>
                         </div>
@@ -101,11 +101,23 @@
                         </div>
                     </div>
                     <div class="row-fluid">
-                        <div class="span12">
+                        <div class="span6">
                             <div class="control-group">
                                 <form:label path="unidadRaiz" cssClass="control-label"><fmt:message key="unidad.raiz"/></form:label>
                                 <div class="controls">
                                     <form:checkbox path="unidadRaiz" value="false" cssClass="input-xlarge"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="span6">
+                            <div class="control-group">
+                                <form:label path="unidad.estado" cssClass="control-label"><fmt:message key="unidad.estado"/></form:label>
+                                <div class="controls">
+                                    <form:select path="unidad.estado.codigoEstadoEntidad"  cssClass="input-xlarge">
+                                        <form:option value="-1" label="..."/>
+                                        <form:options items="${estadosEntidad}" itemValue="codigoEstadoEntidad" itemLabel="descripcionEstadoEntidad"/>
+                                    </form:select>
+                                    <form:errors path="unidad.estado.codigoEstadoEntidad" cssClass="help-inline" element="span"/>
                                 </div>
                             </div>
                         </div>

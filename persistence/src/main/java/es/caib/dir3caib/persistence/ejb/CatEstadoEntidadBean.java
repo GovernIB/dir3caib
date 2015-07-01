@@ -4,12 +4,12 @@ import es.caib.dir3caib.persistence.model.CatEstadoEntidad;
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.SecurityDomain;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
-import javax.annotation.security.RolesAllowed;
 
 /**
  * Created by Fundació BIT.
@@ -62,5 +62,20 @@ public class CatEstadoEntidadBean extends BaseEjbJPA<CatEstadoEntidad, String> i
 
         em.createQuery("delete from CatEstadoEntidad").executeUpdate();
         
+    }
+
+    @Override
+    public CatEstadoEntidad findByCodigo(String codigo) throws Exception {
+        Query q = em.createQuery("Select catEstadoEntidad from CatEstadoEntidad as catEstadoEntidad where catEstadoEntidad.codigoEstadoEntidad = :codigo");
+
+        q.setParameter("codigo",codigo);
+
+        List<CatEstadoEntidad> catEstadoEntidad = q.getResultList();
+        if(catEstadoEntidad.size() == 1){
+            return catEstadoEntidad.get(0);
+        }else{
+            return  null;
+        }
+
     }
 }
