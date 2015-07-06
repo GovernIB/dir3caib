@@ -1,10 +1,10 @@
 package es.caib.dir3caib.back.controller.rest;
 
-import es.caib.dir3caib.back.controller.BaseController;
 import es.caib.dir3caib.persistence.ejb.Dir3RestLocal;
 import es.caib.dir3caib.persistence.model.Oficina;
 import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.persistence.model.utils.ObjetoBasico;
+import org.apache.log4j.Logger;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +24,9 @@ import java.util.List;
  */
 @Controller
 @RequestMapping(value = "/rest")
-public class RestController extends BaseController {
+public class RestController {
+
+  protected final Logger log = Logger.getLogger(getClass());
   
   @EJB(mappedName = "dir3caib/Dir3RestEJB/local")
   protected Dir3RestLocal dir3RestEjb;
