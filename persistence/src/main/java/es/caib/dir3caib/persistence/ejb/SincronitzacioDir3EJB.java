@@ -121,7 +121,6 @@ public class SincronitzacioDir3EJB  implements SincronitzacioDir3Local {
     
     try {
 
-      importadorCatalogo.importarCatalogoTask();
       importadorUnidades.importarUnidadesTask();
       importadorOficinas.importarOficinasTask();
       
