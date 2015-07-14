@@ -4,6 +4,7 @@ import es.caib.dir3caib.persistence.ejb.Dir3RestLocal;
 import es.caib.dir3caib.persistence.model.Oficina;
 import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.persistence.model.utils.ObjetoBasico;
+import es.caib.dir3caib.persistence.model.utils.ObjetoBasicoUnidad;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -97,13 +98,16 @@ public class RestController {
      */
      @RequestMapping(value = "/busqueda/organismos", method = RequestMethod.GET)
      public @ResponseBody
-     ResponseEntity<List<ObjetoBasico>> busquedaOrganismos(@RequestParam String codigo, @RequestParam String denominacion, @RequestParam Long codNivelAdministracion,  @RequestParam Long codComunidadAutonoma, @RequestParam String origen) throws Exception {
+     ResponseEntity<List<ObjetoBasicoUnidad>> busquedaOrganismos(@RequestParam String codigo, @RequestParam String denominacion, @RequestParam Long codNivelAdministracion,  @RequestParam Long codComunidadAutonoma, @RequestParam String origen, @RequestParam boolean unidadRaiz) throws Exception {
         log.info("dentro rest busqueda organismos ");
-        List<ObjetoBasico> unidades = dir3RestEjb.busquedaOrganismos(codigo, denominacion, codNivelAdministracion, codComunidadAutonoma, origen);
+        List<ObjetoBasicoUnidad> unidades = dir3RestEjb.busquedaOrganismos(codigo, denominacion, codNivelAdministracion, codComunidadAutonoma, origen, unidadRaiz);
         log.info("Organismos encontrados " + unidades.size());
         HttpHeaders headers = addAccessControllAllowOrigin();
 
-        return new ResponseEntity<List<ObjetoBasico>>(unidades, headers, HttpStatus.OK);
+         return new ResponseEntity<List<ObjetoBasicoUnidad>>(unidades, headers, HttpStatus.OK);
+
+         //Pruebas con cache rest
+        //return new ResponseEntity<List<ObjetoBasico>>(unidades, headers, HttpStatus.NOT_MODIFIED);
 
      }
 

@@ -5,6 +5,7 @@ import es.caib.dir3caib.persistence.model.Oficina;
 import es.caib.dir3caib.persistence.model.RelacionOrganizativaOfi;
 import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.persistence.model.utils.ObjetoBasico;
+import es.caib.dir3caib.persistence.model.utils.ObjetoBasicoUnidad;
 import es.caib.dir3caib.persistence.utils.DataBaseUtils;
 import org.apache.log4j.Logger;
 
@@ -219,12 +220,12 @@ public class Dir3RestBean implements Dir3RestLocal {
    * coincide con los parámetros de búsqueda
    * @throws Exception
    */
-     public List<ObjetoBasico> busquedaOrganismos(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, String origen) throws Exception {
+     public List<ObjetoBasicoUnidad> busquedaOrganismos(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, String origen, boolean unidadRaiz) throws Exception {
          log.info("ORIGEN " + origen);
        Query q;
        Map<String, Object> parametros = new HashMap<String, Object>();
        List<String> where = new ArrayList<String>();
-       StringBuffer query = new StringBuffer("Select distinct(unidad.codigo),unidad.denominacion  from Unidad  as unidad ");
+       StringBuffer query = new StringBuffer("Select distinct(unidad.codigo),unidad.denominacion, unidad.codUnidadRaiz.codigo, unidad.codUnidadRaiz.denominacion, unidad.codUnidadSuperior.codigo, unidad.codUnidadSuperior.denominacion  from Unidad  as unidad ");
 
        // Parametros de busqueda
 
@@ -233,6 +234,7 @@ public class Dir3RestBean implements Dir3RestLocal {
        if(codigoNivelAdministracion!= null && codigoNivelAdministracion != -1){where.add(" unidad.nivelAdministracion.codigoNivelAdministracion = :codigoNivelAdministracion "); parametros.put("codigoNivelAdministracion",codigoNivelAdministracion);}
        if(codComunidad!= null && codComunidad != -1){where.add(" unidad.codAmbComunidad.codigoComunidad = :codComunidad "); parametros.put("codComunidad",codComunidad);}
        where.add(" unidad.estado.codigoEstadoEntidad =:vigente ");parametros.put("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+       if(unidadRaiz){where.add(" unidad.codUnidadRaiz.codigo = unidad.codigo ");}
 
        // Añadimos los parametros a la query
        if (parametros.size() != 0) {
@@ -258,13 +260,13 @@ public class Dir3RestBean implements Dir3RestLocal {
        }
 
        //Miramos los que tienen oficinas
-       List<ObjetoBasico> unidades = getObjetoBasicoList(q.getResultList());
+       List<ObjetoBasicoUnidad> unidades = getObjetoBasicoUnidadList(q.getResultList());
          //Si el origen de la busqueda es desde los destinatarios miramos si tienen oficinas
          //si no simplemente devolvemos el resultado de la búsqueda de todos los organismos encontrados con los parámetros indicados
          if(Dir3caibConstantes.ORIGENDESTINO.equals(origen)){// si origen es OrganismoDestinatario
              log.info("Entro dentro de busqueda con oficinas");
-           List<ObjetoBasico> unidadesConOficinas= new ArrayList<ObjetoBasico>();
-           for(ObjetoBasico unidad :unidades){
+           List<ObjetoBasicoUnidad> unidadesConOficinas= new ArrayList<ObjetoBasicoUnidad>();
+           for(ObjetoBasicoUnidad unidad :unidades){
 
                if(tieneOficinasOrganismo(unidad.getCodigo())){
                  unidadesConOficinas.add(unidad);
@@ -348,6 +350,7 @@ public class Dir3RestBean implements Dir3RestLocal {
           List<ObjetoBasico> unidadesReducidas = new ArrayList<ObjetoBasico>();
 
           for (Object[] object : result){
+
               ObjetoBasico objetoBasico = new ObjetoBasico((String)object[0],(String)object[1],"");
 
               unidadesReducidas.add(objetoBasico);
@@ -355,4 +358,32 @@ public class Dir3RestBean implements Dir3RestLocal {
 
           return  unidadesReducidas;
        }
+
+       /**
+         * Convierte los resultados de una query en una lista de {@link es.caib.dir3caib.persistence.model.utils.ObjetoBasico}
+         * @param result
+         * @return
+         * @throws Exception
+         */
+       private List<ObjetoBasicoUnidad> getObjetoBasicoUnidadList(List<Object[]> result) throws Exception{
+
+            List<ObjetoBasicoUnidad> unidadesReducidas = new ArrayList<ObjetoBasicoUnidad>();
+
+            for (Object[] object : result){
+                //object[0] unidad.codigo
+                //object[1] unidad.denominacion
+                //object[2] unidadraiz.codigo
+                //object[3] unidadraiz.denominacion
+                //object[4] unidadsuperior.codigo
+                //object[5] unidadsuperior.denominacion
+                String sunidadraiz = object[2] + " - "+ object[3];
+                String sunidadsuperior = object[4] + " - "+ object[5];
+                ObjetoBasicoUnidad objetoBasico = new ObjetoBasicoUnidad((String)object[0],(String)object[1],"", sunidadraiz, sunidadsuperior);
+
+                unidadesReducidas.add(objetoBasico);
+            }
+
+            return  unidadesReducidas;
+       }
+
 }

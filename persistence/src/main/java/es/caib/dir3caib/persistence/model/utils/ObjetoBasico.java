@@ -13,7 +13,6 @@ public class ObjetoBasico {
   private String denominacion;
   private String descripcionEstado;
 
-
   public ObjetoBasico() {
   }
 
