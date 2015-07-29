@@ -3,7 +3,6 @@ package es.caib.dir3caib.persistence.ejb;
 import es.caib.dir3caib.persistence.model.Oficina;
 import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.persistence.model.utils.ObjetoBasico;
-import es.caib.dir3caib.persistence.model.utils.ObjetoBasicoUnidad;
 
 import javax.ejb.Local;
 import java.util.List;
@@ -23,7 +22,7 @@ public interface Dir3RestLocal  {
   public List<ObjetoBasico> obtenerArbolUnidades(String codigo) throws Exception;
   public List<Oficina> obtenerOficinasOrganismo(String codigo, String fechaActualizacion) throws Exception;
   public Boolean tieneOficinasOrganismo(String codigo) throws Exception;
-  public List<ObjetoBasicoUnidad> busquedaOrganismos(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, String origen, boolean unidadRaiz) throws Exception;
+  public List<ObjetoBasico> busquedaOrganismos(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, boolean conOficinas, boolean unidadRaiz) throws Exception;
   public List<ObjetoBasico> busquedaOficinas(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad) throws Exception;
   public String unidadDenominacion(String codigo) throws Exception;
   public String oficinaDenominacion(String codigo) throws Exception;

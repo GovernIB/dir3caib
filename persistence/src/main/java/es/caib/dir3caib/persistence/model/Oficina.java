@@ -1,26 +1,14 @@
 package es.caib.dir3caib.persistence.model;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.hibernate.annotations.ForeignKey;
+import org.hibernate.annotations.Index;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.hibernate.annotations.ForeignKey;
-import org.hibernate.annotations.Index;
 /**
  * @version 1.0
  * @created 28-oct-2013 14:41:39
@@ -53,7 +41,7 @@ public class Oficina implements Serializable {
 	private Date fechaAltaOficial;
 	private Date fechaExtincion;
 	private Date fechaAnulacion;
-  private Date fechaImportacion;
+    private Date fechaImportacion;
 	private CatTipoVia tipoVia;
 	private String nombreVia;
 	private String numVia;
@@ -68,11 +56,11 @@ public class Oficina implements Serializable {
 	private List<RelacionSirOfi> sirOfi;
 	private List<RelacionOrganizativaOfi> organizativasOfi;
 	private Set<Servicio> servicios;
-  private List<ContactoOfi> contactos;
+    private List<ContactoOfi> contactos;
   
   
   
-  private Set<Oficina> historicosOfi;
+    private Set<Oficina> historicosOfi;
 
 	public Oficina(){
 

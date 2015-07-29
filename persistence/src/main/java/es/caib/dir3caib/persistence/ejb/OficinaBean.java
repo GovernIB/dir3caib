@@ -68,7 +68,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
       Object[] obj = (Object[])q.getSingleResult();
 
-      ObjetoBasico objetoBasico = new ObjetoBasico((String)obj[0],(String)obj[1],(String)obj[2]);
+      ObjetoBasico objetoBasico = new ObjetoBasico((String)obj[0],(String)obj[1],(String)obj[2],"","");
 
       return objetoBasico;
 
@@ -468,7 +468,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
           List<ObjetoBasico> oficinasReducidas = new ArrayList<ObjetoBasico>();
 
           for (Object[] object : result){
-              ObjetoBasico objetoBasico = new ObjetoBasico((String)object[0],(String)object[1],"");
+              ObjetoBasico objetoBasico = new ObjetoBasico((String)object[0],(String)object[1],"","","");
 
               oficinasReducidas.add(objetoBasico);
           }
