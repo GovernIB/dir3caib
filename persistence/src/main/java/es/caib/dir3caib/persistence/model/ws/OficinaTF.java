@@ -1,5 +1,6 @@
 package es.caib.dir3caib.persistence.model.ws;
 
+import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.model.Oficina;
 import es.caib.dir3caib.persistence.model.RelacionOrganizativaOfi;
 import es.caib.dir3caib.persistence.model.RelacionSirOfi;
@@ -101,9 +102,10 @@ public class OficinaTF {
         List<RelacionSirOfiTF> sirOfiTFList = new ArrayList<RelacionSirOfiTF>();
 
         for (RelacionSirOfi relacionSirOfi : sirOfi) {
-            RelacionSirOfiTF sirOfiTF = RelacionSirOfiTF.generar(relacionSirOfi);
-
-            sirOfiTFList.add(sirOfiTF);
+            if(Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE.equals(relacionSirOfi.getEstado().getCodigoEstadoEntidad())) {
+                RelacionSirOfiTF sirOfiTF = RelacionSirOfiTF.generar(relacionSirOfi);
+                sirOfiTFList.add(sirOfiTF);
+            }
         }
 
         this.sirOfi = sirOfiTFList;
@@ -126,9 +128,10 @@ public class OficinaTF {
         List<RelacionOrganizativaOfiTF> relacionOrganizativaOfiTFList = new ArrayList<RelacionOrganizativaOfiTF>();
 
         for (RelacionOrganizativaOfi relacionOrganizativaOfi : organizativasOfi) {
-
-            RelacionOrganizativaOfiTF relacionOrganizativaOfiTF = RelacionOrganizativaOfiTF.generar(relacionOrganizativaOfi);
-            relacionOrganizativaOfiTFList.add(relacionOrganizativaOfiTF);
+            if(Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE.equals(relacionOrganizativaOfi.getEstado().getCodigoEstadoEntidad())) {
+                RelacionOrganizativaOfiTF relacionOrganizativaOfiTF = RelacionOrganizativaOfiTF.generar(relacionOrganizativaOfi);
+                relacionOrganizativaOfiTFList.add(relacionOrganizativaOfiTF);
+            }
         }
 
         this.organizativasOfi = relacionOrganizativaOfiTFList;
@@ -151,6 +154,7 @@ public class OficinaTF {
         if(oficina.getCodOfiResponsable() != null){
             this.setCodOfiResponsable(oficina.getCodOfiResponsable().getCodigo());
         }
+
 
         if(oficina.getSirOfi() != null){
             this.setSirOfiTF(oficina.getSirOfi());
