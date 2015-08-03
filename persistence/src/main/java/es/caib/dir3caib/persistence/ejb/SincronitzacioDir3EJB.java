@@ -56,6 +56,12 @@ public class SincronitzacioDir3EJB  implements SincronitzacioDir3Local {
       log.error("Error creant sincronitzador: " + e.getMessage(), e);
     }
   }
+  
+  @Override
+  public void clearTimers() {
+    removeTimer(NAME_TIMER);
+  }
+  
 
   @Timeout
   public void timeOutHandler(Timer timer){
@@ -69,7 +75,7 @@ public class SincronitzacioDir3EJB  implements SincronitzacioDir3Local {
 
       sincronitzar();
       
-    } catch (Exception e) {
+    } catch (Throwable e) {
       log.error("Error sincronitzant: " +e.getMessage(), e);
     }
 
@@ -106,7 +112,7 @@ public class SincronitzacioDir3EJB  implements SincronitzacioDir3Local {
             String scheduled = (String) timer.getInfo();
             //System.out.println("-> Timer Found : " + scheduled);
             if (scheduled.equals(name)) {
-                    //System.out.println("-> Removing old timer : " + scheduled);
+                    log.info("Removing old timer : " + scheduled + "(" + timer.getNextTimeout() + ")");
                     timer.cancel();
             }
     }
@@ -115,20 +121,18 @@ public class SincronitzacioDir3EJB  implements SincronitzacioDir3Local {
 
 
   public void sincronitzar()  {
-    // TODO Auto-generated method stub
-    System.out.println("Executa sincornitzar System.out.println()");
-    log.info("Executa sincronitzar log.info();");
     
+    log.info("Entra dins el metode sincronitzar() de SincronitzacioDir3EJB");
+   
     try {
 
       importadorUnidades.importarUnidadesTask();
       importadorOficinas.importarOficinasTask();
       
-    } catch (Exception e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+    } catch (Throwable e) {
+      log.error("Error Sincronitzant ...", e);
     }
-    
+
   }
 
 }

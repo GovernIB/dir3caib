@@ -135,7 +135,7 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
   
   public class UnidadesCacheManager {
     
-    // XYZ 
+
     public int countFind = 0;
     public int countCache = 0;
     public long findByTime = 0;
@@ -204,112 +204,7 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
     
     
   }
-  
-  
-  
-  /*
-  public class UnidadesCacheManager {
-    
-    // XYZ 
-    public int countFind = 0;
-    public int countCache = 0;
-    public long findByTime = 0;
-    
-    private final UnidadLocal unidadEjb;
-    
-    Map<String, Unidad> cacheUnidad = new TreeMap<String,Unidad>();
-
-    // * @param isupdate
-    public UnidadesCacheManager(UnidadLocal unidadEjb) throws Exception {
-      super();
-      
-      this.unidadEjb = unidadEjb;
-
-
-      
-    }
-    
-    
-    public Unidad get(String codigo) throws Exception {
-      
-      Unidad unidad = cacheUnidad.get(codigo);
-      
-      if (unidad == null) {
-        long start = System.currentTimeMillis();
-        unidad = this.unidadEjb.findById(codigo);
-        findByTime =  findByTime + (System.currentTimeMillis() - start);
-        cacheUnidad.put(codigo, unidad);
-        countFind++;
-      } else {        
-        countCache++;
-      }
-      return unidad;
-      
-    }
-    
-    
-  }
-  
-  */
-  
-  
-  /*
-  public class UnidadesCacheManager {
-    
-    private  final boolean isupdate;
-    
-    private final UnidadLocal unidadEjb;
-    
-    Map<String, Unidad> cacheUnidad = new TreeMap<String,Unidad>();
-
-    // * @param isupdate
-    public UnidadesCacheManager(UnidadLocal unidadEjb, boolean isupdate) throws Exception {
-      super();
-      this.isupdate = isupdate;
-      this.unidadEjb = unidadEjb;
-
-      if (!this.isupdate) {
-        final int numberOfItems = 500;
-        int startItem = 1;
-        List<Unidad> unidades;
-        int count = 0;
-        final Long total = this.unidadEjb.getTotal();
-        do {
-          long start2 = System.currentTimeMillis();
-          unidades =  unidadEjb.getPagination(startItem, numberOfItems);
-
-          for (Unidad ca : unidades) {        
-            cacheUnidad.put(ca.getCodigo(), ca);
-            count ++;
-          }
-          long end2 = System.currentTimeMillis();
-
-          log.info(" Cache de Unidades " + (startItem + numberOfItems - 1) + "/" + total + "   -->   " + Utils.formatElapsedTime(end2 - start2));
-          startItem = startItem + numberOfItems;
-
-        } while(unidades.size() == numberOfItems);
-
-        log.info(" Total Count Of Unidades: " + count );
-      }
-      
-      
-    }
-    
-    
-    public Unidad get(String codigo) throws Exception {
-      if (isupdate) {
-        return this.unidadEjb.findById(codigo);
-      } else {
-        return this.cacheUnidad.get(codigo);
-      }
-    }
-    
-    
-  }
-  */
-  
-  
-  
+ 
 
    /**
   * Método que importa el contenido de los archivos de las oficinas y sus relaciones descargados previamente a través

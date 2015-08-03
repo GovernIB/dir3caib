@@ -15,5 +15,7 @@ public interface SincronitzacioDir3Local extends Serializable {
   public void sincronitzar();
   
   public void createTimer();
+  
+  public void clearTimers();
 
 }

@@ -33,6 +33,9 @@ public class InitServlet extends HttpServlet {
       SincronitzacioDir3Local sinc;
       sinc = (SincronitzacioDir3Local) new InitialContext()
           .lookup("dir3caib/SincronitzacioDir3EJB/local");
+      
+      sinc.clearTimers();
+      
       sinc.createTimer();
     } catch (Throwable th) {
       log.error("Error desconegut inicialitzant sincronitzador amb DIR3: " + th.getMessage(), th);
