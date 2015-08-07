@@ -1,6 +1,5 @@
 package es.caib.dir3caib.persistence.model.ws;
 
-import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.model.Oficina;
 import es.caib.dir3caib.persistence.model.RelacionOrganizativaOfi;
 import es.caib.dir3caib.persistence.model.RelacionSirOfi;
@@ -102,10 +101,8 @@ public class OficinaTF {
         List<RelacionSirOfiTF> sirOfiTFList = new ArrayList<RelacionSirOfiTF>();
 
         for (RelacionSirOfi relacionSirOfi : sirOfi) {
-            if(Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE.equals(relacionSirOfi.getEstado().getCodigoEstadoEntidad())) {
-                RelacionSirOfiTF sirOfiTF = RelacionSirOfiTF.generar(relacionSirOfi);
-                sirOfiTFList.add(sirOfiTF);
-            }
+            RelacionSirOfiTF sirOfiTF = RelacionSirOfiTF.generar(relacionSirOfi);
+            sirOfiTFList.add(sirOfiTF);
         }
 
         this.sirOfi = sirOfiTFList;
@@ -128,10 +125,8 @@ public class OficinaTF {
         List<RelacionOrganizativaOfiTF> relacionOrganizativaOfiTFList = new ArrayList<RelacionOrganizativaOfiTF>();
 
         for (RelacionOrganizativaOfi relacionOrganizativaOfi : organizativasOfi) {
-            if(Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE.equals(relacionOrganizativaOfi.getEstado().getCodigoEstadoEntidad())) {
-                RelacionOrganizativaOfiTF relacionOrganizativaOfiTF = RelacionOrganizativaOfiTF.generar(relacionOrganizativaOfi);
-                relacionOrganizativaOfiTFList.add(relacionOrganizativaOfiTF);
-            }
+            RelacionOrganizativaOfiTF relacionOrganizativaOfiTF = RelacionOrganizativaOfiTF.generar(relacionOrganizativaOfi);
+            relacionOrganizativaOfiTFList.add(relacionOrganizativaOfiTF);
         }
 
         this.organizativasOfi = relacionOrganizativaOfiTFList;

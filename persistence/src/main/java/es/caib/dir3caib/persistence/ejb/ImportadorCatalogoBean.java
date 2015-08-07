@@ -435,9 +435,8 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
                        // Miramos si ya existe la provincia
                        CatProvincia provincia;
-                       {
-                          provincia = catProvinciaEjb.findById(codigoProvincia);
-                       }
+                       provincia = catProvinciaEjb.findById(codigoProvincia);
+
                        if(provincia == null){ // Si es nuevo creamos el objeto a introducir
                          provincia = new CatProvincia();
                          provincia.setCodigoProvincia(codigoProvincia);
@@ -562,11 +561,8 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                          // Miramos si existe ya en la BD
                          String codigoTipoUnidadOrganica = fila[0];
                          CatTipoUnidadOrganica tipoUnidadOrganica;
-                         /*if(quartz){
-                            tipoUnidadOrganica = importarEjb.findTipoUnidadOrganica(codigoTipoUnidadOrganica);
-                         }else */{
-                            tipoUnidadOrganica = catTipoUnidadOrganicaEjb.findById(codigoTipoUnidadOrganica);
-                         }
+                         tipoUnidadOrganica = catTipoUnidadOrganicaEjb.findById(codigoTipoUnidadOrganica);
+
                          if(tipoUnidadOrganica == null){ // Si es nuevo creamos el objeto a introducir
                            tipoUnidadOrganica = new CatTipoUnidadOrganica();
                            tipoUnidadOrganica.setCodigoTipoUnidadOrganica(codigoTipoUnidadOrganica);
@@ -593,17 +589,13 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                          // Miramos si existe ya en la BD
                          Long codigoTipoVia = new Long(fila[0]);
                          CatTipoVia tipoVia;
-
                          tipoVia = catTipoViaEjb.findById(codigoTipoVia);
-
                          if(tipoVia == null){ // Si es nuevo creamos el objeto a introducir
                            tipoVia = new CatTipoVia();
                            tipoVia.setCodigoTipoVia(codigoTipoVia);
                          }
                          tipoVia.setDescripcionTipoVia(fila[1]);
-
                          catTipoViaEjb.persist(tipoVia);
-
                      }catch(Exception e){
                          log.info(e.getMessage());
                      }
@@ -628,22 +620,18 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
                        // Miramos si ya existe el ambitoTerritorial
                        CatAmbitoTerritorial ambitoTerritorial;
-                       {
-                          ambitoTerritorial = catAmbitoTerritorialEjb.findByPKs(codigoAmbito, Long.parseLong(fila[2]));
-                       }
+                       ambitoTerritorial = catAmbitoTerritorialEjb.findByPKs(codigoAmbito, Long.parseLong(fila[2]));
                        if(ambitoTerritorial == null){ // Si es nuevo creamos el objeto a introducir
                          ambitoTerritorial = new CatAmbitoTerritorial();
                          ambitoTerritorial.setCodigoAmbito(codigoAmbito);
                          ambitoTerritorial.setNivelAdministracion(catNivelAdministracion);
                        }
                        ambitoTerritorial.setDescripcionAmbito(fila[1]);
-
                        catAmbitoTerritorialEjb.persist(ambitoTerritorial);
-
                      }catch(Exception e){
                          log.info(e.getMessage());
                      }
-                   }
+                 }
 
                }
 

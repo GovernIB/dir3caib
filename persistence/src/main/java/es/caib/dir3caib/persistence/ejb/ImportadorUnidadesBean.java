@@ -311,11 +311,14 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
                         if(!codigoNivelAdmin.isEmpty()){
                           nivelAdministracion = cacheNivelAdministracion.get(new Long(codigoNivelAdmin));
                         }
-                        
 
-                        CatAmbitoTerritorialPK catAmbitoTerritorialPk = new CatAmbitoTerritorialPK(fila[16],new Long(codigoNivelAdmin));
-                        CatAmbitoTerritorial ambitoTerritorial;
-                        ambitoTerritorial = cacheAmbitoTerritorial.get(catAmbitoTerritorialPk);
+                        String ambTerrit= fila[16].trim();
+                        CatAmbitoTerritorial ambitoTerritorial= null;
+                        if(!ambTerrit.isEmpty()) {
+                            CatAmbitoTerritorialPK catAmbitoTerritorialPk = new CatAmbitoTerritorialPK(ambTerrit, new Long(codigoNivelAdmin));
+                            ambitoTerritorial = cacheAmbitoTerritorial.get(catAmbitoTerritorialPk);
+                            unidad.setCodAmbitoTerritorial(ambitoTerritorial);
+                        }
                         unidad.setCodAmbitoTerritorial(ambitoTerritorial);
                         unidad.setNivelAdministracion(nivelAdministracion);
                         //log.info("Ambito Territorial y nivel administracion");
@@ -324,6 +327,8 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
                         String codigoJerarquico = fila[6].trim();
                         if(!codigoJerarquico.isEmpty()){
                             unidad.setNivelJerarquico(Long.valueOf(codigoJerarquico));
+                        }else{
+                            unidad.setNivelJerarquico(null);
                         }
                         //log.info("Nivel jerarquico");
 
@@ -331,10 +336,10 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
                         String codigoComunidadAutonoma = fila[19].trim();
                         if(!codigoComunidadAutonoma.isEmpty()){
                           CatComunidadAutonoma  comunidadAutonoma;
-                          
                           comunidadAutonoma = cacheComunidadAutonoma.get(new Long(codigoComunidadAutonoma));
-
                           unidad.setCodAmbComunidad(comunidadAutonoma);
+                        }else{
+                            unidad.setCodAmbComunidad(null);
                         }
                          //log.info("Comunidad Autonoma");
 
@@ -342,6 +347,8 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
                         String codAmbElm = fila[23].trim();
                         if(!codAmbElm.isEmpty()){
                           unidad.setCodAmbElm(new Long(codAmbElm));
+                        }else{
+                            unidad.setCodAmbElm(null);
                         }
                         //log.info( "AmbElm");
 
@@ -351,6 +358,8 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
                         if(!codigoEntGeog.isEmpty()){
                           entidadGeografica = cacheEntidadGeografica.get(codigoEntGeog);
                           unidad.setCodAmbEntGeografica(entidadGeografica);
+                        }else{
+                            unidad.setCodAmbEntGeografica(null);
                         }
                         //log.info("AmbEntGeog");
 
@@ -358,9 +367,10 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
                         String codigoIsla = fila[22].trim();
                         if(!codigoIsla.isEmpty()){
                           CatIsla isla;
-                          
                           isla = cacheIsla.get(new Long(codigoIsla));
                           unidad.setCodAmbIsla(isla);
+                        }else{
+                            unidad.setCodAmbIsla(null);
                         }
                         //log.info("AmbIsla");
 
@@ -377,6 +387,8 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
                           } else {
                             unidad.setCodAmbProvincia(provincia);
                           }
+                        }else{
+                            unidad.setCodAmbProvincia(null);
                         }
                         //log.info("Amb Provincia");
 
@@ -387,6 +399,8 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
                           CatLocalidad municipio;
                           municipio = cacheLocalidad.get(catLocalidadPK);
                           unidad.setCatLocalidad(municipio);
+                        }else{
+                            unidad.setCatLocalidad(null);
                         }
                         //log.info("Amb Localidad");
 
@@ -396,6 +410,8 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
                           CatPais pais;
                           pais = cachePais.get(new Long(codigoPais));
                           unidad.setCodAmbPais(pais);
+                        }else{
+                            unidad.setCodAmbPais(null);
                         }
                         //log.info("Amb Pais");
 
@@ -405,6 +421,8 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
                           CatComunidadAutonoma comunidadAutonomaD;
                           comunidadAutonomaD = cacheComunidadAutonoma.get(new Long(codigoComunidad));
                           unidad.setCodComunidad(comunidadAutonomaD);
+                        }else{
+                            unidad.setCodComunidad(null);
                         }
                         //log.info("Comunidad");
 
@@ -418,6 +436,8 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
                             unidadEdpPrincipal = null;
                           }
                           unidad.setCodEdpPrincipal(unidadEdpPrincipal);
+                        }else{
+                            unidad.setCodEdpPrincipal(null);
                         }
                         //log.info("Edp Principal");
 
@@ -450,6 +470,8 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
                           CatLocalidad localidadD;
                           localidadD = cacheLocalidad.get(catLocalidadPKD);
                           unidad.setCodLocalidad(localidadD);
+                        }else{
+                            unidad.setCodLocalidad(null);
                         }
                         //log.info("Localidad");
 
@@ -458,8 +480,9 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
                         CatPais paisD = null;
                         if(!codigoPaisD.isEmpty()) {
                           paisD = cachePais.get(new Long(codigoPaisD));
-                          
                           unidad.setCodPais(paisD);
+                        }else{
+                            unidad.setCodPais(null);
                         }
                         //log.info(" Pais");
 
@@ -470,10 +493,10 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
                         String codigoTipoEntPubli= fila[14].trim();
                         CatTipoEntidadPublica tipoEntidadPublica = null;
                         if(!codigoTipoEntPubli.isEmpty()){
-
                           tipoEntidadPublica = cacheTipoEntidadPublica.get(codigoTipoEntPubli);
-
                           unidad.setCodTipoEntPublica(tipoEntidadPublica);
+                        }else{
+                            unidad.setCodTipoEntPublica(null);
                         }
                         //log.info(" Ent publica");
 
@@ -481,10 +504,10 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
                         String codigoTipUniOrg = fila[15].trim();
                         CatTipoUnidadOrganica tipoUnidadOrganica = null;
                         if(!codigoTipUniOrg.isEmpty()){
-                          
                           tipoUnidadOrganica = cacheTipoUnidadOrganica.get(codigoTipUniOrg);
-
                           unidad.setCodTipoUnidad(tipoUnidadOrganica);
+                        }else{
+                            unidad.setCodTipoUnidad(null);
                         }
                         //log.info("Tipo Unidad");
 
@@ -502,11 +525,12 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
 
                         //Estado Entidad
                         String codigoEstado = fila[2].trim();
-                        
                         if(!codigoEstado.isEmpty()){
                           CatEstadoEntidad estado;
                           estado = cacheEstadoEntidad.get(codigoEstado);
                           unidad.setEstado(estado);
+                        }else{
+                            unidad.setEstado(null);
                         }
                         //log.info("estado entidad");
 
@@ -516,6 +540,8 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
                         if(!sfechaAlta.isEmpty()){
                           fechaAlta = formatoFecha.parse(sfechaAlta);
                           unidad.setFechaAltaOficial(fechaAlta);
+                        }else{
+                            unidad.setFechaAltaOficial(null);
                         }
                         //log.info("fecha alta");
 
@@ -525,6 +551,8 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
                         if(!sfechaAnulacion.isEmpty()){
                           fechaAnulacion = formatoFecha.parse(sfechaAnulacion);
                           unidad.setFechaAnulacion(fechaAnulacion);
+                        }else{
+                            unidad.setFechaAnulacion(null);
                         }
                         //log.info("fecha Anulacion");
 
@@ -534,6 +562,8 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
                         if(!sfechaBajaOficial.isEmpty()){
                           fechaBaja = formatoFecha.parse(sfechaBajaOficial);
                           unidad.setFechaBajaOficial(fechaBaja);
+                        }else{
+                            unidad.setFechaBajaOficial(null);
                         }
                         //log.info("fecha Baja");
 
@@ -543,6 +573,8 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
                         if(!sfechaExtincion.isEmpty()){
                           fechaExtincion = formatoFecha.parse(sfechaExtincion);
                           unidad.setFechaExtincion(fechaExtincion);
+                        }else{
+                            unidad.setFechaExtincion(null);
                         }
                         //log.info("fecha extincion");
 
@@ -561,26 +593,25 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
                         if(!codigoTipoVia.isEmpty()){
                           CatTipoVia tipoVia;
                           tipoVia = cacheTipoVia.get(new Long(codigoTipoVia));
-
                           unidad.setTipoVia(tipoVia);
+                        }else{
+                            unidad.setTipoVia(null);
                         }
-                        
-                        
+
                         caches = caches + (System.currentTimeMillis() - s);
-                        
-                        
+
                         //log.info(" Tipo Via");
                         
                         s = System.currentTimeMillis();
-                       if (existeix){
+                        if (existeix){
                           unidad= unidadEjb.merge(unidad);
                         } else {
                           unidad= unidadEjb.persistReal(unidad);
                         }
-                       existInBBDD.add(codigoUnidad);
-                       persist = persist + (System.currentTimeMillis() - s);
+                        existInBBDD.add(codigoUnidad);
+                        persist = persist + (System.currentTimeMillis() - s);
 
-                       s = System.currentTimeMillis();
+                        s = System.currentTimeMillis();
                         // Unidad Raiz
                         String codigoUnidadRaiz = fila[9].trim();
                         if(!codigoUnidadRaiz.isEmpty()){
@@ -600,6 +631,8 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
                           unidad.setCodUnidadRaiz(unidadRaiz);
                           
                           
+                        }else{
+                            unidad.setCodUnidadRaiz(null);
                         }
                         //log.info("Unidad Raiz");
 
@@ -619,6 +652,8 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
                             existInBBDD.add(codigoUnidadSuperior);
                           }
                           unidad.setCodUnidadSuperior(unidadSuperior);
+                        }else{
+                            unidad.setCodUnidadSuperior(null);
                         }
 
                         //Actualizamos

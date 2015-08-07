@@ -376,6 +376,8 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                             comunidadAutonoma = cacheComunidadAutonoma.get(new Long(codigoComunidadAutonoma));
 
                             oficina.setCodComunidad(comunidadAutonoma);
+                          }else{
+                            oficina.setCodComunidad(null);
                           }
 
                           // Pais
@@ -384,6 +386,8 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                             CatPais pais;
                             pais = cachePais.get(new Long(codigoPais));
                             oficina.setCodPais(pais);
+                          }else{
+                            oficina.setCodPais(null);
                           }
 
                           // Codigo Postal
@@ -395,6 +399,8 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                             Unidad uoResponsable;
                             uoResponsable = cacheUnidad.get(codUOResponsable);
                             oficina.setCodUoResponsable(uoResponsable);
+                          }else{
+                            oficina.setCodUoResponsable(null);
                           }
 
                           // atributos directos
@@ -412,6 +418,8 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                              CatEstadoEntidad estado;
                              estado = cacheEstadoEntidad.get(codigoEstado);
                              oficina.setEstado(estado);
+                          }else{
+                             oficina.setEstado(null);
                           }
 
                           //fechas
@@ -420,6 +428,8 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                           if(!sfechaAlta.isEmpty()){
                             fechaAlta = formatoFecha.parse(sfechaAlta);
                             oficina.setFechaAltaOficial(fechaAlta);
+                          }else{
+                            oficina.setFechaAltaOficial(null);
                           }
 
 
@@ -428,6 +438,8 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                           if(!sfechaExtincion.isEmpty()){
                             fechaExtincion = formatoFecha.parse(sfechaExtincion);
                             oficina.setFechaExtincion(fechaExtincion);
+                          }else{
+                            oficina.setFechaExtincion(null);
                           }
 
                           Date fechaAnulacion = null;
@@ -435,6 +447,8 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                           if(!sfechaAnulacion.isEmpty()){
                             fechaAnulacion = formatoFecha.parse(sfechaAnulacion);
                             oficina.setFechaExtincion(fechaAnulacion);
+                          }else{
+                            oficina.setFechaAnulacion(null);
                           }
 
 
@@ -457,12 +471,17 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                             CatLocalidad localidadD;
                             localidadD = cacheLocalidad.get(catLocalidadPKD);
                             oficina.setLocalidad(localidadD);
+                          }else{
+                            oficina.setLocalidad(null);
                           }
+
                           String codigoNivelAdmin = fila[3].trim();
                           CatNivelAdministracion nivelAdministracion = null;
                           if(!codigoNivelAdmin.isEmpty()){
                             nivelAdministracion = cacheNivelAdministracion.get(new Long(codigoNivelAdmin));
                             oficina.setNivelAdministracion(nivelAdministracion);
+                          }else{
+                            oficina.setNivelAdministracion(null);
                           }
 
                           //tipoOficina
@@ -471,6 +490,8 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                           if(!tipoOficina.isEmpty()){
                             jerarquiaOficina = catJerarquiaOficinaEjb.findById(new Long(tipoOficina));
                             oficina.setTipoOficina(jerarquiaOficina);
+                          }else{
+                            oficina.setTipoOficina(null);
                           }
 
                           //Tipo Via
@@ -479,6 +500,8 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                           if(!tipoVia.isEmpty()){
                             catTipoVia = cacheTipoVia.get(new Long(tipoVia));
                             oficina.setTipoVia(catTipoVia);
+                          }else{
+                            oficina.setTipoVia(null);
                           }
 
                           if (existeix) {
@@ -505,6 +528,8 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
 
                             }
                             oficina.setCodOfiResponsable(ofiResponsable);
+                          }else{ // no viene ningun código de oficina responsable, pero puede tener de antes que hay que anular
+                            oficina.setCodOfiResponsable(null);
                           }
 
                           oficinaEjb.merge(oficina);
@@ -548,6 +573,8 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                           oficina = oficinaEjb.findById(sOficina);
                         }
                         contacto.setOficina(oficina);
+                      }else{
+                        contacto.setOficina(null);
                       }
 
                       //Tipo contacto
@@ -556,6 +583,8 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                         CatTipoContacto tipoContacto;
                         tipoContacto = cacheTipoContacto.get(stipoContacto);
                         contacto.setTipoContacto(tipoContacto);
+                      }else{
+                        contacto.setTipoContacto(null);
                       }
 
                       //Valor contacto

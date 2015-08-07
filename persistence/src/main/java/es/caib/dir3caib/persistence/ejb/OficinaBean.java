@@ -7,6 +7,7 @@ package es.caib.dir3caib.persistence.ejb;
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.model.Oficina;
 import es.caib.dir3caib.persistence.model.RelacionOrganizativaOfi;
+import es.caib.dir3caib.persistence.model.RelacionSirOfi;
 import es.caib.dir3caib.persistence.model.utils.ObjetoBasico;
 import es.caib.dir3caib.persistence.utils.DataBaseUtils;
 import es.caib.dir3caib.persistence.utils.Paginacion;
@@ -226,7 +227,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
       @Override
     public List<Oficina> obtenerOficinasOrganismo(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception{
 
-        log.info("obtenerOficinasOrganismo");
+        log.info("obtenerOficinasOrganismo con codigo : " +codigo);
         // En un primer paso obtenemos las oficinas en función de si es SINCRO o ACTUALIZACION
         Query q;
         if(fechaActualizacion == null){// Es una sincronizacion, solo se mandan las vigentes
@@ -259,6 +260,21 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
               }
               oficina.setOrganizativasOfi(null);
               oficina.setOrganizativasOfi(new ArrayList<RelacionOrganizativaOfi>(relacionesVigentes));
+
+              // Solo se envian las relaciones organizativas vigentes.
+              // TODO ESTA COMENTADO PARA NO SUBIRLO ACCIDENTALMENTE
+              Set<RelacionSirOfi> relacionesSir =new HashSet<RelacionSirOfi>(oficina.getSirOfi());
+
+              Set<RelacionSirOfi> relacionesSirVigentes= new HashSet<RelacionSirOfi>();
+              //Metemos en la lista las relacionesVigentes
+              for(RelacionSirOfi relSir : relacionesSir){
+                  if(relSir.getEstado().getCodigoEstadoEntidad().equals( Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE)){
+                      relacionesSirVigentes.add(relSir);
+                  }
+              }
+              oficina.setSirOfi(null);
+              oficina.setSirOfi(new ArrayList<RelacionSirOfi>(relacionesSirVigentes));
+
              }
              oficinasCompletas = new ArrayList<Oficina>(oficinas);
 
@@ -268,17 +284,34 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
           for(Oficina oficina: oficinas){
              if(fechaActualizacion.before(oficina.getFechaImportacion()) || fechaActualizacion.equals(oficina.getFechaImportacion())){
-                // Cogemos solo las relaciones organizativas posteriores a la fecha de sincronizacion
-                Set<RelacionOrganizativaOfi> todasRelaciones = new HashSet<RelacionOrganizativaOfi>(oficina.getOrganizativasOfi());
-                Set<RelacionOrganizativaOfi> relacionesValidas= new HashSet<RelacionOrganizativaOfi>();
-                for(RelacionOrganizativaOfi relOrg: todasRelaciones){
-                  if(relacionValida(relOrg, fechaSincronizacion)){
-                    relacionesValidas.add(relOrg);
-                  }
-                }
-                oficina.setOrganizativasOfi(null);
-                oficina.setOrganizativasOfi(new ArrayList<RelacionOrganizativaOfi>(relacionesValidas));
-                oficinasActualizadas.add(oficina);
+                 // Miramos que la oficina no esté extinguida o anulada anterior a la fecha de sincronizacion de regweb
+                 if(oficinaValida(oficina,fechaSincronizacion)){
+
+                     // Cogemos solo las relaciones organizativas posteriores a la fecha de sincronizacion
+                     Set<RelacionOrganizativaOfi> todasRelaciones = new HashSet<RelacionOrganizativaOfi>(oficina.getOrganizativasOfi());
+                     Set<RelacionOrganizativaOfi> relacionesValidas= new HashSet<RelacionOrganizativaOfi>();
+                     for(RelacionOrganizativaOfi relOrg: todasRelaciones){
+                         if(relacionValida(relOrg, fechaSincronizacion)){
+                             relacionesValidas.add(relOrg);
+                         }
+                     }
+                     oficina.setOrganizativasOfi(null);
+                     oficina.setOrganizativasOfi(new ArrayList<RelacionOrganizativaOfi>(relacionesValidas));
+
+                     // Cogemos solo las relaciones sir posteriores a la fecha de sincronizacion
+                     // TODO ESTA COMENTADO PARA NO SUBIRLO ACCIDENTALMENTE
+                     Set<RelacionSirOfi> todasRelacionesSir = new HashSet<RelacionSirOfi>(oficina.getSirOfi());
+                     Set<RelacionSirOfi> relacionesSirValidas= new HashSet<RelacionSirOfi>();
+                     for(RelacionSirOfi relSir : todasRelacionesSir){
+                         if(relacionSirValida(relSir, fechaSincronizacion)){
+                             relacionesSirValidas.add(relSir);
+                         }
+                     }
+                     oficina.setSirOfi(null);
+                     oficina.setSirOfi(new ArrayList<RelacionSirOfi>(relacionesSirValidas));
+
+                     oficinasActualizadas.add(oficina);
+                 }
              }
           }
           oficinasCompletas = new ArrayList<Oficina>(oficinasActualizadas);
@@ -332,18 +365,33 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
           //  Date fechaSincro = formatoFecha.parse(fechaSincronizacion);
             for(Oficina oficina : padres){
               if(fechaActualizacion.before(oficina.getFechaImportacion()) || fechaActualizacion.equals(oficina.getFechaImportacion())){
-                // Cogemos solo las relaciones organizativas posteriores a la fecha de sincronizacion
-                Set<RelacionOrganizativaOfi> todasRelaciones = new HashSet<RelacionOrganizativaOfi>(oficina.getOrganizativasOfi());
-                Set<RelacionOrganizativaOfi> relacionesValidas= new HashSet<RelacionOrganizativaOfi>();
-                for(RelacionOrganizativaOfi relOrg: todasRelaciones){
-                  if(relacionValida(relOrg, fechaSincronizacion)){
-                    relacionesValidas.add(relOrg);
-                  }
-                }
-                oficina.setOrganizativasOfi(null);
-                oficina.setOrganizativasOfi(new ArrayList<RelacionOrganizativaOfi>(relacionesValidas));
+                  // Miramos que la oficina no este extinguida o anulada anterior a la fecha de sincronizacion de regweb
+                  if(oficinaValida(oficina,fechaSincronizacion)){
+                      // Cogemos solo las relaciones organizativas posteriores a la fecha de sincronizacion
+                      Set<RelacionOrganizativaOfi> todasRelaciones = new HashSet<RelacionOrganizativaOfi>(oficina.getOrganizativasOfi());
+                      Set<RelacionOrganizativaOfi> relacionesValidas= new HashSet<RelacionOrganizativaOfi>();
+                      for(RelacionOrganizativaOfi relOrg: todasRelaciones){
+                          if(relacionValida(relOrg, fechaSincronizacion)){
+                              relacionesValidas.add(relOrg);
+                          }
+                      }
+                      oficina.setOrganizativasOfi(null);
+                      oficina.setOrganizativasOfi(new ArrayList<RelacionOrganizativaOfi>(relacionesValidas));
 
-                padresActualizados.add(oficina);
+
+                      // Cogemos solo las relaciones sir posteriores a la fecha de sincronizacion
+                      // TODO ESTA COMENTADO PARA NO SUBIRLO ACCIDENTALMENTE
+                      Set<RelacionSirOfi> todasRelacionesSir = new HashSet<RelacionSirOfi>(oficina.getSirOfi());
+                      Set<RelacionSirOfi> relacionesSirValidas= new HashSet<RelacionSirOfi>();
+                      for(RelacionSirOfi relSir : todasRelacionesSir){
+                          if(relacionSirValida(relSir, fechaSincronizacion)){
+                              relacionesSirValidas.add(relSir);
+                          }
+                      }
+                      oficina.setSirOfi(null);
+                      oficina.setSirOfi(new ArrayList<RelacionSirOfi>(relacionesSirValidas));
+                      padresActualizados.add(oficina);
+                  }
               }
             }
             listaCompleta = new ArrayList<Oficina>(padresActualizados);
@@ -361,7 +409,22 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
               }
               oficina.setOrganizativasOfi(null);
               oficina.setOrganizativasOfi(new ArrayList<RelacionOrganizativaOfi>(relacionesVigentes));
-             }
+
+              // Solo se envian las relaciones sir vigentes.
+              // TODO ESTA COMENTADO PARA NO SUBIRLO ACCIDENTALMENTE
+              Set<RelacionSirOfi> relacionesSir =new HashSet<RelacionSirOfi>(oficina.getSirOfi());
+
+              Set<RelacionSirOfi> relacionesSirVigentes= new HashSet<RelacionSirOfi>();
+              //Metemos en la lista las relacionesVigentes
+              for(RelacionSirOfi relSir : relacionesSir){
+                   if(relSir.getEstado().getCodigoEstadoEntidad().equals( Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE)){
+                       relacionesSirVigentes.add(relSir);
+                   }
+              }
+              oficina.setSirOfi(null);
+              oficina.setSirOfi(new ArrayList<RelacionSirOfi>(relacionesSirVigentes));
+
+              }
              listaCompleta = new ArrayList<Oficina>(padres);
 
         }
@@ -420,14 +483,40 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
            return false;
       }
 
-      /**
-      * Método que comprueba si una unidad tiene oficinas donde registrar
-      * @param codigo
-      * @return
-      * @throws Exception
-      */
-      @Override
-      public Boolean tieneOficinasOrganismo(String codigo) throws Exception {
+    /**
+     * Nos dice si la relacion sir es valida para enviar en la actualización de regweb.
+     * Se mira que si la unidad con la que esta relacionada su fecha de extinción y anulacion son posteriores
+     * a la fecha de la primera sincronizacion con regweb. Así evitamos enviar relaciones antiguas extinguidas o anuladas
+     * @param relSir    relacion sir
+     * @param fechaSincro  fecha de la primera sincronizacion con regweb
+     * @return
+     * @throws Exception
+     */
+    public boolean relacionSirValida(RelacionSirOfi relSir, Date fechaSincro) throws Exception {
+        if(relSir.getUnidad().getFechaExtincion() != null){
+            if(relSir.getUnidad().getFechaExtincion().after(fechaSincro) || relSir.getUnidad().getFechaExtincion().equals(fechaSincro)){
+                return true;
+            }
+        }else{
+            if(relSir.getUnidad().getFechaAnulacion() != null){
+                if(relSir.getUnidad().getFechaAnulacion().after(fechaSincro) || relSir.getUnidad().getFechaAnulacion().equals(fechaSincro)) {
+                    return true;
+                }
+            }else {
+                return true;
+            }
+        }
+        return false;
+    }
+
+     /**
+     * Método que comprueba si una unidad tiene oficinas donde registrar
+     * @param codigo
+     * @return
+     * @throws Exception
+     */
+     @Override
+     public Boolean tieneOficinasOrganismo(String codigo) throws Exception {
 
         Query q = em.createQuery("Select oficina from Oficina as oficina where oficina.codUoResponsable.codigo =:codigo and oficina.estado.codigoEstadoEntidad=:vigente order by oficina.codigo");
 
@@ -446,24 +535,24 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
           return relorg.size() > 0;
         }
 
-      }
+     }
       
       
-      @Override
-      public List<String> getAllCodigos() throws Exception {
+     @Override
+     public List<String> getAllCodigos() throws Exception {
         
           Query q = em.createQuery("Select oficina.codigo from Oficina as oficina order by oficina.codigo");
          
           return q.getResultList();
-      }
+     }
     
-      /**
-       * Convierte los resultados de una query en una lista de {@link es.caib.dir3caib.persistence.model.utils.ObjetoBasico}
-       * @param result
-       * @return
-       * @throws Exception
-       */
-       private List<ObjetoBasico> getObjetoBasicoList(List<Object[]> result) throws Exception{
+     /**
+      * Convierte los resultados de una query en una lista de {@link es.caib.dir3caib.persistence.model.utils.ObjetoBasico}
+      * @param result
+      * @return
+      * @throws Exception
+      */
+      private List<ObjetoBasico> getObjetoBasicoList(List<Object[]> result) throws Exception{
 
           List<ObjetoBasico> oficinasReducidas = new ArrayList<ObjetoBasico>();
 
@@ -474,6 +563,32 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
           }
 
           return  oficinasReducidas;
-       }
+      }
+
+    /**
+     *
+     * Se mira que si la oficina,  su fecha de extinción y anulacion son posteriores
+     * a la fecha de la primera sincronizacion con regweb. Así evitamos enviar relaciones antiguas extinguidas o anuladas
+     * @param oficina  oficina
+     * @param fechaSincro  fecha de la primera sincronizacion con regweb
+     * @return
+     * @throws Exception
+     */
+    public boolean oficinaValida(Oficina oficina, Date fechaSincro) throws Exception {
+        if(oficina.getFechaExtincion() != null){
+            if(oficina.getFechaExtincion().after(fechaSincro) || oficina.getFechaExtincion().equals(fechaSincro)){
+                return true;
+            }
+        }else{
+            if(oficina.getFechaAnulacion() != null){
+                if(oficina.getFechaAnulacion().after(fechaSincro) || oficina.getFechaAnulacion().equals(fechaSincro)) {
+                    return true;
+                }
+            }else {
+                return true;
+            }
+        }
+        return false;
+    }
 }
 

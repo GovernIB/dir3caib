@@ -342,7 +342,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
      *
      * Se mira que si la unidad,  su fecha de extinción y anulacion son posteriores
      * a la fecha de la primera sincronizacion con regweb. Así evitamos enviar relaciones antiguas extinguidas o anuladas
-     * @param unidad    relacion organizativa
+     * @param unidad  unidad
      * @param fechaSincro  fecha de la primera sincronizacion con regweb
      * @return
      * @throws Exception
