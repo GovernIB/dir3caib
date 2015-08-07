@@ -18,7 +18,8 @@ import java.util.Collection;
  * 
  * 
  * @author anadal
- * 
+ * @author mgonzalez
+ *
  */
 public class LoginInfo {
 
@@ -28,6 +29,8 @@ public class LoginInfo {
   final boolean roleAdmin;
   final boolean descargaUnidad;
   final boolean descargaOficina;
+  final boolean development;
+
 
 
   final User springSecurityUser;
@@ -44,13 +47,14 @@ public class LoginInfo {
    * @param roles
    */
   public LoginInfo(User springSecurityUser,
-                   boolean roleAdmin, boolean descargaUnidad, boolean descargaOficina, Collection<GrantedAuthority> roles) {
+                   boolean roleAdmin, boolean descargaUnidad, boolean descargaOficina, boolean development, Collection<GrantedAuthority> roles) {
     
     this.springSecurityUser = springSecurityUser;
     this.roleAdmin = roleAdmin;
     this.descargaUnidad = descargaUnidad;
     this.descargaOficina = descargaOficina;
     this.springRoles = roles;
+    this.development= development;
 
   }
 
@@ -64,6 +68,10 @@ public class LoginInfo {
 
   public boolean isDescargaOficina() {
     return descargaOficina;
+  }
+
+  public boolean isDevelopment() {
+    return development;
   }
 
   public User getSpringSecurityUser() {

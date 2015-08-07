@@ -3,6 +3,7 @@ package es.caib.dir3caib.back.security;
 import es.caib.dir3caib.persistence.ejb.DescargaLocal;
 import es.caib.dir3caib.persistence.model.Descarga;
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
+import es.caib.dir3caib.utils.Configuracio;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.authentication.event.InteractiveAuthenticationSuccessEvent;
@@ -58,6 +59,7 @@ public class AuthenticationSuccessListener implements
     boolean containsDescargaUnidad = false;
     boolean containsDescargaOficina = false;
 
+
     for (GrantedAuthority grantedAuthority : seyconAuthorities) {
       String rol = grantedAuthority.getAuthority();
       log.info("Rol SEYCON : " + rol);
@@ -92,7 +94,7 @@ public class AuthenticationSuccessListener implements
 
     LoginInfo loginInfo;
     // create a new authentication token
-    loginInfo = new LoginInfo(user, containsRoleAdmin, containsDescargaUnidad, containsDescargaOficina,seyconAuthorities);
+    loginInfo = new LoginInfo(user, containsRoleAdmin, containsDescargaUnidad, containsDescargaOficina, Configuracio.isDevelopment(),seyconAuthorities);
 
     // and set the authentication of the current Session context
     SecurityContextHolder.getContext().setAuthentication(loginInfo.generateToken());

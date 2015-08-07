@@ -39,23 +39,35 @@
                               <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
                                   <li><a href="<c:url value="/oficina/ficheros"/>"><fmt:message key="menu.listado.ficheros"/></a></li>
                                   <li class="divider"></li>
-                                   <c:if test="${loginInfo.descargaOficina == false}"><li><a href="<c:url value="/oficina/obtener"/>"><fmt:message key="oficina.obtener"/></a></li></c:if>
-                                   <c:if test="${loginInfo.descargaOficina == true}"><li><a href="<c:url value="/oficina/sincronizar"/>"><fmt:message key="menu.sincronizar.oficina"/></a></li></c:if>
+                                  <c:if test="${loginInfo.development== true}">
+                                      <li><a href="<c:url value="/oficina/obtener"/>"><fmt:message key="oficina.obtener"/></a></li>
+                                      <c:if test="${loginInfo.descargaOficina == true}"><li><a href="<c:url value="/oficina/sincronizar"/>"><fmt:message key="menu.sincronizar.oficina"/></a></li></c:if>
+                                  </c:if>
+                                  <c:if test="${loginInfo.development== false}">
+                                    <c:if test="${loginInfo.descargaOficina == false}"><li><a href="<c:url value="/oficina/obtener"/>"><fmt:message key="oficina.obtener"/></a></li></c:if>
+                                    <c:if test="${loginInfo.descargaOficina == true}"><li><a href="<c:url value="/oficina/sincronizar"/>"><fmt:message key="menu.sincronizar.oficina"/></a></li></c:if>
+                                  </c:if>
                                   <li><a href="<c:url value="/oficina/list/"/>"><fmt:message key="menu.buscar.oficina"/></a></li>
                               </ul>
                           </li>                          
                           <li class="dropdown">
-                              <a id="drop1" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"><fmt:message key="menu.unidad"/><b class="caret"></b></a>
+                              <a id="drop2" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"><fmt:message key="menu.unidad"/><b class="caret"></b></a>
                               <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
                                   <li><a href="<c:url value="/unidad/ficheros"/>"><fmt:message key="menu.listado.ficheros"/></a></li>
                                   <li class="divider"></li>
-                                  <c:if test="${loginInfo.descargaUnidad == false}"><li><a href="<c:url value="/unidad/obtener"/>"><fmt:message key="unidad.obtener"/></a></li></c:if>
-                                  <c:if test="${loginInfo.descargaUnidad == true}"><li><a href="<c:url value="/unidad/sincronizar"/>"><fmt:message key="menu.sincronizar.unidad"/></a></li></c:if>
+                                  <c:if test="${loginInfo.development== true}">
+                                      <li><a href="<c:url value="/unidad/obtener"/>"><fmt:message key="unidad.obtener"/></a></li>
+                                      <c:if test="${loginInfo.descargaUnidad == true}"><li><a href="<c:url value="/unidad/sincronizar"/>"><fmt:message key="menu.sincronizar.unidad"/></a></li></c:if>
+                                  </c:if>
+                                  <c:if test="${loginInfo.development== false}">
+                                    <c:if test="${loginInfo.descargaUnidad== false}"><li><a href="<c:url value="/unidad/obtener"/>"><fmt:message key="unidad.obtener"/></a></li></c:if>
+                                    <c:if test="${loginInfo.descargaUnidad == true}"><li><a href="<c:url value="/unidad/sincronizar"/>"><fmt:message key="menu.sincronizar.unidad"/></a></li></c:if>
+                                  </c:if>
                                   <li><a href="<c:url value="/unidad/list/"/>"><fmt:message key="menu.buscar.unidad"/></a></li>
                               </ul>
                           </li>
                           <li class="dropdown">
-                              <a id="drop1" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"><fmt:message key="menu.catalogo"/><b class="caret"></b></a>
+                              <a id="drop3" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"><fmt:message key="menu.catalogo"/><b class="caret"></b></a>
                               <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
                                   <li><a href="<c:url value="/catalogo/ficheros"/>"><fmt:message key="menu.listado.ficheros"/></a></li>
                                   <li class="divider"></li>
