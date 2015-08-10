@@ -1,6 +1,7 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.utils.Configuracio;
+
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.SecurityDomain;
 import org.quartz.impl.triggers.CronTriggerImpl;
@@ -8,6 +9,7 @@ import org.quartz.impl.triggers.CronTriggerImpl;
 import javax.annotation.Resource;
 import javax.annotation.security.RunAs;
 import javax.ejb.*;
+
 import java.text.ParseException;
 import java.util.Date;
 
@@ -47,7 +49,7 @@ public class SincronitzacioDir3EJB  implements SincronitzacioDir3Local {
       Date nextExecution = nextExecution();
 
       if (nextExecution != null) {
-        log.info("Primera sincronització DIR3 sera " + nextExecution);
+        log.info("Primera sincronitzacio DIR3 sera " + nextExecution);
       } else {
         log.info("Sincronització DIR3 desactivada");
       }
@@ -66,6 +68,7 @@ public class SincronitzacioDir3EJB  implements SincronitzacioDir3Local {
   @Timeout
   public void timeOutHandler(Timer timer){
     try {
+      long timeRemaining = timer.getTimeRemaining();
       
       timer.cancel();
       
@@ -73,7 +76,15 @@ public class SincronitzacioDir3EJB  implements SincronitzacioDir3Local {
    
       nextExecution();
 
-      sincronitzar();
+      // Si han passat més de 30segons de l'hora pravista d'execució
+      // llavors no l'executam. 
+      if (timeRemaining > -30000) {
+        sincronitzar();
+      } else {
+        log.warn("Timer programat per "
+          + new Date(System.currentTimeMillis() + timeRemaining)
+          + " no s'executara.");
+      }
       
     } catch (Throwable e) {
       log.error("Error sincronitzant: " +e.getMessage(), e);
@@ -84,16 +95,18 @@ public class SincronitzacioDir3EJB  implements SincronitzacioDir3Local {
   protected Date nextExecution() throws ParseException {
     String cronExpression = Configuracio.getCronExpression();
 
-    if(cronExpression != null && cronExpression.length() != 0) {
+    if(cronExpression != null && cronExpression.trim().length() != 0) {
     
       Date currTime = new Date();
       CronTriggerImpl tr = new CronTriggerImpl();
       tr.setCronExpression(cronExpression);
       Date nextFireAt = tr.getFireTimeAfter(currTime);
-      
-      
+
       TimerService timerService = context.getTimerService();
-      Timer timer2 = timerService.createTimer(nextFireAt, NAME_TIMER);
+      //final boolean isPersistence= false;
+      //TimerConfig timerConfig = new TimerConfig(NAME_TIMER, isPersistence);
+      Timer timer2 = timerService.createTimer(nextFireAt, NAME_TIMER /* timerConfig */);
+      
       if (log.isDebugEnabled()) {
         log.debug("Reference time: " + currTime);
         log.debug("Next fire after reference time: " + nextFireAt);
@@ -125,7 +138,7 @@ public class SincronitzacioDir3EJB  implements SincronitzacioDir3Local {
     log.info("Entra dins el metode sincronitzar() de SincronitzacioDir3EJB");
    
     try {
-
+      
       importadorUnidades.importarUnidadesTask();
       importadorOficinas.importarOficinasTask();
       
