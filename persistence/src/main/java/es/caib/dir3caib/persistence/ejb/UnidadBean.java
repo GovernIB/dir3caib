@@ -316,21 +316,35 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     @Override
     public List<Unidad> obtenerArbolUnidadesDestinatarias(String codigo) throws Exception{
 
-      Query q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.codigo");
+      Query q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadRaiz.codigo =:codigo and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.codigo");
       q.setParameter("codigo", codigo);
       q.setParameter("vigente",  Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
       List<Unidad> unidadesDestinatariasPadres  = q.getResultList();
       List<Unidad> unidadesDestConOficinas= new ArrayList<Unidad>();
 
+     // log.info("Total unidades: " + unidadesDestinatariasPadres.size());
+
+      if(unidadesDestinatariasPadres.size() > 1){ // Es necesario eliminar la Unidad superior de la lista a procesar
+          log.info("Tiene más de una");
+          Unidad unidadRaiz = findById(codigo);
+
+          if(unidadesDestinatariasPadres.contains(unidadRaiz)){
+              //Antes de eliminarla de la lista de los padres, hay que añadirla a la lista dest con oficinas en el caso que las tenga.
+              Boolean tiene = oficinaEjb.tieneOficinasOrganismo(unidadRaiz.getCodigo());
+              if(tiene){
+                  log.info(" El gobierno tiene oficinas");
+                  unidadesDestConOficinas.add(unidadRaiz);
+              }
+              log.info("Existe");
+              log.info("Eliminado?: " + unidadesDestinatariasPadres.remove(unidadRaiz));
+          }
+      }
+
       for(Unidad unidad: unidadesDestinatariasPadres){
         Boolean tiene = oficinaEjb.tieneOficinasOrganismo(unidad.getCodigo());
         if(tiene){
           unidadesDestConOficinas.add(unidad);
-        }
-        if(tieneHijos(unidad.getCodigo())){
-          List<Unidad> hijos = obtenerArbolUnidadesDestinatarias(unidad.getCodigo());
-          unidadesDestConOficinas.addAll(hijos);
         }
       }
 
