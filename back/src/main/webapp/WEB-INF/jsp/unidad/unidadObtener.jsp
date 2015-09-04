@@ -29,9 +29,10 @@
                             <!-- Solo mostramos las fechas si es desarrollo-->
                             <c:if test="${development}">
                                 <div class="page-header"><fmt:message key="dir3caib.fechas"/></div>
+                                <div class="row-fluid"><fmt:message key="dir3caib.info.fechas"/></div>
                             </c:if>
 
-                            <form:form modelAttribute="unidad" method="post" cssClass="form-horizontal" onsubmit="return validateDates($('#fechaInicio'),$('#fechaFin'));">
+                            <form:form modelAttribute="fechasForm" method="post" cssClass="form-horizontal"> <%--onsubmit="return validateDates($('#fechaInicio'),$('#fechaFin'));--%>
                                 <fieldset>
                                     <c:if test="${development}">
                                         <div class="row-fluid">
