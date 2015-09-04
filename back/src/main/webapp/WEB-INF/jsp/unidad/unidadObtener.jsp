@@ -32,7 +32,7 @@
                                 <div class="row-fluid"><fmt:message key="dir3caib.info.fechas"/></div>
                             </c:if>
 
-                            <form:form modelAttribute="fechasForm" method="post" cssClass="form-horizontal"> <%--onsubmit="return validateDates($('#fechaInicio'),$('#fechaFin'));--%>
+                            <form:form modelAttribute="fechasForm" method="post" cssClass="form-horizontal" onsubmit="return validateDates($('#fechaInicio'),$('#fechaFin'));">
                                 <fieldset>
                                     <c:if test="${development}">
                                         <div class="row-fluid">
