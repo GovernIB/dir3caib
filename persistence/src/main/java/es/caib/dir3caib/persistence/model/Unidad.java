@@ -70,7 +70,7 @@ public class Unidad implements Serializable {
 	private Date fechaBajaOficial;
 	private Date fechaExtincion;
 	private Date fechaAnulacion;
-  private Date fechaImportacion;
+    private Date fechaImportacion;
 	private String codExterno;
 	private String observGenerales;
 	private String observBaja;
@@ -81,7 +81,7 @@ public class Unidad implements Serializable {
 	private String codPostal;
 	private CatPais codPais;
 	private CatComunidadAutonoma codComunidad;
-  private CatLocalidad codLocalidad;
+    private CatLocalidad codLocalidad;
 	private String dirExtranjera;
 	private String locExtranjera;
 	private String observaciones;
@@ -91,10 +91,8 @@ public class Unidad implements Serializable {
   
   private Set<Unidad> historicoUO;
 
-	public Unidad(){
-
-	}
-
+  public Unidad(){
+  }
 
   @Index (name="DIR_UNIDAD_PK_I")
   @Column(name = "CODIGO", nullable = false, length = 9)

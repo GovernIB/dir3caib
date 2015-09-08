@@ -333,7 +333,6 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
               //Antes de eliminarla de la lista de los padres, hay que añadirla a la lista dest con oficinas en el caso que las tenga.
               Boolean tiene = oficinaEjb.tieneOficinasOrganismo(unidadRaiz.getCodigo());
               if(tiene){
-                  log.info(" El gobierno tiene oficinas");
                   unidadesDestConOficinas.add(unidadRaiz);
               }
               log.info("Existe");
