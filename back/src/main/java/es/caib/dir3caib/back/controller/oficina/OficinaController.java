@@ -194,19 +194,12 @@ public class OficinaController extends BaseController {
      */
     @RequestMapping(value = "/obtener", method = RequestMethod.POST)
     public String descargaOficinas(@ModelAttribute FechasForm fechasForm, HttpServletRequest request)throws Exception {
-        
-        /*log.info("fechaInicio: " + fechasForm.getFechaInicioFormateada(Dir3caibConstantes.FORMATO_FECHA));
-        log.info("fechaFin: " + fechasForm.getFechaFinFormateada(Dir3caibConstantes.FORMATO_FECHA));
-        
-          //Fechas de descarga
-        String fechaInicio = fechasForm.getFechaInicioFormateada(Dir3caibConstantes.FORMATO_FECHA);
-        String fechaFin = fechasForm.getFechaFinFormateada(Dir3caibConstantes.FORMATO_FECHA);*/
-        
-        
-        descargarOficinasWS(request, fechasForm.getFechaInicio(), fechasForm.getFechaFin());
-        
-        return "redirect:/oficina/ficheros ";
 
+        if(descargarOficinasWS(request, fechasForm.getFechaInicio(), fechasForm.getFechaFin())) {
+            return "redirect:/oficina/ficheros ";
+        }else{
+            return "redirect:/oficina/obtener";
+        }
     }
     
     /**
@@ -310,17 +303,25 @@ public class OficinaController extends BaseController {
      * @param fechaInicio
      * @param fechaFin
      */
-    public void descargarOficinasWS(HttpServletRequest request, Date fechaInicio, Date fechaFin) throws Exception {
+    public boolean descargarOficinasWS(HttpServletRequest request, Date fechaInicio, Date fechaFin) throws Exception {
 
         try{
-            importadorOficinas.descargarOficinasWS(fechaInicio, fechaFin);
-            Mensaje.saveMessageInfo(request, "Se han obtenido correctamente las oficinas");
+            String[] respuesta = importadorOficinas.descargarOficinasWS(fechaInicio, fechaFin);
+            if(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO.equals(respuesta[0])){
+                Mensaje.saveMessageInfo(request, "Se han obtenido correctamente las oficinas");
+                return true;
+            }else{
+                Mensaje.saveMessageError(request, "Ha ocurrido un error obtener las oficinas a través de WS: " + respuesta[1]);
+                return false;
+            }
         }catch(IOException ex){
             Mensaje.saveMessageError(request, "Ha ocurrido un error al descomprimir las oficinas");
             ex.printStackTrace();
+            return false;
         }catch (Exception e){
             Mensaje.saveMessageError(request, "Ha ocurrido un error obtener las oficinas a través de WS");
             e.printStackTrace();
+            return false;
         }
 
     }

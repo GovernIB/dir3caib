@@ -30,6 +30,7 @@
                             <!-- Solo mostramos las fechas si es desarrollo-->
                             <c:if test="${development}">
                                 <div class="page-header"><fmt:message key="dir3caib.fechas"/></div>
+                                <div class="row-fluid"><fmt:message key="dir3caib.info.fechas"/></div>
                             </c:if>
                             <form:form modelAttribute="oficina" method="post" cssClass="form-horizontal" onsubmit="return validateDates($('#fechaInicio'),$('#fechaFin'));">
                                 <fieldset>

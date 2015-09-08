@@ -98,4 +98,7 @@ public class Dir3caibConstantes {
     public static final String ESTADO_ENTIDAD_ANULADO= "A";
     public static final String ESTADO_ENTIDAD_TRANSITORIO= "T";
 
+    //codigo respuesta correcto ws descarga madrid
+    public static final String CODIGO_RESPUESTA_CORRECTO= "01";
+
 }

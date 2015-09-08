@@ -15,7 +15,7 @@ public interface ImportadorOficinasLocal {
 
   public ResultadosImportacion importarOficinas(boolean isUpdate) throws Exception;
 
-  public void descargarOficinasWS(Date fechaInicio, Date fechaFin) throws Exception;
+  public String[] descargarOficinasWS(Date fechaInicio, Date fechaFin) throws Exception;
 
   public void importarOficinasTask();
 

@@ -13,11 +13,14 @@ import es.caib.dir3caib.persistence.utils.Paginacion;
 import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
 import es.caib.dir3caib.utils.Configuracio;
 import es.caib.dir3caib.utils.Utils;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -44,7 +47,8 @@ import java.util.List;
 public class UnidadController extends BaseController{
 
     protected final Logger log = Logger.getLogger(getClass());
-    
+
+
     @EJB(mappedName = "dir3caib/ImportadorUnidadesEJB/local")
     private ImportadorUnidadesLocal importadorUnidades;
     
@@ -132,6 +136,7 @@ public class UnidadController extends BaseController{
     
     /**
      * Muestra los ficheros de unidades que hay en el directorio
+     *
      * @param request
      * @return 
      */
@@ -181,7 +186,7 @@ public class UnidadController extends BaseController{
           model.addAttribute("descarga", descarga);
         }
         model.addAttribute("development", Configuracio.isDevelopment());
-        model.addAttribute("unidad", new FechasForm());
+        model.addAttribute("fechasForm", new FechasForm());
         
         return "/unidad/unidadObtener";
     }
@@ -193,9 +198,11 @@ public class UnidadController extends BaseController{
     @RequestMapping(value = "/obtener", method = RequestMethod.POST)
     public String descargaUnidades(@ModelAttribute FechasForm fechasForm, HttpServletRequest request) throws Exception {
 
-        descargarUnidadesWS(request, fechasForm.getFechaInicio(), fechasForm.getFechaFin());
-         
-        return "redirect:/unidad/ficheros ";
+        if(descargarUnidadesWS(request, fechasForm.getFechaInicio(), fechasForm.getFechaFin())) {
+            return "redirect:/unidad/ficheros";
+        }else{
+            return "redirect:/unidad/obtener";
+        }
 
     }
     
@@ -291,16 +298,24 @@ public class UnidadController extends BaseController{
      * @param fechaInicio
      * @param fechaFin
      */     
-    public void descargarUnidadesWS(HttpServletRequest request, Date fechaInicio, Date fechaFin) throws Exception {
+    public boolean descargarUnidadesWS(HttpServletRequest request, Date fechaInicio, Date fechaFin) throws Exception {
         try{
-            importadorUnidades.descargarUnidadesWS(fechaInicio, fechaFin);
-            Mensaje.saveMessageInfo(request, "Se han obtenido correctamente las unidades");
+            String[] respuesta= importadorUnidades.descargarUnidadesWS(fechaInicio, fechaFin);
+            if(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO.equals(respuesta[0])){
+                Mensaje.saveMessageInfo(request, "Se han obtenido correctamente las unidades");
+                return true;
+            }else{
+                Mensaje.saveMessageError(request, "Ha ocurrido un error al descargar las unidades a través de WS: " + respuesta[1]);
+                return false;
+            }
         }catch(IOException ex){
             Mensaje.saveMessageError(request, "Ha ocurrido un error al descomprimir las unidades");
-            ex.printStackTrace(); 
+            ex.printStackTrace();
+            return false;
         }catch (Exception e){
             Mensaje.saveMessageError(request, "Ha ocurrido un error al descargar las unidades a través de WS");
             e.printStackTrace();
+            return false;
         }
     }
 

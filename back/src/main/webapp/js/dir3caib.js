@@ -223,11 +223,13 @@ function actualizarSelectTraduccion(url, idSelect, seleccion, valorSelected, tod
  * @param endDate fecha de fin
  */
 function validateDates(startDate, endDate) {
-
+  /* if($.datepicker.parseDate('dd/mm/yy', endDate.val()) != null && $.datepicker.parseDate('dd/mm/yy', startDate.val())==null){
+        alert("Debe indicar también la fecha de inicio");
+        return false;
+   }*/
    if ($.datepicker.parseDate('dd/mm/yy', startDate.val()) > $.datepicker.parseDate('dd/mm/yy', endDate.val())) {
        alert("La Fecha de Inicio debe ser inferior a la Fecha Fin");
        return false;
-
     }
 }
 

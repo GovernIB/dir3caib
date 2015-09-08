@@ -872,9 +872,10 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
    * @param fechaInicio
    * @param fechaFin
    */
-  public void descargarUnidadesWS(Date fechaInicio, Date fechaFin) throws Exception {
+  public String[] descargarUnidadesWS(Date fechaInicio, Date fechaFin) throws Exception {
 
     byte[] buffer = new byte[1024];
+    String[] resp = new String[2];
 
 
     log.info("Fecha Inicio " + fechaInicio);
@@ -893,11 +894,10 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
     }
 
     Date hoy = new Date();
-    //Si no indican fechas es una sincro desde el principio de los tiempos.
-      /*if(fechaInicio == null){
-        descarga.setFechaInicio(hoy);
-      }*/
-
+    /* El funcionamiento de los ws de madrid no permiten que la fecha de inicio sea null si la fecha fin es distinta de null.
+       Descarga incremental: Hay dos opciones, incluir solo la fecha de inicio que devolverá la información que existe
+       desde la fecha indicada hasta la fecha en la que se realiza la petición y la otra opción es incluir
+       fecha de inicio y fecha fin. Esta devuelve la información añadida o modificada entre esas dos fechas.*/
     if (fechaFin == null) {
       descarga.setFechaFin(hoy);
     }
@@ -939,9 +939,17 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
       RespuestaWS respuesta = service.exportar(parametros);
 
       Base64 decoder = new Base64();
-
       log.info("Codigo: " + respuesta.getCodigo());
       log.info("Descripcion: " + respuesta.getDescripcion());
+
+        //Montamos la respuesta del ws para controlar los errores a mostrar
+      resp[0] = respuesta.getCodigo();
+      resp[1] = respuesta.getDescripcion();
+
+      if (!respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO)){
+          descargaEjb.deleteByTipo(Dir3caibConstantes.UNIDAD);
+          return resp;
+      }
 
       // definimos el archivo zip a descargar
       String archivoUnidadZip = ruta + Dir3caibConstantes.UNIDADES_ARCHIVO_ZIP + descarga.getCodigo() + ".zip";
@@ -985,7 +993,7 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
       zis.closeEntry();
       zis.close();
 
-
+     return resp;
     }catch (Exception e){
        descargaEjb.deleteByTipo(Dir3caibConstantes.UNIDAD);
         throw new Exception(e.getMessage());
@@ -1012,7 +1020,7 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
             Date fechaFin = new Date();
 
             // Obtiene los archivos csv via WS
-            descargarUnidadesWS(fechaInicio, fechaFin);
+           descargarUnidadesWS(fechaInicio, fechaFin);
 
             // importamos el catálogo a la bd.
             importarUnidades();

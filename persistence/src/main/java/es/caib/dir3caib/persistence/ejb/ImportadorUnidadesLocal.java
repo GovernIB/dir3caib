@@ -16,7 +16,7 @@ public interface ImportadorUnidadesLocal {
 
 
   
-  public void descargarUnidadesWS(Date fechaInicio, Date fechaFin) throws Exception;
+  public String[] descargarUnidadesWS(Date fechaInicio, Date fechaFin) throws Exception;
   
   public ResultadosImportacion importarUnidades() throws Exception;
 

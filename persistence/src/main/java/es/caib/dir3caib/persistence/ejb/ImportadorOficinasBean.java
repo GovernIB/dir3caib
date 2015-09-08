@@ -927,10 +927,10 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
    * @param fechaFin
    */
   @Override
-  public void descargarOficinasWS(Date fechaInicio, Date fechaFin) throws Exception {
+  public String[] descargarOficinasWS(Date fechaInicio, Date fechaFin) throws Exception {
 
       byte[] buffer = new byte[1024];
-
+      String[] resp = new String[2];
 
      //Definimos el formato de la fecha para las descargas de los WS.
       log.info( "Fecha Inicio " + fechaInicio);
@@ -1000,6 +1000,15 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
         log.info("Codigo: " + respuesta.getCodigo());
         log.info("Descripcion: " + respuesta.getDescripcion());
 
+        //Montamos la respuesta del ws para controlar los errores a mostrar
+        resp[0] = respuesta.getCodigo();
+        resp[1] = respuesta.getDescripcion();
+
+        if (!respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO)){
+          descargaEjb.deleteByTipo(Dir3caibConstantes.OFICINA);
+          return resp;
+        }
+
         // Realizamos una copia del archivo zip de la ultima descarga
         String archivoOficinaZip = ruta + Dir3caibConstantes.OFICINAS_ARCHIVO_ZIP + descarga.getCodigo() + ".zip";
         File file = new File(archivoOficinaZip);
@@ -1043,7 +1052,7 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
         zis.closeEntry();
         zis.close();
 
-
+        return resp;
       }catch(Exception e){
         descargaEjb.deleteByTipo(Dir3caibConstantes.OFICINA);
         throw new Exception(e.getMessage());
