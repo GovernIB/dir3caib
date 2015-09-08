@@ -396,6 +396,16 @@ public class OficinaController extends BaseController {
        }
        return codigosValor;
     }
+
+    @RequestMapping(value = "/descarga/list", method = RequestMethod.GET)
+    public ModelAndView descargaOficinasList(HttpServletRequest request) throws Exception {
+
+        ModelAndView mav = new ModelAndView("/descargaList");
+
+        mav.addObject("descargas" , descargasByTipo(Dir3caibConstantes.OFICINA));
+
+        return mav;
+    }
      
      
     @InitBinder

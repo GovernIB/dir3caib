@@ -38,6 +38,7 @@
                               <a id="drop1" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"><fmt:message key="menu.oficina"/><b class="caret"></b></a>
                               <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
                                   <li><a href="<c:url value="/oficina/ficheros"/>"><fmt:message key="menu.listado.ficheros"/></a></li>
+                                  <li><a href="<c:url value="/oficina/descarga/list"/>"><fmt:message key="menu.listado.descargas"/></a></li>
                                   <li class="divider"></li>
                                   <c:if test="${loginInfo.development== true}">
                                       <li><a href="<c:url value="/oficina/obtener"/>"><fmt:message key="oficina.obtener"/></a></li>
@@ -54,6 +55,7 @@
                               <a id="drop2" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"><fmt:message key="menu.unidad"/><b class="caret"></b></a>
                               <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
                                   <li><a href="<c:url value="/unidad/ficheros"/>"><fmt:message key="menu.listado.ficheros"/></a></li>
+                                  <li><a href="<c:url value="/unidad/descarga/list"/>"><fmt:message key="menu.listado.descargas"/></a></li>
                                   <li class="divider"></li>
                                   <c:if test="${loginInfo.development== true}">
                                       <li><a href="<c:url value="/unidad/obtener"/>"><fmt:message key="unidad.obtener"/></a></li>
@@ -70,6 +72,7 @@
                               <a id="drop3" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"><fmt:message key="menu.catalogo"/><b class="caret"></b></a>
                               <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
                                   <li><a href="<c:url value="/catalogo/ficheros"/>"><fmt:message key="menu.listado.ficheros"/></a></li>
+                                  <li><a href="<c:url value="/catalogo/descarga/list"/>"><fmt:message key="menu.listado.descargas"/></a></li>
                                   <li class="divider"></li>
                                   <li><a href="<c:url value="/catalogo/obtener"/>"><fmt:message key="catalogo.obtener"/></a></li>
                               </ul>

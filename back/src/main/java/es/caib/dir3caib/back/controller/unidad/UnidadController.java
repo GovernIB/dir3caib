@@ -401,6 +401,16 @@ public class UnidadController extends BaseController{
       return codigosValor;
     }
 
+    @RequestMapping(value = "/descarga/list", method = RequestMethod.GET)
+    public ModelAndView descargaUnidadesList(HttpServletRequest request) throws Exception {
+
+        ModelAndView mav = new ModelAndView("/descargaList");
+
+        mav.addObject("descargas" , descargasByTipo(Dir3caibConstantes.UNIDAD));
+
+        return mav;
+    }
+
      
     @InitBinder
     public void initBinder(WebDataBinder binder) {

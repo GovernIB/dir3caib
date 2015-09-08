@@ -53,6 +53,15 @@ public class DescargaBean extends BaseEjbJPA<Descarga, Long> implements Descarga
     }
 
     @Override
+    @SuppressWarnings(value = "unchecked")
+    public List<Descarga> getAllByTipo(String tipo) throws Exception {
+
+        Query query =em.createQuery("Select descarga from Descarga as descarga where descarga.tipo=? order by descarga.codigo");
+        query.setParameter(1, tipo);
+        return query.getResultList();
+    }
+
+    @Override
     public Long getTotal() throws Exception {
 
         Query q = em.createQuery("Select count(descarga.codigo) from Descarga as descarga");

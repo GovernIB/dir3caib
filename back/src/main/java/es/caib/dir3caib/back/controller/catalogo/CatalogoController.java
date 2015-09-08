@@ -288,7 +288,15 @@ public class CatalogoController extends BaseController{
         }
     }
 
+    @RequestMapping(value = "/descarga/list", method = RequestMethod.GET)
+    public ModelAndView descargaCatalogoList(HttpServletRequest request) throws Exception {
 
+        ModelAndView mav = new ModelAndView("/descargaList");
+
+        mav.addObject("descargas" , descargasByTipo(Dir3caibConstantes.CATALOGO));
+
+        return mav;
+    }
 
 
      

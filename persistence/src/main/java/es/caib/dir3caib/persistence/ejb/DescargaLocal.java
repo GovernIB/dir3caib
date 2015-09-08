@@ -3,6 +3,7 @@ package es.caib.dir3caib.persistence.ejb;
 import es.caib.dir3caib.persistence.model.Descarga;
 
 import javax.ejb.Local;
+import java.util.List;
 
 /**
  * Created by Fundació BIT.
@@ -14,6 +15,8 @@ import javax.ejb.Local;
 public interface DescargaLocal extends BaseEjb<Descarga, Long> {
   
   public Descarga findByTipo(String tipo) throws Exception;
+
+  public List<Descarga> getAllByTipo(String tipo) throws Exception;
   
   public void deleteByTipo(String tipo) throws Exception;
 
