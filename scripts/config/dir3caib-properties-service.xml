@@ -6,6 +6,7 @@
                  especials requerides en l'entorn de la CAIB (Govern Balear) si es true -->
 		    es.caib.dir3caib.iscaib=false
             es.caib.dir3caib.development=false
+            es.caib.dir3caib.showtimestamp=false
 		
 		    <!-- Dialecte de la BBDD -->
 		    # es.caib.dir3caib.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect

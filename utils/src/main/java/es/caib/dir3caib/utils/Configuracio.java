@@ -63,4 +63,8 @@ public class Configuracio implements Constants {
   public static String getCronExpression() {
     return System.getProperty(DIR3CAIB_PROPERTY_BASE +  "cronExpression"); 
   }
+
+  public static boolean showTimeStamp() {
+        return Boolean.getBoolean(DIR3CAIB_PROPERTY_BASE + "showtimestamp");
+    }
 }
