@@ -4,6 +4,6 @@
 %><%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" 
 %>
 <div class="container row-fluid">
-    <div class="pull-left dir3caib-footer">DIR3CAIB - &copy; <fmt:message key="dir3caib.titulo"/> - <fmt:message key="dir3caib.version"/> <%=Versio.VERSIO + (Configuracio.isCAIB()?"-caib": "")+ " " + (Configuracio.showTimeStamp()?"2015-09-08 15:00" : "")%></div>
+    <div class="pull-left dir3caib-footer">DIR3CAIB - &copy; <fmt:message key="dir3caib.titulo"/> - <fmt:message key="dir3caib.version"/> <%=Versio.VERSIO + (Configuracio.isCAIB()?"-caib": "")+ " " + (Configuracio.showTimeStamp()?"2015-09-09 15:00" : "")%></div>
     <div class="pull-right govern-footer"> <img src="<c:url value="/img/govern-logo-neg.png"/>" width="129" height="30" alt="Govern de les Illes Balears" /></div>
 </div>
