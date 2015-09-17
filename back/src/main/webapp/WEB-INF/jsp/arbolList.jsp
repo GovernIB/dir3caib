@@ -24,20 +24,71 @@
                              <strong><spring:message code="unidad.organigrama.vacio"/></strong>
                         </div>
                     </c:if>
+
+
+                    <!-- LEYENDA -->
+                  <%--  <div class="col-xs-4 button-right">
+                        <div class="box-header well">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <i class="fa fa-comment-o"></i> <strong><spring:message code="dir3caib.leyenda"/></strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer">
+                                <div class="row">
+                                    <div class="col-xs-6 pad-bottom5">
+                                        <button type="button" class="btn-primary btn-xs"><i class="fa fa-globe"></i> <spring:message code="dir3caib.unidadOrganica"/></button>
+                                    </div>
+
+                                    <div class="col-xs-6 pad-bottom5">
+                                        <button type="button" class="btn-warning btn-xs"><i class="fa fa-home"></i> <spring:message code="dir3caib.oficina.principal"/></button>
+                                    </div>
+
+
+                                    <div class="col-xs-6 pad-bottom5">
+                                        <button type="button" class="btn-ofaux btn-xs"><i class="fa fa-home"></i> <spring:message code="dir3caib.oficina.auxiliar"/></button>
+                                    </div>
+
+
+                                    <div class="col-xs-6 pad-bottom5">
+                                        <button type="button" class="btn-success btn-xs"><i class="fa fa-institution"></i> <spring:message code="dir3caib.oficina.funcional"/></button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>--%>
                     <c:if test="${not empty nodo.hijos}">
-                    <div class="tree">
+                        <div class="tree">
                             <ul>
                                 <li>
-                                     <span class="badge-arbre btn-success"><i class=""></i> ${nodo.id} -${nodo.nombre}</span>
-                                     <jsp:include page="nodo.jsp">
-                                         <jsp:param name="color" value="badge-arbre btn-primary"/>
-                                     </jsp:include>
-
-                                </li>
+                                    <span class="badge-arbre btn-primary"><i class=""></i> ${nodo.id} -${nodo.nombre}</span>
+                                    <!--Pintamos oficinas responsables -->
+                                    <ul>
+                                        <c:forEach var="ofiDependiente" items="${nodo.oficinasDependientes}">
+                                            <li><span class="badge-arbre btn-warning"><i class="fa fa-home"></i> ${ofiDependiente.id} -${ofiDependiente.nombre}</span>
+                                                <!-- Pintamos las auxiliares -->
+                                                <c:if test="${not empty ofiDependiente.oficinasAuxiliares }">
+                                                    <ul>
+                                                        <c:forEach var="ofiAuxiliar" items="${ofiDependiente.oficinasAuxiliares}">
+                                                            <li><span class="badge-arbre btn-ofaux"><i class="fa fa-home"></i> ${ofiAuxiliar.id} -${ofiAuxiliar.nombre}</span></li>
+                                                        </c:forEach>
+                                                    </ul>
+                                                </c:if>
+                                            </li>
+                                         </c:forEach>
+                                         <!-- FUNCIONALES -->
+                                         <c:forEach var="ofiFuncional" items="${nodo.oficinasFuncionales}">
+                                            <li><span class="badge-arbre btn-success"><i class="fa fa-institution"></i> ${ofiFuncional.id} -${ofiFuncional.nombre}</span></li>
+                                         </c:forEach>
+                                    </ul>
+                                    <jsp:include page="nodo.jsp"/>
+                               </li>
                             </ul>
-                    </div>
+                        </div>
                     </c:if>
-
                 </div>
             </div>
         </div>

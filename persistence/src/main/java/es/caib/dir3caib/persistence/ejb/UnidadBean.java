@@ -251,6 +251,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         return getObjetoBasicoList(q.getResultList());
     }
 
+
     /*
       * Método que devuelve el árbol de unidades de la unidad indicada por codigo,
       * teniendo en cuenta la fecha de la ultima actualización de regweb.

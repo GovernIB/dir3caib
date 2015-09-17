@@ -1,6 +1,6 @@
-﻿<%@page import="org.springframework.web.util.WebUtils"
-%><%@page import="org.springframework.context.i18n.LocaleContextHolder"
-%><%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" 
+﻿<%@page import="org.springframework.context.i18n.LocaleContextHolder"
+%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"
 %><%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" 
 %><%
    session.setAttribute("lang", LocaleContextHolder.getLocale().getLanguage());
@@ -17,6 +17,9 @@
     <link rel="stylesheet" href="<c:url value="/css/jquery-ui-1.10.1.custom.css"/>" type="text/css"  />
     <link rel="stylesheet" href="<c:url value="/css/bootstrap-responsive.css"/>" type="text/css"  />
     <link rel="stylesheet" href="<c:url value="/css/dir3caib.css"/>" type="text/css"  />
+
+    <!-- Add custom CSS here -->
+    <link href="<c:url value="/font-awesome/css/font-awesome.min.css"/>" rel="stylesheet">
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>

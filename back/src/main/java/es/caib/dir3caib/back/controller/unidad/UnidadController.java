@@ -13,14 +13,11 @@ import es.caib.dir3caib.persistence.utils.Paginacion;
 import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
 import es.caib.dir3caib.utils.Configuracio;
 import es.caib.dir3caib.utils.Utils;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -66,6 +63,12 @@ public class UnidadController extends BaseController{
     
     @EJB(mappedName = "dir3caib/DescargaEJB/local")
     protected DescargaLocal descargaEjb;
+
+    @EJB(mappedName = "dir3caib/OficinaEJB/local")
+    protected OficinaLocal oficinaEjb;
+
+    @EJB(mappedName = "dir3caib/RelacionOrganizativaOfiEJB/local")
+    protected RelacionOrganizativaOfiLocal relacionOrganizativaOfiEjb;
 
 
     // Indicamos el formato de fecha dd/MM/yyyy hh:mm:ss
@@ -345,13 +348,40 @@ public class UnidadController extends BaseController{
    private void arbolUnidades(String idUnidad, Nodo nodo, String estado) throws Exception {
 
           ObjetoBasico unidadPadre = unidadEjb.findReduceUnidad(idUnidad, estado);
+
+          // Nodo que se està tratando (representa una unidad)
           nodo.setId(unidadPadre.getCodigo());
           nodo.setNombre(unidadPadre.getDenominacion());
           nodo.setIdPadre(idUnidad);
           nodo.setEstado(unidadPadre.getDescripcionEstado());
 
+          //OBTENEMOS LAS OFICINAS DEPENDIENTES DEL NODO TRATADO
+          List<ObjetoBasico> oficinasDependientes=oficinaEjb.oficinasDependientes(unidadPadre.getCodigo(),estado);
+          List<Nodo> oficinasDependientesTransf= new ArrayList<Nodo>();
+          for(ObjetoBasico oficina: oficinasDependientes){
+              // Obtenemos las oficinas auxliares del nodo oficina que estamos tratando
+              List<ObjetoBasico> oficinasAuxiliares = oficinaEjb.oficinasAuxiliares(oficina.getCodigo(), estado);
+              List<Nodo> oficinasAuxTransformadas = transformarOficinasAuxiliares(oficinasAuxiliares);
+
+
+              // Configuramos los datos del nodo (Representa una oficina)
+              Nodo nodoOficina= new Nodo();
+              nodoOficina.setId(oficina.getCodigo());
+              nodoOficina.setNombre(oficina.getDenominacion());
+              nodoOficina.setOficinasAuxiliares(oficinasAuxTransformadas);
+              oficinasDependientesTransf.add(nodoOficina);
+          }
+          //Añadimos las oficinas dependientes al nodo que se està tratando.
+          nodo.setOficinasDependientes(oficinasDependientesTransf);
+
+          //Oficinas Funcionales
+          List<RelacionOrganizativaOfi> oficinasFuncionales = relacionOrganizativaOfiEjb.getOrganizativasByUnidadEstado(unidadPadre.getCodigo(), estado);
+          nodo.setOficinasFuncionales(transformarOficinasFuncionales(oficinasFuncionales));
+
           List<Nodo> hijos = new ArrayList<Nodo>();
           List<ObjetoBasico> unidadesHijas = unidadEjb.hijos(idUnidad,estado);
+
+
           for(ObjetoBasico unidadHija: unidadesHijas){
             Nodo hijo = new Nodo();
             hijo.setId(unidadHija.getCodigo());
@@ -418,6 +448,28 @@ public class UnidadController extends BaseController{
         CustomDateEditor dateEditor = new CustomDateEditor(sdf, true);
 
         binder.registerCustomEditor(java.util.Date.class, dateEditor);
+    }
+
+    private List<Nodo> transformarOficinasAuxiliares(List<ObjetoBasico> oficinasAtransformar) throws Exception {
+        List<Nodo> nodos = new ArrayList<Nodo>();
+        for(ObjetoBasico obj: oficinasAtransformar){
+            Nodo nodo = new Nodo();
+            nodo.setId(obj.getCodigo());
+            nodo.setNombre(obj.getDenominacion());
+            nodos.add(nodo);
+        }
+        return nodos;
+    }
+
+    private List<Nodo> transformarOficinasFuncionales(List<RelacionOrganizativaOfi> oficinasAtransformar) throws Exception {
+        List<Nodo> nodos = new ArrayList<Nodo>();
+        for(RelacionOrganizativaOfi obj: oficinasAtransformar){
+            Nodo nodo = new Nodo();
+            nodo.setId(obj.getOficina().getCodigo());
+            nodo.setNombre(obj.getOficina().getDenominacion());
+            nodos.add(nodo);
+        }
+        return nodos;
     }
 
 }

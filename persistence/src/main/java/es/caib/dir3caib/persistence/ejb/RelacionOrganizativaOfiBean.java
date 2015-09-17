@@ -1,16 +1,15 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.RelacionOrganizativaOfi;
-
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.SecurityDomain;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
-import javax.annotation.security.RolesAllowed;
 
 /**
  * Created by Fundació BIT.
@@ -89,6 +88,16 @@ public class RelacionOrganizativaOfiBean extends BaseEjbJPA<RelacionOrganizativa
         Query q = em.createQuery("Select relacionOrganizativaOfi from RelacionOrganizativaOfi as relacionOrganizativaOfi ");
         q.setFirstResult(inicio);
         q.setMaxResults(RESULTADOS_PAGINACION);
+
+        return q.getResultList();
+    }
+
+    public List<RelacionOrganizativaOfi> getOrganizativasByUnidadEstado(String codigo, String estado) throws Exception{
+        Query q = em.createQuery("Select relacionOrganizativaOfi from RelacionOrganizativaOfi as relacionOrganizativaOfi where " +
+                "relacionOrganizativaOfi.unidad.codigo =:codigo and relacionOrganizativaOfi.estado.descripcionEstadoEntidad =:estado");
+
+        q.setParameter("codigo",codigo);
+        q.setParameter("estado",estado);
 
         return q.getResultList();
     }

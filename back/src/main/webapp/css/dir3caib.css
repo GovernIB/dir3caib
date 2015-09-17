@@ -432,7 +432,92 @@ table th {
     background-color: #FFE835;
     border-color: #FFE744;
 }
+.btn-llibre {
+    color: #fff;
+    background-color: #b374d1;
+    border-color: #a357c7;
+}
+.btn-llibre:hover,
+.btn-llibre:focus,
+.btn-llibre:active,
+.btn-llibre.active{
+    color: #fff;
+    background-color: #ac5fd0;
+    border-color: #a357c7;
+}
+.btn-llibre-llegenda {
+    color: #fff;
+    background-color: #b374d1;
+    border-color: #B267D5;
+    cursor: default;
+}
+.btn-llibre-llegenda:hover,
+.btn-llibre-llegenda:focus,
+.btn-llibre-llegenda:active,
+.btn-llibre-llegenda.active{
+    color: #fff;
+    background-color: #b374d1;
+    border-color: #B267D5;
+}
+.btn-danger-llegenda {
+    color: #fff;
+    background-color: #d9534f;
+    border-color: #d43f3a;
+    cursor: default;
+}
+.btn-danger-llegenda:hover,
+.btn-danger-llegenda:focus,
+.btn-danger-llegenda:active,
+.btn-danger-llegenda.active{
+    color: #fff;
+    background-color: #d9534f;
+    border-color: #B267D5;
+}
+.btn-quart {
+    color: #fff;
+    background-color: #b1b0b0;
+    border-color: #959494;
+}
+.btn-quart:hover,
+.btn-quart:focus,
+.btn-quart:active,
+.btn-quart.active{
+    color: #fff;
+    background-color: #9f9f9f;
+    border-color: #959494;
+}
+.btn-ofaux {
+    color: #999999;
+    background-color: #FFD700;
+    border-color: #CBB11B;
+}
+.btn-ofaux:hover,
+.btn-ofaux:focus,
+.btn-ofaux:active,
+.btn-ofaux.active{
+    color: #999999;
+    background-color: #E7C713;
+    border-color: #CBB11B;
+}
+.btn-oficinafuncional {
+    color: #fff;
+    background-color: #83ef47;
+    border-color: #7af736;
+}
+.btn-oficinafuncional:hover,
+.btn-oficinafuncional:focus,
+.btn-oficinafuncional:active,
+.btn-oficinafuncional.active{
+    color: #fff;
+    background-color: #73e136;
+    border-color: #7af736;
+}
 .text-gris{
     color: #333;
+}
+a.text-gris:hover,
+a.text-gris:focus {
+    color: #333;
+    text-decoration: none;
 }
 /* FI ARBRE ORGANISMES */
