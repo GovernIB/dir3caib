@@ -79,13 +79,15 @@
                                                 </c:if>
                                             </li>
                                          </c:forEach>
+
                                          <!-- FUNCIONALES -->
+
                                          <c:forEach var="ofiFuncional" items="${nodo.oficinasFuncionales}">
                                             <li><span class="badge-arbre btn-success"><i class="fa fa-institution"></i> ${ofiFuncional.id} -${ofiFuncional.nombre}</span></li>
                                          </c:forEach>
+                                         <jsp:include page="nodo.jsp"/>
                                     </ul>
-                                    <jsp:include page="nodo.jsp"/>
-                               </li>
+                                </li>
                             </ul>
                         </div>
                     </c:if>
