@@ -520,4 +520,12 @@ a.text-gris:focus {
     color: #333;
     text-decoration: none;
 }
+.llegenda{
+	float: right;
+	width: 14.52991452991453%;
+	margin-right: 30px;
+}
+.pad-bottom5 {
+    padding-bottom: 5px;
+}
 /* FI ARBRE ORGANISMES */

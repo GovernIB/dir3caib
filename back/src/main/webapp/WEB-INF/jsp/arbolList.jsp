@@ -26,36 +26,32 @@
                     </c:if>
 
 
-                   <%-- <!-- LEYENDA -->
-                    <div class="box span4 button-right">
+                    <!-- LEYENDA -->
+                    <div class="box llegenda">
                         <div class="box-header well">
-                           <div class="row">
-                                    <div class="col-xs-12">
-                                        <i class="fa fa-comment-o"></i> <strong><spring:message code="dir3caib.leyenda"/></strong>
-                                    </div>
-                           </div>
+							<div class="col-xs-12">
+								<i class="fa fa-comment-o"></i> <strong><spring:message code="dir3caib.leyenda"/></strong>
+							</div>
                         </div>
 
                         <div class="box-content">
-                            <div class="row">
-                                <div class="col-xs-6 pad-bottom5">
-                                    <button type="button" class="btn-primary btn-xs"><i class="fa fa-globe"></i> <spring:message code="dir3caib.unidadOrganica"/></button>
-                                </div>
+							<div class="col-xs-6 pad-bottom5">
+								<span class="badge-arbre btn-primary"><i class="fa fa-globe"></i> <spring:message code="dir3caib.unidadOrganica"/></span>
+							</div>
 
-                                <div class="col-xs-6 pad-bottom5">
-                                    <button type="button" class="btn-warning btn-xs"><i class="fa fa-home"></i> <spring:message code="dir3caib.oficina.principal"/></button>
-                                </div>
+							<div class="col-xs-6 pad-bottom5">
+								<span class="badge-arbre btn-warning"><i class="fa fa-home"></i> <spring:message code="dir3caib.oficina.principal"/></span>
+							</div>
 
-                                <div class="col-xs-6 pad-bottom5">
-                                    <button type="button" class="btn-ofaux btn-xs"><i class="fa fa-home"></i> <spring:message code="dir3caib.oficina.auxiliar"/></button>
-                                </div>
+							<div class="col-xs-6 pad-bottom5">
+								<span class="badge-arbre btn-ofaux"><i class="fa fa-home"></i> <spring:message code="dir3caib.oficina.auxiliar"/></span>
+							</div>
 
-                                <div class="col-xs-6 pad-bottom5">
-                                    <button type="button" class="btn-success btn-xs"><i class="fa fa-institution"></i> <spring:message code="dir3caib.oficina.funcional"/></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>--%>
+							<div class="col-xs-6 pad-bottom5">
+								<span class="badge-arbre btn-success"><i class="fa fa-institution"></i> <spring:message code="dir3caib.oficina.funcional"/></span>
+							</div>
+						</div>
+                    </div>
                     <c:if test="${not empty nodo.hijos}">
                         <div class="tree">
                             <ul>
