@@ -94,7 +94,7 @@ public class RelacionOrganizativaOfiBean extends BaseEjbJPA<RelacionOrganizativa
 
     public List<RelacionOrganizativaOfi> getOrganizativasByUnidadEstado(String codigo, String estado) throws Exception{
         Query q = em.createQuery("Select relacionOrganizativaOfi from RelacionOrganizativaOfi as relacionOrganizativaOfi where " +
-                "relacionOrganizativaOfi.unidad.codigo =:codigo and relacionOrganizativaOfi.estado.descripcionEstadoEntidad =:estado");
+                "relacionOrganizativaOfi.unidad.codigo =:codigo and relacionOrganizativaOfi.estado.descripcionEstadoEntidad =:estado order by relacionOrganizativaOfi.oficina.codigo");
 
         q.setParameter("codigo",codigo);
         q.setParameter("estado",estado);
