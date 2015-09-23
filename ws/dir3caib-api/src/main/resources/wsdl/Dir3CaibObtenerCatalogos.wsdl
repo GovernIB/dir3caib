@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="Dir3CaibObtenerCatalogosWsService" targetNamespace="http://catalogo.ws.dir3caib.caib.es/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://catalogo.ws.dir3caib.caib.es/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+<wsdl:definitions name="Dir3CaibObtenerCatalogosWsService" targetNamespace="http://catalogo.ws.dir3caib.caib.es/"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://catalogo.ws.dir3caib.caib.es/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
   <wsdl:types>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://catalogo.ws.dir3caib.caib.es/" elementFormDefault="unqualified" targetNamespace="http://catalogo.ws.dir3caib.caib.es/" version="1.0">
 <xs:element name="getVersion" type="tns:getVersion"/>
@@ -20,6 +22,8 @@
 <xs:element name="obtenerCatPaisResponse" type="tns:obtenerCatPaisResponse"/>
 <xs:element name="obtenerCatProvincia" type="tns:obtenerCatProvincia"/>
 <xs:element name="obtenerCatProvinciaResponse" type="tns:obtenerCatProvinciaResponse"/>
+<xs:element name="obtenerCatServicio" type="tns:obtenerCatServicio"/>
+<xs:element name="obtenerCatServicioResponse" type="tns:obtenerCatServicioResponse"/>
 <xs:complexType name="obtenerCatComunidadAutonoma">
     <xs:sequence/>
   </xs:complexType>
@@ -108,6 +112,20 @@
       <xs:element minOccurs="0" name="descripcionEstadoEntidad" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
+<xs:complexType name="obtenerCatServicio">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="obtenerCatServicioResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:servicio"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="servicio">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codServicio" type="xs:long"/>
+      <xs:element minOccurs="0" name="descServicio" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
 <xs:complexType name="obtenerCatPais">
     <xs:sequence/>
   </xs:complexType>
@@ -186,6 +204,10 @@
     <wsdl:part name="parameters" element="tns:obtenerCatComunidadAutonomaResponse">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="obtenerCatServicio">
+    <wsdl:part name="parameters" element="tns:obtenerCatServicio">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="obtenerCatComunidadAutonoma">
     <wsdl:part name="parameters" element="tns:obtenerCatComunidadAutonoma">
     </wsdl:part>
@@ -208,6 +230,10 @@
   </wsdl:message>
   <wsdl:message name="obtenerCatEntidadGeografica">
     <wsdl:part name="parameters" element="tns:obtenerCatEntidadGeografica">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatServicioResponse">
+    <wsdl:part name="parameters" element="tns:obtenerCatServicioResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="obtenerCatNivelAdministracionResponse">
@@ -249,6 +275,12 @@
       <wsdl:input name="obtenerCatEstadoEntidad" message="tns:obtenerCatEstadoEntidad">
     </wsdl:input>
       <wsdl:output name="obtenerCatEstadoEntidadResponse" message="tns:obtenerCatEstadoEntidadResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatServicio">
+      <wsdl:input name="obtenerCatServicio" message="tns:obtenerCatServicio">
+    </wsdl:input>
+      <wsdl:output name="obtenerCatServicioResponse" message="tns:obtenerCatServicioResponse">
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="obtenerCatPais">
@@ -332,6 +364,15 @@
         <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output name="obtenerCatPaisResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatServicio">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="obtenerCatServicio">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="obtenerCatServicioResponse">
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
