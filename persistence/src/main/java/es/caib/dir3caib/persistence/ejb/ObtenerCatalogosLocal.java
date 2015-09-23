@@ -1,6 +1,9 @@
 package es.caib.dir3caib.persistence.ejb;
 
-import es.caib.dir3caib.persistence.model.*;
+import es.caib.dir3caib.persistence.model.CatEstadoEntidad;
+import es.caib.dir3caib.persistence.model.CatNivelAdministracion;
+import es.caib.dir3caib.persistence.model.CatPais;
+import es.caib.dir3caib.persistence.model.Servicio;
 import es.caib.dir3caib.persistence.model.ws.CatComunidadAutonomaTF;
 import es.caib.dir3caib.persistence.model.ws.CatEntidadGeograficaTF;
 import es.caib.dir3caib.persistence.model.ws.CatLocalidadTF;
@@ -32,5 +35,6 @@ public interface ObtenerCatalogosLocal {
 
     public List<CatEntidadGeograficaTF> obtenerCatEntidadGeografica() throws Exception;
 
+    public List<Servicio> obtenerCatServicio() throws Exception;
 
 }

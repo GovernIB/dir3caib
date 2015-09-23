@@ -4,6 +4,7 @@ import es.caib.dir3caib.persistence.ejb.ObtenerCatalogosLocal;
 import es.caib.dir3caib.persistence.model.CatEstadoEntidad;
 import es.caib.dir3caib.persistence.model.CatNivelAdministracion;
 import es.caib.dir3caib.persistence.model.CatPais;
+import es.caib.dir3caib.persistence.model.Servicio;
 import es.caib.dir3caib.persistence.model.ws.CatComunidadAutonomaTF;
 import es.caib.dir3caib.persistence.model.ws.CatEntidadGeograficaTF;
 import es.caib.dir3caib.persistence.model.ws.CatLocalidadTF;
@@ -11,7 +12,6 @@ import es.caib.dir3caib.persistence.model.ws.CatProvinciaTF;
 import es.caib.dir3caib.persistence.utils.Versio;
 import es.caib.dir3caib.utils.Configuracio;
 import es.caib.dir3caib.utils.Constants;
-
 import org.jboss.ejb3.annotation.SecurityDomain;
 import org.jboss.wsf.spi.annotation.TransportGuarantee;
 import org.jboss.wsf.spi.annotation.WebContext;
@@ -22,7 +22,6 @@ import javax.ejb.Stateless;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
-
 import java.util.List;
 
 /**
@@ -149,5 +148,17 @@ public class Dir3CaibObtenerCatalogosImpl implements Dir3CaibObtenerCatalogosWs 
     @RolesAllowed({ Constants.DIR_ADMIN })
     public List<CatEntidadGeograficaTF> obtenerCatEntidadGeografica() throws Exception{
          return  obtenerCatalogosEjb.obtenerCatEntidadGeografica();
+    }
+
+    /**
+     * Obtiene todas los servicios.
+     * @return
+     * @throws Exception
+     */
+    @Override
+    @WebMethod
+    @RolesAllowed({ Constants.DIR_ADMIN })
+    public List<Servicio> obtenerCatServicio() throws Exception{
+        return  obtenerCatalogosEjb.obtenerCatServicio();
     }
 }

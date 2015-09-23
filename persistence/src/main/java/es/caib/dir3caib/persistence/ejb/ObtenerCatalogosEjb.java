@@ -46,6 +46,9 @@ public class ObtenerCatalogosEjb implements ObtenerCatalogosLocal {
     @EJB(mappedName = "dir3caib/CatEntidadGeograficaEJB/local")
     protected CatEntidadGeograficaLocal catEntidadGeograficaEjb;
 
+    @EJB(mappedName = "dir3caib/ServicioEJB/local")
+    protected ServicioLocal servicioEjb;
+
 
   /**
    * Obtiene todos los estados en los que puede estar una entidad(organismo).
@@ -148,5 +151,15 @@ public class ObtenerCatalogosEjb implements ObtenerCatalogosLocal {
 
             return entidadesGeograficasTF;
 
+    }
+
+    /**
+     * Obtiene todos los Servicios
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public List<Servicio> obtenerCatServicio() throws Exception{
+        return servicioEjb.getAll();
     }
 }
