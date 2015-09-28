@@ -69,7 +69,7 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
 
 
     /**
-      * Obtiene el arbol de oficinas que dependen de un organismo.Solo se envian aquellas
+      * Obtiene todas las oficinas cuyo organismo responsable es el indicado por código(son todas padres e hijas).Solo se envian aquellas
       * que han sido actualizadas.
       * @param codigo Código del organismo
       * @param fechaActualizacion fecha en la que se realiza la actualizacion.
@@ -80,10 +80,6 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
         List<Oficina> oficinas = oficinaEjb.obtenerOficinasOrganismo(codigo, fechaActualizacion,fechaSincronizacion);
 
         List<Oficina> oficinasCompleto = new ArrayList<Oficina>(oficinas);
-
-        for (Oficina oficina : oficinas) {
-            oficinasCompleto.addAll(oficinaEjb.obtenerArbolOficinas(oficina.getCodigo(),fechaActualizacion,fechaSincronizacion));
-        }
 
         List<OficinaTF> arbolTF = new ArrayList<OficinaTF>();
 
