@@ -14,6 +14,7 @@ public class Nodo {
   private String estado;
   private List<Nodo> hijos;
   private List<Nodo> oficinasDependientes;
+  private List<Nodo> oficinasDependientesAuxiliares;
   private List<Nodo> oficinasAuxiliares;
   private List<Nodo> oficinasFuncionales; //relacionesOrganizativasOfi
 
@@ -72,6 +73,14 @@ public class Nodo {
 
   public void setOficinasDependientes(List<Nodo> oficinasDependientes) {
     this.oficinasDependientes = oficinasDependientes;
+  }
+
+  public List<Nodo> getOficinasDependientesAuxiliares() {
+    return oficinasDependientesAuxiliares;
+  }
+
+  public void setOficinasDependientesAuxiliares(List<Nodo> oficinasDependientesAuxiliares) {
+    this.oficinasDependientesAuxiliares = oficinasDependientesAuxiliares;
   }
 
   public List<Nodo> getOficinasAuxiliares() {

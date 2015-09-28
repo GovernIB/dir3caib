@@ -355,13 +355,18 @@ public class UnidadController extends BaseController{
           nodo.setIdPadre(idUnidad);
           nodo.setEstado(unidadPadre.getDescripcionEstado());
 
-          //OBTENEMOS LAS OFICINAS DEPENDIENTES DEL NODO TRATADO
+          //OBTENEMOS LAS OFICINAS DEPENDIENTES DEL NODO(UNIDAD) TRATADO
+          // Primero obtenemos las oficinas generales dependendientes.
           List<ObjetoBasico> oficinasDependientes=oficinaEjb.oficinasDependientes(unidadPadre.getCodigo(),estado);
+
           List<Nodo> oficinasDependientesTransf= new ArrayList<Nodo>();
           for(ObjetoBasico oficina: oficinasDependientes){
               // Obtenemos las oficinas auxliares del nodo oficina que estamos tratando
               List<ObjetoBasico> oficinasAuxiliares = oficinaEjb.oficinasAuxiliares(oficina.getCodigo(), estado);
               List<Nodo> oficinasAuxTransformadas = transformarOficinasAuxiliares(oficinasAuxiliares);
+
+              //Obtenemos las oficinas auxiliares de segundo nivel
+              obtenerAuxiliares(oficinasAuxTransformadas,estado);
 
 
               // Configuramos los datos del nodo (Representa una oficina)
@@ -470,6 +475,18 @@ public class UnidadController extends BaseController{
             nodos.add(nodo);
         }
         return nodos;
+    }
+
+    private void obtenerAuxiliares(List<Nodo> oficinas, String estado) throws Exception {
+
+        for(Nodo oficinaAuxiliarTrans: oficinas){
+            // obtener sus auxiliares
+            List<ObjetoBasico> oficinasAuxiliares= oficinaEjb.oficinasAuxiliares(oficinaAuxiliarTrans.getId(), estado);
+            List<Nodo> oficinasAuxTransformadas = transformarOficinasAuxiliares(oficinasAuxiliares);
+            oficinaAuxiliarTrans.setOficinasAuxiliares(oficinasAuxTransformadas);
+            //recursividad
+            obtenerAuxiliares(oficinasAuxTransformadas,estado);
+        }
     }
 
 }

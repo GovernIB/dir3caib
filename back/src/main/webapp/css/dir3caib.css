@@ -529,3 +529,18 @@ a.text-gris:focus {
     padding-bottom: 5px;
 }
 /* FI ARBRE ORGANISMES */
+.btn-arbre{
+  margin-left: 90px;
+  margin-top: 20px;
+  display: inline-block;
+  padding: 4px 12px;
+  font-size: 14px;
+  color: #333333;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+  vertical-align: middle;
+  cursor: pointer;
+  background-color: #f5f5f5;
+  -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+}
