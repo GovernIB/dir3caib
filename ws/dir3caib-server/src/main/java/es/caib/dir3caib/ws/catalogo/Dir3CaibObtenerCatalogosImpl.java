@@ -1,10 +1,7 @@
 package es.caib.dir3caib.ws.catalogo;
 
 import es.caib.dir3caib.persistence.ejb.ObtenerCatalogosLocal;
-import es.caib.dir3caib.persistence.model.CatEstadoEntidad;
-import es.caib.dir3caib.persistence.model.CatNivelAdministracion;
-import es.caib.dir3caib.persistence.model.CatPais;
-import es.caib.dir3caib.persistence.model.Servicio;
+import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.model.ws.CatComunidadAutonomaTF;
 import es.caib.dir3caib.persistence.model.ws.CatEntidadGeograficaTF;
 import es.caib.dir3caib.persistence.model.ws.CatLocalidadTF;
@@ -160,5 +157,17 @@ public class Dir3CaibObtenerCatalogosImpl implements Dir3CaibObtenerCatalogosWs 
     @RolesAllowed({ Constants.DIR_ADMIN })
     public List<Servicio> obtenerCatServicio() throws Exception{
         return  obtenerCatalogosEjb.obtenerCatServicio();
+    }
+
+    /**
+     * Obtiene todos los Tipo Via
+     * @return
+     * @throws Exception
+     */
+    @Override
+    @WebMethod
+    @RolesAllowed({ Constants.DIR_ADMIN })
+    public List<CatTipoVia> obtenerCatTipoVia() throws Exception{
+        return  obtenerCatalogosEjb.obtenerCatTipoVia();
     }
 }
