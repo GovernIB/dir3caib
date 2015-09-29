@@ -24,6 +24,22 @@
 <xs:element name="obtenerCatProvinciaResponse" type="tns:obtenerCatProvinciaResponse"/>
 <xs:element name="obtenerCatServicio" type="tns:obtenerCatServicio"/>
 <xs:element name="obtenerCatServicioResponse" type="tns:obtenerCatServicioResponse"/>
+<xs:element name="obtenerCatTipoVia" type="tns:obtenerCatTipoVia"/>
+<xs:element name="obtenerCatTipoViaResponse" type="tns:obtenerCatTipoViaResponse"/>
+<xs:complexType name="obtenerCatTipoVia">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="obtenerCatTipoViaResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:catTipoVia"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="catTipoVia">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codigoTipoVia" type="xs:long"/>
+      <xs:element minOccurs="0" name="descripcionTipoVia" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
 <xs:complexType name="obtenerCatComunidadAutonoma">
     <xs:sequence/>
   </xs:complexType>
@@ -200,12 +216,16 @@
     <wsdl:part name="parameters" element="tns:obtenerCatPaisResponse">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="obtenerCatComunidadAutonomaResponse">
-    <wsdl:part name="parameters" element="tns:obtenerCatComunidadAutonomaResponse">
+  <wsdl:message name="obtenerCatTipoViaResponse">
+    <wsdl:part name="parameters" element="tns:obtenerCatTipoViaResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="obtenerCatServicio">
     <wsdl:part name="parameters" element="tns:obtenerCatServicio">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatComunidadAutonomaResponse">
+    <wsdl:part name="parameters" element="tns:obtenerCatComunidadAutonomaResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="obtenerCatComunidadAutonoma">
@@ -228,6 +248,10 @@
     <wsdl:part name="parameters" element="tns:getVersionResponse">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="obtenerCatTipoVia">
+    <wsdl:part name="parameters" element="tns:obtenerCatTipoVia">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="obtenerCatEntidadGeografica">
     <wsdl:part name="parameters" element="tns:obtenerCatEntidadGeografica">
     </wsdl:part>
@@ -241,6 +265,12 @@
     </wsdl:part>
   </wsdl:message>
   <wsdl:portType name="Dir3CaibObtenerCatalogosWs">
+    <wsdl:operation name="obtenerCatTipoVia">
+      <wsdl:input name="obtenerCatTipoVia" message="tns:obtenerCatTipoVia">
+    </wsdl:input>
+      <wsdl:output name="obtenerCatTipoViaResponse" message="tns:obtenerCatTipoViaResponse">
+    </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="obtenerCatComunidadAutonoma">
       <wsdl:input name="obtenerCatComunidadAutonoma" message="tns:obtenerCatComunidadAutonoma">
     </wsdl:input>
@@ -304,6 +334,15 @@
   </wsdl:portType>
   <wsdl:binding name="Dir3CaibObtenerCatalogosWsServiceSoapBinding" type="tns:Dir3CaibObtenerCatalogosWs">
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="obtenerCatTipoVia">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="obtenerCatTipoVia">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="obtenerCatTipoViaResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="obtenerCatComunidadAutonoma">
       <soap:operation soapAction="" style="document"/>
       <wsdl:input name="obtenerCatComunidadAutonoma">

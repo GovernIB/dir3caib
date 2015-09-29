@@ -411,6 +411,9 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                           oficina.setDireccionObservaciones(fila[27].trim());
                           oficina.setHorarioAtencion(fila[9].trim());
                           oficina.setLocExtranjera(fila[26].trim());
+                          oficina.setNombreVia(fila[16].trim());
+                          oficina.setNumVia(fila[17].trim());
+                          oficina.setCodPostal(fila[19].trim());
 
                           // Estado
                           String codigoEstado = fila[2].trim();

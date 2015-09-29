@@ -3,6 +3,7 @@ package es.caib.dir3caib.persistence.model.ws;
 import es.caib.dir3caib.persistence.model.Oficina;
 import es.caib.dir3caib.persistence.model.RelacionOrganizativaOfi;
 import es.caib.dir3caib.persistence.model.RelacionSirOfi;
+import es.caib.dir3caib.persistence.model.Servicio;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,12 @@ public class OficinaTF {
     private String codOfiResponsable;   //Oficina
     private List<RelacionSirOfiTF> sirOfi;
     private List<RelacionOrganizativaOfiTF> organizativasOfi;
+    private String descripcionLocalidad; //LOCALIDAD
+    private String nombreVia;
+    private String numVia;
+    private Long codigoTipoVia;
+    private String codPostal;
+    private List<Long> servicios;
 
     public OficinaTF() {
     }
@@ -92,6 +99,54 @@ public class OficinaTF {
         this.sirOfi = sirOfi;
     }
 
+    public String getDescripcionLocalidad() {
+        return descripcionLocalidad;
+    }
+
+    public void setDescripcionLocalidad(String descripcionLocalidad) {
+        this.descripcionLocalidad = descripcionLocalidad;
+    }
+
+    public String getNombreVia() {
+        return nombreVia;
+    }
+
+    public void setNombreVia(String nombreVia) {
+        this.nombreVia = nombreVia;
+    }
+
+    public String getNumVia() {
+        return numVia;
+    }
+
+    public void setNumVia(String numVia) {
+        this.numVia = numVia;
+    }
+
+    public Long getCodigoTipoVia() {
+        return codigoTipoVia;
+    }
+
+    public void setCodigoTipoVia(Long codigoTipoVia) {
+        this.codigoTipoVia = codigoTipoVia;
+    }
+
+    public String getCodPostal() {
+        return codPostal;
+    }
+
+    public void setCodPostal(String codPostal) {
+        this.codPostal = codPostal;
+    }
+
+    public List<Long> getServicios() {
+        return servicios;
+    }
+
+    public void setServicios(List<Long> servicios) {
+        this.servicios = servicios;
+    }
+
     /**
      * Transforma un List de {@link es.caib.dir3caib.persistence.model.RelacionSirOfi} en {@link es.caib.dir3caib.persistence.model.ws.RelacionSirOfiTF}
      * @param sirOfi
@@ -136,6 +191,13 @@ public class OficinaTF {
         this.setCodigo(oficina.getCodigo());
         this.setDenominacion(oficina.getDenominacion());
         this.setEstado(oficina.getEstado().getCodigoEstadoEntidad());
+        this.setDescripcionLocalidad(oficina.getLocalidad().getDescripcionLocalidad());
+        this.setNombreVia(oficina.getNombreVia());
+        this.setNumVia(oficina.getNumVia());
+        this.setCodigoTipoVia(oficina.getTipoVia().getCodigoTipoVia());
+        this.setCodPostal(oficina.getCodPostal());
+
+
 
         if(oficina.getNivelAdministracion() != null){
             this.setNivelAdministracion(oficina.getNivelAdministracion().getCodigoNivelAdministracion());
@@ -159,6 +221,13 @@ public class OficinaTF {
             this.setOrganizativasOfiTF(oficina.getOrganizativasOfi());
         }
 
+        if(oficina.getServicios() != null){
+            List<Long> serviciosIds= new ArrayList<Long>();
+            for(Servicio servicio: oficina.getServicios()){
+                serviciosIds.add(servicio.getCodServicio());
+            }
+            this.setServicios(serviciosIds);
+        }
     }
 
 

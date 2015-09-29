@@ -1,12 +1,12 @@
 
 package es.caib.dir3caib.ws.api.oficina;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -20,12 +20,18 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="codOfiResponsable" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="codPostal" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="codUoResponsable" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="codigo" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="codigoTipoVia" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
  *         &lt;element name="denominacion" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="descripcionLocalidad" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="estado" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="nivelAdministracion" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
+ *         &lt;element name="nombreVia" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="numVia" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="organizativasOfi" type="{http://oficina.ws.dir3caib.caib.es/}relacionOrganizativaOfiTF" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="servicios" type="{http://www.w3.org/2001/XMLSchema}long" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="sirOfi" type="{http://oficina.ws.dir3caib.caib.es/}relacionSirOfiTF" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="tipoOficina" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
  *       &lt;/sequence>
@@ -39,25 +45,38 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "oficinaTF", propOrder = {
     "codOfiResponsable",
+    "codPostal",
     "codUoResponsable",
     "codigo",
+    "codigoTipoVia",
     "denominacion",
+    "descripcionLocalidad",
     "estado",
     "nivelAdministracion",
+    "nombreVia",
+    "numVia",
     "organizativasOfi",
+    "servicios",
     "sirOfi",
     "tipoOficina"
 })
 public class OficinaTF {
 
     protected String codOfiResponsable;
+    protected String codPostal;
     protected String codUoResponsable;
     protected String codigo;
+    protected Long codigoTipoVia;
     protected String denominacion;
+    protected String descripcionLocalidad;
     protected String estado;
     protected Long nivelAdministracion;
+    protected String nombreVia;
+    protected String numVia;
     @XmlElement(nillable = true)
     protected List<RelacionOrganizativaOfiTF> organizativasOfi;
+    @XmlElement(nillable = true)
+    protected List<Long> servicios;
     @XmlElement(nillable = true)
     protected List<RelacionSirOfiTF> sirOfi;
     protected Long tipoOficina;
@@ -84,6 +103,30 @@ public class OficinaTF {
      */
     public void setCodOfiResponsable(String value) {
         this.codOfiResponsable = value;
+    }
+
+    /**
+     * Gets the value of the codPostal property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getCodPostal() {
+        return codPostal;
+    }
+
+    /**
+     * Sets the value of the codPostal property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setCodPostal(String value) {
+        this.codPostal = value;
     }
 
     /**
@@ -135,6 +178,30 @@ public class OficinaTF {
     }
 
     /**
+     * Gets the value of the codigoTipoVia property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Long }
+     *     
+     */
+    public Long getCodigoTipoVia() {
+        return codigoTipoVia;
+    }
+
+    /**
+     * Sets the value of the codigoTipoVia property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Long }
+     *     
+     */
+    public void setCodigoTipoVia(Long value) {
+        this.codigoTipoVia = value;
+    }
+
+    /**
      * Gets the value of the denominacion property.
      * 
      * @return
@@ -156,6 +223,30 @@ public class OficinaTF {
      */
     public void setDenominacion(String value) {
         this.denominacion = value;
+    }
+
+    /**
+     * Gets the value of the descripcionLocalidad property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getDescripcionLocalidad() {
+        return descripcionLocalidad;
+    }
+
+    /**
+     * Sets the value of the descripcionLocalidad property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setDescripcionLocalidad(String value) {
+        this.descripcionLocalidad = value;
     }
 
     /**
@@ -207,6 +298,54 @@ public class OficinaTF {
     }
 
     /**
+     * Gets the value of the nombreVia property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getNombreVia() {
+        return nombreVia;
+    }
+
+    /**
+     * Sets the value of the nombreVia property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setNombreVia(String value) {
+        this.nombreVia = value;
+    }
+
+    /**
+     * Gets the value of the numVia property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getNumVia() {
+        return numVia;
+    }
+
+    /**
+     * Sets the value of the numVia property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setNumVia(String value) {
+        this.numVia = value;
+    }
+
+    /**
      * Gets the value of the organizativasOfi property.
      * 
      * <p>
@@ -233,6 +372,35 @@ public class OficinaTF {
             organizativasOfi = new ArrayList<RelacionOrganizativaOfiTF>();
         }
         return this.organizativasOfi;
+    }
+
+    /**
+     * Gets the value of the servicios property.
+     * 
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the servicios property.
+     * 
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getServicios().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link Long }
+     * 
+     * 
+     */
+    public List<Long> getServicios() {
+        if (servicios == null) {
+            servicios = new ArrayList<Long>();
+        }
+        return this.servicios;
     }
 
     /**

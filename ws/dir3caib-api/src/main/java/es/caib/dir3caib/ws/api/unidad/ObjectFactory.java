@@ -43,6 +43,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ObtenerArbolUnidadesResponse }
+     * 
+     */
+    public ObtenerArbolUnidadesResponse createObtenerArbolUnidadesResponse() {
+        return new ObtenerArbolUnidadesResponse();
+    }
+
+    /**
      * Create an instance of {@link GetVersionResponse }
      * 
      */
@@ -51,11 +59,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ObtenerUnidad }
+     * Create an instance of {@link ObtenerArbolUnidadesDestinatarias }
      * 
      */
-    public ObtenerUnidad createObtenerUnidad() {
-        return new ObtenerUnidad();
+    public ObtenerArbolUnidadesDestinatarias createObtenerArbolUnidadesDestinatarias() {
+        return new ObtenerArbolUnidadesDestinatarias();
     }
 
     /**
@@ -67,27 +75,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ObtenerArbolUnidadesResponse }
+     * Create an instance of {@link UnidadTF }
      * 
      */
-    public ObtenerArbolUnidadesResponse createObtenerArbolUnidadesResponse() {
-        return new ObtenerArbolUnidadesResponse();
-    }
-
-    /**
-     * Create an instance of {@link GetVersion }
-     * 
-     */
-    public GetVersion createGetVersion() {
-        return new GetVersion();
-    }
-
-    /**
-     * Create an instance of {@link GetVersionWs }
-     * 
-     */
-    public GetVersionWs createGetVersionWs() {
-        return new GetVersionWs();
+    public UnidadTF createUnidadTF() {
+        return new UnidadTF();
     }
 
     /**
@@ -96,14 +88,6 @@ public class ObjectFactory {
      */
     public ObtenerArbolUnidades createObtenerArbolUnidades() {
         return new ObtenerArbolUnidades();
-    }
-
-    /**
-     * Create an instance of {@link ObtenerArbolUnidadesDestinatarias }
-     * 
-     */
-    public ObtenerArbolUnidadesDestinatarias createObtenerArbolUnidadesDestinatarias() {
-        return new ObtenerArbolUnidadesDestinatarias();
     }
 
     /**
@@ -123,11 +107,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link UnidadTF }
+     * Create an instance of {@link ObtenerUnidad }
      * 
      */
-    public UnidadTF createUnidadTF() {
-        return new UnidadTF();
+    public ObtenerUnidad createObtenerUnidad() {
+        return new ObtenerUnidad();
+    }
+
+    /**
+     * Create an instance of {@link GetVersion }
+     * 
+     */
+    public GetVersion createGetVersion() {
+        return new GetVersion();
+    }
+
+    /**
+     * Create an instance of {@link GetVersionWs }
+     * 
+     */
+    public GetVersionWs createGetVersionWs() {
+        return new GetVersionWs();
     }
 
     /**
