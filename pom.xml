@@ -119,16 +119,11 @@
     </build>
 	
 	<distributionManagement>
-        <site>
-            <id>es.caib.dir3caib</id>
-            <url>scp://shell.sourceforge.net/home/project-web/dir3caib/htdocs/maven</url>
-        </site>
-        <repository>
+         <repository>
             <id>es.caib.dir3caib</id>
             <name>Dir3Caib Maven Repository</name>
-            <url>scp://shell.sourceforge.net/home/project-web/dir3caib/htdocs/maven</url>
+            <url>sftp://web.sourceforge.net/home/project-web/dir3caib/htdocs/maven</url>
         </repository>
-        
         <!--   COM UTILITZAR: AFEGIR AQUEST CODI AL pom.xml    -->
         <!--
         <repositories>
