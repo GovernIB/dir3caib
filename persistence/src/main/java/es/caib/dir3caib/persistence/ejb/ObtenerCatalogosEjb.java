@@ -49,6 +49,9 @@ public class ObtenerCatalogosEjb implements ObtenerCatalogosLocal {
     @EJB(mappedName = "dir3caib/ServicioEJB/local")
     protected ServicioLocal servicioEjb;
 
+    @EJB(mappedName = "dir3caib/CatTipoViaEJB/local")
+    protected CatTipoViaLocal catTipoViaEjb;
+
 
   /**
    * Obtiene todos los estados en los que puede estar una entidad(organismo).
@@ -161,5 +164,15 @@ public class ObtenerCatalogosEjb implements ObtenerCatalogosLocal {
     @Override
     public List<Servicio> obtenerCatServicio() throws Exception{
         return servicioEjb.getAll();
+    }
+
+    /**
+     * Obtiene todos los Tipo Via
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public List<CatTipoVia> obtenerCatTipoVia() throws Exception{
+        return catTipoViaEjb.getAll();
     }
 }
