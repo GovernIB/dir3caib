@@ -1,10 +1,10 @@
 package es.caib.dir3caib.persistence.model;
 
-import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 
 /**
@@ -18,7 +18,6 @@ public class CatTipoVia implements Serializable {
 	private Long codigoTipoVia;
 	private String descripcionTipoVia;
 
-  // TODO CAMPOS VIA (CAMPO DEL CSV)
 
 	public CatTipoVia(){
 

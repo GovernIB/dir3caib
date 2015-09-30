@@ -35,6 +35,7 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
       * @param codigo Código de la oficina
       * @param fechaActualizacion fecha en la que se realiza la actualizacion.
       */
+    /* OJO: Este método no se emplea en REGWEB, ver si se emplea en SISTRA o otra aplicación, TODO si no borrarlo */
     @Override
     public OficinaTF obtenerOficina(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception{
 
@@ -50,7 +51,7 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
             Set<RelacionOrganizativaOfi> todasRelaciones = new HashSet<RelacionOrganizativaOfi>(oficina.getOrganizativasOfi());
             Set<RelacionOrganizativaOfi> relacionesValidas= new HashSet<RelacionOrganizativaOfi>();
             for(RelacionOrganizativaOfi relOrg: todasRelaciones){
-                //TODO revisar esta condicion, pero creo que no se utiliza el metodo.
+                //TODO revisar esta condicion
               if(relOrg.getUnidad().getFechaExtincion().before(fechaSincronizacion)){
                 relacionesValidas.add(relOrg);
               }

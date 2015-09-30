@@ -377,7 +377,6 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
 
                       // Cogemos solo las relaciones sir posteriores a la fecha de sincronizacion
-                      // TODO ESTA COMENTADO PARA NO SUBIRLO ACCIDENTALMENTE
                       Set<RelacionSirOfi> todasRelacionesSir = new HashSet<RelacionSirOfi>(oficina.getSirOfi());
                       Set<RelacionSirOfi> relacionesSirValidas= new HashSet<RelacionSirOfi>();
                       for(RelacionSirOfi relSir : todasRelacionesSir){
@@ -408,7 +407,6 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
                   oficina.setOrganizativasOfi(new ArrayList<RelacionOrganizativaOfi>(relacionesVigentes));
 
                   // Solo se envian las relaciones sir vigentes.
-                  // TODO ESTA COMENTADO PARA NO SUBIRLO ACCIDENTALMENTE
                   Set<RelacionSirOfi> relacionesSir =new HashSet<RelacionSirOfi>(oficina.getSirOfi());
 
                   Set<RelacionSirOfi> relacionesSirVigentes= new HashSet<RelacionSirOfi>();

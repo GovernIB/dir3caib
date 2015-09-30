@@ -147,7 +147,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
      ArrayList<String> existentes = new ArrayList<String>(Arrays.asList(f.list()));
      results.setExistentes(existentes);
 
-     // TODO caches
+     // caches
      Map<String, CatEntidadGeografica> cacheEntidadGeografica  = new TreeMap<String, CatEntidadGeografica>();
      
      Map<Long, CatNivelAdministracion> cacheNivelAdministracion  = new TreeMap<Long, CatNivelAdministracion>();
@@ -594,7 +594,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                            tipoVia = new CatTipoVia();
                            tipoVia.setCodigoTipoVia(codigoTipoVia);
                          }
-                         tipoVia.setDescripcionTipoVia(fila[1]);
+                         tipoVia.setDescripcionTipoVia(fila[1].toLowerCase());
                          catTipoViaEjb.persist(tipoVia);
                      }catch(Exception e){
                          log.info(e.getMessage());

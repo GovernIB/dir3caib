@@ -25,6 +25,8 @@ public class OficinaTF {
     private String codOfiResponsable;   //Oficina
     private List<RelacionSirOfiTF> sirOfi;
     private List<RelacionOrganizativaOfiTF> organizativasOfi;
+    private Long codigoPais;
+    private Long codigoComunidad;
     private String descripcionLocalidad; //LOCALIDAD
     private String nombreVia;
     private String numVia;
@@ -97,6 +99,22 @@ public class OficinaTF {
 
     public void setSirOfi(List<RelacionSirOfiTF> sirOfi) {
         this.sirOfi = sirOfi;
+    }
+
+    public Long getCodigoPais() {
+        return codigoPais;
+    }
+
+    public void setCodigoPais(Long codigoPais) {
+        this.codigoPais = codigoPais;
+    }
+
+    public Long getCodigoComunidad() {
+        return codigoComunidad;
+    }
+
+    public void setCodigoComunidad(Long codigoComunidad) {
+        this.codigoComunidad = codigoComunidad;
     }
 
     public String getDescripcionLocalidad() {
@@ -191,6 +209,8 @@ public class OficinaTF {
         this.setCodigo(oficina.getCodigo());
         this.setDenominacion(oficina.getDenominacion());
         this.setEstado(oficina.getEstado().getCodigoEstadoEntidad());
+        this.setCodigoPais(oficina.getCodPais().getCodigoPais());
+        this.setCodigoComunidad(oficina.getCodComunidad().getCodigoComunidad());
         this.setDescripcionLocalidad(oficina.getLocalidad().getDescripcionLocalidad());
         this.setNombreVia(oficina.getNombreVia());
         this.setNumVia(oficina.getNumVia());

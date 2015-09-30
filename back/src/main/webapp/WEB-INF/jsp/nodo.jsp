@@ -7,7 +7,7 @@
 
     <c:forEach var="hijo" items="${nodo.hijos}" varStatus="status">
 
-        <!-- TODO: print the node here -->
+        <!-- print the node here -->
         <li><span class="badge-arbre btn-primary" style="display:closed;"><i class=""></i> ${hijo.id} - ${hijo.nombre}</span>
 
             <!--Pintamos oficinas responsables -->
