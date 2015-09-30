@@ -209,12 +209,18 @@ public class OficinaTF {
         this.setCodigo(oficina.getCodigo());
         this.setDenominacion(oficina.getDenominacion());
         this.setEstado(oficina.getEstado().getCodigoEstadoEntidad());
-        this.setCodigoPais(oficina.getCodPais().getCodigoPais());
-        this.setCodigoComunidad(oficina.getCodComunidad().getCodigoComunidad());
+        if(oficina.getCodPais()!=null) {
+            this.setCodigoPais(oficina.getCodPais().getCodigoPais());
+        }
+        if(oficina.getCodComunidad()!=null) {
+            this.setCodigoComunidad(oficina.getCodComunidad().getCodigoComunidad());
+        }
         this.setDescripcionLocalidad(oficina.getLocalidad().getDescripcionLocalidad());
         this.setNombreVia(oficina.getNombreVia());
         this.setNumVia(oficina.getNumVia());
-        this.setCodigoTipoVia(oficina.getTipoVia().getCodigoTipoVia());
+        if(oficina.getTipoVia()!=null) {
+            this.setCodigoTipoVia(oficina.getTipoVia().getCodigoTipoVia());
+        }
         this.setCodPostal(oficina.getCodPostal());
 
 

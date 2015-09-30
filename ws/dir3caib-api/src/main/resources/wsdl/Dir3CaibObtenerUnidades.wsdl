@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="Dir3CaibObtenerUnidadesWsService" targetNamespace="http://unidad.ws.dir3caib.caib.es/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://unidad.ws.dir3caib.caib.es/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+<wsdl:definitions name="Dir3CaibObtenerUnidadesWsService" targetNamespace="http://unidad.ws.dir3caib.caib.es/"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://unidad.ws.dir3caib.caib.es/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
   <wsdl:types>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://unidad.ws.dir3caib.caib.es/" elementFormDefault="unqualified" targetNamespace="http://unidad.ws.dir3caib.caib.es/" version="1.0">
 <xs:element name="getVersion" type="tns:getVersion"/>
@@ -36,12 +38,17 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="codAmbComunidad" type="xs:long"/>
       <xs:element minOccurs="0" name="codAmbProvincia" type="xs:long"/>
+      <xs:element minOccurs="0" name="codPostal" type="xs:string"/>
       <xs:element minOccurs="0" name="codUnidadRaiz" type="xs:string"/>
       <xs:element minOccurs="0" name="codUnidadSuperior" type="xs:string"/>
       <xs:element minOccurs="0" name="codigo" type="xs:string"/>
+      <xs:element minOccurs="0" name="codigoAmbPais" type="xs:long"/>
+      <xs:element minOccurs="0" name="codigoAmbitoTerritorial" type="xs:string"/>
       <xs:element minOccurs="0" name="codigoEstadoEntidad" type="xs:string"/>
+      <xs:element minOccurs="0" name="codigoTipoVia" type="xs:long"/>
       <xs:element minOccurs="0" name="competencias" type="xs:string"/>
       <xs:element minOccurs="0" name="denominacion" type="xs:string"/>
+      <xs:element minOccurs="0" name="descripcionLocalidad" type="xs:string"/>
       <xs:element minOccurs="0" name="fechaAltaOficial" type="xs:dateTime"/>
       <xs:element minOccurs="0" name="fechaAnulacion" type="xs:dateTime"/>
       <xs:element minOccurs="0" name="fechaBajaOficial" type="xs:dateTime"/>
@@ -49,6 +56,8 @@
       <xs:element maxOccurs="unbounded" minOccurs="0" name="historicosUO" nillable="true" type="xs:string"/>
       <xs:element minOccurs="0" name="nivelAdministracion" type="xs:long"/>
       <xs:element minOccurs="0" name="nivelJerarquico" type="xs:long"/>
+      <xs:element minOccurs="0" name="nombreVia" type="xs:string"/>
+      <xs:element minOccurs="0" name="numVia" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
 <xs:complexType name="getVersion">

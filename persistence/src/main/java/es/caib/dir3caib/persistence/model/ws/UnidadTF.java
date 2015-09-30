@@ -28,8 +28,15 @@ public class UnidadTF {
    private Date fechaExtincion;
    private Date fechaAnulacion;
    private Long nivelAdministracion;
+   private String codigoAmbitoTerritorial;
+   private Long codigoAmbPais;
    private Long codAmbProvincia;
    private Long codAmbComunidad;
+   private String descripcionLocalidad;
+   private String nombreVia;
+   private String numVia;
+   private Long codigoTipoVia;
+   private String codPostal;
    private Set<String> historicosUO;
 
 
@@ -132,6 +139,22 @@ public class UnidadTF {
       this.nivelAdministracion = nivelAdministracion;
     }
 
+    public String getCodigoAmbitoTerritorial() {
+        return codigoAmbitoTerritorial;
+    }
+
+    public void setCodigoAmbitoTerritorial(String codigoAmbitoTerritorial) {
+        this.codigoAmbitoTerritorial = codigoAmbitoTerritorial;
+    }
+
+    public Long getCodigoAmbPais() {
+        return codigoAmbPais;
+    }
+
+    public void setCodigoAmbPais(Long codigoAmbPais) {
+        this.codigoAmbPais = codigoAmbPais;
+    }
+
     public Long getCodAmbProvincia() {
       return codAmbProvincia;
     }
@@ -146,6 +169,46 @@ public class UnidadTF {
 
     public void setCodAmbComunidad(Long codAmbComunidad) {
       this.codAmbComunidad = codAmbComunidad;
+    }
+
+    public String getDescripcionLocalidad() {
+        return descripcionLocalidad;
+    }
+
+    public void setDescripcionLocalidad(String descripcionLocalidad) {
+        this.descripcionLocalidad = descripcionLocalidad;
+    }
+
+    public String getNombreVia() {
+        return nombreVia;
+    }
+
+    public void setNombreVia(String nombreVia) {
+        this.nombreVia = nombreVia;
+    }
+
+    public String getNumVia() {
+        return numVia;
+    }
+
+    public void setNumVia(String numVia) {
+        this.numVia = numVia;
+    }
+
+    public Long getCodigoTipoVia() {
+        return codigoTipoVia;
+    }
+
+    public void setCodigoTipoVia(Long codigoTipoVia) {
+        this.codigoTipoVia = codigoTipoVia;
+    }
+
+    public String getCodPostal() {
+        return codPostal;
+    }
+
+    public void setCodPostal(String codPostal) {
+        this.codPostal = codPostal;
     }
 
     public Set<String> getHistoricosUO() {
@@ -169,12 +232,26 @@ public class UnidadTF {
         this.setFechaExtincion(unidad.getFechaExtincion());
         this.setNivelJerarquico(unidad.getNivelJerarquico());
         this.setNivelAdministracion(unidad.getNivelAdministracion().getCodigoNivelAdministracion());
+        if(unidad.getCodAmbitoTerritorial()!=null){
+            this.setCodigoAmbitoTerritorial(unidad.getCodAmbitoTerritorial().getCodigoAmbito());
+        }
+        if(unidad.getCodAmbPais()!=null){
+            this.setCodigoAmbPais(unidad.getCodAmbPais().getCodigoPais());
+        }
         if(unidad.getCodAmbProvincia() != null){
           this.setCodAmbProvincia(unidad.getCodAmbProvincia().getCodigoProvincia());
         }
         if(unidad.getCodAmbComunidad() != null){
           this.setCodAmbComunidad(unidad.getCodAmbComunidad().getCodigoComunidad());
         }
+
+        this.setDescripcionLocalidad(unidad.getCatLocalidad().getDescripcionLocalidad());
+        this.setNombreVia(unidad.getNombreVia());
+        this.setNumVia(unidad.getNumVia());
+        if(unidad.getTipoVia()!=null) {
+            this.setCodigoTipoVia(unidad.getTipoVia().getCodigoTipoVia());
+        }
+        this.setCodPostal(unidad.getCodPostal());
         // Enviamos los historicos a regweb para la gestión del organigrama
         Set<String> sHistoricosUO = new HashSet<String>();
         for(Unidad historico : unidad.getHistoricoUO() ){
