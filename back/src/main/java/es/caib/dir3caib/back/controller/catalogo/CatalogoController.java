@@ -288,6 +288,12 @@ public class CatalogoController extends BaseController{
         }
     }
 
+    /**
+     * Método que se encarga de listar todas las descargas que se han realizado del catálogo
+     * @param request
+     * @return
+     * @throws Exception
+     */
     @RequestMapping(value = "/descarga/list", method = RequestMethod.GET)
     public ModelAndView descargaCatalogoList(HttpServletRequest request) throws Exception {
 

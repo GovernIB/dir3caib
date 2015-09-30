@@ -126,7 +126,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
   
 
    /**
-  * Método que importa el contenido de los archivos del catálog  descargados previamente a través
+  * Método que importa el contenido de los archivos del catálogo  descargados previamente a través
   * de los WS.
   * */
   @Override

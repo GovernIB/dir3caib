@@ -28,6 +28,9 @@ import java.util.zip.ZipInputStream;
 /**
  * Created 6/03/14 13:38
  *
+ * Clase que permite importar las unidades desde el directorio común. En un primer paso
+ * se descargan los archivos y posteriormente se importa el contenido en la BD.
+ *
  * @author mgonzalez
  * @author anadal (Cache & EJB)
  * @author anadal (Eliminar PKs multiples)

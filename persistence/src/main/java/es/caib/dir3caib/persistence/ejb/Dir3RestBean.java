@@ -19,6 +19,7 @@ import java.util.*;
  * Created 1/04/14 9:50
  *
  * @author mgonzalez
+ * Clase que implementa la funcionalidad de varios servicios rest que pueden ser llamados desde otras aplicaciones.
  */
 @Stateless(name = "Dir3RestEJB")
 public class Dir3RestBean implements Dir3RestLocal {
@@ -29,7 +30,12 @@ public class Dir3RestBean implements Dir3RestLocal {
   @PersistenceContext
   private EntityManager em;
 
-
+    /**
+     * Obtiene las unidades cuya denominación coincide con la indicada.
+     * @param denominacion
+     * @return
+     * @throws Exception
+     */
   @Override
   public List<Unidad> findUnidadesByDenominacion(String denominacion) throws Exception {
 
@@ -40,6 +46,12 @@ public class Dir3RestBean implements Dir3RestLocal {
     return q.getResultList();
   }
 
+    /**
+     * Obtiene las oficinas cuya denominación coincide con la indicada.
+     * @param denominacion
+     * @return
+     * @throws Exception
+     */
   @Override
   public List<Oficina> findOficinasByDenominacion(String denominacion) throws Exception {
 
@@ -50,22 +62,28 @@ public class Dir3RestBean implements Dir3RestLocal {
       return q.getResultList();
     }
 
-  /*
-     * Metodo que comprueba si una unidad tiene más unidades hijas
+    /**
+     * Método que comprueba si una unidad tiene más unidades hijas
+     * @param codigo
+     * @return
+     * @throws Exception
      */
-    @Override
-    public Boolean tieneHijos(String codigo) throws Exception{
+  @Override
+  public Boolean tieneHijos(String codigo) throws Exception{
+      Query q = em.createQuery("Select unidad.codigo from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo order by unidad.codigo");
+      q.setParameter("codigo",codigo);
 
-        Query q = em.createQuery("Select unidad.codigo from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo order by unidad.codigo");
+      List<Unidad> hijos = q.getResultList();
+      return hijos.size() > 0;
+  }
 
-        q.setParameter("codigo",codigo);
-
-        List<Unidad> hijos = q.getResultList();
-
-        return hijos.size() > 0;
-    }
-
-
+    /**
+     * Obtiene el arbol de unidades de la unidad indicada por código.
+     * @param codigo
+     * @param fechaActualizacion
+     * @return
+     * @throws Exception
+     */
   @Override
   public List<Unidad> obtenerArbolUnidades(String codigo, String fechaActualizacion) throws Exception{
       Query q;
@@ -280,7 +298,15 @@ public class Dir3RestBean implements Dir3RestLocal {
 
      }
 
-
+    /**
+     * Método que permite buscar oficinas según el conjunto de criterios indicados en los parámetros.
+     * @param codigo código de la oficina
+     * @param denominacion denominación de la oficina
+     * @param codigoNivelAdministracion nivel de administración de la oficina
+     * @param codComunidad comunidad a la que pertenece la oficina
+     * @return ObjetoBasico representa el par (codigo,denominación) de la oficina.
+     * @throws Exception
+     */
      public List<ObjetoBasico> busquedaOficinas(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad) throws Exception {
          Query q;
          Map<String, Object> parametros = new HashMap<String, Object>();
@@ -325,6 +351,12 @@ public class Dir3RestBean implements Dir3RestLocal {
 
        }
 
+    /**
+     * Devuelve la denominación de la unidad especificada por codigo
+     * @param codigo
+     * @return
+     * @throws Exception
+     */
        @Override
        public String unidadDenominacion(String codigo) throws Exception {
 
@@ -333,21 +365,28 @@ public class Dir3RestBean implements Dir3RestLocal {
          return (String)q.getSingleResult();
        }
 
-       @Override
-       public String oficinaDenominacion(String codigo) throws Exception {
+    /**
+     *
+     * @param codigo
+     * @return
+     * @throws Exception
+     */
+
+     @Override
+     public String oficinaDenominacion(String codigo) throws Exception {
 
          Query q = em.createQuery("select oficina.denominacion from Oficina as oficina where oficina.codigo=:codigo").setParameter("codigo", codigo);
 
          return (String)q.getSingleResult();
-       }
+     }
 
-       /**
-       * Convierte los resultados de una query en una lista de {@link es.caib.dir3caib.persistence.model.utils.ObjetoBasico}
-       * @param result
-       * @return
-       * @throws Exception
-       */
-       private List<ObjetoBasico> getObjetoBasicoList(List<Object[]> result) throws Exception{
+     /**
+     * Convierte los resultados de una query en una lista de {@link es.caib.dir3caib.persistence.model.utils.ObjetoBasico}
+     * @param result
+     * @return
+     * @throws Exception
+     */
+     private List<ObjetoBasico> getObjetoBasicoList(List<Object[]> result) throws Exception{
 
           List<ObjetoBasico> objetoBasicos = new ArrayList<ObjetoBasico>();
 
@@ -359,7 +398,7 @@ public class Dir3RestBean implements Dir3RestLocal {
           }
 
           return  objetoBasicos;
-       }
+     }
 
 
 

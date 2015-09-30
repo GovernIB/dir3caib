@@ -28,6 +28,9 @@ import java.util.zip.ZipInputStream;
 /**
  * Created 10/03/14 14:38
  *
+ * Clase que permite importar las oficinas desde el directorio común. En un primer paso
+ * se descargan los archivos y posteriormente se importa el contenido en la BD.
+ *
  * @author mgonzalez
  * @author anadal (Cache & EJB)
  * @author anadal (Eliminar PKs multiples)
@@ -112,7 +115,7 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
 
   SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
   
-  
+
   
   public class CacheUnidadOficina {
     

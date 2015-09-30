@@ -363,7 +363,8 @@ public class UnidadController extends BaseController{
           for(ObjetoBasico oficina: oficinasDependientes){
               // Obtenemos las oficinas auxliares del nodo oficina que estamos tratando
               List<ObjetoBasico> oficinasAuxiliares = oficinaEjb.oficinasAuxiliares(oficina.getCodigo(), estado);
-              List<Nodo> oficinasAuxTransformadas = transformarOficinasAuxiliares(oficinasAuxiliares);
+              //Transforma una lista de oficinas auxiliares en formato ObjetoBasico a Nodo
+              List<Nodo> oficinasAuxTransformadas = transformarObjetoBasicoANodo(oficinasAuxiliares);
 
               //Obtenemos las oficinas auxiliares de segundo nivel
               obtenerAuxiliares(oficinasAuxTransformadas,estado);
@@ -436,6 +437,12 @@ public class UnidadController extends BaseController{
       return codigosValor;
     }
 
+    /**
+     * Método que se encarga de listar todas las descargas que se han realizado de las unidades
+     * @param request
+     * @return
+     * @throws Exception
+     */
     @RequestMapping(value = "/descarga/list", method = RequestMethod.GET)
     public ModelAndView descargaUnidadesList(HttpServletRequest request) throws Exception {
 
@@ -455,7 +462,14 @@ public class UnidadController extends BaseController{
         binder.registerCustomEditor(java.util.Date.class, dateEditor);
     }
 
-    private List<Nodo> transformarOficinasAuxiliares(List<ObjetoBasico> oficinasAtransformar) throws Exception {
+    /**
+     * Método que transforma una lista de {@link es.caib.dir3caib.persistence.model.utils.ObjetoBasico} en una lista de
+     * {@link es.caib.dir3caib.back.utils.Nodo}
+     * @param oficinasAtransformar
+     * @return lista de Nodo
+     * @throws Exception
+     */
+    private List<Nodo> transformarObjetoBasicoANodo(List<ObjetoBasico> oficinasAtransformar) throws Exception {
         List<Nodo> nodos = new ArrayList<Nodo>();
         for(ObjetoBasico obj: oficinasAtransformar){
             Nodo nodo = new Nodo();
@@ -466,6 +480,13 @@ public class UnidadController extends BaseController{
         return nodos;
     }
 
+    /**
+     * Método que transforma una lista de {@link es.caib.dir3caib.persistence.model.RelacionOrganizativaOfi} en una lista de
+     * link{es.caib.dir3caib.back.utils.Nodo}
+     * @param oficinasAtransformar
+     * @return lista de Nodo
+     * @throws Exception
+     */
     private List<Nodo> transformarOficinasFuncionales(List<RelacionOrganizativaOfi> oficinasAtransformar) throws Exception {
         List<Nodo> nodos = new ArrayList<Nodo>();
         for(RelacionOrganizativaOfi obj: oficinasAtransformar){
@@ -477,12 +498,19 @@ public class UnidadController extends BaseController{
         return nodos;
     }
 
+    /**
+     * Método que de manera recursiva obtiene las oficinas auxiliares de una lista de oficinas indicadas y con el estado indicado
+     * Se emplea para pintar el árbol de las unidades y oficinas.
+     * @param oficinas
+     * @param estado
+     * @throws Exception
+     */
     private void obtenerAuxiliares(List<Nodo> oficinas, String estado) throws Exception {
 
         for(Nodo oficinaAuxiliarTrans: oficinas){
             // obtener sus auxiliares
             List<ObjetoBasico> oficinasAuxiliares= oficinaEjb.oficinasAuxiliares(oficinaAuxiliarTrans.getId(), estado);
-            List<Nodo> oficinasAuxTransformadas = transformarOficinasAuxiliares(oficinasAuxiliares);
+            List<Nodo> oficinasAuxTransformadas = transformarObjetoBasicoANodo(oficinasAuxiliares);
             oficinaAuxiliarTrans.setOficinasAuxiliares(oficinasAuxTransformadas);
             //recursividad
             obtenerAuxiliares(oficinasAuxTransformadas,estado);

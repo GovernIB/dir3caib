@@ -397,6 +397,12 @@ public class OficinaController extends BaseController {
        return codigosValor;
     }
 
+    /**
+     * Método que se encarga de listar todas las descargas que se han realizado de las oficinas
+     * @param request
+     * @return
+     * @throws Exception
+     */
     @RequestMapping(value = "/descarga/list", method = RequestMethod.GET)
     public ModelAndView descargaOficinasList(HttpServletRequest request) throws Exception {
 
