@@ -23,6 +23,8 @@ import java.util.List;
  *         &lt;element name="codPostal" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="codUoResponsable" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="codigo" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="codigoComunidad" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
+ *         &lt;element name="codigoPais" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
  *         &lt;element name="codigoTipoVia" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
  *         &lt;element name="denominacion" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="descripcionLocalidad" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -48,6 +50,8 @@ import java.util.List;
     "codPostal",
     "codUoResponsable",
     "codigo",
+    "codigoComunidad",
+    "codigoPais",
     "codigoTipoVia",
     "denominacion",
     "descripcionLocalidad",
@@ -66,6 +70,8 @@ public class OficinaTF {
     protected String codPostal;
     protected String codUoResponsable;
     protected String codigo;
+    protected Long codigoComunidad;
+    protected Long codigoPais;
     protected Long codigoTipoVia;
     protected String denominacion;
     protected String descripcionLocalidad;
@@ -175,6 +181,54 @@ public class OficinaTF {
      */
     public void setCodigo(String value) {
         this.codigo = value;
+    }
+
+    /**
+     * Gets the value of the codigoComunidad property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Long }
+     *     
+     */
+    public Long getCodigoComunidad() {
+        return codigoComunidad;
+    }
+
+    /**
+     * Sets the value of the codigoComunidad property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Long }
+     *     
+     */
+    public void setCodigoComunidad(Long value) {
+        this.codigoComunidad = value;
+    }
+
+    /**
+     * Gets the value of the codigoPais property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Long }
+     *     
+     */
+    public Long getCodigoPais() {
+        return codigoPais;
+    }
+
+    /**
+     * Sets the value of the codigoPais property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Long }
+     *     
+     */
+    public void setCodigoPais(Long value) {
+        this.codigoPais = value;
     }
 
     /**

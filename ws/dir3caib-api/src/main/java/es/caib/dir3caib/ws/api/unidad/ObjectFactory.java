@@ -67,46 +67,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ObtenerArbolUnidadesDestinatariasResponse }
-     * 
-     */
-    public ObtenerArbolUnidadesDestinatariasResponse createObtenerArbolUnidadesDestinatariasResponse() {
-        return new ObtenerArbolUnidadesDestinatariasResponse();
-    }
-
-    /**
-     * Create an instance of {@link UnidadTF }
-     * 
-     */
-    public UnidadTF createUnidadTF() {
-        return new UnidadTF();
-    }
-
-    /**
-     * Create an instance of {@link ObtenerArbolUnidades }
-     * 
-     */
-    public ObtenerArbolUnidades createObtenerArbolUnidades() {
-        return new ObtenerArbolUnidades();
-    }
-
-    /**
-     * Create an instance of {@link ObtenerUnidadResponse }
-     * 
-     */
-    public ObtenerUnidadResponse createObtenerUnidadResponse() {
-        return new ObtenerUnidadResponse();
-    }
-
-    /**
-     * Create an instance of {@link GetVersionWsResponse }
-     * 
-     */
-    public GetVersionWsResponse createGetVersionWsResponse() {
-        return new GetVersionWsResponse();
-    }
-
-    /**
      * Create an instance of {@link ObtenerUnidad }
      * 
      */
@@ -123,11 +83,51 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ObtenerArbolUnidades }
+     * 
+     */
+    public ObtenerArbolUnidades createObtenerArbolUnidades() {
+        return new ObtenerArbolUnidades();
+    }
+
+    /**
+     * Create an instance of {@link UnidadTF }
+     * 
+     */
+    public UnidadTF createUnidadTF() {
+        return new UnidadTF();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerArbolUnidadesDestinatariasResponse }
+     * 
+     */
+    public ObtenerArbolUnidadesDestinatariasResponse createObtenerArbolUnidadesDestinatariasResponse() {
+        return new ObtenerArbolUnidadesDestinatariasResponse();
+    }
+
+    /**
      * Create an instance of {@link GetVersionWs }
      * 
      */
     public GetVersionWs createGetVersionWs() {
         return new GetVersionWs();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerUnidadResponse }
+     * 
+     */
+    public ObtenerUnidadResponse createObtenerUnidadResponse() {
+        return new ObtenerUnidadResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetVersionWsResponse }
+     * 
+     */
+    public GetVersionWsResponse createGetVersionWsResponse() {
+        return new GetVersionWsResponse();
     }
 
     /**

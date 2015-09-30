@@ -38,6 +38,8 @@
       <xs:element minOccurs="0" name="codPostal" type="xs:string"/>
       <xs:element minOccurs="0" name="codUoResponsable" type="xs:string"/>
       <xs:element minOccurs="0" name="codigo" type="xs:string"/>
+      <xs:element minOccurs="0" name="codigoComunidad" type="xs:long"/>
+      <xs:element minOccurs="0" name="codigoPais" type="xs:long"/>
       <xs:element minOccurs="0" name="codigoTipoVia" type="xs:long"/>
       <xs:element minOccurs="0" name="denominacion" type="xs:string"/>
       <xs:element minOccurs="0" name="descripcionLocalidad" type="xs:string"/>
