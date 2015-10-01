@@ -244,8 +244,9 @@ public class UnidadTF {
         if(unidad.getCodAmbComunidad() != null){
           this.setCodAmbComunidad(unidad.getCodAmbComunidad().getCodigoComunidad());
         }
-
-        this.setDescripcionLocalidad(unidad.getCatLocalidad().getDescripcionLocalidad());
+        if(unidad.getCatLocalidad()!=null) {
+            this.setDescripcionLocalidad(unidad.getCatLocalidad().getDescripcionLocalidad());
+        }
         this.setNombreVia(unidad.getNombreVia());
         this.setNumVia(unidad.getNumVia());
         if(unidad.getTipoVia()!=null) {

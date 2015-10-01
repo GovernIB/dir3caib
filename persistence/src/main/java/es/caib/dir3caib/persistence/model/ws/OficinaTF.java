@@ -215,7 +215,9 @@ public class OficinaTF {
         if(oficina.getCodComunidad()!=null) {
             this.setCodigoComunidad(oficina.getCodComunidad().getCodigoComunidad());
         }
-        this.setDescripcionLocalidad(oficina.getLocalidad().getDescripcionLocalidad());
+        if(oficina.getLocalidad()!=null) {
+            this.setDescripcionLocalidad(oficina.getLocalidad().getDescripcionLocalidad());
+        }
         this.setNombreVia(oficina.getNombreVia());
         this.setNumVia(oficina.getNumVia());
         if(oficina.getTipoVia()!=null) {
