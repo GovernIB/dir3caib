@@ -9,7 +9,7 @@
                 <h3><fmt:message key="dir3caib.sincronizando"/></h3>
             </div>
             <div class="modal-body" >
-                <div class="col-xs-4 centrat" id="carga">
+                <div class="col-xs-4 centrat-sincro" id="carga">
                     <img src="<c:url value="/img/712.GIF"/>" width="60" height="60"/>
                 </div>
             </div>

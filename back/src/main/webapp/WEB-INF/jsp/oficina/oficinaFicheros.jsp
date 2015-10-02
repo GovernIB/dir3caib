@@ -66,6 +66,7 @@
                                         <input type="button" value="<fmt:message key="dir3caib.boton.eliminartodos"/>" onclick="javascript:confirm('<c:url value="/oficina/eliminar"/>','<fmt:message key="dir3caib.confirm.eliminar"  />');" class="btn btn-primary">
                                        </div>
                                     </div>
+                                    <jsp:include page="../modalSincro.jsp" flush="true"/>
                                 </c:if>
                                 <c:if test="${empty existentes}">
                                     <fmt:message key="dir3caib.datos.nohay"/>
