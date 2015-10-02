@@ -58,7 +58,7 @@
                                     <div class="form-horizontal">
                                       <div class="form-actions">
                                         <%--<c:if test="${not empty mostrarimportacion}">--%>
-                                          <input type="button" value="<fmt:message key="dir3caib.boton.importar"/>" onclick="javascript:confirm('<c:url value="/oficina/importar"/>','<fmt:message key="dir3caib.confirm.importar"/>');" class="btn btn-primary">
+                                          <input type="button" value="<fmt:message key="dir3caib.boton.importar"/>" onclick="javascript:confirmDescarga('<c:url value="/oficina/importar"/>','<fmt:message key="dir3caib.confirm.importar"/>');" class="btn btn-primary">
                                        <%-- </c:if>
                                         <c:if test="${empty mostrarimportacion}">
                                               <input type="button" value="<fmt:message key="dir3caib.boton.importar"/>" class="btn btn-primary disabled">

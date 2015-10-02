@@ -33,7 +33,7 @@
                                 <form:form modelAttribute="catalogo" method="post" cssClass="form-horizontal">
                                     <fieldset>
                                         <div class="alert fade in">
-                                            <c:if test="${empty descarga}"><fmt:message key="catalogo.obtener.etiqueta"/></c:if><c:if test="${not empty descarga}"><fmt:message key="catalogo.actualizar.etiqueta"/></c:if>  <input type="submit" value="<fmt:message key="dir3caib.boton.obtener"/>" class="btn btn-primary">
+                                            <c:if test="${empty descarga}"><fmt:message key="catalogo.obtener.etiqueta"/></c:if><c:if test="${not empty descarga}"><fmt:message key="dir3caib.ultima.actualizacion"/>:&nbsp;<fmt:formatDate pattern="dd/MM/yyyy" value="${descarga.fechaFin}" /></c:if>  <input type="submit" value="<fmt:message key="dir3caib.boton.obtener"/>" class="btn btn-primary">
                                         </div>
 
                                      </fieldset>

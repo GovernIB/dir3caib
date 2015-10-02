@@ -56,7 +56,7 @@
                                         </div>
                                     </c:if>
                                     <div class="form-actions">
-                                        <c:if test="${empty descarga}"><fmt:message key="oficina.obtener.etiqueta"/></c:if><c:if test="${not empty descarga}"><fmt:message key="oficina.actualizar.etiqueta"/></c:if>  <input type="submit" value="<fmt:message key="dir3caib.boton.obtener"/>" class="btn btn-primary">
+                                        <c:if test="${empty descarga}"><fmt:message key="oficina.obtener.etiqueta"/></c:if><c:if test="${not empty descarga}"><fmt:message key="dir3caib.ultima.actualizacion"/>:&nbsp;<fmt:formatDate pattern="dd/MM/yyyy" value="${descarga.fechaFin}" /></c:if>  <input type="submit" value="<fmt:message key="dir3caib.boton.obtener"/>" class="btn btn-primary">
                                         <%--<input type="submit" value="<fmt:message key="dir3caib.boton.obtener"/>" class="btn btn-primary"  >--%>
                                         <input type="reset" value="<fmt:message key="dir3caib.boton.restablecer"/>" class="btn btn-primary">
                                     </div>
