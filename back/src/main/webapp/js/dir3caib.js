@@ -61,7 +61,11 @@ $(document).ready(function() {
 
 });
 
-// Muestra el cuadro de confirmación para eliminar un registro
+/**
+ * Muestra el cuadro de confirmación para realizar una acción
+ * @param url  url a la que se dirigirá
+ * @param texto texto de confirmación a mostrar
+ */
 function confirm(url,texto) {
 
     var confirmModal = 
@@ -82,15 +86,71 @@ function confirm(url,texto) {
         '</div>');
 
     confirmModal.find('#okButton').click(function(event) {
-      document.location.href=url;
-	  confirmModal.modal('hide');
+        document.location.href = url;
+        confirmModal.modal('hide');
+
     });
 
     confirmModal.modal('show');     
 };
 
+function confirmDescarga(url,texto) {
+
+    var confirmModal =
+        $('<div class="modal hide fade">' +
+            '<div class="modal-header">' +
+            '<a class="close" data-dismiss="modal" >&times;</a>' +
+            '<h3>Confirmar acción</h3>' +
+            '</div>' +
+
+            '<div class="modal-body">' +
+            '<p>'+texto+'</p>' +
+            '</div>' +
+
+            '<div class="modal-footer">' +
+            '<a href="#" class="btn" data-dismiss="modal">No</a>' +
+            '<a href="#" id="okButton" class="btn btn-primary">Si</a>' +
+            '</div>' +
+            '</div>');
+
+    confirmModal.find('#okButton').click(function(event) {
+        document.location.href = url;
+        confirmModal.modal('hide');
+        $('#modalSincro').modal('show');
+    });
+
+    confirmModal.modal('show');
+};
+
 function goTo(url) {
     document.location.href=url;
+}
+
+function confirmDescarga(url,texto){
+    var confirmModal =
+        $('<div class="modal hide fade">' +
+            '<div class="modal-header">' +
+            '<a class="close" data-dismiss="modal" >&times;</a>' +
+            '<h3>Confirmar acción</h3>' +
+            '</div>' +
+
+            '<div class="modal-body">' +
+            '<p>'+texto+'</p>' +
+            '</div>' +
+
+            '<div class="modal-footer">' +
+            '<a href="#" class="btn" data-dismiss="modal">No</a>' +
+            '<a href="#" id="okButton" class="btn btn-primary">Si</a>' +
+            '</div>' +
+            '</div>');
+
+    confirmModal.find('#okButton').click(function(event) {
+        document.location.href=url;
+        confirmModal.modal('hide');
+        $('#modalSincro').modal('show');
+    });
+
+    confirmModal.modal('show');
 }
 
 

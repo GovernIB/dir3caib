@@ -544,3 +544,16 @@ a.text-gris:focus {
      -moz-border-radius: 4px;
           border-radius: 4px;
 }
+.centrat {
+    float: none;
+    margin: 0 auto;
+}
+.centrat-float-left{
+    float: left;
+}
+
+/* Modal de la imagen de sincronización */
+#modalSincro .modal-dialog
+{
+    width: 320px;
+}
