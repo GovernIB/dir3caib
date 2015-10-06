@@ -283,15 +283,14 @@ public class UnidadController extends BaseController{
           Descarga ultimaDescarga = descargaEjb.findByTipo(Dir3caibConstantes.UNIDAD);
           Date hoy = new Date();
           // Obtenemos los archivos por WS
-          descargarUnidadesWS(request, ultimaDescarga.getFechaFin(), hoy);
-          // Importamos los datos a la BD.
-          return importarUnidades(request);
+          boolean descargaOk= descargarUnidadesWS(request, ultimaDescarga.getFechaFin(), hoy);
+          // Importamos los datos a la BD si la descarga ha ido bien
+          if(descargaOk) {  return importarUnidades(request);}
  
         }catch(Exception ex){
           Mensaje.saveMessageError(request, "Ha ocurrido un error al sincronizar las unidades");
           ex.printStackTrace();
         }
-        Mensaje.saveMessageInfo(request, "Se han sincronizado todos los ficheros de unidades");
         return new ModelAndView("/unidad/unidadImportacion");
      }
      

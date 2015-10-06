@@ -284,11 +284,12 @@ public class OficinaController extends BaseController {
           // Establecemmos la fecha de hoy
           Date hoy = new Date();
           // Obtenemos los archivos por WS
-          descargarOficinasWS(request, ultimaDescarga.getFechaFin(), hoy);
+
+          boolean descargaOk= descargarOficinasWS(request, ultimaDescarga.getFechaFin(), hoy);
           // Importamos los datos a la BD.
-
-
-          return importarOficinas(request, sincronizacion);
+          if(descargaOk) {
+              return importarOficinas(request, sincronizacion);
+          }
           
         }catch(Exception ex){
           Mensaje.saveMessageError(request, "Ha ocurrido un error al sincronizar las oficinas");

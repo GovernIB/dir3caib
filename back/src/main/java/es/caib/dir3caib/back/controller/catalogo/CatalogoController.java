@@ -271,20 +271,26 @@ public class CatalogoController extends BaseController{
      * @param fechaInicio
      * @param fechaFin
      */      
-    public void descargarCatalogoWS(HttpServletRequest request, Date fechaInicio, Date fechaFin ) throws Exception{
+    public boolean descargarCatalogoWS(HttpServletRequest request, Date fechaInicio, Date fechaFin ) throws Exception{
 
          try{
+             String[] respuesta= importadorCatalogo.descargarCatalogoWS(fechaInicio, fechaFin);
+             if(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO.equals(respuesta[0])){
+                 Mensaje.saveMessageInfo(request, "Se han obtenido correctamente los catálogos");
+                 return true;
+             }else{
+                 Mensaje.saveMessageError(request, "Ha ocurrido un error al descargar el catálogo a través de WS: " + respuesta[1]);
+                 return false;
+             }
 
-            importadorCatalogo.descargarCatalogoWS(fechaInicio, fechaFin);
-
-
-            Mensaje.saveMessageInfo(request, "Se han obtenido correctamente los catalogos");
         }catch(IOException ex){
-            Mensaje.saveMessageError(request, "Ha ocurrido un error al descomprimir los catalogos");
-            ex.printStackTrace(); 
+            Mensaje.saveMessageError(request, "Ha ocurrido un error al descomprimir los catálogos");
+            ex.printStackTrace();
+            return false;
         }catch(Exception e){
             Mensaje.saveMessageError(request, "Ha ocurrido un error en la descarga del catálogo a través del WS");
             e.printStackTrace();
+            return false;
         }
     }
 

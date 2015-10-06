@@ -771,9 +771,10 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
    * @param fechaFin
    */
    @Override
-   public void descargarCatalogoWS(Date fechaInicio, Date fechaFin) throws Exception{
+   public String[] descargarCatalogoWS(Date fechaInicio, Date fechaFin) throws Exception{
 
       byte[] buffer = new byte[1024];
+      String[] resp = new String[2];
 
 
      //Definimos el formato de la fecha para las descargas de los WS.
@@ -829,6 +830,15 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
         log.info("Codigo: " + respuestaCsv.getCodigo());
         log.info("Descripcion: " + respuestaCsv.getDescripcion());
 
+        //Montamos la respuesta del ws para controlar los errores a mostrar
+        resp[0] = respuestaCsv.getCodigo();
+        resp[1] = respuestaCsv.getDescripcion();
+
+        if (!respuestaCsv.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO)){
+            descargaEjb.deleteByTipo(Dir3caibConstantes.UNIDAD);
+            return resp;
+        }
+
         // Definimos el nombre del archivo zip a descargar
         String archivoCatalogoZip = ruta + Dir3caibConstantes.CATALOGOS_ARCHIVO_ZIP + descarga.getCodigo() + ".zip";
         File file = new File(archivoCatalogoZip);
@@ -877,6 +887,8 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
         }
         zis.closeEntry();
         zis.close();
+
+        return resp;
       }catch (Exception e){
         descargaEjb.deleteByTipo(Dir3caibConstantes.CATALOGO);
           throw new Exception(e.getMessage());

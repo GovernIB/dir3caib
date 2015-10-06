@@ -13,7 +13,7 @@ import java.util.Date;
 @Local
 public interface ImportadorCatalogoLocal {
 
-  public void descargarCatalogoWS(Date fechaInicio, Date fechaFin)
+  public String[] descargarCatalogoWS(Date fechaInicio, Date fechaFin)
       throws Exception;
 
   public void importarCatalogoTask();
