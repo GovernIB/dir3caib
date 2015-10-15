@@ -7,6 +7,7 @@ import es.caib.dir3caib.persistence.utils.Paginacion;
 import javax.ejb.Local;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -51,7 +52,11 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
 
     public Boolean tieneHijos(String codigo) throws Exception;
 
-    public List<ObjetoBasico> hijos(String codigo, String estado) throws Exception;
+    public List<ObjetoBasico> hijosOB(String codigo, String estado) throws Exception;
+
+    public List<Unidad> hijosPrimerNivel(String codigo, String estado) throws Exception;
+
+    public void arbolHijos(Set<Unidad> unidadesPadres, String estado, Set<Unidad> hijosTotales) throws Exception;
 
     public List<Unidad> findByDenominacion(String denominacion) throws Exception;
     

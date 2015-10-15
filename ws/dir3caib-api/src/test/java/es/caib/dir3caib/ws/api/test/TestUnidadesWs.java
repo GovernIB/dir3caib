@@ -16,7 +16,7 @@ public class TestUnidadesWs extends Dir3CaibTestUtils{
     public void obtenerArbolUnidadesDestinatarias() {
       try{
           Dir3CaibObtenerUnidadesWs apiUnidades = getObtenerUnidadesApi(true);
-          List<UnidadTF> destinatarias = apiUnidades.obtenerArbolUnidadesDestinatarias("U03600001");
+          List<UnidadTF> destinatarias = apiUnidades.obtenerArbolUnidadesDestinatarias("U00300001");
             System.out.println("DESTINATRIAS " + destinatarias.size());
           for (UnidadTF unidadTF : destinatarias) {
             System.out.println(unidadTF.getCodigo() + "\t\t"

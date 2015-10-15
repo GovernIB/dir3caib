@@ -384,7 +384,7 @@ public class UnidadController extends BaseController{
           nodo.setOficinasFuncionales(transformarOficinasFuncionales(oficinasFuncionales));
 
           List<Nodo> hijos = new ArrayList<Nodo>();
-          List<ObjetoBasico> unidadesHijas = unidadEjb.hijos(idUnidad,estado);
+          List<ObjetoBasico> unidadesHijas = unidadEjb.hijosOB(idUnidad,estado);
 
 
           for(ObjetoBasico unidadHija: unidadesHijas){

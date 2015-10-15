@@ -96,13 +96,13 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
     public List<Oficina> obtenerOficinasSIRUnidad(String codigo) throws Exception;
 
     /**
-     * Método que comprueba si una unidad tiene oficinas donde registrar
+     * Método que comprueba si el arbol de unidades del código indicado  tiene oficinas donde registrar
      *
      * @param codigo
      * @return
      * @throws Exception
      */
-    public Boolean tieneOficinasOrganismo(String codigo) throws Exception;
+    public Boolean tieneOficinasArbol(String codigo) throws Exception;
 
     public List<String> getAllCodigos() throws Exception;
 

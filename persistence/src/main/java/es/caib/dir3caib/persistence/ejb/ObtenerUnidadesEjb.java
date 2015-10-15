@@ -81,7 +81,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
     }
 
   /**
-   * Método que devuelve el arbol de Unidades que estan vigentes y tienen oficinas donde registrar
+   * Método que devuelve el la unidad indicada si tiene oficinas y los hijos que dependen de ella.
    * @param codigo
    * @return
    * @throws Exception

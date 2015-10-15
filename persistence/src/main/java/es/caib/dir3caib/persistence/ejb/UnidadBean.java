@@ -234,14 +234,14 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     }
 
     /**
-     * Metodo que obtiene los hijos de primer nivel de una unidad en función del estado de la unidad padre
+     * Método que obtiene los hijos de primer nivel de una unidad en función del estado de la unidad padre
      * @param codigo identificador de la unidad padre.
      * @param estado estado de la unidad padre.
      *
      * @return  {@link es.caib.dir3caib.persistence.model.utils.ObjetoBasico}
      */
     @Override
-    public List<ObjetoBasico> hijos(String codigo, String estado) throws Exception {
+    public List<ObjetoBasico> hijosOB(String codigo, String estado) throws Exception {
 
         Query q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.estado.descripcionEstadoEntidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.descripcionEstadoEntidad =:estado order by unidad.codigo");
 
@@ -249,6 +249,50 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         q.setParameter("estado",estado);
 
         return getObjetoBasicoList(q.getResultList());
+    }
+
+    /**
+     * Método que obtiene los hijos de primer nivel de una unidad en función del estado de la unidad padre
+     * @param codigo identificador de la unidad padre.
+     * @param estado estado de la unidad padre.
+     *
+     * @return  {@link es.caib.dir3caib.persistence.model.Unidad}
+     */
+    @Override
+    public List<Unidad> hijosPrimerNivel(String codigo, String estado) throws Exception {
+
+        Query q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.descripcionEstadoEntidad =:estado order by unidad.codigo");
+
+        q.setParameter("codigo",codigo);
+        q.setParameter("estado",estado);
+
+        return q.getResultList();
+    }
+
+    /**
+     * Metodo que obtiene los hijos de primer nivel de una unidad en función del estado de la unidad padre
+     * @param unidadesPadres unidadesPadres de las que obtener hijos
+     * @param estado indica el estado de los hijos
+     * @param hijosTotales lista con todos los hijos encontrados de manera recursiva.
+     *
+     * @return  {@link es.caib.dir3caib.persistence.model.Unidad}
+     */
+    @Override
+    public void arbolHijos(Set<Unidad> unidadesPadres, String estado, Set<Unidad> hijosTotales) throws Exception {
+        for(Unidad unidad:unidadesPadres){
+            Query q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.descripcionEstadoEntidad =:estado order by unidad.codigo");
+
+            q.setParameter("codigo",unidad.getCodigo());
+            q.setParameter("estado",estado);
+
+            Set<Unidad> hijos=new HashSet<Unidad>(q.getResultList());
+            log.info("Hijos encontrados de UNIDAD:  " + unidad.getCodigo());
+            hijosTotales.addAll(hijos);
+
+            //llamada recursiva para todos los hijos
+            arbolHijos(hijos,estado,hijosTotales);
+        }
+
     }
 
 
@@ -307,8 +351,8 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     }
 
   /**
-   * Método que devuelve el árbol de unidades de la unidad indicada por codigo,
-   * que esté vigente y que sean destinatarios( es decir que tengan oficinas donde registrar)
+   * Método que devuelve la unidad indicada por código siempre que esté vigente y tenga oficinas donde registrar.
+   * A partir de ella se obtienen todos sus hijos vigentes.
    * solicitado por SISTRA
    * @param codigo código de la unidad raiz de la que partimos.
    * @return
@@ -317,35 +361,28 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     @Override
     public List<Unidad> obtenerArbolUnidadesDestinatarias(String codigo) throws Exception{
 
-      Query q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadRaiz.codigo =:codigo and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.codigo");
+      Query q = em.createQuery("Select unidad from Unidad as unidad where unidad.codigo =:codigo and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.codigo");
       q.setParameter("codigo", codigo);
       q.setParameter("vigente",  Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
-      List<Unidad> unidadesDestinatariasPadres  = q.getResultList();
+      Unidad unidadPadre  = (Unidad)q.getSingleResult();
+      log.info("UNIDAD ENCONTRADA " + unidadPadre.getCodigo());
+
       List<Unidad> unidadesDestConOficinas= new ArrayList<Unidad>();
 
-     // log.info("Total unidades: " + unidadesDestinatariasPadres.size());
+      //Miramos si la unidad que nos pasan tiene oficinas
+      Boolean tiene = oficinaEjb.tieneOficinasArbol(unidadPadre.getCodigo());
 
-      if(unidadesDestinatariasPadres.size() > 1){ // Es necesario eliminar la Unidad superior de la lista a procesar
-          log.info("Tiene más de una");
-          Unidad unidadRaiz = findById(codigo);
+      if(tiene){
 
-          if(unidadesDestinatariasPadres.contains(unidadRaiz)){
-              //Antes de eliminarla de la lista de los padres, hay que añadirla a la lista dest con oficinas en el caso que las tenga.
-              Boolean tiene = oficinaEjb.tieneOficinasOrganismo(unidadRaiz.getCodigo());
-              if(tiene){
-                  unidadesDestConOficinas.add(unidadRaiz);
-              }
-              log.info("Existe");
-              log.info("Eliminado?: " + unidadesDestinatariasPadres.remove(unidadRaiz));
-          }
-      }
+          unidadesDestConOficinas.add(unidadPadre);
+          Set<Unidad> padres = new HashSet<Unidad>();
+          padres.add(unidadPadre);
+          Set<Unidad> unidadesTotales = new HashSet<Unidad>();
+          //Obtenemos de manera recursiva todos los hijos de la unidad que nos indican
+          arbolHijos(padres,Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE,unidadesTotales);
 
-      for(Unidad unidad: unidadesDestinatariasPadres){
-        Boolean tiene = oficinaEjb.tieneOficinasOrganismo(unidad.getCodigo());
-        if(tiene){
-          unidadesDestConOficinas.add(unidad);
-        }
+          unidadesDestConOficinas.addAll(unidadesTotales);
       }
 
       return unidadesDestConOficinas;

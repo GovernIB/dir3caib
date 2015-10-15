@@ -4,10 +4,7 @@
  */
 package es.caib.dir3caib.persistence.ejb;
 
-import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
-import es.caib.dir3caib.persistence.model.Oficina;
-import es.caib.dir3caib.persistence.model.RelacionOrganizativaOfi;
-import es.caib.dir3caib.persistence.model.RelacionSirOfi;
+import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.model.utils.ObjetoBasico;
 import es.caib.dir3caib.persistence.utils.DataBaseUtils;
 import es.caib.dir3caib.persistence.utils.Paginacion;
@@ -501,7 +498,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
 
      @Override
-     public Boolean tieneOficinasOrganismo(String codigo) throws Exception {
+     public Boolean tieneOficinasArbol(String codigo) throws Exception {
 
         Query q = em.createQuery("Select oficina from Oficina as oficina where oficina.codUoResponsable.codigo =:codigo and oficina.estado.codigoEstadoEntidad=:vigente order by oficina.codigo");
 
@@ -509,6 +506,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
         q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
         List<Oficina> oficinas =  q.getResultList();
+         log.info("OFICINAS"+ oficinas.size()+ " DE "+codigo);
         if (oficinas.size() > 0) {
           return true;
         }else{
@@ -517,10 +515,27 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
           q.setParameter("codigo", codigo);
           q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
           List<RelacionOrganizativaOfi> relorg= q.getResultList();
-          return relorg.size() > 0;
-        }
+          if(relorg.size() > 0){
+              return true;
+          }else{// no tiene oficinas, miramos sus hijos
+              log.info("Entramos aquí");
+              Query q2 = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:estado order by unidad.codigo");
 
+              q2.setParameter("codigo",codigo);
+              q2.setParameter("estado",Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+              List<Unidad> hijos= q2.getResultList();
+              log.info("HIJOS  "+ hijos.size());
+              for(Unidad hijo:hijos){
+                  boolean tiene= tieneOficinasArbol(hijo.getCodigo());
+                  if(tiene) {return true;}
+                  break;
+              }
+          }
+        }
+        return false;
      }
+
+
       
       
      @Override
