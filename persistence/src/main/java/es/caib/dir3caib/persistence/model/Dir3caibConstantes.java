@@ -100,5 +100,6 @@ public class Dir3caibConstantes {
 
     //codigo respuesta correcto ws descarga madrid
     public static final String CODIGO_RESPUESTA_CORRECTO= "01";
+    public static final String CODIGO_RESPUESTA_VACIO= "14";
 
 }

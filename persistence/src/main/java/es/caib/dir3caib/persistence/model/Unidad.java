@@ -2,15 +2,13 @@ package es.caib.dir3caib.persistence.model;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.ForeignKey;
+import org.hibernate.annotations.Index;
 
 import javax.persistence.*;
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-
-import org.hibernate.annotations.Index;
 
 
 
@@ -415,7 +413,7 @@ public class Unidad implements Serializable {
 
   @Column(name = "FECHAALTAOFICIAL")
   @JsonIgnore
-  @Temporal(TemporalType.DATE)
+ // @Temporal(TemporalType.DATE)
   public Date getFechaAltaOficial() {
     return fechaAltaOficial;
   }
@@ -428,7 +426,7 @@ public class Unidad implements Serializable {
 
   @Column(name = "FECHABAJAOFICIAL")
   @JsonIgnore
-  @Temporal(TemporalType.DATE)
+ // @Temporal(TemporalType.DATE)
   public Date getFechaBajaOficial() {
     return fechaBajaOficial;
   }
@@ -439,7 +437,7 @@ public class Unidad implements Serializable {
   }
 
   @Column(name = "FECHAEXTINCION")
-  @Temporal(TemporalType.DATE)
+//  @Temporal(TemporalType.DATE)
   @JsonIgnore
   public Date getFechaExtincion() {
     return fechaExtincion;
@@ -452,7 +450,7 @@ public class Unidad implements Serializable {
 
 
   @Column(name = "FECHAANULACION")
-  @Temporal(TemporalType.DATE)
+ // @Temporal(TemporalType.DATE)
   @JsonIgnore
   public Date getFechaAnulacion() {
     return fechaAnulacion;
@@ -464,7 +462,7 @@ public class Unidad implements Serializable {
   }
 
     @Column(name = "FECHAIMPORTACION")
-    @Temporal(TemporalType.DATE)
+   // @Temporal(TemporalType.DATE)
     @JsonIgnore
     public Date getFechaImportacion() {
       return fechaImportacion;

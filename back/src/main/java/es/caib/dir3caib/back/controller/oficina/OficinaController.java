@@ -312,8 +312,14 @@ public class OficinaController extends BaseController {
                 Mensaje.saveMessageInfo(request, "Se han obtenido correctamente las oficinas");
                 return true;
             }else{
-                Mensaje.saveMessageError(request, "Ha ocurrido un error obtener las oficinas a través de WS: " + respuesta[1]);
-                return false;
+                if(Dir3caibConstantes.CODIGO_RESPUESTA_VACIO.equals(respuesta[0])){
+                    Mensaje.saveMessageInfo(request, "No hay oficinas nuevas a importar");
+                    return true;
+                }else {
+                    Mensaje.saveMessageError(request, "Ha ocurrido un error obtener las oficinas a través de WS: " + respuesta[1]);
+                    return false;
+                }
+
             }
         }catch(IOException ex){
             Mensaje.saveMessageError(request, "Ha ocurrido un error al descomprimir las oficinas");

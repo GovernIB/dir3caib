@@ -326,8 +326,9 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
         if(fechaActualizacion!= null){ // Si hay fecha de actualizacion solo se envian las actualizadas
            for(Unidad unidad: padres){
-             if(fechaActualizacion.before(unidad.getFechaImportacion()) || fechaActualizacion.equals(unidad.getFechaImportacion())){
-                  log.info("FECHA ACTUALIZACION " +fechaActualizacion +"ANTERIOR O IGUAL A LA FECHA DE IMPORTACION DE LA UNIDAD ID "+ unidad.getCodigo() +" FECHA IMPORT"+ unidad.getFechaImportacion());
+               //TODO QUITAR segunda condición.
+             if(fechaActualizacion.before(unidad.getFechaImportacion()) /*|| fechaActualizacion.equals(unidad.getFechaImportacion())*/){
+                  log.info("FECHA ACTUALIZACION " +fechaActualizacion +"ANTERIOR A LA FECHA DE IMPORTACION DE LA UNIDAD ID "+ unidad.getCodigo() +" FECHA IMPORT"+ unidad.getFechaImportacion());
                   // Miramos que la unidad no este extinguida o anulada anterior a la fecha de sincronizacion de regweb
                   if(unidadValida(unidad,fechaSincronizacion)){
                     padresActualizados.add(unidad);
@@ -399,13 +400,21 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
      * @throws Exception
      */
       public boolean unidadValida(Unidad unidad, Date fechaSincro) throws Exception {
-           if(unidad.getFechaExtincion() != null){
-                if(unidad.getFechaExtincion().after(fechaSincro) || unidad.getFechaExtincion().equals(fechaSincro)){
+
+          SimpleDateFormat fechaFormat = new SimpleDateFormat("dd/MM/yyyy");
+          String sSincro=new String();
+          if(fechaSincro!= null) {
+              sSincro = fechaFormat.format(fechaSincro);
+          }
+          if(unidad.getFechaExtincion() != null){
+                String sExtincion = fechaFormat.format(unidad.getFechaExtincion());
+                if(unidad.getFechaExtincion().after(fechaSincro) || sExtincion.equals(sSincro)){
                   return true;
                 }
            }else{
                 if(unidad.getFechaAnulacion() != null){
-                  if(unidad.getFechaAnulacion().after(fechaSincro) || unidad.getFechaAnulacion().equals(fechaSincro)) {
+                  String sAnulacion = fechaFormat.format(unidad.getFechaAnulacion());
+                  if(unidad.getFechaAnulacion().after(fechaSincro) || sAnulacion.equals(sSincro)) {
                     return true;
                   }
                 }else {

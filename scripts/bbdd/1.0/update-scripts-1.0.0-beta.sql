@@ -33,6 +33,17 @@ ALTER TABLE dir_catpais  alter column descripcionpais type character varying(100
 ALTER TABLE dir_cattipoentidadpublica MODIFY descripciontipoentidadpublica VARCHAR2(100 CHAR);
 ALTER TABLE dir_catpais MODIFY descripcionpais VARCHAR2(100 CHAR);
 
+--(PENDIENTE DE APLICAR EN PORTS Y CAIB)
+--20/10/2015 cambiar fechaimportacion de date a timestamp. Pendiente de aplicar y ver si versionamos(ORACLE)
+ALTER TABLE dir_unidad MODIFY fechaimportacion TIMESTAMP;
+ALTER TABLE dir_oficina MODIFY fechaimportacion TIMESTAMP;
+
+
+--20/10/2015 cambiar fechaimportacion de date a timestamp. Pendiente de aplicar y ver si versionamos(POSTGRESQL)
+ALTER TABLE dir_unidad ALTER COLUMN fechaimportacion TYPE timestamp;
+ALTER TABLE dir_oficina ALTER COLUMN fechaimportacion TYPE timestamp;
+
+
 
 
 

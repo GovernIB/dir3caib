@@ -206,6 +206,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
     }
 
     /**
+     * EL QUE SE EMPLEA EN LA SINCRO CON REGWEB (EL BUENO)
      * Método que devuelve las oficinas de un organismo(son todas, padres e hijos),
      * teniendo en cuenta la fecha de la ultima actualización de regweb.
      * Se emplea para la sincronizacion y actualización con regweb
@@ -274,7 +275,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
           // incluir en la lista de actualizadas
 
           for(Oficina oficina: oficinas){
-             if(fechaActualizacion.before(oficina.getFechaImportacion()) || fechaActualizacion.equals(oficina.getFechaImportacion())){
+             if(fechaActualizacion.before(oficina.getFechaImportacion()) /*|| fechaActualizacion.equals(oficina.getFechaImportacion())*/){
                  // Miramos que la oficina no esté extinguida o anulada anterior a la fecha de sincronizacion de regweb
 
                  if(oficinaValida(oficina,fechaSincronizacion)){
@@ -454,13 +455,20 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
      * @throws Exception
      */
       public boolean relacionValida(RelacionOrganizativaOfi relOrg, Date fechaSincro) throws Exception {
+           SimpleDateFormat fechaFormat = new SimpleDateFormat("dd/MM/yyyy");
+           String sSincro=new String();
+           if(fechaSincro!= null) {
+              sSincro = fechaFormat.format(fechaSincro);
+           }
            if(relOrg.getUnidad().getFechaExtincion() != null){
-                if(relOrg.getUnidad().getFechaExtincion().after(fechaSincro) || relOrg.getUnidad().getFechaExtincion().equals(fechaSincro)){
+                String sExtincion = fechaFormat.format(relOrg.getUnidad().getFechaExtincion());
+                if(relOrg.getUnidad().getFechaExtincion().after(fechaSincro) ||  sExtincion.equals(sSincro)){
                   return true;
                 }
            }else{
                 if(relOrg.getUnidad().getFechaAnulacion() != null){
-                  if(relOrg.getUnidad().getFechaAnulacion().after(fechaSincro) || relOrg.getUnidad().getFechaAnulacion().equals(fechaSincro)) {
+                  String sAnulacion = fechaFormat.format(relOrg.getUnidad().getFechaAnulacion());
+                  if(relOrg.getUnidad().getFechaAnulacion().after(fechaSincro) || sAnulacion.equals(sSincro)) {
                     return true;
                   }
                 }else {
@@ -480,13 +488,20 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
      * @throws Exception
      */
     public boolean relacionSirValida(RelacionSirOfi relSir, Date fechaSincro) throws Exception {
+        SimpleDateFormat fechaFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String sSincro=new String();
+        if(fechaSincro!= null) {
+            sSincro = fechaFormat.format(fechaSincro);
+        }
         if(relSir.getUnidad().getFechaExtincion() != null){
-            if(relSir.getUnidad().getFechaExtincion().after(fechaSincro) || relSir.getUnidad().getFechaExtincion().equals(fechaSincro)){
+            String sExtincion = fechaFormat.format(relSir.getUnidad().getFechaExtincion());
+            if(relSir.getUnidad().getFechaExtincion().after(fechaSincro) || sExtincion.equals(sSincro)){
                 return true;
             }
         }else{
             if(relSir.getUnidad().getFechaAnulacion() != null){
-                if(relSir.getUnidad().getFechaAnulacion().after(fechaSincro) || relSir.getUnidad().getFechaAnulacion().equals(fechaSincro)) {
+                String sAnulacion = fechaFormat.format(relSir.getUnidad().getFechaAnulacion());
+                if(relSir.getUnidad().getFechaAnulacion().after(fechaSincro) ||  sAnulacion.equals(sSincro)) {
                     return true;
                 }
             }else {
@@ -575,13 +590,20 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
      * @throws Exception
      */
     public boolean oficinaValida(Oficina oficina, Date fechaSincro) throws Exception {
+        SimpleDateFormat fechaFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String sSincro=new String();
+        if(fechaSincro!= null) {
+            sSincro = fechaFormat.format(fechaSincro);
+        }
         if(oficina.getFechaExtincion() != null){
-            if(oficina.getFechaExtincion().after(fechaSincro) || oficina.getFechaExtincion().equals(fechaSincro)){
+            String sExtincion = fechaFormat.format(oficina.getFechaExtincion());
+            if(oficina.getFechaExtincion().after(fechaSincro) || sExtincion.equals(sSincro)){
                 return true;
             }
         }else{
             if(oficina.getFechaAnulacion() != null){
-                if(oficina.getFechaAnulacion().after(fechaSincro) || oficina.getFechaAnulacion().equals(fechaSincro)) {
+                String sAnulacion = fechaFormat.format(oficina.getFechaAnulacion());
+                if(oficina.getFechaAnulacion().after(fechaSincro) || sAnulacion.equals(sSincro)) {
                     return true;
                 }
             }else {

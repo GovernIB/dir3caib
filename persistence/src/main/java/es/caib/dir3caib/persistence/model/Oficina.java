@@ -243,7 +243,7 @@ public class Oficina implements Serializable {
    * @return the fechaAltaOficial
    */
   @Column(name = "FECHAALTAOFICIAL")
-  @Temporal(TemporalType.DATE)
+  //@Temporal(TemporalType.DATE)
   @JsonIgnore
   public Date getFechaAltaOficial() {
     return fechaAltaOficial;
@@ -260,7 +260,7 @@ public class Oficina implements Serializable {
    * @return the fechaExtincion
    */
   @Column(name = "FECHAEXTINCION")
-  @Temporal(TemporalType.DATE)
+ // @Temporal(TemporalType.DATE)
   @JsonIgnore
   public Date getFechaExtincion() {
     return fechaExtincion;
@@ -277,7 +277,7 @@ public class Oficina implements Serializable {
    * @return the fechaAnulacion
    */
   @Column(name = "FECHAANULACION")
-  @Temporal(TemporalType.DATE)
+ // @Temporal(TemporalType.DATE)
   @JsonIgnore
   public Date getFechaAnulacion() {
     return fechaAnulacion;
@@ -294,7 +294,7 @@ public class Oficina implements Serializable {
     * @return the fechaAnulacion
     */
    @Column(name = "FECHAIMPORTACION")
-   @Temporal(TemporalType.DATE)
+   //@Temporal(TemporalType.DATE)
    @JsonIgnore
    public Date getFechaImportacion() {
      return fechaImportacion;
