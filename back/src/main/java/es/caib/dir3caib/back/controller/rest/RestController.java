@@ -38,7 +38,9 @@ public class RestController {
       public @ResponseBody
       ResponseEntity<List<Unidad>> unidadesPorDenominacion(@RequestParam String denominacion) throws Exception {
         log.info("dentro rest unidadPorDenominacion");
-        List<Unidad> resultado = dir3RestEjb.findUnidadesByDenominacion(denominacion);
+        //Transformamos el campo denominacion de ISO a UTF-8 para realizar las búsquedas en bd que estan en UTF-8.
+        //Esto se hace porque el @RequestParam viene en ISO-8859-1.
+        List<Unidad> resultado = dir3RestEjb.findUnidadesByDenominacion(new String(denominacion.getBytes("ISO-8859-1"), "UTF-8"));
         log.info( " Unidades encontradas: " + resultado.size());
         HttpHeaders headers = addAccessControllAllowOrigin();
           return new ResponseEntity<List<Unidad>>(resultado, headers, HttpStatus.OK);
@@ -52,7 +54,9 @@ public class RestController {
       public @ResponseBody
       ResponseEntity<List<Oficina>> oficinasPorDenominacion(@RequestParam String denominacion) throws Exception {
         log.info("dentro rest oficinaPorDenominacion");
-        List<Oficina> resultado = dir3RestEjb.findOficinasByDenominacion(denominacion);
+        //Transformamos el campo denominacion de ISO a UTF-8 para realizar las búsquedas en bd que estan en UTF-8.
+        //Esto se hace porque el @RequestParam viene en ISO-8859-1.
+        List<Oficina> resultado = dir3RestEjb.findOficinasByDenominacion(new String(denominacion.getBytes("ISO-8859-1"), "UTF-8"));
         log.info( " Oficinas encontradas: " + resultado.size());
         HttpHeaders headers = addAccessControllAllowOrigin();
         return new ResponseEntity<List<Oficina>>(resultado, headers, HttpStatus.OK);
@@ -98,8 +102,12 @@ public class RestController {
      @RequestMapping(value = "/busqueda/organismos", method = RequestMethod.GET)
      public @ResponseBody
      ResponseEntity<List<ObjetoBasico>> busquedaOrganismos(@RequestParam String codigo, @RequestParam String denominacion, @RequestParam Long codNivelAdministracion,  @RequestParam Long codComunidadAutonoma, @RequestParam boolean conOficinas, @RequestParam boolean unidadRaiz) throws Exception {
-        log.info("dentro rest busqueda organismos ");
-        List<ObjetoBasico> unidades = dir3RestEjb.busquedaOrganismos(codigo, denominacion, codNivelAdministracion, codComunidadAutonoma, conOficinas, unidadRaiz);
+
+        log.info("dentro rest busqueda organismos");
+        //log.info("dentro rest busqueda organismos ISO lenght: " + new String(denominacion.getBytes("ISO-8859-1"), "UTF-8").length());
+        //Transformamos el campo denominacion de ISO a UTF-8 para realizar las búsquedas en bd que estan en UTF-8.
+         //Esto se hace porque el @RequestParam viene en ISO-8859-1.
+        List<ObjetoBasico> unidades = dir3RestEjb.busquedaOrganismos(codigo, new String(denominacion.getBytes("ISO-8859-1"), "UTF-8"), codNivelAdministracion, codComunidadAutonoma, conOficinas, unidadRaiz);
         log.info("Organismos encontrados " + unidades.size());
         HttpHeaders headers = addAccessControllAllowOrigin();
 
@@ -117,8 +125,10 @@ public class RestController {
      @RequestMapping(value = "/busqueda/oficinas", method = RequestMethod.GET)
      public @ResponseBody
      ResponseEntity<List<ObjetoBasico>> busquedaOficinas(@RequestParam String codigo, @RequestParam String denominacion, @RequestParam Long codNivelAdministracion,  @RequestParam Long codComunidadAutonoma) throws Exception {
-        log.info("dentro rest busqueda oficinas ");
-        List<ObjetoBasico> oficinas = dir3RestEjb.busquedaOficinas(codigo, denominacion, codNivelAdministracion, codComunidadAutonoma);
+        log.info("dentro rest busqueda oficinas");
+        //Transformamos el campo denominacion de ISO a UTF-8 para realizar las búsquedas en bd que estan en UTF-8.
+        // Esto se hace porque el @RequestParam viene en ISO-8859-1.
+        List<ObjetoBasico> oficinas = dir3RestEjb.busquedaOficinas(codigo, new String(denominacion.getBytes("ISO-8859-1"), "UTF-8"), codNivelAdministracion, codComunidadAutonoma);
         log.info("Oficinas encontradas " + oficinas.size());
         HttpHeaders headers = addAccessControllAllowOrigin();
 

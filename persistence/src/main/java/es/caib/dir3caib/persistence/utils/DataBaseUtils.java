@@ -48,7 +48,6 @@ public class DataBaseUtils {
       }
 
       parametros.put(variable, "%" + newValue.toString().toLowerCase() + "%");
-
       return " upper(" + columnName + ") like upper(:" + variable + ")";
     }
   }
