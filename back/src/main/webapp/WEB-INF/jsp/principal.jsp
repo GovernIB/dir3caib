@@ -26,9 +26,35 @@
                     </div>
                     
                     <c:import url="modulos/mensajes.jsp"/>
+                    <%--TODO mostrar si ha ido bien con el código que devuelve madrid.--%>
 
+
+                    <div class="box-content">
+                        <table class="table table-bordered">
+                        <colgroup>
+                            <col>
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th><fmt:message key="menu.catalogo"/></th>
+                            <th><fmt:message key="menu.unidad"/></th>
+                            <th><fmt:message key="menu.oficina"/></th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr>
+                            <td><strong><spring:message code="dir3caib.ultima.actualizacion"/></strong></td>
+                            <td><c:if test="${empty ultimaDescargaCatalogo.fechaImportacion}"><spring:message code="descarga.importacion.error"/></c:if><fmt:formatDate pattern="dd/MM/yyyy" value="${ultimaDescargaCatalogo.fechaImportacion}" /></td>
+                            <td><c:if test="${empty ultimaDescargaUnidad.fechaImportacion}"><spring:message code="descarga.importacion.error"/></c:if><fmt:formatDate pattern="dd/MM/yyyy" value="${ultimaDescargaUnidad.fechaImportacion}" /></td>
+                            <td><c:if test="${empty ultimaDescargaOficina.fechaImportacion}"><spring:message code="descarga.importacion.error"/></c:if><fmt:formatDate pattern="dd/MM/yyyy" value="${ultimaDescargaOficina.fechaImportacion}" /></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    </div>
                 </div>
-             </div>
+            </div>
 
             <hr>
 

@@ -13,12 +13,33 @@ import java.util.List;
  */
 @Local
 public interface DescargaLocal extends BaseEjb<Descarga, Long> {
-  
+  /**
+   * Obtiene la ultima descarga realizada del tipo indicado
+   * @param tipo
+   * @return
+   * @throws Exception
+   */
   public Descarga findByTipo(String tipo) throws Exception;
 
+  /**
+   * Obtiene todas las descargas del tipo indicado
+   * @param tipo
+   * @return
+   * @throws Exception
+   */
   public List<Descarga> getAllByTipo(String tipo) throws Exception;
-  
+
+  /**
+   * Borra la ultima descarga del tipo indicado
+   * @param tipo
+   * @throws Exception
+   */
   public void deleteByTipo(String tipo) throws Exception;
 
+  /**
+   * Borra todas las descargas del tipo indicado
+   * @param tipo
+   * @throws Exception
+   */
   public void deleteAllByTipo(String tipo) throws Exception;
 }

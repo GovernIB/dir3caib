@@ -4,10 +4,7 @@ import es.caib.dir3caib.persistence.ejb.CatComunidadAutonomaLocal;
 import es.caib.dir3caib.persistence.ejb.CatEstadoEntidadLocal;
 import es.caib.dir3caib.persistence.ejb.CatNivelAdministracionLocal;
 import es.caib.dir3caib.persistence.ejb.DescargaLocal;
-import es.caib.dir3caib.persistence.model.CatComunidadAutonoma;
-import es.caib.dir3caib.persistence.model.CatEstadoEntidad;
-import es.caib.dir3caib.persistence.model.CatNivelAdministracion;
-import es.caib.dir3caib.persistence.model.Descarga;
+import es.caib.dir3caib.persistence.model.*;
 import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
@@ -50,10 +47,27 @@ public class BaseController {
     return catEstadoEntidadEjb.getAll();
   }
 
+  @ModelAttribute("ultimaDescargaCatalogo")
+  public Descarga ultimaDescargaCatalogo() throws Exception {
+    return descargaEjb.findByTipo(Dir3caibConstantes.CATALOGO);
+  }
+
+  @ModelAttribute("ultimaDescargaUnidad")
+  public Descarga ultimaDescargaUnidad() throws Exception {
+    return descargaEjb.findByTipo(Dir3caibConstantes.UNIDAD);
+  }
+
+  @ModelAttribute("ultimaDescargaOficina")
+  public Descarga ultimaDescargaOficina() throws Exception {
+    return descargaEjb.findByTipo(Dir3caibConstantes.OFICINA);
+  }
+
   public List<Descarga> descargasByTipo(String tipo) throws Exception {
     return descargaEjb.getAllByTipo(tipo);
   }
 
   protected final Logger log = Logger.getLogger(getClass());
+
+
 
 }

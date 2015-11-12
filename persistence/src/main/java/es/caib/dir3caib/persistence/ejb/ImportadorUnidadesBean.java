@@ -1023,10 +1023,20 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
             Date fechaFin = new Date();
 
             // Obtiene los archivos csv via WS
-           descargarUnidadesWS(fechaInicio, fechaFin);
+            //descargarUnidadesWS(fechaInicio, fechaFin);
 
-            // importamos el catálogo a la bd.
-            importarUnidades();
+           String[] respuesta= descargarUnidadesWS(fechaInicio, fechaFin);
+           if(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO.equals(respuesta[0])){
+               //importamos las unidades a la bd.
+               importarUnidades();
+               //Mensaje.saveMessageInfo(request, "Se han obtenido correctamente las unidades");
+               //return true;
+           }
+
+
+
+            // importamos las unidades a la bd.
+            //importarUnidades();
        } catch(Exception e){
          e.printStackTrace();
        }

@@ -1081,16 +1081,21 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
             Descarga ultimaDescarga = descargaEjb.findByTipo(Dir3caibConstantes.OFICINA);
             Date fechaInicio =ultimaDescarga.getFechaFin(); // fecha de la ultima descarga
 
-
             // obtenemos la fecha de hoy
             Date fechaFin = new Date();
 
             // Obtiene los archivos csv via WS
-            descargarOficinasWS(fechaInicio, fechaFin);
+            //descargarOficinasWS(fechaInicio, fechaFin);
+
+           String[] respuesta = descargarOficinasWS(fechaInicio, fechaFin);
+           if(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO.equals(respuesta[0])){
+               // importamos las oficinas a la bd.
+               importarOficinas(true);
+           }
 
 
             // importamos las oficinas a la bd.
-            importarOficinas(true);
+            //importarOficinas(true);
        } catch(Exception e){
          log.error("Error important Oficines: " + e.getMessage(),  e);
        }
