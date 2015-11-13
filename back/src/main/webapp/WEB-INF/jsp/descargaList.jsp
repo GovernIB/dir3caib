@@ -19,18 +19,30 @@
             <div class="box span12">
 
                 <div class="box-header well">
-                    <h2><fmt:message key="descarga.listado"/></h2>
+                    <h2><fmt:message key="descarga.listado.${elemento}"/></h2>
                 </div>
 
                 <c:import url="modulos/mensajes.jsp"/>
 
                 <div class="box-content">
-                    <c:if test="${empty descargas}">
+                    <c:if test="${paginacion != null && empty listado}">
                         <div class="alert fade in">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
                             <fmt:message key="descarga.existentes.notfound"/>
                         </div>
                     </c:if>
-                    <c:if test="${not empty descargas}">
+
+                    <c:if test="${not empty listado}">
+                           <div class="well" style="margin-top:8px;padding:4px 4px">
+                               <c:if test="${paginacion.totalResults > 1}">
+                                   <fmt:message key="dir3caib.resultados"/> <strong>${paginacion.totalResults}</strong> <fmt:message key="descarga.descargas"/>
+                               </c:if>
+                               <c:if test="${paginacion.totalResults == 1}">
+                                   <fmt:message key="dir3caib.resultado"/> <strong>${paginacion.totalResults}</strong> <fmt:message key="descarga.descarga"/>
+                               </c:if>
+
+                               <p class="pull-right">Página <strong>${paginacion.currentIndex}</strong> de ${paginacion.totalPages}</p>
+                           </div>
                             <table class="table table-bordered">
                                 <colgroup>
                                     <col>
@@ -46,7 +58,7 @@
                                 </thead>
 
                                 <tbody>
-                                <c:forEach var="descarga" items="${descargas}">
+                                <c:forEach var="descarga" items="${listado}">
                                     <tr>
                                         <td>${descarga.codigo}</td>
                                         <td>( <c:if test="${empty descarga.fechaInicio}"> ******* </c:if><fmt:formatDate pattern="dd/MM/yyyy" value="${descarga.fechaInicio}" />  -  <c:if test="${empty descarga.fechaFin}"> ******* </c:if><fmt:formatDate pattern="dd/MM/yyyy" value="${descarga.fechaFin}" /> )</td>
@@ -57,6 +69,12 @@
                                 </c:forEach>
                                 </tbody>
                             </table>
+
+                            <!-- Paginacion -->
+                            <c:import url="modulos/paginacion.jsp">
+                                <c:param name="entidad" value="descarga"/>
+                                <c:param name="elemento" value="${elemento}"/>
+                            </c:import>
                         </c:if>
                 </div>
 

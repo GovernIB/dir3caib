@@ -62,9 +62,6 @@ public class BaseController {
     return descargaEjb.findByTipo(Dir3caibConstantes.OFICINA);
   }
 
-  public List<Descarga> descargasByTipo(String tipo) throws Exception {
-    return descargaEjb.getAllByTipo(tipo);
-  }
 
   protected final Logger log = Logger.getLogger(getClass());
 

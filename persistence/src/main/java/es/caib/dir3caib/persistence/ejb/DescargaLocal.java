@@ -42,4 +42,21 @@ public interface DescargaLocal extends BaseEjb<Descarga, Long> {
    * @throws Exception
    */
   public void deleteAllByTipo(String tipo) throws Exception;
+
+  /**
+   * Obtiene el total por tipo.
+   * @param tipo
+   * @return
+   * @throws Exception
+   */
+  public Long getTotalByTipo(String tipo) throws Exception;
+
+  /**
+   *  Calcula la paginació de les descarregues
+   * @param inicio
+   * @param tipo
+   * @return
+   * @throws Exception
+   */
+  public List<Descarga> getPaginationByTipo(int inicio, String tipo) throws Exception;
 }

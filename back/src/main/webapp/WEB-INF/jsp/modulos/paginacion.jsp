@@ -6,10 +6,10 @@
 <c:if test="${paginacion.totalPages > 1}">
     <div class="pagination pagination-right">
 
-        <c:url var="firstUrl" value="/${param.entidad}/list/1" />
-        <c:url var="lastUrl" value="/${param.entidad}/list/${paginacion.totalPages}" />
-        <c:url var="prevUrl" value="/${param.entidad}/list/${paginacion.currentIndex - 1}" />
-        <c:url var="nextUrl" value="/${param.entidad}/list/${paginacion.currentIndex + 1}" />
+        <c:url var="firstUrl" value="/${param.elemento}/${param.entidad}/list/1" />
+        <c:url var="lastUrl" value="/${param.elemento}/${param.entidad}/list/${paginacion.totalPages}" />
+        <c:url var="prevUrl" value="/${param.elemento}/${param.entidad}/list/${paginacion.currentIndex - 1}" />
+        <c:url var="nextUrl" value="/${param.elemento}/${param.entidad}/list/${paginacion.currentIndex + 1}" />
 
         <ul>
             <c:choose>
@@ -22,7 +22,7 @@
             </c:choose>
 
             <c:forEach var="i" begin="${paginacion.beginIndex}" end="${paginacion.endIndex}">
-                <c:url var="pageUrl" value="/${param.entidad}/list/${i}" />
+                <c:url var="pageUrl" value="/${param.elemento}/${param.entidad}/list/${i}" />
                 <c:choose>
                     <c:when test="${i == paginacion.currentIndex}">
                         <li class="active"><a href="${pageUrl}"><c:out value="${i}" /></a></li>

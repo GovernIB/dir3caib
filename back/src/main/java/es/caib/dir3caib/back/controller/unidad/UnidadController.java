@@ -442,18 +442,39 @@ public class UnidadController extends BaseController{
       return codigosValor;
     }
 
+
     /**
-     * Método que se encarga de listar todas las descargas que se han realizado de las unidades
-     * @param request
+     * Método que se encarga de listar todas las descargas que se han realizado del catálogo
+     */
+    @RequestMapping(value = "/descarga/list", method = RequestMethod.GET)
+    public String listadoDescargaCatalogo() {
+
+        return "redirect:/unidad/descarga/list/1";
+    }
+
+    /**
+     * Listado de tipos de asunto
+     * @param pageNumber
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/descarga/list", method = RequestMethod.GET)
-    public ModelAndView descargaUnidadesList(HttpServletRequest request) throws Exception {
+    @RequestMapping(value = "/descarga/list/{pageNumber}", method = RequestMethod.GET)
+    public ModelAndView descargaCatalogoList(@PathVariable Integer pageNumber)throws Exception {
 
         ModelAndView mav = new ModelAndView("/descargaList");
 
-        mav.addObject("descargas" , descargasByTipo(Dir3caibConstantes.UNIDAD));
+
+
+        List<Descarga> listado = descargaEjb.getPaginationByTipo(((pageNumber - 1) * BaseEjbJPA.RESULTADOS_PAGINACION), Dir3caibConstantes.UNIDAD );
+        log.info("LISTADO: " + listado.size());
+
+        Long total = descargaEjb.getTotalByTipo(Dir3caibConstantes.UNIDAD);
+
+        Paginacion paginacion = new Paginacion(total.intValue(), pageNumber);
+
+        mav.addObject("paginacion", paginacion);
+        mav.addObject("listado", listado);
+        mav.addObject("elemento", "unidad");
 
         return mav;
     }

@@ -56,7 +56,7 @@ public class DescargaBean extends BaseEjbJPA<Descarga, Long> implements Descarga
     @SuppressWarnings(value = "unchecked")
     public List<Descarga> getAllByTipo(String tipo) throws Exception {
 
-        Query query =em.createQuery("Select descarga from Descarga as descarga where descarga.tipo=? order by descarga.codigo");
+        Query query =em.createQuery("Select descarga from Descarga as descarga where descarga.tipo=? order by descarga.codigo desc");
         query.setParameter(1, tipo);
         return query.getResultList();
     }
@@ -69,10 +69,30 @@ public class DescargaBean extends BaseEjbJPA<Descarga, Long> implements Descarga
         return (Long) q.getSingleResult();
     }
 
+
+    public Long getTotalByTipo(String tipo) throws Exception {
+
+        Query q = em.createQuery("Select count(descarga.codigo) from Descarga as descarga where descarga.tipo=?");
+        q.setParameter(1, tipo);
+
+        return (Long) q.getSingleResult();
+    }
+
     @Override
     public List<Descarga> getPagination(int inicio) throws Exception {
 
         Query q = em.createQuery("Select descarga from Descarga as descarga order by descarga.codigo");
+        q.setFirstResult(inicio);
+        q.setMaxResults(RESULTADOS_PAGINACION);
+
+        return q.getResultList();
+    }
+
+
+    public List<Descarga> getPaginationByTipo(int inicio, String tipo) throws Exception {
+
+        Query q = em.createQuery("Select descarga from Descarga as descarga where descarga.tipo=? order by descarga.codigo desc");
+        q.setParameter(1, tipo);
         q.setFirstResult(inicio);
         q.setMaxResults(RESULTADOS_PAGINACION);
 

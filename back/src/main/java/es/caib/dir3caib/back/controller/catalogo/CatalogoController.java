@@ -6,6 +6,7 @@ import es.caib.dir3caib.back.utils.Mensaje;
 import es.caib.dir3caib.persistence.ejb.*;
 import es.caib.dir3caib.persistence.model.Descarga;
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
+import es.caib.dir3caib.persistence.utils.Paginacion;
 import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
 import es.caib.dir3caib.utils.Configuracio;
 import es.caib.dir3caib.utils.Utils;
@@ -14,10 +15,7 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.ejb.EJB;
@@ -28,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -294,18 +293,39 @@ public class CatalogoController extends BaseController{
         }
     }
 
+
     /**
      * Método que se encarga de listar todas las descargas que se han realizado del catálogo
-     * @param request
+     */
+    @RequestMapping(value = "/descarga/list", method = RequestMethod.GET)
+    public String listadoDescargaCatalogo() {
+
+        return "redirect:/catalogo/descarga/list/1";
+    }
+
+    /**
+     * Listado de tipos de asunto
+     * @param pageNumber
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/descarga/list", method = RequestMethod.GET)
-    public ModelAndView descargaCatalogoList(HttpServletRequest request) throws Exception {
+    @RequestMapping(value = "/descarga/list/{pageNumber}", method = RequestMethod.GET)
+    public ModelAndView descargaCatalogoList(@PathVariable Integer pageNumber)throws Exception {
 
         ModelAndView mav = new ModelAndView("/descargaList");
 
-        mav.addObject("descargas" , descargasByTipo(Dir3caibConstantes.CATALOGO));
+
+
+        List<Descarga> listado = descargaEjb.getPaginationByTipo(((pageNumber - 1) * BaseEjbJPA.RESULTADOS_PAGINACION), Dir3caibConstantes.CATALOGO );
+        log.info("LISTADO: " + listado.size());
+
+        Long total = descargaEjb.getTotalByTipo(Dir3caibConstantes.CATALOGO);
+
+        Paginacion paginacion = new Paginacion(total.intValue(), pageNumber);
+
+        mav.addObject("paginacion", paginacion);
+        mav.addObject("listado", listado);
+        mav.addObject("elemento", "catalogo");
 
         return mav;
     }
