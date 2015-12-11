@@ -1,12 +1,12 @@
 package es.caib.dir3caib.back.utils;
 
 import es.caib.dir3caib.persistence.ejb.SincronitzacioDir3Local;
-
 import es.caib.dir3caib.persistence.utils.DataBaseUtils;
 import es.caib.dir3caib.persistence.utils.Versio;
 import es.caib.dir3caib.utils.Configuracio;
-
 import org.apache.log4j.Logger;
+import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.stereotype.Component;
 
 import javax.naming.InitialContext;
@@ -27,6 +27,22 @@ public class InitServlet extends HttpServlet {
 
   @Override
   public void init(ServletConfig config) throws ServletException {
+
+    // Sistema de Traduccions WEB
+    try {
+      ReloadableResourceBundleMessageSource ms = new ReloadableResourceBundleMessageSource();
+      String[] basenames = {
+              "es/caib/dir3caib/back/webapp/missatges" // /WEB-INF/classes/
+              /*"logicmissatges"*/
+      };
+      ms.setDefaultEncoding("UTF-8");
+      ms.setBasenames(basenames);
+      I18NUtils.setMessageSource(ms);
+    } catch (Throwable th) {
+      log.error("Error inicialitzant el sistema de traduccions web: " + th.getMessage(), th);
+    }
+
+
 
     // Sincronitzador amb Dir3
     try {

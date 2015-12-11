@@ -147,33 +147,38 @@ public class UnidadController extends BaseController{
      public ModelAndView ficherosList(HttpServletRequest request) throws Exception{
 
          ModelAndView mav = new ModelAndView("/unidad/unidadFicheros");
-        ArrayList<String> existentes = new ArrayList<String>();
+         ArrayList<String> existentes = new ArrayList<String>();
          
          // Obtenemos el listado de ficheros que hay dentro del directorio indicado
          Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.UNIDAD);
+
          if(descarga != null) {
-             File f = new File(Configuracio.getUnidadesPath(descarga.getCodigo()));
-             existentes = new ArrayList<String>(Arrays.asList(f.list()));
-         }
+          File f = new File(Configuracio.getUnidadesPath(descarga.getCodigo()));
+             if(f.exists()) {
+                 existentes = new ArrayList<String>(Arrays.asList(f.list()));
 
-        if(descarga != null) {
-          // Miramos si debemos mostrar el botón de importación,
-          // solo se muestra si la fecha de Inicio descarga es superior a la fechaImportacion
-          Date fechaInicio = descarga.getFechaInicio();
-          Date fechaImportacion = descarga.getFechaImportacion();
+                 // Miramos si debemos mostrar el botón de importación,
+                 // solo se muestra si la fecha de Inicio descarga es superior a la fechaImportacion
+                 Date fechaInicio = descarga.getFechaInicio();
+                 Date fechaImportacion = descarga.getFechaImportacion();
 
-          if (fechaImportacion != null) {
-            if (fechaInicio != null) {
-              if (fechaInicio.after(fechaImportacion)) {
-                mav.addObject("mostrarimportacion", "mostrarImportacion");
-              }
-            }
-          } else {
-            mav.addObject("mostrarimportacion", "mostrarImportacion");
-          }
+                 if (fechaImportacion != null) {
+                     if (fechaInicio != null) {
+                         if (fechaInicio.after(fechaImportacion)) {
+                             mav.addObject("mostrarimportacion", "mostrarImportacion");
+                         }
+                     }
+                 } else {
+                     mav.addObject("mostrarimportacion", "mostrarImportacion");
+                 }
 
-          mav.addObject("descarga", descarga);
+                 //mav.addObject("descarga", descarga);
+             }else{
+                 Mensaje.saveMessageError(request, getMessage("descarga.error.importante"));
+
+             }
         }
+        mav.addObject("descarga", descarga);
         mav.addObject("existentes", existentes);
          
         return mav;
@@ -228,8 +233,8 @@ public class UnidadController extends BaseController{
          long end = System.currentTimeMillis();
          log.info("Importat unidades en " + Utils.formatElapsedTime(end - start));
 
-         Mensaje.saveMessageInfo(request, "Se han importado correctamente todas las unidades");
-         mav.addObject("procesados",results.getProcesados());
+         Mensaje.saveMessageInfo(request, getMessage("unidad.importacion.ok"));
+         mav.addObject("procesados", results.getProcesados());
          mav.addObject("ficheros",Dir3caibConstantes.UO_FICHEROS);
          mav.addObject("existentes", results.getExistentes());
          mav.addObject("descarga" , results.getDescarga());
@@ -259,9 +264,9 @@ public class UnidadController extends BaseController{
            descargaEjb.deleteAllByTipo(Dir3caibConstantes.UNIDAD);
          
            FileUtils.cleanDirectory(directorio);
-           Mensaje.saveMessageInfo(request, "Se han eliminado correctamente todos los ficheros de unidades");
+           Mensaje.saveMessageInfo(request, getMessage("unidad.borrar.ok"));
          } catch (Exception ex) {
-             Mensaje.saveMessageError(request, "Ha ocurrido un error al intentar eliminar los archivos del directorio unidades");
+             Mensaje.saveMessageError(request, getMessage("dir3caib.borrar.directorio.error"));
              ex.printStackTrace();
          } 
          
@@ -288,7 +293,7 @@ public class UnidadController extends BaseController{
           if(descargaOk) {  return importarUnidades(request);}
  
         }catch(Exception ex){
-          Mensaje.saveMessageError(request, "Ha ocurrido un error al sincronizar las unidades");
+          Mensaje.saveMessageError(request, getMessage("unidad.sincronizacion.error"));
           ex.printStackTrace();
         }
         return new ModelAndView("/unidad/unidadImportacion");
@@ -304,24 +309,24 @@ public class UnidadController extends BaseController{
         try{
             String[] respuesta= importadorUnidades.descargarUnidadesWS(fechaInicio, fechaFin);
             if(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO.equals(respuesta[0])){
-                Mensaje.saveMessageInfo(request, "Se han obtenido correctamente las unidades");
+                Mensaje.saveMessageInfo(request, getMessage("unidad.descarga.ok"));
                 return true;
             }else{
 
                 if(Dir3caibConstantes.CODIGO_RESPUESTA_VACIO.equals(respuesta[0])){
-                    Mensaje.saveMessageInfo(request, "No hay unidades nuevas a importar");
+                    Mensaje.saveMessageInfo(request, getMessage("unidad.nueva.nohay"));
                     return true;
                 }else {
-                    Mensaje.saveMessageError(request, "Ha ocurrido un error al descargar las unidades a través de WS: " + respuesta[1]);
+                    Mensaje.saveMessageError(request, getMessage("unidad.descarga.nook")+ ": " + respuesta[1]);
                     return false;
                 }
             }
         }catch(IOException ex){
-            Mensaje.saveMessageError(request, "Ha ocurrido un error al descomprimir las unidades");
+            Mensaje.saveMessageError(request, getMessage("unidad.descomprimir.error"));
             ex.printStackTrace();
             return false;
         }catch (Exception e){
-            Mensaje.saveMessageError(request, "Ha ocurrido un error al descargar las unidades a través de WS");
+            Mensaje.saveMessageError(request, getMessage("unidad.descarga.nook"));
             e.printStackTrace();
             return false;
         }
@@ -447,7 +452,7 @@ public class UnidadController extends BaseController{
      * Método que se encarga de listar todas las descargas que se han realizado del catálogo
      */
     @RequestMapping(value = "/descarga/list", method = RequestMethod.GET)
-    public String listadoDescargaCatalogo() {
+    public String listadoDescargaUnidad() {
 
         return "redirect:/unidad/descarga/list/1";
     }
@@ -459,7 +464,7 @@ public class UnidadController extends BaseController{
      * @throws Exception
      */
     @RequestMapping(value = "/descarga/list/{pageNumber}", method = RequestMethod.GET)
-    public ModelAndView descargaCatalogoList(@PathVariable Integer pageNumber)throws Exception {
+    public ModelAndView descargaUnidadList(@PathVariable Integer pageNumber)throws Exception {
 
         ModelAndView mav = new ModelAndView("/descargaList");
 

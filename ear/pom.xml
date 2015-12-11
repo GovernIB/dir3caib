@@ -123,6 +123,12 @@
             <artifactId>jackson-core-asl</artifactId>
             <version>1.9.9</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.fundaciobit.genapp</groupId>
+            <artifactId>genapp-core</artifactId>
+            <version>1.0</version>
+        </dependency>
 	
 		<!-- Apache Commons -->
 		

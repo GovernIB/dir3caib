@@ -145,33 +145,36 @@ public class OficinaController extends BaseController {
          ArrayList<String> existentes = new ArrayList<String>();
          // Obtenemos el listado de ficheros que hay dentro del directorio indicado
          Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.OFICINA);
-         if(descarga != null) {
-             File f = new File(Configuracio.getOficinasPath(descarga.getCodigo()));
-             existentes = new ArrayList<String>(Arrays.asList(f.list()));
+
+
+         if(descarga != null){
+            File f = new File(Configuracio.getOficinasPath(descarga.getCodigo()));
+             if(f.exists()) {
+                 existentes = new ArrayList<String>(Arrays.asList(f.list()));
+                 // Miramos si debemos mostrar el botón de importación,
+                 // solo se muestra si la fecha de Inicio descarga es superior a la fechaImportacion
+                 Date fechaInicio = descarga.getFechaInicio();
+                 Date fechaImportacion = descarga.getFechaImportacion();
+
+                 if (fechaImportacion != null) {
+                     if (fechaInicio != null) {
+                         if (fechaInicio.after(fechaImportacion)) {
+                             mav.addObject("mostrarimportacion", "mostrarImportacion");
+                         }
+                     }
+                 } else {
+                     mav.addObject("mostrarimportacion", "mostrarImportacion");
+                 }
+
+                 //mav.addObject("descarga", descarga);
+             }else{
+                 Mensaje.saveMessageError(request, getMessage("descarga.error.importante"));
+             }
          }
+         mav.addObject("descarga", descarga);
+         mav.addObject("existentes", existentes);
 
-          if(descarga != null){
-            // Miramos si debemos mostrar el botón de importación,
-            // solo se muestra si la fecha de Inicio descarga es superior a la fechaImportacion
-            Date fechaInicio = descarga.getFechaInicio();
-            Date fechaImportacion = descarga.getFechaImportacion();
-
-            if(fechaImportacion != null){
-              if(fechaInicio != null) {
-                if (fechaInicio.after(fechaImportacion)) {
-                  mav.addObject("mostrarimportacion", "mostrarImportacion");
-                }
-              }
-            }else {
-              mav.addObject("mostrarimportacion", "mostrarImportacion");
-            }
-
-            mav.addObject("descarga", descarga);
-          }
-          mav.addObject("existentes", existentes);
-
-         
-          return mav;
+         return mav;
      }
     
     /**
@@ -224,7 +227,7 @@ public class OficinaController extends BaseController {
          System.gc();
 
 
-         Mensaje.saveMessageInfo(request, "Se han importado correctamente todas las oficinas");
+         Mensaje.saveMessageInfo(request, getMessage("oficina.importacion.ok"));
          mav.addObject("procesados",resultados.getProcesados());
          mav.addObject("ficheros",Dir3caibConstantes.OFI_FICHEROS);
          mav.addObject("existentes",resultados.getExistentes());
@@ -256,9 +259,9 @@ public class OficinaController extends BaseController {
              descargaEjb.deleteAllByTipo(Dir3caibConstantes.OFICINA);
              
              FileUtils.cleanDirectory(directorio);
-             Mensaje.saveMessageInfo(request, "Se han eliminado correctamente todos los ficheros de oficinas");
+             Mensaje.saveMessageInfo(request, getMessage("oficina.borrar.ok"));
          } catch (Exception ex) {
-             Mensaje.saveMessageError(request, "Ha ocurrido un error al intentar eliminar los archivos del directorio oficinas");
+             Mensaje.saveMessageError(request, getMessage("dir3caib.borrar.directorio.error"));
              ex.printStackTrace();
          }
          
@@ -292,7 +295,7 @@ public class OficinaController extends BaseController {
           }
           
         }catch(Exception ex){
-          Mensaje.saveMessageError(request, "Ha ocurrido un error al sincronizar las oficinas");
+          Mensaje.saveMessageError(request, getMessage("oficina.sincronizacion.error"));
           ex.printStackTrace();
         }
         return new ModelAndView("/oficina/oficinaImportacion");        
@@ -309,24 +312,24 @@ public class OficinaController extends BaseController {
         try{
             String[] respuesta = importadorOficinas.descargarOficinasWS(fechaInicio, fechaFin);
             if(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO.equals(respuesta[0])){
-                Mensaje.saveMessageInfo(request, "Se han obtenido correctamente las oficinas");
+                Mensaje.saveMessageInfo(request, getMessage("oficina.descarga.ok"));
                 return true;
             }else{
                 if(Dir3caibConstantes.CODIGO_RESPUESTA_VACIO.equals(respuesta[0])){
-                    Mensaje.saveMessageInfo(request, "No hay oficinas nuevas a importar");
+                    Mensaje.saveMessageInfo(request, getMessage("oficina.nueva.nohay"));
                     return true;
                 }else {
-                    Mensaje.saveMessageError(request, "Ha ocurrido un error obtener las oficinas a través de WS: " + respuesta[1]);
+                    Mensaje.saveMessageError(request, getMessage("oficina.descarga.nook")+ ": " + respuesta[1]);
                     return false;
                 }
 
             }
         }catch(IOException ex){
-            Mensaje.saveMessageError(request, "Ha ocurrido un error al descomprimir las oficinas");
+            Mensaje.saveMessageError(request, getMessage("oficina.descomprimir.error"));
             ex.printStackTrace();
             return false;
         }catch (Exception e){
-            Mensaje.saveMessageError(request, "Ha ocurrido un error obtener las oficinas a través de WS");
+            Mensaje.saveMessageError(request, getMessage("oficina.descarga.nook"));
             e.printStackTrace();
             return false;
         }
@@ -410,7 +413,7 @@ public class OficinaController extends BaseController {
      * Método que se encarga de listar todas las descargas que se han realizado del catálogo
      */
     @RequestMapping(value = "/descarga/list", method = RequestMethod.GET)
-    public String listadoDescargaCatalogo() {
+    public String listadoDescargaOficina() {
 
         return "redirect:/oficina/descarga/list/1";
     }
@@ -422,7 +425,7 @@ public class OficinaController extends BaseController {
      * @throws Exception
      */
     @RequestMapping(value = "/descarga/list/{pageNumber}", method = RequestMethod.GET)
-    public ModelAndView descargaCatalogoList(@PathVariable Integer pageNumber)throws Exception {
+    public ModelAndView descargaOficinaList(@PathVariable Integer pageNumber)throws Exception {
 
         ModelAndView mav = new ModelAndView("/descargaList");
 

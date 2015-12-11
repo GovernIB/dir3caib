@@ -105,40 +105,35 @@ public class CatalogoController extends BaseController{
         // Obtenemos el listado de ficheros que hay dentro del directorio indicado
         ArrayList<String> existentes = new ArrayList<String>();
         Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.CATALOGO);
-        if (descarga != null){
+        if (descarga != null) {
             File f = new File(Configuracio.getCatalogosPath(descarga.getCodigo()));
-            if (!f.exists()) {
-                f.mkdirs();
+            if (f.exists()) {
+                existentes = new ArrayList<String>(Arrays.asList(f.list()));
+                // Miramos si debemos mostrar el botón de importación,
+                // solo se muestra si la fecha de Inicio descarga es superior a la fechaImportacion
+                Date fechaInicio = descarga.getFechaInicio();
+                Date fechaImportacion = descarga.getFechaImportacion();
+
+                if (fechaImportacion != null) {
+                    if (fechaInicio != null) {
+                        if (fechaInicio.after(fechaImportacion)) {
+                            mav.addObject("mostrarimportacion", "mostrarImportacion");
+                        }
+                    }
+                } else {
+                    mav.addObject("mostrarimportacion", "mostrarImportacion");
+                }
+
+                //mav.addObject("descarga", descarga);
             } else {
-                existentes.addAll(Arrays.asList(f.list()));
+                Mensaje.saveMessageError(request, getMessage("descarga.error.importante"));
             }
+
         }
+        mav.addObject("descarga", descarga);
+        mav.addObject("existentes", existentes);
 
-
-
-
-         if(descarga != null){
-          // Miramos si debemos mostrar el botón de importación,
-          // solo se muestra si la fecha de Inicio descarga es superior a la fechaImportacion
-          Date fechaInicio = descarga.getFechaInicio();
-          Date fechaImportacion = descarga.getFechaImportacion();
-
-          if(fechaImportacion != null){
-            if(fechaInicio != null) {
-              if (fechaInicio.after(fechaImportacion)) {
-                mav.addObject("mostrarimportacion", "mostrarImportacion");
-              }
-            }
-          }else {
-            mav.addObject("mostrarimportacion", "mostrarImportacion");
-          }
-          mav.addObject("descarga", descarga);
-        }
-
-         
-         mav.addObject("existentes", existentes);
-
-         return mav;
+        return mav;
      }
     
     /**
@@ -203,7 +198,7 @@ public class CatalogoController extends BaseController{
          long end = System.currentTimeMillis();
          log.info("Importat cataleg en " + Utils.formatElapsedTime(end - start));
 
-         Mensaje.saveMessageInfo(request, "Se han importado correctamente todo el catálogo ");
+         Mensaje.saveMessageInfo(request, getMessage("catalogo.importacion.ok"));
          mav.addObject("procesados",results.getProcesados());
          mav.addObject("ficheros",Dir3caibConstantes.CAT_FICHEROS);
          mav.addObject("existentes",results.getExistentes());
@@ -251,12 +246,12 @@ public class CatalogoController extends BaseController{
              descargaEjb.deleteAllByTipo(Dir3caibConstantes.CATALOGO);
              
              
-             Mensaje.saveMessageInfo(request, "Se han eliminado correctamente todos los ficheros de catalogos");
+             Mensaje.saveMessageInfo(request, getMessage("catalogo.borrar.ok"));
          } catch (IOException ex) {
-             Mensaje.saveMessageError(request, "Ha ocurrido un error al intentar eliminar los archivos del directorio catalogos");
+             Mensaje.saveMessageError(request, getMessage("catalogo.borrar.nook") + Configuracio.getArchivosPath());
              ex.printStackTrace();
          } catch ( Exception e) {
-               Mensaje.saveMessageError(request, "Ha ocurrido un error al intentar borrar los elementos de la BD.");
+               Mensaje.saveMessageError(request, getMessage("catalogo.borrar.bd.nook"));
                e.printStackTrace();
          }
          
@@ -275,19 +270,19 @@ public class CatalogoController extends BaseController{
          try{
              String[] respuesta= importadorCatalogo.descargarCatalogoWS(fechaInicio, fechaFin);
              if(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO.equals(respuesta[0])){
-                 Mensaje.saveMessageInfo(request, "Se han obtenido correctamente los catálogos");
+                 Mensaje.saveMessageInfo(request, getMessage("catalogo.descarga.ok"));
                  return true;
              }else{
-                 Mensaje.saveMessageError(request, "Ha ocurrido un error al descargar el catálogo a través de WS: " + respuesta[1]);
+                 Mensaje.saveMessageError(request, getMessage("catalogo.descarga.nook") +": "+respuesta[1]);
                  return false;
              }
 
         }catch(IOException ex){
-            Mensaje.saveMessageError(request, "Ha ocurrido un error al descomprimir los catálogos");
+            Mensaje.saveMessageError(request, getMessage("catalogo.descomprimir.nook"));
             ex.printStackTrace();
             return false;
         }catch(Exception e){
-            Mensaje.saveMessageError(request, "Ha ocurrido un error en la descarga del catálogo a través del WS");
+            Mensaje.saveMessageError(request,  getMessage("catalogo.descarga.nook"));
             e.printStackTrace();
             return false;
         }

@@ -6,6 +6,7 @@ import es.caib.dir3caib.persistence.ejb.CatNivelAdministracionLocal;
 import es.caib.dir3caib.persistence.ejb.DescargaLocal;
 import es.caib.dir3caib.persistence.model.*;
 import org.apache.log4j.Logger;
+import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import javax.ejb.EJB;
@@ -65,6 +66,14 @@ public class BaseController {
 
   protected final Logger log = Logger.getLogger(getClass());
 
+  /**
+   * Retorna el mensaje traducido según el idioma del usuario
+   * @param key
+   * @return
+   */
+  protected String getMessage(String key){
+    return I18NUtils.tradueix(key);
+  }
 
 
 }
