@@ -67,7 +67,7 @@ $(document).ready(function() {
  * @param texto texto de confirmación a mostrar
  */
 function confirm(url,texto) {
-
+   alert("Entro en confirm");
     var confirmModal = 
       $('<div class="modal hide fade">' +    
           '<div class="modal-header">' +
@@ -88,7 +88,6 @@ function confirm(url,texto) {
     confirmModal.find('#okButton').click(function(event) {
         document.location.href = url;
         confirmModal.modal('hide');
-
     });
 
     confirmModal.modal('show');     
@@ -124,33 +123,6 @@ function confirmDescarga(url,texto) {
 
 function goTo(url) {
     document.location.href=url;
-}
-
-function confirmDescarga(url,texto){
-    var confirmModal =
-        $('<div class="modal hide fade">' +
-            '<div class="modal-header">' +
-            '<a class="close" data-dismiss="modal" >&times;</a>' +
-            '<h3>Confirmar acción</h3>' +
-            '</div>' +
-
-            '<div class="modal-body">' +
-            '<p>'+texto+'</p>' +
-            '</div>' +
-
-            '<div class="modal-footer">' +
-            '<a href="#" class="btn" data-dismiss="modal">No</a>' +
-            '<a href="#" id="okButton" class="btn btn-primary">Si</a>' +
-            '</div>' +
-            '</div>');
-
-    confirmModal.find('#okButton').click(function(event) {
-        document.location.href=url;
-        confirmModal.modal('hide');
-        $('#modalSincro').modal('show');
-    });
-
-    confirmModal.modal('show');
 }
 
 
