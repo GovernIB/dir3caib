@@ -147,6 +147,8 @@
                 <tr>
                     <th><fmt:message key="oficina.codigo"/></th>
                     <th><fmt:message key="oficina.denominacion"/></th>
+                    <th><fmt:message key="oficina.responsable"/></th>
+                    <th><fmt:message key="oficina.unidadresponsable"/></th>
                     <th><fmt:message key="oficina.estado"/></th>
                 </tr>
                 </thead>
@@ -157,7 +159,13 @@
 
                         <td>${oficina.codigo}</td>
                         <td><a href="<c:url value="/oficina/${oficina.codigo}/${oficina.estado.descripcionEstadoEntidad}/arbol/"/>">${oficina.denominacion}</a></td>
+                        <td><c:if
+                                test="${not empty oficina.codOfiResponsable.codigo}">${oficina.codOfiResponsable.codigo} - ${oficina.codOfiResponsable.denominacion}</c:if><c:if
+                                test="${empty oficina.codOfiResponsable.codigo}"><fmt:message
+                                key="oficina.no.responsable"/></c:if></td>
+                        <td>${oficina.codUoResponsable.codigo} - ${oficina.codUoResponsable.denominacion}</td>
                         <td>${oficina.estado.descripcionEstadoEntidad}</td>
+
 
                     </tr>
                 </c:forEach>

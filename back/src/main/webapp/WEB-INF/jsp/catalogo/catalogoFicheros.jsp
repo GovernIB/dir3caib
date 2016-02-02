@@ -1,5 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ include file="/WEB-INF/jsp/modulos/includes.jsp" %>
+<%@page import="es.caib.dir3caib.persistence.model.Descarga" %>
+<%@page import="es.caib.dir3caib.persistence.model.Dir3caibConstantes" %>
 
 <!DOCTYPE html>
 <html>
@@ -69,9 +71,10 @@
                                     </div>
                                     <jsp:include page="../modalSincro.jsp" flush="true"/>
                                 </c:if>
-                                <c:if test="${empty existentes}">
-                                    <fmt:message key="dir3caib.datos.nohay"/>
-                                </c:if>
+                                <% Descarga descarga = (Descarga) request.getAttribute("descarga");
+                                    if (Dir3caibConstantes.CODIGO_RESPUESTA_VACIO.equals(descarga.getEstado())) {%>
+                                <fmt:message key="dir3caib.datos.nohay"/>
+                                <%} %>
                             </c:if>
                         
                         </div>

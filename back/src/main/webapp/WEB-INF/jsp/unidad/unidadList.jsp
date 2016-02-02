@@ -103,7 +103,8 @@
                     <div class="row-fluid">
                         <div class="span6">
                             <div class="control-group">
-                                <form:label path="unidadRaiz" cssClass="control-label"><fmt:message key="unidad.raiz"/></form:label>
+                                <form:label path="unidadRaiz" cssClass="control-label"><fmt:message
+                                        key="unidad.unidades.raiz"/></form:label>
                                 <div class="controls">
                                     <form:checkbox path="unidadRaiz" value="false" cssClass="input-xlarge"/>
                                 </div>
@@ -169,6 +170,8 @@
                 <tr>
                     <th><fmt:message key="unidad.codigo"/></th>
                     <th><fmt:message key="unidad.denominacion"/></th>
+                    <th><fmt:message key="unidad.superior"/></th>
+                    <th><fmt:message key="unidad.raiz"/></th>
                     <th><fmt:message key="unidad.estado"/></th>
                 </tr>
                 </thead>
@@ -179,6 +182,8 @@
 
                         <td>${unidad.codigo}</td>
                         <td><a href="<c:url value="/unidad/${unidad.codigo}/${unidad.estado.descripcionEstadoEntidad}/arbol/"/>">${unidad.denominacion}</a></td>
+                        <td>${unidad.codUnidadSuperior.codigo} - ${unidad.codUnidadSuperior.denominacion}</td>
+                        <td>${unidad.codUnidadRaiz.codigo} - ${unidad.codUnidadRaiz.denominacion}</td>
                         <td>${unidad.estado.descripcionEstadoEntidad}</td>
 
                     </tr>
