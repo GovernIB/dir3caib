@@ -8,7 +8,12 @@
     <c:forEach var="hijo" items="${nodo.hijos}" varStatus="status">
 
         <!-- print the node here -->
+        <c:if test="${empty oficinas}">
         <li><span class="badge-arbre btn-primary" style="display:closed;"><i class=""></i> ${hijo.id} - ${hijo.nombre}</span>
+        </c:if>
+        <c:if test="${not empty oficinas}">
+            <li><span class="badge-arbre btn-ofaux" style="display:closed;"><i class=""></i> ${hijo.id} - ${hijo.nombre}</span>
+        </c:if>
 
             <!--Pintamos oficinas responsables -->
             <ul>

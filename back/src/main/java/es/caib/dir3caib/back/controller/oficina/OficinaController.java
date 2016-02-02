@@ -350,6 +350,7 @@ public class OficinaController extends BaseController {
       Nodo nodo = new Nodo();
       arbolOficinas(idOficina, nodo, estadoOficina);
       mav.addObject("nodo", nodo);
+        mav.addObject("oficinas", "oficinas");
 
       return mav;
 

@@ -26,7 +26,6 @@
                     </div>
                     
                     <c:import url="modulos/mensajes.jsp"/>
-                    <%--TODO mostrar si ha ido bien con el código que devuelve madrid.--%>
 
 
                     <div class="box-content">

@@ -62,7 +62,14 @@
                         <ul>
 
                             <li>
+                                <c:if test="${empty oficinas}">
                                 <span class="badge-arbre btn-primary"><i class=""></i> ${nodo.id} - ${nodo.nombre}</span>
+                                </c:if>
+                                <c:if test="${not empty oficinas}">
+                                    <span class="badge-arbre btn-warning"><i
+                                            class=""></i> ${nodo.id} - ${nodo.nombre}</span>
+                                </c:if>
+
                                 <!--Pintamos oficinas responsables -->
                                 <ul>
                                     <c:forEach var="ofiDependiente" items="${nodo.oficinasDependientes}">
