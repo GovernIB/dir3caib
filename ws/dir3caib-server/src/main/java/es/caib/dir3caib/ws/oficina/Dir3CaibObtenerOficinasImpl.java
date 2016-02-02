@@ -97,4 +97,16 @@ public class Dir3CaibObtenerOficinasImpl /* extends CommonMethodsImpl */implemen
       throws Exception{
       return obtenerOficinasEjb.obtenerOficinasSIRUnidad(codigoUnidad);
   }
+
+  /**
+   * Obtiene la fecha en la que se actualizaron las unidades de dir3caib
+   * @return
+   * @throws Exception
+   */
+  @Override
+  public Date obtenerFechaUltimaActualizacion()
+          throws Exception {
+
+    return obtenerOficinasEjb.obtenerFechaUltimaActualizacion();
+  }
 }

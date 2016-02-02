@@ -12,8 +12,18 @@
 <xs:element name="obtenerArbolUnidadesDestinatarias" type="tns:obtenerArbolUnidadesDestinatarias"/>
 <xs:element name="obtenerArbolUnidadesDestinatariasResponse" type="tns:obtenerArbolUnidadesDestinatariasResponse"/>
 <xs:element name="obtenerArbolUnidadesResponse" type="tns:obtenerArbolUnidadesResponse"/>
+<xs:element name="obtenerFechaUltimaActualizacion" type="tns:obtenerFechaUltimaActualizacion"/>
+<xs:element name="obtenerFechaUltimaActualizacionResponse" type="tns:obtenerFechaUltimaActualizacionResponse"/>
 <xs:element name="obtenerUnidad" type="tns:obtenerUnidad"/>
 <xs:element name="obtenerUnidadResponse" type="tns:obtenerUnidadResponse"/>
+<xs:complexType name="obtenerFechaUltimaActualizacion">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="obtenerFechaUltimaActualizacionResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:dateTime"/>
+    </xs:sequence>
+  </xs:complexType>
 <xs:complexType name="getVersionWs">
     <xs:sequence/>
   </xs:complexType>
@@ -96,6 +106,10 @@
     <wsdl:part name="parameters" element="tns:obtenerArbolUnidadesDestinatarias">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="obtenerFechaUltimaActualizacion">
+    <wsdl:part name="parameters" element="tns:obtenerFechaUltimaActualizacion">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="obtenerArbolUnidadesDestinatariasResponse">
     <wsdl:part name="parameters" element="tns:obtenerArbolUnidadesDestinatariasResponse">
     </wsdl:part>
@@ -128,11 +142,21 @@
     <wsdl:part name="parameters" element="tns:obtenerArbolUnidadesResponse">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="obtenerFechaUltimaActualizacionResponse">
+    <wsdl:part name="parameters" element="tns:obtenerFechaUltimaActualizacionResponse">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="getVersionWsResponse">
     <wsdl:part name="parameters" element="tns:getVersionWsResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:portType name="Dir3CaibObtenerUnidadesWs">
+    <wsdl:operation name="obtenerFechaUltimaActualizacion">
+      <wsdl:input name="obtenerFechaUltimaActualizacion" message="tns:obtenerFechaUltimaActualizacion">
+    </wsdl:input>
+      <wsdl:output name="obtenerFechaUltimaActualizacionResponse" message="tns:obtenerFechaUltimaActualizacionResponse">
+    </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="getVersionWs">
       <wsdl:input name="getVersionWs" message="tns:getVersionWs">
     </wsdl:input>
@@ -166,6 +190,15 @@
   </wsdl:portType>
   <wsdl:binding name="Dir3CaibObtenerUnidadesWsServiceSoapBinding" type="tns:Dir3CaibObtenerUnidadesWs">
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="obtenerFechaUltimaActualizacion">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="obtenerFechaUltimaActualizacion">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="obtenerFechaUltimaActualizacionResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="getVersionWs">
       <soap:operation soapAction="" style="document"/>
       <wsdl:input name="getVersionWs">

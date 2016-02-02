@@ -21,4 +21,6 @@ public interface ObtenerUnidadesLocal {
 
     public List<UnidadTF> obtenerArbolUnidadesDestinatarias(String codigo) throws Exception;
 
+    public Date obtenerFechaUltimaActualizacion() throws Exception;
+
 }

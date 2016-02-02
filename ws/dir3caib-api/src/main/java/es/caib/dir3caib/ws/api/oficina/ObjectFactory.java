@@ -28,8 +28,10 @@ public class ObjectFactory {
     private final static QName _GetVersionResponse_QNAME = new QName("http://oficina.ws.dir3caib.caib.es/", "getVersionResponse");
     private final static QName _GetVersionWs_QNAME = new QName("http://oficina.ws.dir3caib.caib.es/", "getVersionWs");
     private final static QName _ObtenerArbolOficinas_QNAME = new QName("http://oficina.ws.dir3caib.caib.es/", "obtenerArbolOficinas");
+    private final static QName _ObtenerFechaUltimaActualizacion_QNAME = new QName("http://oficina.ws.dir3caib.caib.es/", "obtenerFechaUltimaActualizacion");
     private final static QName _ObtenerArbolOficinasResponse_QNAME = new QName("http://oficina.ws.dir3caib.caib.es/", "obtenerArbolOficinasResponse");
     private final static QName _GetVersionWsResponse_QNAME = new QName("http://oficina.ws.dir3caib.caib.es/", "getVersionWsResponse");
+    private final static QName _ObtenerFechaUltimaActualizacionResponse_QNAME = new QName("http://oficina.ws.dir3caib.caib.es/", "obtenerFechaUltimaActualizacionResponse");
     private final static QName _ObtenerOficinaResponse_QNAME = new QName("http://oficina.ws.dir3caib.caib.es/", "obtenerOficinaResponse");
     private final static QName _ObtenerOficinasSIRUnidadResponse_QNAME = new QName("http://oficina.ws.dir3caib.caib.es/", "obtenerOficinasSIRUnidadResponse");
     private final static QName _GetVersion_QNAME = new QName("http://oficina.ws.dir3caib.caib.es/", "getVersion");
@@ -43,38 +45,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetVersionWs }
-     * 
-     */
-    public GetVersionWs createGetVersionWs() {
-        return new GetVersionWs();
-    }
-
-    /**
-     * Create an instance of {@link ObtenerOficinasSIRUnidadResponse }
-     * 
-     */
-    public ObtenerOficinasSIRUnidadResponse createObtenerOficinasSIRUnidadResponse() {
-        return new ObtenerOficinasSIRUnidadResponse();
-    }
-
-    /**
-     * Create an instance of {@link ObtenerArbolOficinas }
-     * 
-     */
-    public ObtenerArbolOficinas createObtenerArbolOficinas() {
-        return new ObtenerArbolOficinas();
-    }
-
-    /**
-     * Create an instance of {@link OficinaTF }
-     * 
-     */
-    public OficinaTF createOficinaTF() {
-        return new OficinaTF();
-    }
-
-    /**
      * Create an instance of {@link ObtenerArbolOficinasResponse }
      * 
      */
@@ -83,27 +53,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetVersion }
+     * Create an instance of {@link GetVersionWs }
      * 
      */
-    public GetVersion createGetVersion() {
-        return new GetVersion();
-    }
-
-    /**
-     * Create an instance of {@link GetVersionWsResponse }
-     * 
-     */
-    public GetVersionWsResponse createGetVersionWsResponse() {
-        return new GetVersionWsResponse();
-    }
-
-    /**
-     * Create an instance of {@link ObtenerOficinaResponse }
-     * 
-     */
-    public ObtenerOficinaResponse createObtenerOficinaResponse() {
-        return new ObtenerOficinaResponse();
+    public GetVersionWs createGetVersionWs() {
+        return new GetVersionWs();
     }
 
     /**
@@ -115,11 +69,43 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ObtenerOficina }
+     * Create an instance of {@link GetVersion }
      * 
      */
-    public ObtenerOficina createObtenerOficina() {
-        return new ObtenerOficina();
+    public GetVersion createGetVersion() {
+        return new GetVersion();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerFechaUltimaActualizacionResponse }
+     * 
+     */
+    public ObtenerFechaUltimaActualizacionResponse createObtenerFechaUltimaActualizacionResponse() {
+        return new ObtenerFechaUltimaActualizacionResponse();
+    }
+
+    /**
+     * Create an instance of {@link OficinaTF }
+     * 
+     */
+    public OficinaTF createOficinaTF() {
+        return new OficinaTF();
+    }
+
+    /**
+     * Create an instance of {@link RelacionSirOfiTF }
+     * 
+     */
+    public RelacionSirOfiTF createRelacionSirOfiTF() {
+        return new RelacionSirOfiTF();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerArbolOficinas }
+     * 
+     */
+    public ObtenerArbolOficinas createObtenerArbolOficinas() {
+        return new ObtenerArbolOficinas();
     }
 
     /**
@@ -131,6 +117,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ObtenerOficinaResponse }
+     * 
+     */
+    public ObtenerOficinaResponse createObtenerOficinaResponse() {
+        return new ObtenerOficinaResponse();
+    }
+
+    /**
      * Create an instance of {@link RelacionOrganizativaOfiTF }
      * 
      */
@@ -139,11 +133,35 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link RelacionSirOfiTF }
+     * Create an instance of {@link GetVersionWsResponse }
      * 
      */
-    public RelacionSirOfiTF createRelacionSirOfiTF() {
-        return new RelacionSirOfiTF();
+    public GetVersionWsResponse createGetVersionWsResponse() {
+        return new GetVersionWsResponse();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerOficinasSIRUnidadResponse }
+     * 
+     */
+    public ObtenerOficinasSIRUnidadResponse createObtenerOficinasSIRUnidadResponse() {
+        return new ObtenerOficinasSIRUnidadResponse();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerFechaUltimaActualizacion }
+     * 
+     */
+    public ObtenerFechaUltimaActualizacion createObtenerFechaUltimaActualizacion() {
+        return new ObtenerFechaUltimaActualizacion();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerOficina }
+     * 
+     */
+    public ObtenerOficina createObtenerOficina() {
+        return new ObtenerOficina();
     }
 
     /**
@@ -183,6 +201,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ObtenerFechaUltimaActualizacion }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://oficina.ws.dir3caib.caib.es/", name = "obtenerFechaUltimaActualizacion")
+    public JAXBElement<ObtenerFechaUltimaActualizacion> createObtenerFechaUltimaActualizacion(ObtenerFechaUltimaActualizacion value) {
+        return new JAXBElement<ObtenerFechaUltimaActualizacion>(_ObtenerFechaUltimaActualizacion_QNAME, ObtenerFechaUltimaActualizacion.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ObtenerArbolOficinasResponse }{@code >}}
      * 
      */
@@ -198,6 +225,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://oficina.ws.dir3caib.caib.es/", name = "getVersionWsResponse")
     public JAXBElement<GetVersionWsResponse> createGetVersionWsResponse(GetVersionWsResponse value) {
         return new JAXBElement<GetVersionWsResponse>(_GetVersionWsResponse_QNAME, GetVersionWsResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ObtenerFechaUltimaActualizacionResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://oficina.ws.dir3caib.caib.es/", name = "obtenerFechaUltimaActualizacionResponse")
+    public JAXBElement<ObtenerFechaUltimaActualizacionResponse> createObtenerFechaUltimaActualizacionResponse(ObtenerFechaUltimaActualizacionResponse value) {
+        return new JAXBElement<ObtenerFechaUltimaActualizacionResponse>(_ObtenerFechaUltimaActualizacionResponse_QNAME, ObtenerFechaUltimaActualizacionResponse.class, null, value);
     }
 
     /**

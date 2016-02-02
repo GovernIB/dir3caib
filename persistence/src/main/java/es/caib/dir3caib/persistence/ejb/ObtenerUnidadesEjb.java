@@ -1,5 +1,6 @@
 package es.caib.dir3caib.persistence.ejb;
 
+import es.caib.dir3caib.persistence.model.Descarga;
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.persistence.model.ws.UnidadTF;
@@ -31,6 +32,9 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
 
     @EJB(mappedName = "dir3caib/UnidadEJB/local")
     protected UnidadLocal unidadEjb;
+
+    @EJB(mappedName = "dir3caib/DescargaEJB/local")
+    protected DescargaLocal descargaEjb;
 
     /** Método que devuelve una UnidadTF( que se transfiere) a partir del código indicado y en función de
      *  la fecha de actualización y la de sincronizacion ( primera sincronizacion)
@@ -98,6 +102,19 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
         }
 
         return arbolTF;
+    }
+
+    /**
+     * Método que devuelve la fecha de la última actualización de las unidades
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public Date obtenerFechaUltimaActualizacion() throws Exception{
+
+        Descarga descarga =  descargaEjb.findByTipo(Dir3caibConstantes.UNIDAD);
+
+        return descarga.getFechaImportacion();
     }
 
     /**

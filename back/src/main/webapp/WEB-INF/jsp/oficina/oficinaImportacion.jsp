@@ -46,7 +46,7 @@
                                             <td>${fichero}</td>
                                             <td class="center">
                                                 <c:if test="${fn:contains(existentes, fichero)}"><span class="badge badge-success">Si</span></c:if>
-                                                <c:if test="${not fn:contains(existentes, fichero)}"><span class="badge badge-important">No</span></c:if>
+                                                <c:if test="${not fn:contains(existentes, fichero)}"><span class="badge badge-important">No</span> <fmt:message key="dir3caib.nodatos.actualizar"/></c:if>
                                             </td>
                                             <td class="center"> 
                                                 <c:if test="${fn:contains(procesados, fichero)}"><span class="badge badge-success">Si</span></c:if>

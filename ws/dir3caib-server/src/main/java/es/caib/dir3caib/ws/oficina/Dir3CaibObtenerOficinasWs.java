@@ -43,4 +43,9 @@ public interface Dir3CaibObtenerOficinasWs /* extends CommonMethods */{
   @RolesAllowed({ Constants.DIR_ADMIN })
   public List<OficinaTF> obtenerOficinasSIRUnidad(String codigoUnidad)
       throws Exception;
+
+  @WebMethod
+  @RolesAllowed({ Constants.DIR_ADMIN })
+  public Date obtenerFechaUltimaActualizacion()
+          throws Exception;
 }

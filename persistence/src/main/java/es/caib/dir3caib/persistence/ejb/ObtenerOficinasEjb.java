@@ -1,5 +1,6 @@
 package es.caib.dir3caib.persistence.ejb;
 
+import es.caib.dir3caib.persistence.model.Descarga;
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.model.Oficina;
 import es.caib.dir3caib.persistence.model.RelacionOrganizativaOfi;
@@ -27,6 +28,9 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
 
     @EJB(mappedName = "dir3caib/OficinaEJB/local")
     protected OficinaLocal oficinaEjb;
+
+    @EJB(mappedName = "dir3caib/DescargaEJB/local")
+    protected DescargaLocal descargaEjb;
 
     /**
       * Obtiene los datos de una oficina en función del codigo y la fecha de actualización.
@@ -111,6 +115,19 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
         }
 
         return oficinasTF;
+    }
+
+    /**
+     * Método que devuelve la fecha de la última actualización de las unidades
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public Date obtenerFechaUltimaActualizacion() throws Exception{
+
+        Descarga descarga =  descargaEjb.findByTipo(Dir3caibConstantes.OFICINA);
+
+        return descarga.getFechaImportacion();
     }
 
 }

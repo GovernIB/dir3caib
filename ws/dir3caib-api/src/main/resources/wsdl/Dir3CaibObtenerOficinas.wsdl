@@ -10,6 +10,8 @@
 <xs:element name="getVersionWsResponse" type="tns:getVersionWsResponse"/>
 <xs:element name="obtenerArbolOficinas" type="tns:obtenerArbolOficinas"/>
 <xs:element name="obtenerArbolOficinasResponse" type="tns:obtenerArbolOficinasResponse"/>
+<xs:element name="obtenerFechaUltimaActualizacion" type="tns:obtenerFechaUltimaActualizacion"/>
+<xs:element name="obtenerFechaUltimaActualizacionResponse" type="tns:obtenerFechaUltimaActualizacionResponse"/>
 <xs:element name="obtenerOficina" type="tns:obtenerOficina"/>
 <xs:element name="obtenerOficinaResponse" type="tns:obtenerOficinaResponse"/>
 <xs:element name="obtenerOficinasSIRUnidad" type="tns:obtenerOficinasSIRUnidad"/>
@@ -99,6 +101,14 @@
       <xs:element minOccurs="0" name="return" type="tns:oficinaTF"/>
     </xs:sequence>
   </xs:complexType>
+<xs:complexType name="obtenerFechaUltimaActualizacion">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="obtenerFechaUltimaActualizacionResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:dateTime"/>
+    </xs:sequence>
+  </xs:complexType>
 </xs:schema>
   </wsdl:types>
   <wsdl:message name="obtenerOficinasSIRUnidad">
@@ -117,12 +127,20 @@
     <wsdl:part name="parameters" element="tns:obtenerArbolOficinas">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="obtenerFechaUltimaActualizacion">
+    <wsdl:part name="parameters" element="tns:obtenerFechaUltimaActualizacion">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="obtenerArbolOficinasResponse">
     <wsdl:part name="parameters" element="tns:obtenerArbolOficinasResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="getVersionWsResponse">
     <wsdl:part name="parameters" element="tns:getVersionWsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerFechaUltimaActualizacionResponse">
+    <wsdl:part name="parameters" element="tns:obtenerFechaUltimaActualizacionResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="obtenerOficinaResponse">
@@ -172,6 +190,12 @@
       <wsdl:output name="obtenerOficinaResponse" message="tns:obtenerOficinaResponse">
     </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="obtenerFechaUltimaActualizacion">
+      <wsdl:input name="obtenerFechaUltimaActualizacion" message="tns:obtenerFechaUltimaActualizacion">
+    </wsdl:input>
+      <wsdl:output name="obtenerFechaUltimaActualizacionResponse" message="tns:obtenerFechaUltimaActualizacionResponse">
+    </wsdl:output>
+    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="Dir3CaibObtenerOficinasWsServiceSoapBinding" type="tns:Dir3CaibObtenerOficinasWs">
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
@@ -208,6 +232,15 @@
         <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output name="obtenerArbolOficinasResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerFechaUltimaActualizacion">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="obtenerFechaUltimaActualizacion">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="obtenerFechaUltimaActualizacionResponse">
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>

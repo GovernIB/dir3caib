@@ -25,6 +25,7 @@ import javax.xml.namespace.QName;
 public class ObjectFactory {
 
     private final static QName _ObtenerArbolUnidadesDestinatarias_QNAME = new QName("http://unidad.ws.dir3caib.caib.es/", "obtenerArbolUnidadesDestinatarias");
+    private final static QName _ObtenerFechaUltimaActualizacion_QNAME = new QName("http://unidad.ws.dir3caib.caib.es/", "obtenerFechaUltimaActualizacion");
     private final static QName _GetVersionResponse_QNAME = new QName("http://unidad.ws.dir3caib.caib.es/", "getVersionResponse");
     private final static QName _GetVersionWs_QNAME = new QName("http://unidad.ws.dir3caib.caib.es/", "getVersionWs");
     private final static QName _ObtenerArbolUnidades_QNAME = new QName("http://unidad.ws.dir3caib.caib.es/", "obtenerArbolUnidades");
@@ -33,6 +34,7 @@ public class ObjectFactory {
     private final static QName _GetVersion_QNAME = new QName("http://unidad.ws.dir3caib.caib.es/", "getVersion");
     private final static QName _ObtenerUnidad_QNAME = new QName("http://unidad.ws.dir3caib.caib.es/", "obtenerUnidad");
     private final static QName _ObtenerArbolUnidadesResponse_QNAME = new QName("http://unidad.ws.dir3caib.caib.es/", "obtenerArbolUnidadesResponse");
+    private final static QName _ObtenerFechaUltimaActualizacionResponse_QNAME = new QName("http://unidad.ws.dir3caib.caib.es/", "obtenerFechaUltimaActualizacionResponse");
     private final static QName _GetVersionWsResponse_QNAME = new QName("http://unidad.ws.dir3caib.caib.es/", "getVersionWsResponse");
 
     /**
@@ -43,19 +45,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ObtenerArbolUnidadesResponse }
+     * Create an instance of {@link GetVersionWsResponse }
      * 
      */
-    public ObtenerArbolUnidadesResponse createObtenerArbolUnidadesResponse() {
-        return new ObtenerArbolUnidadesResponse();
-    }
-
-    /**
-     * Create an instance of {@link GetVersionResponse }
-     * 
-     */
-    public GetVersionResponse createGetVersionResponse() {
-        return new GetVersionResponse();
+    public GetVersionWsResponse createGetVersionWsResponse() {
+        return new GetVersionWsResponse();
     }
 
     /**
@@ -67,27 +61,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link UnidadTF }
+     * Create an instance of {@link GetVersion }
      * 
      */
-    public UnidadTF createUnidadTF() {
-        return new UnidadTF();
+    public GetVersion createGetVersion() {
+        return new GetVersion();
     }
 
     /**
-     * Create an instance of {@link GetVersionWs }
+     * Create an instance of {@link ObtenerArbolUnidadesDestinatarias }
      * 
      */
-    public GetVersionWs createGetVersionWs() {
-        return new GetVersionWs();
+    public ObtenerArbolUnidadesDestinatarias createObtenerArbolUnidadesDestinatarias() {
+        return new ObtenerArbolUnidadesDestinatarias();
     }
 
     /**
-     * Create an instance of {@link GetVersionWsResponse }
+     * Create an instance of {@link ObtenerFechaUltimaActualizacion }
      * 
      */
-    public GetVersionWsResponse createGetVersionWsResponse() {
-        return new GetVersionWsResponse();
+    public ObtenerFechaUltimaActualizacion createObtenerFechaUltimaActualizacion() {
+        return new ObtenerFechaUltimaActualizacion();
     }
 
     /**
@@ -107,11 +101,35 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetVersion }
+     * Create an instance of {@link UnidadTF }
      * 
      */
-    public GetVersion createGetVersion() {
-        return new GetVersion();
+    public UnidadTF createUnidadTF() {
+        return new UnidadTF();
+    }
+
+    /**
+     * Create an instance of {@link GetVersionResponse }
+     * 
+     */
+    public GetVersionResponse createGetVersionResponse() {
+        return new GetVersionResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetVersionWs }
+     * 
+     */
+    public GetVersionWs createGetVersionWs() {
+        return new GetVersionWs();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerFechaUltimaActualizacionResponse }
+     * 
+     */
+    public ObtenerFechaUltimaActualizacionResponse createObtenerFechaUltimaActualizacionResponse() {
+        return new ObtenerFechaUltimaActualizacionResponse();
     }
 
     /**
@@ -123,11 +141,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ObtenerArbolUnidadesDestinatarias }
+     * Create an instance of {@link ObtenerArbolUnidadesResponse }
      * 
      */
-    public ObtenerArbolUnidadesDestinatarias createObtenerArbolUnidadesDestinatarias() {
-        return new ObtenerArbolUnidadesDestinatarias();
+    public ObtenerArbolUnidadesResponse createObtenerArbolUnidadesResponse() {
+        return new ObtenerArbolUnidadesResponse();
     }
 
     /**
@@ -137,6 +155,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://unidad.ws.dir3caib.caib.es/", name = "obtenerArbolUnidadesDestinatarias")
     public JAXBElement<ObtenerArbolUnidadesDestinatarias> createObtenerArbolUnidadesDestinatarias(ObtenerArbolUnidadesDestinatarias value) {
         return new JAXBElement<ObtenerArbolUnidadesDestinatarias>(_ObtenerArbolUnidadesDestinatarias_QNAME, ObtenerArbolUnidadesDestinatarias.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ObtenerFechaUltimaActualizacion }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://unidad.ws.dir3caib.caib.es/", name = "obtenerFechaUltimaActualizacion")
+    public JAXBElement<ObtenerFechaUltimaActualizacion> createObtenerFechaUltimaActualizacion(ObtenerFechaUltimaActualizacion value) {
+        return new JAXBElement<ObtenerFechaUltimaActualizacion>(_ObtenerFechaUltimaActualizacion_QNAME, ObtenerFechaUltimaActualizacion.class, null, value);
     }
 
     /**
@@ -209,6 +236,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://unidad.ws.dir3caib.caib.es/", name = "obtenerArbolUnidadesResponse")
     public JAXBElement<ObtenerArbolUnidadesResponse> createObtenerArbolUnidadesResponse(ObtenerArbolUnidadesResponse value) {
         return new JAXBElement<ObtenerArbolUnidadesResponse>(_ObtenerArbolUnidadesResponse_QNAME, ObtenerArbolUnidadesResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ObtenerFechaUltimaActualizacionResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://unidad.ws.dir3caib.caib.es/", name = "obtenerFechaUltimaActualizacionResponse")
+    public JAXBElement<ObtenerFechaUltimaActualizacionResponse> createObtenerFechaUltimaActualizacionResponse(ObtenerFechaUltimaActualizacionResponse value) {
+        return new JAXBElement<ObtenerFechaUltimaActualizacionResponse>(_ObtenerFechaUltimaActualizacionResponse_QNAME, ObtenerFechaUltimaActualizacionResponse.class, null, value);
     }
 
     /**

@@ -44,4 +44,9 @@ public interface Dir3CaibObtenerUnidadesWs {
   public List<UnidadTF> obtenerArbolUnidadesDestinatarias(String codigo)
       throws Exception;
 
+  @WebMethod
+  @RolesAllowed({ Constants.DIR_ADMIN })
+  public Date obtenerFechaUltimaActualizacion()
+          throws Exception;
+
 }

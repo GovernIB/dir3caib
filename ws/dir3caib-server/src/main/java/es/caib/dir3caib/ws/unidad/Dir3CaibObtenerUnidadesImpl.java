@@ -98,5 +98,19 @@ public class Dir3CaibObtenerUnidadesImpl implements Dir3CaibObtenerUnidadesWs {
     return obtenerUnidadesEjb.obtenerArbolUnidadesDestinatarias(codigo);
   }
 
+  /**
+   * Obtiene la fecha en la que se actualizaron las unidades de dir3caib
+   * @return
+   * @throws Exception
+   */
+  @Override
+  public Date obtenerFechaUltimaActualizacion()
+          throws Exception {
+
+    return obtenerUnidadesEjb.obtenerFechaUltimaActualizacion();
+  }
+
+
+
 
 }

@@ -24,6 +24,7 @@ public class Descarga implements Serializable {
   private Date fechaImportacion;
 
   private String tipo;
+  private String estado;
 
   public Descarga() {
   }
@@ -75,4 +76,13 @@ public class Descarga implements Serializable {
     this.tipo = tipo;
   }
 
+  // este campo representa los tipos de estado que devuelve dir3caib de madrid.
+  @Column(name = "ESTADO", length = 2)
+  public String getEstado() {
+    return estado;
+  }
+
+  public void setEstado(String estado) {
+    this.estado = estado;
+  }
 }

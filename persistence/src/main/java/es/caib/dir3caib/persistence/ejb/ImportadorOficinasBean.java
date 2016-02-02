@@ -1010,10 +1010,15 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
         resp[0] = respuesta.getCodigo();
         resp[1] = respuesta.getDescripcion();
 
-        if (!respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO)){
+        if (!respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO) && !respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_VACIO)){
           descargaEjb.deleteByTipo(Dir3caibConstantes.OFICINA);
           return resp;
         }
+
+        //actualizamos el estado de la descarga.
+        descarga.setEstado(respuesta.getCodigo());
+        descargaEjb.merge(descarga);
+
 
         // Realizamos una copia del archivo zip de la ultima descarga
         String archivoOficinaZip = ruta + Dir3caibConstantes.OFICINAS_ARCHIVO_ZIP + descarga.getCodigo() + ".zip";
@@ -1026,11 +1031,11 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
         // Se crea el directorio para el catálogo
         File dir = new File(rutaOficinas);
         if (!dir.exists()) {
-          if (!dir.mkdirs()) {
-            //Borramos la descarga creada previamente.
-            descargaEjb.deleteByTipo(Dir3caibConstantes.OFICINA);
-            log.error(" No se ha podido crear el directorio");
-          }
+            if (!dir.mkdirs()) {
+                //Borramos la descarga creada previamente.
+                descargaEjb.deleteByTipo(Dir3caibConstantes.OFICINA);
+                log.error(" No se ha podido crear el directorio");
+            }
         }
 
         //Descomprimir el archivo
@@ -1038,25 +1043,26 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
         ZipEntry zipEntry = zis.getNextEntry();
 
         while (zipEntry != null) {
-          String fileName = zipEntry.getName();
-          File newFile = new File(rutaOficinas + fileName);
-          log.info("Fichero descomprimido: " + newFile.getAbsoluteFile());
+            String fileName = zipEntry.getName();
+            File newFile = new File(rutaOficinas + fileName);
+            log.info("Fichero descomprimido: " + newFile.getAbsoluteFile());
 
-          //create all non exists folders
-          //else you will hit FileNotFoundException for compressed folder
-          new File(newFile.getParent()).mkdirs();
-          FileOutputStream fos = new FileOutputStream(newFile);
+            //create all non exists folders
+            //else you will hit FileNotFoundException for compressed folder
+            new File(newFile.getParent()).mkdirs();
+            FileOutputStream fos = new FileOutputStream(newFile);
 
-          int len;
-          while ((len = zis.read(buffer)) > 0) {
-            fos.write(buffer, 0, len);
-          }
-          fos.close();
-          zipEntry = zis.getNextEntry();
+            int len;
+            while ((len = zis.read(buffer)) > 0) {
+                fos.write(buffer, 0, len);
+            }
+            fos.close();
+            zipEntry = zis.getNextEntry();
 
         }
         zis.closeEntry();
         zis.close();
+
 
         return resp;
       }catch(Exception e){

@@ -326,8 +326,8 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
         if(fechaActualizacion!= null){ // Si hay fecha de actualizacion solo se envian las actualizadas
            for(Unidad unidad: padres){
-               //TODO QUITAR segunda condición.
-             if(fechaActualizacion.before(unidad.getFechaImportacion()) /*|| fechaActualizacion.equals(unidad.getFechaImportacion())*/){
+
+             if(fechaActualizacion.before(unidad.getFechaImportacion())){
                   log.info("FECHA ACTUALIZACION " +fechaActualizacion +"ANTERIOR A LA FECHA DE IMPORTACION DE LA UNIDAD ID "+ unidad.getCodigo() +" FECHA IMPORT"+ unidad.getFechaImportacion());
                   // Miramos que la unidad no este extinguida o anulada anterior a la fecha de sincronizacion de regweb
                   if(unidadValida(unidad,fechaSincronizacion)){
