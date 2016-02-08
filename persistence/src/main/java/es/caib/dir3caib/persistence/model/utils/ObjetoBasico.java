@@ -15,16 +15,18 @@ public class ObjetoBasico {
   private String descripcionEstado;
   private String raiz;
   private String superior;
+  private String localidad;
 
   public ObjetoBasico() {
   }
 
-  public ObjetoBasico(String codigo, String denominacion, String descripcionEstado, String raiz, String superior) {
+  public ObjetoBasico(String codigo, String denominacion, String descripcionEstado, String raiz, String superior, String localidad) {
     this.codigo = codigo;
     this.denominacion = denominacion;
     this.descripcionEstado = descripcionEstado;
     this.raiz = raiz;
     this.superior = superior;
+    this.localidad = localidad;
   }
 
   public String getCodigo() {
@@ -65,5 +67,13 @@ public class ObjetoBasico {
 
   public void setSuperior(String superior) {
     this.superior = superior;
+  }
+
+  public String getLocalidad() {
+    return localidad;
+  }
+
+  public void setLocalidad(String localidad) {
+    this.localidad = localidad;
   }
 }
