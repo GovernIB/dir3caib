@@ -70,7 +70,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
       Object[] obj = (Object[])q.getSingleResult();
 
-      ObjetoBasico objetoBasico = new ObjetoBasico((String)obj[0],(String)obj[1],(String)obj[2],"","");
+        ObjetoBasico objetoBasico = new ObjetoBasico((String) obj[0], (String) obj[1], (String) obj[2], "", "", "");
 
       return objetoBasico;
 
@@ -448,7 +448,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
           List<ObjetoBasico> unidadesReducidas = new ArrayList<ObjetoBasico>();
 
           for (Object[] object : result){
-              ObjetoBasico objetoBasico = new ObjetoBasico((String)object[0],(String)object[1],(String)object[2],"","");
+              ObjetoBasico objetoBasico = new ObjetoBasico((String) object[0], (String) object[1], (String) object[2], "", "", "");
 
               unidadesReducidas.add(objetoBasico);
           }

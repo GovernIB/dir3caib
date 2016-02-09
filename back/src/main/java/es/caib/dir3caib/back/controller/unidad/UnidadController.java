@@ -341,11 +341,13 @@ public class UnidadController extends BaseController{
     @RequestMapping(value = "/{idUnidad}/{estadoUnidad}/arbol", method = RequestMethod.GET)
     public ModelAndView mostrarArbolUnidades(HttpServletRequest request, @PathVariable String idUnidad, @PathVariable String estadoUnidad) throws Exception {
 
+        Long start = System.currentTimeMillis();
       ModelAndView mav = new ModelAndView("/arbolList");
       Nodo nodo = new Nodo();
       arbolUnidades(idUnidad, nodo,estadoUnidad);
       mav.addObject("nodo", nodo);
-
+        Long end = System.currentTimeMillis();
+        log.info(Utils.formatElapsedTime(end - start));
       return mav;
 
     }
