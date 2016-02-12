@@ -1,6 +1,7 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.RelacionOrganizativaOfi;
+import es.caib.dir3caib.persistence.model.utils.ObjetoBasico;
 
 import javax.ejb.Local;
 import java.util.List;
@@ -27,6 +28,6 @@ public interface RelacionOrganizativaOfiLocal extends BaseEjb<RelacionOrganizati
    * @return
    * @throws Exception
    */
-  public List<RelacionOrganizativaOfi> getOrganizativasByUnidadEstado(String codigo, String estado) throws Exception;
+  public List<ObjetoBasico> getOrganizativasByUnidadEstado(String codigo, String estado) throws Exception;
 
 }

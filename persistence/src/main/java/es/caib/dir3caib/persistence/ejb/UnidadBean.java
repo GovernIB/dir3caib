@@ -69,7 +69,6 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
              q.setParameter("estado", estado);
 
       Object[] obj = (Object[])q.getSingleResult();
-
         ObjetoBasico objetoBasico = new ObjetoBasico((String) obj[0], (String) obj[1], (String) obj[2], "", "", "");
 
       return objetoBasico;

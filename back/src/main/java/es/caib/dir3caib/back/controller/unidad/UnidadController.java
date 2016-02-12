@@ -344,10 +344,12 @@ public class UnidadController extends BaseController{
         Long start = System.currentTimeMillis();
       ModelAndView mav = new ModelAndView("/arbolList");
       Nodo nodo = new Nodo();
-      arbolUnidades(idUnidad, nodo,estadoUnidad);
-      mav.addObject("nodo", nodo);
+        arbolUnidades(idUnidad, nodo, estadoUnidad);
         Long end = System.currentTimeMillis();
-        log.info(Utils.formatElapsedTime(end - start));
+
+        log.info("TIEMPO CARGA ARBOLarbol: " + Utils.formatElapsedTime(end - start));
+
+      mav.addObject("nodo", nodo);
       return mav;
 
     }
@@ -393,8 +395,10 @@ public class UnidadController extends BaseController{
           nodo.setOficinasDependientes(oficinasDependientesTransf);
 
           //Oficinas Funcionales
-          List<RelacionOrganizativaOfi> oficinasFuncionales = relacionOrganizativaOfiEjb.getOrganizativasByUnidadEstado(unidadPadre.getCodigo(), estado);
-          nodo.setOficinasFuncionales(transformarOficinasFuncionales(oficinasFuncionales));
+       // List<RelacionOrganizativaOfi> oficinasFuncionales = relacionOrganizativaOfiEjb.getOrganizativasByUnidadEstado(unidadPadre.getCodigo(), estado);
+       List<ObjetoBasico> oficinasFuncionales = relacionOrganizativaOfiEjb.getOrganizativasByUnidadEstado(unidadPadre.getCodigo(), estado);
+       // nodo.setOficinasFuncionales(transformarOficinasFuncionales(oficinasFuncionales));
+       nodo.setOficinasFuncionales(transformarObjetoBasicoANodo(oficinasFuncionales));
 
           List<Nodo> hijos = new ArrayList<Nodo>();
           List<ObjetoBasico> unidadesHijas = unidadEjb.hijosOB(idUnidad,estado);
@@ -412,6 +416,7 @@ public class UnidadController extends BaseController{
           }
           nodo.setHijos(hijos);
     }
+
 
     /**
      * Obtiene los {@link es.caib.dir3caib.persistence.model.CatAmbitoTerritorial} del nivel administracion seleccionado
