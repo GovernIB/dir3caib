@@ -211,17 +211,25 @@ public class OficinaTF {
         this.setEstado(oficina.getEstado().getCodigoEstadoEntidad());
         if(oficina.getCodPais()!=null) {
             this.setCodigoPais(oficina.getCodPais().getCodigoPais());
+        } else {
+            this.setCodigoPais(null);
         }
         if(oficina.getCodComunidad()!=null) {
             this.setCodigoComunidad(oficina.getCodComunidad().getCodigoComunidad());
+        } else {
+            this.setCodigoComunidad(null);
         }
         if(oficina.getLocalidad()!=null) {
             this.setDescripcionLocalidad(oficina.getLocalidad().getDescripcionLocalidad());
+        } else {
+            this.setDescripcionLocalidad(null);
         }
         this.setNombreVia(oficina.getNombreVia());
         this.setNumVia(oficina.getNumVia());
         if(oficina.getTipoVia()!=null) {
             this.setCodigoTipoVia(oficina.getTipoVia().getCodigoTipoVia());
+        } else {
+            this.setCodigoTipoVia(null);
         }
         this.setCodPostal(oficina.getCodPostal());
 
@@ -229,24 +237,34 @@ public class OficinaTF {
 
         if(oficina.getNivelAdministracion() != null){
             this.setNivelAdministracion(oficina.getNivelAdministracion().getCodigoNivelAdministracion());
+        } else {
+            this.setNivelAdministracion(null);
         }
 
         if(oficina.getTipoOficina() != null){
             this.setTipoOficina(oficina.getTipoOficina().getCodigoJerarquiaOficina());
+        } else {
+            this.setTipoOficina(null);
         }
         this.setCodUoResponsable(oficina.getCodUoResponsable().getCodigo());
 
         if(oficina.getCodOfiResponsable() != null){
             this.setCodOfiResponsable(oficina.getCodOfiResponsable().getCodigo());
+        } else {
+            this.setCodOfiResponsable(null);
         }
 
 
         if(oficina.getSirOfi() != null){
             this.setSirOfiTF(oficina.getSirOfi());
+        } else {
+            this.setSirOfiTF(null);
         }
 
         if(oficina.getOrganizativasOfi() != null){
             this.setOrganizativasOfiTF(oficina.getOrganizativasOfi());
+        } else {
+            this.setOrganizativasOfiTF(null);
         }
 
         if(oficina.getServicios() != null){
@@ -255,6 +273,8 @@ public class OficinaTF {
                 serviciosIds.add(servicio.getCodServicio());
             }
             this.setServicios(serviciosIds);
+        } else {
+            this.setServicios(null);
         }
     }
 

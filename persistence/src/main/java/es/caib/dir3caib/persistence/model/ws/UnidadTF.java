@@ -234,23 +234,35 @@ public class UnidadTF {
         this.setNivelAdministracion(unidad.getNivelAdministracion().getCodigoNivelAdministracion());
         if(unidad.getCodAmbitoTerritorial()!=null){
             this.setCodigoAmbitoTerritorial(unidad.getCodAmbitoTerritorial().getCodigoAmbito());
+        } else {
+            this.setCodigoAmbitoTerritorial(null);
         }
         if(unidad.getCodAmbPais()!=null){
             this.setCodigoAmbPais(unidad.getCodAmbPais().getCodigoPais());
+        } else {
+            this.setCodigoAmbPais(null);
         }
         if(unidad.getCodAmbProvincia() != null){
           this.setCodAmbProvincia(unidad.getCodAmbProvincia().getCodigoProvincia());
+        } else {
+            this.setCodAmbProvincia(null);
         }
         if(unidad.getCodAmbComunidad() != null){
           this.setCodAmbComunidad(unidad.getCodAmbComunidad().getCodigoComunidad());
+        } else {
+            this.setCodAmbComunidad(null);
         }
         if(unidad.getCodLocalidad()!=null) {
             this.setDescripcionLocalidad(unidad.getCodLocalidad().getDescripcionLocalidad());
+        } else {
+            this.setDescripcionLocalidad(null);
         }
         this.setNombreVia(unidad.getNombreVia());
         this.setNumVia(unidad.getNumVia());
         if(unidad.getTipoVia()!=null) {
             this.setCodigoTipoVia(unidad.getTipoVia().getCodigoTipoVia());
+        } else {
+            this.setCodigoTipoVia(null);
         }
         this.setCodPostal(unidad.getCodPostal());
         // Enviamos los historicos a regweb para la gestión del organigrama

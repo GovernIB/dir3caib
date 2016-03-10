@@ -106,6 +106,8 @@
     </div>
 </div>
 
+<c:import url="modulos/pie.jsp"/>
+
 <script type="text/javascript">
     $(function () {
         $('.tree li:has(ul > li)').addClass('parent_li').find(' > span').attr('title', 'Amaga la branca');

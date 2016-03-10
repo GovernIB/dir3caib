@@ -73,20 +73,6 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
                                                   Date fechaSincronizacion) throws Exception;
 
     /**
-     * Método que devuelve  el arbol de oficinas de una oficina padre,
-     * teniendo en cuenta la fecha de la ultima actualización de regweb.
-     * Se emplea para la sincronizacion y actualización con regweb
-     *
-     * @param codigo              código de la oficina padre
-     * @param fechaActualizacion  fecha de la ultima actualización de regweb
-     * @param fechaSincronizacion fecha la primera sincronización de regweb.
-     * @return
-     * @throws Exception
-     */
-    public List<Oficina> obtenerArbolOficinas(String codigo, Date fechaActualizacion,
-                                              Date fechaSincronizacion) throws Exception;
-
-    /**
      * Obtiene las oficinas SIR de una unidad que están vigentes
      *
      * @param codigo código de la Unidad

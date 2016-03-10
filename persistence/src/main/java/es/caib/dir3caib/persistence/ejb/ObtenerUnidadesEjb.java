@@ -71,9 +71,15 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
      * @param fechaSincronizacion fecha en la que se realiza la primera sincronizacion por parte del sistema que se sincroniza(regweb)
      */
     @Override
-    public List<UnidadTF> obtenerArbolUnidades(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception{
+    public List<UnidadTF> obtenerArbolUnidadesTF(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
 
-        List<Unidad> arbol = unidadEjb.obtenerArbolUnidades(codigo,fechaActualizacion, fechaSincronizacion );
+        if (fechaActualizacion == null) {
+            log.info("SINCRONIZACION UNIDADES");
+        } else {
+            log.info("ACTUALIZACION UNIDADES");
+        }
+        List<Unidad> arbol = unidadEjb.obtenerArbolUnidades(codigo, fechaActualizacion, fechaSincronizacion);
+        log.info("Numero TOTAL de unidades a actualizar: " + arbol.size());
         List<UnidadTF> arbolTF = new ArrayList<UnidadTF>();
 
 
@@ -82,6 +88,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
         }
 
         return arbolTF;
+
     }
 
   /**

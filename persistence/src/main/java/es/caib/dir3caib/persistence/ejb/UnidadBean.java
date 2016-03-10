@@ -114,8 +114,16 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
         return q.getResultList();
     }
-    
-    
+
+    @Override
+    public String unidadDenominacion(String codigo) throws Exception {
+
+        Query q = em.createQuery("select unidad.denominacion from Unidad as unidad where unidad.codigo=:codigo").setParameter("codigo", codigo);
+
+        return (String) q.getSingleResult();
+    }
+
+
     @Override
     public List<Unidad> getListByIds(List<String> ids) throws Exception {
       
@@ -217,17 +225,32 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
       return q.getResultList();
     }
 
+    @Override
+    public List<Unidad> obtenerArbol(String codigo) throws Exception {
+
+        List<Unidad> arbol = new ArrayList<Unidad>();
+        List<Unidad> hijos = hijosPrimerNivel(codigo);
+
+        arbol.addAll(hijos);
+
+        for (Unidad hijo : hijos) {
+            arbol.addAll(obtenerArbol(hijo.getCodigo()));
+        }
+
+        return arbol;
+    }
+
     /*
      * Metodo que comprueba si una unidad tiene más unidades hijas
      */
     @Override
     public Boolean tieneHijos(String codigo) throws Exception{
 
-        Query q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo order by unidad.codigo");
+        Query q = em.createQuery("Select unidad.id from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo order by unidad.codigo");
 
         q.setParameter("codigo",codigo);
 
-        List<Unidad> hijos = q.getResultList();
+        List<Long> hijos = q.getResultList();
 
         return hijos.size() > 0;
     }
@@ -253,17 +276,16 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     /**
      * Método que obtiene los hijos de primer nivel de una unidad en función del estado de la unidad padre
      * @param codigo identificador de la unidad padre.
-     * @param estado estado de la unidad padre.
      *
      * @return  {@link es.caib.dir3caib.persistence.model.Unidad}
      */
     @Override
-    public List<Unidad> hijosPrimerNivel(String codigo, String estado) throws Exception {
+    public List<Unidad> hijosPrimerNivel(String codigo) throws Exception {
 
-        Query q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.descripcionEstadoEntidad =:estado order by unidad.codigo");
+        Query q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:estado order by unidad.codigo");
 
         q.setParameter("codigo",codigo);
-        q.setParameter("estado",estado);
+        q.setParameter("estado", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
         return q.getResultList();
     }
@@ -302,52 +324,61 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
       * */
     @Override
     public List<Unidad> obtenerArbolUnidades(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception{
-        log.info("CODIGO QUE NOS PASAN " + codigo);
+
+        String denominacion = unidadDenominacion(codigo);
         Query q;
-        if(fechaActualizacion == null){ // Es una sincronizacion, solo traemos vigentes
-          log.info("SINCRONIZACION UNIDADES");
-          q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.codigo");
-          q.setParameter("codigo",codigo);
-          q.setParameter("vigente",Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-        } else {// es una actualizacion, lo traemos todo
-          log.info("ACTUALIZACION UNIDADES");
-          q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo  order by unidad.codigo");
-          q.setParameter("codigo",codigo);
+        try {
+            if (fechaActualizacion == null) { // Es una sincronizacion, solo traemos vigentes
+                q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.codigo");
+                q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+            } else {// es una actualizacion, traemos las que tienen fechaactualizacion anterior a la fecha de importacion de las unidades
 
-        }
-
-
-        List<Unidad> padres = q.getResultList();
-        List<Unidad> padresActualizados = new ArrayList<Unidad>();
-        List<Unidad> listaCompleta;
-
-        log.info("Número de PADRES UNIDADES: " + padres.size());
-
-        if(fechaActualizacion!= null){ // Si hay fecha de actualizacion solo se envian las actualizadas
-           for(Unidad unidad: padres){
-
-             if(fechaActualizacion.before(unidad.getFechaImportacion())){
-                  log.info("FECHA ACTUALIZACION " +fechaActualizacion +"ANTERIOR A LA FECHA DE IMPORTACION DE LA UNIDAD ID "+ unidad.getCodigo() +" FECHA IMPORT"+ unidad.getFechaImportacion());
-                  // Miramos que la unidad no este extinguida o anulada anterior a la fecha de sincronizacion de regweb
-                  if(unidadValida(unidad,fechaSincronizacion)){
-                    padresActualizados.add(unidad);
-                  }
-             }
-           }
-           listaCompleta = new ArrayList<Unidad>(padresActualizados);
-        } else { // si no hay fecha, se trata de una sincronización
-           listaCompleta = new ArrayList<Unidad>(padres);
-        }
-
-        for (Unidad unidad : padres) {
-            if(tieneHijos(unidad.getCodigo())){
-                List<Unidad> hijos = obtenerArbolUnidades(unidad.getCodigo(),fechaActualizacion, fechaSincronizacion);
-                log.info("Unidad " + unidad.getDenominacion() + ", tiene "+ hijos.size()+" hijos!");
-                listaCompleta.addAll(hijos);
+                q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo " +
+                        "and unidad.codigo !=:codigo  " +
+                        "and :fechaActualizacion < unidad.fechaImportacion " +
+                        "order by unidad.codigo");
+                q.setParameter("fechaActualizacion", fechaActualizacion);
             }
-        }
 
-        return listaCompleta;
+            q.setParameter("codigo", codigo);
+            List<Unidad> hijos = q.getResultList();
+            List<Unidad> padresActualizados = new ArrayList<Unidad>();
+            List<Unidad> listaCompleta;
+
+            log.info(" ");
+            log.info("UNIDAD PADRE: " + codigo + " - " + denominacion);
+
+            if (fechaActualizacion != null) { // Si hay fecha de actualizacion solo se envian las actualizadas
+                for (Unidad unidad : hijos) {
+                    log.info("FECHA ACTUALIZACION " + fechaActualizacion + "ANTERIOR A LA FECHA DE IMPORTACION DE LA UNIDAD ID " + unidad.getCodigo() + " FECHA IMPORT" + unidad.getFechaImportacion());
+                    // Miramos que la unidad no este extinguida o anulada anterior a la fecha de sincronizacion de regweb
+                    if (unidadValida(unidad, fechaSincronizacion)) {
+                        padresActualizados.add(unidad);
+                    }
+                }
+                listaCompleta = new ArrayList<Unidad>(padresActualizados);
+            } else { // si no hay fecha, se trata de una sincronización
+                listaCompleta = new ArrayList<Unidad>(hijos);
+            }
+
+            log.info("Numero de hijos a actualizar: " + listaCompleta.size());
+
+            for (Unidad unidad : hijos) {
+
+                if (tieneHijos(unidad.getCodigo())) {
+                    List<Unidad> arbol = obtenerArbolUnidades(unidad.getCodigo(), fechaActualizacion, fechaSincronizacion);
+                    listaCompleta.addAll(arbol);
+                }
+
+            }
+
+            log.info(" ");
+
+            return listaCompleta;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
   /**

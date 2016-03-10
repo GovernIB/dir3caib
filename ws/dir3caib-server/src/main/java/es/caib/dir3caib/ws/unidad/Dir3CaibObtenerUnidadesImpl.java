@@ -80,7 +80,8 @@ public class Dir3CaibObtenerUnidadesImpl implements Dir3CaibObtenerUnidadesWs {
   public List<UnidadTF> obtenerArbolUnidades(String codigo, Date fechaActualizacion, Date fechaSincronizacion)
       throws Exception {
 
-    return obtenerUnidadesEjb.obtenerArbolUnidades(codigo, fechaActualizacion, fechaSincronizacion);
+    return obtenerUnidadesEjb.obtenerArbolUnidadesTF(codigo, fechaActualizacion, fechaSincronizacion);
+
   }
 
   /**

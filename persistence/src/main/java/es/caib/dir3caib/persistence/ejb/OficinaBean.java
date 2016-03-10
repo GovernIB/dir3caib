@@ -219,21 +219,21 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
     @Override
     public List<Oficina> obtenerOficinasOrganismo(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception{
 
-        log.info("obtenerOficinasOrganismo con codigo : " +codigo);
         // En un primer paso obtenemos las oficinas en función de si es SINCRO o ACTUALIZACION
         Query q;
         if(fechaActualizacion == null){// Es una sincronizacion, solo se mandan las vigentes
           q = em.createQuery("Select oficina from Oficina as oficina where oficina.codUoResponsable.codigo =:codigo and oficina.estado.codigoEstadoEntidad =:vigente order by oficina.codigo");
-          q.setParameter("codigo",codigo);
           q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-        }else{ //Es una actualizacion, se mandan todas
-          q = em.createQuery("Select oficina from Oficina as oficina where oficina.codUoResponsable.codigo =:codigo order by oficina.codigo");
-          q.setParameter("codigo",codigo);
+        } else { //Es una actualizacion, se mandan todas las que tienen fechaactualizacion anterior a la fecha de importacion de las oficinas
+            q = em.createQuery("Select oficina from Oficina as oficina where oficina.codUoResponsable.codigo =:codigo " +
+                    " and :fechaActualizacion < oficina.fechaImportacion " +
+                    " order by oficina.codigo");
+            q.setParameter("fechaActualizacion", fechaActualizacion);
         }
 
 
+        q.setParameter("codigo", codigo);
         List<Oficina> oficinas = q.getResultList();
-        log.info("OFICINAS ENCONTRADAS " + oficinas.size() + " del organismo " + codigo);
         List<Oficina> oficinasCompletas = new ArrayList<Oficina>();
         List<Oficina> oficinasActualizadas = new ArrayList<Oficina>();
 
@@ -275,21 +275,20 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
           // incluir en la lista de actualizadas
 
           for(Oficina oficina: oficinas){
-             if(fechaActualizacion.before(oficina.getFechaImportacion()) /*|| fechaActualizacion.equals(oficina.getFechaImportacion())*/){
-                 // Miramos que la oficina no esté extinguida o anulada anterior a la fecha de sincronizacion de regweb
 
-                 if(oficinaValida(oficina,fechaSincronizacion)){
+              // Miramos que la oficina no esté extinguida o anulada anterior a la fecha de sincronizacion de regweb
+              if (oficinaValida(oficina, fechaSincronizacion)) {
 
                      // Cogemos solo las relaciones organizativas posteriores a la fecha de sincronizacion
                      Set<RelacionOrganizativaOfi> todasRelaciones = new HashSet<RelacionOrganizativaOfi>(oficina.getOrganizativasOfi());
-                     log.info("ORGANIZATIVAS OFI " + todasRelaciones.size());
+                  log.info("ORGANIZATIVAS OFI: " + todasRelaciones.size());
                      Set<RelacionOrganizativaOfi> relacionesValidas= new HashSet<RelacionOrganizativaOfi>();
                      for(RelacionOrganizativaOfi relOrg: todasRelaciones){
                          if(relacionValida(relOrg, fechaSincronizacion)){
                              relacionesValidas.add(relOrg);
                          }
                      }
-                     log.info("ORGANIZATIVAS VALIDAS " + relacionesValidas.size());
+                  log.info("ORGANIZATIVAS VALIDAS: " + relacionesValidas.size());
                      oficina.setOrganizativasOfi(null);
                      oficina.setOrganizativasOfi(new ArrayList<RelacionOrganizativaOfi>(relacionesValidas));
 
@@ -306,138 +305,22 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
                      oficinasActualizadas.add(oficina);
                  }
-             }
           }
           oficinasCompletas = new ArrayList<Oficina>(oficinasActualizadas);
         }
 
-        log.info("DIR3CAIB OFICINAS ENVIADAS: " + oficinasCompletas.size());
+        log.info("DIR3CAIB OFICINAS ENVIADAS DE " + codigo + ": " + oficinasCompletas.size());
 
         return oficinasCompletas;
 
     }
 
-    /**
-     *  Método que devuelve  el arbol de oficinas de una oficina padre,
-     * teniendo en cuenta la fecha de la ultima actualización de regweb.
-     * Se emplea para la sincronizacion y actualización con regweb
-     * @param codigo código de la oficina padre
-     * @param fechaActualizacion  fecha de la ultima actualización de regweb
-     * @param fechaSincronizacion fecha la primera sincronización de regweb.
-     * @return
-     * @throws Exception
-     */
-    /* OJO ESTE METODO SE DEJA DE EMPLEAR PORQUE SE VOLVIAN A ENVIAR LAS OFICINAS HIJAS DE NUEVO */
-    @Override
-     public List<Oficina> obtenerArbolOficinas(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception{
 
-        Query q;
-        if(fechaActualizacion == null){ // SINCRONIZACION solo traemos las vigentes
-            log.info("SINCRONIZACION OFICINAS");
-            q = em.createQuery("Select oficina from Oficina as oficina where oficina.codOfiResponsable.codigo =:codigo and oficina.estado.codigoEstadoEntidad =:vigente order by oficina.codigo");
-            q.setParameter("codigo",codigo);
-            q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-        } else { // ACTUALIZACION
-            log.info("ACTUALIZACION OFICINAS");
-            q = em.createQuery("Select oficina from Oficina as oficina where oficina.codOfiResponsable.codigo =:codigo  order by oficina.codigo");
-            q.setParameter("codigo",codigo);
-        }
-
-
-        List<Oficina> padres = q.getResultList();
-        List<Oficina> padresActualizados = new ArrayList<Oficina>();
-        List<Oficina> listaCompleta;
-
-        log.info("Número de OFICINAS HIJAS: " + padres.size());
-
-
-        //Preparación de las oficinas a enviar.
-        // si hay fecha de actualización solo se envian las actualizadas
-        // posterior a la fecha indicada
-        if(fechaActualizacion!= null){
-          //  Date fechaAct = formatoFecha.parse(fechaActualizacion);
-            // Fecha de la primera sincronizacion de regweb
-          //  Date fechaSincro = formatoFecha.parse(fechaSincronizacion);
-            for(Oficina oficina : padres){
-              if(fechaActualizacion.before(oficina.getFechaImportacion()) || fechaActualizacion.equals(oficina.getFechaImportacion())){
-                  // Miramos que la oficina no este extinguida o anulada anterior a la fecha de sincronizacion de regweb
-                  if(oficinaValida(oficina,fechaSincronizacion)){
-                      // Cogemos solo las relaciones organizativas posteriores a la fecha de sincronizacion
-                      Set<RelacionOrganizativaOfi> todasRelaciones = new HashSet<RelacionOrganizativaOfi>(oficina.getOrganizativasOfi());
-                      Set<RelacionOrganizativaOfi> relacionesValidas= new HashSet<RelacionOrganizativaOfi>();
-                      for(RelacionOrganizativaOfi relOrg: todasRelaciones){
-                          if(relacionValida(relOrg, fechaSincronizacion)){
-                              relacionesValidas.add(relOrg);
-                          }
-                      }
-                      oficina.setOrganizativasOfi(null);
-                      oficina.setOrganizativasOfi(new ArrayList<RelacionOrganizativaOfi>(relacionesValidas));
-
-
-                      // Cogemos solo las relaciones sir posteriores a la fecha de sincronizacion
-                      Set<RelacionSirOfi> todasRelacionesSir = new HashSet<RelacionSirOfi>(oficina.getSirOfi());
-                      Set<RelacionSirOfi> relacionesSirValidas= new HashSet<RelacionSirOfi>();
-                      for(RelacionSirOfi relSir : todasRelacionesSir){
-                          if(relacionSirValida(relSir, fechaSincronizacion)){
-                              relacionesSirValidas.add(relSir);
-                          }
-                      }
-                      oficina.setSirOfi(null);
-                      oficina.setSirOfi(new ArrayList<RelacionSirOfi>(relacionesSirValidas));
-                      padresActualizados.add(oficina);
-                  }
-              }
-            }
-            listaCompleta = new ArrayList<Oficina>(padresActualizados);
-        } else { // Si no hay fechaActualizacion, es una sincronización y se envian todas las vigentes y sus relaciones vigentes
-              for(Oficina oficina: padres){
-                  // Solo se envian las relaciones organizativas vigentes.
-                  Set<RelacionOrganizativaOfi> relaciones =new HashSet<RelacionOrganizativaOfi>(oficina.getOrganizativasOfi());
-
-                  Set<RelacionOrganizativaOfi> relacionesVigentes= new HashSet<RelacionOrganizativaOfi>();
-                  //Metemos en la lista las relacionesVigentes
-                  for(RelacionOrganizativaOfi relOrg: relaciones){
-                    if(relOrg.getEstado().getCodigoEstadoEntidad().equals( Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE)){
-                      relacionesVigentes.add(relOrg);
-                    }
-                  }
-                  oficina.setOrganizativasOfi(null);
-                  oficina.setOrganizativasOfi(new ArrayList<RelacionOrganizativaOfi>(relacionesVigentes));
-
-                  // Solo se envian las relaciones sir vigentes.
-                  Set<RelacionSirOfi> relacionesSir =new HashSet<RelacionSirOfi>(oficina.getSirOfi());
-
-                  Set<RelacionSirOfi> relacionesSirVigentes= new HashSet<RelacionSirOfi>();
-                  //Metemos en la lista las relacionesVigentes
-                  for(RelacionSirOfi relSir : relacionesSir){
-                       if(relSir.getEstado().getCodigoEstadoEntidad().equals( Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE)){
-                           relacionesSirVigentes.add(relSir);
-                       }
-                  }
-                  oficina.setSirOfi(null);
-                  oficina.setSirOfi(new ArrayList<RelacionSirOfi>(relacionesSirVigentes));
-
-              }
-             listaCompleta = new ArrayList<Oficina>(padres);
-
-        }
-
-        for (Oficina oficina: padres) {
-            if(tieneHijos(oficina.getCodigo())){
-                List<Oficina> hijos = obtenerArbolOficinas(oficina.getCodigo(),fechaActualizacion,fechaSincronizacion);
-                log.info("Oficina " + oficina.getDenominacion() + ", tiene "+ hijos.size()+" hijos!");
-                listaCompleta.addAll(hijos);
-            }
-        }
-
-        return listaCompleta;
-    }
-
-
+    //TODO falta mirar los servicios de las oficinas para ver si estan integradas en sir de envio o recepción o ambos
     public List<Oficina> obtenerOficinasSIRUnidad(String codigo) throws Exception {
 
-         Query q = em.createQuery("select oficina from RelacionSirOfi as relacionSirOfi, Oficina as oficina where " +
-                "relacionSirOfi.unidad.id = :codigoUnidad and relacionSirOfi.estado.codigoEstadoEntidad='V' and relacionSirOfi.oficina.id = oficina.id");
+        Query q = em.createQuery("select oficina from RelacionSirOfi as relacionSirOfi, Oficina as oficina where " +
+                "relacionSirOfi.unidad.id = :codigoUnidad and relacionSirOfi.estado.codigoEstadoEntidad='V' and relacionSirOfi.oficina.id = oficina.id ");
 
          q.setParameter("codigoUnidad", codigo);
 

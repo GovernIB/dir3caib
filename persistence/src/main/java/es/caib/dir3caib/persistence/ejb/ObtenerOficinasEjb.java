@@ -1,9 +1,6 @@
 package es.caib.dir3caib.persistence.ejb;
 
-import es.caib.dir3caib.persistence.model.Descarga;
-import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
-import es.caib.dir3caib.persistence.model.Oficina;
-import es.caib.dir3caib.persistence.model.RelacionOrganizativaOfi;
+import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.model.ws.OficinaTF;
 import org.apache.log4j.Logger;
 
@@ -28,6 +25,9 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
 
     @EJB(mappedName = "dir3caib/OficinaEJB/local")
     protected OficinaLocal oficinaEjb;
+
+    @EJB(mappedName = "dir3caib/UnidadEJB/local")
+    protected UnidadLocal unidadEjb;
 
     @EJB(mappedName = "dir3caib/DescargaEJB/local")
     protected DescargaLocal descargaEjb;
@@ -82,12 +82,21 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
     @Override
     public List<OficinaTF> obtenerArbolOficinas(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception{
 
-        List<Oficina> oficinas = oficinaEjb.obtenerOficinasOrganismo(codigo, fechaActualizacion,fechaSincronizacion);
+        log.info("Inicio obtener Oficinas");
+        // Obtenemos todos las unidades vigentes de la unidad Raiz
+        List<Unidad> unidades = unidadEjb.obtenerArbol(codigo);
+        log.info("Total arbol: " + unidades.size());
 
-        List<Oficina> oficinasCompleto = new ArrayList<Oficina>(oficinas);
+        List<Oficina> oficinasCompleto = new ArrayList<Oficina>();
 
+        // Por cada Unidad, obtenemos sus Oficinas
+        for (Unidad unidad : unidades) {
+            List<Oficina> oficinas = oficinaEjb.obtenerOficinasOrganismo(unidad.getCodigo(), fechaActualizacion, fechaSincronizacion);
+            oficinasCompleto.addAll(oficinas);
+        }
+
+        // Convertimos las Oficinas en OficinaTF
         List<OficinaTF> arbolTF = new ArrayList<OficinaTF>();
-
         for (Oficina oficina : oficinasCompleto) {
             arbolTF.add(OficinaTF.generar(oficina));
         }

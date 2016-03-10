@@ -54,13 +54,31 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
 
     public List<ObjetoBasico> hijosOB(String codigo, String estado) throws Exception;
 
-    public List<Unidad> hijosPrimerNivel(String codigo, String estado) throws Exception;
+    public List<Unidad> hijosPrimerNivel(String codigo) throws Exception;
 
     public void arbolHijos(Set<Unidad> unidadesPadres, String estado, Set<Unidad> hijosTotales) throws Exception;
 
     public List<Unidad> findByDenominacion(String denominacion) throws Exception;
+
+    /**
+     * Obtiene al arbol de una Unidad
+     *
+     * @param codigo
+     * @return
+     * @throws Exception
+     */
+    public List<Unidad> obtenerArbol(String codigo) throws Exception;
     
     public List<Unidad> getPagination(int startItem, int numberOfItems) throws Exception;
+
+    /**
+     * Obtiene la Denominacion de una Unidad
+     *
+     * @param codigo
+     * @return
+     * @throws Exception
+     */
+    public String unidadDenominacion(String codigo) throws Exception;
 
     public List<String> getAllCodigos();
     
