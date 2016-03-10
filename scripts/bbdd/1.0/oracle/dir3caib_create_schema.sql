@@ -109,6 +109,7 @@
 
     create table DIR_DESCARGA (
         CODIGO number(19,0) not null,
+        ESTADO varchar2(2 char),
         FECHAFIN timestamp,
         FECHAIMPORTACION timestamp,
         FECHAINICIO timestamp,
@@ -133,9 +134,9 @@
         DIASSINHABILES varchar2(400 char),
         DIREXTRANJERA varchar2(200 char),
         DIRECCIONOBSERVACIONES varchar2(400 char),
-        FECHAALTAOFICIAL date,
-        FECHAANULACION date,
-        FECHAEXTINCION date,
+        FECHAALTAOFICIAL timestamp,
+        FECHAANULACION timestamp,
+        FECHAEXTINCION timestamp,
         FECHAIMPORTACION timestamp,
         HORARIOANTENCION varchar2(400 char),
         LOCEXTRANJERA varchar2(40 char),
@@ -184,10 +185,10 @@
         DIREXTRANJERA varchar2(200 char),
         DISPOSICIONLEGAL varchar2(400 char),
         ESEDP number(1,0),
-        FECHAALTAOFICIAL date,
-        FECHAANULACION date,
-        FECHABAJAOFICIAL date,
-        FECHAEXTINCION date,
+        FECHAALTAOFICIAL timestamp,
+        FECHAANULACION timestamp,
+        FECHABAJAOFICIAL timestamp,
+        FECHAEXTINCION timestamp,
         FECHAIMPORTACION timestamp,
         LOCEXTRANJERA varchar2(40 char),
         NIFCIF varchar2(9 char),
@@ -574,12 +575,8 @@
 
  -- INICI UNIQUES
     alter table DIR_CATAMBITOTERRITORIAL add constraint DIR_CATAMBTER_CODAMB_NIVADM_UK unique (CODIGOAMBITO, NIVELADMINISTRACION);
-
     alter table DIR_CATLOCALIDAD add constraint DIR_CATLOC_LOC_PRO_ENTGEO_UK unique (CODIGOLOCALIDAD, PROVINCIA, ENTIDADGEOGRAFICA);
-
     alter table DIR_RELACIONORGANIZATIVAOFI add constraint DIR_RELORG_CODOFI_CODUNI_UK unique (CODOFICINA, CODUNIDAD);
-
     alter table DIR_RELACIONSIROFI add constraint DIR_RELSIROFI_OFI_UNI_UK unique (CODOFICINA, CODUNIDAD);
-
  -- FINAL UNIQUES
 
