@@ -280,18 +280,28 @@ public class OficinaController extends BaseController {
      public ModelAndView sincronizarOficinas(HttpServletRequest request){
         
         try{
-
-          final Boolean sincronizacion= true;
-          // Obtenemos la fecha de la ultima descarga/sincronizacion
-          Descarga ultimaDescarga = descargaEjb.findByTipo(Dir3caibConstantes.OFICINA);
-          // Establecemmos la fecha de hoy
+            //Establecemos la fecha de hoy
           Date hoy = new Date();
-          // Obtenemos los archivos por WS
 
-          boolean descargaOk= descargarOficinasWS(request, ultimaDescarga.getFechaFin(), hoy);
-          // Importamos los datos a la BD.
-          if(descargaOk) {
-              return importarOficinas(request, sincronizacion);
+            //Obtenemos las ultimas descargas de Unidades y Oficinas
+            Descarga ultimaDescargaUnidad = descargaEjb.findByTipo(Dir3caibConstantes.UNIDAD);
+            Descarga ultimaDescargaOficina = descargaEjb.findByTipo(Dir3caibConstantes.OFICINA);
+
+            // Controlamos que no se puedan sincronizar las oficinas antes que las unidades.
+            // Para ello comprobamos que la fecha de importación de las unidades no sea anterior
+            // a la fecha de la sincro de las oficinas (hoy)
+            if (Utils.isAfterDay(hoy, ultimaDescargaUnidad.getFechaImportacion())) {
+                Mensaje.saveMessageError(request, getMessage("oficina.sincronizacion.nosepuede"));
+            } else {
+                final Boolean sincronizacion = true;
+
+                // Obtenemos los archivos por WS
+                boolean descargaOk = descargarOficinasWS(request, ultimaDescargaOficina.getFechaFin(), hoy);
+                // Importamos los datos a la BD.
+                if (descargaOk) {
+                    return importarOficinas(request, sincronizacion);
+                }
+
           }
           
         }catch(Exception ex){
