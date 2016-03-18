@@ -76,6 +76,14 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     }
 
     @Override
+    public Unidad obtenerUnidad(String codigo) throws Exception {
+        Query q = em.createQuery("select unidad from Unidad as unidad where unidad.codigo=:codigo ");
+        q.setParameter("codigo", codigo);
+        return (Unidad) q.getSingleResult();
+    }
+
+
+    @Override
     @SuppressWarnings(value = "unchecked")
     public List<Unidad> getAll() throws Exception {
         

@@ -86,5 +86,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
 
     public ObjetoBasico findReduceUnidad(String id, String estado) throws Exception;
 
+    public Unidad obtenerUnidad(String codigo) throws Exception;
+
   
 }
