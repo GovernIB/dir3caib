@@ -5,10 +5,9 @@ import es.caib.dir3caib.back.form.FechasForm;
 import es.caib.dir3caib.back.form.UnidadBusquedaForm;
 import es.caib.dir3caib.back.utils.CodigoValor;
 import es.caib.dir3caib.back.utils.Mensaje;
-import es.caib.dir3caib.back.utils.Nodo;
 import es.caib.dir3caib.persistence.ejb.*;
 import es.caib.dir3caib.persistence.model.*;
-import es.caib.dir3caib.persistence.model.utils.ObjetoBasico;
+import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.Paginacion;
 import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
 import es.caib.dir3caib.utils.Configuracio;
@@ -67,8 +66,8 @@ public class UnidadController extends BaseController{
     @EJB(mappedName = "dir3caib/OficinaEJB/local")
     protected OficinaLocal oficinaEjb;
 
-    @EJB(mappedName = "dir3caib/RelacionOrganizativaOfiEJB/local")
-    protected RelacionOrganizativaOfiLocal relacionOrganizativaOfiEjb;
+    @EJB(mappedName = "dir3caib/ArbolEJB/local")
+    protected ArbolLocal arbolEjb;
 
 
     // Indicamos el formato de fecha dd/MM/yyyy hh:mm:ss
@@ -342,9 +341,9 @@ public class UnidadController extends BaseController{
     public ModelAndView mostrarArbolUnidades(HttpServletRequest request, @PathVariable String idUnidad, @PathVariable String estadoUnidad) throws Exception {
 
         Long start = System.currentTimeMillis();
-      ModelAndView mav = new ModelAndView("/arbolList");
-      Nodo nodo = new Nodo();
-        arbolUnidades(idUnidad, nodo, estadoUnidad);
+        ModelAndView mav = new ModelAndView("/arbolList");
+        Nodo nodo = new Nodo();
+        arbolEjb.arbolUnidades(idUnidad, nodo, estadoUnidad, true);
         Long end = System.currentTimeMillis();
 
         log.info("TIEMPO CARGA ARBOLarbol: " + Utils.formatElapsedTime(end - start));
@@ -353,70 +352,6 @@ public class UnidadController extends BaseController{
       return mav;
 
     }
-
-  /**
-   * Metodo que devuelve una estructura de nodos que representan un árbol de unidades
-   * @param idUnidad  unidad raiz de la que partimos.
-   * @return  Nodo (arbol)
-   */
-   private void arbolUnidades(String idUnidad, Nodo nodo, String estado) throws Exception {
-
-          ObjetoBasico unidadPadre = unidadEjb.findReduceUnidad(idUnidad, estado);
-
-          // Nodo que se està tratando (representa una unidad)
-          nodo.setId(unidadPadre.getCodigo());
-          nodo.setNombre(unidadPadre.getDenominacion());
-          nodo.setIdPadre(idUnidad);
-          nodo.setEstado(unidadPadre.getDescripcionEstado());
-
-          //OBTENEMOS LAS OFICINAS DEPENDIENTES DEL NODO(UNIDAD) TRATADO
-          // Primero obtenemos las oficinas generales dependendientes.
-          List<ObjetoBasico> oficinasDependientes=oficinaEjb.oficinasDependientes(unidadPadre.getCodigo(),estado);
-
-          List<Nodo> oficinasDependientesTransf= new ArrayList<Nodo>();
-          for(ObjetoBasico oficina: oficinasDependientes){
-              // Obtenemos las oficinas auxliares del nodo oficina que estamos tratando
-              List<ObjetoBasico> oficinasAuxiliares = oficinaEjb.oficinasAuxiliares(oficina.getCodigo(), estado);
-              //Transforma una lista de oficinas auxiliares en formato ObjetoBasico a Nodo
-              List<Nodo> oficinasAuxTransformadas = transformarObjetoBasicoANodo(oficinasAuxiliares);
-
-              //Obtenemos las oficinas auxiliares de segundo nivel
-              obtenerAuxiliares(oficinasAuxTransformadas,estado);
-
-
-              // Configuramos los datos del nodo (Representa una oficina)
-              Nodo nodoOficina= new Nodo();
-              nodoOficina.setId(oficina.getCodigo());
-              nodoOficina.setNombre(oficina.getDenominacion());
-              nodoOficina.setOficinasAuxiliares(oficinasAuxTransformadas);
-              oficinasDependientesTransf.add(nodoOficina);
-          }
-          //Añadimos las oficinas dependientes al nodo que se està tratando.
-          nodo.setOficinasDependientes(oficinasDependientesTransf);
-
-          //Oficinas Funcionales
-       // List<RelacionOrganizativaOfi> oficinasFuncionales = relacionOrganizativaOfiEjb.getOrganizativasByUnidadEstado(unidadPadre.getCodigo(), estado);
-       List<ObjetoBasico> oficinasFuncionales = relacionOrganizativaOfiEjb.getOrganizativasByUnidadEstado(unidadPadre.getCodigo(), estado);
-       // nodo.setOficinasFuncionales(transformarOficinasFuncionales(oficinasFuncionales));
-       nodo.setOficinasFuncionales(transformarObjetoBasicoANodo(oficinasFuncionales));
-
-          List<Nodo> hijos = new ArrayList<Nodo>();
-          List<ObjetoBasico> unidadesHijas = unidadEjb.hijosOB(idUnidad,estado);
-
-
-          for(ObjetoBasico unidadHija: unidadesHijas){
-            Nodo hijo = new Nodo();
-            hijo.setId(unidadHija.getCodigo());
-            hijo.setNombre(unidadHija.getDenominacion());
-            hijo.setIdPadre(idUnidad);
-            hijo.setEstado(unidadHija.getDescripcionEstado());
-            hijos.add(hijo);
-            // llamada recursiva
-            arbolUnidades( unidadHija.getCodigo(), hijo, unidadHija.getDescripcionEstado());
-          }
-          nodo.setHijos(hijos);
-    }
-
 
     /**
      * Obtiene los {@link es.caib.dir3caib.persistence.model.CatAmbitoTerritorial} del nivel administracion seleccionado
@@ -498,61 +433,6 @@ public class UnidadController extends BaseController{
         CustomDateEditor dateEditor = new CustomDateEditor(sdf, true);
 
         binder.registerCustomEditor(java.util.Date.class, dateEditor);
-    }
-
-    /**
-     * Método que transforma una lista de {@link es.caib.dir3caib.persistence.model.utils.ObjetoBasico} en una lista de
-     * {@link es.caib.dir3caib.back.utils.Nodo}
-     * @param oficinasAtransformar
-     * @return lista de Nodo
-     * @throws Exception
-     */
-    private List<Nodo> transformarObjetoBasicoANodo(List<ObjetoBasico> oficinasAtransformar) throws Exception {
-        List<Nodo> nodos = new ArrayList<Nodo>();
-        for(ObjetoBasico obj: oficinasAtransformar){
-            Nodo nodo = new Nodo();
-            nodo.setId(obj.getCodigo());
-            nodo.setNombre(obj.getDenominacion());
-            nodos.add(nodo);
-        }
-        return nodos;
-    }
-
-    /**
-     * Método que transforma una lista de {@link es.caib.dir3caib.persistence.model.RelacionOrganizativaOfi} en una lista de
-     * link{es.caib.dir3caib.back.utils.Nodo}
-     * @param oficinasAtransformar
-     * @return lista de Nodo
-     * @throws Exception
-     */
-    private List<Nodo> transformarOficinasFuncionales(List<RelacionOrganizativaOfi> oficinasAtransformar) throws Exception {
-        List<Nodo> nodos = new ArrayList<Nodo>();
-        for(RelacionOrganizativaOfi obj: oficinasAtransformar){
-            Nodo nodo = new Nodo();
-            nodo.setId(obj.getOficina().getCodigo());
-            nodo.setNombre(obj.getOficina().getDenominacion());
-            nodos.add(nodo);
-        }
-        return nodos;
-    }
-
-    /**
-     * Método que de manera recursiva obtiene las oficinas auxiliares de una lista de oficinas indicadas y con el estado indicado
-     * Se emplea para pintar el árbol de las unidades y oficinas.
-     * @param oficinas
-     * @param estado
-     * @throws Exception
-     */
-    private void obtenerAuxiliares(List<Nodo> oficinas, String estado) throws Exception {
-
-        for(Nodo oficinaAuxiliarTrans: oficinas){
-            // obtener sus auxiliares
-            List<ObjetoBasico> oficinasAuxiliares= oficinaEjb.oficinasAuxiliares(oficinaAuxiliarTrans.getId(), estado);
-            List<Nodo> oficinasAuxTransformadas = transformarObjetoBasicoANodo(oficinasAuxiliares);
-            oficinaAuxiliarTrans.setOficinasAuxiliares(oficinasAuxTransformadas);
-            //recursividad
-            obtenerAuxiliares(oficinasAuxTransformadas,estado);
-        }
     }
 
 }

@@ -5,10 +5,9 @@ import es.caib.dir3caib.back.form.FechasForm;
 import es.caib.dir3caib.back.form.OficinaBusquedaForm;
 import es.caib.dir3caib.back.utils.CodigoValor;
 import es.caib.dir3caib.back.utils.Mensaje;
-import es.caib.dir3caib.back.utils.Nodo;
 import es.caib.dir3caib.persistence.ejb.*;
 import es.caib.dir3caib.persistence.model.*;
-import es.caib.dir3caib.persistence.model.utils.ObjetoBasico;
+import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.Paginacion;
 import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
 import es.caib.dir3caib.utils.Configuracio;
@@ -67,6 +66,9 @@ public class OficinaController extends BaseController {
     
     @EJB(mappedName = "dir3caib/RelacionSirOfiEJB/local")
     protected RelacionSirOfiLocal relSirOfiEjb;
+
+    @EJB(mappedName = "dir3caib/ArbolEJB/local")
+    protected ArbolLocal arbolEjb;
 
     // Indicamos el formato de fecha dd/MM/yyyy hh:mm:ss
     SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
@@ -354,50 +356,16 @@ public class OficinaController extends BaseController {
    * @return
    */
     @RequestMapping(value = "/{idOficina}/{estadoOficina}/arbol", method = RequestMethod.GET)
-    public ModelAndView mostrarArbolOficinas(HttpServletRequest request, @PathVariable String idOficina, @PathVariable String estadoOficina) {
+    public ModelAndView mostrarArbolOficinas(HttpServletRequest request, @PathVariable String idOficina, @PathVariable String estadoOficina) throws Exception {
 
       ModelAndView mav = new ModelAndView("/arbolList");
       Nodo nodo = new Nodo();
-      arbolOficinas(idOficina, nodo, estadoOficina);
+        arbolEjb.arbolOficinas(idOficina, nodo, estadoOficina);
       mav.addObject("nodo", nodo);
         mav.addObject("oficinas", "oficinas");
 
       return mav;
 
-    }
-
-   /**
-   * Metodo que devuelve una estructura de nodos que representan un árbol de oficinas
-   * @param idOficina  oficina raiz de la que partimos.
-   * @return  Nodo (árbol)
-   */
-    private void arbolOficinas(String idOficina, Nodo nodo,String estado){
-
-       try {
-          //Oficina oficinaPadre = oficinaEjb.findById(idOficina);
-          ObjetoBasico oficinaPadre = oficinaEjb.findReduceOficina(idOficina,estado);
-          nodo.setId(oficinaPadre.getCodigo());
-          nodo.setNombre(oficinaPadre.getDenominacion());
-          nodo.setIdPadre(idOficina);
-          nodo.setEstado(oficinaPadre.getDescripcionEstado());
-
-          List<Nodo> hijos = new ArrayList<Nodo>();
-         // List<Oficina> oficinasHijas = oficinaEjb.hijos(idOficina);
-          List<ObjetoBasico> oficinasHijas = oficinaEjb.hijos(idOficina, estado);
-          for(ObjetoBasico oficinaHija: oficinasHijas){
-            Nodo hijo = new Nodo();
-            hijo.setId(oficinaHija.getCodigo());
-            hijo.setNombre(oficinaHija.getDenominacion());
-            hijo.setIdPadre(idOficina);
-            hijo.setEstado(oficinaHija.getDescripcionEstado());
-            hijos.add(hijo);
-            // llamada recursiva
-            arbolOficinas(oficinaHija.getCodigo(), hijo, oficinaHija.getDescripcionEstado());
-          }
-          nodo.setHijos(hijos);
-       }catch(Exception e){
-           e.printStackTrace();
-       }
     }
 
     /**

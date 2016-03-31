@@ -137,7 +137,7 @@ public class Dir3RestBean implements Dir3RestLocal {
   public List<ObjetoBasico> obtenerArbolUnidades(String codigo) throws Exception{
       Query q;
 
-      q = em.createQuery("Select unidad.codigo, unidad.denominacion from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.codigo");
+      q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.estado.descripcionEstadoEntidad, from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.codigo");
       q.setParameter("codigo",codigo);
       q.setParameter("vigente",Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
@@ -226,6 +226,7 @@ public class Dir3RestBean implements Dir3RestLocal {
     }
 
   /**
+   * TODO REVISAR
    * Búsqueda de organismos según los parámetros indicados que esten vigentes y que tengan
    * al menos una oficina asociada (ya sea organizativa o funcional)
    * @param codigo  código de la unidad
@@ -237,20 +238,39 @@ public class Dir3RestBean implements Dir3RestLocal {
    * coincide con los parámetros de búsqueda
    * @throws Exception
    */
-     public List<ObjetoBasico> busquedaOrganismos(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, boolean conOficinas, boolean unidadRaiz) throws Exception {
+  public List<ObjetoBasico> busquedaOrganismos(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, boolean conOficinas, boolean unidadRaiz, Long provincia, String localidad) throws Exception {
          log.info("conOficinas " + conOficinas);
        Query q;
        Map<String, Object> parametros = new HashMap<String, Object>();
        List<String> where = new ArrayList<String>();
 
-         StringBuffer query = new StringBuffer("Select distinct(unidad.codigo),unidad.denominacion, unidad.codUnidadRaiz.codigo, unidad.codUnidadRaiz.denominacion, unidad.codUnidadSuperior.codigo, unidad.codUnidadSuperior.denominacion, unilocalidad.descripcionLocalidad  from Unidad  as unidad left outer join unidad.catLocalidad as unilocalidad  ");
+      StringBuffer query = new StringBuffer("Select distinct(unidad.codigo),unidad.denominacion, unidad.codUnidadRaiz.codigo, unidad.codUnidadRaiz.denominacion, unidad.codUnidadSuperior.codigo, unidad.codUnidadSuperior.denominacion, unilocalidad.descripcionLocalidad  from Unidad  as unidad left outer join unidad.catLocalidad as unilocalidad  ");
 
        // Parametros de busqueda
+      log.info("LOCALIDAD RECIBIDA:  " + localidad);
+      log.info("PROVINCIA RECIBIDA:  " + provincia);
 
        if(codigo!= null && codigo.length() > 0){where.add(DataBaseUtils.like("unidad.codigo","codigo",parametros,codigo));}
        if(denominacion!= null && denominacion.length() > 0){where.add(DataBaseUtils.like("unidad.denominacion", "denominacion", parametros, denominacion));}
        if(codigoNivelAdministracion!= null && codigoNivelAdministracion != -1){where.add(" unidad.nivelAdministracion.codigoNivelAdministracion = :codigoNivelAdministracion "); parametros.put("codigoNivelAdministracion",codigoNivelAdministracion);}
        if(codComunidad!= null && codComunidad != -1){where.add(" unidad.codAmbComunidad.codigoComunidad = :codComunidad "); parametros.put("codComunidad",codComunidad);}
+      if (provincia != null && provincia != -1) {
+          where.add(" unidad.codAmbProvincia.codigoProvincia = :codProvincia");
+          parametros.put("codProvincia", provincia);
+      }
+      if (localidad != null && !localidad.equals("-1") && !localidad.isEmpty()) {
+          String[] localidadsplit = localidad.split("-");
+          where.add(" unidad.catLocalidad.codigoLocalidad = :localidad ");
+          parametros.put("localidad", new Long(localidadsplit[0]));
+          if (provincia != null && provincia != -1) {
+              where.add(" unidad.catLocalidad.provincia.codigoProvincia = :provincia ");
+              parametros.put("provincia", provincia);
+              if (localidadsplit[1] != null && localidadsplit[1].length() > 0) {
+                  where.add(" unidad.catLocalidad.entidadGeografica.codigoEntidadGeografica = :entidadGeografica ");
+                  parametros.put("entidadGeografica", localidadsplit[1]);
+              }
+          }
+      }
        where.add(" unidad.estado.codigoEstadoEntidad =:vigente ");parametros.put("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
        if(unidadRaiz){where.add(" unidad.codUnidadRaiz.codigo = unidad.codigo ");}
 
@@ -284,14 +304,14 @@ public class Dir3RestBean implements Dir3RestLocal {
          // que tienen oficinas en las que registrar
          if(conOficinas){
              log.info("Entro dentro de busqueda con oficinas");
-           List<ObjetoBasico> unidadesConOficinas= new ArrayList<ObjetoBasico>();
+             Set<ObjetoBasico> unidadesConOficinas = new HashSet<ObjetoBasico>();
            for(ObjetoBasico unidad :unidades){
 
                if(tieneOficinasOrganismo(unidad.getCodigo())){
                  unidadesConOficinas.add(unidad);
                }
            }
-             unidades= unidadesConOficinas;
+             unidades = new ArrayList<ObjetoBasico>(unidadesConOficinas);
          }
 
        return unidades;
@@ -307,7 +327,7 @@ public class Dir3RestBean implements Dir3RestLocal {
      * @return ObjetoBasico representa el par (codigo,denominación) de la oficina.
      * @throws Exception
      */
-     public List<ObjetoBasico> busquedaOficinas(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad) throws Exception {
+    public List<ObjetoBasico> busquedaOficinas(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, Long provincia, String localidad) throws Exception {
          Query q;
          Map<String, Object> parametros = new HashMap<String, Object>();
          List<String> where = new ArrayList<String>();
@@ -320,7 +340,27 @@ public class Dir3RestBean implements Dir3RestLocal {
          if(denominacion!= null && denominacion.length() > 0){where.add(DataBaseUtils.like("oficina.denominacion ", "denominacion", parametros, denominacion));}
          if(codComunidad!= null && codComunidad != -1){where.add("oficina.codComunidad.codigoComunidad=:codComunidad "); parametros.put("codComunidad",codComunidad);}
          if(codigoNivelAdministracion!= null && codigoNivelAdministracion != -1){where.add("oficina.nivelAdministracion.codigoNivelAdministracion=:codigoNivelAdministracion "); parametros.put("codigoNivelAdministracion",codigoNivelAdministracion);}
+        if (provincia != null && provincia != -1) {
+            where.add("(oficina.codUoResponsable.codAmbProvincia.codigoProvincia=:codigoProvincia or oficina.localidad.provincia.codigoProvincia =:codigoProvincia) ");
+            parametros.put("codigoProvincia", provincia);
+        }
 
+        if (localidad != null && !localidad.equals("-1") && !localidad.isEmpty()) {
+            //Separamos el codigo de la localidad del codigo de la entidadGeografica
+            String[] localidadsplit = localidad.split("-");
+            where.add(" oficina.localidad.codigoLocalidad = :localidad ");
+            parametros.put("localidad", new Long(localidadsplit[0]));
+            if (provincia != null && provincia != -1) {
+                where.add(" oficina.localidad.provincia.codigoProvincia = :provincia ");
+                parametros.put("provincia", provincia);
+                if (localidadsplit[1] != null && localidadsplit[1].length() > 0) {
+                    where.add(" oficina.localidad.entidadGeografica.codigoEntidadGeografica = :entidadGeografica ");
+                    parametros.put("entidadGeografica", localidadsplit[1]);
+                }
+            }
+        }
+        where.add(" oficina.estado.codigoEstadoEntidad =:vigente ");
+        parametros.put("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
          // Añadimos los parametros a la query
          if (parametros.size() != 0) {
@@ -435,7 +475,7 @@ public class Dir3RestBean implements Dir3RestLocal {
               }
               ;
 
-              ObjetoBasico objetoBasico = new ObjetoBasico(obj0, obj1, "", obj2 + " - " + obj3, obj4 + " - " + obj5, obj6);
+              ObjetoBasico objetoBasico = new ObjetoBasico(obj0, obj1, "", obj3 + " - " + obj2, obj5 + " - " + obj4, obj6);
 
               objetoBasicos.add(objetoBasico);
           }

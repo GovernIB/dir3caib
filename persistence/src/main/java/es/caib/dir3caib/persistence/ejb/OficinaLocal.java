@@ -43,6 +43,8 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
 
     public ObjetoBasico findReduceOficina(String id, String estado) throws Exception;
 
+    public ObjetoBasico findOficina(String id, String estado) throws Exception;
+
     /*
        Método que comprueba si una oficina tiene más oficinas hijas
     */

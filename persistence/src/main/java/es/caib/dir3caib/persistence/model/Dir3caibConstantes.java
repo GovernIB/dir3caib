@@ -98,8 +98,18 @@ public class Dir3caibConstantes {
     public static final String ESTADO_ENTIDAD_ANULADO= "A";
     public static final String ESTADO_ENTIDAD_TRANSITORIO= "T";
 
+    public static final String DESCRIPCION_ESTADO_ENTIDAD_VIGENTE = "Vigente";
+    public static final String DESCRIPCION_ESTADO_ENTIDAD_EXTINGUIDO = "Extinguido";
+    public static final String DESCRIPCION_ESTADO_ENTIDAD_ANULADO = "Anulado";
+    public static final String DESCRIPCION_ESTADO_ENTIDAD_TRANSITORIO = "Transitorio";
+
     //codigo respuesta correcto ws descarga madrid
     public static final String CODIGO_RESPUESTA_CORRECTO= "01";
     public static final String CODIGO_RESPUESTA_VACIO= "14";
+
+    //servicios SIR
+    public static final String SERVICIO_SIR = "5";
+    public static final String SERVICIO_SIR_ENVIO = "6";
+    public static final String SERVICIO_SIR_RECEPCION = "7";
 
 }

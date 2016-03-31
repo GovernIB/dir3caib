@@ -54,15 +54,29 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
     public ObjetoBasico findReduceOficina(String id, String estado) throws Exception {
 
-      Query q = em.createQuery("Select oficina.codigo, oficina.denominacion, oficina.estado.descripcionEstadoEntidad from Oficina as oficina where oficina.codigo=:id and oficina.estado.descripcionEstadoEntidad =:estado");
-             q.setParameter("id", id);
-             q.setParameter("estado", estado);
+        Query q = em.createQuery("Select oficina.codigo, oficina.denominacion, oficina.estado.descripcionEstadoEntidad from Oficina as oficina where oficina.codigo=:id and oficina.estado.descripcionEstadoEntidad =:estado");
+        q.setParameter("id", id);
+        q.setParameter("estado", estado);
 
-      Object[] obj = (Object[])q.getSingleResult();
+        Object[] obj = (Object[]) q.getSingleResult();
 
         ObjetoBasico objetoBasico = new ObjetoBasico((String) obj[0], (String) obj[1], (String) obj[2], "", "", "");
 
-      return objetoBasico;
+        return objetoBasico;
+
+    }
+
+    public ObjetoBasico findOficina(String id, String estado) throws Exception {
+
+        Query q = em.createQuery("Select oficina.codigo, oficina.denominacion, oficina.estado.descripcionEstadoEntidad, oficina.codUoResponsable.codUnidadRaiz.codigo, oficina.codUoResponsable.codUnidadRaiz.denominacion, oficina.codUoResponsable.codigo, oficina.codUoResponsable.denominacion  from Oficina as oficina where oficina.codigo=:id and oficina.estado.descripcionEstadoEntidad =:estado");
+        q.setParameter("id", id);
+        q.setParameter("estado", estado);
+
+        Object[] obj = (Object[]) q.getSingleResult();
+
+        ObjetoBasico objetoBasico = new ObjetoBasico((String) obj[0], (String) obj[1], (String) obj[2], obj[3] + " - " + obj[4], obj[5] + " - " + obj[6], "");
+
+        return objetoBasico;
 
     }
 

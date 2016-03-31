@@ -18,15 +18,6 @@
                     <h2><fmt:message key="unidad.organigrama"/>&nbsp;<i> ${nodo.id} - ${nodo.nombre}</i></h2>
                 </div>
 
-                <c:if test="${empty nodo.hijos}">
-                    <div class="alert alert-warning alert-dismissable">
-                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                        <strong><spring:message code="unidad.organigrama.vacio"/></strong>
-                    </div>
-                </c:if>
-
-                <c:if test="${not empty nodo.hijos}">
-
                     <div class="btn-group pad-left">
                         <button type="button" class="btn-arbre btn-info btn-xs" onclick="goTo('<c:url value="/unidad/${nodo.id}/Vigente/arbol/"/>')"><i class="fa fa-sitemap"></i> <spring:message code="unidad.arbol.abre"/></button>
                     </div>
@@ -59,7 +50,20 @@
                     </div>
 
                     <div class="tree">
+                        <c:set var="nodoactual" value="${nodo.id} - ${nodo.nombre}"/>
+                        <c:set var="nodoraiz" value="${nodo.raiz}"/>
+                        <c:set var="nodosuperior" value="${nodo.superior}"/>
+                        <c:if test="${nodoraiz!=nodoactual}">
                         <ul>
+                            <li>
+                                <span class="badge-arbre btn-primary"><i class=""></i> ${nodo.raiz}</span>
+                                </c:if>
+                                <c:if test="${nodoraiz!=nodosuperior}">
+                                <ul>
+                                    <li>
+                                        <span class="badge-arbre btn-primary"><i class=""></i> ${nodo.superior}</span>
+                                        </c:if>
+                                        <ul>
 
                             <li>
                                 <c:if test="${empty oficinas}">
@@ -99,8 +103,11 @@
                                 </ul>
                             </li>
                         </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
                     </div>
-                </c:if>
             </div>
         </div>
     </div>

@@ -75,6 +75,26 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
     }
 
+    /**
+     * Obtiene el codigo y la denominación de una Unidad con estado vigente. Se emplea para mostrar el arbol de unidades.
+     *
+     * @param id     identificador de la unidad
+     * @param estado estado de la unidad
+     * @return {@link es.caib.dir3caib.persistence.model.utils.ObjetoBasico}
+     */
+    public ObjetoBasico findUnidad(String id, String estado) throws Exception {
+
+        Query q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.estado.descripcionEstadoEntidad, unidad.codUnidadRaiz.codigo, unidad.codUnidadRaiz.denominacion, unidad.codUnidadSuperior.codigo, unidad.codUnidadSuperior.denominacion from Unidad as unidad where unidad.codigo=:id and unidad.estado.descripcionEstadoEntidad =:estado");
+        q.setParameter("id", id);
+        q.setParameter("estado", estado);
+
+        Object[] obj = (Object[]) q.getSingleResult();
+        ObjetoBasico objetoBasico = new ObjetoBasico((String) obj[0], (String) obj[1], (String) obj[2], obj[3] + " - " + obj[4], obj[5] + " - " + obj[6], "");
+
+        return objetoBasico;
+
+    }
+
     @Override
     public Unidad obtenerUnidad(String codigo) throws Exception {
         Query q = em.createQuery("select unidad from Unidad as unidad where unidad.codigo=:codigo ");
@@ -191,7 +211,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
                 count++;
             }
             q2 = em.createQuery(query.toString().replaceAll("Select unidad from Unidad as unidad ", "Select count(unidad.codigo) from Unidad as unidad "));
-            query.append("order by unidad.codigo desc");
+            query.append("order by unidad.denominacion asc");
             q = em.createQuery(query.toString());
 
             for (Map.Entry<String, Object> param : parametros.entrySet()) {
@@ -202,7 +222,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         }else{
             if(unidadRaiz){query.append(" where unidad.codUnidadRaiz.codigo = unidad.codigo ");}
             q2 = em.createQuery(query.toString().replaceAll("Select unidad from Unidad as unidad ", "Select count(unidad.codigo) from Unidad as unidad "));
-            query.append("order by unidad.codigo desc");
+            query.append("order by unidad.denominacion asc");
             q = em.createQuery(query.toString());
         }
 
@@ -273,7 +293,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     @Override
     public List<ObjetoBasico> hijosOB(String codigo, String estado) throws Exception {
 
-        Query q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.estado.descripcionEstadoEntidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.descripcionEstadoEntidad =:estado order by unidad.codigo");
+        Query q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.estado.descripcionEstadoEntidad,unidad.codUnidadRaiz.codigo, unidad.codUnidadRaiz.denominacion, unidad.codUnidadSuperior.codigo, unidad.codUnidadSuperior.denominacion from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.descripcionEstadoEntidad =:estado order by unidad.codigo");
 
         q.setParameter("codigo",codigo);
         q.setParameter("estado",estado);
@@ -485,8 +505,8 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
           List<ObjetoBasico> unidadesReducidas = new ArrayList<ObjetoBasico>();
 
-          for (Object[] object : result){
-              ObjetoBasico objetoBasico = new ObjetoBasico((String) object[0], (String) object[1], (String) object[2], "", "", "");
+          for (Object[] object : result) {
+              ObjetoBasico objetoBasico = new ObjetoBasico((String) object[0], (String) object[1], (String) object[2], object[3] + " - " + object[4], object[5] + " - " + object[6], "");
 
               unidadesReducidas.add(objetoBasico);
           }

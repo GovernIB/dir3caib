@@ -7,7 +7,9 @@ import java.util.List;
  *
  * @author mgonzalez
  */
+
 public class Nodo {
+
   private String id;
   private String idPadre;
   private String nombre;
