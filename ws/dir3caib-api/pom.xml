@@ -7,12 +7,12 @@
     <parent>
         <groupId>es.caib.dir3caib</groupId>
         <artifactId>dir3caib-ws</artifactId>
-		<version>1.0.2</version>
+		<version>1.0.3</version>
     </parent>
 
     <groupId>es.caib.dir3caib</groupId>
     <artifactId>dir3caib-ws-api</artifactId>
-	<version>1.0.2</version>
+	<version>1.0.3</version>
 	
 	<name>Dir3Caib - WS - Dir3Caib WS API</name>
 	
@@ -109,14 +109,14 @@
 					<dependency>
 						<groupId>es.caib.dir3caib</groupId>
 						<artifactId>dir3caib-ws-server</artifactId>
-						<version>1.0.2</version>
+						<version>1.0.3</version>
 					   <scope>compile</scope>
 				   </dependency>
 
 					<dependency>
 						<groupId>es.caib.dir3caib</groupId>
 						<artifactId>dir3caib-persistence</artifactId>
-						<version>1.0.2</version>
+						<version>1.0.3</version>
 						<scope>compile</scope>
 					</dependency>
 					
