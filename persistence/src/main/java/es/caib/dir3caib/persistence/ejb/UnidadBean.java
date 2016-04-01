@@ -345,13 +345,71 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     }
 
 
+    @Override
+    public List<Unidad> obtenerArbolUnidades(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
+        // log.info("CODIGO QUE NOS PASAN " + codigo);
+        String denominacion = unidadDenominacion(codigo);
+        Query q;
+        if (fechaActualizacion == null) { // Es una sincronizacion, solo traemos vigentes
+            log.info("SINCRONIZACION UNIDADES");
+            q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.codigo");
+            q.setParameter("codigo", codigo);
+            q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+        } else {// es una actualizacion, lo traemos todo
+            log.info("ACTUALIZACION UNIDADES");
+            q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo  order by unidad.codigo");
+            q.setParameter("codigo", codigo);
+
+        }
+
+
+        List<Unidad> padres = q.getResultList();
+        List<Unidad> padresActualizados = new ArrayList<Unidad>();
+        List<Unidad> listaCompleta;
+
+        //log.info("Número de PADRES UNIDADES: " + padres.size());
+        log.info(" ");
+        log.info("UNIDAD PADRE: " + codigo + " - " + denominacion);
+
+
+        if (fechaActualizacion != null) { // Si hay fecha de actualizacion solo se envian las actualizadas
+            for (Unidad unidad : padres) {
+
+                if (fechaActualizacion.before(unidad.getFechaImportacion())) {
+                    log.info("FECHA ACTUALIZACION " + fechaActualizacion + "ANTERIOR A LA FECHA DE IMPORTACION DE LA UNIDAD ID " + unidad.getCodigo() + " FECHA IMPORT" + unidad.getFechaImportacion());
+                    // Miramos que la unidad no este extinguida o anulada anterior a la fecha de sincronizacion de regweb
+                    if (unidadValida(unidad, fechaSincronizacion)) {
+                        padresActualizados.add(unidad);
+                    }
+                }
+            }
+            listaCompleta = new ArrayList<Unidad>(padresActualizados);
+        } else { // si no hay fecha, se trata de una sincronización
+            listaCompleta = new ArrayList<Unidad>(padres);
+        }
+
+        log.info("Numero de hijos a actualizar: " + listaCompleta.size());
+
+        for (Unidad unidad : padres) {
+            if (tieneHijos(unidad.getCodigo())) {
+                List<Unidad> hijos = obtenerArbolUnidades(unidad.getCodigo(), fechaActualizacion, fechaSincronizacion);
+                // log.info("Unidad " + unidad.getDenominacion() + ", tiene "+ hijos.size()+" hijos!");
+                listaCompleta.addAll(hijos);
+            }
+        }
+
+        return listaCompleta;
+    }
+
+
+
     /*
       * Método que devuelve el árbol de unidades de la unidad indicada por codigo,
       * teniendo en cuenta la fecha de la ultima actualización de regweb.
       * Se emplea para la sincronizacion y actualización con regweb
       * */
-    @Override
-    public List<Unidad> obtenerArbolUnidades(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception{
+   /*  @Override
+   public List<Unidad> obtenerArbolUnidades(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception{
 
         String denominacion = unidadDenominacion(codigo);
         Query q;
@@ -407,7 +465,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
             e.printStackTrace();
             return null;
         }
-    }
+    }*/
 
   /**
    * Método que devuelve la unidad indicada por código siempre que esté vigente y tenga oficinas donde registrar.
