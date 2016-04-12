@@ -261,7 +261,8 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
               Set<RelacionOrganizativaOfi> relacionesVigentes= new HashSet<RelacionOrganizativaOfi>();
               //Metemos en la lista las relacionesVigentes
               for(RelacionOrganizativaOfi relOrg: relaciones){
-                if(relOrg.getEstado().getCodigoEstadoEntidad().equals( Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE)){
+                  if (relOrg.getEstado().getCodigoEstadoEntidad().equals(Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE) &&
+                          relOrg.getUnidad().getEstado().getCodigoEstadoEntidad().equals(Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE)) {
                   relacionesVigentes.add(relOrg);
                 }
               }
@@ -274,7 +275,8 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
               Set<RelacionSirOfi> relacionesSirVigentes= new HashSet<RelacionSirOfi>();
               //Metemos en la lista las relacionesVigentes
               for(RelacionSirOfi relSir : relacionesSir){
-                  if(relSir.getEstado().getCodigoEstadoEntidad().equals( Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE)){
+                  if (relSir.getEstado().getCodigoEstadoEntidad().equals(Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE) &&
+                          relSir.getUnidad().getEstado().getCodigoEstadoEntidad().equals(Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE)) {
                       relacionesSirVigentes.add(relSir);
                   }
               }
