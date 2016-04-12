@@ -86,7 +86,7 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
         // Obtenemos todos las unidades vigentes de la unidad Raiz
 
         List<Unidad> unidades = new ArrayList<Unidad>();
-        unidades.add(unidadEjb.obtenerUnidad(codigo));
+        unidades.add(unidadEjb.obtenerUnidad(codigo)); // Añadimos la raiz
 
         unidades.addAll(unidadEjb.obtenerArbol(codigo));
         log.info("Total arbol: " + unidades.size());

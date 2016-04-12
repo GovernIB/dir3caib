@@ -310,12 +310,21 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     @Override
     public List<Unidad> hijosPrimerNivel(String codigo) throws Exception {
 
-        Query q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:estado order by unidad.codigo");
+        Query q = em.createQuery("Select unidad.codigo from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:estado order by unidad.codigo");
 
         q.setParameter("codigo",codigo);
         q.setParameter("estado", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
-        return q.getResultList();
+        List<Object[]> result = q.getResultList();
+        List<Unidad> unidades = new ArrayList<Unidad>();
+
+        for (Object[] object : result) {
+            Unidad unidad = new Unidad((String) object[0]);
+
+            unidades.add(unidad);
+        }
+
+        return unidades;
     }
 
     /**

@@ -7,7 +7,6 @@
         <version>1.0.3</version>
     </parent>
 
-    <groupId>es.caib.dir3caib</groupId>
     <artifactId>dir3caib-ws</artifactId>
     <version>1.0.3</version>
     <packaging>pom</packaging>
@@ -24,16 +23,6 @@
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	  <cxf.version>2.2.12</cxf.version>	
     </properties>
-	
-	
-	<dependencies>
-	     <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.14</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
 
 
     <build>

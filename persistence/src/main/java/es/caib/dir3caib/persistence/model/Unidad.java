@@ -92,6 +92,10 @@ public class Unidad implements Serializable {
   public Unidad(){
   }
 
+  public Unidad(String codigo) {
+    this.codigo = codigo;
+  }
+
   @Index (name="DIR_UNIDAD_PK_I")
   @Column(name = "CODIGO", nullable = false, length = 9)
   @Id
