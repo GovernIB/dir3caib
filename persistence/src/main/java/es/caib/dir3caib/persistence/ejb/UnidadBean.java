@@ -99,7 +99,8 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     public Unidad obtenerUnidad(String codigo) throws Exception {
         Query q = em.createQuery("select unidad from Unidad as unidad where unidad.codigo=:codigo ");
         q.setParameter("codigo", codigo);
-        return (Unidad) q.getSingleResult();
+
+        return new Unidad((String) q.getSingleResult());
     }
 
 
@@ -315,11 +316,11 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         q.setParameter("codigo",codigo);
         q.setParameter("estado", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
-        List<Object[]> result = q.getResultList();
+        List result = q.getResultList();
         List<Unidad> unidades = new ArrayList<Unidad>();
 
-        for (Object[] object : result) {
-            Unidad unidad = new Unidad((String) object[0]);
+        for (Object object : result) {
+            Unidad unidad = new Unidad((String) object);
 
             unidades.add(unidad);
         }
@@ -410,71 +411,6 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         return listaCompleta;
     }
 
-
-
-    /*
-      * Método que devuelve el árbol de unidades de la unidad indicada por codigo,
-      * teniendo en cuenta la fecha de la ultima actualización de regweb.
-      * Se emplea para la sincronizacion y actualización con regweb
-      * */
-   /*  @Override
-   public List<Unidad> obtenerArbolUnidades(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception{
-
-        String denominacion = unidadDenominacion(codigo);
-        Query q;
-        try {
-            if (fechaActualizacion == null) { // Es una sincronizacion, solo traemos vigentes
-                q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.codigo");
-                q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-            } else {// es una actualizacion, traemos las que tienen fechaactualizacion anterior a la fecha de importacion de las unidades
-
-                q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo " +
-                        "and unidad.codigo !=:codigo  " +
-                        "and :fechaActualizacion < unidad.fechaImportacion " +
-                        "order by unidad.codigo");
-                q.setParameter("fechaActualizacion", fechaActualizacion);
-            }
-
-            q.setParameter("codigo", codigo);
-            List<Unidad> hijos = q.getResultList();
-            List<Unidad> padresActualizados = new ArrayList<Unidad>();
-            List<Unidad> listaCompleta;
-
-            log.info(" ");
-            log.info("UNIDAD PADRE: " + codigo + " - " + denominacion);
-
-            if (fechaActualizacion != null) { // Si hay fecha de actualizacion solo se envian las actualizadas
-                for (Unidad unidad : hijos) {
-                    log.info("FECHA ACTUALIZACION " + fechaActualizacion + "ANTERIOR A LA FECHA DE IMPORTACION DE LA UNIDAD ID " + unidad.getCodigo() + " FECHA IMPORT" + unidad.getFechaImportacion());
-                    // Miramos que la unidad no este extinguida o anulada anterior a la fecha de sincronizacion de regweb
-                    if (unidadValida(unidad, fechaSincronizacion)) {
-                        padresActualizados.add(unidad);
-                    }
-                }
-                listaCompleta = new ArrayList<Unidad>(padresActualizados);
-            } else { // si no hay fecha, se trata de una sincronización
-                listaCompleta = new ArrayList<Unidad>(hijos);
-            }
-
-            log.info("Numero de hijos a actualizar: " + listaCompleta.size());
-
-            for (Unidad unidad : hijos) {
-
-                if (tieneHijos(unidad.getCodigo())) {
-                    List<Unidad> arbol = obtenerArbolUnidades(unidad.getCodigo(), fechaActualizacion, fechaSincronizacion);
-                    listaCompleta.addAll(arbol);
-                }
-
-            }
-
-            log.info(" ");
-
-            return listaCompleta;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }*/
 
   /**
    * Método que devuelve la unidad indicada por código siempre que esté vigente y tenga oficinas donde registrar.
