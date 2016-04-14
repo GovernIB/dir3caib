@@ -44,7 +44,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
     @Override
     public UnidadTF obtenerUnidad(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception{
 
-        Unidad unidad = unidadEjb.findFullById(codigo);
+        Unidad unidad = unidadEjb.findConHistoricosVigente(codigo);
         UnidadTF unidadTF= null;
         // Si hay fecha de actualización y es anterior a la fecha de importación se debe transmitir
         if(fechaActualizacion != null){
