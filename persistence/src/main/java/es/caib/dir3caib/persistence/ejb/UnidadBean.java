@@ -335,13 +335,13 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
                 //Obtenemos todos los organismos vigentes cuya unidad raiz es la indicada por el código.
                 // El elemento raiz del organigrama no se envia, ya que se solicita desde regweb pro separado.
 
-                q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadRaiz.codigo =:codigo  and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.codigo");
+                q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadRaiz.codigo =:codigo  and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.nivelJerarquico");
                 q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
             } else {
                 // es una actualizacion, traemos las que tienen fechaactualizacion anterior a la fecha de importacion de las unidades
                 q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadRaiz.codigo =:codigo " +
                         "and :fechaActualizacion < unidad.fechaImportacion " +
-                        "order by unidad.codigo");
+                        "order by unidad.nivelJerarquico");
                 q.setParameter("fechaActualizacion", fechaActualizacion);
             }
             q.setParameter("codigo", codigo);
@@ -406,6 +406,27 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
       }
 
       return unidadesDestConOficinas;
+    }
+
+    public List<Unidad> obtenerUnidadesConOficina(String codigo) throws Exception {
+
+        Query q = em.createQuery("Select unidad.codigo from Unidad as unidad, Oficina as oficina " +
+                "inner join oficina.codUoResponsable as unidadResponsable " +
+                "where unidadResponsable.codigo = unidad.codigo and unidad.codUnidadRaiz.codigo =:codigo and unidad.estado.codigoEstadoEntidad =:estado order by unidad.codigo");
+
+        q.setParameter("codigo", codigo);
+        q.setParameter("estado", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+
+        List result = q.getResultList();
+        List<Unidad> unidades = new ArrayList<Unidad>();
+
+        for (Object object : result) {
+            Unidad unidad = new Unidad((String) object);
+
+            unidades.add(unidad);
+        }
+
+        return unidades;
     }
 
 

@@ -167,5 +167,14 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      */
     public Unidad obtenerUnidad(String codigo) throws Exception;
 
+    /**
+     * Obtiene todas las Unidades de la Unidad Raiz que tienen OFicinas.
+     *
+     * @param codigo
+     * @return
+     * @throws Exception
+     */
+    public List<Unidad> obtenerUnidadesConOficina(String codigo) throws Exception;
+
   
 }
