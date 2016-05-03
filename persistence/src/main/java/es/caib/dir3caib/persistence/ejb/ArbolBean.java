@@ -154,7 +154,7 @@ public class ArbolBean implements ArbolLocal {
      */
     public void arbolOficinas(String idOficina, Nodo nodo, String estado) throws Exception {
 
-
+        log.info(" CODIGO DE LA OFICINA " + idOficina);
         //Oficina oficinaPadre = oficinaEjb.findById(idOficina);
         ObjetoBasico oficinaPadre = oficinaEjb.findOficina(idOficina, estado);
         nodo.setId(oficinaPadre.getCodigo());
@@ -167,6 +167,7 @@ public class ArbolBean implements ArbolLocal {
         List<Nodo> hijos = new ArrayList<Nodo>();
         // List<Oficina> oficinasHijas = oficinaEjb.hijos(idOficina);
         List<ObjetoBasico> oficinasHijas = oficinaEjb.hijos(idOficina, estado);
+
         for (ObjetoBasico oficinaHija : oficinasHijas) {
             Nodo hijo = new Nodo();
             hijo.setId(oficinaHija.getCodigo());
@@ -177,7 +178,7 @@ public class ArbolBean implements ArbolLocal {
             hijo.setEstado(oficinaHija.getDescripcionEstado());
             hijos.add(hijo);
             // llamada recursiva
-            arbolOficinas(oficinaHija.getCodigo(), hijo, oficinaHija.getDescripcionEstado());
+            arbolOficinas(oficinaHija.getCodigo(), hijo, estado);
         }
         nodo.setHijos(hijos);
 

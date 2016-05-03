@@ -22,6 +22,8 @@ public class UnidadTF {
    private Long nivelJerarquico;
    private String codUnidadSuperior;
    private String codUnidadRaiz;
+    private boolean esEdp;
+    private String codEdpPrincipal;
    private String competencias;
    private Date fechaAltaOficial;
    private Date fechaBajaOficial;
@@ -89,6 +91,22 @@ public class UnidadTF {
 
     public void setCodUnidadRaiz(String codUnidadRaiz) {
       this.codUnidadRaiz = codUnidadRaiz;
+    }
+
+    public boolean isEsEdp() {
+        return esEdp;
+    }
+
+    public void setEsEdp(boolean esEdp) {
+        this.esEdp = esEdp;
+    }
+
+    public String getCodEdpPrincipal() {
+        return codEdpPrincipal;
+    }
+
+    public void setCodEdpPrincipal(String codEdpPrincipal) {
+        this.codEdpPrincipal = codEdpPrincipal;
     }
 
     public String getCompetencias() {
@@ -224,6 +242,8 @@ public class UnidadTF {
         this.setCodUnidadRaiz(unidad.getCodUnidadRaiz().getCodigo());
         this.setCodUnidadSuperior(unidad.getCodUnidadSuperior().getCodigo());
         this.setCodigoEstadoEntidad(unidad.getEstado().getCodigoEstadoEntidad());
+        this.setEsEdp(unidad.isEsEdp());
+        this.setCodEdpPrincipal(unidad.getCodEdpPrincipal().getCodigo());
         this.setCompetencias(unidad.getCompetencias());
         this.setDenominacion(unidad.getDenominacion());
         this.setFechaAltaOficial(unidad.getFechaAltaOficial());

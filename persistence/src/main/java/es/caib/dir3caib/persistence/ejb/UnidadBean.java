@@ -57,19 +57,6 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
       return unidad;
     }
 
-    @Override
-    public ObjetoBasico findReduceUnidad(String id, String estado) throws Exception {
-
-      Query q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.estado.descripcionEstadoEntidad from Unidad as unidad where unidad.codigo=:id and unidad.estado.descripcionEstadoEntidad =:estado");
-             q.setParameter("id", id);
-             q.setParameter("estado", estado);
-
-      Object[] obj = (Object[])q.getSingleResult();
-        ObjetoBasico objetoBasico = new ObjetoBasico((String) obj[0], (String) obj[1], (String) obj[2], "", "", "");
-
-      return objetoBasico;
-
-    }
 
     @Override
     public ObjetoBasico findUnidad(String id, String estado) throws Exception {
@@ -333,12 +320,11 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         try {
             if (fechaActualizacion == null) { // Es una sincronizacion
                 //Obtenemos todos los organismos vigentes cuya unidad raiz es la indicada por el código.
-                // El elemento raiz del organigrama no se envia, ya que se solicita desde regweb pro separado.
-
-                q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadRaiz.codigo =:codigo  and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.nivelJerarquico");
+                /*and unidad.codigo !=:codigo*/
+                q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadRaiz.codigo =:codigo  and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.nivelJerarquico");
                 q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
             } else {
-                // es una actualizacion, traemos las que tienen fechaactualizacion anterior a la fecha de importacion de las unidades
+                // es una actualizacion, traemos aquellas unidades que tienen fechaactualizacion anterior a la fecha de importacion de las unidades
                 q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadRaiz.codigo =:codigo " +
                         "and :fechaActualizacion < unidad.fechaImportacion " +
                         "order by unidad.nivelJerarquico");
@@ -346,25 +332,26 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
             }
             q.setParameter("codigo", codigo);
 
-            //
-            List<Unidad> hijos = q.getResultList();
-            List<Unidad> padresActualizados = new ArrayList<Unidad>();
-            List<Unidad> listaCompleta;
+
+            List<Unidad> unidadesObtenidas = q.getResultList();// unidades candidatas(que devuelve la query) a ser enviadas a regweb3
+            List<Unidad> padresActualizados = new ArrayList<Unidad>(); // unidades que se han actualizado entre las ultimas fechas indicadas
+            List<Unidad> listaCompleta; // Lista completa de unidades que se enviaran a regweb3 por cumplir todas las condiciones de ser enviadas
 
             log.info(" ");
             log.info("UNIDAD PADRE: " + codigo + " - " + denominacion);
 
             if (fechaActualizacion != null) { // Si hay fecha de actualizacion solo se envian las actualizadas
-                for (Unidad unidad : hijos) {
+                for (Unidad unidad : unidadesObtenidas) {
                     log.info("FECHA ACTUALIZACION " + fechaActualizacion + "ANTERIOR A LA FECHA DE IMPORTACION DE LA UNIDAD ID " + unidad.getCodigo() + " FECHA IMPORT" + unidad.getFechaImportacion());
                     // Miramos que la unidad no este extinguida o anulada anterior a la fecha de sincronizacion de regweb
+                    // ya que no debe ser enviada a regweb.
                     if (unidadValida(unidad, fechaSincronizacion)) {
                         padresActualizados.add(unidad);
                     }
                 }
                 listaCompleta = new ArrayList<Unidad>(padresActualizados);
             } else { // si no hay fecha, se trata de una sincronización
-                listaCompleta = new ArrayList<Unidad>(hijos);
+                listaCompleta = new ArrayList<Unidad>(unidadesObtenidas);
             }
 
             log.info("Numero de hijos a actualizar: " + listaCompleta.size());
@@ -433,7 +420,8 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     /**
      *
      * Se mira que si la unidad,  su fecha de extinción y anulacion son posteriores
-     * a la fecha de la primera sincronizacion con regweb. Así evitamos enviar relaciones antiguas extinguidas o anuladas
+     * a la fecha de la primera sincronizacion con regweb. Así evitamos enviar unidades que fueron extinguidas o anuladas
+     * antes de la primera sincronización con Madrid.
      * @param unidad  unidad
      * @param fechaSincro  fecha de la primera sincronizacion con regweb
      * @return
@@ -446,18 +434,22 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
           if(fechaSincro!= null) {
               sSincro = fechaFormat.format(fechaSincro);
           }
+          // Si tiene fecha de extinción
           if(unidad.getFechaExtincion() != null){
                 String sExtincion = fechaFormat.format(unidad.getFechaExtincion());
+              // Si la fecha de extinción es posterior o igual a la fecha sincro, se debe enviar a regweb
                 if(unidad.getFechaExtincion().after(fechaSincro) || sExtincion.equals(sSincro)){
                   return true;
                 }
            }else{
+              // Si tiene fecha de anulación
                 if(unidad.getFechaAnulacion() != null){
                   String sAnulacion = fechaFormat.format(unidad.getFechaAnulacion());
+                    // Si la fecha de anulación es posterior o igual a la fecha sincronizacion se debe enviar a regweb
                   if(unidad.getFechaAnulacion().after(fechaSincro) || sAnulacion.equals(sSincro)) {
                     return true;
                   }
-                }else {
+                } else { // Si no tiene ni fecha de extincion ni de anulación, tambien se debe enviar a regweb
                    return true;
                 }
            }

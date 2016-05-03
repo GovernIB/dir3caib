@@ -107,27 +107,41 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      */
     public List<Unidad> hijosPrimerNivel(String codigo) throws Exception;
 
- /**
-  * Metodo que obtiene los hijos de primer nivel de una unidad en función del estado de la unidad padre
-  * @param unidadesPadres unidadesPadres de las que obtener hijos
-  * @param estado indica el estado de los hijos
-  * @param hijosTotales lista con todos los hijos encontrados de manera recursiva.
-  *
-  * @return  {@link es.caib.dir3caib.persistence.model.Unidad}
+    /**
+     * Metodo que obtiene los hijos de primer nivel de una unidad en función del estado de la unidad padre
+     * @param unidadesPadres unidadesPadres de las que obtener hijos
+     * @param estado indica el estado de los hijos
+     * @param hijosTotales lista con todos los hijos encontrados de manera recursiva.
+     *
+     * @return  {@link es.caib.dir3caib.persistence.model.Unidad}
      */
     public void arbolHijos(Set<Unidad> unidadesPadres, String estado, Set<Unidad> hijosTotales) throws Exception;
 
+    /**
+     * Obtiene una unidad por su denominación
+     *
+     * @param denominacion
+     * @return
+     * @throws Exception
+     */
     public List<Unidad> findByDenominacion(String denominacion) throws Exception;
 
     /**
-     * Obtiene al arbol de una Unidad
+     * Obtiene el arbol de una Unidad, pero solo los códigos
      *
      * @param codigo
      * @return
      * @throws Exception
      */
     public List<Unidad> obtenerArbol(String codigo) throws Exception;
-    
+
+    /**
+     * Obtiene una lista de unidades páginada
+     * @param startItem
+     * @param numberOfItems
+     * @return
+     * @throws Exception
+     */
     public List<Unidad> getPagination(int startItem, int numberOfItems) throws Exception;
 
     /**
@@ -139,17 +153,22 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      */
     public String unidadDenominacion(String codigo) throws Exception;
 
+    /**
+     * Obtiene todos los códigos de las unidades. Se emplea para la importación de las unidades desde Madrid.
+     * @return
+     */
     public List<String> getAllCodigos();
-    
+
+
+    /**
+     * Devuelve todas las unidades de la lista de ids indicados. Se emplea para montar la cache de unidades
+     * en la importación de unidades desde Madrid
+     * @param ids
+     * @return
+     * @throws Exception
+     */
     public List<Unidad> getListByIds(List<String> ids) throws Exception;
 
- /**
-  * Obtiene el codigo y la denominación de una Unidad con estado vigente. Se emplea para mostrar el arbol de unidades.
-  * @param id identificador de la unidad
-  * @param estado estado de la unidad
-  * @return  {@link es.caib.dir3caib.persistence.model.utils.ObjetoBasico}
-     * */
-    public ObjetoBasico findReduceUnidad(String id, String estado) throws Exception;
 
  /**
   * Obtiene el codigo y la denominación de una Unidad con estado vigente. Se emplea para mostrar el arbol de unidades.

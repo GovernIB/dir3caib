@@ -20,29 +20,67 @@ import java.util.List;
 @Local
 public interface OficinaLocal extends BaseEjb<Oficina, String> {
 
+    /**
+     * Elimina todas las oficinas
+     *
+     * @throws Exception
+     */
     public void deleteAll() throws Exception;
 
+    /**
+     * Realiza la búsqueda de oficinas en función de los criterios especificados
+     * @param pageNumber numero de pagina, para la paginación
+     * @param codigo código de la oficina
+     * @param denominacion denominacion de la oficina
+     * @param codigoNivelAdministracion codigo del nivel de administración
+     * @param codComunidad codigo de la comunidad  a la que pertenece.
+     * @param codigoProvincia codigo de la provincia a la que pertenece.
+     * @param codigoEstado codigo de estado (vigente, anulado)
+     * @return
+     * @throws Exception
+     */
     public Paginacion busqueda(Integer pageNumber, String codigo, String denominacion,
                                Long codigoNivelAdministracion, Long codComunidad, Long codigoProvincia, String codigoEstado)
             throws Exception;
 
+    /**
+     * Elimina todos los registros de la tabla de históricos de oficinas
+     * @throws Exception
+     */
     public void deleteHistoricosOficina() throws Exception;
 
+    /**
+     * Elimina todos los servicios de oficinas de la tabla de servicios.
+     * @throws Exception
+     */
     public void deleteServiciosOficina() throws Exception;
 
+    /**
+     * Obtiene una oficina con sus historicos y sus servicios
+     * @param id
+     * @return
+     * @throws Exception
+     */
     public Oficina findFullById(String id) throws Exception;
 
     /**
-     * Obtiene el codigo y la denominación de una Oficina con el estado indicado.
+     * Obtiene el codigo y la denominación y el estado de una Oficina con el estado indicado.
      * Se emplea para mostrar el árbol de oficinas.
      *
      * @param id     identificador de la oficina
      * @param estado de la oficina
      * @return {@link es.caib.dir3caib.persistence.model.utils.ObjetoBasico}
      */
+    // public ObjetoBasico findReduceOficina(String id, String estado) throws Exception;
 
-    public ObjetoBasico findReduceOficina(String id, String estado) throws Exception;
-
+    /**
+     * Obtiene el codigo, la denominación, el estado, la tupla codigo-denominacion de la unidad raiz y de la unidad responsable
+     * de la oficina.
+     * @param id
+     * @param estado
+     * @return
+     * @throws Exception
+     */
     public ObjetoBasico findOficina(String id, String estado) throws Exception;
 
     /*
@@ -61,13 +99,13 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
 
 
     /**
-     * Método que devuelve las oficinas de un organismo,
+     * EL QUE SE EMPLEA EN LA SINCRO CON REGWEB (EL BUENO)
+     * Método que devuelve las oficinas de un organismo(son todas, padres e hijos),
      * teniendo en cuenta la fecha de la ultima actualización de regweb.
      * Se emplea para la sincronizacion y actualización con regweb
-     *
-     * @param codigo              código de la unidad
-     * @param fechaActualizacion  fecha de la ultima actualización
-     * @param fechaSincronizacion fecha de la primera sincronización
+     * @param codigo código de la unidad
+     * @param fechaActualizacion   fecha de la ultima actualización
+     * @param fechaSincronizacion  fecha de la primera sincronización
      * @return
      * @throws Exception
      */
@@ -81,29 +119,36 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      * @return listado de Oficinas
      * @throws Exception
      */
+    //TODO falta mirar los servicios de las oficinas para ver si estan integradas en sir de envio o recepción o ambos
     public List<Oficina> obtenerOficinasSIRUnidad(String codigo) throws Exception;
 
     /**
      * Método que comprueba si el arbol de unidades del código indicado  tiene oficinas donde registrar
-     *
-     * @param codigo
+     * @param codigo de la unidad
      * @return
      * @throws Exception
      */
     public Boolean tieneOficinasArbol(String codigo) throws Exception;
 
+    /**
+     * Obtiene todos los código de las oficinas. Se emplea en la importación de oficinas desde Madrid.
+     * @return
+     * @throws Exception
+     */
     public List<String> getAllCodigos() throws Exception;
 
     /**
      * Obtiene las oficinas que dependen directamente de la unidad
-     *
+     * @param codigo código de la unidad
+     * @param estado
      * @return {@link es.caib.dir3caib.persistence.model.utils.ObjetoBasico}
      */
     public List<ObjetoBasico> oficinasDependientes(String codigo, String estado) throws Exception;
 
     /**
      * Obtiene las oficinas auxiliares de un Oficina padre.
-     *
+     * @param codigo código de la oficina
+     * @param estado
      * @return {@link es.caib.dir3caib.persistence.model.utils.ObjetoBasico}
      */
     public List<ObjetoBasico> oficinasAuxiliares(String codigo, String estado) throws Exception;

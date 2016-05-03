@@ -4,12 +4,12 @@ import es.caib.dir3caib.persistence.model.CatComunidadAutonoma;
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.SecurityDomain;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
-import javax.annotation.security.RolesAllowed;
 
 /**
  * Created by Fundació BIT.
@@ -37,7 +37,7 @@ public class CatComunidadAutonomaBean extends BaseEjbJPA<CatComunidadAutonoma, L
     @SuppressWarnings(value = "unchecked")
     public List<CatComunidadAutonoma> getAll() throws Exception {
 
-        return  em.createQuery("Select catComunidadAutonoma from CatComunidadAutonoma as catComunidadAutonoma order by catComunidadAutonoma.codigoComunidad").getResultList();
+        return em.createQuery("Select catComunidadAutonoma from CatComunidadAutonoma as catComunidadAutonoma order by catComunidadAutonoma.descripcionComunidad").getResultList();
     }
 
     @Override
