@@ -1,20 +1,21 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-v4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>dir3caib-ws-api</artifactId>
+	<version>1.0.3</version>
+    <packaging>jar</packaging>
+	
+	<name>Dir3Caib - WS - Dir3Caib WS API</name>
 
     <parent>
         <groupId>es.caib.dir3caib</groupId>
         <artifactId>dir3caib-ws</artifactId>
 		<version>1.0.3</version>
-    </parent>
+    </parent>	
 
-    <artifactId>dir3caib-ws-api</artifactId>
-	<version>1.0.3</version>
-	
-	<name>Dir3Caib - WS - Dir3Caib WS API</name>
-	
 	<properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   
@@ -35,34 +36,28 @@
       </dependencies>  
    </dependencyManagement>
 
-
+     <repositories>
+	  <repository>
+        <id>java.net-m2</id>
+        <name>java.net - Maven 2</name>
+        <url>https://repository.jboss.org/nexus/content/repositories/java.net-m2</url>
+      </repository>
+	</repositories>
+	
 	<build>
+
        <plugins>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>2.5.1</version>
                     <configuration>
-                        <source>1.5</source>
-                        <target>1.5</target>
+                        <source>1.6</source>
+                        <target>1.6</target>
                     </configuration>
 			    </plugin>
-        </plugins>
-    </build>
-		
-	<profiles>
-	  <profile>
-		<id>regenerateapi</id>
-		<activation>
-		   <activeByDefault>false</activeByDefault>
-		   <property>				    
-				<name>regenerateapi</name>
-			</property>
-		</activation>
-		<build>
-			<plugins>
-				
-				
+        
+    
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
@@ -79,6 +74,7 @@
                         <filter>
 						  <artifact>org.fundaciobit.genapp:genapp-core</artifact>
 						  <includes>
+                            <include>org/fundaciobit/genapp/common/i18n/I18N*.*</include>
 							<include>org/fundaciobit/genapp/common/ws/Ws*Adapter.*</include>
 						  </includes>
 						</filter>
@@ -87,7 +83,60 @@
 				  </execution>
 				</executions>
 			</plugin>
+
+
+
+
+
+            <plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.6</version>
+				<executions>
+				  <execution>
+					<id>copy-resources</id>				
+					<phase>validate</phase>
+					<goals>
+					  <goal>copy-resources</goal>
+					</goals>
+					<configuration>
+					  <outputDirectory>${basedir}/src/main/resources</outputDirectory>
+					  <resources>          
+						<resource>
+						  <directory>${basedir}/../../logic/src/main/resources</directory>
+							<includes>
+							   <include>logicmissatges_*.properties</include>
+							   <include>genapp_*.properties</include>
+							   <include>portafib_genapp_*.properties</include>
+							</includes>
+						  <filtering>true</filtering>
+						</resource>
+					  </resources>
+					  <overwrite>true</overwrite>
+					</configuration>            
+				  </execution>
+				</executions>
+			</plugin>
 			
+			
+		</plugins>
+
+    </build>
+
+
+    
+	<profiles>
+	  <profile>
+		<id>regenerateapi</id>
+		<activation>
+		   <activeByDefault>false</activeByDefault>
+		   <property>				    
+				<name>regenerateapi</name>
+			</property>
+		</activation>
+		<build>
+			<plugins>
+			
+           
 			<plugin>
 				<groupId>org.apache.cxf</groupId>
 				<artifactId>cxf-java2ws-plugin</artifactId>
@@ -118,14 +167,8 @@
 						<version>1.0.3</version>
 						<scope>compile</scope>
 					</dependency>
-					
-					<dependency>
-					  <groupId>org.fundaciobit.genapp</groupId>
-					  <artifactId>genapp-core</artifactId>
-					  <version>1.0</version>
-					  <scope>compile</scope>
-					</dependency>
-					
+
+				
 					 <dependency>
 						<groupId>log4j</groupId>
 						<artifactId>log4j</artifactId>
@@ -176,6 +219,7 @@
 						</configuration>
 						<goals><goal>java2ws</goal></goals>
 					</execution>
+
 				</executions>
 			</plugin>
 			
@@ -188,6 +232,10 @@
 					<goalPrefix>wsconsume</goalPrefix>	
                     <extension>true</extension>					
 					<sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>				
+
+					<bindingFiles>
+						<bindingFile>${basedir}/bindings/bindings.xjc</bindingFile>
+					 </bindingFiles>
 				  </configuration>  
 				  <executions>  
 					<execution>  
@@ -244,11 +292,10 @@
         </build>
 	  </profile>
 	</profiles>
-
-	
-	
 	
 
+	
+	
     <dependencies>
 	
 	   <dependency>  
