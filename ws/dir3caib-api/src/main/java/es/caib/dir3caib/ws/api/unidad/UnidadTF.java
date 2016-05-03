@@ -20,6 +20,7 @@ import java.util.List;
  *       &lt;sequence>
  *         &lt;element name="codAmbComunidad" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
  *         &lt;element name="codAmbProvincia" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
+ *         &lt;element name="codEdpPrincipal" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="codPostal" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="codUnidadRaiz" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="codUnidadSuperior" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -31,6 +32,7 @@ import java.util.List;
  *         &lt;element name="competencias" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="denominacion" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="descripcionLocalidad" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="esEdp" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *         &lt;element name="fechaAltaOficial" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="fechaAnulacion" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="fechaBajaOficial" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
@@ -52,6 +54,7 @@ import java.util.List;
 @XmlType(name = "unidadTF", propOrder = {
     "codAmbComunidad",
     "codAmbProvincia",
+        "codEdpPrincipal",
     "codPostal",
     "codUnidadRaiz",
     "codUnidadSuperior",
@@ -63,6 +66,7 @@ import java.util.List;
     "competencias",
     "denominacion",
     "descripcionLocalidad",
+        "esEdp",
     "fechaAltaOficial",
     "fechaAnulacion",
     "fechaBajaOficial",
@@ -77,6 +81,7 @@ public class UnidadTF {
 
     protected Long codAmbComunidad;
     protected Long codAmbProvincia;
+    protected String codEdpPrincipal;
     protected String codPostal;
     protected String codUnidadRaiz;
     protected String codUnidadSuperior;
@@ -88,6 +93,7 @@ public class UnidadTF {
     protected String competencias;
     protected String denominacion;
     protected String descripcionLocalidad;
+    protected boolean esEdp;
     @XmlElement(type = String.class)
     @XmlJavaTypeAdapter(Adapter1 .class)
     @XmlSchemaType(name = "dateTime")
@@ -157,6 +163,28 @@ public class UnidadTF {
      */
     public void setCodAmbProvincia(Long value) {
         this.codAmbProvincia = value;
+    }
+
+    /**
+     * Gets the value of the codEdpPrincipal property.
+     *
+     * @return
+     *     possible object is
+     *     {@link String }
+     *
+     */
+    public String getCodEdpPrincipal() {
+        return codEdpPrincipal;
+    }
+
+    /**
+     * Sets the value of the codEdpPrincipal property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setCodEdpPrincipal(String value) {
+        this.codEdpPrincipal = value;
     }
 
     /**
@@ -421,6 +449,21 @@ public class UnidadTF {
      */
     public void setDescripcionLocalidad(String value) {
         this.descripcionLocalidad = value;
+    }
+
+    /**
+     * Gets the value of the esEdp property.
+     *
+     */
+    public boolean isEsEdp() {
+        return esEdp;
+    }
+
+    /**
+     * Sets the value of the esEdp property.
+     */
+    public void setEsEdp(boolean value) {
+        this.esEdp = value;
     }
 
     /**

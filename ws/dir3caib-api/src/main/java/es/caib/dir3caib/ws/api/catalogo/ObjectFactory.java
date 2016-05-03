@@ -55,19 +55,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CatNivelAdministracion }
+     * Create an instance of {@link ObtenerCatTipoViaResponse }
      * 
      */
-    public CatNivelAdministracion createCatNivelAdministracion() {
-        return new CatNivelAdministracion();
-    }
-
-    /**
-     * Create an instance of {@link ObtenerCatTipoVia }
-     * 
-     */
-    public ObtenerCatTipoVia createObtenerCatTipoVia() {
-        return new ObtenerCatTipoVia();
+    public ObtenerCatTipoViaResponse createObtenerCatTipoViaResponse() {
+        return new ObtenerCatTipoViaResponse();
     }
 
     /**
@@ -87,11 +79,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetVersion }
+     * Create an instance of {@link CatEstadoEntidad }
      * 
      */
-    public GetVersion createGetVersion() {
-        return new GetVersion();
+    public CatEstadoEntidad createCatEstadoEntidad() {
+        return new CatEstadoEntidad();
     }
 
     /**
@@ -103,131 +95,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ObtenerCatEntidadGeograficaResponse }
+     * Create an instance of {@link CatNivelAdministracion }
      * 
      */
-    public ObtenerCatEntidadGeograficaResponse createObtenerCatEntidadGeograficaResponse() {
-        return new ObtenerCatEntidadGeograficaResponse();
-    }
-
-    /**
-     * Create an instance of {@link CatLocalidadTF }
-     * 
-     */
-    public CatLocalidadTF createCatLocalidadTF() {
-        return new CatLocalidadTF();
-    }
-
-    /**
-     * Create an instance of {@link ObtenerCatTipoViaResponse }
-     * 
-     */
-    public ObtenerCatTipoViaResponse createObtenerCatTipoViaResponse() {
-        return new ObtenerCatTipoViaResponse();
-    }
-
-    /**
-     * Create an instance of {@link ObtenerCatEstadoEntidadResponse }
-     * 
-     */
-    public ObtenerCatEstadoEntidadResponse createObtenerCatEstadoEntidadResponse() {
-        return new ObtenerCatEstadoEntidadResponse();
-    }
-
-    /**
-     * Create an instance of {@link ObtenerCatProvincia }
-     * 
-     */
-    public ObtenerCatProvincia createObtenerCatProvincia() {
-        return new ObtenerCatProvincia();
-    }
-
-    /**
-     * Create an instance of {@link GetVersionResponse }
-     * 
-     */
-    public GetVersionResponse createGetVersionResponse() {
-        return new GetVersionResponse();
-    }
-
-    /**
-     * Create an instance of {@link CatEntidadGeograficaTF }
-     * 
-     */
-    public CatEntidadGeograficaTF createCatEntidadGeograficaTF() {
-        return new CatEntidadGeograficaTF();
-    }
-
-    /**
-     * Create an instance of {@link ObtenerCatPais }
-     * 
-     */
-    public ObtenerCatPais createObtenerCatPais() {
-        return new ObtenerCatPais();
-    }
-
-    /**
-     * Create an instance of {@link CatPais }
-     * 
-     */
-    public CatPais createCatPais() {
-        return new CatPais();
-    }
-
-    /**
-     * Create an instance of {@link Servicio }
-     * 
-     */
-    public Servicio createServicio() {
-        return new Servicio();
-    }
-
-    /**
-     * Create an instance of {@link CatComunidadAutonomaTF }
-     * 
-     */
-    public CatComunidadAutonomaTF createCatComunidadAutonomaTF() {
-        return new CatComunidadAutonomaTF();
-    }
-
-    /**
-     * Create an instance of {@link ObtenerCatNivelAdministracionResponse }
-     * 
-     */
-    public ObtenerCatNivelAdministracionResponse createObtenerCatNivelAdministracionResponse() {
-        return new ObtenerCatNivelAdministracionResponse();
-    }
-
-    /**
-     * Create an instance of {@link CatTipoVia }
-     * 
-     */
-    public CatTipoVia createCatTipoVia() {
-        return new CatTipoVia();
-    }
-
-    /**
-     * Create an instance of {@link ObtenerCatComunidadAutonoma }
-     * 
-     */
-    public ObtenerCatComunidadAutonoma createObtenerCatComunidadAutonoma() {
-        return new ObtenerCatComunidadAutonoma();
-    }
-
-    /**
-     * Create an instance of {@link GetVersionWsResponse }
-     * 
-     */
-    public GetVersionWsResponse createGetVersionWsResponse() {
-        return new GetVersionWsResponse();
-    }
-
-    /**
-     * Create an instance of {@link ObtenerCatServicioResponse }
-     * 
-     */
-    public ObtenerCatServicioResponse createObtenerCatServicioResponse() {
-        return new ObtenerCatServicioResponse();
+    public CatNivelAdministracion createCatNivelAdministracion() {
+        return new CatNivelAdministracion();
     }
 
     /**
@@ -239,35 +111,43 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ObtenerCatProvinciaResponse }
+     * Create an instance of {@link ObtenerCatEntidadGeograficaResponse }
      * 
      */
-    public ObtenerCatProvinciaResponse createObtenerCatProvinciaResponse() {
-        return new ObtenerCatProvinciaResponse();
+    public ObtenerCatEntidadGeograficaResponse createObtenerCatEntidadGeograficaResponse() {
+        return new ObtenerCatEntidadGeograficaResponse();
     }
 
     /**
-     * Create an instance of {@link CatEstadoEntidad }
+     * Create an instance of {@link ObtenerCatProvincia }
      * 
      */
-    public CatEstadoEntidad createCatEstadoEntidad() {
-        return new CatEstadoEntidad();
+    public ObtenerCatProvincia createObtenerCatProvincia() {
+        return new ObtenerCatProvincia();
     }
 
     /**
-     * Create an instance of {@link ObtenerCatPaisResponse }
+     * Create an instance of {@link CatEntidadGeograficaTF }
      * 
      */
-    public ObtenerCatPaisResponse createObtenerCatPaisResponse() {
-        return new ObtenerCatPaisResponse();
+    public CatEntidadGeograficaTF createCatEntidadGeograficaTF() {
+        return new CatEntidadGeograficaTF();
     }
 
     /**
-     * Create an instance of {@link ObtenerCatEntidadGeografica }
+     * Create an instance of {@link CatComunidadAutonomaTF }
      * 
      */
-    public ObtenerCatEntidadGeografica createObtenerCatEntidadGeografica() {
-        return new ObtenerCatEntidadGeografica();
+    public CatComunidadAutonomaTF createCatComunidadAutonomaTF() {
+        return new CatComunidadAutonomaTF();
+    }
+
+    /**
+     * Create an instance of {@link GetVersion }
+     * 
+     */
+    public GetVersion createGetVersion() {
+        return new GetVersion();
     }
 
     /**
@@ -279,14 +159,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CatProvinciaTF }
-     * 
-     */
-    public CatProvinciaTF createCatProvinciaTF() {
-        return new CatProvinciaTF();
-    }
-
-    /**
      * Create an instance of {@link GetVersionWs }
      * 
      */
@@ -295,11 +167,139 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link Servicio }
+     * 
+     */
+    public Servicio createServicio() {
+        return new Servicio();
+    }
+
+    /**
+     * Create an instance of {@link CatLocalidadTF }
+     * 
+     */
+    public CatLocalidadTF createCatLocalidadTF() {
+        return new CatLocalidadTF();
+    }
+
+    /**
+     * Create an instance of {@link GetVersionResponse }
+     * 
+     */
+    public GetVersionResponse createGetVersionResponse() {
+        return new GetVersionResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetVersionWsResponse }
+     * 
+     */
+    public GetVersionWsResponse createGetVersionWsResponse() {
+        return new GetVersionWsResponse();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerCatTipoVia }
+     * 
+     */
+    public ObtenerCatTipoVia createObtenerCatTipoVia() {
+        return new ObtenerCatTipoVia();
+    }
+
+    /**
+     * Create an instance of {@link CatTipoVia }
+     * 
+     */
+    public CatTipoVia createCatTipoVia() {
+        return new CatTipoVia();
+    }
+
+    /**
+     * Create an instance of {@link CatPais }
+     * 
+     */
+    public CatPais createCatPais() {
+        return new CatPais();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerCatPaisResponse }
+     * 
+     */
+    public ObtenerCatPaisResponse createObtenerCatPaisResponse() {
+        return new ObtenerCatPaisResponse();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerCatComunidadAutonoma }
+     * 
+     */
+    public ObtenerCatComunidadAutonoma createObtenerCatComunidadAutonoma() {
+        return new ObtenerCatComunidadAutonoma();
+    }
+
+    /**
      * Create an instance of {@link ObtenerCatLocalidad }
      * 
      */
     public ObtenerCatLocalidad createObtenerCatLocalidad() {
         return new ObtenerCatLocalidad();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerCatPais }
+     * 
+     */
+    public ObtenerCatPais createObtenerCatPais() {
+        return new ObtenerCatPais();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerCatProvinciaResponse }
+     * 
+     */
+    public ObtenerCatProvinciaResponse createObtenerCatProvinciaResponse() {
+        return new ObtenerCatProvinciaResponse();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerCatServicioResponse }
+     * 
+     */
+    public ObtenerCatServicioResponse createObtenerCatServicioResponse() {
+        return new ObtenerCatServicioResponse();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerCatNivelAdministracionResponse }
+     *
+     */
+    public ObtenerCatNivelAdministracionResponse createObtenerCatNivelAdministracionResponse() {
+        return new ObtenerCatNivelAdministracionResponse();
+    }
+
+    /**
+     * Create an instance of {@link CatProvinciaTF }
+     * 
+     */
+    public CatProvinciaTF createCatProvinciaTF() {
+        return new CatProvinciaTF();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerCatEstadoEntidadResponse }
+     * 
+     */
+    public ObtenerCatEstadoEntidadResponse createObtenerCatEstadoEntidadResponse() {
+        return new ObtenerCatEstadoEntidadResponse();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerCatEntidadGeografica }
+     * 
+     */
+    public ObtenerCatEntidadGeografica createObtenerCatEntidadGeografica() {
+        return new ObtenerCatEntidadGeografica();
     }
 
     /**

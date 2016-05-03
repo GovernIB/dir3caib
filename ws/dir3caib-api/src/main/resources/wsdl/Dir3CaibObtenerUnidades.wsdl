@@ -48,6 +48,7 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="codAmbComunidad" type="xs:long"/>
       <xs:element minOccurs="0" name="codAmbProvincia" type="xs:long"/>
+      <xs:element minOccurs="0" name="codEdpPrincipal" type="xs:string"/>
       <xs:element minOccurs="0" name="codPostal" type="xs:string"/>
       <xs:element minOccurs="0" name="codUnidadRaiz" type="xs:string"/>
       <xs:element minOccurs="0" name="codUnidadSuperior" type="xs:string"/>
@@ -59,6 +60,7 @@
       <xs:element minOccurs="0" name="competencias" type="xs:string"/>
       <xs:element minOccurs="0" name="denominacion" type="xs:string"/>
       <xs:element minOccurs="0" name="descripcionLocalidad" type="xs:string"/>
+      <xs:element name="esEdp" type="xs:boolean"/>
       <xs:element minOccurs="0" name="fechaAltaOficial" type="xs:dateTime"/>
       <xs:element minOccurs="0" name="fechaAnulacion" type="xs:dateTime"/>
       <xs:element minOccurs="0" name="fechaBajaOficial" type="xs:dateTime"/>
