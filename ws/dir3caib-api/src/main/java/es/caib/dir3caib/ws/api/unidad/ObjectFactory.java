@@ -45,35 +45,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetVersion }
+     * Create an instance of {@link ObtenerArbolUnidades }
      * 
      */
-    public GetVersion createGetVersion() {
-        return new GetVersion();
-    }
-
-    /**
-     * Create an instance of {@link GetVersionResponse }
-     * 
-     */
-    public GetVersionResponse createGetVersionResponse() {
-        return new GetVersionResponse();
-    }
-
-    /**
-     * Create an instance of {@link UnidadTF }
-     * 
-     */
-    public UnidadTF createUnidadTF() {
-        return new UnidadTF();
-    }
-
-    /**
-     * Create an instance of {@link ObtenerFechaUltimaActualizacion }
-     * 
-     */
-    public ObtenerFechaUltimaActualizacion createObtenerFechaUltimaActualizacion() {
-        return new ObtenerFechaUltimaActualizacion();
+    public ObtenerArbolUnidades createObtenerArbolUnidades() {
+        return new ObtenerArbolUnidades();
     }
 
     /**
@@ -85,19 +61,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ObtenerArbolUnidadesDestinatarias }
+     * Create an instance of {@link UnidadTF }
      * 
      */
-    public ObtenerArbolUnidadesDestinatarias createObtenerArbolUnidadesDestinatarias() {
-        return new ObtenerArbolUnidadesDestinatarias();
-    }
-
-    /**
-     * Create an instance of {@link ObtenerUnidad }
-     * 
-     */
-    public ObtenerUnidad createObtenerUnidad() {
-        return new ObtenerUnidad();
+    public UnidadTF createUnidadTF() {
+        return new UnidadTF();
     }
 
     /**
@@ -109,27 +77,43 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ObtenerFechaUltimaActualizacionResponse }
-     * 
-     */
-    public ObtenerFechaUltimaActualizacionResponse createObtenerFechaUltimaActualizacionResponse() {
-        return new ObtenerFechaUltimaActualizacionResponse();
-    }
-
-    /**
      * Create an instance of {@link GetVersionWs }
-     *
+     * 
      */
     public GetVersionWs createGetVersionWs() {
         return new GetVersionWs();
     }
 
     /**
-     * Create an instance of {@link ObtenerArbolUnidades }
+     * Create an instance of {@link GetVersionResponse }
      * 
      */
-    public ObtenerArbolUnidades createObtenerArbolUnidades() {
-        return new ObtenerArbolUnidades();
+    public GetVersionResponse createGetVersionResponse() {
+        return new GetVersionResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetVersion }
+     * 
+     */
+    public GetVersion createGetVersion() {
+        return new GetVersion();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerUnidad }
+     * 
+     */
+    public ObtenerUnidad createObtenerUnidad() {
+        return new ObtenerUnidad();
+    }
+
+    /**
+     * Create an instance of {@link GetVersionWsResponse }
+     * 
+     */
+    public GetVersionWsResponse createGetVersionWsResponse() {
+        return new GetVersionWsResponse();
     }
 
     /**
@@ -141,10 +125,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetVersionWsResponse }
+     * Create an instance of {@link ObtenerFechaUltimaActualizacion }
+     * 
      */
-    public GetVersionWsResponse createGetVersionWsResponse() {
-        return new GetVersionWsResponse();
+    public ObtenerFechaUltimaActualizacion createObtenerFechaUltimaActualizacion() {
+        return new ObtenerFechaUltimaActualizacion();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerFechaUltimaActualizacionResponse }
+     * 
+     */
+    public ObtenerFechaUltimaActualizacionResponse createObtenerFechaUltimaActualizacionResponse() {
+        return new ObtenerFechaUltimaActualizacionResponse();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerArbolUnidadesDestinatarias }
+     * 
+     */
+    public ObtenerArbolUnidadesDestinatarias createObtenerArbolUnidadesDestinatarias() {
+        return new ObtenerArbolUnidadesDestinatarias();
     }
 
     /**

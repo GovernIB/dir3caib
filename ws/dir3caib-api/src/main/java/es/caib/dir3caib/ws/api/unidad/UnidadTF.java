@@ -167,11 +167,11 @@ public class UnidadTF {
 
     /**
      * Gets the value of the codEdpPrincipal property.
-     *
+     * 
      * @return
      *     possible object is
      *     {@link String }
-     *
+     *     
      */
     public String getCodEdpPrincipal() {
         return codEdpPrincipal;
@@ -180,8 +180,10 @@ public class UnidadTF {
     /**
      * Sets the value of the codEdpPrincipal property.
      *
-     * @param value allowed object is
-     *              {@link String }
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setCodEdpPrincipal(String value) {
         this.codEdpPrincipal = value;
@@ -453,7 +455,7 @@ public class UnidadTF {
 
     /**
      * Gets the value of the esEdp property.
-     *
+     * 
      */
     public boolean isEsEdp() {
         return esEdp;
@@ -461,6 +463,7 @@ public class UnidadTF {
 
     /**
      * Sets the value of the esEdp property.
+     * 
      */
     public void setEsEdp(boolean value) {
         this.esEdp = value;
