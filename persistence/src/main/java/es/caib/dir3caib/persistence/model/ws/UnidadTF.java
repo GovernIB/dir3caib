@@ -243,7 +243,11 @@ public class UnidadTF {
         this.setCodUnidadSuperior(unidad.getCodUnidadSuperior().getCodigo());
         this.setCodigoEstadoEntidad(unidad.getEstado().getCodigoEstadoEntidad());
         this.setEsEdp(unidad.isEsEdp());
-        this.setCodEdpPrincipal(unidad.getCodEdpPrincipal().getCodigo());
+        if (unidad.getCodEdpPrincipal() != null) {
+            this.setCodEdpPrincipal(unidad.getCodEdpPrincipal().getCodigo());
+        } else {
+            this.setCodEdpPrincipal(null);
+        }
         this.setCompetencias(unidad.getCompetencias());
         this.setDenominacion(unidad.getDenominacion());
         this.setFechaAltaOficial(unidad.getFechaAltaOficial());
