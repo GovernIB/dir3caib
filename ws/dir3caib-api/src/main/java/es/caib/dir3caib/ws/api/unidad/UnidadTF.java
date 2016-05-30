@@ -179,7 +179,7 @@ public class UnidadTF {
 
     /**
      * Sets the value of the codEdpPrincipal property.
-     *
+     * 
      * @param value
      *     allowed object is
      *     {@link String }

@@ -45,14 +45,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ObtenerArbolOficinasResponse }
-     * 
-     */
-    public ObtenerArbolOficinasResponse createObtenerArbolOficinasResponse() {
-        return new ObtenerArbolOficinasResponse();
-    }
-
-    /**
      * Create an instance of {@link GetVersion }
      * 
      */
@@ -61,43 +53,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ObtenerOficinasSIRUnidadResponse }
+     * Create an instance of {@link ObtenerArbolOficinasResponse }
      * 
      */
-    public ObtenerOficinasSIRUnidadResponse createObtenerOficinasSIRUnidadResponse() {
-        return new ObtenerOficinasSIRUnidadResponse();
-    }
-
-    /**
-     * Create an instance of {@link GetVersionResponse }
-     * 
-     */
-    public GetVersionResponse createGetVersionResponse() {
-        return new GetVersionResponse();
-    }
-
-    /**
-     * Create an instance of {@link RelacionSirOfiTF }
-     * 
-     */
-    public RelacionSirOfiTF createRelacionSirOfiTF() {
-        return new RelacionSirOfiTF();
-    }
-
-    /**
-     * Create an instance of {@link OficinaTF }
-     * 
-     */
-    public OficinaTF createOficinaTF() {
-        return new OficinaTF();
-    }
-
-    /**
-     * Create an instance of {@link ObtenerOficina }
-     * 
-     */
-    public ObtenerOficina createObtenerOficina() {
-        return new ObtenerOficina();
+    public ObtenerArbolOficinasResponse createObtenerArbolOficinasResponse() {
+        return new ObtenerArbolOficinasResponse();
     }
 
     /**
@@ -109,35 +69,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ObtenerOficinaResponse }
+     * Create an instance of {@link ObtenerOficina }
      * 
      */
-    public ObtenerOficinaResponse createObtenerOficinaResponse() {
-        return new ObtenerOficinaResponse();
+    public ObtenerOficina createObtenerOficina() {
+        return new ObtenerOficina();
     }
 
     /**
-     * Create an instance of {@link ObtenerArbolOficinas }
+     * Create an instance of {@link ObtenerOficinasSIRUnidadResponse }
      * 
      */
-    public ObtenerArbolOficinas createObtenerArbolOficinas() {
-        return new ObtenerArbolOficinas();
+    public ObtenerOficinasSIRUnidadResponse createObtenerOficinasSIRUnidadResponse() {
+        return new ObtenerOficinasSIRUnidadResponse();
     }
 
     /**
-     * Create an instance of {@link ObtenerOficinasSIRUnidad }
+     * Create an instance of {@link OficinaTF }
      * 
      */
-    public ObtenerOficinasSIRUnidad createObtenerOficinasSIRUnidad() {
-        return new ObtenerOficinasSIRUnidad();
-    }
-
-    /**
-     * Create an instance of {@link RelacionOrganizativaOfiTF }
-     * 
-     */
-    public RelacionOrganizativaOfiTF createRelacionOrganizativaOfiTF() {
-        return new RelacionOrganizativaOfiTF();
+    public OficinaTF createOficinaTF() {
+        return new OficinaTF();
     }
 
     /**
@@ -157,11 +109,59 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link RelacionSirOfiTF }
+     * 
+     */
+    public RelacionSirOfiTF createRelacionSirOfiTF() {
+        return new RelacionSirOfiTF();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerOficinaResponse }
+     * 
+     */
+    public ObtenerOficinaResponse createObtenerOficinaResponse() {
+        return new ObtenerOficinaResponse();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerOficinasSIRUnidad }
+     * 
+     */
+    public ObtenerOficinasSIRUnidad createObtenerOficinasSIRUnidad() {
+        return new ObtenerOficinasSIRUnidad();
+    }
+
+    /**
+     * Create an instance of {@link RelacionOrganizativaOfiTF }
+     * 
+     */
+    public RelacionOrganizativaOfiTF createRelacionOrganizativaOfiTF() {
+        return new RelacionOrganizativaOfiTF();
+    }
+
+    /**
+     * Create an instance of {@link GetVersionResponse }
+     * 
+     */
+    public GetVersionResponse createGetVersionResponse() {
+        return new GetVersionResponse();
+    }
+
+    /**
      * Create an instance of {@link GetVersionWs }
      * 
      */
     public GetVersionWs createGetVersionWs() {
         return new GetVersionWs();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerArbolOficinas }
+     * 
+     */
+    public ObtenerArbolOficinas createObtenerArbolOficinas() {
+        return new ObtenerArbolOficinas();
     }
 
     /**
