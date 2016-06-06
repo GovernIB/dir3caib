@@ -5,8 +5,9 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.*;
-import es.caib.dir3caib.persistence.model.utils.ObjetoBasico;
 import es.caib.dir3caib.persistence.utils.DataBaseUtils;
+import es.caib.dir3caib.persistence.utils.Nodo;
+import es.caib.dir3caib.persistence.utils.NodoUtils;
 import es.caib.dir3caib.persistence.utils.Paginacion;
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
@@ -52,21 +53,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
     }
 
 
-   /* public ObjetoBasico findReduceOficina(String id, String estado) throws Exception {
-
-        Query q = em.createQuery("Select oficina.codigo, oficina.denominacion, oficina.estado.descripcionEstadoEntidad from Oficina as oficina where oficina.codigo=:id and oficina.estado.descripcionEstadoEntidad =:estado");
-        q.setParameter("id", id);
-        q.setParameter("estado", estado);
-
-        Object[] obj = (Object[]) q.getSingleResult();
-
-        ObjetoBasico objetoBasico = new ObjetoBasico((String) obj[0], (String) obj[1], (String) obj[2], "", "", "");
-
-        return objetoBasico;
-
-    }*/
-
-    public ObjetoBasico findOficina(String id, String estado) throws Exception {
+    public Nodo findOficina(String id, String estado) throws Exception {
 
         Query q = em.createQuery("Select oficina.codigo, oficina.denominacion, oficina.estado.descripcionEstadoEntidad, oficina.codUoResponsable.codUnidadRaiz.codigo, oficina.codUoResponsable.codUnidadRaiz.denominacion, oficina.codUoResponsable.codigo, oficina.codUoResponsable.denominacion  from Oficina as oficina where oficina.codigo=:id and oficina.estado.descripcionEstadoEntidad =:estado");
         q.setParameter("id", id);
@@ -74,9 +61,9 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
         Object[] obj = (Object[]) q.getSingleResult();
 
-        ObjetoBasico objetoBasico = new ObjetoBasico((String) obj[0], (String) obj[1], (String) obj[2], obj[3] + " - " + obj[4], obj[5] + " - " + obj[6], "");
+        Nodo nodo = new Nodo((String) obj[0], (String) obj[1], (String) obj[2], obj[3] + " - " + obj[4], obj[5] + " - " + obj[6], "");
 
-        return objetoBasico;
+        return nodo;
 
     }
 
@@ -198,14 +185,14 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
 
     @Override
-    public List<ObjetoBasico> hijos(String codigo, String estado) throws Exception {
+    public List<Nodo> hijos(String codigo, String estado) throws Exception {
 
         Query q = em.createQuery("Select oficina.codigo, oficina.denominacion, oficina.estado.descripcionEstadoEntidad from Oficina as oficina where oficina.codOfiResponsable.codigo =:codigo and oficina.codigo !=:codigo and oficina.estado.descripcionEstadoEntidad =:estado order by oficina.codigo");
 
         q.setParameter("codigo",codigo);
         q.setParameter("estado",estado);
 
-        return getObjetoBasicoList(q.getResultList());
+        return NodoUtils.getNodoList(q.getResultList());
     }
 
     /**
@@ -466,24 +453,6 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
           return q.getResultList();
      }
     
-     /**
-      * Convierte los resultados de una query en una lista de {@link es.caib.dir3caib.persistence.model.utils.ObjetoBasico}
-      * @param result
-      * @return
-      * @throws Exception
-      */
-      private List<ObjetoBasico> getObjetoBasicoList(List<Object[]> result) throws Exception{
-
-          List<ObjetoBasico> oficinasReducidas = new ArrayList<ObjetoBasico>();
-
-          for (Object[] object : result){
-              ObjetoBasico objetoBasico = new ObjetoBasico((String) object[0], (String) object[1], (String) object[2], "", "", "");
-
-              oficinasReducidas.add(objetoBasico);
-          }
-
-          return  oficinasReducidas;
-      }
 
     /**
      *
@@ -520,10 +489,10 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
     /**
      * Obtiene las oficinas que dependen directamente de la unidad
-     * @return  {@link es.caib.dir3caib.persistence.model.utils.ObjetoBasico}
+     * @return  {@link es.caib.dir3caib.persistence.utils.Nodo}
      */
     @Override
-    public List<ObjetoBasico> oficinasDependientes(String codigo, String estado) throws Exception {
+    public List<Nodo> oficinasDependientes(String codigo, String estado) throws Exception {
 
         Query q = em.createQuery("Select oficina.codigo, oficina.denominacion, oficina.estado.descripcionEstadoEntidad from Oficina as oficina where " +
                 "oficina.codUoResponsable.codigo=:codigo and oficina.estado.descripcionEstadoEntidad=:estado " +
@@ -532,15 +501,15 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
         q.setParameter("codigo",codigo);
         q.setParameter("estado",estado);
 
-        return getObjetoBasicoList(q.getResultList());
+        return NodoUtils.getNodoList(q.getResultList());
     }
 
     /**
      * Obtiene las oficinas auxiliares de un Oficina padre.
-     * @return  {@link es.caib.dir3caib.persistence.model.utils.ObjetoBasico}
+     * @return  {@link es.caib.dir3caib.persistence.utils.Nodo}
      */
     @Override
-    public List<ObjetoBasico> oficinasAuxiliares(String codigo, String estado) throws Exception {
+    public List<Nodo> oficinasAuxiliares(String codigo, String estado) throws Exception {
 
         Query q = em.createQuery("Select oficina.codigo, oficina.denominacion, oficina.estado.descripcionEstadoEntidad from Oficina as oficina where " +
                 " oficina.codOfiResponsable.codigo=:codigo and oficina.estado.descripcionEstadoEntidad =:estado " +
@@ -548,7 +517,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
         q.setParameter("codigo",codigo);
         q.setParameter("estado",estado);
-        return getObjetoBasicoList(q.getResultList());
+        return NodoUtils.getNodoList(q.getResultList());
     }
 }
 

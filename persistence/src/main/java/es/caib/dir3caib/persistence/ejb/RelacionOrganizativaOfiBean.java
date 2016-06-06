@@ -1,7 +1,8 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.RelacionOrganizativaOfi;
-import es.caib.dir3caib.persistence.model.utils.ObjetoBasico;
+import es.caib.dir3caib.persistence.utils.Nodo;
+import es.caib.dir3caib.persistence.utils.NodoUtils;
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.SecurityDomain;
 
@@ -10,7 +11,6 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -95,7 +95,7 @@ public class RelacionOrganizativaOfiBean extends BaseEjbJPA<RelacionOrganizativa
     }
 
 
-    public List<ObjetoBasico> getOrganizativasByUnidadEstado(String codigo, String estado) throws Exception {
+    public List<Nodo> getOrganizativasByUnidadEstado(String codigo, String estado) throws Exception {
         Query q = em.createQuery("Select relacionOrganizativaOfi.oficina.codigo, relacionOrganizativaOfi.oficina.denominacion  from RelacionOrganizativaOfi as relacionOrganizativaOfi where " +
                 "relacionOrganizativaOfi.unidad.codigo =:codigo and relacionOrganizativaOfi.estado.descripcionEstadoEntidad =:estado order by relacionOrganizativaOfi.oficina.codigo");
 
@@ -103,7 +103,7 @@ public class RelacionOrganizativaOfiBean extends BaseEjbJPA<RelacionOrganizativa
         q.setParameter("estado",estado);
 
 
-        return getObjetoBasicoList(q.getResultList());
+        return NodoUtils.getNodoListMinimo(q.getResultList());
     }
     @Override
     public void deleteAll() throws Exception {
@@ -112,23 +112,4 @@ public class RelacionOrganizativaOfiBean extends BaseEjbJPA<RelacionOrganizativa
 
     }
 
-    /**
-     * Convierte los resultados de una query en una lista de {@link es.caib.dir3caib.persistence.model.utils.ObjetoBasico}
-     *
-     * @param result
-     * @return
-     * @throws Exception
-     */
-    private List<ObjetoBasico> getObjetoBasicoList(List<Object[]> result) throws Exception {
-
-        List<ObjetoBasico> listaReducida = new ArrayList<ObjetoBasico>();
-
-        for (Object[] object : result) {
-            ObjetoBasico objetoBasico = new ObjetoBasico((String) object[0], (String) object[1], "", "", "", "");
-
-            listaReducida.add(objetoBasico);
-        }
-
-        return listaReducida;
-    }
 }

@@ -1,6 +1,5 @@
 package es.caib.dir3caib.persistence.ejb;
 
-import es.caib.dir3caib.persistence.model.utils.ObjetoBasico;
 import es.caib.dir3caib.persistence.utils.Nodo;
 import org.apache.log4j.Logger;
 
@@ -41,29 +40,29 @@ public class ArbolBean implements ArbolLocal {
      */
     public void arbolUnidades(String idUnidad, Nodo nodo, String estado, boolean conOficinas) throws Exception {
 
-        ObjetoBasico unidadPadre = unidadEjb.findUnidad(idUnidad, estado);
+        Nodo unidadPadre = unidadEjb.findUnidad(idUnidad, estado);
 
 
         // Nodo que se està tratando (representa una unidad)
-        nodo.setId(unidadPadre.getCodigo());
+        nodo.setCodigo(unidadPadre.getCodigo());
         nodo.setIdPadre(unidadPadre.getCodigo());
-        nodo.setNombre(unidadPadre.getDenominacion());
+        nodo.setDenominacion(unidadPadre.getDenominacion());
         nodo.setRaiz(unidadPadre.getRaiz());
         nodo.setSuperior(unidadPadre.getSuperior());
-        nodo.setEstado(unidadPadre.getDescripcionEstado());
+        nodo.setDescripcionEstado(unidadPadre.getDescripcionEstado());
 
         //OBTENEMOS LAS OFICINAS DEPENDIENTES DEL NODO(UNIDAD) TRATADO
         // Primero obtenemos las oficinas generales dependendientes.
-        List<ObjetoBasico> oficinasDependientes;
+        List<Nodo> oficinasDependientes;
         if (conOficinas) {
             oficinasDependientes = oficinaEjb.oficinasDependientes(unidadPadre.getCodigo(), estado);
 
             List<Nodo> oficinasDependientesTransf = new ArrayList<Nodo>();
-            for (ObjetoBasico oficina : oficinasDependientes) {
+            for (Nodo oficina : oficinasDependientes) {
                 // Obtenemos las oficinas auxliares del nodo oficina que estamos tratando
-                List<ObjetoBasico> oficinasAuxiliares = oficinaEjb.oficinasAuxiliares(oficina.getCodigo(), estado);
-                //Transforma una lista de oficinas auxiliares en formato ObjetoBasico a Nodo
-                List<Nodo> oficinasAuxTransformadas = transformarObjetoBasicoANodo(oficinasAuxiliares);
+                List<Nodo> oficinasAuxiliares = oficinaEjb.oficinasAuxiliares(oficina.getCodigo(), estado);
+
+                List<Nodo> oficinasAuxTransformadas = oficinasAuxiliares;
 
                 //Obtenemos las oficinas auxiliares de segundo nivel
                 obtenerAuxiliares(oficinasAuxTransformadas, estado);
@@ -71,8 +70,8 @@ public class ArbolBean implements ArbolLocal {
 
                 // Configuramos los datos del nodo (Representa una oficina)
                 Nodo nodoOficina = new Nodo();
-                nodoOficina.setId(oficina.getCodigo());
-                nodoOficina.setNombre(oficina.getDenominacion());
+                nodoOficina.setCodigo(oficina.getCodigo());
+                nodoOficina.setDenominacion(oficina.getDenominacion());
                 nodoOficina.setOficinasAuxiliares(oficinasAuxTransformadas);
                 oficinasDependientesTransf.add(nodoOficina);
             }
@@ -80,23 +79,23 @@ public class ArbolBean implements ArbolLocal {
             nodo.setOficinasDependientes(oficinasDependientesTransf);
 
             //Oficinas Funcionales
-            List<ObjetoBasico> oficinasFuncionales = relacionOrganizativaOfiEjb.getOrganizativasByUnidadEstado(unidadPadre.getCodigo(), estado);
-            nodo.setOficinasFuncionales(transformarObjetoBasicoANodo(oficinasFuncionales));
+            List<Nodo> oficinasFuncionales = relacionOrganizativaOfiEjb.getOrganizativasByUnidadEstado(unidadPadre.getCodigo(), estado);
+            nodo.setOficinasFuncionales(oficinasFuncionales);
         }
 
 
         List<Nodo> hijos = new ArrayList<Nodo>();
-        List<ObjetoBasico> unidadesHijas = unidadEjb.hijosOB(idUnidad, estado);
+        List<Nodo> unidadesHijas = unidadEjb.hijosOB(idUnidad, estado);
 
 
-        for (ObjetoBasico unidadHija : unidadesHijas) {
+        for (Nodo unidadHija : unidadesHijas) {
             Nodo hijo = new Nodo();
-            hijo.setId(unidadHija.getCodigo());
+            hijo.setCodigo(unidadHija.getCodigo());
             hijo.setIdPadre(idUnidad);
-            hijo.setNombre(unidadHija.getDenominacion());
+            hijo.setDenominacion(unidadHija.getDenominacion());
             hijo.setSuperior(unidadHija.getSuperior());
             hijo.setRaiz(unidadHija.getRaiz());
-            hijo.setEstado(unidadHija.getDescripcionEstado());
+            hijo.setDescripcionEstado(unidadHija.getDescripcionEstado());
             hijos.add(hijo);
             // llamada recursiva
             arbolUnidades(unidadHija.getCodigo(), hijo, unidadHija.getDescripcionEstado(), conOficinas);
@@ -104,25 +103,6 @@ public class ArbolBean implements ArbolLocal {
         nodo.setHijos(hijos);
     }
 
-
-    /**
-     * Método que transforma una lista de {@link es.caib.dir3caib.persistence.model.utils.ObjetoBasico} en una lista de
-     * {@link es.caib.dir3caib.persistence.utils.Nodo}
-     *
-     * @param oficinasAtransformar
-     * @return lista de Nodo
-     * @throws Exception
-     */
-    private List<Nodo> transformarObjetoBasicoANodo(List<ObjetoBasico> oficinasAtransformar) throws Exception {
-        List<Nodo> nodos = new ArrayList<Nodo>();
-        for (ObjetoBasico obj : oficinasAtransformar) {
-            Nodo nodo = new Nodo();
-            nodo.setId(obj.getCodigo());
-            nodo.setNombre(obj.getDenominacion());
-            nodos.add(nodo);
-        }
-        return nodos;
-    }
 
 
     /**
@@ -137,8 +117,8 @@ public class ArbolBean implements ArbolLocal {
 
         for (Nodo oficinaAuxiliarTrans : oficinas) {
             // obtener sus auxiliares
-            List<ObjetoBasico> oficinasAuxiliares = oficinaEjb.oficinasAuxiliares(oficinaAuxiliarTrans.getId(), estado);
-            List<Nodo> oficinasAuxTransformadas = transformarObjetoBasicoANodo(oficinasAuxiliares);
+            List<Nodo> oficinasAuxiliares = oficinaEjb.oficinasAuxiliares(oficinaAuxiliarTrans.getCodigo(), estado);
+            List<Nodo> oficinasAuxTransformadas = oficinasAuxiliares;
             oficinaAuxiliarTrans.setOficinasAuxiliares(oficinasAuxTransformadas);
             //recursividad
             obtenerAuxiliares(oficinasAuxTransformadas, estado);
@@ -156,26 +136,25 @@ public class ArbolBean implements ArbolLocal {
 
         log.info(" CODIGO DE LA OFICINA " + idOficina);
         //Oficina oficinaPadre = oficinaEjb.findById(idOficina);
-        ObjetoBasico oficinaPadre = oficinaEjb.findOficina(idOficina, estado);
-        nodo.setId(oficinaPadre.getCodigo());
-        nodo.setNombre(oficinaPadre.getDenominacion());
+        Nodo oficinaPadre = oficinaEjb.findOficina(idOficina, estado);
+        nodo.setCodigo(oficinaPadre.getCodigo());
+        nodo.setDenominacion(oficinaPadre.getDenominacion());
         nodo.setIdPadre(idOficina);
         nodo.setRaiz(oficinaPadre.getRaiz());
         nodo.setSuperior(oficinaPadre.getSuperior());
-        nodo.setEstado(oficinaPadre.getDescripcionEstado());
+        nodo.setDescripcionEstado(oficinaPadre.getDescripcionEstado());
 
         List<Nodo> hijos = new ArrayList<Nodo>();
-        // List<Oficina> oficinasHijas = oficinaEjb.hijos(idOficina);
-        List<ObjetoBasico> oficinasHijas = oficinaEjb.hijos(idOficina, estado);
+        List<Nodo> oficinasHijas = oficinaEjb.hijos(idOficina, estado);
 
-        for (ObjetoBasico oficinaHija : oficinasHijas) {
+        for (Nodo oficinaHija : oficinasHijas) {
             Nodo hijo = new Nodo();
-            hijo.setId(oficinaHija.getCodigo());
-            hijo.setNombre(oficinaHija.getDenominacion());
+            hijo.setCodigo(oficinaHija.getCodigo());
+            hijo.setDenominacion(oficinaHija.getDenominacion());
             hijo.setIdPadre(idOficina);
             hijo.setRaiz(oficinaHija.getRaiz());
             hijo.setSuperior(oficinaHija.getSuperior());
-            hijo.setEstado(oficinaHija.getDescripcionEstado());
+            hijo.setDescripcionEstado(oficinaHija.getDescripcionEstado());
             hijos.add(hijo);
             // llamada recursiva
             arbolOficinas(oficinaHija.getCodigo(), hijo, estado);

@@ -1,7 +1,7 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.Unidad;
-import es.caib.dir3caib.persistence.model.utils.ObjetoBasico;
+import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.Paginacion;
 
 import javax.ejb.Local;
@@ -95,9 +95,9 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
   * @param codigo identificador de la unidad padre.
   * @param estado estado de la unidad padre.
   *
-  * @return  {@link es.caib.dir3caib.persistence.model.utils.ObjetoBasico}
+  * @return  {@link es.caib.dir3caib.persistence.utils.Nodo}
      */
-    public List<ObjetoBasico> hijosOB(String codigo, String estado) throws Exception;
+ public List<Nodo> hijosOB(String codigo, String estado) throws Exception;
 
  /**
   * Método que obtiene los hijos de primer nivel de una unidad en función del estado de la unidad padre
@@ -174,9 +174,9 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
   * Obtiene el codigo y la denominación de una Unidad con estado vigente. Se emplea para mostrar el arbol de unidades.
   * @param id     identificador de la unidad
   * @param estado estado de la unidad
-  * @return {@link es.caib.dir3caib.persistence.model.utils.ObjetoBasico}
+  * @return {@link es.caib.dir3caib.persistence.utils.Nodo}
      */
-    public ObjetoBasico findUnidad(String id, String estado) throws Exception;
+ public Nodo findUnidad(String id, String estado) throws Exception;
 
  /**
   * Obtiene solo el código de la unidad indicada

@@ -4,7 +4,8 @@
 
 <ul>
     <c:forEach var="ofiAux" items="${oficinaAuxiliar.oficinasAuxiliares}">
-        <li><a href="javascript:void(0);"><span class="badge-arbre btn-ofaux" style="display:closed;"><i class="fa fa-home"></i> ${ofiAux.id} - ${ofiAux.nombre}</span></a>
+        <li><a href="javascript:void(0);"><span class="badge-arbre btn-ofaux" style="display:closed;"><i
+                class="fa fa-home"></i> ${ofiAux.codigo} - ${ofiAux.denominacion}</span></a>
             <c:set var="oficinaAuxiliar" value="${ofiAux}" scope="request"/>
             <jsp:include page="auxiliares.jsp" flush="true"/>
         </li>

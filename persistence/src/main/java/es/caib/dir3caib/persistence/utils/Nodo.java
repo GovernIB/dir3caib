@@ -1,5 +1,7 @@
 package es.caib.dir3caib.persistence.utils;
 
+import es.caib.dir3caib.persistence.model.utils.ObjetoBasico;
+
 import java.util.List;
 
 /**
@@ -8,14 +10,9 @@ import java.util.List;
  * @author mgonzalez
  */
 
-public class Nodo {
+public class Nodo extends ObjetoBasico {
 
-    private String id;
     private String idPadre;
-    private String superior; // concatenacion codigodir3+denominacion
-    private String raiz; // concatenacion codigodir3+denominacion
-    private String nombre;
-    private String estado;
     private List<Nodo> hijos;
     private List<Nodo> oficinasDependientes;
     private List<Nodo> oficinasDependientesAuxiliares;
@@ -26,10 +23,20 @@ public class Nodo {
     public Nodo() {
     }
 
-    public Nodo(String nombre, String estado) {
-        this.nombre = nombre;
-        this.estado = estado;
+    public Nodo(String codigo, String denominacion, String descripcionEstado, String raiz, String superior, String localidad) {
+        super(codigo, denominacion, descripcionEstado, raiz, superior, localidad);
     }
+
+    public Nodo(String codigo, String denominacion, String descripcionEstado, String raiz, String superior, String localidad, String idPadre, List<Nodo> hijos, List<Nodo> oficinasDependientes, List<Nodo> oficinasDependientesAuxiliares, List<Nodo> oficinasAuxiliares, List<Nodo> oficinasFuncionales) {
+        super(codigo, denominacion, descripcionEstado, raiz, superior, localidad);
+        this.idPadre = idPadre;
+        this.hijos = hijos;
+        this.oficinasDependientes = oficinasDependientes;
+        this.oficinasDependientesAuxiliares = oficinasDependientesAuxiliares;
+        this.oficinasAuxiliares = oficinasAuxiliares;
+        this.oficinasFuncionales = oficinasFuncionales;
+    }
+
 
     public String getIdPadre() {
         return idPadre;
@@ -39,37 +46,7 @@ public class Nodo {
         this.idPadre = idPadre;
     }
 
-    public String getId() {
-        return id;
-    }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getSuperior() {
-        return superior;
-    }
-
-    public void setSuperior(String superior) {
-        this.superior = superior;
-    }
-
-    public String getRaiz() {
-        return raiz;
-    }
-
-    public void setRaiz(String raiz) {
-        this.raiz = raiz;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
 
     public List<Nodo> getHijos() {
         return hijos;
@@ -79,13 +56,7 @@ public class Nodo {
         this.hijos = hijos;
     }
 
-    public String getEstado() {
-        return estado;
-    }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
 
     public List<Nodo> getOficinasDependientes() {
         return oficinasDependientes;

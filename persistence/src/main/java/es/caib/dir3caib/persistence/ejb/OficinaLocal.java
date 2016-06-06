@@ -5,7 +5,7 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.Oficina;
-import es.caib.dir3caib.persistence.model.utils.ObjetoBasico;
+import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.Paginacion;
 
 import javax.ejb.Local;
@@ -63,15 +63,6 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      */
     public Oficina findFullById(String id) throws Exception;
 
-    /**
-     * Obtiene el codigo y la denominación y el estado de una Oficina con el estado indicado.
-     * Se emplea para mostrar el árbol de oficinas.
-     *
-     * @param id     identificador de la oficina
-     * @param estado de la oficina
-     * @return {@link es.caib.dir3caib.persistence.model.utils.ObjetoBasico}
-     */
-    // public ObjetoBasico findReduceOficina(String id, String estado) throws Exception;
 
     /**
      * Obtiene el codigo, la denominación, el estado, la tupla codigo-denominacion de la unidad raiz y de la unidad responsable
@@ -81,7 +72,7 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      * @return
      * @throws Exception
      */
-    public ObjetoBasico findOficina(String id, String estado) throws Exception;
+    public Nodo findOficina(String id, String estado) throws Exception;
 
     /*
        Método que comprueba si una oficina tiene más oficinas hijas
@@ -93,9 +84,9 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      *
      * @param codigo identificador de la oficina padre.
      * @param estado estado de la oficina padre.
-     * @return {@link es.caib.dir3caib.persistence.model.utils.ObjetoBasico}
+     * @return {@link es.caib.dir3caib.persistence.utils.Nodo}
      */
-    public List<ObjetoBasico> hijos(String codigo, String estado) throws Exception;
+    public List<Nodo> hijos(String codigo, String estado) throws Exception;
 
 
     /**
@@ -141,15 +132,15 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      * Obtiene las oficinas que dependen directamente de la unidad
      * @param codigo código de la unidad
      * @param estado
-     * @return {@link es.caib.dir3caib.persistence.model.utils.ObjetoBasico}
+     * @return {@link es.caib.dir3caib.persistence.utils.Nodo}
      */
-    public List<ObjetoBasico> oficinasDependientes(String codigo, String estado) throws Exception;
+    public List<Nodo> oficinasDependientes(String codigo, String estado) throws Exception;
 
     /**
      * Obtiene las oficinas auxiliares de un Oficina padre.
      * @param codigo código de la oficina
      * @param estado
-     * @return {@link es.caib.dir3caib.persistence.model.utils.ObjetoBasico}
+     * @return {@link es.caib.dir3caib.persistence.utils.Nodo}
      */
-    public List<ObjetoBasico> oficinasAuxiliares(String codigo, String estado) throws Exception;
+    public List<Nodo> oficinasAuxiliares(String codigo, String estado) throws Exception;
 }

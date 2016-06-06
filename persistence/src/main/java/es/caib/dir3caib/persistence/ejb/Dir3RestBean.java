@@ -4,8 +4,9 @@ import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.model.Oficina;
 import es.caib.dir3caib.persistence.model.RelacionOrganizativaOfi;
 import es.caib.dir3caib.persistence.model.Unidad;
-import es.caib.dir3caib.persistence.model.utils.ObjetoBasico;
 import es.caib.dir3caib.persistence.utils.DataBaseUtils;
+import es.caib.dir3caib.persistence.utils.Nodo;
+import es.caib.dir3caib.persistence.utils.NodoUtils;
 import org.apache.log4j.Logger;
 
 import javax.ejb.Stateless;
@@ -127,33 +128,31 @@ public class Dir3RestBean implements Dir3RestLocal {
   }
 
   /**
-   * Función que obtiene los hijos vigentes de una Unidad pero como ObjetoBasico ya que solo interesa
-   * el código y la denominación.
+   * Función que obtiene los hijos vigentes de una Unidad pero como Nodo ya que solo interesa
+   * el código, denominación y estado .
    * @param codigo
    * @return
    * @throws Exception
    */
   @Override
-  public List<ObjetoBasico> obtenerArbolUnidades(String codigo) throws Exception{
+  public List<Nodo> obtenerArbolUnidades(String codigo) throws Exception {
       Query q;
 
-      q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.estado.descripcionEstadoEntidad, from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.codigo");
+      q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.estado.descripcionEstadoEntidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.codigo");
       q.setParameter("codigo",codigo);
       q.setParameter("vigente",Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
 
-      List<ObjetoBasico> padres = getObjetoBasicoList(q.getResultList());
-      List<ObjetoBasico> listaCompleta;
+      List<Nodo> padres = NodoUtils.getNodoList(q.getResultList());
+      List<Nodo> listaCompleta;
 
 
+      listaCompleta = new ArrayList<Nodo>(padres);
 
 
-      listaCompleta = new ArrayList<ObjetoBasico>(padres);
-
-
-      for (ObjetoBasico unidad : padres) {
+      for (Nodo unidad : padres) {
           if(tieneHijos(unidad.getCodigo())){
-              List<ObjetoBasico> hijos = obtenerArbolUnidades(unidad.getCodigo());
+              List<Nodo> hijos = obtenerArbolUnidades(unidad.getCodigo());
               listaCompleta.addAll(hijos);
           }
       }
@@ -234,11 +233,11 @@ public class Dir3RestBean implements Dir3RestLocal {
    * @param codigoNivelAdministracion  nivel de administración de la unidad
    * @param codComunidad  comunidad autónoma a la que pertenece.
    * @param conOficinas  indica el conOficinas de la búsqueda desde regweb "OrganismoInteresado" , "OrganismoDestinatario"
-   * @return   List<ObjetoBasico> devuelve un listado con el codigo y la denominación que
+   * @return List<Nodo> conjunto de datos a mostrar del organismo
    * coincide con los parámetros de búsqueda
    * @throws Exception
    */
-  public List<ObjetoBasico> busquedaOrganismos(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, boolean conOficinas, boolean unidadRaiz, Long provincia, String localidad) throws Exception {
+  public List<Nodo> busquedaOrganismos(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, boolean conOficinas, boolean unidadRaiz, Long provincia, String localidad) throws Exception {
          log.info("conOficinas " + conOficinas);
        Query q;
        Map<String, Object> parametros = new HashMap<String, Object>();
@@ -298,20 +297,20 @@ public class Dir3RestBean implements Dir3RestLocal {
        }
 
        //Miramos los que tienen oficinas
-         List<ObjetoBasico> unidades = getObjetoBasicoListExtendido(q.getResultList());
+      List<Nodo> unidades = NodoUtils.getNodoListExtendido(q.getResultList());
 
          //Si nos indican la variable conOficinas a true es que interesa devolver solo aquellos organismos
          // que tienen oficinas en las que registrar
          if(conOficinas){
              log.info("Entro dentro de busqueda con oficinas");
-             Set<ObjetoBasico> unidadesConOficinas = new HashSet<ObjetoBasico>();
-           for(ObjetoBasico unidad :unidades){
+             Set<Nodo> unidadesConOficinas = new HashSet<Nodo>();
+             for (Nodo unidad : unidades) {
 
                if(tieneOficinasOrganismo(unidad.getCodigo())){
                  unidadesConOficinas.add(unidad);
                }
            }
-             unidades = new ArrayList<ObjetoBasico>(unidadesConOficinas);
+             unidades = new ArrayList<Nodo>(unidadesConOficinas);
          }
 
        return unidades;
@@ -324,10 +323,10 @@ public class Dir3RestBean implements Dir3RestLocal {
      * @param denominacion denominación de la oficina
      * @param codigoNivelAdministracion nivel de administración de la oficina
      * @param codComunidad comunidad a la que pertenece la oficina
-     * @return ObjetoBasico representa el par (codigo,denominación) de la oficina.
+     * @return Nodo conjunto de datos a mostrar de la oficina
      * @throws Exception
      */
-    public List<ObjetoBasico> busquedaOficinas(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, Long provincia, String localidad) throws Exception {
+    public List<Nodo> busquedaOficinas(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, Long provincia, String localidad) throws Exception {
          Query q;
          Map<String, Object> parametros = new HashMap<String, Object>();
          List<String> where = new ArrayList<String>();
@@ -386,8 +385,8 @@ public class Dir3RestBean implements Dir3RestLocal {
          }
 
          log.info("QUERYYYYY : " + query.toString());
-       //  return q.getResultList();
-         return getObjetoBasicoListExtendido(q.getResultList());
+
+        return NodoUtils.getNodoListExtendido(q.getResultList());
 
      }
 
@@ -420,88 +419,5 @@ public class Dir3RestBean implements Dir3RestLocal {
          return (String)q.getSingleResult();
      }
 
-     /**
-      * Convierte los resultados de una query de unidades en una lista de {@link es.caib.dir3caib.persistence.model.utils.ObjetoBasico}
-     * @param result
-     * @return
-     * @throws Exception
-     */
-     private List<ObjetoBasico> getObjetoBasicoListExtendido(List<Object[]> result) throws Exception {
-
-          List<ObjetoBasico> objetoBasicos = new ArrayList<ObjetoBasico>();
-
-          for (Object[] object : result){
-              // UNIDADES
-              //object[0] --> codigo
-              //object[1] --> denominacion
-              //object[2] --> raiz.codigo
-              //object[3] --> raiz.denominacion
-              //object[4] --> superior.codigo
-              //object[5] --> superior.denominacion
-              //object[6] --> localidad
-              String obj0 = "";
-              String obj1 = "";
-              String obj2 = "";
-              String obj3 = "";
-              String obj4 = "";
-              String obj5 = "";
-              String obj6 = "";
-              if (object[0] != null) {
-                  obj0 = (String) object[0];
-              }
-              ;
-              if (object[1] != null) {
-                  obj1 = (String) object[1];
-              }
-              ;
-              if (object[2] != null) {
-                  obj2 = (String) object[2];
-              }
-              ;
-              if (object[3] != null) {
-                  obj3 = (String) object[3];
-              }
-              ;
-              if (object[4] != null) {
-                  obj4 = (String) object[4];
-              }
-              ;
-              if (object[5] != null) {
-                  obj5 = (String) object[5];
-              }
-              ;
-              if (object[6] != null) {
-                  obj6 = (String) object[6];
-              }
-              ;
-
-              ObjetoBasico objetoBasico = new ObjetoBasico(obj0, obj1, "", obj3 + " - " + obj2, obj5 + " - " + obj4, obj6);
-
-              objetoBasicos.add(objetoBasico);
-          }
-
-          return  objetoBasicos;
-     }
-
-
-    /**
-     * Convierte los resultados de una query en una lista de {@link es.caib.dir3caib.persistence.model.utils.ObjetoBasico}
-     *
-     * @param result
-     * @return
-     * @throws Exception
-     */
-    private List<ObjetoBasico> getObjetoBasicoList(List<Object[]> result) throws Exception {
-
-        List<ObjetoBasico> objetosBasicos = new ArrayList<ObjetoBasico>();
-
-        for (Object[] object : result) {
-            ObjetoBasico objetoBasico = new ObjetoBasico((String) object[0], (String) object[1], (String) object[2], "", "", "");
-
-            objetosBasicos.add(objetoBasico);
-        }
-
-        return objetosBasicos;
-    }
 
 }

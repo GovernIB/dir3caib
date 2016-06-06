@@ -6,8 +6,9 @@ package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.model.Unidad;
-import es.caib.dir3caib.persistence.model.utils.ObjetoBasico;
 import es.caib.dir3caib.persistence.utils.DataBaseUtils;
+import es.caib.dir3caib.persistence.utils.Nodo;
+import es.caib.dir3caib.persistence.utils.NodoUtils;
 import es.caib.dir3caib.persistence.utils.Paginacion;
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
@@ -59,16 +60,16 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
 
     @Override
-    public ObjetoBasico findUnidad(String id, String estado) throws Exception {
+    public Nodo findUnidad(String id, String estado) throws Exception {
 
         Query q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.estado.descripcionEstadoEntidad, unidad.codUnidadRaiz.codigo, unidad.codUnidadRaiz.denominacion, unidad.codUnidadSuperior.codigo, unidad.codUnidadSuperior.denominacion from Unidad as unidad where unidad.codigo=:id and unidad.estado.descripcionEstadoEntidad =:estado");
         q.setParameter("id", id);
         q.setParameter("estado", estado);
 
         Object[] obj = (Object[]) q.getSingleResult();
-        ObjetoBasico objetoBasico = new ObjetoBasico((String) obj[0], (String) obj[1], (String) obj[2], obj[3] + " - " + obj[4], obj[5] + " - " + obj[6], "");
+        Nodo nodo = new Nodo((String) obj[0], (String) obj[1], (String) obj[2], obj[3] + " - " + obj[4], obj[5] + " - " + obj[6], "");
 
-        return objetoBasico;
+        return nodo;
 
     }
 
@@ -261,14 +262,14 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
 
     @Override
-    public List<ObjetoBasico> hijosOB(String codigo, String estado) throws Exception {
+    public List<Nodo> hijosOB(String codigo, String estado) throws Exception {
 
         Query q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.estado.descripcionEstadoEntidad,unidad.codUnidadRaiz.codigo, unidad.codUnidadRaiz.denominacion, unidad.codUnidadSuperior.codigo, unidad.codUnidadSuperior.denominacion from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.descripcionEstadoEntidad =:estado order by unidad.codigo");
 
         q.setParameter("codigo",codigo);
         q.setParameter("estado",estado);
 
-        return getObjetoBasicoList(q.getResultList());
+        return NodoUtils.getNodoList(q.getResultList());
     }
 
 
@@ -468,23 +469,4 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         List<String> codigos = q.getResultList();
         return codigos;
       }
-      
-      /**
-       * Convierte los resultados de una query en una lista de {@link es.caib.dir3caib.persistence.model.utils.ObjetoBasico}
-       * @param result
-       * @return
-       * @throws Exception
-       */
-       private List<ObjetoBasico> getObjetoBasicoList(List<Object[]> result) throws Exception{
-
-          List<ObjetoBasico> unidadesReducidas = new ArrayList<ObjetoBasico>();
-
-          for (Object[] object : result) {
-              ObjetoBasico objetoBasico = new ObjetoBasico((String) object[0], (String) object[1], (String) object[2], object[3] + " - " + object[4], object[5] + " - " + object[6], "");
-
-              unidadesReducidas.add(objetoBasico);
-          }
-
-          return  unidadesReducidas;
-       }
 }

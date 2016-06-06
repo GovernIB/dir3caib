@@ -15,11 +15,13 @@
         <div class="row-fluid">
             <div class="box span12">
                 <div class="box-header well">
-                    <h2><fmt:message key="unidad.organigrama"/>&nbsp;<i> ${nodo.id} - ${nodo.nombre}</i></h2>
+                    <h2><fmt:message key="unidad.organigrama"/>&nbsp;<i> ${nodo.codigo} - ${nodo.denominacion}</i></h2>
                 </div>
 
                     <div class="btn-group pad-left">
-                        <button type="button" class="btn-arbre btn-info btn-xs" onclick="goTo('<c:url value="/unidad/${nodo.id}/Vigente/arbol/"/>')"><i class="fa fa-sitemap"></i> <spring:message code="unidad.arbol.abre"/></button>
+                        <button type="button" class="btn-arbre btn-info btn-xs"
+                                onclick="goTo('<c:url value="/unidad/${nodo.codigo}/Vigente/arbol/"/>')"><i
+                                class="fa fa-sitemap"></i> <spring:message code="unidad.arbol.abre"/></button>
                     </div>
 
                     <!-- LEYENDA -->
@@ -50,7 +52,7 @@
                     </div>
 
                     <div class="tree">
-                        <c:set var="nodoactual" value="${nodo.id} - ${nodo.nombre}"/>
+                        <c:set var="nodoactual" value="${nodo.codigo} - ${nodo.denominacion}"/>
                         <c:set var="nodoraiz" value="${nodo.raiz}"/>
                         <c:set var="nodosuperior" value="${nodo.superior}"/>
                         <c:if test="${nodoraiz!=nodoactual}">
@@ -67,23 +69,28 @@
 
                             <li>
                                 <c:if test="${empty oficinas}">
-                                <span class="badge-arbre btn-primary"><i class=""></i> ${nodo.id} - ${nodo.nombre}</span>
+                                    <span class="badge-arbre btn-primary"><i
+                                            class=""></i> ${nodo.codigo} - ${nodo.denominacion}</span>
                                 </c:if>
                                 <c:if test="${not empty oficinas}">
                                     <span class="badge-arbre btn-warning"><i
-                                            class=""></i> ${nodo.id} - ${nodo.nombre}</span>
+                                            class=""></i> ${nodo.codigo} - ${nodo.denominacion}</span>
                                 </c:if>
 
                                 <!--Pintamos oficinas responsables -->
                                 <ul>
                                     <c:forEach var="ofiDependiente" items="${nodo.oficinasDependientes}">
-                                        <li><a href="javascript:void(0);"><span class="badge-arbre btn-warning" style="display:closed;"><i class="fa fa-home"></i> ${ofiDependiente.id} - ${ofiDependiente.nombre}</span></a>
+                                        <li><a href="javascript:void(0);"><span class="badge-arbre btn-warning"
+                                                                                style="display:closed;"><i
+                                                class="fa fa-home"></i> ${ofiDependiente.codigo} - ${ofiDependiente.denominacion}</span></a>
                                             <!-- Pintamos las auxiliares -->
                                             <c:if test="${not empty ofiDependiente.oficinasAuxiliares }">
                                                 <ul>
                                                     <c:forEach var="ofiAuxiliar" items="${ofiDependiente.oficinasAuxiliares}">
-                                                       <%-- <li><a href="javascript:void(0);"><span class="badge-arbre btn-ofaux" style="display:closed;"> <i class="fa fa-home"></i> ${ofiAuxiliar.id} - ${ofiAuxiliar.nombre}</span></a></li>--%>
-                                                        <li><a href="javascript:void(0);"><span class="badge-arbre btn-ofaux" style="display:closed;"><i class="fa fa-home"></i> ${ofiAuxiliar.id} - ${ofiAuxiliar.nombre}</span></a>
+                                                        <%-- <li><a href="javascript:void(0);"><span class="badge-arbre btn-ofaux" style="display:closed;"> <i class="fa fa-home"></i> ${ofiAuxiliar.codigo} - ${ofiAuxiliar.denominacion}</span></a></li>--%>
+                                                        <li><a href="javascript:void(0);"><span
+                                                                class="badge-arbre btn-ofaux" style="display:closed;"><i
+                                                                class="fa fa-home"></i> ${ofiAuxiliar.codigo} - ${ofiAuxiliar.denominacion}</span></a>
                                                             <!-- Pintamos las auxiliares de todos los niveles -->
                                                             <c:set var="oficinaAuxiliar" value="${ofiAuxiliar}" scope="request"/>
                                                             <jsp:include page="auxiliares.jsp" flush="true"/>
@@ -97,7 +104,10 @@
                                     <!-- FUNCIONALES -->
 
                                     <c:forEach var="ofiFuncional" items="${nodo.oficinasFuncionales}">
-                                        <li><a href="javascript:void(0);"><span class="badge-arbre btn-success" style="display:closed;"><i class="fa fa-institution"></i> ${ofiFuncional.id} - ${ofiFuncional.nombre}</span></a></li>
+                                        <li><a href="javascript:void(0);"><span class="badge-arbre btn-success"
+                                                                                style="display:closed;"><i
+                                                class="fa fa-institution"></i> ${ofiFuncional.codigo} - ${ofiFuncional.denominacion}</span></a>
+                                        </li>
                                     </c:forEach>
                                     <jsp:include page="nodo.jsp"/>
                                 </ul>

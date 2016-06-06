@@ -9,21 +9,24 @@
 
         <!-- print the node here -->
         <c:if test="${empty oficinas}">
-        <li><span class="badge-arbre btn-primary" style="display:closed;"><i class=""></i> ${hijo.id} - ${hijo.nombre}</span>
+            <li><span class="badge-arbre btn-primary" style="display:closed;"><i class=""></i> ${hijo.codigo} - ${hijo.denominacion}</span>
         </c:if>
         <c:if test="${not empty oficinas}">
-            <li><span class="badge-arbre btn-ofaux" style="display:closed;"><i class=""></i> ${hijo.id} - ${hijo.nombre}</span>
+            <li><span class="badge-arbre btn-ofaux" style="display:closed;"><i class=""></i> ${hijo.codigo} - ${hijo.denominacion}</span>
         </c:if>
 
             <!--Pintamos oficinas responsables -->
             <ul>
                 <c:forEach var="ofiDependiente" items="${hijo.oficinasDependientes}">
-                    <li><a href="javascript:void(0);"><span class="badge-arbre btn-warning" style="display:closed;"><i class="fa fa-home"></i>  ${ofiDependiente.id} - ${ofiDependiente.nombre}</span></a>
+                    <li><a href="javascript:void(0);"><span class="badge-arbre btn-warning" style="display:closed;"><i
+                            class="fa fa-home"></i>  ${ofiDependiente.codigo} - ${ofiDependiente.denominacion}</span></a>
                         <!-- Pintamos las auxiliares -->
                         <c:if test="${not empty ofiDependiente.oficinasAuxiliares }">
                             <ul>
                                 <c:forEach var="ofiAuxiliar" items="${ofiDependiente.oficinasAuxiliares}">
-                                    <li><a href="javascript:void(0);"><span class="badge-arbre btn-ofaux" style="display:closed;"><i class="fa fa-home"></i> ${ofiAuxiliar.id} - ${ofiAuxiliar.nombre}</span></a>
+                                    <li><a href="javascript:void(0);"><span class="badge-arbre btn-ofaux"
+                                                                            style="display:closed;"><i
+                                            class="fa fa-home"></i> ${ofiAuxiliar.codigo} - ${ofiAuxiliar.denominacion}</span></a>
                                         <!-- Pintamos las auxiliares de todos los niveles -->
                                         <c:set var="oficinaAuxiliar" value="${ofiAuxiliar}" scope="request"/>
                                         <jsp:include page="auxiliares.jsp" flush="true"/>
@@ -35,7 +38,9 @@
                 </c:forEach>
                 <!--Pintamos relaciones organizativas -->
                 <c:forEach var="ofiFuncional" items="${hijo.oficinasFuncionales}">
-                    <li><span class="badge-arbre btn-success"><i class="fa fa-institution"></i> ${ofiFuncional.id} - ${ofiFuncional.nombre}</span></li>
+                    <li><span class="badge-arbre btn-success"><i
+                            class="fa fa-institution"></i> ${ofiFuncional.codigo} - ${ofiFuncional.denominacion}</span>
+                    </li>
                 </c:forEach>
 
 
