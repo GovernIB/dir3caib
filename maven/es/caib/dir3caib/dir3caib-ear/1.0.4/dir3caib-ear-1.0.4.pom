@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>es.caib.dir3caib</groupId>
+        <artifactId>dir3caib</artifactId>
+        <version>1.0.4</version>
+    </parent>
+
+    <groupId>es.caib.dir3caib</groupId>
+    <artifactId>dir3caib-ear</artifactId>
+    <version>1.0.4</version>
+    <packaging>ear</packaging>
+
+    <name>Dir3Caib - Ear</name>
+
+    <build>
+
+        <finalName>dir3caib</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-ear-plugin</artifactId>
+                <version>2.3.2</version>
+                <!-- configuring the ear plugin -->
+                <configuration>
+
+                    <displayName>DIR 3 Autonomic</displayName>
+                    <description>Còpia autonòmica del Directori Comú d'unitat orgàniques i oficines (DIR3)  </description>
+                    <defaultLibBundleDir>lib</defaultLibBundleDir>
+
+                    <jboss>
+                        <version>5</version>
+                        <loader-repository>es.caib.dir3caib:loader=dir3caib.ear</loader-repository>
+                        <loader-repository-config>java2ParentDelegation=false</loader-repository-config>
+                        <!--<security-domain>java:/jaas/seycon</security-domain>-->
+                    </jboss>
+
+                    <modules>
+
+                        <webModule>
+                            <groupId>es.caib.dir3caib</groupId>
+                            <artifactId>dir3caib-back</artifactId>
+                            <contextRoot>dir3caib</contextRoot>
+                            <bundleFileName>dir3caib.war</bundleFileName>
+                        </webModule>
+
+                        <ejbModule>
+                            <groupId>es.caib.dir3caib</groupId>
+                            <artifactId>dir3caib-persistence</artifactId>
+                            <bundleFileName>dir3caib-ejb.jar</bundleFileName>
+                        </ejbModule>
+
+                        <ejbModule>
+                            <groupId>es.caib.dir3caib</groupId>
+                            <artifactId>dir3caib-ws-server</artifactId>
+                            <bundleFileName>dir3caib-ws.jar</bundleFileName>
+                        </ejbModule>
+
+                    </modules>
+
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jboss-maven-plugin</artifactId>
+                <version>1.5.0</version>
+                <configuration>
+                    <jbossHome>D:\servidores\jboss-eap-5.1\jboss-as</jbossHome>
+                    <serverName>default</serverName>
+                    <fileName>target/dir3caib.ear</fileName>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+    <dependencies>
+
+        <!-- Internas -->
+	    <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>dir3caib-utils</artifactId>
+            <version>${project.version}</version>
+            <type>jar</type>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>dir3caib-persistence</artifactId>
+            <version>${project.version}</version>
+            <type>ejb</type>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>dir3caib-back</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>dir3caib-ws-server</artifactId>
+            <version>${project.version}</version>
+            <type>ejb</type>
+        </dependency>
+
+        <!-- Externas -->
+		
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>1.9.9</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-core-asl</artifactId>
+            <version>1.9.9</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.fundaciobit.genapp</groupId>
+            <artifactId>genapp-core</artifactId>
+            <version>1.0</version>
+        </dependency>
+	
+		<!-- Apache Commons -->
+		
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.0</version>
+		</dependency>
+
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.4</version>
+        </dependency>
+		
+		<!--
+		<dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.14</version>
+        </dependency>
+		-->
+
+        <!-- OpenCVS -->
+        <dependency>
+            <groupId>net.sf.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>2.3</version>
+        </dependency>
+
+
+        <!-- apache POI -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.6</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+    </dependencies>
+
+    
+</project>
