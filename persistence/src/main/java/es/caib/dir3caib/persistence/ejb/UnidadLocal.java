@@ -18,8 +18,7 @@ import java.util.Set;
 @Local
 public interface UnidadLocal extends BaseEjb<Unidad, String> {
 
- //TODO BORRAR NO SE USA
-   /* public List<Unidad> getMaxResult(int maxResult) throws Exception;*/
+
 
  /**
   * Borra todas las unidades
@@ -34,6 +33,19 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
   */
     public void deleteHistoricosUnidad() throws Exception;
 
+
+    /**
+     * Obtiene si una unidad ha sido actualizada con fecha posterior a la fecha de actualización.
+     * Se usa para la sincronizacion con regweb3
+     *
+     * @param id
+     * @param fechaActualizacion
+     * @return
+     * @throws Exception
+     */
+    public Unidad findUnidadActualizada(String id, Date fechaActualizacion) throws Exception;
+
+
  /**
   * Obtiene una unidad que es vigente con sus historicosUO
   *
@@ -42,6 +54,17 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
   * @throws Exception
   */
  public Unidad findConHistoricosVigente(String id) throws Exception;
+
+    /**
+     * Método que busca la unidad con id indicado y estado indicado
+     *
+     * @param id
+     * @param estado
+     * @return
+     * @throws Exception
+     */
+    public Unidad findUnidadEstado(String id, String estado) throws Exception;
+
 
 
     /**

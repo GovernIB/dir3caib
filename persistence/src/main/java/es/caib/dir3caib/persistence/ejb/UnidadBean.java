@@ -50,12 +50,22 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
     @Override
     public Unidad findConHistoricosVigente(String id) throws Exception {
-     Query q = em.createQuery("select unidad from Unidad as unidad where unidad.codigo=:id and unidad.estado.codigoEstadoEntidad=:vigente");
-      q.setParameter("id", id);
-      q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);;
+        Query q = em.createQuery("select unidad from Unidad as unidad where unidad.codigo=:id and unidad.estado.codigoEstadoEntidad=:vigente");
+        q.setParameter("id", id);
+        q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+        ;
         Unidad unidad = (Unidad)q.getSingleResult();
-      Hibernate.initialize(unidad.getHistoricoUO());
-      return unidad;
+        Hibernate.initialize(unidad.getHistoricoUO());
+        return unidad;
+    }
+
+
+    public Unidad findUnidadEstado(String id, String estado) throws Exception {
+        Query q = em.createQuery("select unidad from Unidad as unidad where unidad.codigo=:id and unidad.estado.codigoEstadoEntidad=:estado");
+        q.setParameter("id", id);
+        q.setParameter("estado", estado);
+
+        return (Unidad) q.getSingleResult();
     }
 
 
@@ -70,6 +80,22 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         Nodo nodo = new Nodo((String) obj[0], (String) obj[1], (String) obj[2], obj[3] + " - " + obj[4], obj[5] + " - " + obj[6], "");
 
         return nodo;
+
+    }
+
+
+    @Override
+    public Unidad findUnidadActualizada(String id, Date fechaActualizacion) throws Exception {
+        Query q = em.createQuery("Select unidad from Unidad as unidad where unidad.codigo =:id " +
+                " and :fechaActualizacion < unidad.fechaImportacion ");
+
+        q.setParameter("id", id);
+        q.setParameter("fechaActualizacion", fechaActualizacion);
+        if (q.getResultList().size() > 0) {
+            return (Unidad) q.getResultList().get(0);
+        } else {
+            return null;
+        }
 
     }
 
@@ -311,9 +337,62 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
     }
 
-
-    @Override
+    /**
+     * RECORDATORIO MARILEN: En este método se obtienen todos los hijos del código indicado a través de la unidad superior y de manera recursiva.
+     * Con la unidad raiz no funciona para aquellos organismos que no son raiz.
+     */
     public List<Unidad> obtenerArbolUnidades(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
+        log.info("obtenerArbolUnidades del código: " + codigo);
+
+        Query q;
+        if (fechaActualizacion == null) { // Es una sincronizacion, solo traemos vigentes
+            q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.nivelJerarquico");
+
+            q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+        } else {// es una actualizacion, lo traemos todo
+
+            q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo  " +
+                    "and :fechaActualizacion < unidad.fechaImportacion " +
+                    "order by unidad.nivelJerarquico");
+            q.setParameter("fechaActualizacion", fechaActualizacion);
+
+        }
+        q.setParameter("codigo", codigo);
+
+        List<Unidad> padres = q.getResultList();
+        List<Unidad> padresActualizados = new ArrayList<Unidad>();
+        List<Unidad> listaCompleta;
+
+        log.info(padres.size() + " hijos del código : " + codigo);
+
+        if (fechaActualizacion != null) { // Si hay fecha de actualizacion solo se envian las actualizadas
+
+            for (Unidad unidad : padres) {
+                log.info("FECHA ACTUALIZACION " + fechaActualizacion + "ANTERIOR A LA FECHA DE IMPORTACION DE LA UNIDAD ID " + unidad.getCodigo() + " FECHA IMPORT" + unidad.getFechaImportacion());
+                // Miramos que la unidad no este extinguida o anulada anterior a la fecha de sincronizacion de regweb
+                // ya que no debe ser enviada a regweb.
+                if (unidadValida(unidad, fechaSincronizacion)) {
+                    padresActualizados.add(unidad);
+                }
+            }
+            listaCompleta = new ArrayList<Unidad>(padresActualizados);
+        } else { // si no hay fecha, se trata de una sincronización
+            listaCompleta = new ArrayList<Unidad>(padres);
+        }
+
+        for (Unidad unidad : padres) {
+            if (tieneHijos(unidad.getCodigo())) {
+                List<Unidad> hijos = obtenerArbolUnidades(unidad.getCodigo(), fechaActualizacion, fechaSincronizacion);
+                listaCompleta.addAll(hijos);
+            }
+        }
+
+        return listaCompleta;
+    }
+
+
+    /* @Override
+   public List<Unidad> obtenerArbolUnidades(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
 
         String denominacion = unidadDenominacion(codigo);
         Query q;
@@ -321,7 +400,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         try {
             if (fechaActualizacion == null) { // Es una sincronizacion
                 //Obtenemos todos los organismos vigentes cuya unidad raiz es la indicada por el código.
-                /*and unidad.codigo !=:codigo*/
+                *//*and unidad.codigo !=:codigo*//*
                 q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadRaiz.codigo =:codigo  and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.nivelJerarquico");
                 q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
             } else {
@@ -364,7 +443,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
             e.printStackTrace();
             return null;
         }
-    }
+    }*/
 
     @Override
     public List<Unidad> obtenerArbolUnidadesDestinatarias(String codigo) throws Exception{
