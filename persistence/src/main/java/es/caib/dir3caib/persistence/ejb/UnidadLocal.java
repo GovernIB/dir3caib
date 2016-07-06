@@ -85,7 +85,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
 
  /**
   * Método que devuelve el árbol de unidades de la unidad indicada por codigo,
-  * teniendo en cuenta la fecha de la ultima actualización de regweb.
+  * teniendo en cuenta la fecha de la ultima actualización de regweb para el caso en que la unidad indicada no es raiz.
   * Se emplea para la sincronizacion y actualización con regweb
      * @param codigo
   * @param fechaActualizacion
@@ -93,7 +93,21 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @return
      * @throws Exception
      */
-    public List<Unidad> obtenerArbolUnidades(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception;
+ public List<Unidad> obtenerArbolUnidadesUnidadNoRaiz(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception;
+
+
+    /**
+     * Método que devuelve el árbol de unidades de la unidad indicada por codigo,
+     * teniendo en cuenta la fecha de la ultima actualización de regweb y se emplea para el caso que la unidad indicada es raiz.
+     * Se emplea para la sincronizacion y actualización con regweb
+     *
+     * @param codigo
+     * @param fechaActualizacion
+     * @param fechaSincronizacion
+     * @return
+     * @throws Exception
+     */
+    public List<Unidad> obtenerArbolUnidadesUnidadRaiz(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception;
 
  /**
   * Método que devuelve la unidad indicada por código siempre que esté vigente y tenga oficinas donde registrar.

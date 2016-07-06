@@ -337,17 +337,15 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
     }
 
-    /**
-     * RECORDATORIO MARILEN: En este método se obtienen todos los hijos del código indicado a través de la unidad superior y de manera recursiva.
-     * Con la unidad raiz no funciona para aquellos organismos que no son raiz.
-     */
-    public List<Unidad> obtenerArbolUnidades(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
+    @Override
+    public List<Unidad> obtenerArbolUnidadesUnidadNoRaiz(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
         log.info("obtenerArbolUnidades del código: " + codigo);
 
         Query q;
+        Query qHijos;
+
         if (fechaActualizacion == null) { // Es una sincronizacion, solo traemos vigentes
             q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.nivelJerarquico");
-
             q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
         } else {// es una actualizacion, lo traemos todo
 
@@ -359,30 +357,38 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         }
         q.setParameter("codigo", codigo);
 
-        List<Unidad> padres = q.getResultList();
-        List<Unidad> padresActualizados = new ArrayList<Unidad>();
-        List<Unidad> listaCompleta;
 
-        log.info(padres.size() + " hijos del código : " + codigo);
+        //Obtenemos todos los hijos del organismo con código indicado para poder obtener todos los cambios en niveles inferiores de forma recursiva
+        qHijos = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo  " +
+                "order by unidad.nivelJerarquico");
+
+        qHijos.setParameter("codigo", codigo);
+        List<Unidad> todosHijos = qHijos.getResultList(); // todos los hijos de la unidad padre, para poder recorrer el árbol en su totalidad
+
+        List<Unidad> hijosActualizados = q.getResultList(); // Hijos actualizados solo por fecha de importación
+        List<Unidad> hijosActualizadosValidos = new ArrayList<Unidad>(); //Hijos actualizados validos( unidadValida())
+        List<Unidad> listaCompleta; // Lista completa de unidades a enviar a regweb3.
+
+        log.info(hijosActualizados.size() + " hijos actualizados del código : " + codigo);
 
         if (fechaActualizacion != null) { // Si hay fecha de actualizacion solo se envian las actualizadas
 
-            for (Unidad unidad : padres) {
+            for (Unidad unidad : hijosActualizados) {
                 log.info("FECHA ACTUALIZACION " + fechaActualizacion + "ANTERIOR A LA FECHA DE IMPORTACION DE LA UNIDAD ID " + unidad.getCodigo() + " FECHA IMPORT" + unidad.getFechaImportacion());
                 // Miramos que la unidad no este extinguida o anulada anterior a la fecha de sincronizacion de regweb
                 // ya que no debe ser enviada a regweb.
                 if (unidadValida(unidad, fechaSincronizacion)) {
-                    padresActualizados.add(unidad);
+                    hijosActualizadosValidos.add(unidad);
                 }
             }
-            listaCompleta = new ArrayList<Unidad>(padresActualizados);
+            listaCompleta = new ArrayList<Unidad>(hijosActualizadosValidos);
         } else { // si no hay fecha, se trata de una sincronización
-            listaCompleta = new ArrayList<Unidad>(padres);
+            listaCompleta = new ArrayList<Unidad>(hijosActualizados);
         }
 
-        for (Unidad unidad : padres) {
+        for (Unidad unidad : todosHijos) {
             if (tieneHijos(unidad.getCodigo())) {
-                List<Unidad> hijos = obtenerArbolUnidades(unidad.getCodigo(), fechaActualizacion, fechaSincronizacion);
+                List<Unidad> hijos = obtenerArbolUnidadesUnidadNoRaiz(unidad.getCodigo(), fechaActualizacion, fechaSincronizacion);
                 listaCompleta.addAll(hijos);
             }
         }
@@ -390,9 +396,8 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         return listaCompleta;
     }
 
-
-    /* @Override
-   public List<Unidad> obtenerArbolUnidades(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
+    @Override
+    public List<Unidad> obtenerArbolUnidadesUnidadRaiz(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
 
         String denominacion = unidadDenominacion(codigo);
         Query q;
@@ -400,7 +405,6 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         try {
             if (fechaActualizacion == null) { // Es una sincronizacion
                 //Obtenemos todos los organismos vigentes cuya unidad raiz es la indicada por el código.
-                *//*and unidad.codigo !=:codigo*//*
                 q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadRaiz.codigo =:codigo  and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.nivelJerarquico");
                 q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
             } else {
@@ -443,7 +447,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
             e.printStackTrace();
             return null;
         }
-    }*/
+    }
 
     @Override
     public List<Unidad> obtenerArbolUnidadesDestinatarias(String codigo) throws Exception{

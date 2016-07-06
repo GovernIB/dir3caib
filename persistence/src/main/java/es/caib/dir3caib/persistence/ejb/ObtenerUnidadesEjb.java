@@ -13,7 +13,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Fundació BIT.
@@ -71,8 +70,8 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
      * @param fechaActualizacion fecha en la que se realiza la actualización
      * @param fechaSincronizacion fecha en la que se realiza la primera sincronizacion por parte del sistema que se sincroniza(regweb)
      */
-    @Override
-    public List<UnidadTF> obtenerArbolUnidadesTF(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
+   /* @Override
+    public List<UnidadTF> obtenerArbolUnidadesTFXXXX(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
         // Unidad Raiz, la obtenemos por separado, ya que el arbol lo obtenemos a través de la unidad Superior.
 
         Unidad unidadRaiz = null;
@@ -115,6 +114,75 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
         }
 
         return arbolTF;
+
+    }*/
+    @Override
+    public List<UnidadTF> obtenerArbolUnidadesTF(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
+
+        if (fechaActualizacion == null) {
+            log.info("SINCRONIZACION UNIDADES");
+        } else {
+            log.info("ACTUALIZACION UNIDADES");
+        }
+        Unidad unidad = unidadEjb.findById(codigo);
+        Unidad unidadRaiz = unidad.getCodUnidadRaiz();
+        if (unidad == unidadRaiz) { // Caso que la unidad que nos indican es unidad raiz
+            log.info("CASO UNIDAD QUE NOS PASAN ES RAIZ");
+            List<Unidad> arbol = unidadEjb.obtenerArbolUnidadesUnidadRaiz(codigo, fechaActualizacion, fechaSincronizacion);
+            log.info("Numero TOTAL de unidades a actualizar: " + arbol.size());
+            List<UnidadTF> arbolTF = new ArrayList<UnidadTF>();
+
+
+            for (Unidad uni : arbol) {
+                arbolTF.add(UnidadTF.generar(uni));
+            }
+
+            return arbolTF;
+        } else { // caso de que la unidad que nos indican no es raiz
+            log.info("CASO UNIDAD QUE NOS PASAN NO ES RAIZ");
+            List<Unidad> arbol = new ArrayList<Unidad>(); //Lista completa de unidades a enviar a regweb3(o porque es sincro o porque se han actualizado)
+
+           /* if (fechaActualizacion != null) { // ES actualizacion, miramos si la raiz se ha actualizado
+                log.info("ACTUALIZACION UNIDADES");
+                //Obtenemos la raiz en funcion de la fecha de actualización
+                unidadRaiz = unidadEjb.findUnidadActualizada(codigo, fechaActualizacion);
+                if (unidadRaiz != null) { //Han actualizado la raiz
+                    // miramos que no esté extinguida o anulada antes de la primera sincro.
+                    if (unidadValida(unidadRaiz, fechaSincronizacion)) {
+                        arbol.add(unidadRaiz);
+                        Set<Unidad> historicosRaiz = unidadRaiz.getHistoricoUO();
+                        if (historicosRaiz != null) {
+                            for (Unidad historico : historicosRaiz) {
+                                arbol.add(historico);
+                                arbol.addAll(unidadEjb.obtenerArbolUnidades(historico.getCodigo(), fechaActualizacion, fechaSincronizacion));
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            if (unidadRaiz == null) { // O es Sincro o es actualizacion pero con la raiz sin actualizar.
+                unidadRaiz = unidadEjb.findUnidadEstado(codigo, Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+                if (unidadRaiz != null) {
+                    arbol.add(unidadRaiz);
+                }
+            }*/
+            //Añadimos la raiz cuando es sincronización
+            if (fechaActualizacion == null) {
+                arbol.add(unidad);
+            }
+            arbol.addAll(unidadEjb.obtenerArbolUnidadesUnidadNoRaiz(codigo, fechaActualizacion, fechaSincronizacion));
+            log.info("Numero TOTAL de unidades a actualizar: " + arbol.size());
+            List<UnidadTF> arbolTF = new ArrayList<UnidadTF>();
+
+
+            for (Unidad uni : arbol) {
+                arbolTF.add(UnidadTF.generar(uni));
+            }
+
+            return arbolTF;
+        }
 
     }
 
