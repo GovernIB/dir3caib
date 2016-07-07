@@ -55,8 +55,9 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
 
         Unidad unidad = null;
-        if (q.getResultList().size() > 0) {
-            unidad = (Unidad) q.getResultList().get(0);
+        List<Unidad> unidades = q.getResultList();
+        if (unidades.size() > 0) {
+            unidad = unidades.get(0);
         }
 
         if (unidad != null) {
@@ -98,8 +99,10 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
         q.setParameter("id", id);
         q.setParameter("fechaActualizacion", fechaActualizacion);
-        if (q.getResultList().size() > 0) {
-            return (Unidad) q.getResultList().get(0);
+
+        List<Unidad> unidades = q.getResultList();
+        if (unidades.size() > 0) {
+            return unidades.get(0);
         } else {
             return null;
         }
