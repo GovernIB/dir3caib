@@ -55,6 +55,22 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
         return oficina;
     }
 
+    public Oficina findById(String codigo, String estado) throws Exception{
+
+        Query q = em.createQuery("Select oficina from Oficina as oficina where oficina.codigo=:codigo and oficina.estado.codigoEstadoEntidad =:estado");
+        q.setParameter("codigo", codigo);
+        q.setParameter("estado", estado);
+
+        List<Oficina> oficinas = q.getResultList();
+
+        if(oficinas.size() > 0){
+            return oficinas.get(0);
+        }else{
+            return null;
+        }
+
+    }
+
 
     public Nodo findOficina(String id, String estado) throws Exception {
 
