@@ -509,16 +509,17 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         q.setParameter("codigo", codigo);
         q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
-        Unidad unidadPadre = (Unidad) q.getSingleResult();
-        log.info("UNIDAD ENCONTRADA " + unidadPadre.getCodigo());
-
+        List<Unidad> unidades = q.getResultList();
+        Unidad unidadPadre = null;
         List<Unidad> unidadesDestConOficinas = new ArrayList<Unidad>();
+        if (unidades.size() > 0) {
+            unidadPadre = unidades.get(0);
+            log.info("UNIDAD ENCONTRADA " + unidadPadre.getCodigo());
 
-        //Miramos si la unidad que nos pasan tiene oficinas
-        Boolean tiene = oficinaEjb.tieneOficinasArbol(unidadPadre.getCodigo());
+            //Miramos si la unidad que nos pasan tiene oficina
+            Boolean tiene = oficinaEjb.tieneOficinasArbol(unidadPadre.getCodigo());
 
-        if (tiene) {
-
+            if (tiene) {
             unidadesDestConOficinas.add(unidadPadre);
             Set<Unidad> padres = new HashSet<Unidad>();
             padres.add(unidadPadre);
@@ -527,6 +528,8 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
             arbolHijos(padres, Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE, unidadesTotales);
 
             unidadesDestConOficinas.addAll(unidadesTotales);
+            }
+
         }
 
         return unidadesDestConOficinas;

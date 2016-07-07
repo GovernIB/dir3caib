@@ -78,11 +78,14 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
         q.setParameter("id", id);
         q.setParameter("estado", estado);
 
-        Object[] obj = (Object[]) q.getSingleResult();
+        List<Object[]> oficinas = q.getResultList();
 
-        Nodo nodo = new Nodo((String) obj[0], (String) obj[1], (String) obj[2], obj[3] + " - " + obj[4], obj[5] + " - " + obj[6], "");
-
-        return nodo;
+        if (oficinas.size() > 0) {
+            Object[] obj = oficinas.get(0);
+            return new Nodo((String) obj[0], (String) obj[1], (String) obj[2], obj[3] + " - " + obj[4], obj[5] + " - " + obj[6], "");
+        } else {
+            return null;
+        }
 
     }
 
