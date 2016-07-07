@@ -53,7 +53,11 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         q.setParameter("id", id);
         q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
-        Unidad unidad = (Unidad) q.getSingleResult();
+
+        Unidad unidad = null;
+        if (q.getResultList().size() > 0) {
+            unidad = (Unidad) q.getResultList().get(0);
+        }
 
         if (unidad != null) {
             Hibernate.initialize(unidad.getHistoricoUO());
