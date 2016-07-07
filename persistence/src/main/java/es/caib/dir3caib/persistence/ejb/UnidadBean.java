@@ -73,7 +73,13 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         q.setParameter("id", id);
         q.setParameter("estado", estado);
 
-        return (Unidad) q.getSingleResult();
+        List<Unidad> unidad = q.getResultList();
+
+        if(unidad.size() > 0){
+            return unidad.get(0);
+        }else {
+            return  null;
+        }
     }
 
 
@@ -84,10 +90,14 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         q.setParameter("id", id);
         q.setParameter("estado", estado);
 
-        Object[] obj = (Object[]) q.getSingleResult();
-        Nodo nodo = new Nodo((String) obj[0], (String) obj[1], (String) obj[2], obj[3] + " - " + obj[4], obj[5] + " - " + obj[6], "");
+        List<Object[]> unidades = q.getResultList();
 
-        return nodo;
+        if(unidades.size() > 0){
+            Object[] obj = unidades.get(0);
+            return new Nodo((String) obj[0], (String) obj[1], (String) obj[2], obj[3] + " - " + obj[4], obj[5] + " - " + obj[6], "");
+        }else{
+            return null;
+        }
 
     }
 
@@ -114,7 +124,13 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         Query q = em.createQuery("select unidad.codigo from Unidad as unidad where unidad.codigo=:codigo ");
         q.setParameter("codigo", codigo);
 
-        return new Unidad((String) q.getSingleResult());
+        List<Unidad> unidad = q.getResultList();
+
+        if(unidad.size() > 0){
+            return unidad.get(0);
+        }else {
+            return  null;
+        }
     }
 
 
@@ -163,7 +179,13 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
         Query q = em.createQuery("select unidad.denominacion from Unidad as unidad where unidad.codigo=:codigo").setParameter("codigo", codigo);
 
-        return (String) q.getSingleResult();
+        List<String> unidades = q.getResultList();
+
+        if(unidades.size() > 0){
+            return unidades.get(0);
+        }else {
+            return  null;
+        }
     }
 
 

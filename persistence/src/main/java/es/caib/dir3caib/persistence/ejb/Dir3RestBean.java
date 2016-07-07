@@ -401,7 +401,13 @@ public class Dir3RestBean implements Dir3RestLocal {
 
          Query q = em.createQuery("select unidad.denominacion from Unidad as unidad where unidad.codigo=:codigo").setParameter("codigo", codigo);
 
-         return (String)q.getSingleResult();
+           List<String> unidades = q.getResultList();
+
+           if(unidades.size() > 0){
+               return unidades.get(0);
+           }else {
+               return  null;
+           }
        }
 
     /**
@@ -416,7 +422,13 @@ public class Dir3RestBean implements Dir3RestLocal {
 
          Query q = em.createQuery("select oficina.denominacion from Oficina as oficina where oficina.codigo=:codigo").setParameter("codigo", codigo);
 
-         return (String)q.getSingleResult();
+         List<String> oficinas = q.getResultList();
+
+         if(oficinas.size() > 0){
+            return oficinas.get(0);
+         }else {
+             return  null;
+         }
      }
 
 
