@@ -124,10 +124,10 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         Query q = em.createQuery("select unidad.codigo from Unidad as unidad where unidad.codigo=:codigo ");
         q.setParameter("codigo", codigo);
 
-        List<Unidad> unidad = q.getResultList();
+        List<String> unidades = q.getResultList();
 
-        if(unidad.size() > 0){
-            return unidad.get(0);
+        if(unidades.size() > 0){
+            return new Unidad(unidades.get(0));
         }else {
             return  null;
         }
