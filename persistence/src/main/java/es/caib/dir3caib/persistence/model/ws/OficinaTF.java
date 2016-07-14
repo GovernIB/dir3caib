@@ -280,8 +280,9 @@ public class OficinaTF {
 
 
     public static OficinaTF generar(Oficina oficina){
-        OficinaTF oficinaTF =  new OficinaTF();
+        OficinaTF oficinaTF = null;
         if(oficina!=null){
+            oficinaTF = new OficinaTF();
             oficinaTF.rellenar(oficina);
         }
         return oficinaTF;
