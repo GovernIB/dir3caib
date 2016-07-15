@@ -35,41 +35,46 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
     /**
       * Obtiene los datos de una oficina en función del codigo y la fecha de actualización.
       * Si la fecha de actualización es inferior a la de importación con Madrid se supone
-      * que no ha cambiado y se envia null( CREO QUE NO SE UTILIZA..)
+      * que no ha cambiado y se envia null
       * @param codigo Código de la oficina
       * @param fechaActualizacion fecha en la que se realiza la actualizacion.
       */
-    /* OJO: Este método no se emplea en REGWEB, ver si se emplea en SISTRA o otra aplicación, TODO si no borrarlo */
     @Override
     public OficinaTF obtenerOficina(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception{
 
-        Oficina oficina = oficinaEjb.findFullById(codigo);
+        Oficina oficina = oficinaEjb.findById(codigo,Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
+        if(oficina != null){
+            OficinaTF oficinaTF= null;
+            if(fechaActualizacion != null){
 
-        OficinaTF oficinaTF= null;
-        if(fechaActualizacion != null){
+                if(fechaActualizacion.before(oficina.getFechaImportacion())){
 
-          if(fechaActualizacion.before(oficina.getFechaImportacion())){
+                    // Cogemos solo las relaciones organizativas posteriores a la fecha de sincronizacion
+                    Set<RelacionOrganizativaOfi> todasRelaciones = new HashSet<RelacionOrganizativaOfi>(oficina.getOrganizativasOfi());
+                    Set<RelacionOrganizativaOfi> relacionesValidas= new HashSet<RelacionOrganizativaOfi>();
+                    for(RelacionOrganizativaOfi relOrg: todasRelaciones){
+                        //TODO revisar esta condicion
+                        if(relOrg.getUnidad().getFechaExtincion().before(fechaSincronizacion)){
+                            relacionesValidas.add(relOrg);
+                        }
+                    }
+                    oficina.setOrganizativasOfi(null);
+                    oficina.setOrganizativasOfi(new ArrayList<RelacionOrganizativaOfi>(relacionesValidas));
 
-            // Cogemos solo las relaciones organizativas posteriores a la fecha de sincronizacion
-            Set<RelacionOrganizativaOfi> todasRelaciones = new HashSet<RelacionOrganizativaOfi>(oficina.getOrganizativasOfi());
-            Set<RelacionOrganizativaOfi> relacionesValidas= new HashSet<RelacionOrganizativaOfi>();
-            for(RelacionOrganizativaOfi relOrg: todasRelaciones){
-                //TODO revisar esta condicion
-              if(relOrg.getUnidad().getFechaExtincion().before(fechaSincronizacion)){
-                relacionesValidas.add(relOrg);
-              }
+                    oficinaTF = OficinaTF.generar(oficina);
+                }
+            }else {
+                oficinaTF = OficinaTF.generar(oficina);
             }
-            oficina.setOrganizativasOfi(null);
-            oficina.setOrganizativasOfi(new ArrayList<RelacionOrganizativaOfi>(relacionesValidas));
 
-            oficinaTF = OficinaTF.generar(oficina);
-          }
-        }else {
-          oficinaTF = OficinaTF.generar(oficina);
+            return oficinaTF;
+        }else{
+            log.info("Oficina cuyo codigoDir3 es " + codigo + " no existe");
+            return null;
         }
 
-        return oficinaTF;
+
     }
 
 

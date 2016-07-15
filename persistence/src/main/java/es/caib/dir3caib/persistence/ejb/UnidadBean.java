@@ -24,7 +24,6 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- *
  * @author mgonzalez
  * @author anadal
  */
@@ -40,7 +39,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     protected SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
 
     @PersistenceContext
-    private EntityManager em;  
+    private EntityManager em;
 
     @Override
     public Unidad findById(String id) throws Exception {
@@ -53,9 +52,18 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         Query q = em.createQuery("select unidad from Unidad as unidad where unidad.codigo=:id and unidad.estado.codigoEstadoEntidad=:vigente");
         q.setParameter("id", id);
         q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-        ;
-        Unidad unidad = (Unidad)q.getSingleResult();
-        Hibernate.initialize(unidad.getHistoricoUO());
+
+
+        Unidad unidad = null;
+        List<Unidad> unidades = q.getResultList();
+        if (unidades.size() > 0) {
+            unidad = unidades.get(0);
+        }
+
+        if (unidad != null) {
+            Hibernate.initialize(unidad.getHistoricoUO());
+        }
+
         return unidad;
     }
 
@@ -65,7 +73,13 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         q.setParameter("id", id);
         q.setParameter("estado", estado);
 
-        return (Unidad) q.getSingleResult();
+        List<Unidad> unidad = q.getResultList();
+
+        if(unidad.size() > 0){
+            return unidad.get(0);
+        }else {
+            return  null;
+        }
     }
 
 
@@ -76,10 +90,14 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         q.setParameter("id", id);
         q.setParameter("estado", estado);
 
-        Object[] obj = (Object[]) q.getSingleResult();
-        Nodo nodo = new Nodo((String) obj[0], (String) obj[1], (String) obj[2], obj[3] + " - " + obj[4], obj[5] + " - " + obj[6], "");
+        List<Object[]> unidades = q.getResultList();
 
-        return nodo;
+        if(unidades.size() > 0){
+            Object[] obj = unidades.get(0);
+            return new Nodo((String) obj[0], (String) obj[1], (String) obj[2], obj[3] + " - " + obj[4], obj[5] + " - " + obj[6], "");
+        }else{
+            return null;
+        }
 
     }
 
@@ -91,8 +109,10 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
         q.setParameter("id", id);
         q.setParameter("fechaActualizacion", fechaActualizacion);
-        if (q.getResultList().size() > 0) {
-            return (Unidad) q.getResultList().get(0);
+
+        List<Unidad> unidades = q.getResultList();
+        if (unidades.size() > 0) {
+            return unidades.get(0);
         } else {
             return null;
         }
@@ -104,19 +124,25 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         Query q = em.createQuery("select unidad.codigo from Unidad as unidad where unidad.codigo=:codigo ");
         q.setParameter("codigo", codigo);
 
-        return new Unidad((String) q.getSingleResult());
+        List<String> unidades = q.getResultList();
+
+        if(unidades.size() > 0){
+            return new Unidad(unidades.get(0));
+        }else {
+            return  null;
+        }
     }
 
 
     @Override
     @SuppressWarnings(value = "unchecked")
     public List<Unidad> getAll() throws Exception {
-        
-        return  em.createQuery("Select unidad from Unidad as unidad order by unidad.codigo").getResultList();
+
+        return em.createQuery("Select unidad from Unidad as unidad order by unidad.codigo").getResultList();
     }
-    
+
     public List<Unidad> getMaxResult(int maxResult) throws Exception {
-       return em.createQuery("Select unidad from Unidad as unidad order by unidad.codigo").setMaxResults(maxResult).getResultList();
+        return em.createQuery("Select unidad from Unidad as unidad order by unidad.codigo").setMaxResults(maxResult).getResultList();
     }
 
     @Override
@@ -125,22 +151,22 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         Query q = em.createQuery("Select count(distinct unidad.codigo) from Unidad as unidad");
 
         return (Long) q.getSingleResult();
-        
+
     }
 
     @Override
     public List<Unidad> getPagination(int inicio) throws Exception {
-      
+
         Query q = em.createQuery("Select unidad from Unidad as unidad order by unidad.codigo");
         q.setFirstResult(inicio);
         q.setMaxResults(RESULTADOS_PAGINACION);
 
         return q.getResultList();
     }
-    
+
     @Override
     public List<Unidad> getPagination(int startItem, int numberOfItems) throws Exception {
-      
+
         Query q = em.createQuery("Select unidad from Unidad as unidad order by unidad.codigo");
         q.setFirstResult(startItem);
         q.setMaxResults(numberOfItems);
@@ -153,34 +179,38 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
         Query q = em.createQuery("select unidad.denominacion from Unidad as unidad where unidad.codigo=:codigo").setParameter("codigo", codigo);
 
-        return (String) q.getSingleResult();
+        List<String> unidades = q.getResultList();
+
+        if(unidades.size() > 0){
+            return unidades.get(0);
+        }else {
+            return  null;
+        }
     }
 
 
     @Override
     public List<Unidad> getListByIds(List<String> ids) throws Exception {
-      
-      
-      
+
+
         Query q = em.createQuery("Select unidad from Unidad as unidad "
-          + " where unidad.codigo in (:theids) order by unidad.codigo");
-        
+                + " where unidad.codigo in (:theids) order by unidad.codigo");
+
         q.setParameter("theids", ids);
 
         return q.getResultList();
     }
-    
-    
-    
-     public void deleteHistoricosUnidad() throws Exception {
-       
+
+
+    public void deleteHistoricosUnidad() throws Exception {
+
         em.createNativeQuery("delete from DIR_HISTORICOUO").executeUpdate();
     }
-    
-    
+
+
     public void deleteAll() throws Exception {
-          
-        em.createQuery("delete from Unidad").executeUpdate();                                
+
+        em.createQuery("delete from Unidad").executeUpdate();
     }
 
 
@@ -195,14 +225,35 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         StringBuffer query = new StringBuffer("Select unidad from Unidad as unidad ");
 
         // Parametros de busqueda
-        if(codigo!= null && codigo.length() > 0){where.add(DataBaseUtils.like("unidad.codigo", "codigo", parametros, codigo));}
-        if(denominacion!= null && denominacion.length() > 0){where.add(DataBaseUtils.like("unidad.denominacion", "denominacion", parametros, denominacion));}
-        if(codigoNivelAdministracion!= null && codigoNivelAdministracion != -1){where.add(" unidad.nivelAdministracion.codigoNivelAdministracion = :codigoNivelAdministracion "); parametros.put("codigoNivelAdministracion",codigoNivelAdministracion);}
-        if(codAmbitoTerritorial!= null && (!"-1".equals(codAmbitoTerritorial))){where.add(" unidad.codAmbitoTerritorial.codigoAmbito = :codAmbitoTerritorial "); parametros.put("codAmbitoTerritorial",codAmbitoTerritorial);}
-        if(codComunidad!= null && codComunidad != -1){where.add(" unidad.codAmbComunidad.codigoComunidad = :codComunidad "); parametros.put("codComunidad",codComunidad);}
-        if(codigoProvincia!= null && codigoProvincia != -1){where.add(" unidad.codAmbProvincia.codigoProvincia = :codigoProvincia "); parametros.put("codigoProvincia",codigoProvincia);}
-        if(codigoEstado!= null &&(!"-1".equals(codigoEstado))){where.add(" unidad.estado.codigoEstadoEntidad = :codigoEstado "); parametros.put("codigoEstado",codigoEstado);}
-        if(unidadRaiz){where.add(" unidad.codUnidadRaiz.codigo = unidad.codigo ");}
+        if (codigo != null && codigo.length() > 0) {
+            where.add(DataBaseUtils.like("unidad.codigo", "codigo", parametros, codigo));
+        }
+        if (denominacion != null && denominacion.length() > 0) {
+            where.add(DataBaseUtils.like("unidad.denominacion", "denominacion", parametros, denominacion));
+        }
+        if (codigoNivelAdministracion != null && codigoNivelAdministracion != -1) {
+            where.add(" unidad.nivelAdministracion.codigoNivelAdministracion = :codigoNivelAdministracion ");
+            parametros.put("codigoNivelAdministracion", codigoNivelAdministracion);
+        }
+        if (codAmbitoTerritorial != null && (!"-1".equals(codAmbitoTerritorial))) {
+            where.add(" unidad.codAmbitoTerritorial.codigoAmbito = :codAmbitoTerritorial ");
+            parametros.put("codAmbitoTerritorial", codAmbitoTerritorial);
+        }
+        if (codComunidad != null && codComunidad != -1) {
+            where.add(" unidad.codAmbComunidad.codigoComunidad = :codComunidad ");
+            parametros.put("codComunidad", codComunidad);
+        }
+        if (codigoProvincia != null && codigoProvincia != -1) {
+            where.add(" unidad.codAmbProvincia.codigoProvincia = :codigoProvincia ");
+            parametros.put("codigoProvincia", codigoProvincia);
+        }
+        if (codigoEstado != null && (!"-1".equals(codigoEstado))) {
+            where.add(" unidad.estado.codigoEstadoEntidad = :codigoEstado ");
+            parametros.put("codigoEstado", codigoEstado);
+        }
+        if (unidadRaiz) {
+            where.add(" unidad.codUnidadRaiz.codigo = unidad.codigo ");
+        }
 
         // Añadimos los parametros a la query
         if (parametros.size() != 0) {
@@ -224,8 +275,10 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
                 q2.setParameter(param.getKey(), param.getValue());
             }
 
-        }else{
-            if(unidadRaiz){query.append(" where unidad.codUnidadRaiz.codigo = unidad.codigo ");}
+        } else {
+            if (unidadRaiz) {
+                query.append(" where unidad.codUnidadRaiz.codigo = unidad.codigo ");
+            }
             q2 = em.createQuery(query.toString().replaceAll("Select unidad from Unidad as unidad ", "Select count(unidad.codigo) from Unidad as unidad "));
             query.append("order by unidad.denominacion asc");
             q = em.createQuery(query.toString());
@@ -233,13 +286,13 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
         Paginacion paginacion = null;
 
-        if(pageNumber != null){ // Comprobamos si es una busqueda paginada o no
-            Long total = (Long)q2.getSingleResult();
+        if (pageNumber != null) { // Comprobamos si es una busqueda paginada o no
+            Long total = (Long) q2.getSingleResult();
             paginacion = new Paginacion(total.intValue(), pageNumber);
             int inicio = (pageNumber - 1) * BaseEjbJPA.RESULTADOS_PAGINACION;
             q.setFirstResult(inicio);
             q.setMaxResults(RESULTADOS_PAGINACION);
-        }else{
+        } else {
             paginacion = new Paginacion(0, 0);
         }
         paginacion.setListado(q.getResultList());
@@ -251,11 +304,11 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     @Override
     public List<Unidad> findByDenominacion(String denominacion) throws Exception {
 
-      Query q = em.createQuery("select unidad from Unidad as unidad where upper(unidad.denominacion) like upper(:denominacion)");
+        Query q = em.createQuery("select unidad from Unidad as unidad where upper(unidad.denominacion) like upper(:denominacion)");
 
-      q.setParameter("denominacion", "%"+denominacion.toLowerCase()+"%");
+        q.setParameter("denominacion", "%" + denominacion.toLowerCase() + "%");
 
-      return q.getResultList();
+        return q.getResultList();
     }
 
     @Override
@@ -275,11 +328,11 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
 
     @Override
-    public Boolean tieneHijos(String codigo) throws Exception{
+    public Boolean tieneHijos(String codigo) throws Exception {
 
         Query q = em.createQuery("Select unidad.id from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo order by unidad.codigo");
 
-        q.setParameter("codigo",codigo);
+        q.setParameter("codigo", codigo);
 
         List<Long> hijos = q.getResultList();
 
@@ -292,8 +345,8 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
         Query q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.estado.descripcionEstadoEntidad,unidad.codUnidadRaiz.codigo, unidad.codUnidadRaiz.denominacion, unidad.codUnidadSuperior.codigo, unidad.codUnidadSuperior.denominacion from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.descripcionEstadoEntidad =:estado order by unidad.codigo");
 
-        q.setParameter("codigo",codigo);
-        q.setParameter("estado",estado);
+        q.setParameter("codigo", codigo);
+        q.setParameter("estado", estado);
 
         return NodoUtils.getNodoList(q.getResultList());
     }
@@ -304,7 +357,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
         Query q = em.createQuery("Select unidad.codigo from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:estado order by unidad.codigo");
 
-        q.setParameter("codigo",codigo);
+        q.setParameter("codigo", codigo);
         q.setParameter("estado", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
         List result = q.getResultList();
@@ -321,33 +374,31 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
     @Override
     public void arbolHijos(Set<Unidad> unidadesPadres, String estado, Set<Unidad> hijosTotales) throws Exception {
-        for(Unidad unidad:unidadesPadres){
+        for (Unidad unidad : unidadesPadres) {
             Query q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.descripcionEstadoEntidad =:estado order by unidad.codigo");
 
-            q.setParameter("codigo",unidad.getCodigo());
-            q.setParameter("estado",estado);
+            q.setParameter("codigo", unidad.getCodigo());
+            q.setParameter("estado", estado);
 
-            Set<Unidad> hijos=new HashSet<Unidad>(q.getResultList());
+            Set<Unidad> hijos = new HashSet<Unidad>(q.getResultList());
             log.info("Hijos encontrados de UNIDAD:  " + unidad.getCodigo());
             hijosTotales.addAll(hijos);
 
             //llamada recursiva para todos los hijos
-            arbolHijos(hijos,estado,hijosTotales);
+            arbolHijos(hijos, estado, hijosTotales);
         }
 
     }
 
-    /**
-     * RECORDATORIO MARILEN: En este método se obtienen todos los hijos del código indicado a través de la unidad superior y de manera recursiva.
-     * Con la unidad raiz no funciona para aquellos organismos que no son raiz.
-     */
-    public List<Unidad> obtenerArbolUnidades(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
+    @Override
+    public List<Unidad> obtenerArbolUnidadesUnidadNoRaiz(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
         log.info("obtenerArbolUnidades del código: " + codigo);
 
         Query q;
+        Query qHijos;
+
         if (fechaActualizacion == null) { // Es una sincronizacion, solo traemos vigentes
             q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.nivelJerarquico");
-
             q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
         } else {// es una actualizacion, lo traemos todo
 
@@ -359,30 +410,38 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         }
         q.setParameter("codigo", codigo);
 
-        List<Unidad> padres = q.getResultList();
-        List<Unidad> padresActualizados = new ArrayList<Unidad>();
-        List<Unidad> listaCompleta;
 
-        log.info(padres.size() + " hijos del código : " + codigo);
+        //Obtenemos todos los hijos del organismo con código indicado para poder obtener todos los cambios en niveles inferiores de forma recursiva
+        qHijos = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo  " +
+                "order by unidad.nivelJerarquico");
+
+        qHijos.setParameter("codigo", codigo);
+        List<Unidad> todosHijos = qHijos.getResultList(); // todos los hijos de la unidad padre, para poder recorrer el árbol en su totalidad
+
+        List<Unidad> hijosActualizados = q.getResultList(); // Hijos actualizados solo por fecha de importación
+        List<Unidad> hijosActualizadosValidos = new ArrayList<Unidad>(); //Hijos actualizados validos( unidadValida())
+        List<Unidad> listaCompleta; // Lista completa de unidades a enviar a regweb3.
+
+        log.info(hijosActualizados.size() + " hijos actualizados del código : " + codigo);
 
         if (fechaActualizacion != null) { // Si hay fecha de actualizacion solo se envian las actualizadas
 
-            for (Unidad unidad : padres) {
+            for (Unidad unidad : hijosActualizados) {
                 log.info("FECHA ACTUALIZACION " + fechaActualizacion + "ANTERIOR A LA FECHA DE IMPORTACION DE LA UNIDAD ID " + unidad.getCodigo() + " FECHA IMPORT" + unidad.getFechaImportacion());
                 // Miramos que la unidad no este extinguida o anulada anterior a la fecha de sincronizacion de regweb
                 // ya que no debe ser enviada a regweb.
                 if (unidadValida(unidad, fechaSincronizacion)) {
-                    padresActualizados.add(unidad);
+                    hijosActualizadosValidos.add(unidad);
                 }
             }
-            listaCompleta = new ArrayList<Unidad>(padresActualizados);
+            listaCompleta = new ArrayList<Unidad>(hijosActualizadosValidos);
         } else { // si no hay fecha, se trata de una sincronización
-            listaCompleta = new ArrayList<Unidad>(padres);
+            listaCompleta = new ArrayList<Unidad>(hijosActualizados);
         }
 
-        for (Unidad unidad : padres) {
+        for (Unidad unidad : todosHijos) {
             if (tieneHijos(unidad.getCodigo())) {
-                List<Unidad> hijos = obtenerArbolUnidades(unidad.getCodigo(), fechaActualizacion, fechaSincronizacion);
+                List<Unidad> hijos = obtenerArbolUnidadesUnidadNoRaiz(unidad.getCodigo(), fechaActualizacion, fechaSincronizacion);
                 listaCompleta.addAll(hijos);
             }
         }
@@ -390,9 +449,8 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         return listaCompleta;
     }
 
-
-    /* @Override
-   public List<Unidad> obtenerArbolUnidades(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
+    @Override
+    public List<Unidad> obtenerArbolUnidadesUnidadRaiz(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
 
         String denominacion = unidadDenominacion(codigo);
         Query q;
@@ -400,7 +458,6 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         try {
             if (fechaActualizacion == null) { // Es una sincronizacion
                 //Obtenemos todos los organismos vigentes cuya unidad raiz es la indicada por el código.
-                *//*and unidad.codigo !=:codigo*//*
                 q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadRaiz.codigo =:codigo  and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.nivelJerarquico");
                 q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
             } else {
@@ -443,36 +500,39 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
             e.printStackTrace();
             return null;
         }
-    }*/
+    }
 
     @Override
-    public List<Unidad> obtenerArbolUnidadesDestinatarias(String codigo) throws Exception{
+    public List<Unidad> obtenerArbolUnidadesDestinatarias(String codigo) throws Exception {
 
-      Query q = em.createQuery("Select unidad from Unidad as unidad where unidad.codigo =:codigo and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.codigo");
-      q.setParameter("codigo", codigo);
-      q.setParameter("vigente",  Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+        Query q = em.createQuery("Select unidad from Unidad as unidad where unidad.codigo =:codigo and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.codigo");
+        q.setParameter("codigo", codigo);
+        q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
-      Unidad unidadPadre  = (Unidad)q.getSingleResult();
-      log.info("UNIDAD ENCONTRADA " + unidadPadre.getCodigo());
+        List<Unidad> unidades = q.getResultList();
+        Unidad unidadPadre = null;
+        List<Unidad> unidadesDestConOficinas = new ArrayList<Unidad>();
+        if (unidades.size() > 0) {
+            unidadPadre = unidades.get(0);
+            log.info("UNIDAD ENCONTRADA " + unidadPadre.getCodigo());
 
-      List<Unidad> unidadesDestConOficinas= new ArrayList<Unidad>();
+            //Miramos si la unidad que nos pasan tiene oficina
+            Boolean tiene = oficinaEjb.tieneOficinasArbol(unidadPadre.getCodigo());
 
-      //Miramos si la unidad que nos pasan tiene oficinas
-      Boolean tiene = oficinaEjb.tieneOficinasArbol(unidadPadre.getCodigo());
+            if (tiene) {
+            unidadesDestConOficinas.add(unidadPadre);
+            Set<Unidad> padres = new HashSet<Unidad>();
+            padres.add(unidadPadre);
+            Set<Unidad> unidadesTotales = new HashSet<Unidad>();
+            //Obtenemos de manera recursiva todos los hijos de la unidad que nos indican
+            arbolHijos(padres, Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE, unidadesTotales);
 
-      if(tiene){
+            unidadesDestConOficinas.addAll(unidadesTotales);
+            }
 
-          unidadesDestConOficinas.add(unidadPadre);
-          Set<Unidad> padres = new HashSet<Unidad>();
-          padres.add(unidadPadre);
-          Set<Unidad> unidadesTotales = new HashSet<Unidad>();
-          //Obtenemos de manera recursiva todos los hijos de la unidad que nos indican
-          arbolHijos(padres,Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE,unidadesTotales);
+        }
 
-          unidadesDestConOficinas.addAll(unidadesTotales);
-      }
-
-      return unidadesDestConOficinas;
+        return unidadesDestConOficinas;
     }
 
     public List<Unidad> obtenerUnidadesConOficina(String codigo) throws Exception {
@@ -498,54 +558,54 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
 
     /**
-     *
      * Se mira que si la unidad,  su fecha de extinción y anulacion son posteriores
      * a la fecha de la primera sincronizacion con regweb. Así evitamos enviar unidades que fueron extinguidas o anuladas
      * antes de la primera sincronización con Madrid.
-     * @param unidad  unidad
-     * @param fechaSincro  fecha de la primera sincronizacion con regweb
+     *
+     * @param unidad      unidad
+     * @param fechaSincro fecha de la primera sincronizacion con regweb
      * @return
      * @throws Exception
      */
-      public boolean unidadValida(Unidad unidad, Date fechaSincro) throws Exception {
+    public boolean unidadValida(Unidad unidad, Date fechaSincro) throws Exception {
 
-          SimpleDateFormat fechaFormat = new SimpleDateFormat("dd/MM/yyyy");
-          String sSincro=new String();
-          if(fechaSincro!= null) {
-              sSincro = fechaFormat.format(fechaSincro);
-          }
-          // Si tiene fecha de extinción
-          if(unidad.getFechaExtincion() != null){
-                String sExtincion = fechaFormat.format(unidad.getFechaExtincion());
-              // Si la fecha de extinción es posterior o igual a la fecha sincro, se debe enviar a regweb
-                if(unidad.getFechaExtincion().after(fechaSincro) || sExtincion.equals(sSincro)){
-                  return true;
-                }
-           }else{
-              // Si tiene fecha de anulación
-                if(unidad.getFechaAnulacion() != null){
-                  String sAnulacion = fechaFormat.format(unidad.getFechaAnulacion());
-                    // Si la fecha de anulación es posterior o igual a la fecha sincronizacion se debe enviar a regweb
-                  if(unidad.getFechaAnulacion().after(fechaSincro) || sAnulacion.equals(sSincro)) {
+        SimpleDateFormat fechaFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String sSincro = new String();
+        if (fechaSincro != null) {
+            sSincro = fechaFormat.format(fechaSincro);
+        }
+        // Si tiene fecha de extinción
+        if (unidad.getFechaExtincion() != null) {
+            String sExtincion = fechaFormat.format(unidad.getFechaExtincion());
+            // Si la fecha de extinción es posterior o igual a la fecha sincro, se debe enviar a regweb
+            if (unidad.getFechaExtincion().after(fechaSincro) || sExtincion.equals(sSincro)) {
+                return true;
+            }
+        } else {
+            // Si tiene fecha de anulación
+            if (unidad.getFechaAnulacion() != null) {
+                String sAnulacion = fechaFormat.format(unidad.getFechaAnulacion());
+                // Si la fecha de anulación es posterior o igual a la fecha sincronizacion se debe enviar a regweb
+                if (unidad.getFechaAnulacion().after(fechaSincro) || sAnulacion.equals(sSincro)) {
                     return true;
-                  }
-                } else { // Si no tiene ni fecha de extincion ni de anulación, tambien se debe enviar a regweb
-                   return true;
                 }
-           }
-           return false;
-      }
-      
-      
-      
-      /**
-       * Devuelve  los Identificadores de todas las unidades existentes en base de datos 
-       * @return
-       */
-      @Override
-      public List<String> getAllCodigos() {
+            } else { // Si no tiene ni fecha de extincion ni de anulación, tambien se debe enviar a regweb
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * Devuelve  los Identificadores de todas las unidades existentes en base de datos
+     *
+     * @return
+     */
+    @Override
+    public List<String> getAllCodigos() {
         Query q = em.createQuery("Select unidad.codigo from Unidad as unidad order by unidad.codigo");
         List<String> codigos = q.getResultList();
         return codigos;
-      }
+    }
 }

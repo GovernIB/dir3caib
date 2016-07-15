@@ -63,6 +63,15 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      */
     public Oficina findFullById(String id) throws Exception;
 
+    /**
+     * Obtiene una Oficina según su código y estado
+     * @param codigo
+     * @param estado
+     * @return
+     * @throws Exception
+     */
+    public Oficina findById(String codigo, String estado) throws Exception;
+
 
     /**
      * Obtiene el codigo, la denominación, el estado, la tupla codigo-denominacion de la unidad raiz y de la unidad responsable

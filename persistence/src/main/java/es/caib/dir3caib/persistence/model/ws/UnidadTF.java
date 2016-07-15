@@ -300,9 +300,10 @@ public class UnidadTF {
 
 
     public static UnidadTF generar(Unidad unidad){
-        UnidadTF unidadTF =  new UnidadTF();
+        UnidadTF unidadTF = null;
         if(unidad!=null){
-          unidadTF.rellenar(unidad);
+            unidadTF = new UnidadTF();
+            unidadTF.rellenar(unidad);
         }
 
         return unidadTF;
