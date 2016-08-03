@@ -1,10 +1,10 @@
 package es.caib.dir3caib.persistence.model;
 
-import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 
 /**
@@ -24,7 +24,11 @@ public class Servicio implements Serializable {
 
 	}
 
-	public void finalize() throws Throwable {
+  public Servicio(Long codServicio) {
+    this.codServicio = codServicio;
+  }
+
+  public void finalize() throws Throwable {
 
 	}
 
@@ -74,37 +78,22 @@ public class Servicio implements Serializable {
 //    this.oficinas = oficinas;
 //  }
 
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    Servicio servicio = (Servicio) o;
+
+    return codServicio != null ? codServicio.equals(servicio.codServicio) : servicio.codServicio == null;
+
+  }
+
   @Override
   public int hashCode() {
-    int hash = 3;
-    hash = 79 * hash + (this.codServicio != null ? this.codServicio.hashCode() : 0);
-    hash = 79 * hash + (this.descServicio != null ? this.descServicio.hashCode() : 0);
-   // hash = 79 * hash + (this.oficinas != null ? this.oficinas.hashCode() : 0);
-    return hash;
+    return codServicio != null ? codServicio.hashCode() : 0;
   }
 
-  @Override
-  public boolean equals(Object obj) {
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    final Servicio other = (Servicio) obj;
-    if (this.codServicio != other.codServicio && (this.codServicio == null || !this.codServicio.equals(other.codServicio))) {
-      return false;
-    }
-    if ((this.descServicio == null) ? (other.descServicio != null) : !this.descServicio.equals(other.descServicio)) {
-      return false;
-    }
-    /*if (this.oficinas != other.oficinas && (this.oficinas == null || !this.oficinas.equals(other.oficinas))) {
-      return false;
-    }*/
-    return true;
-  }
-
-  
-  
 
 }

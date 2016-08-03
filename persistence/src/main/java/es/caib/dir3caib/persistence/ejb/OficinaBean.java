@@ -14,6 +14,7 @@ import org.hibernate.Hibernate;
 import org.jboss.ejb3.annotation.SecurityDomain;
 
 import javax.annotation.security.RolesAllowed;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -35,6 +36,9 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
     @PersistenceContext
     private EntityManager em;
+
+    @EJB(mappedName = "dir3caib/ServicioEJB/local")
+    public ServicioLocal servicioEjb;
 
     @Override
     public Oficina findById(String id) throws Exception {
@@ -354,13 +358,19 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
     }
 
 
-    //TODO falta mirar los servicios de las oficinas para ver si estan integradas en sir de envio o recepción o ambos
+    @Override
+    @SuppressWarnings(value = "unchecked")
     public List<Oficina> obtenerOficinasSIRUnidad(String codigo) throws Exception {
 
-        Query q = em.createQuery("select oficina from RelacionSirOfi as relacionSirOfi, Oficina as oficina where " +
-                "relacionSirOfi.unidad.id = :codigoUnidad and relacionSirOfi.estado.codigoEstadoEntidad='V' and relacionSirOfi.oficina.id = oficina.id ");
+        Query q = em.createQuery("select relacionSirOfi.oficina from RelacionSirOfi as relacionSirOfi where relacionSirOfi.unidad.codigo =:codigoUnidad " +
+                "and :SERVICIO_SIR_RECEPCION in elements(relacionSirOfi.oficina.servicios) " +
+                "and :SERVICIO_SIR in elements(relacionSirOfi.oficina.servicios) " +
+                "and relacionSirOfi.estado.codigoEstadoEntidad='V' ");
 
         q.setParameter("codigoUnidad", codigo);
+        q.setParameter("SERVICIO_SIR", new Servicio(Dir3caibConstantes.SERVICIO_SIR));
+        q.setParameter("SERVICIO_SIR_RECEPCION", new Servicio(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
+
 
         return q.getResultList();
 
