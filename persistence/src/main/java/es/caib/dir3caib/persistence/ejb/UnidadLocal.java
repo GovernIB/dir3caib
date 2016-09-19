@@ -232,5 +232,17 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      */
     public List<Unidad> obtenerUnidadesConOficina(String codigo) throws Exception;
 
+    /**
+     * Se mira que si la unidad,  su fecha de extinción y anulacion son posteriores
+     * a la fecha de la primera sincronizacion con regweb. Así evitamos enviar unidades que fueron extinguidas o anuladas
+     * antes de la primera sincronización con Madrid.
+     *
+     * @param unidad      unidad
+     * @param fechaSincro fecha de la primera sincronizacion con regweb
+     * @return
+     * @throws Exception
+     */
+    public boolean unidadValida(Unidad unidad, Date fechaSincro) throws Exception;
+
   
 }

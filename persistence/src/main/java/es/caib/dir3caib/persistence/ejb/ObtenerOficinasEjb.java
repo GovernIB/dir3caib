@@ -114,6 +114,68 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
     }
 
     /**
+     * XYZ METODO QUE MIRA SI LA UNIDAD HA SIDO EXTINGUIDA
+     * Obtiene todas las oficinas cuyo organismo responsable es el indicado por código(son todas padres e hijas).Solo se envian aquellas
+     * que han sido actualizadas.
+     * @param codigo Código del organismo
+     * @param fechaActualizacion fecha en la que se realiza la actualizacion.
+     */
+    @Override
+    public List<OficinaTF> obtenerArbolOficinas2(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
+
+        log.info("Inicio obtener Oficinas");
+        // Obtenemos todos las unidades vigentes de la unidad Raiz
+
+        List<Unidad> unidades = new ArrayList<Unidad>();
+        Unidad unidad = null;
+        //unidades.add(unidadEjb.obtenerUnidad(codigo)); // Añadimos la raiz
+        if (fechaActualizacion != null) { // ES actualizacion, miramos si la raiz se ha actualizado
+            log.info("ACTUALIZACION UNIDADES");
+            //Obtenemos la raiz en funcion de la fecha de actualización
+            unidad = unidadEjb.findUnidadActualizada(codigo, fechaActualizacion);
+            if (unidad != null) { //Han actualizado la raiz
+                // miramos que no esté extinguida o anulada antes de la primera sincro.
+                if (unidadEjb.unidadValida(unidad, fechaSincronizacion)) {
+                    unidades.add(unidad);
+                    Set<Unidad> historicosRaiz = unidad.getHistoricoUO();
+                    if (historicosRaiz != null) {
+                        for (Unidad historico : historicosRaiz) {
+                            unidades.add(historico);
+                        }
+                    }
+                }
+            }
+        }
+
+
+        if (unidad == null) { // O es Sincro o es actualizacion pero con la raiz sin actualizar.
+            unidad = unidadEjb.findUnidadEstado(codigo, Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+            if (unidad != null) {
+                unidades.add(unidad);
+            }
+        }
+
+        unidades.addAll(unidadEjb.obtenerArbol(codigo));
+        log.info("Total arbol: " + unidades.size());
+
+        List<Oficina> oficinasCompleto = new ArrayList<Oficina>();
+
+        // Por cada Unidad, obtenemos sus Oficinas
+        for (Unidad uni : unidades) {
+            List<Oficina> oficinas = oficinaEjb.obtenerOficinasOrganismo(uni.getCodigo(), fechaActualizacion, fechaSincronizacion);
+            oficinasCompleto.addAll(oficinas);
+        }
+
+        // Convertimos las Oficinas en OficinaTF
+        List<OficinaTF> arbolTF = new ArrayList<OficinaTF>();
+        for (Oficina oficina : oficinasCompleto) {
+            arbolTF.add(OficinaTF.generar(oficina));
+        }
+
+        return arbolTF;
+    }
+
+    /**
       * Obtiene el listado de oficinas Sir de una Unidad
       *
       * @param codigoUnidad Código de la unidad
