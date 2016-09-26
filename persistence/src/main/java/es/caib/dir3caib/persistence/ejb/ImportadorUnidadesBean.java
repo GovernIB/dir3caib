@@ -111,9 +111,6 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
   @EJB(mappedName = "dir3caib/DescargaEJB/local")
   protected DescargaLocal descargaEjb;
 
-  //@EJB(mappedName = "dir3caib/ImportarEJB/local")
-  //protected ImportarLocal importarEjb;
-
   SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
 
    /**
@@ -123,9 +120,11 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
   @Override
   @TransactionTimeout(value=13600)
   public ResultadosImportacion importarUnidades() throws Exception {
-    
+
+      log.info("");
+      log.info("Inicio importación Unidades");
+
     ResultadosImportacion results = new ResultadosImportacion();
-    
     
     //Lista de archivos que han sido procesados al finalizar la importación
     List<String> procesados = results.getProcesados();
@@ -141,14 +140,14 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
     for (CatTipoVia ca : catTipoViaEjb.getAll()) {
       cacheTipoVia.put(ca.getCodigoTipoVia(), ca);
     }
-    log.info(" TipoVias : " + cacheTipoVia.size());
+    log.debug(" TipoVias : " + cacheTipoVia.size());
 
     
     Map<String, CatEstadoEntidad> cacheEstadoEntidad = new TreeMap<String,CatEstadoEntidad>();
     for (CatEstadoEntidad ca : catEstadoEntidadEjb.getAll()) {
       cacheEstadoEntidad.put(ca.getCodigoEstadoEntidad(), ca);
     }
-    log.info(" Estado Entidad : " + cacheEstadoEntidad.size());
+    log.debug(" Estado Entidad : " + cacheEstadoEntidad.size());
     
     Map<String, CatTipoUnidadOrganica> cacheTipoUnidadOrganica = new TreeMap<String,CatTipoUnidadOrganica>();
     for (CatTipoUnidadOrganica ca : catTipoUnidadOrganicaEjb.getAll()) {
@@ -166,14 +165,14 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
     for (CatPais ca : catPaisEjb.getAll()) {
       cachePais.put(ca.getCodigoPais(), ca);
     }
-    log.info(" Pais : " + cachePais.size());
+    log.debug(" Pais : " + cachePais.size());
 
     Map<CatLocalidadPK,CatLocalidad> cacheLocalidad = new HashMap<CatLocalidadPK,CatLocalidad>();
     for (CatLocalidad ca : catLocalidadEjb.getAll()) {
       CatLocalidadPK catLocalidadPK = new CatLocalidadPK(ca.getCodigoLocalidad(), ca.getProvincia(), ca.getEntidadGeografica());
       cacheLocalidad.put(catLocalidadPK, ca);
     }
-    log.info(" Localidad: " + cacheLocalidad.size());
+    log.debug(" Localidad: " + cacheLocalidad.size());
 
     
     
@@ -222,7 +221,7 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
 
     
     long end = System.currentTimeMillis();
-    log.info("Inicialitzades Caches de Importar Unidades en " + Utils.formatElapsedTime(end - start));
+    log.debug("Inicialitzades Caches de Importar Unidades en " + Utils.formatElapsedTime(end - start));
     
     
     start = end;
@@ -232,7 +231,7 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
     
     
     end = System.currentTimeMillis();
-    log.info("Inicialitzada Cache Unidades existents en " + Utils.formatElapsedTime(end - start));
+    log.debug("Inicialitzada Cache Unidades existents en " + Utils.formatElapsedTime(end - start));
     
     
     
@@ -248,7 +247,7 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
 
     // Obtenemos el listado de ficheros que hay dentro del directorio indicado que se
     // corresponde con la descarga hecha previamente
-    Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.UNIDAD);
+    Descarga descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.UNIDAD);
     File f = new File(Configuracio.getUnidadesPath(descarga.getCodigo()));
     ArrayList<String> existentes = new ArrayList<String>(Arrays.asList(f.list()));
 
@@ -704,7 +703,7 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
               // Contactos
               importarContactos(nombreFichero,  reader);
 
-              log.info(" Acabados procesamiento: " + nombreFichero);
+              log.info("Fin importar fichero: " + nombreFichero);
               procesados.add(fichero);
           }
 
@@ -733,7 +732,7 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
     // Guardamos fecha Importacion y tipo
 
 
-    descarga = descargaEjb.findByTipo(Dir3caibConstantes.UNIDAD);
+    descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.UNIDAD);
     if (descarga == null) {
       descarga = new Descarga();
       descarga.setTipo(Dir3caibConstantes.UNIDAD);
@@ -881,8 +880,7 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
     String[] resp = new String[2];
 
 
-    log.info("Fecha Inicio " + fechaInicio);
-    log.info("Fecha Fin " + fechaFin);
+    log.info("Intervalo fechas descarga unidades directorio común: " + formatoFecha.format(fechaInicio) + " - " + formatoFecha.format(fechaFin));
 
     // Guardaremos la fecha de la ultima descarga
     Descarga descarga = new Descarga();
@@ -942,15 +940,14 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
         RespuestaWS respuesta = service.exportar(parametros);
 
         Base64 decoder = new Base64();
-        log.info("Codigo: " + respuesta.getCodigo());
-        log.info("Descripcion: " + respuesta.getDescripcion());
+        log.info("Respuesta WS unidades DIR3: " + respuesta.getCodigo() + " - " + respuesta.getDescripcion());
 
         //Montamos la respuesta del ws para controlar los errores a mostrar
         resp[0] = respuesta.getCodigo();
         resp[1] = respuesta.getDescripcion();
 
         if (!respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO) && !respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_VACIO)) {
-            descargaEjb.deleteByTipo(Dir3caibConstantes.UNIDAD);
+            descargaEjb.remove(descarga);
             return resp;
         }
         //actualizamos el estado de la descarga.
@@ -969,7 +966,7 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
         if (!dir.exists()) {
             if (!dir.mkdirs()) {
                 //Borramos la descarga creada previamente.
-                descargaEjb.deleteByTipo(Dir3caibConstantes.UNIDAD);
+                descargaEjb.remove(descarga);
                 log.error(" No se ha podido crear el directorio");
             }
         }
@@ -1002,7 +999,7 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
 
         return resp;
     }catch (Exception e){
-       descargaEjb.deleteByTipo(Dir3caibConstantes.UNIDAD);
+       descargaEjb.remove(descarga);
         throw new Exception(e.getMessage());
     }
 
@@ -1020,15 +1017,13 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
             //Obtenemos las fechas entre las que hay que hacer la descarga
 
             // obtenemos los datos de la última descarga
-            Descarga ultimaDescarga = descargaEjb.findByTipo(Dir3caibConstantes.UNIDAD);
+            Descarga ultimaDescarga = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.UNIDAD);
             Date fechaInicio =ultimaDescarga.getFechaFin(); // fecha de la ultima descarga
 
             // obtenemos la fecha de hoy
             Date fechaFin = new Date();
 
             // Obtiene los archivos csv via WS
-            //descargarUnidadesWS(fechaInicio, fechaFin);
-
            String[] respuesta= descargarUnidadesWS(fechaInicio, fechaFin);
            if(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO.equals(respuesta[0])){
                //importamos las unidades a la bd.

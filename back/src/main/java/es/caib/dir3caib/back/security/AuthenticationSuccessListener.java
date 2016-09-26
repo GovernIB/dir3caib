@@ -83,8 +83,8 @@ public class AuthenticationSuccessListener implements
 
     if(containsRoleAdmin){
         try {
-          Descarga descargaUnidad = descargaEjb.findByTipo(Dir3caibConstantes.UNIDAD);
-          Descarga descargaOficina = descargaEjb.findByTipo(Dir3caibConstantes.OFICINA);
+          Descarga descargaUnidad = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.UNIDAD);
+          Descarga descargaOficina = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.OFICINA);
           if(descargaUnidad != null) { containsDescargaUnidad = true;}
           if(descargaOficina != null) { containsDescargaOficina = true;}
         }catch(Exception e){

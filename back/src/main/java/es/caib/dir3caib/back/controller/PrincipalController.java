@@ -1,9 +1,12 @@
 package es.caib.dir3caib.back.controller;
 
 import es.caib.dir3caib.persistence.ejb.DescargaLocal;
+import es.caib.dir3caib.persistence.model.Descarga;
+import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import org.apache.log4j.Logger;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -46,6 +49,21 @@ public class PrincipalController extends BaseController {
       WebUtils.setSessionAttribute(request, SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, loc);
       ModelAndView mav = new ModelAndView(new RedirectView("/inicio", true));
       return mav;
+    }
+
+    @ModelAttribute("ultimaDescargaCatalogo")
+    public Descarga ultimaDescargaCatalogo() throws Exception {
+        return descargaEjb.ultimaDescarga(Dir3caibConstantes.CATALOGO);
+    }
+
+    @ModelAttribute("ultimaDescargaUnidad")
+    public Descarga ultimaDescargaUnidad() throws Exception {
+        return descargaEjb.ultimaDescarga(Dir3caibConstantes.UNIDAD);
+    }
+
+    @ModelAttribute("ultimaDescargaOficina")
+    public Descarga ultimaDescargaOficina() throws Exception {
+        return descargaEjb.ultimaDescarga(Dir3caibConstantes.OFICINA);
     }
 
 }

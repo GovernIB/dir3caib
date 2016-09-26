@@ -205,7 +205,7 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
     @Override
     public Date obtenerFechaUltimaActualizacion() throws Exception{
 
-        Descarga descarga =  descargaEjb.findByTipo(Dir3caibConstantes.OFICINA);
+        Descarga descarga =  descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.OFICINA);
 
         return descarga.getFechaImportacion();
     }

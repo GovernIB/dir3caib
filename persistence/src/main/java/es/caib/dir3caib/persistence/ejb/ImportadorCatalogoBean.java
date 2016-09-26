@@ -142,7 +142,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
      // Obtenemos el listado de ficheros que hay dentro del directorio indicado que se
      // corresponde con la descarga hecha previamente
-     Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.CATALOGO);
+     Descarga descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.CATALOGO);
      File f = new File(Configuracio.getCatalogosPath(descarga.getCodigo()));
      ArrayList<String> existentes = new ArrayList<String>(Arrays.asList(f.list()));
      results.setExistentes(existentes);
@@ -723,13 +723,8 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
      }
 
      // Actualizamos la descarga con la fecha de importación.
-     descarga = descargaEjb.findByTipo(Dir3caibConstantes.CATALOGO);
-     if (descarga == null) {
-       descarga = new Descarga();
-       descarga.setTipo(Dir3caibConstantes.CATALOGO);
-     }
      descarga.setFechaImportacion(new Date());
-     descargaEjb.merge(descarga);
+     descarga = descargaEjb.merge(descarga);
 
      results.setDescarga(descarga);
      
@@ -835,7 +830,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
         resp[1] = respuestaCsv.getDescripcion();
 
         if (!respuestaCsv.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO)){
-            descargaEjb.deleteByTipo(Dir3caibConstantes.UNIDAD);
+            descargaEjb.remove(descarga);
             return resp;
         }
 
@@ -852,7 +847,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
         if (!dir.exists()) {
           if (!dir.mkdirs()) {
             //Borramos la descarga creada previamente.
-            descargaEjb.deleteByTipo(Dir3caibConstantes.CATALOGO);
+            descargaEjb.remove(descarga);
             log.error(" No se ha podido crear el directorio");
           }
         }
@@ -890,7 +885,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
         return resp;
       }catch (Exception e){
-        descargaEjb.deleteByTipo(Dir3caibConstantes.CATALOGO);
+        descargaEjb.remove(descarga);
           throw new Exception(e.getMessage());
       }
 
@@ -910,24 +905,17 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
              //Obtenemos las fechas entre las que hay que hacer la descarga
 
              // obtenemos los datos de la última descarga
-             Descarga ultimaDescarga = descargaEjb.findByTipo(Dir3caibConstantes.CATALOGO);
+             Descarga ultimaDescarga = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.CATALOGO);
              Date fechaInicio =ultimaDescarga.getFechaFin(); // fecha de la ultima descarga
 
              // obtenemos la fecha de hoy
              Date fechaFin = new Date();
 
-
              // Obtiene los archivos csv via WS
              descargarCatalogoWS(fechaInicio, fechaFin);
 
-             // Variables necesarias para importar el catálogo en el sistema
-             /*
-             List<String> procesados = new ArrayList<String>();
-             List<String> inexistentes = new ArrayList<String>();
-             Descarga descarga = new Descarga();
-             */
-
              // importamos el catálogo a la bd.
+
              importarCatalogo();
         } catch(Exception e){
           e.printStackTrace();

@@ -1,10 +1,8 @@
 package es.caib.dir3caib.persistence.ejb;
 
-import javax.ejb.Local;
-
-
-
 import es.caib.dir3caib.persistence.model.*;
+
+import javax.ejb.Local;
 
 /**
  * Created 8/09/14 10:13
@@ -19,7 +17,6 @@ public interface ImportarLocal {
 
     public void persistDescarga(Descarga descarga) throws Exception;
     public void mergeDescarga(Descarga descarga) throws Exception;
-    public Descarga findDescargaByTipo(String tipo) throws Exception;
     //public void persistAmbitoTerritorial(CatAmbitoTerritorial ambitoTerritorial) throws Exception;
     public void persistAmbitoTerritorial(String codigoAmbito, 
         CatNivelAdministracion nivelAdministracion) throws Exception;

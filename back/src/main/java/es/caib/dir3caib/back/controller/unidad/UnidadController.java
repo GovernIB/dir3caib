@@ -149,7 +149,7 @@ public class UnidadController extends BaseController{
          ArrayList<String> existentes = new ArrayList<String>();
          
          // Obtenemos el listado de ficheros que hay dentro del directorio indicado
-         Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.UNIDAD);
+         Descarga descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.UNIDAD);
 
          if(descarga != null) {
           File f = new File(Configuracio.getUnidadesPath(descarga.getCodigo()));
@@ -188,7 +188,7 @@ public class UnidadController extends BaseController{
      */
     @RequestMapping(value = "/obtener", method = RequestMethod.GET)
     public String obtenerUnidades(Model model)throws Exception {
-        Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.UNIDAD);
+        Descarga descarga = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.UNIDAD);
         if(descarga != null){
           model.addAttribute("descarga", descarga);
         }
@@ -253,7 +253,7 @@ public class UnidadController extends BaseController{
 
          
          try {
-           Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.UNIDAD);
+           Descarga descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.UNIDAD);
            File directorio = new File(Configuracio.getUnidadesPath(descarga.getCodigo()));
            // Contactos 
            contactoUOEjb.deleteAll();
@@ -284,7 +284,7 @@ public class UnidadController extends BaseController{
         
         try{
           // Obtenemos la fecha de la ultima descarga/sincronizacion
-          Descarga ultimaDescarga = descargaEjb.findByTipo(Dir3caibConstantes.UNIDAD);
+          Descarga ultimaDescarga = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.UNIDAD);
           Date hoy = new Date();
           // Obtenemos los archivos por WS
           boolean descargaOk= descargarUnidadesWS(request, ultimaDescarga.getFechaFin(), hoy);

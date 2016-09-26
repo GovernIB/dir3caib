@@ -4,7 +4,9 @@ import es.caib.dir3caib.persistence.ejb.CatComunidadAutonomaLocal;
 import es.caib.dir3caib.persistence.ejb.CatEstadoEntidadLocal;
 import es.caib.dir3caib.persistence.ejb.CatNivelAdministracionLocal;
 import es.caib.dir3caib.persistence.ejb.DescargaLocal;
-import es.caib.dir3caib.persistence.model.*;
+import es.caib.dir3caib.persistence.model.CatComunidadAutonoma;
+import es.caib.dir3caib.persistence.model.CatEstadoEntidad;
+import es.caib.dir3caib.persistence.model.CatNivelAdministracion;
 import org.apache.log4j.Logger;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -46,21 +48,6 @@ public class BaseController {
   @ModelAttribute("estadosEntidad")
   public List<CatEstadoEntidad> estadosEntidad() throws Exception {
     return catEstadoEntidadEjb.getAll();
-  }
-
-  @ModelAttribute("ultimaDescargaCatalogo")
-  public Descarga ultimaDescargaCatalogo() throws Exception {
-    return descargaEjb.findByTipo(Dir3caibConstantes.CATALOGO);
-  }
-
-  @ModelAttribute("ultimaDescargaUnidad")
-  public Descarga ultimaDescargaUnidad() throws Exception {
-    return descargaEjb.findByTipo(Dir3caibConstantes.UNIDAD);
-  }
-
-  @ModelAttribute("ultimaDescargaOficina")
-  public Descarga ultimaDescargaOficina() throws Exception {
-    return descargaEjb.findByTipo(Dir3caibConstantes.OFICINA);
   }
 
 

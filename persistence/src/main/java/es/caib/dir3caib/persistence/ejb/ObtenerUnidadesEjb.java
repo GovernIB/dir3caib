@@ -122,7 +122,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
      * Este método considera también la posibilidad de que la misma raiz también se haya estinguido.
      *
      */
-    public List<UnidadTF> obtenerArbolUnidadesTF2(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
+    public List<UnidadTF> obtenerArbolUnidadesTF(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
 
         List<Unidad> arbol = new ArrayList<Unidad>(); //Lista completa de unidades a enviar a regweb3(o porque es sincro o porque se han actualizado)
         Unidad unidad = null;
@@ -215,7 +215,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
     @Override
     public Date obtenerFechaUltimaActualizacion() throws Exception{
 
-        Descarga descarga =  descargaEjb.findByTipo(Dir3caibConstantes.UNIDAD);
+        Descarga descarga =  descargaEjb.ultimaDescarga(Dir3caibConstantes.UNIDAD);
 
         return descarga.getFechaImportacion();
     }

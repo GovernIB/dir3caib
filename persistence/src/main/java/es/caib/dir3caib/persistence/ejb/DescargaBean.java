@@ -1,6 +1,7 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.Descarga;
+import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.SecurityDomain;
 
@@ -33,16 +34,32 @@ public class DescargaBean extends BaseEjbJPA<Descarga, Long> implements Descarga
         return em.find(Descarga.class, id);
     }
     
-    public Descarga findByTipo(String tipo) throws Exception {
+    public Descarga ultimaDescarga(String tipo) throws Exception {
         
-        Query query = em.createQuery( "select descarga from Descarga as descarga where descarga.tipo=? order by descarga.codigo desc");
-        query.setParameter(1, tipo);
+        Query query = em.createQuery( "select descarga from Descarga as descarga where descarga.tipo= :tipo order by descarga.codigo desc");
+        query.setParameter("tipo", tipo);
         List<Descarga> descargas = query.getResultList();
         if(!descargas.isEmpty()){
           return (Descarga) query.getResultList().get(0);
         } else {
           return null;
         } 
+    }
+
+    public Descarga ultimaDescargaSincronizada(String tipo) throws Exception {
+
+        Query query = em.createQuery( "select descarga from Descarga as descarga where descarga.tipo= :tipo and descarga.estado= :correcto and " +
+                "descarga.fechaImportacion != null order by descarga.codigo desc");
+
+        query.setParameter("tipo", tipo);
+        query.setParameter("correcto", Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO);
+
+        List<Descarga> descargas = query.getResultList();
+        if(!descargas.isEmpty()){
+            return (Descarga) query.getResultList().get(0);
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -97,12 +114,6 @@ public class DescargaBean extends BaseEjbJPA<Descarga, Long> implements Descarga
         q.setMaxResults(RESULTADOS_PAGINACION);
 
         return q.getResultList();
-    }
-    
-    public void deleteByTipo(String tipo) throws Exception {
-      Descarga descarga = findByTipo(tipo);
-      em.remove(descarga);
-         
     }
 
     public void deleteAllByTipo(String tipo) throws Exception {
