@@ -60,10 +60,12 @@
                 <updatePolicy>never</updatePolicy>
             </snapshots>
         </repository>
+        
+        <!-- Requerim GENAPP -->
         <repository>
-            <id>genapp-maven-repos</id>
-            <name>GenApp Maven Repository</name>
-            <url>http://GovernIB.github.io/genapp/maven/</url>
+           <id>maven-repos</id>
+           <name>GitHub GovernIB Maven Repository</name>
+           <url>http://GovernIB.github.io/maven/maven/</url>
         </repository>
     </repositories>
 
@@ -131,10 +133,10 @@
                     </includes>
                     <path>maven</path>
                     <!-- github repo name -->
-                    <repositoryName>dir3caib</repositoryName>      
+                    <repositoryName>maven</repositoryName>      
                     <!-- github username or organization  -->
                     <repositoryOwner>GovernIB</repositoryOwner>    
-                    <server>github_governib_dir3caib</server>
+                    <server>github_governib_maven</server>
                     <merge>true</merge>
                     <dryRun>false</dryRun>
                 </configuration>
@@ -152,23 +154,23 @@
         
     </build>
 	
-	<distributionManagement>
-         <repository>
-            <id>github_governib_dir3caib</id>
-            <name>GitHub GovernIB Dir3CAIB Maven Repository</name>
-            <url>file://${project.build.directory}/mvn-repo</url>
-        </repository>
-        <!--   COM UTILITZAR: AFEGIR AQUEST CODI AL pom.xml    -->
-        <!--
+  <distributionManagement>
+    <repository>
+      <id>github_governib_maven</id>
+      <name>GitHub GovernIB Maven Repository</name>
+      <url>file://${project.build.directory}/mvn-repo</url>
+    </repository>
+  </distributionManagement>
+  
+  <!--   COM UTILITZAR: AFEGIR AQUEST CODI AL pom.xml    -->
+  <!--
         <repositories>
            <repository>
-            <id>dir3caib-maven-repos</id>
-            <name>Dir3CAIB Maven Repository</name>
-            <url>http://GovernIB.github.io/dir3caib/maven/</url>
-          </repository>
-        <repositories>
-        -->
-
-    </distributionManagement>
+             <id>github-governib-maven-repos</id>
+             <name>GitHub GovernIB Maven Repository</name>
+             <url>http://GovernIB.github.io/maven/maven/</url>
+           </repository>
+        </repositories>
+  -->
     
 </project>
