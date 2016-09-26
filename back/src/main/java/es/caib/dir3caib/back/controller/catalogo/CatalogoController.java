@@ -104,7 +104,7 @@ public class CatalogoController extends BaseController{
 
         // Obtenemos el listado de ficheros que hay dentro del directorio indicado
         ArrayList<String> existentes = new ArrayList<String>();
-        Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.CATALOGO);
+        Descarga descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.CATALOGO);
         if (descarga != null) {
             File f = new File(Configuracio.getCatalogosPath(descarga.getCodigo()));
             if (f.exists()) {
@@ -142,7 +142,7 @@ public class CatalogoController extends BaseController{
     @RequestMapping(value = "/obtener", method = RequestMethod.GET)
     public String obtenerCatalogos(Model model)throws Exception {
 
-        Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.CATALOGO);
+        Descarga descarga = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.CATALOGO);
         if(descarga != null){
           model.addAttribute("descarga", descarga);
         }
@@ -221,7 +221,7 @@ public class CatalogoController extends BaseController{
 
          
          try {
-             Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.CATALOGO);
+             Descarga descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.CATALOGO);
              File directorio = new File(Configuracio.getCatalogosPath(descarga.getCodigo()));
              FileUtils.cleanDirectory(directorio);
              

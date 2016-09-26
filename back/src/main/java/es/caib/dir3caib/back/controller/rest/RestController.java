@@ -177,7 +177,9 @@ public class RestController {
      }
 
     /**
-     * Obtiene el organigrama solo de organismos sin oficinas a partir del codigo especificado
+     * Obtiene el organigrama solo de organismos sin oficinas a partir del codigo especificado, pero muestra sus
+     * ascendentes y sus descendientes
+     * Es el que se enmplea para mostrar el arbol en la búsqueda de organismos destinatarios de regweb3
      *
      * @param codigo el código raiz del que partimos
      */
@@ -187,7 +189,8 @@ public class RestController {
     ResponseEntity<Nodo> organigrama(@RequestParam String codigo) throws Exception {
         log.info("dentro rest organigrama codigo : " + codigo);
         Nodo nodo = new Nodo();
-        arbolEjb.arbolUnidades(codigo, nodo, Dir3caibConstantes.DESCRIPCION_ESTADO_ENTIDAD_VIGENTE, false);
+        arbolEjb.arbolUnidadesAscendentes(codigo, nodo, Dir3caibConstantes.DESCRIPCION_ESTADO_ENTIDAD_VIGENTE, false);
+        log.info("NODO  REST" + nodo.getDenominacion());
 
         HttpHeaders headers = addAccessControllAllowOrigin();
         return new ResponseEntity<Nodo>(nodo, headers, HttpStatus.OK);

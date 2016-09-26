@@ -52,16 +52,16 @@ public class ArchivoController extends BaseController{
 
         try {
             if (nombre != null) {
-                Descarga descargaCat = descargaEjb.findByTipo(Dir3caibConstantes.CATALOGO);
+                Descarga descargaCat = descargaEjb.ultimaDescarga(Dir3caibConstantes.CATALOGO);
                 if(Dir3caibConstantes.CATALOGO.equals(tipo)){
                   file = new File(Configuracio.getCatalogosPath(descargaCat.getCodigo()), nombre);
                 }
 
-                Descarga descargaUnidad = descargaEjb.findByTipo(Dir3caibConstantes.UNIDAD);
+                Descarga descargaUnidad = descargaEjb.ultimaDescarga(Dir3caibConstantes.UNIDAD);
                 if(Dir3caibConstantes.UNIDAD.equals(tipo)){
                   file = new File(Configuracio.getUnidadesPath(descargaUnidad.getCodigo()), nombre);
                 }
-                Descarga descargaOficina = descargaEjb.findByTipo(Dir3caibConstantes.OFICINA);
+                Descarga descargaOficina = descargaEjb.ultimaDescarga(Dir3caibConstantes.OFICINA);
                 if(Dir3caibConstantes.OFICINA.equals(tipo)){
                   file = new File(Configuracio.getOficinasPath(descargaOficina.getCodigo()), nombre);
                 }

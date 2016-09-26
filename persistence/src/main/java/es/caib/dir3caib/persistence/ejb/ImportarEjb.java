@@ -110,15 +110,6 @@ public class ImportarEjb implements ImportarLocal {
        descargaEjb.merge(descarga);
      }
 
-      /**
-    * obtiene un elemento descarga
-    * @return
-    * @throws Exception
-    */
-     @Override
-     public Descarga findDescargaByTipo(String tipo) throws Exception {
-       return descargaEjb.findByTipo(tipo);
-     }
 
     /**
     * persiste un elemento ambitoTerritorial

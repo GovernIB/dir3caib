@@ -82,7 +82,8 @@ public class Dir3CaibObtenerOficinasImpl /* extends CommonMethodsImpl */implemen
   public List<OficinaTF> obtenerArbolOficinas(String codigo, Date fechaActualizacion, Date fechaSincronizacion)
       throws Exception {
 
-    return obtenerOficinasEjb.obtenerArbolOficinas(codigo, fechaActualizacion, fechaSincronizacion);
+    //return obtenerOficinasEjb.obtenerArbolOficinas(codigo, fechaActualizacion, fechaSincronizacion);
+    return obtenerOficinasEjb.obtenerArbolOficinas2(codigo, fechaActualizacion, fechaSincronizacion);
   }
 
   /**

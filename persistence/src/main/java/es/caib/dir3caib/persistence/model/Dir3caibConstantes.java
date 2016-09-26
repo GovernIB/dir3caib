@@ -108,8 +108,8 @@ public class Dir3caibConstantes {
     public static final String CODIGO_RESPUESTA_VACIO= "14";
 
     //servicios SIR
-    public static final String SERVICIO_SIR = "5";
-    public static final String SERVICIO_SIR_ENVIO = "6";
-    public static final String SERVICIO_SIR_RECEPCION = "7";
+    public static final long SERVICIO_SIR = 5;
+    public static final long SERVICIO_SIR_ENVIO = 6;
+    public static final long SERVICIO_SIR_RECEPCION = 7;
 
 }

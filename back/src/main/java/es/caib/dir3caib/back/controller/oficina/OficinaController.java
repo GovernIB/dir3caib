@@ -146,7 +146,7 @@ public class OficinaController extends BaseController {
          ModelAndView mav = new ModelAndView("/oficina/oficinaFicheros");
          ArrayList<String> existentes = new ArrayList<String>();
          // Obtenemos el listado de ficheros que hay dentro del directorio indicado
-         Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.OFICINA);
+         Descarga descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.OFICINA);
 
 
          if(descarga != null){
@@ -184,7 +184,7 @@ public class OficinaController extends BaseController {
      */
     @RequestMapping(value = "/obtener", method = RequestMethod.GET)
     public String obtenerOficinas(Model model)throws Exception {
-        Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.OFICINA);
+        Descarga descarga = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.OFICINA);
         if(descarga != null){
           model.addAttribute("descarga", descarga);
         }
@@ -249,7 +249,7 @@ public class OficinaController extends BaseController {
          
 
          try {
-             Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.OFICINA);
+             Descarga descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.OFICINA);
              File directorio = new File(Configuracio.getOficinasPath(descarga.getCodigo()));
              relSirOfiEjb.deleteAll();
              relOrgOfiEjb.deleteAll();
@@ -286,8 +286,8 @@ public class OficinaController extends BaseController {
           Date hoy = new Date();
 
             //Obtenemos las ultimas descargas de Unidades y Oficinas
-            Descarga ultimaDescargaUnidad = descargaEjb.findByTipo(Dir3caibConstantes.UNIDAD);
-            Descarga ultimaDescargaOficina = descargaEjb.findByTipo(Dir3caibConstantes.OFICINA);
+            Descarga ultimaDescargaUnidad = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.UNIDAD);
+            Descarga ultimaDescargaOficina = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.OFICINA);
 
             // Controlamos que no se puedan sincronizar las oficinas antes que las unidades.
             // Para ello comprobamos que la fecha de importación de las unidades no sea anterior

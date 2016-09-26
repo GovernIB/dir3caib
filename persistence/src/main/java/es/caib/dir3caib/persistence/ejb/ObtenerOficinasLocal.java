@@ -20,6 +20,8 @@ public interface ObtenerOficinasLocal {
 
     public List<OficinaTF> obtenerArbolOficinas(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception;
 
+    public List<OficinaTF> obtenerArbolOficinas2(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception;
+
     public List<OficinaTF> obtenerOficinasSIRUnidad(String codigoUnidad) throws Exception;
 
     public Date obtenerFechaUltimaActualizacion() throws Exception;

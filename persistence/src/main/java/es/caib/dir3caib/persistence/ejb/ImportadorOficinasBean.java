@@ -217,6 +217,10 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
   @Override
   @TransactionTimeout(value=13600)
   public ResultadosImportacion importarOficinas(boolean isUpdate) throws Exception {
+
+      log.info("");
+      log.info("Inicio importación Oficinas");
+
     Date hoy = new Date();
 
     System.gc();
@@ -228,7 +232,6 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
 
     
     /*  CACHES */
-    log.info("Inicialitzant Cache de Unidades per Importar Oficinas ...");
     
     long start = System.currentTimeMillis();
     
@@ -244,10 +247,10 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
 
 
     long end = System.currentTimeMillis();
-    log.info("Inicialitzat Cache de Unidades en " + Utils.formatElapsedTime(end - start));
+    log.debug("Inicialitzat Cache de Unidades en " + Utils.formatElapsedTime(end - start));
     
     start = System.currentTimeMillis();
-    log.info("Inicialitzant Varies Caches per Importar Oficinas ...");
+    log.debug("Inicialitzant Varies Caches per Importar Oficinas ...");
 
     
     Map<String, CatTipoContacto> cacheTipoContacto = new TreeMap<String,CatTipoContacto>();
@@ -260,7 +263,7 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
     for (CatTipoVia ca : catTipoViaEjb.getAll()) {
       cacheTipoVia.put(ca.getCodigoTipoVia(), ca);
     }
-    log.info(" TipoVias : " + cacheTipoVia.size());
+    log.debug(" TipoVias : " + cacheTipoVia.size());
 
 
     
@@ -273,26 +276,26 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
     for (CatProvincia ca : catProvinciaEjb.getAll()) {
       cacheProvincia.put(ca.getCodigoProvincia(), ca);
     }
-    log.info(" Provincia: " + cacheProvincia.size());
+    log.debug(" Provincia: " + cacheProvincia.size());
 
     Map<Long,CatComunidadAutonoma> cacheComunidadAutonoma = new TreeMap<Long,CatComunidadAutonoma>();
     for (CatComunidadAutonoma ca : catComunidadAutonomaEjb.getAll()) {
       cacheComunidadAutonoma.put(ca.getCodigoComunidad(), ca);
     }
-    log.info(" Comunidad Autonoma : " + cacheComunidadAutonoma.size());
+    log.debug(" Comunidad Autonoma : " + cacheComunidadAutonoma.size());
 
     Map<Long, CatPais> cachePais = new TreeMap<Long,CatPais>();
     for (CatPais ca : catPaisEjb.getAll()) {
       cachePais.put(ca.getCodigoPais(), ca);
     }
-    log.info(" Pais : " + cachePais.size());
+    log.debug(" Pais : " + cachePais.size());
 
     
     Map<String, CatEstadoEntidad> cacheEstadoEntidad = new TreeMap<String,CatEstadoEntidad>();
     for (CatEstadoEntidad ca : catEstadoEntidadEjb.getAll()) {
       cacheEstadoEntidad.put(ca.getCodigoEstadoEntidad(), ca);
     }
-    log.info(" Estado Entidad : " + cacheEstadoEntidad.size());
+    log.debug(" Estado Entidad : " + cacheEstadoEntidad.size());
     
     
     Map<String, CatEntidadGeografica> cacheEntidadGeografica  = new TreeMap<String, CatEntidadGeografica>();
@@ -306,12 +309,12 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
       CatLocalidadPK catLocalidadPK = new CatLocalidadPK(ca.getCodigoLocalidad(), ca.getProvincia(), ca.getEntidadGeografica());
       cacheLocalidad.put(catLocalidadPK, ca);
     }
-    log.info(" Localidad: " + cacheLocalidad.size());
+    log.debug(" Localidad: " + cacheLocalidad.size());
     
     
     
     end = System.currentTimeMillis();
-    log.info("Inicialitzades Varies Caches per Importar Oficinas en " + Utils.formatElapsedTime(end - start));
+    log.debug("Inicialitzades Varies Caches per Importar Oficinas en " + Utils.formatElapsedTime(end - start));
     
     
     Set<String> existInBBDD = new TreeSet<String>();
@@ -325,7 +328,7 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
 
      // Obtenemos el listado de ficheros que hay dentro del directorio indicado que se
      // corresponde con la descarga hecha previamente
-     Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.OFICINA);
+     Descarga descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.OFICINA);
      File f = new File(Configuracio.getOficinasPath(descarga.getCodigo()));
      ArrayList<String> existentes = new ArrayList<String>(Arrays.asList(f.list()));
      
@@ -551,9 +554,9 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                             + ") en " + Utils.formatElapsedTime(end - start));
                         start = end;
                         
-                        log.info("            Cache[CountCache]: " + cacheUnidad.countCache);
-                        log.info("            Cache[CountFindBy]: " + cacheUnidad.countFind);
-                        log.info("            Cache[FindByTime]: " + Utils.formatElapsedTime(cacheUnidad.findByTime));
+                        log.debug("            Cache[CountCache]: " + cacheUnidad.countCache);
+                        log.debug("            Cache[CountFindBy]: " + cacheUnidad.countFind);
+                        log.debug("            Cache[FindByTime]: " + Utils.formatElapsedTime(cacheUnidad.findByTime));
                         
                         cacheUnidad.countCache = 0;
                         cacheUnidad.countFind = 0;
@@ -681,22 +684,7 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                       String sOficina = fila[0].trim();
                       String sUnidad = fila[2].trim();
                       if(!sOficina.isEmpty() && !sUnidad.isEmpty()){
-                        /*
-                        Oficina oficina;
 
-                        oficina = oficinesCache.get(sOficina);
-                        
-                        if (oficina == null) {
-                          oficina = oficinaEjb.findById(sOficina);
-                        }
-                        
-                        Unidad  unidad;
-                        unidad = cacheUnidad.get(sUnidad);
-
-                        RelacionOrganizativaOfiPK relacionOrganizativaOfiPK = new RelacionOrganizativaOfiPK();
-                        relacionOrganizativaOfiPK.setOficina(oficina);
-                        relacionOrganizativaOfiPK.setUnidad(unidad);
-                        */
 
                         RelacionOrganizativaOfi relacionOrganizativaOfi;
                         if (cache.existsUnidadOficina(sUnidad, sOficina)){
@@ -738,7 +726,7 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                           log.info("Procesades OFI_RELACIONES_ORGANIZATIVAS_OFI (" + c + ") "
                             + " en " + Utils.formatElapsedTime(System.currentTimeMillis() - s));
                           
-                          log.info("           * Time FIND = " + Utils.formatElapsedTime(findby));
+                          log.debug("           * Time FIND = " + Utils.formatElapsedTime(findby));
                           s = System.currentTimeMillis();
                           findby = 0;
                         }
@@ -816,7 +804,7 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                           log.info("   RelacionesSIROFI:  (" + c + ") "
                             + " en " + Utils.formatElapsedTime(System.currentTimeMillis() - s));
                           
-                          log.info("           * Time FIND = " + Utils.formatElapsedTime(findby));
+                          log.debug("           * Time FIND = " + Utils.formatElapsedTime(findby));
                           s = System.currentTimeMillis();
                           findby = 0;
                         }
@@ -876,7 +864,7 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                   }
                }
             }
-            log.info(" Acabados procesamiento: " + nombreFichero);
+            log.info("Fin importar fichero: " + nombreFichero);
 
             procesados.add(fichero);
           }
@@ -900,7 +888,7 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
             }
         }
 
-        descarga = descargaEjb.findByTipo(Dir3caibConstantes.OFICINA);
+        descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.OFICINA);
         if (descarga == null) {
           descarga = new Descarga();
           descarga.setTipo(Dir3caibConstantes.OFICINA);
@@ -939,8 +927,7 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
       String[] resp = new String[2];
 
      //Definimos el formato de la fecha para las descargas de los WS.
-      log.info( "Fecha Inicio " + fechaInicio);
-      log.info( "Fecha Fin " + fechaFin);
+      log.info("Intervalo fechas descarga oficinas directorio común: " + formatoFecha.format(fechaInicio) + " - " + formatoFecha.format(fechaFin));
 
       // Guardaremos la fecha de la ultima descarga
       Descarga descarga = new Descarga();
@@ -966,7 +953,6 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
       }
 
       descarga = descargaEjb.persist(descarga);
-      log.info("DESCARGA FECHA INICIO " + descarga.getFechaInicio());
 
       try {
 
@@ -1003,15 +989,14 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
         RespuestaWS respuesta = service.exportar(parametros);
         Base64 decoder = new Base64();
 
-        log.info("Codigo: " + respuesta.getCodigo());
-        log.info("Descripcion: " + respuesta.getDescripcion());
+          log.info("Respuesta WS oficinas DIR3: " + respuesta.getCodigo() + " - " + respuesta.getDescripcion());
 
         //Montamos la respuesta del ws para controlar los errores a mostrar
         resp[0] = respuesta.getCodigo();
         resp[1] = respuesta.getDescripcion();
 
         if (!respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO) && !respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_VACIO)){
-          descargaEjb.deleteByTipo(Dir3caibConstantes.OFICINA);
+          descargaEjb.remove(descarga);
           return resp;
         }
 
@@ -1033,7 +1018,7 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
         if (!dir.exists()) {
             if (!dir.mkdirs()) {
                 //Borramos la descarga creada previamente.
-                descargaEjb.deleteByTipo(Dir3caibConstantes.OFICINA);
+                descargaEjb.remove(descarga);
                 log.error(" No se ha podido crear el directorio");
             }
         }
@@ -1066,7 +1051,7 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
 
         return resp;
       }catch(Exception e){
-        descargaEjb.deleteByTipo(Dir3caibConstantes.OFICINA);
+        descargaEjb.remove(descarga);
         throw new Exception(e.getMessage());
       }
 
@@ -1084,15 +1069,13 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
             //Obtenemos las fechas entre las que hay que hacer la descarga
 
             // obtenemos los datos de la última descarga
-            Descarga ultimaDescarga = descargaEjb.findByTipo(Dir3caibConstantes.OFICINA);
+            Descarga ultimaDescarga = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.OFICINA);
             Date fechaInicio =ultimaDescarga.getFechaFin(); // fecha de la ultima descarga
 
             // obtenemos la fecha de hoy
             Date fechaFin = new Date();
 
             // Obtiene los archivos csv via WS
-            //descargarOficinasWS(fechaInicio, fechaFin);
-
            String[] respuesta = descargarOficinasWS(fechaInicio, fechaFin);
            if(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO.equals(respuesta[0])){
                // importamos las oficinas a la bd.
@@ -1122,7 +1105,7 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
     int count = 0;
     int allCount = 0;
     try {
-      Descarga descarga = descargaEjb.findByTipo(Dir3caibConstantes.OFICINA);
+      Descarga descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.OFICINA);
       File file = new File(Configuracio.getOficinasPath(descarga.getCodigo()),Dir3caibConstantes.OFI_OFICINAS);
       is1 = new FileInputStream(file);
       BufferedReader is = new BufferedReader(new InputStreamReader(is1, "UTF-8"));
