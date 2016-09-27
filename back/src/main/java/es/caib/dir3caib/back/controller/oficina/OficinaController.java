@@ -3,10 +3,12 @@ package es.caib.dir3caib.back.controller.oficina;
 import es.caib.dir3caib.back.controller.BaseController;
 import es.caib.dir3caib.back.form.FechasForm;
 import es.caib.dir3caib.back.form.OficinaBusquedaForm;
-import es.caib.dir3caib.back.utils.CodigoValor;
 import es.caib.dir3caib.back.utils.Mensaje;
 import es.caib.dir3caib.persistence.ejb.*;
-import es.caib.dir3caib.persistence.model.*;
+import es.caib.dir3caib.persistence.model.CatEstadoEntidad;
+import es.caib.dir3caib.persistence.model.Descarga;
+import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
+import es.caib.dir3caib.persistence.model.Oficina;
 import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.Paginacion;
 import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
@@ -46,17 +48,11 @@ public class OficinaController extends BaseController {
     @EJB(mappedName = "dir3caib/OficinaEJB/local")
     protected OficinaLocal oficinaEjb;
 
-    @EJB(mappedName = "dir3caib/CatProvinciaEJB/local")
-    protected CatProvinciaLocal catProvinciaEjb;
-
     @EJB(mappedName = "dir3caib/ContactoOfiEJB/local")
     protected ContactoOfiLocal contactoOfiEjb;
 
     @EJB(mappedName = "dir3caib/RelacionOrganizativaOfiEJB/local")
     protected RelacionOrganizativaOfiLocal relOrgOfiEjb;
-
-    @EJB(mappedName = "dir3caib/DescargaEJB/local")
-    protected DescargaLocal descargaEjb;
 
     @EJB(mappedName = "dir3caib/ServicioEJB/local")
     protected ServicioLocal servicioEjb;
@@ -370,25 +366,6 @@ public class OficinaController extends BaseController {
 
         return mav;
 
-    }
-
-    /**
-     * Obtiene los {@link es.caib.dir3caib.persistence.model.CatProvincia} de la comunidad autonoma seleccionada
-     */
-    @RequestMapping(value = "/provincias", method = RequestMethod.GET)
-    public
-    @ResponseBody
-    List<CodigoValor> provincias(@RequestParam Long id) throws Exception {
-
-        List<CatProvincia> provincias = catProvinciaEjb.getByComunidadAutonoma(id);
-        List<CodigoValor> codigosValor = new ArrayList<CodigoValor>();
-        for (CatProvincia provincia : provincias) {
-            CodigoValor codigoValor = new CodigoValor();
-            codigoValor.setId(provincia.getCodigoProvincia());
-            codigoValor.setDescripcion(provincia.getDescripcionProvincia());
-            codigosValor.add(codigoValor);
-        }
-        return codigosValor;
     }
 
 
