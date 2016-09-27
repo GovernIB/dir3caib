@@ -1,15 +1,14 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.utils.Configuracio;
-
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.SecurityDomain;
+import org.jboss.ejb3.annotation.TransactionTimeout;
 import org.quartz.impl.triggers.CronTriggerImpl;
 
 import javax.annotation.Resource;
 import javax.annotation.security.RunAs;
 import javax.ejb.*;
-
 import java.text.ParseException;
 import java.util.Date;
 
@@ -66,6 +65,7 @@ public class SincronitzacioDir3EJB  implements SincronitzacioDir3Local {
   
 
   @Timeout
+  @TransactionTimeout(value = 18000)
   public void timeOutHandler(Timer timer){
     try {
       long timeRemaining = timer.getTimeRemaining();
@@ -130,7 +130,6 @@ public class SincronitzacioDir3EJB  implements SincronitzacioDir3Local {
             }
     }
 }
-  
 
 
   public void sincronitzar()  {
