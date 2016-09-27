@@ -392,7 +392,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
     @Override
     public List<Unidad> obtenerArbolUnidadesUnidadNoRaiz(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
-        log.info("obtenerArbolUnidades del código: " + codigo);
+        //log.info("obtenerArbolUnidades del código: " + codigo);
 
         Query q;
         Query qHijos;
@@ -422,7 +422,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         List<Unidad> hijosActualizadosValidos = new ArrayList<Unidad>(); //Hijos actualizados validos( unidadValida())
         List<Unidad> listaCompleta; // Lista completa de unidades a enviar a regweb3.
 
-        log.info(hijosActualizados.size() + " hijos actualizados del código : " + codigo);
+        //log.info(hijosActualizados.size() + " hijos actualizados del código : " + codigo);
 
         if (fechaActualizacion != null) { // Si hay fecha de actualizacion solo se envian las actualizadas
 
