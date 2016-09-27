@@ -215,7 +215,7 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
   * @param isUpdate booleano que indica si la llamada es una sincronización(actualizacion)
   * */
   @Override
-  @TransactionTimeout(value=13600)
+  @TransactionTimeout(value = 18000)
   public ResultadosImportacion importarOficinas(boolean isUpdate) throws Exception {
 
       log.info("");
@@ -1062,7 +1062,7 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
    *  en la base de datos, de esta manera realiza el proceso de sincronizacion con Madrid en un sólo
    *  proceso
    *  */
-  @TransactionTimeout(value=13600)
+  @TransactionTimeout(value = 18000)
    public void importarOficinasTask(){
 
        try {

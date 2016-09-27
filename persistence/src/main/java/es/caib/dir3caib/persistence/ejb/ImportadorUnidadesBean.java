@@ -118,7 +118,7 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
   * de los WS.
   * */
   @Override
-  @TransactionTimeout(value=13600)
+  @TransactionTimeout(value = 18000)
   public ResultadosImportacion importarUnidades() throws Exception {
 
       log.info("");
@@ -1010,7 +1010,7 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
   *  proceso
   *  */
   @Override
-  @TransactionTimeout(value=13600)
+  @TransactionTimeout(value = 18000)
   public void importarUnidadesTask() {
 
        try {
