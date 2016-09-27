@@ -19,8 +19,10 @@ import java.util.Set;
  * Created by Fundació BIT.
  *
  * @author earrivi
+ * @author mgonzalez
  * Date: 12/02/14
  */
+
 /**
  * Ejb que proporciona los métodos para los ws para la sincronización/actualización con regweb
  */
@@ -37,29 +39,31 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
     @EJB(mappedName = "dir3caib/DescargaEJB/local")
     protected DescargaLocal descargaEjb;
 
-    /** Método que devuelve una UnidadTF( que se transfiere) a partir del código indicado y en función de
-     *  la fecha de actualización y la de sincronizacion ( primera sincronizacion)
-     *  @param codigo código de la unidad a transferir
-     *  @param fechaActualizacion fecha en la que se realiza la actualización
+    /**
+     * Método que devuelve una UnidadTF( que se transfiere) a partir del código indicado y en función de
+     * la fecha de actualización y la de sincronizacion ( primera sincronizacion)
+     *
+     * @param codigo             código de la unidad a transferir
+     * @param fechaActualizacion fecha en la que se realiza la actualización
      */
     @Override
-    public UnidadTF obtenerUnidad(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception{
+    public UnidadTF obtenerUnidad(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
 
         Unidad unidad = unidadEjb.findConHistoricosVigente(codigo);
-        UnidadTF unidadTF= null;
+        UnidadTF unidadTF = null;
         // Si hay fecha de actualización y es anterior a la fecha de importación se debe transmitir
-        if(fechaActualizacion != null){
-          //Date fechaAct = formatoFecha.parse(fechaActualizacion);
-          //Date fechaSincro = formatoFecha.parse(fechaSincronizacion);
-          // Miramos si ha sido actualizada
-          if(fechaActualizacion.before(unidad.getFechaImportacion()) || fechaActualizacion.equals(unidad.getFechaImportacion())){
-              // miramos que no esté extinguida o anulada antes de la primera sincro.
-              if(unidadValida(unidad, fechaSincronizacion)){
-                 unidadTF = UnidadTF.generar(unidad);
-              }
-          }
-        }else { // Si no hay fecha Actualización se trata de una sincronización y se debe enviar
-          unidadTF = UnidadTF.generar(unidad);
+        if (fechaActualizacion != null) {
+            //Date fechaAct = formatoFecha.parse(fechaActualizacion);
+            //Date fechaSincro = formatoFecha.parse(fechaSincronizacion);
+            // Miramos si ha sido actualizada
+            if (fechaActualizacion.before(unidad.getFechaImportacion()) || fechaActualizacion.equals(unidad.getFechaImportacion())) {
+                // miramos que no esté extinguida o anulada antes de la primera sincro.
+                if (unidadValida(unidad, fechaSincronizacion)) {
+                    unidadTF = UnidadTF.generar(unidad);
+                }
+            }
+        } else { // Si no hay fecha Actualización se trata de una sincronización y se debe enviar
+            unidadTF = UnidadTF.generar(unidad);
         }
 
         return unidadTF;
@@ -67,6 +71,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
 
     /**
      * Método antiguo de sincronización/actualización de organigrama que no considera que se pueda extinguir la unidad raíz.
+     *
      * @param codigo
      * @param fechaActualizacion
      * @param fechaSincronizacion
@@ -123,6 +128,8 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
      *
      */
     public List<UnidadTF> obtenerArbolUnidadesTF(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
+
+        log.info("WS: Inicio obtenerArbolUnidadesTF");
 
         List<Unidad> arbol = new ArrayList<Unidad>(); //Lista completa de unidades a enviar a regweb3(o porque es sincro o porque se han actualizado)
         Unidad unidad = null;
@@ -188,13 +195,14 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
 
 
     /**
-   * Método que devuelve el la unidad indicada si tiene oficinas y los hijos que dependen de ella.
-   * @param codigo
-   * @return
-   * @throws Exception
-   */
+     * Método que devuelve el la unidad indicada si tiene oficinas y los hijos que dependen de ella.
+     *
+     * @param codigo
+     * @return
+     * @throws Exception
+     */
     @Override
-    public List<UnidadTF> obtenerArbolUnidadesDestinatarias(String codigo) throws Exception{
+    public List<UnidadTF> obtenerArbolUnidadesDestinatarias(String codigo) throws Exception {
 
         List<Unidad> arbol = unidadEjb.obtenerArbolUnidadesDestinatarias(codigo);
         List<UnidadTF> arbolTF = new ArrayList<UnidadTF>();
@@ -209,40 +217,41 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
 
     /**
      * Método que devuelve la fecha de la última actualización de las unidades
+     *
      * @return
      * @throws Exception
      */
     @Override
-    public Date obtenerFechaUltimaActualizacion() throws Exception{
+    public Date obtenerFechaUltimaActualizacion() throws Exception {
 
-        Descarga descarga =  descargaEjb.ultimaDescarga(Dir3caibConstantes.UNIDAD);
+        Descarga descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.UNIDAD);
 
         return descarga.getFechaImportacion();
     }
 
     /**
-     *
      * Se mira que si la unidad,  su fecha de extinción y anulacion son posteriores
      * a la fecha de la primera sincronizacion con regweb. Así evitamos enviar relaciones antiguas extinguidas o anuladas
-     * @param unidad    relacion organizativa
-     * @param fechaSincro  fecha de la primera sincronizacion con regweb
+     *
+     * @param unidad      relacion organizativa
+     * @param fechaSincro fecha de la primera sincronizacion con regweb
      * @return
      * @throws Exception
      */
-      private boolean unidadValida(Unidad unidad, Date fechaSincro) throws Exception {
-           if(unidad.getFechaExtincion() != null){
-                if(unidad.getFechaExtincion().after(fechaSincro) || unidad.getFechaExtincion().equals(fechaSincro)){
-                  return true;
-                }
-           }else{
-                if(unidad.getFechaAnulacion() != null){
-                  if(unidad.getFechaAnulacion().after(fechaSincro) || unidad.getFechaAnulacion().equals(fechaSincro)) {
+    private boolean unidadValida(Unidad unidad, Date fechaSincro) throws Exception {
+        if (unidad.getFechaExtincion() != null) {
+            if (unidad.getFechaExtincion().after(fechaSincro) || unidad.getFechaExtincion().equals(fechaSincro)) {
+                return true;
+            }
+        } else {
+            if (unidad.getFechaAnulacion() != null) {
+                if (unidad.getFechaAnulacion().after(fechaSincro) || unidad.getFechaAnulacion().equals(fechaSincro)) {
                     return true;
-                  }
-                }else {
-                   return true;
                 }
-           }
-           return false;
-      }
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
 }

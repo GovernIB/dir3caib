@@ -14,6 +14,7 @@ import java.util.*;
  * Created by Fundació BIT.
  *
  * @author earrivi
+ * @author mgonzalez
  * Date: 12/02/14
  */
 @Stateless(name = "ObtenerOficinasEJB")
@@ -33,29 +34,30 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
     protected DescargaLocal descargaEjb;
 
     /**
-      * Obtiene los datos de una oficina en función del codigo y la fecha de actualización.
-      * Si la fecha de actualización es inferior a la de importación con Madrid se supone
-      * que no ha cambiado y se envia null
-      * @param codigo Código de la oficina
-      * @param fechaActualizacion fecha en la que se realiza la actualizacion.
-      */
+     * Obtiene los datos de una oficina en función del codigo y la fecha de actualización.
+     * Si la fecha de actualización es inferior a la de importación con Madrid se supone
+     * que no ha cambiado y se envia null
+     *
+     * @param codigo             Código de la oficina
+     * @param fechaActualizacion fecha en la que se realiza la actualizacion.
+     */
     @Override
-    public OficinaTF obtenerOficina(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception{
+    public OficinaTF obtenerOficina(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
 
-        Oficina oficina = oficinaEjb.findById(codigo,Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+        Oficina oficina = oficinaEjb.findById(codigo, Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
-        if(oficina != null){
-            OficinaTF oficinaTF= null;
-            if(fechaActualizacion != null){
+        if (oficina != null) {
+            OficinaTF oficinaTF = null;
+            if (fechaActualizacion != null) {
 
-                if(fechaActualizacion.before(oficina.getFechaImportacion())){
+                if (fechaActualizacion.before(oficina.getFechaImportacion())) {
 
                     // Cogemos solo las relaciones organizativas posteriores a la fecha de sincronizacion
                     Set<RelacionOrganizativaOfi> todasRelaciones = new HashSet<RelacionOrganizativaOfi>(oficina.getOrganizativasOfi());
-                    Set<RelacionOrganizativaOfi> relacionesValidas= new HashSet<RelacionOrganizativaOfi>();
-                    for(RelacionOrganizativaOfi relOrg: todasRelaciones){
+                    Set<RelacionOrganizativaOfi> relacionesValidas = new HashSet<RelacionOrganizativaOfi>();
+                    for (RelacionOrganizativaOfi relOrg : todasRelaciones) {
                         //TODO revisar esta condicion
-                        if(relOrg.getUnidad().getFechaExtincion().before(fechaSincronizacion)){
+                        if (relOrg.getUnidad().getFechaExtincion().before(fechaSincronizacion)) {
                             relacionesValidas.add(relOrg);
                         }
                     }
@@ -64,13 +66,13 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
 
                     oficinaTF = OficinaTF.generar(oficina);
                 }
-            }else {
+            } else {
                 oficinaTF = OficinaTF.generar(oficina);
             }
 
             return oficinaTF;
-        }else{
-            log.info("Oficina cuyo codigoDir3 es " + codigo + " no existe");
+        } else {
+            log.info("WS: Oficina cuyo codigoDir3 es " + codigo + " no existe");
             return null;
         }
 
@@ -79,21 +81,23 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
 
 
     /**
-      * Obtiene todas las oficinas cuyo organismo responsable es el indicado por código(son todas padres e hijas).Solo se envian aquellas
-      * que han sido actualizadas.
-      * @param codigo Código del organismo
-      * @param fechaActualizacion fecha en la que se realiza la actualizacion.
-      */
+     * Obtiene todas las oficinas cuyo organismo responsable es el indicado por código(son todas padres e hijas).Solo se envian aquellas
+     * que han sido actualizadas.
+     *
+     * @param codigo             Código del organismo
+     * @param fechaActualizacion fecha en la que se realiza la actualizacion.
+     */
     @Override
-    public List<OficinaTF> obtenerArbolOficinas(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception{
+    public List<OficinaTF> obtenerArbolOficinas(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
 
-        log.info("Inicio obtener Oficinas");
+        log.info("WS: Inicio obtenerArbolOficinas");
         // Obtenemos todos las unidades vigentes de la unidad Raiz
 
         List<Unidad> unidades = new ArrayList<Unidad>();
-        unidades.add(unidadEjb.obtenerUnidad(codigo)); // Añadimos la raiz
 
+        unidades.add(unidadEjb.obtenerUnidad(codigo)); // Añadimos la raiz
         unidades.addAll(unidadEjb.obtenerArbol(codigo));
+
         log.info("Total arbol: " + unidades.size());
 
         List<Oficina> oficinasCompleto = new ArrayList<Oficina>();
@@ -117,13 +121,14 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
      * XYZ METODO QUE MIRA SI LA UNIDAD HA SIDO EXTINGUIDA
      * Obtiene todas las oficinas cuyo organismo responsable es el indicado por código(son todas padres e hijas).Solo se envian aquellas
      * que han sido actualizadas.
-     * @param codigo Código del organismo
+     *
+     * @param codigo             Código del organismo
      * @param fechaActualizacion fecha en la que se realiza la actualizacion.
      */
     @Override
     public List<OficinaTF> obtenerArbolOficinas2(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
 
-        log.info("Inicio obtener Oficinas");
+        log.info("WS: Inicio obtener Oficinas");
         // Obtenemos todos las unidades vigentes de la unidad Raiz
 
         List<Unidad> unidades = new ArrayList<Unidad>();
@@ -176,17 +181,14 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
     }
 
     /**
-      * Obtiene el listado de oficinas Sir de una Unidad
-      *
-      * @param codigoUnidad Código de la unidad
-      *
-      */
+     * Obtiene el listado de oficinas Sir de una Unidad
+     *
+     * @param codigoUnidad Código de la unidad
+     */
     @Override
-    public List<OficinaTF> obtenerOficinasSIRUnidad(String codigoUnidad) throws Exception{
+    public List<OficinaTF> obtenerOficinasSIRUnidad(String codigoUnidad) throws Exception {
 
         List<Oficina> oficinas = oficinaEjb.obtenerOficinasSIRUnidad(codigoUnidad);
-
-
 
         List<OficinaTF> oficinasTF = new ArrayList<OficinaTF>();
 
@@ -199,13 +201,14 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
 
     /**
      * Método que devuelve la fecha de la última actualización de las unidades
+     *
      * @return
      * @throws Exception
      */
     @Override
-    public Date obtenerFechaUltimaActualizacion() throws Exception{
+    public Date obtenerFechaUltimaActualizacion() throws Exception {
 
-        Descarga descarga =  descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.OFICINA);
+        Descarga descarga = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.OFICINA);
 
         return descarga.getFechaImportacion();
     }
