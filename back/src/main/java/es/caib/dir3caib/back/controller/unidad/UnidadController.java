@@ -55,14 +55,8 @@ public class UnidadController extends BaseController {
     @EJB(mappedName = "dir3caib/CatAmbitoTerritorialEJB/local")
     protected CatAmbitoTerritorialLocal catAmbitoTerritorialEjb;
 
-    @EJB(mappedName = "dir3caib/CatProvinciaEJB/local")
-    protected CatProvinciaLocal catProvinciaEjb;
-
     @EJB(mappedName = "dir3caib/ContactoUOEJB/local")
     protected ContactoUOLocal contactoUOEjb;
-
-    @EJB(mappedName = "dir3caib/DescargaEJB/local")
-    protected DescargaLocal descargaEjb;
 
     @EJB(mappedName = "dir3caib/OficinaEJB/local")
     protected OficinaLocal oficinaEjb;
@@ -379,24 +373,6 @@ public class UnidadController extends BaseController {
         return codigosValor;
     }
 
-    /**
-     * Obtiene los {@link es.caib.dir3caib.persistence.model.CatProvincia} de la comunidad autonoma seleccionada
-     */
-    @RequestMapping(value = "/provincias", method = RequestMethod.GET)
-    public
-    @ResponseBody
-    List<CodigoValor> provincias(@RequestParam Long id) throws Exception {
-
-        List<CatProvincia> provincias = catProvinciaEjb.getByComunidadAutonoma(id);
-        List<CodigoValor> codigosValor = new ArrayList<CodigoValor>();
-        for (CatProvincia provincia : provincias) {
-            CodigoValor codigoValor = new CodigoValor();
-            codigoValor.setId(provincia.getCodigoProvincia());
-            codigoValor.setDescripcion(provincia.getDescripcionProvincia());
-            codigosValor.add(codigoValor);
-        }
-        return codigosValor;
-    }
 
 
     /**
