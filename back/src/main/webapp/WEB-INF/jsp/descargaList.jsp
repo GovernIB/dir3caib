@@ -67,15 +67,20 @@
                                         <td><fmt:formatDate pattern="dd/MM/yyyy" value="${descarga.fechaImportacion}" /></td>
                                         <c:set var="codigoVacio"
                                                value="<%=Dir3caibConstantes.CODIGO_RESPUESTA_VACIO%>"/>
-                                        <td><c:if test="${not empty descarga.fechaImportacion}"><i
-                                                class="fa fa-check-square fa-lg" style="color:green"></i>
-                                            <spring:message code="dir3caib.importado"/></c:if><c:if
-                                                test="${empty descarga.fechaImportacion}"><i
-                                                class="fa fa-exclamation-triangle fa-lg" style="color:red"></i><c:if
-                                                test="${not empty descarga.estado && descarga.estado==codigoVacio}"><fmt:message
-                                                key="descarga.vacio"/></c:if><c:if
-                                                test="${not empty descarga.estado && descarga.estado!=codigoVacio}"><fmt:message
-                                                key="descarga.error"/></c:if> </c:if></td>
+                                        <td>
+                                            <c:if test="${not empty descarga.fechaImportacion}">
+                                                <i class="fa fa-check-square fa-lg" style="color:green"></i>
+                                                <spring:message code="dir3caib.importado"/>
+                                            </c:if>
+                                            <c:if test="${empty descarga.fechaImportacion}">
+                                                <i class="fa fa-exclamation-triangle fa-lg" style="color:red"></i>
+                                                <c:if test="${not empty descarga.estado && descarga.estado==codigoVacio}">
+                                                    <fmt:message key="descarga.vacio"/></c:if>
+                                                <c:if test="${not empty descarga.estado && descarga.estado!=codigoVacio}">
+                                                    <fmt:message key="descarga.error.importacion"/>
+                                                </c:if>
+                                            </c:if>
+                                        </td>
                                     </tr>
                                 </c:forEach>
                                 </tbody>

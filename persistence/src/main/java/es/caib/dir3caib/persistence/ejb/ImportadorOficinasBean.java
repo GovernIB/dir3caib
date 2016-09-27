@@ -888,7 +888,6 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
             }
         }
 
-        descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.OFICINA);
         if (descarga == null) {
           descarga = new Descarga();
           descarga.setTipo(Dir3caibConstantes.OFICINA);
