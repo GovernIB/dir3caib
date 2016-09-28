@@ -249,7 +249,7 @@ public class ImportadorUnidadesBean implements ImportadorUnidadesLocal {
             CSVReader reader = null;
 
             log.info("");
-            log.info("Fichero: " + fichero);
+            log.info("Inicio fichero: " + fichero);
             log.info("------------------------------------");
             try {
                 // Obtenemos el fichero del sistema de archivos

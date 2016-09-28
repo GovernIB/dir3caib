@@ -333,7 +333,7 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
             CSVReader reader = null;
 
             log.info("");
-            log.info("Fichero: " + fichero);
+            log.info("Inicio fichero: " + fichero);
             log.info("------------------------------------");
 
 
@@ -798,7 +798,7 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
 
                                     c++;
                                     if (c % 100 == 0) {
-                                        log.info("   RelacionesSIROFI:  (" + c + ") "
+                                        log.info("Procesades RelacionesSIROFI:  (" + c + ") "
                                                 + " en " + Utils.formatElapsedTime(System.currentTimeMillis() - s));
 
                                         log.debug("           * Time FIND = " + Utils.formatElapsedTime(findby));
@@ -1039,7 +1039,7 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
             zis.closeEntry();
             zis.close();
 
-
+            log.info("Fin descarga de oficinas directorio común");
             return resp;
         } catch (Exception e) {
             descargaEjb.remove(descarga);

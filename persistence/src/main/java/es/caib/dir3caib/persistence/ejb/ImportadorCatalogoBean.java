@@ -96,33 +96,6 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
     protected DescargaLocal descargaEjb;
 
 
-
-  /*
-  public static void main(String[] args) {
-    
-    try {
-      
-
-    
-    String path ="D:\\dades\\dades\\CarpetesPersonals\\Programacio\\Dir3Caib-Files\\archivos\\catalogos\\CAT_COMUNIDAD_AUTONOMA.CSV";
-    FileInputStream is1 = new FileInputStream(path);
-    
-    BufferedReader is = new BufferedReader(new InputStreamReader(is1, "UTF-8"));
-    
-    int c;
-    
-    while ((c = is.read()) != -1) {
-      System.out.print((char)c);
-    }
-    
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    
-  }
-  */
-
-
     /**
      * Método que importa el contenido de los archivos del catálogo  descargados previamente a través
      * de los WS.
@@ -789,7 +762,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
             descarga.setFechaFin(hoy);
         }
 
-        log.info("DESCARGA FECHA INICIO " + descarga.getFechaInicio());
+        log.info("Inicio descarga de catalogo directorio común");
 
         // Guardamos la descarga porque emplearemos el identificador para el nombre del directorio y el archivo.
         descarga = descargaEjb.persist(descarga);
@@ -877,6 +850,8 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
             }
             zis.closeEntry();
             zis.close();
+
+            log.info("Fin descarga de catalogo directorio comun");
 
             return resp;
         } catch (Exception e) {
