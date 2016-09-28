@@ -186,7 +186,7 @@ public class ImportadorUnidadesBean implements ImportadorUnidadesLocal {
         for (CatIsla ca : catIslaEjb.getAll()) {
             cacheIsla.put(ca.getCodigoIsla(), ca);
         }
-        log.info(" Islas : " + cacheIsla.size());
+        log.debug(" Islas : " + cacheIsla.size());
 
 
         Map<String, CatEntidadGeografica> cacheEntidadGeografica = new TreeMap<String, CatEntidadGeografica>();
@@ -198,7 +198,7 @@ public class ImportadorUnidadesBean implements ImportadorUnidadesLocal {
         for (CatComunidadAutonoma ca : catComunidadAutonomaEjb.getAll()) {
             cacheComunidadAutonoma.put(ca.getCodigoComunidad(), ca);
         }
-        log.info(" Comunidad Autonoma : " + cacheComunidadAutonoma.size());
+        log.debug(" Comunidad Autonoma : " + cacheComunidadAutonoma.size());
 
 
         Map<CatAmbitoTerritorialPK, CatAmbitoTerritorial> cacheAmbitoTerritorial = new HashMap<CatAmbitoTerritorialPK, CatAmbitoTerritorial>();
@@ -667,11 +667,11 @@ public class ImportadorUnidadesBean implements ImportadorUnidadesLocal {
                                 log.info("Procesades 500 Unidades (" + (count - 500) + " - " + count
                                         + ") en " + Utils.formatElapsedTime(end - start));
 
-                                log.info("   findbyid: " + Utils.formatElapsedTime(findbyid));
-                                log.info("findbyidcount: " + findbyidcount);
-                                log.info("   caches  : " + Utils.formatElapsedTime(caches));
-                                log.info("   merge   : " + Utils.formatElapsedTime(merge));
-                                log.info("   persist : " + Utils.formatElapsedTime(persist));
+                                log.debug("   findbyid: " + Utils.formatElapsedTime(findbyid));
+                                log.debug("findbyidcount: " + findbyidcount);
+                                log.debug("   caches  : " + Utils.formatElapsedTime(caches));
+                                log.debug("   merge   : " + Utils.formatElapsedTime(merge));
+                                log.debug("   persist : " + Utils.formatElapsedTime(persist));
 
 
                                 start = end;
