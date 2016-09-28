@@ -53,17 +53,17 @@ public class PrincipalController extends BaseController {
 
     @ModelAttribute("ultimaDescargaCatalogo")
     public Descarga ultimaDescargaCatalogo() throws Exception {
-        return descargaEjb.ultimaDescarga(Dir3caibConstantes.CATALOGO);
+        return descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.CATALOGO);
     }
 
     @ModelAttribute("ultimaDescargaUnidad")
     public Descarga ultimaDescargaUnidad() throws Exception {
-        return descargaEjb.ultimaDescarga(Dir3caibConstantes.UNIDAD);
+        return descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.UNIDAD);
     }
 
     @ModelAttribute("ultimaDescargaOficina")
     public Descarga ultimaDescargaOficina() throws Exception {
-        return descargaEjb.ultimaDescarga(Dir3caibConstantes.OFICINA);
+        return descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.OFICINA);
     }
 
 }

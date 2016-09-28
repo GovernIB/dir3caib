@@ -341,6 +341,9 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
          log.info("");
          log.info("Fichero: " + fichero);
          log.info("------------------------------------");
+
+
+         Thread.sleep(240000); // Esperamos 4 minutos para provocar error de importación
          try {
             // Obtenemos el fichero del sistema de archivos
            FileInputStream is1 = new FileInputStream(new File(Configuracio.getOficinasPath(descarga.getCodigo()),fichero));
@@ -565,6 +568,7 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                       }
                     }
                 }
+
 
                 // CONTACTOS
                if(Dir3caibConstantes.OFI_CONTACTO_OFI.equals(nombreFichero)){
@@ -887,11 +891,11 @@ public class ImportadorOficinasBean  implements ImportadorOficinasLocal {
                  }
             }
         }
+         if (procesados.size() > 0) {
+             descarga.setFechaImportacion(hoy);
+             descargaEjb.merge(descarga);
 
-        descarga.setFechaImportacion(hoy);
-        descargaEjb.merge(descarga);
-
-        
+         }
         results.setDescarga(descarga);
 
      }

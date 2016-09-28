@@ -730,11 +730,13 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
     }
     
     // Guardamos fecha Importacion y tipo
-    descarga.setFechaImportacion(hoy);
-    descargaEjb.merge(descarga);
+      if (procesados.size() > 0) {
+          descarga.setFechaImportacion(hoy);
+          descargaEjb.merge(descarga);
+      }
 
 
-    results.setDescarga(descarga);
+      results.setDescarga(descarga);
     results.setExistentes(existentes);
     
     System.gc();
