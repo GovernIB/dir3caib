@@ -730,11 +730,6 @@ public class  ImportadorUnidadesBean implements  ImportadorUnidadesLocal {
     }
     
     // Guardamos fecha Importacion y tipo
-
-    if (descarga == null) {
-      descarga = new Descarga();
-      descarga.setTipo(Dir3caibConstantes.UNIDAD);
-    }
     descarga.setFechaImportacion(hoy);
     descargaEjb.merge(descarga);
 
