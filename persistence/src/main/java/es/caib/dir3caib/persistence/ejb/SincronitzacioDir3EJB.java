@@ -131,7 +131,7 @@ public class SincronitzacioDir3EJB  implements SincronitzacioDir3Local {
     }
 }
 
-
+  @TransactionTimeout(value = 18000)
   public void sincronitzar()  {
     
     log.info("Entra dins el metode sincronitzar() de SincronitzacioDir3EJB");
