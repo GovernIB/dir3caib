@@ -193,12 +193,19 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     public List<Unidad> getListByIds(List<String> ids) throws Exception {
 
 
-        Query q = em.createQuery("Select unidad from Unidad as unidad "
+        Query q = em.createQuery("Select unidad.codigo from Unidad as unidad "
                 + " where unidad.codigo in (:theids) order by unidad.codigo");
 
         q.setParameter("theids", ids);
 
-        return q.getResultList();
+        List<Unidad> unidades = new ArrayList<Unidad>();
+        List<?> result = q.getResultList();
+
+        for (Object object : result) {
+            unidades.add(new Unidad((String) object));
+        }
+
+        return unidades;
     }
 
 
