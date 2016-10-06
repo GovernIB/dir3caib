@@ -7,12 +7,12 @@
     <parent>
         <groupId>es.caib.dir3caib</groupId>
         <artifactId>dir3caib</artifactId>
-        <version>1.0.5</version>
+        <version>1.0.6</version>
     </parent>
 
     <groupId>es.caib.dir3caib</groupId>
     <artifactId>dir3caib-back</artifactId>
-    <version>1.0.5</version>
+    <version>1.0.6</version>
     <packaging>war</packaging>
 
     <name>Dir3Caib - Back</name>
@@ -39,7 +39,7 @@
         <dependency>
 			<groupId>es.caib.dir3caib</groupId>
 			<artifactId>dir3caib-ws-dir3api</artifactId>
-            <version>1.0.5</version>
+            <version>1.0.6</version>
         </dependency>
 
 
