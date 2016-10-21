@@ -53,7 +53,7 @@ public class Dir3CaibObtenerUnidadesImpl implements Dir3CaibObtenerUnidadesWs {
   }
 
   /**
-   * Método que devuelve una UnidadTF( que se transfiere) a partir del código
+   * Método que devuelve una {@link es.caib.dir3caib.persistence.model.ws.UnidadTF} a partir del código
    * indicado y en función de la fecha de actualización
    * 
    * @param codigo
@@ -68,8 +68,11 @@ public class Dir3CaibObtenerUnidadesImpl implements Dir3CaibObtenerUnidadesWs {
   }
 
   /**
-   * Método que devuelve la lista de UnidadTF( que se transfiere) a partir del
-   * código indicado y en función de la fecha de actualización
+   * Método que devuelve la lista de {@link es.caib.dir3caib.persistence.model.ws.UnidadTF} a partir del
+   * código indicado y las fechas indicadas
+   * Si no se especifican fechas obtiene aquellas unidades que son vigentes.
+   * Si se especifica la fecha de actualización obtiene las unidades que han sufrido cambios entre esa fecha y la actual.
+   * La fecha de sincronización nos sirve para evitar traer unidades (extinguidas/anuladas) anteriores a esta fecha
    * 
    * @param codigo
    *          código de la unidad raiz
@@ -85,8 +88,9 @@ public class Dir3CaibObtenerUnidadesImpl implements Dir3CaibObtenerUnidadesWs {
   }
 
   /**
-   * Método que devuelve la lista de UnidadTF a partir del
-   * código indicado y que estan vigentes y tienen oficinas
+   * Método que devuelve la lista de {@link es.caib.dir3caib.persistence.model.ws.UnidadTF} a partir del
+   * código indicado y que estan vigentes y tienen oficinas. Método que emplea la aplicación SISTRA para
+   * saber donde enviar un registro telemático.
    *
    * @param codigo
    *          código de la unidad raiz
@@ -100,7 +104,7 @@ public class Dir3CaibObtenerUnidadesImpl implements Dir3CaibObtenerUnidadesWs {
   }
 
   /**
-   * Obtiene la fecha en la que se actualizaron las unidades de dir3caib
+   * Obtiene la fecha en la que se actualizaron por última vez las unidades
    * @return
    * @throws Exception
    */

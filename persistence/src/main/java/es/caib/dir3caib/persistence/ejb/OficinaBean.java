@@ -46,7 +46,13 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
         return em.find(Oficina.class, id);
     }
 
-
+    /**
+     * Obtiene una oficina con sus historicos y sus servicios
+     *
+     * @param id
+     * @return
+     * @throws Exception
+     */
     public Oficina findFullById(String id) throws Exception {
 
         Oficina oficina = em.find(Oficina.class, id);
@@ -59,6 +65,13 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
         return oficina;
     }
 
+    /**
+     * Obtiene una Oficina según su código y estado
+     * @param codigo
+     * @param estado
+     * @return
+     * @throws Exception
+     */
     public Oficina findById(String codigo, String estado) throws Exception{
 
         Query q = em.createQuery("Select oficina from Oficina as oficina where oficina.codigo=:codigo and oficina.estado.codigoEstadoEntidad =:estado");
@@ -75,7 +88,13 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
     }
 
-
+    /**
+     * Obtiene el codigo, la denominación, el estado, la tupla codigo-denominacion de la unidad raiz y la tupla codigo-denominacion de la oficina
+     * @param id
+     * @param estado
+     * @return
+     * @throws Exception
+     */
     public Nodo findOficina(String id, String estado) throws Exception {
 
         Query q = em.createQuery("Select oficina.codigo, oficina.denominacion, oficina.estado.descripcionEstadoEntidad, oficina.codUoResponsable.codUnidadRaiz.codigo, oficina.codUoResponsable.codUnidadRaiz.denominacion, oficina.codUoResponsable.codigo, oficina.codUoResponsable.denominacion  from Oficina as oficina where oficina.codigo=:id and oficina.estado.descripcionEstadoEntidad =:estado");
@@ -119,11 +138,19 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
         return q.getResultList();
     }
 
+    /**
+     * Elimina todos los registros de la tabla de históricos de oficinas
+     * @throws Exception
+     */
     public void deleteHistoricosOficina() throws Exception {
 
         em.createNativeQuery("delete from DIR_HISTORICOOFI").executeUpdate();
     }
 
+    /**
+     * Elimina todos los servicios de oficinas de la tabla de servicios.
+     * @throws Exception
+     */
     public void deleteServiciosOficina() throws Exception {
 
         em.createNativeQuery("delete from DIR_SERVICIOOFI").executeUpdate();
@@ -135,6 +162,18 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
     }
 
 
+    /**
+     * Realiza la búsqueda de oficinas en función de los criterios especificados
+     * @param pageNumber numero de pagina, para la paginación
+     * @param codigo código de la oficina
+     * @param denominacion denominacion de la oficina
+     * @param codigoNivelAdministracion codigo del nivel de administración
+     * @param codComunidad codigo de la comunidad  a la que pertenece.
+     * @param codigoProvincia codigo de la provincia a la que pertenece.
+     * @param codigoEstado codigo de estado (vigente, anulado)
+     * @return
+     * @throws Exception
+     */
     @Override
     public Paginacion busqueda(Integer pageNumber, String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, Long codigoProvincia, String codigoEstado) throws Exception {
 
@@ -213,6 +252,11 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
     }
 
+    /**
+     * Método que comprueba si una oficina tiene más oficinas hijas
+     *
+     * @param codigo código de la oficina
+     */
     @Override
     public Boolean tieneHijos(String codigo) throws Exception {
 
@@ -225,7 +269,14 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
         return hijos.size() > 0;
     }
 
-
+    /**
+     * Metodo que obtiene los hijos de primer nivel de una oficina en funcion del estado del padre.
+     * Se emplea para pintar el árbol de oficinas
+     *
+     * @param codigo identificador de la oficina padre.
+     * @param estado estado de la oficina padre.
+     * @return {@link es.caib.dir3caib.persistence.utils.Nodo}
+     */
     @Override
     public List<Nodo> hijos(String codigo, String estado) throws Exception {
 
@@ -357,7 +408,14 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
     }
 
-
+    /**
+     * Obtiene el listado de oficinas Sir de una Unidad
+     * para ello consulta la relacionSirOfi y además que tengan los servicios SIR y SIR_RECEPCION y que sean vigentes.
+     *
+     * @param codigo
+     *          Código de la unidad
+     *
+     */
     @Override
     @SuppressWarnings(value = "unchecked")
     public List<Oficina> obtenerOficinasSIRUnidad(String codigo) throws Exception {
@@ -454,16 +512,30 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
         return false;
     }
 
-
+    /**
+     * Este método mira si la unidad del código especificado tiene oficinas donde registrar.
+     * Para ello comprueba si es unidadResponsable de alguna oficina y después mira si tiene relacionesOrganizativas con oficinas.
+     * Es además recursivo, así que lo mira hasta el último nivel del organigrama.
+     * @param codigo de la unidad
+     * @return
+     * @throws Exception
+     */
     @Override
     public Boolean tieneOficinasArbol(String codigo) throws Exception {
 
-        Query q = em.createQuery("Select oficina from Oficina as oficina where oficina.codUoResponsable.codigo =:codigo and oficina.estado.codigoEstadoEntidad=:vigente order by oficina.codigo");
+        Query q = em.createQuery("Select oficina.codigo from Oficina as oficina where oficina.codUoResponsable.codigo =:codigo and oficina.estado.codigoEstadoEntidad=:vigente order by oficina.codigo");
 
         q.setParameter("codigo", codigo);
         q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
-        List<Oficina> oficinas = q.getResultList();
+        //transformamos los resultados de la query en Oficinas
+        List<Oficina> oficinas = new ArrayList<Oficina>();
+        List<?> result = q.getResultList();
+
+        for (Object object : result) {
+            oficinas.add(new Oficina((String) object));
+        }
+
         log.info("OFICINAS" + oficinas.size() + " DE " + codigo);
         if (oficinas.size() > 0) {
             return true;
@@ -477,11 +549,18 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
                 return true;
             } else {// no tiene oficinas, miramos sus hijos
                 log.info("Entramos aquí");
-                Query q2 = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:estado order by unidad.codigo");
+                Query q2 = em.createQuery("Select unidad.codigo from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:estado order by unidad.codigo");
 
                 q2.setParameter("codigo", codigo);
                 q2.setParameter("estado", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-                List<Unidad> hijos = q2.getResultList();
+
+                //Transformamos el resultado de la query en Unidades
+                List<Unidad> hijos = new ArrayList<Unidad>();
+                List<?> resulthijos = q2.getResultList();
+                for (Object object : resulthijos) {
+                    hijos.add(new Unidad((String) object));
+                }
+
                 log.info("HIJOS  " + hijos.size());
                 for (Unidad hijo : hijos) {
                     boolean tiene = tieneOficinasArbol(hijo.getCodigo());
@@ -495,7 +574,11 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
         return false;
     }
 
-
+    /**
+     * Método que obtiene todos los códigos de las oficinas que hay en dir3caib.
+     * @return
+     * @throws Exception
+     */
     @Override
     public List<String> getAllCodigos() throws Exception {
 
@@ -506,8 +589,9 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
 
     /**
-     * Se mira que si la oficina,  su fecha de extinción y anulacion son posteriores
+     * Método que mira si la oficina,  su fecha de extinción y anulacion son posteriores
      * a la fecha de la primera sincronizacion con regweb. Así evitamos enviar relaciones antiguas extinguidas o anuladas
+     * anterior a la fecha de sincronización con regweb3.
      *
      * @param oficina     oficina
      * @param fechaSincro fecha de la primera sincronizacion con regweb
@@ -539,7 +623,11 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
     }
 
     /**
-     * Obtiene las oficinas que dependen directamente de la unidad
+     * Obtiene las oficinas que dependen directamente de la unidad, es decir cuya unidad responsable es la del codigo
+     * indicado y del estado indicado por estado. Se emplea para pintar el árbol de unidades con sus oficinas
+     *
+     * @param codigo codigo de la unidad
+     * @param estado estado de las oficinas
      *
      * @return {@link es.caib.dir3caib.persistence.utils.Nodo}
      */
@@ -557,8 +645,11 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
     }
 
     /**
-     * Obtiene las oficinas auxiliares de un Oficina padre.
+     * Obtiene las oficinas auxiliares de un Oficina padre, es decir aquellas que dependen de la oficina del código
+     * especificado y del estado especificado.Se emplea para pintar el árbol de unidades con sus oficinas
      *
+     * @param codigo código de la oficina
+     * @param estado estado de la oficina
      * @return {@link es.caib.dir3caib.persistence.utils.Nodo}
      */
     @Override

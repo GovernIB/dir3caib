@@ -74,8 +74,8 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
 
 
     /**
-     * Obtiene el codigo, la denominación, el estado, la tupla codigo-denominacion de la unidad raiz y de la unidad responsable
-     * de la oficina.
+     * Obtiene el codigo, la denominación, el estado, la tupla codigo-denominacion de la unidad raiz y la tupla codigo-denominacion de la unidad responsable
+     * de la oficina. Se emplea para pintar el árbol de oficinas
      * @param id
      * @param estado
      * @return
@@ -113,17 +113,19 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
                                                   Date fechaSincronizacion) throws Exception;
 
     /**
-     * Obtiene las oficinas SIR de una unidad que están vigentes
+     * Obtiene el listado de oficinas Sir de una Unidad
+     * para ello consulta la relacionSirOfi y además que tengan los servicios SIR y SIR_RECEPCION y que sean vigentes.
      *
-     * @param codigo código de la Unidad
-     * @return listado de Oficinas
-     * @throws Exception
+     * @param codigo
+     *          Código de la unidad
+     *
      */
-    //TODO falta mirar los servicios de las oficinas para ver si estan integradas en sir de envio o recepción o ambos
     public List<Oficina> obtenerOficinasSIRUnidad(String codigo) throws Exception;
 
     /**
-     * Método que comprueba si el arbol de unidades del código indicado  tiene oficinas donde registrar
+     * Este método mira si la unidad del código especificado tiene oficinas donde registrar.
+     * Para ello comprueba si es unidadResponsable de alguna oficina y después mira si tiene relacionesOrganizativas con oficinas.
+     * Es además recursivo, así que lo mira hasta el último nivel del organigrama.
      * @param codigo de la unidad
      * @return
      * @throws Exception
@@ -138,17 +140,22 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
     public List<String> getAllCodigos() throws Exception;
 
     /**
-     * Obtiene las oficinas que dependen directamente de la unidad
-     * @param codigo código de la unidad
-     * @param estado
+     * Obtiene las oficinas que dependen directamente de la unidad, es decir cuya unidad responsable es la del codigo
+     * indicado y del estado indicado por estado. Se emplea para pintar el árbol de unidades con sus oficinas
+     *
+     * @param codigo codigo de la unidad
+     * @param estado estado de las oficinas
+     *
      * @return {@link es.caib.dir3caib.persistence.utils.Nodo}
      */
     public List<Nodo> oficinasDependientes(String codigo, String estado) throws Exception;
 
     /**
-     * Obtiene las oficinas auxiliares de un Oficina padre.
+     * Obtiene las oficinas auxiliares de un Oficina padre, es decir aquellas que dependen de la oficina del código
+     * especificado y del estado especificado.Se emplea para pintar el árbol de unidades con sus oficinas
+     *
      * @param codigo código de la oficina
-     * @param estado
+     * @param estado estado de la oficina
      * @return {@link es.caib.dir3caib.persistence.utils.Nodo}
      */
     public List<Nodo> oficinasAuxiliares(String codigo, String estado) throws Exception;

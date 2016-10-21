@@ -23,6 +23,7 @@ import java.util.List;
 
 /**
  * Created by Fundació BIT.
+ * Interface que define los métodos necesarios para exportar los datos del catálogo de dir3caib
  *
  * @author earrivi
  * @author anadal (seguretat)

@@ -298,12 +298,27 @@ public class UnidadTF {
 
     }
 
+    public void rellenarLigero(Unidad unidad) {
+        this.setCodigo(unidad.getCodigo());
+        this.setDenominacion(unidad.getDenominacion());
+    }
+
 
     public static UnidadTF generar(Unidad unidad){
         UnidadTF unidadTF = null;
         if(unidad!=null){
             unidadTF = new UnidadTF();
             unidadTF.rellenar(unidad);
+        }
+
+        return unidadTF;
+    }
+
+    public static UnidadTF generarLigero(Unidad unidad) {
+        UnidadTF unidadTF = null;
+        if (unidad != null) {
+            unidadTF = new UnidadTF();
+            unidadTF.rellenarLigero(unidad);
         }
 
         return unidadTF;

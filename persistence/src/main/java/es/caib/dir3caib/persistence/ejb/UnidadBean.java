@@ -47,6 +47,13 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         return em.find(Unidad.class, id);
     }
 
+    /**
+     * Obtiene una unidad que es vigente con sus historicosUO
+     *
+     * @param id
+     * @return
+     * @throws Exception
+     */
     @Override
     public Unidad findConHistoricosVigente(String id) throws Exception {
         Query q = em.createQuery("select unidad from Unidad as unidad where unidad.codigo=:id and unidad.estado.codigoEstadoEntidad=:vigente");
@@ -67,7 +74,14 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         return unidad;
     }
 
-
+    /**
+     * Método que busca la unidad con id indicado y estado indicado
+     *
+     * @param id
+     * @param estado
+     * @return
+     * @throws Exception
+     */
     public Unidad findUnidadEstado(String id, String estado) throws Exception {
         Query q = em.createQuery("select unidad from Unidad as unidad where unidad.codigo=:id and unidad.estado.codigoEstadoEntidad=:estado");
         q.setParameter("id", id);
@@ -82,7 +96,13 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         }
     }
 
-
+    /**
+     * Obtiene el codigo, la denominación, el estado, la tupla codigo-denominacion de la unidad raiz y la tupla codigo-denominacion de la unidad.
+     * Se emplea para mostrar el arbol de unidades.
+     * @param id     identificador de la unidad
+     * @param estado estado de la unidad
+     * @return {@link es.caib.dir3caib.persistence.utils.Nodo}
+     */
     @Override
     public Nodo findUnidad(String id, String estado) throws Exception {
 
@@ -101,7 +121,17 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
     }
 
-
+    /**
+     * Obtiene si una unidad ha sido actualizada con fecha posterior a la fecha de actualización.
+     * Para ello mira si la fecha de importación de la unidad es posterior a la fecha de actualización indicada.
+     * La fecha de importación de la unidad se actualiza cada vez que se sincroniza con directorio común.
+     *
+     * Se usa para la sincronizacion con regweb3
+     * @param id
+     * @param fechaActualizacion
+     * @return
+     * @throws Exception
+     */
     @Override
     public Unidad findUnidadActualizada(String id, Date fechaActualizacion) throws Exception {
         Query q = em.createQuery("Select unidad from Unidad as unidad where unidad.codigo =:id " +
@@ -119,6 +149,13 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
     }
 
+
+    /**
+     * Obtiene solo el código de la unidad indicada
+     * @param codigo
+     * @return
+     * @throws Exception
+     */
     @Override
     public Unidad obtenerUnidad(String codigo) throws Exception {
         Query q = em.createQuery("select unidad.codigo from Unidad as unidad where unidad.codigo=:codigo ");
@@ -154,6 +191,11 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
     }
 
+    /**
+     * Obtiene una lista de unidades paginada desde un valor inicial y de la longitud base que establece dir3caib
+     * @return
+     * @throws Exception
+     */
     @Override
     public List<Unidad> getPagination(int inicio) throws Exception {
 
@@ -164,6 +206,13 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         return q.getResultList();
     }
 
+    /**
+     * Obtiene una lista de unidades paginada desde un valor inicial y de una longitud determinada
+     * @param startItem valor inicial
+     * @param numberOfItems longitud de la lista
+     * @return
+     * @throws Exception
+     */
     @Override
     public List<Unidad> getPagination(int startItem, int numberOfItems) throws Exception {
 
@@ -174,6 +223,13 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         return q.getResultList();
     }
 
+    /**
+     * Obtiene la Denominacion de una Unidad
+     *
+     * @param codigo
+     * @return
+     * @throws Exception
+     */
     @Override
     public String unidadDenominacion(String codigo) throws Exception {
 
@@ -188,7 +244,13 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         }
     }
 
-
+    /**
+     * Devuelve todas las unidades de la lista de ids indicados. Se emplea para montar la cache de unidades
+     * en la importación de unidades desde Madrid
+     * @param ids
+     * @return
+     * @throws Exception
+     */
     @Override
     public List<Unidad> getListByIds(List<String> ids) throws Exception {
 
@@ -208,7 +270,10 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         return unidades;
     }
 
-
+    /**
+     * Borra todos los historicos de las unidades
+     * @throws Exception
+     */
     public void deleteHistoricosUnidad() throws Exception {
 
         em.createNativeQuery("delete from DIR_HISTORICOUO").executeUpdate();
@@ -221,6 +286,19 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     }
 
 
+    /**
+     * Realiza una busqueda de {@link es.caib.dir3caib.persistence.model.Unidad} según los parámetros
+     * @param pageNumber
+     * @param codigo
+     * @param denominacion
+     * @param codigoNivelAdministracion
+     * @param codAmbitoTerritorial
+     * @param codComunidad
+     * @param codigoProvincia
+     * @param codigoEstado
+     * @return
+     * @throws Exception
+     */
     @Override
     public Paginacion busqueda(Integer pageNumber, String codigo, String denominacion, Long codigoNivelAdministracion, String codAmbitoTerritorial, Long codComunidad, Long codigoProvincia, Boolean unidadRaiz, String codigoEstado) throws Exception {
 
@@ -308,6 +386,14 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
     }
 
+
+    /**
+     * Obtiene una unidad por su denominación
+     *
+     * @param denominacion
+     * @return
+     * @throws Exception
+     */
     @Override
     public List<Unidad> findByDenominacion(String denominacion) throws Exception {
 
@@ -318,6 +404,14 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         return q.getResultList();
     }
 
+    /**
+     * Obtiene el arbol de una Unidad, pero solo los códigos
+     * Se emplea en el método de obtenerArbolOficinas.
+     *
+     * @param codigo
+     * @return
+     * @throws Exception
+     */
     @Override
     public List<Unidad> obtenerArbol(String codigo) throws Exception {
 
@@ -334,6 +428,12 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     }
 
 
+    /**
+     * Método que comprueba si una unidad tiene más unidades hijas
+     * @param codigo
+     * @return
+     * @throws Exception
+     */
     @Override
     public Boolean tieneHijos(String codigo) throws Exception {
 
@@ -347,8 +447,15 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     }
 
 
+    /**
+     * Método que obtiene los hijos de primer nivel de una unidad en función del estado de la unidad padre
+     * Se emplea para pintar el árbol de Unidades.
+     * @param codigo identificador de la unidad padre.
+     * @param estado estado de la unidad padre.
+     * @return  {@link es.caib.dir3caib.persistence.utils.Nodo}
+     */
     @Override
-    public List<Nodo> hijosOB(String codigo, String estado) throws Exception {
+    public List<Nodo> hijos(String codigo, String estado) throws Exception {
 
         Query q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.estado.descripcionEstadoEntidad,unidad.codUnidadRaiz.codigo, unidad.codUnidadRaiz.denominacion, unidad.codUnidadSuperior.codigo, unidad.codUnidadSuperior.denominacion from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.descripcionEstadoEntidad =:estado order by unidad.codigo");
 
@@ -358,7 +465,11 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         return NodoUtils.getNodoList(q.getResultList());
     }
 
-
+    /**
+     * Método que obtiene los codigos de los hijos vigentes de primer nivel de una unidad
+     * @param codigo identificador de la unidad padre.
+     * @return  {@link es.caib.dir3caib.persistence.model.Unidad}
+     */
     @Override
     public List<Unidad> hijosPrimerNivel(String codigo) throws Exception {
 
@@ -379,16 +490,37 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         return unidades;
     }
 
+    /**
+     * Método recursivo que obtiene los hijos de las unidades indicadas  en función del estado indicado y el resultado lo guarda en la variable hijosTotales
+     * Se emplea en el mètodo obtenerArbolUnidadesDestinatarias
+     *
+     * @param unidadesPadres unidadesPadres de las que obtener hijos
+     * @param estado indica el estado de los hijos
+     * @param hijosTotales lista con todos los hijos encontrados de manera recursiva.
+     *
+     * @return  {@link es.caib.dir3caib.persistence.model.Unidad}
+     */
     @Override
     public void arbolHijos(Set<Unidad> unidadesPadres, String estado, Set<Unidad> hijosTotales) throws Exception {
         for (Unidad unidad : unidadesPadres) {
-            Query q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.descripcionEstadoEntidad =:estado order by unidad.codigo");
+
+            Query q = em.createQuery("select unidad.codigo, unidad.denominacion from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:estado order by unidad.codigo");
 
             q.setParameter("codigo", unidad.getCodigo());
             q.setParameter("estado", estado);
 
-            Set<Unidad> hijos = new HashSet<Unidad>(q.getResultList());
-            log.info("Hijos encontrados de UNIDAD:  " + unidad.getCodigo());
+
+            Set<Unidad> hijos = new HashSet<Unidad>();
+
+            List<Object[]> result = q.getResultList();
+            log.info("RESULT LIST " + result.size());
+
+            for (Object[] object : result) {
+                hijos.add(new Unidad((String) object[0], (String) object[1]));
+            }
+
+
+            log.info(hijos.size() + "Hijos encontrados de UNIDAD:  " + unidad.getCodigo());
             hijosTotales.addAll(hijos);
 
             //llamada recursiva para todos los hijos
@@ -397,9 +529,22 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
     }
 
+    /**
+     * Método recursivo que devuelve el árbol de unidades de la unidad indicada por código,
+     * teniendo en cuenta la fecha de la ultima actualización de regweb para el caso en que la unidad indicada no es raíz.
+     * Se emplea para la sincronizacion y actualización con regweb
+     * @param codigo
+     * @param fechaActualizacion
+     * @param fechaSincronizacion
+     * @return
+     * @throws Exception
+     */
     @Override
     public List<Unidad> obtenerArbolUnidadesUnidadNoRaiz(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
         //log.info("obtenerArbolUnidades del código: " + codigo);
+
+        // Este método es recursivo, ya que la query se basa en el organismo superior y se hace necesario hacerlo
+        // de forma recursiva  para poder descender hasta el último nivel, ya que la unidad indicada no es raiz.
 
         Query q;
         Query qHijos;
@@ -407,7 +552,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         if (fechaActualizacion == null) { // Es una sincronizacion, solo traemos vigentes
             q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.nivelJerarquico");
             q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-        } else {// es una actualizacion, lo traemos todo
+        } else {// es una actualizacion, traemos todo lo actualizado
 
             q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo  " +
                     "and :fechaActualizacion < unidad.fechaImportacion " +
@@ -456,6 +601,17 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         return listaCompleta;
     }
 
+    /**
+     * Método que devuelve el árbol de unidades de la unidad indicada por codigo,
+     * teniendo en cuenta la fecha de la ultima actualización de regweb y se emplea para el caso que la unidad indicada es raíz.
+     * Se emplea para la sincronizacion y actualización con regweb
+     *
+     * @param codigo
+     * @param fechaActualizacion
+     * @param fechaSincronizacion
+     * @return
+     * @throws Exception
+     */
     @Override
     public List<Unidad> obtenerArbolUnidadesUnidadRaiz(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
 
@@ -509,32 +665,51 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         }
     }
 
+    /**
+     * Método que devuelve la unidad indicada por código siempre que esté vigente y tenga oficinas donde registrar.
+     * A partir de ella se obtienen todos sus hijos vigentes.
+     * solicitado por SISTRA
+     * @param codigo código de la unidad raiz de la que partimos.
+     * @return
+     * @throws Exception
+     */
     @Override
     public List<Unidad> obtenerArbolUnidadesDestinatarias(String codigo) throws Exception {
 
-        Query q = em.createQuery("Select unidad from Unidad as unidad where unidad.codigo =:codigo and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.codigo");
+        Query q = em.createQuery("Select unidad.codigo, unidad.denominacion from Unidad as unidad where unidad.codigo =:codigo and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.codigo");
         q.setParameter("codigo", codigo);
         q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
-        List<Unidad> unidades = q.getResultList();
-        Unidad unidadPadre = null;
+
+        // Transformamos a Unidades
+        List<Unidad> unidades = new ArrayList<Unidad>();
+        List<Object[]> result = q.getResultList();
+
+        for (Object[] object : result) {
+            unidades.add(new Unidad((String) object[0], (String) object[1]));
+        }
+
+        Unidad unidadRaiz = null;
+        //Lista con el resultado final de unidades destinatarias
         List<Unidad> unidadesDestConOficinas = new ArrayList<Unidad>();
         if (unidades.size() > 0) {
-            unidadPadre = unidades.get(0);
-            log.info("UNIDAD ENCONTRADA " + unidadPadre.getCodigo());
+            unidadRaiz = unidades.get(0);
+            log.info("UNIDAD ENCONTRADA " + unidadRaiz.getCodigo());
 
             //Miramos si la unidad que nos pasan tiene oficina
-            Boolean tiene = oficinaEjb.tieneOficinasArbol(unidadPadre.getCodigo());
+            Boolean tiene = oficinaEjb.tieneOficinasArbol(unidadRaiz.getCodigo());
 
             if (tiene) {
-            unidadesDestConOficinas.add(unidadPadre);
-            Set<Unidad> padres = new HashSet<Unidad>();
-            padres.add(unidadPadre);
-            Set<Unidad> unidadesTotales = new HashSet<Unidad>();
-            //Obtenemos de manera recursiva todos los hijos de la unidad que nos indican
-            arbolHijos(padres, Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE, unidadesTotales);
+                unidadesDestConOficinas.add(unidadRaiz);
+                Set<Unidad> unidadesRaices = new HashSet<Unidad>();
+                //añadimos la unidad raiz porque tiene oficina
+                unidadesRaices.add(unidadRaiz);
+                //Aqui guardamos todas las unidades hijas que vamos a obtener de la unidad indicada
+                Set<Unidad> unidadesHijasTotales = new HashSet<Unidad>();
+                //Obtenemos de manera recursiva todos los hijos de la unidad que nos indican
+                arbolHijos(unidadesRaices, Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE, unidadesHijasTotales);
 
-            unidadesDestConOficinas.addAll(unidadesTotales);
+                unidadesDestConOficinas.addAll(unidadesHijasTotales);
             }
 
         }
@@ -542,6 +717,14 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         return unidadesDestConOficinas;
     }
 
+    /**
+     * Obtiene el código de todas las Unidades hijas de la unidad raiz indicada por código
+     * y que tienen una oficina que cuelga de ellas
+     *
+     * @param codigo
+     * @return
+     * @throws Exception
+     */
     public List<Unidad> obtenerUnidadesConOficina(String codigo) throws Exception {
 
         Query q = em.createQuery("Select unidad.codigo from Unidad as unidad, Oficina as oficina " +

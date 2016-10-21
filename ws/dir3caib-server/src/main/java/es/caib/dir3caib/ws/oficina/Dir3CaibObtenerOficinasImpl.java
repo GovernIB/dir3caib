@@ -54,7 +54,7 @@ public class Dir3CaibObtenerOficinasImpl /* extends CommonMethodsImpl */implemen
   }
 
   /**
-   * Obtiene los datos de una oficina(OficinaTF) en función del codigo y la
+   * Obtiene los datos de una {@link es.caib.dir3caib.persistence.model.ws.OficinaTF}  en función del codigo y la
    * fecha de actualización. Si la fecha de actualización es inferior a la de
    * importación con Madrid se supone que no ha cambiado y se envia null
    * 
@@ -70,20 +70,20 @@ public class Dir3CaibObtenerOficinasImpl /* extends CommonMethodsImpl */implemen
   }
 
   /**
-   * Obtiene el arbol de oficinas que dependen de un organismo.Solo se envian
-   * aquellas que han sido actualizadas.
-   * 
-   * @param codigo
-   *          Código del organismo
-   * @param fechaActualizacion
-   *          fecha en la que se realiza la actualizacion.
+   *
+   * Obtiene todas las {@link es.caib.dir3caib.persistence.model.ws.OficinaTF} cuyo organismo responsable es el indicado por código(son todas padres e hijas).Solo se envian aquellas
+   * que han sido actualizadas controlando que la unidad del código que nos pasan se haya podido actualizar también.
+   * Esto es debido a que cuando en Madrid actualizan una unidad la tendencia es extinguirla y crear una nueva con código diferente.
+   * Esto hace que se tengan que traer las oficinas de la vieja y de la nueva.
+   *
+   * @param codigo             Código del organismo
+   * @param fechaActualizacion fecha en la que se realiza la actualizacion.
    */
   @Override
   public List<OficinaTF> obtenerArbolOficinas(String codigo, Date fechaActualizacion, Date fechaSincronizacion)
       throws Exception {
 
-    //return obtenerOficinasEjb.obtenerArbolOficinas(codigo, fechaActualizacion, fechaSincronizacion);
-    return obtenerOficinasEjb.obtenerArbolOficinas2(codigo, fechaActualizacion, fechaSincronizacion);
+    return obtenerOficinasEjb.obtenerArbolOficinas(codigo, fechaActualizacion, fechaSincronizacion);
   }
 
   /**
@@ -100,7 +100,7 @@ public class Dir3CaibObtenerOficinasImpl /* extends CommonMethodsImpl */implemen
   }
 
   /**
-   * Obtiene la fecha en la que se actualizaron las unidades de dir3caib
+   * Obtiene la fecha en la que se actualizaron por última vez las oficinas
    * @return
    * @throws Exception
    */

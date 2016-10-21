@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * Created by Fundació BIT.
+ * Interface que define los métodos para exportar la información de las unidades de dir3caib
  * 
  * @author earrivi
  * @author anadal (seguretat) Date: 12/02/14

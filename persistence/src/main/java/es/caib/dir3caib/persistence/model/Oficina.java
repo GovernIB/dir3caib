@@ -66,7 +66,11 @@ public class Oficina implements Serializable {
 
 	}
 
-	public void finalize() throws Throwable {
+  public Oficina(String codigo) {
+    this.codigo = codigo;
+  }
+
+  public void finalize() throws Throwable {
 
 	}
 

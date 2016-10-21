@@ -19,25 +19,26 @@ import java.util.Set;
 public interface UnidadLocal extends BaseEjb<Unidad, String> {
 
 
-
- /**
-  * Borra todas las unidades
-  *
-  * @throws Exception
-  */
+    /**
+     * Borra todas las unidades
+     *
+     * @throws Exception
+     */
     public void deleteAll() throws Exception;
 
- /**
-  * Borra todos los historicos de las unidades
-  * @throws Exception
-  */
+    /**
+     * Borra todos los historicos de las unidades
+     * @throws Exception
+    */
     public void deleteHistoricosUnidad() throws Exception;
 
 
     /**
      * Obtiene si una unidad ha sido actualizada con fecha posterior a la fecha de actualización.
-     * Se usa para la sincronizacion con regweb3
+     * Para ello mira si la fecha de importación de la unidad es posterior a la fecha de actualización indicada.
+     * La fecha de importación de la unidad se actualiza cada vez que se sincroniza con directorio común.
      *
+     * Se usa para la sincronizacion con regweb3
      * @param id
      * @param fechaActualizacion
      * @return
@@ -46,14 +47,14 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
     public Unidad findUnidadActualizada(String id, Date fechaActualizacion) throws Exception;
 
 
- /**
-  * Obtiene una unidad que es vigente con sus historicosUO
-  *
-  * @param id
-  * @return
-  * @throws Exception
-  */
- public Unidad findConHistoricosVigente(String id) throws Exception;
+    /**
+     * Obtiene una unidad que es vigente con sus historicosUO
+     *
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    public Unidad findConHistoricosVigente(String id) throws Exception;
 
     /**
      * Método que busca la unidad con id indicado y estado indicado
@@ -66,9 +67,9 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
     public Unidad findUnidadEstado(String id, String estado) throws Exception;
 
 
-
     /**
      * Realiza una busqueda de {@link es.caib.dir3caib.persistence.model.Unidad} según los parámetros
+     * Este método se emplea en la búsqueda de organismos destinatarios de regweb3
      * @param pageNumber
      * @param codigo
      * @param denominacion
@@ -79,21 +80,21 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @param codigoEstado
      * @return
      * @throws Exception
-     */
+    */
     public Paginacion busqueda(Integer pageNumber,String codigo, String denominacion,Long codigoNivelAdministracion,
                                String codAmbitoTerritorial, Long codComunidad, Long codigoProvincia, Boolean unidadRaiz, String codigoEstado) throws Exception;
 
- /**
-  * Método que devuelve el árbol de unidades de la unidad indicada por codigo,
-  * teniendo en cuenta la fecha de la ultima actualización de regweb para el caso en que la unidad indicada no es raiz.
-  * Se emplea para la sincronizacion y actualización con regweb
+    /**
+     * Método recursivo que devuelve el árbol de unidades de la unidad indicada por código,
+     * teniendo en cuenta la fecha de la ultima actualización de regweb para el caso en que la unidad indicada no es raiz.
+     * Se emplea para la sincronizacion y actualización con regweb
      * @param codigo
-  * @param fechaActualizacion
-  * @param fechaSincronizacion
+     * @param fechaActualizacion
+     * @param fechaSincronizacion
      * @return
      * @throws Exception
      */
- public List<Unidad> obtenerArbolUnidadesUnidadNoRaiz(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception;
+    public List<Unidad> obtenerArbolUnidadesUnidadNoRaiz(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception;
 
 
     /**
@@ -109,43 +110,42 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      */
     public List<Unidad> obtenerArbolUnidadesUnidadRaiz(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception;
 
- /**
-  * Método que devuelve la unidad indicada por código siempre que esté vigente y tenga oficinas donde registrar.
-  * A partir de ella se obtienen todos sus hijos vigentes.
-  * solicitado por SISTRA
-  * @param codigo código de la unidad raiz de la que partimos.
-  * @return
-  * @throws Exception
-     */
+    /**
+     * Método que devuelve la unidad indicada por código siempre que esté vigente y tenga oficinas donde registrar.
+     * A partir de ella se obtienen todos sus hijos vigentes.
+     * solicitado por SISTRA
+     * @param codigo código de la unidad raiz de la que partimos.
+     * @return
+     * @throws Exception
+    */
     public List<Unidad> obtenerArbolUnidadesDestinatarias(String codigo) throws Exception;
 
- /**
-  * Metodo que comprueba si una unidad tiene más unidades hijas
-  * @param codigo
-  * @return
-  * @throws Exception
-     */
+    /**
+     * Metodo que comprueba si una unidad tiene más unidades hijas
+     * @param codigo
+     * @return
+     * @throws Exception
+    */
     public Boolean tieneHijos(String codigo) throws Exception;
 
- /**
-  * Método que obtiene los hijos de primer nivel de una unidad en función del estado de la unidad padre
-  * @param codigo identificador de la unidad padre.
-  * @param estado estado de la unidad padre.
-  *
-  * @return  {@link es.caib.dir3caib.persistence.utils.Nodo}
+    /**
+     * Método que obtiene los hijos de primer nivel de una unidad en función del estado de la unidad padre
+     *
+     * @param codigo identificador de la unidad padre.
+     * @param estado estado de la unidad padre.
+     * @return {@link es.caib.dir3caib.persistence.utils.Nodo}
      */
- public List<Nodo> hijosOB(String codigo, String estado) throws Exception;
+    public List<Nodo> hijos(String codigo, String estado) throws Exception;
 
- /**
-  * Método que obtiene los hijos de primer nivel de una unidad en función del estado de la unidad padre
-  * @param codigo identificador de la unidad padre.
-  *
-  * @return  {@link es.caib.dir3caib.persistence.model.Unidad}
+    /**
+     * Método que obtiene los hijos vigentes de primer nivel de una unidad
+     * @param codigo identificador de la unidad padre.
+     * @return  {@link es.caib.dir3caib.persistence.model.Unidad}
      */
     public List<Unidad> hijosPrimerNivel(String codigo) throws Exception;
 
     /**
-     * Metodo que obtiene los hijos de primer nivel de una unidad en función del estado de la unidad padre
+     * Metodo que obtiene los hijos de una unidad en función del estado de la unidad padre
      * @param unidadesPadres unidadesPadres de las que obtener hijos
      * @param estado indica el estado de los hijos
      * @param hijosTotales lista con todos los hijos encontrados de manera recursiva.
@@ -165,6 +165,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
 
     /**
      * Obtiene el arbol de una Unidad, pero solo los códigos
+     * Se emplea en el método de obtenerArbolOficinas.
      *
      * @param codigo
      * @return
@@ -207,24 +208,26 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
     public List<Unidad> getListByIds(List<String> ids) throws Exception;
 
 
- /**
-  * Obtiene el codigo y la denominación de una Unidad con estado vigente. Se emplea para mostrar el arbol de unidades.
-  * @param id     identificador de la unidad
-  * @param estado estado de la unidad
-  * @return {@link es.caib.dir3caib.persistence.utils.Nodo}
+    /**
+     * Obtiene el codigo, la denominación, el estado, la tupla codigo-denominacion de la unidad raiz y la tupla codigo-denominacion de la unidad.
+     * Se emplea para mostrar el arbol de unidades.
+     * @param id     identificador de la unidad
+     * @param estado estado de la unidad
+     * @return {@link es.caib.dir3caib.persistence.utils.Nodo}
      */
- public Nodo findUnidad(String id, String estado) throws Exception;
+    public Nodo findUnidad(String id, String estado) throws Exception;
 
- /**
-  * Obtiene solo el código de la unidad indicada
-  * @param codigo
-  * @return
-  * @throws Exception
-     */
+    /**
+     * Obtiene solo el código de la unidad indicada
+     * @param codigo
+     * @return
+    * @throws Exception
+    */
     public Unidad obtenerUnidad(String codigo) throws Exception;
 
     /**
-     * Obtiene todas las Unidades de la Unidad Raiz que tienen OFicinas.
+     * Obtiene el código de todas las Unidades hijas de la unidad raiz indicada por código
+     * y que tienen una oficina que cuelga de ellas
      *
      * @param codigo
      * @return
@@ -244,5 +247,5 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      */
     public boolean unidadValida(Unidad unidad, Date fechaSincro) throws Exception;
 
-  
-}
+
+    }

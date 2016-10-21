@@ -4,6 +4,7 @@ import es.caib.dir3caib.persistence.model.Descarga;
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.persistence.model.ws.UnidadTF;
+import es.caib.dir3caib.utils.Utils;
 import org.apache.log4j.Logger;
 
 import javax.annotation.security.RunAs;
@@ -40,11 +41,13 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
     protected DescargaLocal descargaEjb;
 
     /**
-     * Método que devuelve una UnidadTF( que se transfiere) a partir del código indicado y en función de
-     * la fecha de actualización y la de sincronizacion ( primera sincronizacion)
+     Método que devuelve una {@link es.caib.dir3caib.persistence.model.ws.UnidadTF} a partir del código
+     * indicado y en función de la fecha de actualización
      *
-     * @param codigo             código de la unidad a transferir
-     * @param fechaActualizacion fecha en la que se realiza la actualización
+     * @param codigo
+     *          código de la unidad a transferir
+     * @param fechaActualizacion
+     *          fecha en la que se realiza la actualización
      */
     @Override
     public UnidadTF obtenerUnidad(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
@@ -53,12 +56,10 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
         UnidadTF unidadTF = null;
         // Si hay fecha de actualización y es anterior a la fecha de importación se debe transmitir
         if (fechaActualizacion != null) {
-            //Date fechaAct = formatoFecha.parse(fechaActualizacion);
-            //Date fechaSincro = formatoFecha.parse(fechaSincronizacion);
             // Miramos si ha sido actualizada
             if (fechaActualizacion.before(unidad.getFechaImportacion()) || fechaActualizacion.equals(unidad.getFechaImportacion())) {
                 // miramos que no esté extinguida o anulada antes de la primera sincro.
-                if (unidadValida(unidad, fechaSincronizacion)) {
+                if (unidadEjb.unidadValida(unidad, fechaSincronizacion)) {
                     unidadTF = UnidadTF.generar(unidad);
                 }
             }
@@ -69,91 +70,59 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
         return unidadTF;
     }
 
-    /**
-     * Método antiguo de sincronización/actualización de organigrama que no considera que se pueda extinguir la unidad raíz.
-     *
-     * @param codigo
-     * @param fechaActualizacion
-     * @param fechaSincronizacion
-     * @return
-     * @throws Exception
-     */
-   /* @Override
-    public List<UnidadTF> obtenerArbolUnidadesTF(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
-
-        if (fechaActualizacion == null) {
-            log.info("SINCRONIZACION UNIDADES");
-        } else {
-            log.info("ACTUALIZACION UNIDADES");
-        }
-        Unidad unidad = unidadEjb.findById(codigo);
-        Unidad unidadRaiz = unidad.getCodUnidadRaiz();
-        if (unidad == unidadRaiz) { // Caso que la unidad que nos indican es unidad raiz
-            log.info("CASO UNIDAD QUE NOS PASAN ES RAIZ");
-            List<Unidad> arbol = unidadEjb.obtenerArbolUnidadesUnidadRaiz(codigo, fechaActualizacion, fechaSincronizacion);
-            log.info("Numero TOTAL de unidades a actualizar: " + arbol.size());
-            List<UnidadTF> arbolTF = new ArrayList<UnidadTF>();
-
-
-            for (Unidad uni : arbol) {
-                arbolTF.add(UnidadTF.generar(uni));
-            }
-
-            return arbolTF;
-        } else { // caso de que la unidad que nos indican no es raiz
-            log.info("CASO UNIDAD QUE NOS PASAN NO ES RAIZ");
-            List<Unidad> arbol = new ArrayList<Unidad>(); //Lista completa de unidades a enviar a regweb3(o porque es sincro o porque se han actualizado)
-
-            //Añadimos la raiz cuando es sincronización
-            if (fechaActualizacion == null) {
-                arbol.add(unidad);
-            }
-            arbol.addAll(unidadEjb.obtenerArbolUnidadesUnidadNoRaiz(codigo, fechaActualizacion, fechaSincronizacion));
-            log.info("Numero TOTAL de unidades a actualizar: " + arbol.size());
-            List<UnidadTF> arbolTF = new ArrayList<UnidadTF>();
-
-
-            for (Unidad uni : arbol) {
-                arbolTF.add(UnidadTF.generar(uni));
-            }
-
-            return arbolTF;
-        }
-
-    }*/
     @Override
     /**
-     * Método para la sincronización/actualización del organigrama cuyo código raiz es el que nos indican.
-     * Este método considera también la posibilidad de que la misma raiz también se haya estinguido.
+     * Método que devuelve la lista de {@link es.caib.dir3caib.persistence.model.ws.UnidadTF} a partir del
+     * código indicado y las fechas indicadas
+     * Si no se especifican fechas obtiene aquellas unidades que son vigentes.
+     * Si se especifica la fecha de actualización obtiene las unidades que han sufrido cambios entre esa fecha y la actual.
+     * La fecha de sincronización nos sirve para evitar traer unidades (extinguidas/anuladas) anteriores a esta fecha
+     *
+     *
+     * Este método considera también la posibilidad de que la misma raiz también se haya extinguido.
+     * Esto es debido a que cuando en Madrid actualizan una unidad la tendencia es extinguirla y crear una nueva con código diferente.
+     * Esto hace que se tengan que traer las unidades de la vieja y de la nueva.
+     * Los casos que se consideran son:
+     * SINCRONIZACION DE UNIDAD RAIZ
+     * SINCRONIZACION DE UNIDAD NO RAIZ
+     * ACTUALIZACION DE  UNIDAD RAIZ CON CAMBIO DE RAIZ
+     * ACTUALIZACION DE  UNIDAD RAIZ SIN CAMBIO DE RAIZ
+     * ACTUALIZACION DE  UNIDAD NO RAIZ CON CAMBIO DE RAIZ
+     * ACTUALIZACION DE  UNIDAD NO RAIZ SIN CAMBIO DE RAIZ
      *
      */
     public List<UnidadTF> obtenerArbolUnidadesTF(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
 
         log.info("WS: Inicio obtenerArbolUnidadesTF");
+        Long start = System.currentTimeMillis();
 
         List<Unidad> arbol = new ArrayList<Unidad>(); //Lista completa de unidades a enviar a regweb3(o porque es sincro o porque se han actualizado)
         Unidad unidad = null;
         Unidad unidadRaiz = null;
 
         //Miramos si se ha actualizado la unidad que nos pasan
-        if (fechaActualizacion != null) { // ES actualizacion, miramos si la raiz se ha actualizado
+        if (fechaActualizacion != null) { // es actualizacion
             log.info("ACTUALIZACION UNIDADES");
-            //Obtenemos la raiz en funcion de la fecha de actualización
+            //Obtenemos la unidad indicada en funcion de la fecha de actualización
+            // de esta manera miramos si la unidad se ha actualizado
             unidad = unidadEjb.findUnidadActualizada(codigo, fechaActualizacion);
-            if (unidad != null) { //Han actualizado la raiz
+            if (unidad != null) { //Han actualizado la unidad
                 unidadRaiz = unidad.getCodUnidadRaiz(); //obtenemos la raiz de la unidad que nos pasan
-                // miramos que no esté extinguida o anulada antes de la primera sincro.
-                if (unidadValida(unidad, fechaSincronizacion)) {
+                // miramos que la unidad que nos pasan no esté extinguida o anulada antes de la primera sincro.
+                if (unidadEjb.unidadValida(unidad, fechaSincronizacion)) {
                     arbol.add(unidad);
+                    //obtenemos sus historicos para poder obtener todos los hijos que dependan de ellos
+                    // y poder actualizar el árbol correctamente.
                     Set<Unidad> historicosRaiz = unidad.getHistoricoUO();
                     if (historicosRaiz != null) {
                         for (Unidad historico : historicosRaiz) {
+                            //añadimos el histórico al arbol de actualizados.
                             arbol.add(historico);
                             if (unidad == unidadRaiz) { //Miramos si la unidad extinguida es raiz
-                                //obtenemos el arbol de los historicos que la sustituyen.
+                                //obtenemos el arbol de hijos de los historicos que la sustituyen.
                                 arbol.addAll(unidadEjb.obtenerArbolUnidadesUnidadRaiz(historico.getCodigo(), fechaActualizacion, fechaSincronizacion));
                             } else {
-                                //obtenemos el arbol de los historicos que la sustituyen.
+                                //obtenemos el arbol de hijos de los historicos que la sustituyen.
                                 arbol.addAll(unidadEjb.obtenerArbolUnidadesUnidadNoRaiz(historico.getCodigo(), fechaActualizacion, fechaSincronizacion));
                             }
                         }
@@ -163,14 +132,18 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
         }
 
 
-        if (unidad == null) { // O es Sincro o es actualizacion pero con la raiz sin actualizar.
+        if (unidad == null) { // Si la unidad es null es porque o es Sincro o es actualizacion pero con la raiz sin actualizar.
+            //Obtenemos la unidad indicada
             unidad = unidadEjb.findUnidadEstado(codigo, Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-            if (unidad != null) {
-                arbol.add(unidad);
+            if (unidad != null) { // Si la unidad es distinta de null, hay que determinar si es raiz o no
+                unidadRaiz = unidad.getCodUnidadRaiz(); //obtenemos su unidad raiz
+                if (unidad != unidadRaiz) {//Si la unidad es distinta de la unidad raiz se añade al arbol porque luego se obtienen solo sus hijos.
+                    arbol.add(unidad);
+                }
             }
         }
 
-        //obtenemos el arbol de la unidad que nos han indicado para que se actualice todo bien.???
+        //obtenemos el arbol de la unidad que nos han indicado para que se actualice bien
         if (unidad == unidadRaiz) { // Caso que la unidad que nos indican es unidad raiz
             log.info("CASO UNIDAD QUE NOS PASAN ES RAIZ");
             arbol.addAll(unidadEjb.obtenerArbolUnidadesUnidadRaiz(codigo, fechaActualizacion, fechaSincronizacion));
@@ -184,22 +157,25 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
 
         //Montamos la lista de unidadesTF a enviar
         List<UnidadTF> arbolTF = new ArrayList<UnidadTF>();
-
         for (Unidad uni : arbol) {
             arbolTF.add(UnidadTF.generar(uni));
         }
 
+        Long end = System.currentTimeMillis();
+        log.info("tiempo obtenerArbolUnidadesTF: " + Utils.formatElapsedTime(end - start));
         return arbolTF;
 
     }
 
 
     /**
-     * Método que devuelve el la unidad indicada si tiene oficinas y los hijos que dependen de ella.
+     * Método que devuelve la lista de {@link es.caib.dir3caib.persistence.model.ws.UnidadTF} a partir del
+     * código indicado y que estan vigentes y tienen oficinas. Método que emplea la aplicación SISTRA para
+     * saber donde enviar un registro telemático.
      *
      * @param codigo
-     * @return
-     * @throws Exception
+     *          código de la unidad raiz
+     *
      */
     @Override
     public List<UnidadTF> obtenerArbolUnidadesDestinatarias(String codigo) throws Exception {
@@ -209,7 +185,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
 
 
         for (Unidad unidad : arbol) {
-            arbolTF.add(UnidadTF.generar(unidad));
+            arbolTF.add(UnidadTF.generarLigero(unidad));
         }
 
         return arbolTF;
@@ -229,29 +205,4 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
         return descarga.getFechaImportacion();
     }
 
-    /**
-     * Se mira que si la unidad,  su fecha de extinción y anulacion son posteriores
-     * a la fecha de la primera sincronizacion con regweb. Así evitamos enviar relaciones antiguas extinguidas o anuladas
-     *
-     * @param unidad      relacion organizativa
-     * @param fechaSincro fecha de la primera sincronizacion con regweb
-     * @return
-     * @throws Exception
-     */
-    private boolean unidadValida(Unidad unidad, Date fechaSincro) throws Exception {
-        if (unidad.getFechaExtincion() != null) {
-            if (unidad.getFechaExtincion().after(fechaSincro) || unidad.getFechaExtincion().equals(fechaSincro)) {
-                return true;
-            }
-        } else {
-            if (unidad.getFechaAnulacion() != null) {
-                if (unidad.getFechaAnulacion().after(fechaSincro) || unidad.getFechaAnulacion().equals(fechaSincro)) {
-                    return true;
-                }
-            } else {
-                return true;
-            }
-        }
-        return false;
-    }
 }

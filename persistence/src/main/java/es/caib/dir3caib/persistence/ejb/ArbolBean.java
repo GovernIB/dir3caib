@@ -88,7 +88,7 @@ public class ArbolBean implements ArbolLocal {
 
 
         List<Nodo> hijos = new ArrayList<Nodo>();
-        List<Nodo> unidadesHijas = unidadEjb.hijosOB(idUnidad, estado);
+        List<Nodo> unidadesHijas = unidadEjb.hijos(idUnidad, estado);
 
 
         for (Nodo unidadHija : unidadesHijas) {
@@ -140,7 +140,7 @@ public class ArbolBean implements ArbolLocal {
 
         //Obtenemos todos los hijos hacia abajo con el metodo de arbolUnidades
         List<Nodo> hijos = new ArrayList<Nodo>();
-        List<Nodo> unidadesHijas = unidadEjb.hijosOB(idUnidad, estado);
+        List<Nodo> unidadesHijas = unidadEjb.hijos(idUnidad, estado);
         //Llamada a arbolUnidades para cada uno de los hijos encontrados
         for (Nodo unidadHija : unidadesHijas) {
             Nodo hijo = new Nodo();
