@@ -118,7 +118,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
                         for (Unidad historico : historicosRaiz) {
                             //añadimos el histórico al arbol de actualizados.
                             arbol.add(historico);
-                            if (unidad == unidadRaiz) { //Miramos si la unidad extinguida es raiz
+                            if (unidad.equals(unidadRaiz)) { //Miramos si la unidad extinguida es raiz
                                 //obtenemos el arbol de hijos de los historicos que la sustituyen.
                                 arbol.addAll(unidadEjb.obtenerArbolUnidadesUnidadRaiz(historico.getCodigo(), fechaActualizacion, fechaSincronizacion));
                             } else {
@@ -137,7 +137,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
             unidad = unidadEjb.findUnidadEstado(codigo, Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
             if (unidad != null) { // Si la unidad es distinta de null, hay que determinar si es raiz o no
                 unidadRaiz = unidad.getCodUnidadRaiz(); //obtenemos su unidad raiz
-                if (unidad != unidadRaiz) {//Si la unidad es distinta de la unidad raiz se añade al arbol porque luego se obtienen solo sus hijos.
+                if (!unidad.equals(unidadRaiz)) {//Si la unidad es distinta de la unidad raiz se añade al arbol porque luego se obtienen solo sus hijos.
                     arbol.add(unidad);
                 }
             }
