@@ -144,7 +144,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
         }
 
         //obtenemos el arbol de la unidad que nos han indicado para que se actualice bien
-        if (unidad == unidadRaiz) { // Caso que la unidad que nos indican es unidad raiz
+        if (unidad.equals(unidadRaiz) ) { // Caso que la unidad que nos indican es unidad raiz
             log.info("CASO UNIDAD QUE NOS PASAN ES RAIZ");
             arbol.addAll(unidadEjb.obtenerArbolUnidadesUnidadRaiz(codigo, fechaActualizacion, fechaSincronizacion));
             log.info("Numero TOTAL de unidades a actualizar: " + arbol.size());
