@@ -1,5 +1,6 @@
 package es.caib.dir3caib.persistence.ejb;
 
+import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.utils.Configuracio;
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.SecurityDomain;
@@ -95,16 +96,17 @@ public class SincronitzacioDir3EJB  implements SincronitzacioDir3Local {
   protected Date nextExecution() throws ParseException {
     String cronExpression = Configuracio.getCronExpression();
 
-    if(cronExpression != null && cronExpression.trim().length() != 0) {
-    
+    if(cronExpression == null) { // Si la propiedad no está definida, se obtiene una por defecto.
+      cronExpression = Dir3caibConstantes.CRON_SINCRONIZAR_DIR3;
+    }
+
       Date currTime = new Date();
       CronTriggerImpl tr = new CronTriggerImpl();
       tr.setCronExpression(cronExpression);
       Date nextFireAt = tr.getFireTimeAfter(currTime);
 
       TimerService timerService = context.getTimerService();
-      //final boolean isPersistence= false;
-      //TimerConfig timerConfig = new TimerConfig(NAME_TIMER, isPersistence);
+
       Timer timer2 = timerService.createTimer(nextFireAt, NAME_TIMER /* timerConfig */);
       
       if (log.isDebugEnabled()) {
@@ -113,8 +115,7 @@ public class SincronitzacioDir3EJB  implements SincronitzacioDir3Local {
         log.debug("timeoutHandler : " + timer2.getInfo());
       }
       return nextFireAt;
-    }
-    return null;
+
   }
   
   

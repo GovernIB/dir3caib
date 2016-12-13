@@ -115,4 +115,7 @@ public class Dir3caibConstantes {
     //Resultados Metodo Helium
     public static final int RESULTADOS_BUSQUEDA_DENOMINACION = 40;
 
+    // Expresión CRON por defecto para actualizar DIR3
+    public static final String CRON_SINCRONIZAR_DIR3= "0 0 3 1/1 * ? *"; // Sincronización diaria a las 03:00 am
+
 }
