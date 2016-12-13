@@ -30,4 +30,6 @@ public interface Dir3RestLocal  {
   public String unidadDenominacion(String codigo) throws Exception;
   public String oficinaDenominacion(String codigo) throws Exception;
 
+  public List<Nodo> busquedaDenominacionComunidad(String denominacion, Long codComunidad) throws Exception;
+
 }

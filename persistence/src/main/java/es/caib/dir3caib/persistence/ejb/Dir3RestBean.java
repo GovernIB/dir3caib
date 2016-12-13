@@ -411,7 +411,7 @@ public class Dir3RestBean implements Dir3RestLocal {
        }
 
     /**
-     *
+     * Devuelve la denominación de la oficina especificada por codigo
      * @param codigo
      * @return
      * @throws Exception
@@ -430,6 +430,72 @@ public class Dir3RestBean implements Dir3RestLocal {
              return  null;
          }
      }
+
+
+    /**
+     * Método que busca unidades por denominación y comunidad para utilidad en HELIUM.
+     *
+     * @param denominacion
+     * @param codComunidad
+     * @return List<Nodo> listado de objetos nodo con el código,denominación, denominación de unidad raiz y denominación de unidad superior
+     * @throws Exception
+     */
+
+    @Override
+    public List<Nodo> busquedaDenominacionComunidad(String denominacion, Long codComunidad) throws Exception {
+
+
+        Query q;
+        List<String> where = new ArrayList<String>();
+        Map<String, Object> parametros = new HashMap<String, Object>();
+        StringBuffer query = new StringBuffer("Select unidad.codigo, unidad.denominacion, unidad.codUnidadRaiz.denominacion, unidad.codUnidadSuperior.denominacion from Unidad as unidad ");
+
+        //Denominación
+        if (denominacion != null && denominacion.length() > 0) {
+            where.add(DataBaseUtils.like("unidad.denominacion", "denominacion", parametros, denominacion));
+        }
+        //Comunidad Autónoma
+        if (codComunidad != null && codComunidad != -1) {
+            where.add(" unidad.codAmbComunidad.codigoComunidad = :codComunidad ");
+            parametros.put("codComunidad", codComunidad);
+        }
+
+        //vigentes
+        where.add(" unidad.estado.codigoEstadoEntidad = :codigoEstado ");
+        parametros.put("codigoEstado", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+
+
+        // Añadimos los parametros a la query
+        if (parametros.size() != 0) {
+            query.append("where ");
+            int count = 0;
+            for (String w : where) {
+                if (count != 0) {
+                    query.append(" and ");
+                }
+                query.append(w);
+                count++;
+            }
+
+            query.append("order by unidad.denominacion asc");
+            log.info("QUERY " + query.toString());
+            q = em.createQuery(query.toString());
+
+            for (Map.Entry<String, Object> param : parametros.entrySet()) {
+                q.setParameter(param.getKey(), param.getValue());
+            }
+
+        } else {
+            query.append("order by unidad.denominacion asc");
+            q = em.createQuery(query.toString());
+        }
+
+        //Fijamos un máximo de resultados a devolver
+        q.setMaxResults(Dir3caibConstantes.RESULTADOS_BUSQUEDA_DENOMINACION);
+        List<Nodo> unidades = NodoUtils.getNodoListUnidadRaizUnidadSuperior(q.getResultList());
+
+        return unidades;
+    }
 
 
 }

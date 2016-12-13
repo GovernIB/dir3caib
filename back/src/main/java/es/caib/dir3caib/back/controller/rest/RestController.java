@@ -3,6 +3,7 @@ package es.caib.dir3caib.back.controller.rest;
 import es.caib.dir3caib.persistence.ejb.ArbolLocal;
 import es.caib.dir3caib.persistence.ejb.CatEstadoEntidadLocal;
 import es.caib.dir3caib.persistence.ejb.Dir3RestLocal;
+import es.caib.dir3caib.persistence.ejb.UnidadLocal;
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.model.Oficina;
 import es.caib.dir3caib.persistence.model.Unidad;
@@ -40,6 +41,8 @@ public class RestController {
     @EJB(mappedName = "dir3caib/CatEstadoEntidadEJB/local")
     protected CatEstadoEntidadLocal catEstadoEntidadEjb;
 
+    @EJB(mappedName = "dir3caib/UnidadEJB/local")
+    protected UnidadLocal unidadEjb;
 
     /**
        * Obtiene los {@link es.caib.dir3caib.persistence.model.Unidad} por denominacion
@@ -198,7 +201,26 @@ public class RestController {
     }
 
 
+    /**
+     * Método que realiza la busqueda de unidades por denominación y comunidad autónoma para utilidad HELIUM
+     *
+     * @param denominacion denominación de la unidad
+     * @param codComunidad codigo de la comunidad
+     * @return List<Nodo> listado de objetos nodo con el código,denominación, denominación de unidad raiz y denominación de unidad superior
+     */
+    @RequestMapping(value = "/busqueda/unidades/denominacion/comunidad", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    ResponseEntity<List<Nodo>> obtenerUnidadesDenominacionComunidad(@RequestParam String denominacion, @RequestParam Long codComunidad)
+            throws Exception {
 
+        List<Nodo> unidades = dir3RestEjb.busquedaDenominacionComunidad(new String(denominacion.getBytes("ISO-8859-1"), "UTF-8"), codComunidad);
+
+        log.info("Encontradas " + unidades.size());
+        HttpHeaders headers = addAccessControllAllowOrigin();
+        return new ResponseEntity<List<Nodo>>(unidades, headers, HttpStatus.OK);
+
+    }
 
 
 

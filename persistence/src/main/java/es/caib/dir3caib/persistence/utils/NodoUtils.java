@@ -11,6 +11,7 @@ public class NodoUtils {
 
     /**
      * Convierte los resultados de una query en una lista de {@link es.caib.dir3caib.persistence.utils.Nodo}
+     * se devuelve codigo y denominación
      *
      * @param result
      * @return
@@ -31,7 +32,7 @@ public class NodoUtils {
 
     /**
      * Convierte los resultados de una query en una lista de {@link es.caib.dir3caib.persistence.utils.Nodo}
-     *
+     * se devuelve codigo, denominación y estado
      * @param result
      * @return
      * @throws Exception
@@ -108,6 +109,27 @@ public class NodoUtils {
 
             Nodo nodo = new Nodo(obj0, obj1, "", obj3 + " - " + obj2, obj5 + " - " + obj4, obj6);
 
+
+            nodos.add(nodo);
+        }
+
+        return nodos;
+    }
+
+    /**
+     * Convierte los resultados de una query en una lista de {@link es.caib.dir3caib.persistence.utils.Nodo}
+     * donde se devuelve el codigo, denominación, denominación de unidad raiz, denominación de unidad superior
+     *
+     * @param result
+     * @return
+     * @throws Exception
+     */
+    public static List<Nodo> getNodoListUnidadRaizUnidadSuperior(List<Object[]> result) throws Exception {
+
+        List<Nodo> nodos = new ArrayList<Nodo>();
+
+        for (Object[] object : result) {
+            Nodo nodo = new Nodo((String) object[0], (String) object[1], "", (String) object[2], (String) object[3], "");
 
             nodos.add(nodo);
         }

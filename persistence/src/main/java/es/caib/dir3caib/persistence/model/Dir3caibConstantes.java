@@ -112,4 +112,7 @@ public class Dir3caibConstantes {
     public static final long SERVICIO_SIR_ENVIO = 6;
     public static final long SERVICIO_SIR_RECEPCION = 7;
 
+    //Resultados Metodo Helium
+    public static final int RESULTADOS_BUSQUEDA_DENOMINACION = 40;
+
 }
