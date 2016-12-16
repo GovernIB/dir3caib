@@ -4,12 +4,12 @@ import es.caib.dir3caib.persistence.model.CatIsla;
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.SecurityDomain;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
-import javax.annotation.security.RolesAllowed;
 
 /**
  * Created by Fundació BIT.
@@ -26,6 +26,12 @@ public class CatIslaBean extends BaseEjbJPA<CatIsla, Long> implements CatIslaLoc
 
     @PersistenceContext
     private EntityManager em;
+
+    @Override
+    public CatIsla getReference(Long id) throws Exception {
+
+        return em.getReference(CatIsla.class, id);
+    }
 
     @Override
     public CatIsla findById(Long id) throws Exception {

@@ -1,7 +1,6 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.CatAmbitoTerritorial;
-
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.SecurityDomain;
 
@@ -10,7 +9,6 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-
 import java.util.List;
 
 /**
@@ -29,6 +27,12 @@ public class CatAmbitoTerritorialBean extends BaseEjbJPA<CatAmbitoTerritorial, L
 
     @PersistenceContext
     private EntityManager em;
+
+    @Override
+    public CatAmbitoTerritorial getReference(Long id) throws Exception {
+
+        return em.getReference(CatAmbitoTerritorial.class, id);
+    }
 
     @Override
     public CatAmbitoTerritorial findById(Long id) throws Exception {

@@ -41,6 +41,12 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
     public ServicioLocal servicioEjb;
 
     @Override
+    public Oficina getReference(String id) throws Exception {
+
+        return em.getReference(Oficina.class, id);
+    }
+
+    @Override
     public Oficina findById(String id) throws Exception {
 
         return em.find(Oficina.class, id);

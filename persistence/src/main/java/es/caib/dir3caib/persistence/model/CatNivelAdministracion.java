@@ -1,10 +1,10 @@
 package es.caib.dir3caib.persistence.model;
 
-import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 
 /**
@@ -12,7 +12,7 @@ import javax.persistence.Table;
  * @created 28-oct-2013 14:41:38
  */
 @Entity
-@Table(name = "DIR_CATNIVELADMINISTRACION", schema = "", catalog = "")
+@Table(name = "DIR_CATNIVELADMINISTRACION")
 public class CatNivelAdministracion implements Serializable {
 
 	private Long codigoNivelAdministracion;
@@ -22,7 +22,11 @@ public class CatNivelAdministracion implements Serializable {
 
 	}
 
-	public void finalize() throws Throwable {
+  public CatNivelAdministracion(Long codigoNivelAdministracion) {
+    this.codigoNivelAdministracion = codigoNivelAdministracion;
+  }
+
+  public void finalize() throws Throwable {
 
 	}
 

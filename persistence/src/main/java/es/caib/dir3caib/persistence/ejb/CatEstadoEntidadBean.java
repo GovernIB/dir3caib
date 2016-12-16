@@ -28,6 +28,12 @@ public class CatEstadoEntidadBean extends BaseEjbJPA<CatEstadoEntidad, String> i
     private EntityManager em;
 
     @Override
+    public CatEstadoEntidad getReference(String id) throws Exception {
+
+        return em.getReference(CatEstadoEntidad.class, id);
+    }
+
+    @Override
     public CatEstadoEntidad findById(String id) throws Exception {
 
         return em.find(CatEstadoEntidad.class, id);

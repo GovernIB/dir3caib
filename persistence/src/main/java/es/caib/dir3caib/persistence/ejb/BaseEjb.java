@@ -50,6 +50,14 @@ public interface BaseEjb<T extends Serializable, E> {
      */
     public T findById(E id) throws Exception;
 
+  /**
+   *  Obtener la referencia al registro por id
+   * @param id
+   * @return
+   * @throws Exception
+   */
+  public T getReference(E id) throws Exception;
+
     /**
      *  Obtener todos los registros
      * @return

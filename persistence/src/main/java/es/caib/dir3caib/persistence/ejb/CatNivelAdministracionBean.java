@@ -4,12 +4,12 @@ import es.caib.dir3caib.persistence.model.CatNivelAdministracion;
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.SecurityDomain;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
-import javax.annotation.security.RolesAllowed;
 
 /**
  * Created by Fundació BIT.
@@ -26,6 +26,12 @@ public class CatNivelAdministracionBean extends BaseEjbJPA<CatNivelAdministracio
 
     @PersistenceContext
     private EntityManager em;
+
+    @Override
+    public CatNivelAdministracion getReference(Long id) throws Exception {
+
+        return em.getReference(CatNivelAdministracion.class, id);
+    }
 
     @Override
     public CatNivelAdministracion findById(Long id) throws Exception {

@@ -31,6 +31,12 @@ public class RelacionOrganizativaOfiBean extends BaseEjbJPA<RelacionOrganizativa
     private EntityManager em;
 
     @Override
+    public RelacionOrganizativaOfi getReference(Long id) throws Exception {
+
+        return em.getReference(RelacionOrganizativaOfi.class, id);
+    }
+
+    @Override
     public RelacionOrganizativaOfi findById(Long id) throws Exception {
 
         return em.find(RelacionOrganizativaOfi.class, id);

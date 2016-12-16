@@ -48,23 +48,14 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
     @EJB(mappedName = "dir3caib/OficinaEJB/local")
     protected OficinaLocal oficinaEjb;
 
-    @EJB(mappedName = "dir3caib/CatAmbitoTerritorialEJB/local")
-    protected CatAmbitoTerritorialLocal catAmbitoTerritorialEjb;
-
     @EJB(mappedName = "dir3caib/CatEntidadGeograficaEJB/local")
     protected CatEntidadGeograficaLocal catEntidadGeograficaEjb;
 
     @EJB(mappedName = "dir3caib/CatEstadoEntidadEJB/local")
     protected CatEstadoEntidadLocal catEstadoEntidadEjb;
 
-    @EJB(mappedName = "dir3caib/CatIslaEJB/local")
-    protected CatIslaLocal catIslaEjb;
-
     @EJB(mappedName = "dir3caib/CatJerarquiaOficinaEJB/local")
     protected CatJerarquiaOficinaLocal catJerarquiaOficinaEjb;
-
-    @EJB(mappedName = "dir3caib/CatMotivoExtincionEJB/local")
-    protected CatMotivoExtincionLocal catMotivoExtincionEjb;
 
     @EJB(mappedName = "dir3caib/CatNivelAdministracionEJB/local")
     protected CatNivelAdministracionLocal catNivelAdministracionEjb;
@@ -74,12 +65,6 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
 
     @EJB(mappedName = "dir3caib/CatTipoContactoEJB/local")
     protected CatTipoContactoLocal catTipoContactoEjb;
-
-    @EJB(mappedName = "dir3caib/CatTipoEntidadPublicaEJB/local")
-    protected CatTipoEntidadPublicaLocal catTipoEntidadPublicaEjb;
-
-    @EJB(mappedName = "dir3caib/CatTipoUnidadOrganicaEJB/local")
-    protected CatTipoUnidadOrganicaLocal catTipoUnidadOrganicaEjb;
 
     @EJB(mappedName = "dir3caib/CatTipoViaEJB/local")
     protected CatTipoViaLocal catTipoViaEjb;
@@ -92,7 +77,6 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
 
     @EJB(mappedName = "dir3caib/CatLocalidadEJB/local")
     protected CatLocalidadLocal catLocalidadEjb;
-
 
     @EJB(mappedName = "dir3caib/ContactoOfiEJB/local")
     protected ContactoOfiLocal contactoOfiEjb;
@@ -109,8 +93,6 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
     @EJB(mappedName = "dir3caib/DescargaEJB/local")
     protected DescargaLocal descargaEjb;
 
-    //@EJB(mappedName = "dir3caib/ImportarEJB/local")
-    //protected ImportarLocal importarEjb;
 
     SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
 
@@ -191,7 +173,7 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
 
             if (unidad == null) {
                 long start = System.currentTimeMillis();
-                unidad = this.unidadEjb.findById(codigo);
+                unidad = this.unidadEjb.getReference(codigo);
                 findByTime = findByTime + (System.currentTimeMillis() - start);
                 cacheUnidad.put(codigo, unidad);
                 countFind++;
@@ -255,7 +237,7 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
         for (CatTipoContacto ca : catTipoContactoEjb.getAll()) {
             cacheTipoContacto.put(ca.getCodigoTipoContacto(), ca);
         }
-
+        log.debug(" TipoContacto : " + cacheTipoContacto.size());
 
         Map<Long, CatTipoVia> cacheTipoVia = new TreeMap<Long, CatTipoVia>();
         for (CatTipoVia ca : catTipoViaEjb.getAll()) {
@@ -268,6 +250,7 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
         for (CatNivelAdministracion na : catNivelAdministracionEjb.getAll()) {
             cacheNivelAdministracion.put(na.getCodigoNivelAdministracion(), na);
         }
+        log.debug(" NivelAdministracion : " + cacheNivelAdministracion.size());
 
         Map<Long, CatProvincia> cacheProvincia = new TreeMap<Long, CatProvincia>();
         for (CatProvincia ca : catProvinciaEjb.getAll()) {
@@ -299,7 +282,7 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
         for (CatEntidadGeografica ca : catEntidadGeograficaEjb.getAll()) {
             cacheEntidadGeografica.put(ca.getCodigoEntidadGeografica(), ca);
         }
-
+        log.debug(" EntidadGeografica : " + cacheEntidadGeografica.size());
 
         Map<CatLocalidadPK, CatLocalidad> cacheLocalidad = new HashMap<CatLocalidadPK, CatLocalidad>();
         for (CatLocalidad ca : catLocalidadEjb.getAll()) {
@@ -310,7 +293,7 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
 
 
         end = System.currentTimeMillis();
-        log.debug("Inicialitzades Varies Caches per Importar Oficinas en " + Utils.formatElapsedTime(end - start));
+        log.info("Inicialitzades Varies Caches per Importar Oficinas en " + Utils.formatElapsedTime(end - start));
 
 
         Set<String> existInBBDD = new TreeSet<String>();
@@ -359,13 +342,11 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
 
                                 if (existInBBDD.contains(codigoOficina)) {
                                     oficina = oficinaEjb.findById(codigoOficina);
-                                }
-                                if (oficina == null) {  //Si es nuevo creamos el objeto a introducir
+                                    existeix = true;
+                                }else{
                                     oficina = new Oficina();
                                     oficina.setCodigo(codigoOficina);
                                     existeix = false;
-                                } else {
-                                    existeix = true;
                                 }
 
                                 //Fecha Importacion
@@ -374,10 +355,7 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
                                 // Comunidad Autonoma
                                 String codigoComunidadAutonoma = fila[21].trim();
                                 if (!codigoComunidadAutonoma.isEmpty()) {
-                                    CatComunidadAutonoma comunidadAutonoma;
-                                    comunidadAutonoma = cacheComunidadAutonoma.get(new Long(codigoComunidadAutonoma));
-
-                                    oficina.setCodComunidad(comunidadAutonoma);
+                                    oficina.setCodComunidad(cacheComunidadAutonoma.get(new Long(codigoComunidadAutonoma)));
                                 } else {
                                     oficina.setCodComunidad(null);
                                 }
@@ -385,9 +363,7 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
                                 // Pais
                                 String codigoPais = fila[20].trim();
                                 if (!codigoPais.isEmpty()) {
-                                    CatPais pais;
-                                    pais = cachePais.get(new Long(codigoPais));
-                                    oficina.setCodPais(pais);
+                                    oficina.setCodPais(cachePais.get(new Long(codigoPais)));
                                 } else {
                                     oficina.setCodPais(null);
                                 }
@@ -398,9 +374,7 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
                                 //Unidad organica responsable
                                 String codUOResponsable = fila[5].trim();
                                 if (!codUOResponsable.isEmpty()) {
-                                    Unidad uoResponsable;
-                                    uoResponsable = cacheUnidad.get(codUOResponsable);
-                                    oficina.setCodUoResponsable(uoResponsable);
+                                    oficina.setCodUoResponsable(cacheUnidad.get(codUOResponsable));
                                 } else {
                                     oficina.setCodUoResponsable(null);
                                 }
@@ -420,38 +394,30 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
                                 // Estado
                                 String codigoEstado = fila[2].trim();
                                 if (!codigoEstado.isEmpty()) {
-                                    CatEstadoEntidad estado;
-                                    estado = cacheEstadoEntidad.get(codigoEstado);
-                                    oficina.setEstado(estado);
+                                    oficina.setEstado(cacheEstadoEntidad.get(codigoEstado));
                                 } else {
                                     oficina.setEstado(null);
                                 }
 
                                 //fechas
-                                Date fechaAlta = null;
                                 String sfechaAlta = fila[12].trim();
                                 if (!sfechaAlta.isEmpty()) {
-                                    fechaAlta = formatoFecha.parse(sfechaAlta);
-                                    oficina.setFechaAltaOficial(fechaAlta);
+
+                                    oficina.setFechaAltaOficial(formatoFecha.parse(sfechaAlta));
                                 } else {
                                     oficina.setFechaAltaOficial(null);
                                 }
 
-
-                                Date fechaExtincion = null;
                                 String sfechaExtincion = fila[13].trim();
                                 if (!sfechaExtincion.isEmpty()) {
-                                    fechaExtincion = formatoFecha.parse(sfechaExtincion);
-                                    oficina.setFechaExtincion(fechaExtincion);
+                                    oficina.setFechaExtincion(formatoFecha.parse(sfechaExtincion));
                                 } else {
                                     oficina.setFechaExtincion(null);
                                 }
 
-                                Date fechaAnulacion = null;
                                 String sfechaAnulacion = fila[14].trim();
                                 if (!sfechaAnulacion.isEmpty()) {
-                                    fechaAnulacion = formatoFecha.parse(sfechaAnulacion);
-                                    oficina.setFechaExtincion(fechaAnulacion);
+                                    oficina.setFechaExtincion(formatoFecha.parse(sfechaAnulacion));
                                 } else {
                                     oficina.setFechaAnulacion(null);
                                 }
@@ -464,7 +430,7 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
                                 if (!codigoProv.isEmpty()) {
                                     provincia = cacheProvincia.get(new Long(codigoProv));
                                 }
-                                //log.info("CodProvincia");
+
                                 CatEntidadGeografica entidadGeograficaD = null;
                                 if (!codigoEntGeog.isEmpty()) {
                                     entidadGeograficaD = cacheEntidadGeografica.get(codigoEntGeog);
@@ -481,32 +447,47 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
                                 }
 
                                 String codigoNivelAdmin = fila[3].trim();
-                                CatNivelAdministracion nivelAdministracion = null;
                                 if (!codigoNivelAdmin.isEmpty()) {
-                                    nivelAdministracion = cacheNivelAdministracion.get(new Long(codigoNivelAdmin));
-                                    oficina.setNivelAdministracion(nivelAdministracion);
+                                    oficina.setNivelAdministracion(cacheNivelAdministracion.get(new Long(codigoNivelAdmin)));
                                 } else {
                                     oficina.setNivelAdministracion(null);
                                 }
 
                                 //tipoOficina
                                 String tipoOficina = fila[4].trim();
-                                CatJerarquiaOficina jerarquiaOficina = null;
                                 if (!tipoOficina.isEmpty()) {
-                                    jerarquiaOficina = catJerarquiaOficinaEjb.findById(new Long(tipoOficina));
-                                    oficina.setTipoOficina(jerarquiaOficina);
+                                    oficina.setTipoOficina(catJerarquiaOficinaEjb.getReference(new Long(tipoOficina)));
                                 } else {
                                     oficina.setTipoOficina(null);
                                 }
 
                                 //Tipo Via
                                 String tipoVia = fila[15].trim();
-                                CatTipoVia catTipoVia = null;
                                 if (!tipoVia.isEmpty()) {
-                                    catTipoVia = cacheTipoVia.get(new Long(tipoVia));
-                                    oficina.setTipoVia(catTipoVia);
+                                    oficina.setTipoVia(cacheTipoVia.get(new Long(tipoVia)));
                                 } else {
                                     oficina.setTipoVia(null);
+                                }
+
+                                //Oficina Responsable
+                                String codigoOfiResponsable = fila[7].trim();
+                                Oficina ofiResponsable = null;
+                                if (!codigoOfiResponsable.isEmpty()) {
+
+                                    if (existInBBDD.contains(codigoOfiResponsable)) {
+                                        ofiResponsable = oficinaEjb.getReference(codigoOfiResponsable);
+                                    }
+                                    if (ofiResponsable == null) {
+                                        ofiResponsable = oficinaVacia();
+                                        ofiResponsable.setCodigo(codigoOfiResponsable);
+
+                                        ofiResponsable = oficinaEjb.persistReal(ofiResponsable);
+                                        existInBBDD.add(codigoOfiResponsable);
+
+                                    }
+                                    oficina.setCodOfiResponsable(ofiResponsable);
+                                } else { // no viene ningun código de oficina responsable, pero puede tener de antes que hay que anular
+                                    oficina.setCodOfiResponsable(null);
                                 }
 
                                 if (existeix) {
@@ -516,28 +497,6 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
                                     existInBBDD.add(codigoOficina);
                                 }
 
-                                //Oficina Responsable
-                                String codigoOfiResponsable = fila[7].trim();
-                                Oficina ofiResponsable = null;
-                                if (!codigoOfiResponsable.isEmpty()) {
-
-                                    if (existInBBDD.contains(codigoOfiResponsable)) {
-                                        ofiResponsable = oficinaEjb.findById(codigoOfiResponsable);
-                                    }
-                                    if (ofiResponsable == null) {
-                                        ofiResponsable = oficinaVacia();
-                                        ofiResponsable.setCodigo(codigoOfiResponsable);
-
-                                        ofiResponsable = oficinaEjb.persist(ofiResponsable);
-                                        existInBBDD.add(codigoOfiResponsable);
-
-                                    }
-                                    oficina.setCodOfiResponsable(ofiResponsable);
-                                } else { // no viene ningun código de oficina responsable, pero puede tener de antes que hay que anular
-                                    oficina.setCodOfiResponsable(null);
-                                }
-
-                                oficinaEjb.merge(oficina);
 
                                 oficinesCache.put(oficina.getCodigo(), oficina);
                             } catch (Exception e) {
@@ -573,11 +532,7 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
                                 // Asociamos oficina
                                 String sOficina = fila[0].trim();
                                 if (!sOficina.isEmpty()) {
-                                    Oficina oficina;
-                                    oficina = oficinesCache.get(sOficina);
-                                    if (oficina == null) {
-                                        oficina = oficinaEjb.findById(sOficina);
-                                    }
+                                    Oficina oficina = oficinaEjb.getReference(sOficina);
                                     contacto.setOficina(oficina);
                                 } else {
                                     contacto.setOficina(null);
@@ -586,9 +541,7 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
                                 //Tipo contacto
                                 String stipoContacto = fila[1].trim();
                                 if (!stipoContacto.isEmpty()) {
-                                    CatTipoContacto tipoContacto;
-                                    tipoContacto = cacheTipoContacto.get(stipoContacto);
-                                    contacto.setTipoContacto(tipoContacto);
+                                    contacto.setTipoContacto(cacheTipoContacto.get(stipoContacto));
                                 } else {
                                     contacto.setTipoContacto(null);
                                 }
@@ -596,7 +549,7 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
                                 //Valor contacto
                                 String valorContacto = fila[2].trim();
                                 contacto.setValorContacto(valorContacto);
-                                Boolean visibilidad = fila[3].equals("S") ? true : false;
+                                Boolean visibilidad = fila[3].equals("S");
                                 contacto.setVisibilidad(visibilidad);
 
 
@@ -624,7 +577,7 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
                                 if (!codigoOficinaUltima.isEmpty()) {
                                     oficinaUltima = oficinesCache.get(codigoOficinaUltima);
                                     if (oficinaUltima == null) {
-                                        oficinaUltima = oficinaEjb.findById(codigoOficinaUltima);
+                                        oficinaUltima = oficinaEjb.getReference(codigoOficinaUltima);
                                     }
                                 }
                                 if (!codigoOficinaAnterior.isEmpty()) {
@@ -650,7 +603,7 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
                                 }
                                 historicosAnterior.add(oficinaUltima);
 
-                                oficinaEjb.persist(oficinaAnterior);
+                                oficinaEjb.merge(oficinaAnterior);
 
                             } catch (Exception e) {
                                 log.error("=======================================");
@@ -682,41 +635,42 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
                                 String sUnidad = fila[2].trim();
                                 if (!sOficina.isEmpty() && !sUnidad.isEmpty()) {
 
+                                    boolean existeix;
 
                                     RelacionOrganizativaOfi relacionOrganizativaOfi;
                                     if (cache.existsUnidadOficina(sUnidad, sOficina)) {
                                         long s1 = System.currentTimeMillis();
-                                        //relacionOrganizativaOfi = relOrgOfiEjb.findById(relacionOrganizativaOfiPK);
                                         relacionOrganizativaOfi = relOrgOfiEjb.findByPKs(sUnidad, sOficina);
+                                        existeix = true;
                                         findby = findby + (System.currentTimeMillis() - s1);
                                     } else {
                                         relacionOrganizativaOfi = null;
+                                        existeix = false;
                                     }
                                     if (relacionOrganizativaOfi == null) {
                                         relacionOrganizativaOfi = new RelacionOrganizativaOfi();
 
-                                        Oficina oficina;
-                                        oficina = oficinesCache.get(sOficina);
+                                        Oficina oficina = oficinesCache.get(sOficina);
                                         if (oficina == null) {
-                                            oficina = oficinaEjb.findById(sOficina);
+                                            oficina = oficinaEjb.getReference(sOficina);
                                         }
 
-                                        Unidad unidad;
-                                        unidad = cacheUnidad.get(sUnidad);
+                                        Unidad unidad = cacheUnidad.get(sUnidad);
 
                                         relacionOrganizativaOfi.setOficina(oficina);
                                         relacionOrganizativaOfi.setUnidad(unidad);
                                     }
                                     String codigoEstado = fila[4].trim();
-                                    CatEstadoEntidad estado = null;
                                     if (!codigoEstado.isEmpty()) {
-                                        estado = cacheEstadoEntidad.get(codigoEstado);
-                                        relacionOrganizativaOfi.setEstado(estado);
+                                        relacionOrganizativaOfi.setEstado(cacheEstadoEntidad.get(codigoEstado));
                                     }
 
 
-                                    relOrgOfiEjb.persist(relacionOrganizativaOfi);
-
+                                    if(existeix){
+                                        relOrgOfiEjb.merge(relacionOrganizativaOfi);
+                                    }else{
+                                        relOrgOfiEjb.persistReal(relacionOrganizativaOfi);
+                                    }
 
                                     c++;
                                     if (c % 100 == 0) {
@@ -749,51 +703,43 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
                                 String sOficina = fila[0].trim();
                                 String sUnidad = fila[2].trim();
                                 if (!sOficina.isEmpty() && !sUnidad.isEmpty()) {
-                        /*
-                        Oficina oficina;
-                        oficina = oficinesCache.get(sOficina);
-                        
-                        if (oficina == null) {
-                          oficina = oficinaEjb.findById(sOficina);
-                        }
-                        Unidad  unidad;
-                        unidad = cacheUnidad.get(sUnidad);
-                        RelacionSirOfiPK relacionSirOfiPK = new RelacionSirOfiPK();
-                        relacionSirOfiPK.setOficina(oficina);
-                        relacionSirOfiPK.setUnidad(unidad);
-                        */
 
+                                    boolean existe;
                                     RelacionSirOfi relacionSirOfi = null;
+
                                     if (cache.existsUnidadOficina(sUnidad, sOficina)) {
                                         long s1 = System.currentTimeMillis();
-                                        //relacionSirOfi = relSirOfiEjb.findById***(relacionSirOfiPK);
                                         relacionSirOfi = relSirOfiEjb.findByPKs(sUnidad, sOficina);
+                                        existe = true;
                                         findby = findby + (System.currentTimeMillis() - s1);
-                                    }
-                                    if (relacionSirOfi == null) {
+                                    }else{
+
+                                        existe = false;
+
                                         relacionSirOfi = new RelacionSirOfi();
 
-                                        Oficina oficina;
-                                        oficina = oficinesCache.get(sOficina);
+                                        Oficina oficina = oficinesCache.get(sOficina);
 
                                         if (oficina == null) {
-                                            oficina = oficinaEjb.findById(sOficina);
+                                            oficina = oficinaEjb.getReference(sOficina);
                                         }
-                                        Unidad unidad;
-                                        unidad = cacheUnidad.get(sUnidad);
+                                        Unidad unidad = cacheUnidad.get(sUnidad);
 
 
                                         relacionSirOfi.setOficina(oficina);
                                         relacionSirOfi.setUnidad(unidad);
                                     }
                                     String codigoEstado = fila[4].trim();
-                                    CatEstadoEntidad estado = null;
                                     if (!codigoEstado.isEmpty()) {
-                                        estado = cacheEstadoEntidad.get(codigoEstado);
-                                        relacionSirOfi.setEstado(estado);
+                                        relacionSirOfi.setEstado(cacheEstadoEntidad.get(codigoEstado));
                                     }
 
-                                    relSirOfiEjb.persist(relacionSirOfi);
+
+                                    if(existe){
+                                        relSirOfiEjb.merge(relacionSirOfi);
+                                    }else{
+                                        relSirOfiEjb.persistReal(relacionSirOfi);
+                                    }
 
 
                                     c++;
@@ -824,37 +770,33 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
                                 if (!codigoOficina.isEmpty() && !codigoServicio.isEmpty()) {
                                     Long codServicio = new Long(codigoServicio);
 
-                                    Oficina oficina;
-                                    oficina = oficinesCache.get(codigoOficina);
+                                    Oficina oficina = oficinesCache.get(codigoOficina);
 
                                     if (oficina == null) {
                                         oficina = oficinaEjb.findById(codigoOficina);
                                     }
-                                    //  log.info("obtenemos oficina");
 
-                                    Servicio servicio;
+                                    Servicio servicio = servicioEjb.findById(codServicio);
 
-                                    servicio = servicioEjb.findById(codServicio);
 
-                                    //  log.info("obtenemos servicio");
                                     if (servicio == null) {
                                         servicio = new Servicio();
                                         servicio.setCodServicio(codServicio);
                                         servicio.setDescServicio(fila[2].trim());
-                                        // log.info("Antes del persist servicio");
-                                        servicioEjb.persist(servicio);
+
+                                        servicio = servicioEjb.persistReal(servicio);
 
                                     }
                                     Set<Servicio> servicios = oficina.getServicios();
                                     if (servicios == null) {
                                         servicios = new HashSet<Servicio>();
-                                        oficina.setServicios(servicios);
                                     }
+
                                     servicios.add(servicio);
+                                    oficina.setServicios(servicios);
 
                                     oficinaEjb.merge(oficina);
 
-                                    // log.info("Despues del merge oficina");
                                 }
                             } catch (Exception e) {
                                 log.error(" Error EnOFI_SERVICIOS_OFI " + e.getMessage(), e);

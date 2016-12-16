@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @version 1.0
  * @created 28-oct-2013 14:41:38
  */
-@Table(name = "DIR_CATTIPOVIA", schema = "", catalog = "")
+@Table(name = "DIR_CATTIPOVIA")
 @Entity
 public class CatTipoVia implements Serializable {
 

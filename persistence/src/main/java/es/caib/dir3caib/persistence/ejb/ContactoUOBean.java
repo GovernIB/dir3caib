@@ -5,14 +5,15 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.ContactoUnidadOrganica;
-import java.util.List;
+import org.apache.log4j.Logger;
+import org.jboss.ejb3.annotation.SecurityDomain;
+
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import org.apache.log4j.Logger;
-import org.jboss.ejb3.annotation.SecurityDomain;
+import java.util.List;
 
 /**
  *
@@ -27,6 +28,12 @@ public class ContactoUOBean extends BaseEjbJPA<ContactoUnidadOrganica, Long> imp
 
     @PersistenceContext
     private EntityManager em;
+
+    @Override
+    public ContactoUnidadOrganica getReference(Long id) throws Exception {
+
+        return em.getReference(ContactoUnidadOrganica.class, id);
+    }
 
     @Override
     public ContactoUnidadOrganica findById(Long id) throws Exception {

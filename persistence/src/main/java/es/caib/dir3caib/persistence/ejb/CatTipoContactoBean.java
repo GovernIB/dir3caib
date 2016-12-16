@@ -4,12 +4,12 @@ import es.caib.dir3caib.persistence.model.CatTipoContacto;
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.SecurityDomain;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
-import javax.annotation.security.RolesAllowed;
 
 /**
  * Created by Fundació BIT.
@@ -26,6 +26,12 @@ public class CatTipoContactoBean extends BaseEjbJPA<CatTipoContacto, String> imp
 
     @PersistenceContext
     private EntityManager em;
+
+    @Override
+    public CatTipoContacto getReference(String id) throws Exception {
+
+        return em.getReference(CatTipoContacto.class, id);
+    }
 
     @Override
     public CatTipoContacto findById(String id) throws Exception {

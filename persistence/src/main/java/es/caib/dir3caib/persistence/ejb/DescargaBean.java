@@ -29,6 +29,12 @@ public class DescargaBean extends BaseEjbJPA<Descarga, Long> implements Descarga
     private EntityManager em;
 
     @Override
+    public Descarga getReference(Long id) throws Exception {
+
+        return em.getReference(Descarga.class, id);
+    }
+
+    @Override
     public Descarga findById(Long id) throws Exception {
 
         return em.find(Descarga.class, id);

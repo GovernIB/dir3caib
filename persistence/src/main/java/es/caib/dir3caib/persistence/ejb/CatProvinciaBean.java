@@ -4,12 +4,12 @@ import es.caib.dir3caib.persistence.model.CatProvincia;
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.SecurityDomain;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
-import javax.annotation.security.RolesAllowed;
 
 /**
  * Created by Fundació BIT.
@@ -26,6 +26,12 @@ public class CatProvinciaBean extends BaseEjbJPA<CatProvincia, Long> implements 
 
     @PersistenceContext
     private EntityManager em;
+
+    @Override
+    public CatProvincia getReference(Long id) throws Exception {
+
+        return em.getReference(CatProvincia.class, id);
+    }
 
     @Override
     public CatProvincia findById(Long id) throws Exception {

@@ -125,7 +125,7 @@ public class Unidad implements Serializable {
   }
 
 
-  @ManyToOne(cascade=CascadeType.PERSIST)
+  @ManyToOne()
   @JoinColumn(name="ESTADO")
   @ForeignKey(name="DIR_UNIDAD_CATESTENTIDAD_FK")
   @JsonIgnore
@@ -163,7 +163,7 @@ public class Unidad implements Serializable {
   }
 
 
-  @ManyToOne(cascade=CascadeType.PERSIST)
+  @ManyToOne()
   @JoinColumn(name="NIVELADMINISTRACION" ,referencedColumnName = "CODIGONIVELADMINISTRACION")
   @ForeignKey(name="DIR_UNIDAD_CATNIVELADMIN_FK")
   @JsonIgnore
@@ -244,7 +244,7 @@ public class Unidad implements Serializable {
   }
 
 
-  @ManyToOne(cascade=CascadeType.PERSIST)
+  @ManyToOne()
   @JoinColumn(name="CODTIPOENTPUBLICA")  
   @ForeignKey(name="DIR_UNIDAD_CATTIPENTPUBLICA_FK")
   @JsonIgnore
@@ -258,7 +258,7 @@ public class Unidad implements Serializable {
   }
 
 
-  @ManyToOne(cascade=CascadeType.PERSIST)
+  @ManyToOne()
   @JoinColumn(name="CODTIPOUNIDAD") 
   @ForeignKey(name="DIR_UNIDAD_CATTIPUNIDORGAN_FK")
   @JsonIgnore
@@ -272,7 +272,7 @@ public class Unidad implements Serializable {
   }
 
 
-  @ManyToOne(cascade=CascadeType.PERSIST)
+  @ManyToOne()
   @JoinColumn(name="CODAMBITOTERRITORIALID")
   @ForeignKey(name="DIR_UNIDAD_CATAMBITTERR_FK")
   @JsonIgnore
@@ -300,7 +300,7 @@ public class Unidad implements Serializable {
   }
 
 
-  @ManyToOne(cascade=CascadeType.PERSIST)
+  @ManyToOne()
   @JoinColumn(name="CODAMBPAIS" , referencedColumnName = "CODIGOPAIS")
   @ForeignKey(name="DIR_UNIDAD_CATAMBPAIS_FK")
   @JsonIgnore
@@ -314,7 +314,7 @@ public class Unidad implements Serializable {
   }
 
 
-  @ManyToOne(cascade=CascadeType.PERSIST)
+  @ManyToOne()
   @JoinColumn(name="CODAMBCOMUNIDAD", referencedColumnName = "CODIGOCOMUNIDAD")
   @ForeignKey(name="DIR_UNIDAD_CATAMBCOMAUTO_FK")
   @JsonIgnore
@@ -327,7 +327,7 @@ public class Unidad implements Serializable {
   }
 
 
-  @ManyToOne(cascade=CascadeType.PERSIST)
+  @ManyToOne()
   @JoinColumn(name="CODAMBPROVINCIA")
   @ForeignKey(name="DIR_UNIDAD_CATPROVINCIA_FK")
   @JsonIgnore
@@ -354,7 +354,7 @@ public class Unidad implements Serializable {
   }
 
 
-  @ManyToOne(cascade=CascadeType.PERSIST)
+  @ManyToOne()
   @JoinColumn(name="CODAMBISLA") 
   @ForeignKey(name="DIR_UNIDAD_CATISLA_FK")
   @JsonIgnore
@@ -519,7 +519,7 @@ public class Unidad implements Serializable {
   }
 
 
-  @ManyToOne(cascade=CascadeType.PERSIST)
+  @ManyToOne()
   @JoinColumn(name="TIPOVIA") 
   @ForeignKey(name="DIR_UNIDAD_CATTIPOVIA_FK")
   @JsonIgnore
@@ -581,7 +581,7 @@ public class Unidad implements Serializable {
   }
 
 
-  @ManyToOne(cascade=CascadeType.PERSIST)
+  @ManyToOne()
   @JoinColumn(name="CODPAIS")  
   @ForeignKey(name="DIR_UNIDAD_CATPAIS_FK")
   @JsonIgnore
@@ -595,7 +595,7 @@ public class Unidad implements Serializable {
   }
 
 
-  @ManyToOne(cascade=CascadeType.PERSIST)
+  @ManyToOne()
   @JoinColumn(name="CODCOMUNIDAD") 
   @ForeignKey(name="DIR_UNIDAD_CATCOMUNIAUTO_FK")
   @JsonIgnore
@@ -609,7 +609,7 @@ public class Unidad implements Serializable {
   }
 
 
- @ManyToOne(cascade=CascadeType.PERSIST)
+ @ManyToOne()
  @JoinColumn(name="CODLOCALIDADID")
  @ForeignKey(name="DIR_UNIDAD_LOCDIRECCION_FK")
  @JsonIgnore

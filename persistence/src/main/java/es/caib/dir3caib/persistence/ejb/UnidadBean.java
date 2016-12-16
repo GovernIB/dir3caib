@@ -41,6 +41,13 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     @PersistenceContext
     private EntityManager em;
 
+
+    @Override
+    public Unidad getReference(String id) throws Exception {
+
+        return em.getReference(Unidad.class, id);
+    }
+
     @Override
     public Unidad findById(String id) throws Exception {
 
@@ -579,7 +586,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         if (fechaActualizacion != null) { // Si hay fecha de actualizacion solo se envian las actualizadas
 
             for (Unidad unidad : hijosActualizados) {
-                log.info("FECHA ACTUALIZACION " + fechaActualizacion + "ANTERIOR A LA FECHA DE IMPORTACION DE LA UNIDAD ID " + unidad.getCodigo() + " FECHA IMPORT" + unidad.getFechaImportacion());
+                log.debug("FECHA ACTUALIZACION " + fechaActualizacion + "ANTERIOR A LA FECHA DE IMPORTACION DE LA UNIDAD ID " + unidad.getCodigo() + " FECHA IMPORT" + unidad.getFechaImportacion());
                 // Miramos que la unidad no este extinguida o anulada anterior a la fecha de sincronizacion de regweb
                 // ya que no debe ser enviada a regweb.
                 if (unidadValida(unidad, fechaSincronizacion)) {
@@ -642,7 +649,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
             if (fechaActualizacion != null) { // Si hay fecha de actualizacion solo se envian las actualizadas
                 for (Unidad unidad : unidadesObtenidas) {
-                    log.info("FECHA ACTUALIZACION " + fechaActualizacion + "ANTERIOR A LA FECHA DE IMPORTACION DE LA UNIDAD ID " + unidad.getCodigo() + " FECHA IMPORT" + unidad.getFechaImportacion());
+                    log.debug("FECHA ACTUALIZACION " + fechaActualizacion + "ANTERIOR A LA FECHA DE IMPORTACION DE LA UNIDAD ID " + unidad.getCodigo() + " FECHA IMPORT" + unidad.getFechaImportacion());
                     // Miramos que la unidad no este extinguida o anulada anterior a la fecha de sincronizacion de regweb
                     // ya que no debe ser enviada a regweb.
                     if (unidadValida(unidad, fechaSincronizacion)) {

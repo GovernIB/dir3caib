@@ -18,7 +18,6 @@ import java.util.Set;
 @Local
 public interface UnidadLocal extends BaseEjb<Unidad, String> {
 
-
     /**
      * Borra todas las unidades
      *

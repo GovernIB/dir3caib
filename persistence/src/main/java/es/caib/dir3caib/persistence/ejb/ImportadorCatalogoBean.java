@@ -613,6 +613,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                             // Obtenemos codigo y miramos si ya existe en la BD
                             // Creamos la clave compuesta primero.
                             try {
+                                Boolean existe;
                                 final Long codigoLocalidad = new Long(fila[0]);
                                 // cargamos el nivel de Administracion correspondiente.
 
@@ -628,6 +629,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                                         codigoEntidadGeografica);
 
                                 if (localidad == null) { // Si es nuevo creamos el objeto a introducir
+                                    existe = false;
                                     localidad = new CatLocalidad();
                                     localidad.setCodigoLocalidad(codigoLocalidad);
 
@@ -637,6 +639,8 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                                     CatEntidadGeografica catEntidadGeografica;
                                     catEntidadGeografica = cacheEntidadGeografica.get(fila[3]);
                                     localidad.setEntidadGeografica(catEntidadGeografica);
+                                }else{
+                                    existe = true;
                                 }
 
 
@@ -647,8 +651,12 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                                     localidad.setDescripcionLocalidad(fila[1]);
                                 }
 
+                                if(existe){
+                                    catLocalidadEjb.merge(localidad);
+                                }else {
+                                    catLocalidadEjb.persistReal(localidad);
+                                }
 
-                                catLocalidadEjb.persist(localidad);
 
                             } catch (Exception e) {
                                 log.error(" Error important Localidad " + e.getMessage());

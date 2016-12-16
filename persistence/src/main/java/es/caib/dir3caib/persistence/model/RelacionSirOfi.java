@@ -1,20 +1,10 @@
 package es.caib.dir3caib.persistence.model;
-import java.io.Serializable;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.Index;
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * @version 1.0
@@ -79,7 +69,7 @@ public class RelacionSirOfi implements Serializable {
    * @return the unidad
    */
 
-  @ManyToOne(cascade=CascadeType.PERSIST)
+  @ManyToOne()
   @JoinColumn (name="CODUNIDAD")
   @ForeignKey(name="DIR_RELSIROFI_CATUNIDAD_FK")
   public Unidad getUnidad() {
