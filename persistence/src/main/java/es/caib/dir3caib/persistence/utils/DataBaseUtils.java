@@ -30,7 +30,7 @@ public class DataBaseUtils {
         String value) {
 
       // Convertir caracters < 128 a _ (qualsevol caràcter)
-      StringBuffer newValue = new StringBuffer(value.length());
+     /* StringBuffer newValue = new StringBuffer(value.length());
 
       for (int i = 0; i < value.length(); i++) {
 
@@ -45,10 +45,12 @@ public class DataBaseUtils {
             newValue.append((char) charVal);
           }
         }
-      }
+      }*/
 
-      parametros.put(variable, "%" + newValue.toString().toLowerCase() + "%");
-      return " upper(" + columnName + ") like upper(:" + variable + ")";
+
+      parametros.put(variable, "%" + value + "%");
+      return "upper(translate(" + columnName + ",'ÁÉÍÓÚáéíóúÀÈÌÒÙàèìòù','AEIOUaeiouAEIOUaeiou')) like upper(translate(:" + variable + ",'ÁÉÍÓÚáéíóúÀÈÌÒÙàèìòù','AEIOUaeiouAEIOUaeiou'))";
+
     }
   }
 
