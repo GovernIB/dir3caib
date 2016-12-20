@@ -29,7 +29,7 @@ public class DataBaseUtils {
     public String like(String columnName, String variable, Map<String, Object> parametros,
         String value) {
 
-      parametros.put(variable, "%" + value + "%");
+      parametros.put(variable, "%" + value.toLowerCase() + "%");
       return "upper(translate(" + columnName + ",'ÁÉÍÓÚáéíóúÀÈÌÒÙàèìòù','AEIOUaeiouAEIOUaeiou')) like upper(translate(:" + variable + ",'ÁÉÍÓÚáéíóúÀÈÌÒÙàèìòù','AEIOUaeiouAEIOUaeiou'))";
 
     }
