@@ -20,8 +20,7 @@ public class DataBaseUtils {
     public String like(String columnName, String variable, Map<String, Object> parametros,
         String value) {
       parametros.put(variable, "%" + value.toLowerCase() + "%");
-      return " upper(convert(" + columnName + ", 'US7ASCII')) like upper(convert(:" + variable
-          + ", 'US7ASCII')) ";
+      return "upper(translate(" + columnName + ",'ÁÉÍÓÚáéíóúÀÈÌÒÙàèìòù','AEIOUaeiouAEIOUaeiou')) like upper(translate(:" + variable + ",'ÁÉÍÓÚáéíóúÀÈÌÒÙàèìòù','AEIOUaeiouAEIOUaeiou'))";
     }
   }
 
@@ -39,7 +38,7 @@ public class DataBaseUtils {
     public String like(String columnName, String variable, Map<String, Object> parametros,
         String value) {
       parametros.put(variable, "%" + value.toLowerCase() + "%");
-      return " upper(" + columnName + ") like upper(:" + variable + ") ";
+      return "upper(translate(" + columnName + ",'ÁÉÍÓÚáéíóúÀÈÌÒÙàèìòù','AEIOUaeiouAEIOUaeiou')) like upper(translate(:" + variable + ",'ÁÉÍÓÚáéíóúÀÈÌÒÙàèìòù','AEIOUaeiouAEIOUaeiou'))";
     }
   }
 
