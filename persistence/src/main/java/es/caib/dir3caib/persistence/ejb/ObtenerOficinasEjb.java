@@ -105,7 +105,7 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
         Unidad unidad = null;
         //unidades.add(unidadEjb.obtenerUnidad(codigo)); // Añadimos la raiz
         if (fechaActualizacion != null) { // ES actualizacion, miramos si la raiz se ha actualizado
-            log.info("ACTUALIZACION UNIDADES");
+            log.info("ACTUALIZACION OFICINAS");
             //Obtenemos la raiz en funcion de la fecha de actualización
             unidad = unidadEjb.findUnidadActualizada(codigo, fechaActualizacion);
             if (unidad != null) { //Han actualizado la raiz

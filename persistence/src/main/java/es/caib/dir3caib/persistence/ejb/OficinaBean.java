@@ -376,7 +376,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
                     // Cogemos solo las relaciones organizativas que no han sido anuladas o extinguidas anterior a la fecha de sincronizacion
                     Set<RelacionOrganizativaOfi> todasRelaciones = new HashSet<RelacionOrganizativaOfi>(oficina.getOrganizativasOfi());
-                    log.info("ORGANIZATIVAS OFI: " + todasRelaciones.size());
+
                     Set<RelacionOrganizativaOfi> relacionesValidas = new HashSet<RelacionOrganizativaOfi>();
                     for (RelacionOrganizativaOfi relOrg : todasRelaciones) {
                         //En el caso de la actualización además hay que asegurarse que no se traen relaciones extinguidas
@@ -385,7 +385,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
                             relacionesValidas.add(relOrg);
                         }
                     }
-                    log.info("ORGANIZATIVAS VALIDAS: " + relacionesValidas.size());
+
                     oficina.setOrganizativasOfi(null);
                     oficina.setOrganizativasOfi(new ArrayList<RelacionOrganizativaOfi>(relacionesValidas));
 
