@@ -122,8 +122,4 @@ public class Dir3caibConstantes {
     // Expresión CRON por defecto para actualizar DIR3
     public static final String CRON_SINCRONIZAR_DIR3= "0 0 3 1/1 * ? *"; // Sincronización diaria a las 03:00 am
 
-    // Valores por defecto Búsqueda de Unidades y Oficinas
-    public static final long NIVEL_ADMINISTRACION_AUTONOMICA = 2;
-    public static final long CA_ILLES_BALEARS = 4;
-
 }

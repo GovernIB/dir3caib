@@ -96,9 +96,16 @@ public class UnidadController extends BaseController {
         List<CatComunidadAutonoma> comunidades = catComunidadAutonomaEjb.getAll();
         List<CatEstadoEntidad> estadosEntidad = catEstadoEntidadEjb.getAll();
 
-        if(Configuracio.isCAIB()){
-            unidadBusqueda.getUnidad().setNivelAdministracion(new CatNivelAdministracion(Dir3caibConstantes.NIVEL_ADMINISTRACION_AUTONOMICA));
-            unidadBusqueda.getUnidad().setCodComunidad(new CatComunidadAutonoma(Dir3caibConstantes.CA_ILLES_BALEARS));
+        // Valores por defecto en la Búsqueda
+        String administracion = Configuracio.getBusquedaAdministracion();
+        String comunidadAutonoma = Configuracio.getBusquedaComunidad();
+
+        if(administracion != null){
+            unidadBusqueda.getUnidad().setNivelAdministracion(new CatNivelAdministracion(Long.valueOf(administracion)));
+        }
+
+        if(comunidadAutonoma != null){
+            unidadBusqueda.getUnidad().setCodComunidad(new CatComunidadAutonoma(Long.valueOf(comunidadAutonoma)));
         }
 
         model.addAttribute("unidadBusqueda", unidadBusqueda);

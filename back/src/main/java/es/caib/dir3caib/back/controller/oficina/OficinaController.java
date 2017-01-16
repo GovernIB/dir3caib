@@ -94,11 +94,17 @@ public class OficinaController extends BaseController {
         List<CatComunidadAutonoma> comunidades = catComunidadAutonomaEjb.getAll();
         List<CatEstadoEntidad> estadosEntidad = catEstadoEntidadEjb.getAll();
 
-        if(Configuracio.isCAIB()){
-            oficinaBusqueda.getOficina().setNivelAdministracion(new CatNivelAdministracion(Dir3caibConstantes.NIVEL_ADMINISTRACION_AUTONOMICA));
-            oficinaBusqueda.getOficina().setCodComunidad(new CatComunidadAutonoma(Dir3caibConstantes.CA_ILLES_BALEARS));
+        // Valores por defecto en la Búsqueda
+        String administracion = Configuracio.getBusquedaAdministracion();
+        String comunidadAutonoma = Configuracio.getBusquedaComunidad();
+
+        if(administracion != null){
+            oficinaBusqueda.getOficina().setNivelAdministracion(new CatNivelAdministracion(Long.valueOf(administracion)));
         }
 
+        if(comunidadAutonoma != null){
+            oficinaBusqueda.getOficina().setCodComunidad(new CatComunidadAutonoma(Long.valueOf(comunidadAutonoma)));
+        }
 
         model.addAttribute("oficinaBusqueda", oficinaBusqueda);
         model.addAttribute("administraciones", administraciones);

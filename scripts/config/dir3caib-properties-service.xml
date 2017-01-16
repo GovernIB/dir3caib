@@ -36,6 +36,11 @@
             <!-- Sincronitzacio DIR3. L'exemple correspon a una sincronització diaria a les 3:00 de la dematinada -->
 			<!-- Per defecte desactivada -->
             # es.caib.dir3caib.cronExpression=0 0 3 1/1 * ? *
+
+			<!--Valores por defecto para la búsqueda de Unidades y Oficinas-->
+			es.caib.dir3caib.busqueda.administracion=2
+			es.caib.dir3caib.busqueda.comunidad=4
+
         </attribute>
     </mbean>
 </server>
