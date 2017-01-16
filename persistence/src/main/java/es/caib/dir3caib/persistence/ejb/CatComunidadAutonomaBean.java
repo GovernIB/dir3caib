@@ -19,7 +19,7 @@ import java.util.List;
  */
 @Stateless(name = "CatComunidadAutonomaEJB")
 @SecurityDomain("seycon")
-@RolesAllowed("DIR_ADMIN")
+@RolesAllowed({"DIR_ADMIN","tothom"})
 public class CatComunidadAutonomaBean extends BaseEjbJPA<CatComunidadAutonoma, Long> implements CatComunidadAutonomaLocal{
 
     protected final Logger log = Logger.getLogger(getClass());

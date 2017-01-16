@@ -5,10 +5,7 @@ import es.caib.dir3caib.back.form.FechasForm;
 import es.caib.dir3caib.back.form.OficinaBusquedaForm;
 import es.caib.dir3caib.back.utils.Mensaje;
 import es.caib.dir3caib.persistence.ejb.*;
-import es.caib.dir3caib.persistence.model.CatEstadoEntidad;
-import es.caib.dir3caib.persistence.model.Descarga;
-import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
-import es.caib.dir3caib.persistence.model.Oficina;
+import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.Paginacion;
 import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
@@ -92,7 +89,21 @@ public class OficinaController extends BaseController {
         oficina.setEstado(vigente);
 
         OficinaBusquedaForm oficinaBusqueda = new OficinaBusquedaForm(oficina, 1);
+
+        List<CatNivelAdministracion> administraciones = catNivelAdministracionEjb.getAll();
+        List<CatComunidadAutonoma> comunidades = catComunidadAutonomaEjb.getAll();
+        List<CatEstadoEntidad> estadosEntidad = catEstadoEntidadEjb.getAll();
+
+        if(Configuracio.isCAIB()){
+            oficinaBusqueda.getOficina().setNivelAdministracion(new CatNivelAdministracion(Dir3caibConstantes.NIVEL_ADMINISTRACION_AUTONOMICA));
+            oficinaBusqueda.getOficina().setCodComunidad(new CatComunidadAutonoma(Dir3caibConstantes.CA_ILLES_BALEARS));
+        }
+
+
         model.addAttribute("oficinaBusqueda", oficinaBusqueda);
+        model.addAttribute("administraciones", administraciones);
+        model.addAttribute("comunidades", comunidades);
+        model.addAttribute("estadosEntidad", estadosEntidad);
 
         return "oficina/oficinaList";
 
@@ -122,6 +133,10 @@ public class OficinaController extends BaseController {
                 codAmbProvincia, codEstado);
 
         busqueda.setPageNumber(1);
+
+        mav.addObject("administraciones", catNivelAdministracionEjb.getAll());
+        mav.addObject("comunidades", catComunidadAutonomaEjb.getAll());
+        mav.addObject("estadosEntidad", catEstadoEntidadEjb.getAll());
 
         mav.addObject("paginacion", paginacion);
         mav.addObject("oficinaBusqueda", busqueda);
@@ -355,12 +370,13 @@ public class OficinaController extends BaseController {
      * @param idOficina
      * @return
      */
-    @RequestMapping(value = "/{idOficina}/{estadoOficina}/arbol", method = RequestMethod.GET)
-    public ModelAndView mostrarArbolOficinas(HttpServletRequest request, @PathVariable String idOficina, @PathVariable String estadoOficina) throws Exception {
+    @RequestMapping(value = "/{idOficina}/arbol", method = RequestMethod.GET)
+    public ModelAndView mostrarArbolOficinas(HttpServletRequest request, @PathVariable String idOficina) throws Exception {
 
         ModelAndView mav = new ModelAndView("/arbolList");
         Nodo nodo = new Nodo();
-        arbolEjb.arbolOficinas(idOficina, nodo, estadoOficina);
+        Oficina oficina = oficinaEjb.findByCodigoLigero(idOficina);
+        arbolEjb.arbolOficinas(idOficina, nodo, oficina.getEstado().getCodigoEstadoEntidad());
         mav.addObject("nodo", nodo);
         mav.addObject("oficinas", "oficinas");
 

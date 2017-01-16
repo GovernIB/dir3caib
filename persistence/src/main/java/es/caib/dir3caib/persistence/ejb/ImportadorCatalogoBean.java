@@ -4,7 +4,6 @@ import au.com.bytecode.opencsv.CSVReader;
 import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
 import es.caib.dir3caib.utils.Configuracio;
-import es.caib.dir3caib.utils.Constants;
 import es.caib.dir3caib.ws.dir3.catalogo.client.RespuestaWS;
 import es.caib.dir3caib.ws.dir3.catalogo.client.SC21CTVolcadoCatalogos;
 import es.caib.dir3caib.ws.dir3.catalogo.client.SC21CTVolcadoCatalogosService;
@@ -38,7 +37,7 @@ import java.util.zip.ZipInputStream;
  */
 @Stateless(name = "ImportadorCatalogoEJB")
 @SecurityDomain("seycon")
-@RunAs(Constants.DIR_ADMIN)
+@RunAs(Dir3caibConstantes.DIR_ADMIN)
 @PermitAll
 public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 

@@ -217,12 +217,12 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
     public Nodo findUnidad(String id, String estado) throws Exception;
 
     /**
-     * Obtiene solo el código de la unidad indicada
+     * OObtiene el código, denominación y estado de la unidad indicada
      * @param codigo
      * @return
     * @throws Exception
     */
-    public Unidad obtenerUnidad(String codigo) throws Exception;
+    public Unidad findByCodigoLigero(String codigo) throws Exception;
 
     /**
      * Obtiene el código de todas las Unidades hijas de la unidad raiz indicada por código

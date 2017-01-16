@@ -10,9 +10,13 @@ package es.caib.dir3caib.persistence.model;
 public class Dir3caibConstantes {
 
      /* -------------- ROLES --------------*/
-    public static final String ROL_ADMIN = "DIR_ADMIN";  // Administrador
+    public static final String DIR_ADMIN = "DIR_ADMIN";  // Administrador
+    public static final String ROL_TOTHOM = "tothom";  // tothom
 
-    
+    public static final String DIR3CAIB_PROPERTY_BASE = "es.caib.dir3caib.";
+
+    public static final String SECURITY_DOMAIN = "seycon";
+
     // Importación Catalogo
     //public static final String CATALOGOS_LOCATION_PROPERTY = "es.caib.dir3caib.catalogos.path";
     public static final String CATALOGOS_ARCHIVO_ZIP = "catalogosCSV";
@@ -117,5 +121,9 @@ public class Dir3caibConstantes {
 
     // Expresión CRON por defecto para actualizar DIR3
     public static final String CRON_SINCRONIZAR_DIR3= "0 0 3 1/1 * ? *"; // Sincronización diaria a las 03:00 am
+
+    // Valores por defecto Búsqueda de Unidades y Oficinas
+    public static final long NIVEL_ADMINISTRACION_AUTONOMICA = 2;
+    public static final long CA_ILLES_BALEARS = 4;
 
 }

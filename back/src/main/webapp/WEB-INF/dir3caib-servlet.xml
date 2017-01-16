@@ -16,6 +16,16 @@
     <tx:annotation-driven/>
     <mvc:default-servlet-handler/>
 
+    <!-- Declaración de los Interceptors -->
+    <mvc:interceptors>
+
+        <!-- Configuración de Idioma -->
+        <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+            <property name="paramName" value="lang" />
+        </bean>
+
+    </mvc:interceptors>
+
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" p:prefix="/WEB-INF/jsp/"
           p:suffix=".jsp"/>
 
@@ -23,20 +33,6 @@
     <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource"
           p:basename="/WEB-INF/classes/es/caib/dir3caib/back/webapp/missatges" p:defaultEncoding="UTF-8"/>
 
-    <!-- Idioma por defecto -->
-    <!--  
-    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.FixedLocaleResolver" p:defaultLocale="ca"/>
-    -->
-    
-    
-    <!-- Etiquetes idiomes -->
-    <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
-        <property name="paramName" value="lang" />
-    </bean>
-    
-    <bean id="handlerMapping" class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
-        <property name="interceptors" ref="localeChangeInterceptor"/>
-    </bean>
         
     <!-- Declare the Resolver org.springframework.web.servlet.i18n.SessionLocaleResolver -->
     <bean id="localeResolver" class="es.caib.dir3caib.back.utils.Dir3CaibSessionLocaleResolver">

@@ -4,6 +4,7 @@
  */
 package es.caib.dir3caib.persistence.ejb;
 
+import es.caib.dir3caib.persistence.model.CatEstadoEntidad;
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.persistence.utils.DataBaseUtils;
@@ -29,7 +30,7 @@ import java.util.*;
  */
 @Stateless(name = "UnidadEJB")
 @SecurityDomain("seycon")
-@RolesAllowed("DIR_ADMIN")
+@RolesAllowed({"DIR_ADMIN","tothom"})
 public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLocal {
 
     @EJB(mappedName = "dir3caib/OficinaEJB/local")
@@ -113,7 +114,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     @Override
     public Nodo findUnidad(String id, String estado) throws Exception {
 
-        Query q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.estado.descripcionEstadoEntidad, unidad.codUnidadRaiz.codigo, unidad.codUnidadRaiz.denominacion, unidad.codUnidadSuperior.codigo, unidad.codUnidadSuperior.denominacion from Unidad as unidad where unidad.codigo=:id and unidad.estado.descripcionEstadoEntidad =:estado");
+        Query q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.estado.descripcionEstadoEntidad, unidad.codUnidadRaiz.codigo, unidad.codUnidadRaiz.denominacion, unidad.codUnidadSuperior.codigo, unidad.codUnidadSuperior.denominacion from Unidad as unidad where unidad.codigo=:id and unidad.estado.codigoEstadoEntidad =:estado");
         q.setParameter("id", id);
         q.setParameter("estado", estado);
 
@@ -158,20 +159,25 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
 
     /**
-     * Obtiene solo el código de la unidad indicada
+     * Obtiene el código, denominación y estado de la unidad indicada
      * @param codigo
      * @return
      * @throws Exception
      */
     @Override
-    public Unidad obtenerUnidad(String codigo) throws Exception {
-        Query q = em.createQuery("select unidad.codigo from Unidad as unidad where unidad.codigo=:codigo ");
+    public Unidad findByCodigoLigero(String codigo) throws Exception {
+        Query q = em.createQuery("select unidad.codigo, unidad.denominacion, unidad.estado.codigoEstadoEntidad from Unidad as unidad where unidad.codigo=:codigo ");
         q.setParameter("codigo", codigo);
 
-        List<String> unidades = q.getResultList();
+        List<Object[]> result = q.getResultList();
 
-        if(unidades.size() > 0){
-            return new Unidad(unidades.get(0));
+        if (result.size() == 1) {
+            Unidad unidad = new Unidad();
+            unidad.setCodigo((String) result.get(0)[0]);
+            unidad.setDenominacion((String) result.get(0)[1]);
+            unidad.setEstado(new CatEstadoEntidad((String)result.get(0)[2]));
+
+            return  unidad;
         }else {
             return  null;
         }
@@ -464,7 +470,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     @Override
     public List<Nodo> hijos(String codigo, String estado) throws Exception {
 
-        Query q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.estado.descripcionEstadoEntidad,unidad.codUnidadRaiz.codigo, unidad.codUnidadRaiz.denominacion, unidad.codUnidadSuperior.codigo, unidad.codUnidadSuperior.denominacion from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.descripcionEstadoEntidad =:estado order by unidad.codigo");
+        Query q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.estado.codigoEstadoEntidad,unidad.codUnidadRaiz.codigo, unidad.codUnidadRaiz.denominacion, unidad.codUnidadSuperior.codigo, unidad.codUnidadSuperior.denominacion from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:estado order by unidad.codigo");
 
         q.setParameter("codigo", codigo);
         q.setParameter("estado", estado);

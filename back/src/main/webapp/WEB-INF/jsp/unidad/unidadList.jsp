@@ -181,7 +181,7 @@
                     <tr>
 
                         <td>${unidad.codigo}</td>
-                        <td><a href="<c:url value="/unidad/${unidad.codigo}/${unidad.estado.descripcionEstadoEntidad}/arbol/"/>">${unidad.denominacion}</a></td>
+                        <td><a href="<c:url value="/unidad/${unidad.codigo}/arbol"/>">${unidad.denominacion}</a></td>
                         <td>${unidad.codUnidadSuperior.codigo} - ${unidad.codUnidadSuperior.denominacion}</td>
                         <td>${unidad.codUnidadRaiz.codigo} - ${unidad.codUnidadRaiz.denominacion}</td>
                         <td>${unidad.estado.descripcionEstadoEntidad}</td>
@@ -206,10 +206,6 @@
 
     <hr>
 
- <%--   <footer>
-        <p>Desenvolupat per Fundació BIT.</p>
-    </footer>--%>
-
 
 
     </div>
@@ -223,13 +219,13 @@
         <c:url var="ambitosTerritoriales" value="/unidad/ambitosTerritoriales" />
         <c:url var="provincias" value="/unidad/provincias" />
 
-                $(document).ready(function() {
-                   // actualizamos los ambitos y provincias para cuando recargamos la pagina.
-                   actualizarAmbitos();
-                   actualizarProvincias();
+        $(document).ready(function() {
+           // actualizamos los ambitos y provincias para cuando recargamos la pagina.
+           actualizarAmbitos();
+           actualizarProvincias();
 
 
-                });
+        });
 
         // Cargamos los ambitos territoriales de la administracion seleccionada
         function actualizarAmbitos(){

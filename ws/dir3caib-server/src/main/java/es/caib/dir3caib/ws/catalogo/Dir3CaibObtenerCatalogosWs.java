@@ -5,7 +5,6 @@ import es.caib.dir3caib.persistence.model.ws.CatComunidadAutonomaTF;
 import es.caib.dir3caib.persistence.model.ws.CatEntidadGeograficaTF;
 import es.caib.dir3caib.persistence.model.ws.CatLocalidadTF;
 import es.caib.dir3caib.persistence.model.ws.CatProvinciaTF;
-import es.caib.dir3caib.utils.Constants;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
@@ -36,38 +35,38 @@ public interface Dir3CaibObtenerCatalogosWs {
 
 
   @WebMethod
-  @RolesAllowed({ Constants.DIR_ADMIN })
+  @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
   public List<CatEstadoEntidad> obtenerCatEstadoEntidad() throws Exception;
 
   @WebMethod
-  @RolesAllowed({ Constants.DIR_ADMIN })
+  @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
   public List<CatNivelAdministracion> obtenerCatNivelAdministracion() throws Exception;
 
   @WebMethod
-  @RolesAllowed({ Constants.DIR_ADMIN })
+  @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
   public List<CatPais> obtenerCatPais() throws Exception;
 
   @WebMethod
-  @RolesAllowed({ Constants.DIR_ADMIN })
+  @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
   public List<CatComunidadAutonomaTF> obtenerCatComunidadAutonoma() throws Exception;
 
   @WebMethod
-  @RolesAllowed({ Constants.DIR_ADMIN })
+  @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
   public List<CatProvinciaTF> obtenerCatProvincia() throws Exception;
 
   @WebMethod
-  @RolesAllowed({ Constants.DIR_ADMIN })
+  @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
   public List<CatLocalidadTF> obtenerCatLocalidad() throws Exception;
 
   @WebMethod
-  @RolesAllowed({ Constants.DIR_ADMIN })
+  @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
   public List<CatEntidadGeograficaTF> obtenerCatEntidadGeografica() throws Exception;
 
   @WebMethod
-  @RolesAllowed({ Constants.DIR_ADMIN })
+  @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
   public List<Servicio> obtenerCatServicio() throws Exception;
 
   @WebMethod
-  @RolesAllowed({ Constants.DIR_ADMIN })
+  @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
   public List<CatTipoVia> obtenerCatTipoVia() throws Exception;
 }

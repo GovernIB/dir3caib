@@ -4,7 +4,8 @@
         <attribute name="Properties">
 			<!-- Propietat que indica als projectes que activins les caracteristiques
                  especials requerides en l'entorn de la CAIB (Govern Balear) si es true -->
-		    es.caib.dir3caib.iscaib=false
+			es.caib.dir3caib.defaultlanguage=ca
+			es.caib.dir3caib.iscaib=false
             es.caib.dir3caib.development=false
             es.caib.dir3caib.showtimestamp=false
 		

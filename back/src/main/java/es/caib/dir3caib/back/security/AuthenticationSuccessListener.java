@@ -64,7 +64,7 @@ public class AuthenticationSuccessListener implements
       String rol = grantedAuthority.getAuthority();
       log.info("Rol SEYCON : " + rol);
 
-      if (Dir3caibConstantes.ROL_ADMIN.equals(rol)) {
+      if (Dir3caibConstantes.DIR_ADMIN.equals(rol)) {
         containsRoleAdmin = true;
       }
 

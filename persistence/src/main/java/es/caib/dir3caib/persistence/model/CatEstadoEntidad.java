@@ -1,10 +1,10 @@
 package es.caib.dir3caib.persistence.model;
 
-import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 
 /**
@@ -22,7 +22,11 @@ public class CatEstadoEntidad implements Serializable {
 
 	}
 
-	public void finalize() throws Throwable {
+  public CatEstadoEntidad(String codigoEstadoEntidad) {
+    this.codigoEstadoEntidad = codigoEstadoEntidad;
+  }
+
+  public void finalize() throws Throwable {
 
 	}
 

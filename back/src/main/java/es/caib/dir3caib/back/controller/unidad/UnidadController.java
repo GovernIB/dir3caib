@@ -86,11 +86,25 @@ public class UnidadController extends BaseController {
 
         CatEstadoEntidad vigente = catEstadoEntidadEjb.findByCodigo(Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
+
         Unidad unidad = new Unidad();
         unidad.setEstado(vigente);
 
         UnidadBusquedaForm unidadBusqueda = new UnidadBusquedaForm(unidad, 1, false);
+
+        List<CatNivelAdministracion> administraciones = catNivelAdministracionEjb.getAll();
+        List<CatComunidadAutonoma> comunidades = catComunidadAutonomaEjb.getAll();
+        List<CatEstadoEntidad> estadosEntidad = catEstadoEntidadEjb.getAll();
+
+        if(Configuracio.isCAIB()){
+            unidadBusqueda.getUnidad().setNivelAdministracion(new CatNivelAdministracion(Dir3caibConstantes.NIVEL_ADMINISTRACION_AUTONOMICA));
+            unidadBusqueda.getUnidad().setCodComunidad(new CatComunidadAutonoma(Dir3caibConstantes.CA_ILLES_BALEARS));
+        }
+
         model.addAttribute("unidadBusqueda", unidadBusqueda);
+        model.addAttribute("administraciones", administraciones);
+        model.addAttribute("comunidades", comunidades);
+        model.addAttribute("estadosEntidad", estadosEntidad);
 
         return "unidad/unidadList";
 
@@ -122,6 +136,10 @@ public class UnidadController extends BaseController {
                 codAmbProvincia, busqueda.getUnidadRaiz(), codEstadoEntidad);
 
         busqueda.setPageNumber(1);
+
+        mav.addObject("administraciones", catNivelAdministracionEjb.getAll());
+        mav.addObject("comunidades", catComunidadAutonomaEjb.getAll());
+        mav.addObject("estadosEntidad", catEstadoEntidadEjb.getAll());
 
         mav.addObject("paginacion", paginacion);
         mav.addObject("unidadBusqueda", busqueda);
@@ -338,13 +356,16 @@ public class UnidadController extends BaseController {
      * @param idUnidad
      * @return
      */
-    @RequestMapping(value = "/{idUnidad}/{estadoUnidad}/arbol", method = RequestMethod.GET)
-    public ModelAndView mostrarArbolUnidades(HttpServletRequest request, @PathVariable String idUnidad, @PathVariable String estadoUnidad) throws Exception {
+    @RequestMapping(value = "/{idUnidad}/arbol", method = RequestMethod.GET)
+    public ModelAndView mostrarArbolUnidades(HttpServletRequest request, @PathVariable String idUnidad) throws Exception {
 
         Long start = System.currentTimeMillis();
         ModelAndView mav = new ModelAndView("/arbolList");
+
+        Unidad unidad = unidadEjb.findByCodigoLigero(idUnidad);
+
         Nodo nodo = new Nodo();
-        arbolEjb.arbolUnidades(idUnidad, nodo, estadoUnidad, true);
+        arbolEjb.arbolUnidades(idUnidad, nodo, unidad.getEstado().getCodigoEstadoEntidad(), true);
         Long end = System.currentTimeMillis();
 
         log.info("TIEMPO CARGA ARBOLarbol: " + Utils.formatElapsedTime(end - start));

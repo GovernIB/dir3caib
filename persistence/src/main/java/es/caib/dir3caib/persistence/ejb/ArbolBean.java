@@ -101,7 +101,7 @@ public class ArbolBean implements ArbolLocal {
             hijo.setDescripcionEstado(unidadHija.getDescripcionEstado());
             hijos.add(hijo);
             // llamada recursiva
-            arbolUnidades(unidadHija.getCodigo(), hijo, unidadHija.getDescripcionEstado(), conOficinas);
+            arbolUnidades(unidadHija.getCodigo(), hijo, estado, conOficinas);
         }
         nodo.setHijos(hijos);
     }

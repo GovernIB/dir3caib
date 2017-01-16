@@ -95,6 +95,7 @@
 		</web-resource-collection>
 		<auth-constraint>
 			<role-name>DIR_ADMIN</role-name>
+			<role-name>tothom</role-name>
 		</auth-constraint>
 	</security-constraint>
 
@@ -106,6 +107,11 @@
 	<security-role>
         <description>Administrador de DIR3CAIB</description>
 		<role-name>DIR_ADMIN</role-name>
+	</security-role>
+
+    <security-role>
+        <description>Usuario de consulta de DIR3CAIB</description>
+		<role-name>tothom</role-name>
 	</security-role>
 
     <listener>

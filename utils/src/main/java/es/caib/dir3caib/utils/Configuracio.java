@@ -5,7 +5,13 @@ package es.caib.dir3caib.utils;
  * @author anadal
  * 
  */
-public class Configuracio implements Constants {
+public class Configuracio {
+
+  public static final String DIR3CAIB_PROPERTY_BASE = "es.caib.dir3caib.";
+
+  public static String getDefaultLanguage() {
+    return System.getProperty(DIR3CAIB_PROPERTY_BASE + "defaultlanguage");
+  }
 
   public static boolean isCAIB() {
     return Boolean.getBoolean(DIR3CAIB_PROPERTY_BASE + "iscaib");

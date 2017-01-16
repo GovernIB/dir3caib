@@ -1,10 +1,10 @@
 package es.caib.dir3caib.ws.oficina;
 
 import es.caib.dir3caib.persistence.ejb.ObtenerOficinasLocal;
+import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.model.ws.OficinaTF;
 import es.caib.dir3caib.persistence.utils.Versio;
 import es.caib.dir3caib.utils.Configuracio;
-import es.caib.dir3caib.utils.Constants;
 import org.jboss.ejb3.annotation.SecurityDomain;
 import org.jboss.wsf.spi.annotation.TransportGuarantee;
 import org.jboss.wsf.spi.annotation.WebContext;
@@ -24,10 +24,10 @@ import java.util.List;
  * @author anadal (seguretat) Date: 12/02/14
  */
 
-@SecurityDomain(Constants.SECURITY_DOMAIN)
+@SecurityDomain(Dir3caibConstantes.SECURITY_DOMAIN)
 @Stateless(name = Dir3CaibObtenerOficinasImpl.NAME + "Ejb")
 @SOAPBinding(style = SOAPBinding.Style.RPC)
-@RolesAllowed({ Constants.DIR_ADMIN })
+@RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
 @WebService(name = Dir3CaibObtenerOficinasImpl.NAME_WS, portName = Dir3CaibObtenerOficinasImpl.NAME_WS, serviceName = Dir3CaibObtenerOficinasImpl.NAME_WS
     + "Service", endpointInterface = "es.caib.dir3caib.ws.oficina.Dir3CaibObtenerOficinasWs")
 @WebContext(contextRoot = "/dir3caib/ws", urlPattern = "/" + Dir3CaibObtenerOficinasImpl.NAME, transportGuarantee = TransportGuarantee.NONE, secureWSDLAccess = false, authMethod = "WSBASIC")

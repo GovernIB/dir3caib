@@ -19,7 +19,7 @@ import java.util.List;
  */
 @Stateless(name = "CatProvinciaEJB")
 @SecurityDomain("seycon")
-@RolesAllowed("DIR_ADMIN")
+@RolesAllowed({"DIR_ADMIN","tothom"})
 public class CatProvinciaBean extends BaseEjbJPA<CatProvincia, Long> implements CatProvinciaLocal{
 
     protected final Logger log = Logger.getLogger(getClass());
@@ -76,7 +76,7 @@ public class CatProvinciaBean extends BaseEjbJPA<CatProvincia, Long> implements 
                 "where catProvincia.comunidadAutonoma.codigoComunidad =:idComunidadAutonoma order by catProvincia.codigoProvincia");
 
         q.setParameter("idComunidadAutonoma", idComunidadAutonoma);
-        log.info("PROVINCIAS " + q.getResultList().size());
+
         return q.getResultList();
     }
 }

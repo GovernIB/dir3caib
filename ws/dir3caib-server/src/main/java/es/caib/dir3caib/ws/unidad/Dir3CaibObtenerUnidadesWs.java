@@ -1,7 +1,7 @@
 package es.caib.dir3caib.ws.unidad;
 
+import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.model.ws.UnidadTF;
-import es.caib.dir3caib.utils.Constants;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
@@ -32,21 +32,21 @@ public interface Dir3CaibObtenerUnidadesWs {
   public String getVersionWs();
 
   @WebMethod
-  @RolesAllowed({ Constants.DIR_ADMIN })
+  @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
   public UnidadTF obtenerUnidad(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception;
 
   @WebMethod
-  @RolesAllowed({ Constants.DIR_ADMIN })
+  @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
   public List<UnidadTF> obtenerArbolUnidades(String codigo, Date fechaActualizacion, Date fechaSincronizacion)
       throws Exception;
 
   @WebMethod
-  @RolesAllowed({ Constants.DIR_ADMIN })
+  @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
   public List<UnidadTF> obtenerArbolUnidadesDestinatarias(String codigo)
       throws Exception;
 
   @WebMethod
-  @RolesAllowed({ Constants.DIR_ADMIN })
+  @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
   public Date obtenerFechaUltimaActualizacion()
           throws Exception;
 

@@ -158,7 +158,7 @@
                     <tr>
 
                         <td>${oficina.codigo}</td>
-                        <td><a href="<c:url value="/oficina/${oficina.codigo}/${oficina.estado.descripcionEstadoEntidad}/arbol/"/>">${oficina.denominacion}</a></td>
+                        <td><a href="<c:url value="/oficina/${oficina.codigo}/arbol"/>">${oficina.denominacion}</a></td>
                         <td><c:if
                                 test="${not empty oficina.codOfiResponsable.codigo}">${oficina.codOfiResponsable.codigo} - ${oficina.codOfiResponsable.denominacion}</c:if><c:if
                                 test="${empty oficina.codOfiResponsable.codigo}"><fmt:message
@@ -186,11 +186,6 @@
 
 
     <hr>
-
- <%--   <footer>
-        <p>Desenvolupat per Fundació BIT.</p>
-    </footer>--%>
-
 
 
     </div>

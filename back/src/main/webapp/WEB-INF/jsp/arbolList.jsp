@@ -18,11 +18,11 @@
                     <h2><fmt:message key="unidad.organigrama"/>&nbsp;<i> ${nodo.codigo} - ${nodo.denominacion}</i></h2>
                 </div>
 
-                    <div class="btn-group pad-left">
+                    <%--<div class="btn-group pad-left">
                         <button type="button" class="btn-arbre btn-info btn-xs"
-                                onclick="goTo('<c:url value="/unidad/${nodo.codigo}/Vigente/arbol/"/>')"><i
+                                onclick="goTo('<c:url value="/unidad/${nodo.codigo}/arbol/"/>')"><i
                                 class="fa fa-sitemap"></i> <spring:message code="unidad.arbol.abre"/></button>
-                    </div>
+                    </div>--%>
 
                     <!-- LEYENDA -->
                     <div class="box llegenda">

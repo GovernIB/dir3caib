@@ -1,14 +1,10 @@
 package es.caib.dir3caib.persistence.model;
-import es.caib.dir3caib.persistence.model.CatPais;
-import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+
 import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.Index;
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * @version 1.0
@@ -31,7 +27,11 @@ public class CatComunidadAutonoma  implements Serializable {
 
 	}
 
-	public void finalize() throws Throwable {
+  public CatComunidadAutonoma(Long codigoComunidad) {
+    this.codigoComunidad = codigoComunidad;
+  }
+
+  public void finalize() throws Throwable {
 
 	}
 

@@ -8,7 +8,6 @@ import es.caib.dir3caib.persistence.model.ws.CatLocalidadTF;
 import es.caib.dir3caib.persistence.model.ws.CatProvinciaTF;
 import es.caib.dir3caib.persistence.utils.Versio;
 import es.caib.dir3caib.utils.Configuracio;
-import es.caib.dir3caib.utils.Constants;
 import org.jboss.ejb3.annotation.SecurityDomain;
 import org.jboss.wsf.spi.annotation.TransportGuarantee;
 import org.jboss.wsf.spi.annotation.WebContext;
@@ -31,10 +30,10 @@ import java.util.List;
  */
 
 
-@SecurityDomain(es.caib.dir3caib.utils.Constants.SECURITY_DOMAIN)
+@SecurityDomain(es.caib.dir3caib.persistence.model.Dir3caibConstantes.SECURITY_DOMAIN)
 @Stateless(name = Dir3CaibObtenerCatalogosImpl.NAME + "Ejb")
 @SOAPBinding(style = SOAPBinding.Style.RPC)
-@RolesAllowed({ Constants.DIR_ADMIN })
+@RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
 @WebService(name = Dir3CaibObtenerCatalogosImpl.NAME_WS, portName = Dir3CaibObtenerCatalogosImpl.NAME_WS,
     serviceName = Dir3CaibObtenerCatalogosImpl.NAME_WS + "Service",
     endpointInterface = "es.caib.dir3caib.ws.catalogo.Dir3CaibObtenerCatalogosWs"
@@ -71,7 +70,7 @@ public class Dir3CaibObtenerCatalogosImpl implements Dir3CaibObtenerCatalogosWs 
      */
     @Override
     @WebMethod
-    @RolesAllowed({ Constants.DIR_ADMIN })
+    @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
     public List<CatEstadoEntidad> obtenerCatEstadoEntidad() throws Exception {
         return obtenerCatalogosEjb.obtenerCatEstadoEntidad();
     }
@@ -83,7 +82,7 @@ public class Dir3CaibObtenerCatalogosImpl implements Dir3CaibObtenerCatalogosWs 
     */
     @Override
     @WebMethod
-    @RolesAllowed({ Constants.DIR_ADMIN })
+    @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
     public List<CatNivelAdministracion> obtenerCatNivelAdministracion() throws Exception{
         return  obtenerCatalogosEjb.obtenerCatNivelAdministracion();
     }
@@ -95,7 +94,7 @@ public class Dir3CaibObtenerCatalogosImpl implements Dir3CaibObtenerCatalogosWs 
     */
     @Override
     @WebMethod
-    @RolesAllowed({ Constants.DIR_ADMIN })
+    @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
     public List<CatPais> obtenerCatPais() throws Exception{
         return  obtenerCatalogosEjb.obtenerCatPais();
     }
@@ -107,7 +106,7 @@ public class Dir3CaibObtenerCatalogosImpl implements Dir3CaibObtenerCatalogosWs 
      */
     @Override
     @WebMethod
-    @RolesAllowed({ Constants.DIR_ADMIN })
+    @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
     public List<CatComunidadAutonomaTF> obtenerCatComunidadAutonoma() throws Exception{
         return  obtenerCatalogosEjb.obtenerCatComunidadAutonoma();
     }
@@ -119,7 +118,7 @@ public class Dir3CaibObtenerCatalogosImpl implements Dir3CaibObtenerCatalogosWs 
     */
     @Override
     @WebMethod
-    @RolesAllowed({ Constants.DIR_ADMIN })
+    @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
     public List<CatProvinciaTF> obtenerCatProvincia() throws Exception{
         return  obtenerCatalogosEjb.obtenerCatProvincia();
     }
@@ -131,7 +130,7 @@ public class Dir3CaibObtenerCatalogosImpl implements Dir3CaibObtenerCatalogosWs 
     */
     @Override
     @WebMethod
-    @RolesAllowed({ Constants.DIR_ADMIN })
+    @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
     public List<CatLocalidadTF> obtenerCatLocalidad() throws Exception{
         return  obtenerCatalogosEjb.obtenerCatLocalidad();
     }
@@ -143,7 +142,7 @@ public class Dir3CaibObtenerCatalogosImpl implements Dir3CaibObtenerCatalogosWs 
    */
     @Override
     @WebMethod
-    @RolesAllowed({ Constants.DIR_ADMIN })
+    @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
     public List<CatEntidadGeograficaTF> obtenerCatEntidadGeografica() throws Exception{
          return  obtenerCatalogosEjb.obtenerCatEntidadGeografica();
     }
@@ -155,7 +154,7 @@ public class Dir3CaibObtenerCatalogosImpl implements Dir3CaibObtenerCatalogosWs 
      */
     @Override
     @WebMethod
-    @RolesAllowed({ Constants.DIR_ADMIN })
+    @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
     public List<Servicio> obtenerCatServicio() throws Exception{
         return  obtenerCatalogosEjb.obtenerCatServicio();
     }
@@ -167,7 +166,7 @@ public class Dir3CaibObtenerCatalogosImpl implements Dir3CaibObtenerCatalogosWs 
      */
     @Override
     @WebMethod
-    @RolesAllowed({ Constants.DIR_ADMIN })
+    @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
     public List<CatTipoVia> obtenerCatTipoVia() throws Exception{
         return  obtenerCatalogosEjb.obtenerCatTipoVia();
     }

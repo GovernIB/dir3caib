@@ -1,18 +1,9 @@
 package es.caib.dir3caib.back.utils;
 
-import java.util.Properties;
-
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.persistence.EntityManagerFactory;
-
-import javax.sql.DataSource;
-
+import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -20,7 +11,12 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import es.caib.dir3caib.utils.Constants;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.persistence.EntityManagerFactory;
+import javax.sql.DataSource;
+import java.util.Properties;
 /**
  * 
  * @author anadal
@@ -60,8 +56,8 @@ public class ConfigurationJPA {
   private Properties additionalProperties() {
 
     Properties sysProp = System.getProperties();
-    final String hibernateProp = Constants.DIR3CAIB_PROPERTY_BASE + "hibernate.";
-    final int cutIndex = Constants.DIR3CAIB_PROPERTY_BASE.length();
+    final String hibernateProp = Dir3caibConstantes.DIR3CAIB_PROPERTY_BASE + "hibernate.";
+    final int cutIndex = Dir3caibConstantes.DIR3CAIB_PROPERTY_BASE.length();
     Properties properties = new Properties();
     for (Object keyObj : sysProp.keySet()) {
       String key = (String) keyObj;

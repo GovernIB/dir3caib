@@ -192,7 +192,7 @@ public class RestController {
     ResponseEntity<Nodo> organigrama(@RequestParam String codigo) throws Exception {
         log.info("dentro rest organigrama codigo : " + codigo);
         Nodo nodo = new Nodo();
-        arbolEjb.arbolUnidadesAscendentes(codigo, nodo, Dir3caibConstantes.DESCRIPCION_ESTADO_ENTIDAD_VIGENTE, false);
+        arbolEjb.arbolUnidadesAscendentes(codigo, nodo, Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE, false);
         log.info("NODO  REST" + nodo.getDenominacion());
 
         HttpHeaders headers = addAccessControllAllowOrigin();

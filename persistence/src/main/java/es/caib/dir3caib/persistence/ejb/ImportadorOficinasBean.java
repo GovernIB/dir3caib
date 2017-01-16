@@ -4,7 +4,6 @@ import au.com.bytecode.opencsv.CSVReader;
 import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
 import es.caib.dir3caib.utils.Configuracio;
-import es.caib.dir3caib.utils.Constants;
 import es.caib.dir3caib.utils.Utils;
 import es.caib.dir3caib.ws.dir3.oficina.client.*;
 import org.apache.commons.codec.binary.Base64;
@@ -37,7 +36,7 @@ import java.util.zip.ZipInputStream;
  */
 @Stateless(name = "ImportadorOficinasEJB")
 @SecurityDomain("seycon")
-@RunAs(Constants.DIR_ADMIN)
+@RunAs(Dir3caibConstantes.DIR_ADMIN)
 @PermitAll
 public class ImportadorOficinasBean implements ImportadorOficinasLocal {
     protected final Logger log = Logger.getLogger(getClass());
