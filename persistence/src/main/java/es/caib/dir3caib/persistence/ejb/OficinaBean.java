@@ -433,7 +433,6 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
             oficinasCompletas = new ArrayList<Oficina>(oficinasActualizadas);
         }
 
-        log.info("DIR3CAIB OFICINAS ENVIADAS DE " + codigo + ": " + oficinasCompletas.size());
 
         return oficinasCompletas;
 

@@ -526,14 +526,11 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
             Set<Unidad> hijos = new HashSet<Unidad>();
 
             List<Object[]> result = q.getResultList();
-            log.info("RESULT LIST " + result.size());
 
             for (Object[] object : result) {
                 hijos.add(new Unidad((String) object[0], (String) object[1]));
             }
 
-
-            log.info(hijos.size() + "Hijos encontrados de UNIDAD:  " + unidad.getCodigo());
             hijosTotales.addAll(hijos);
 
             //llamada recursiva para todos los hijos
