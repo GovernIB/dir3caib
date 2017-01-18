@@ -3,7 +3,6 @@ package es.caib.dir3caib.back.controller.unidad;
 import es.caib.dir3caib.back.controller.BaseController;
 import es.caib.dir3caib.back.form.FechasForm;
 import es.caib.dir3caib.back.form.UnidadBusquedaForm;
-import es.caib.dir3caib.back.utils.CodigoValor;
 import es.caib.dir3caib.back.utils.Mensaje;
 import es.caib.dir3caib.persistence.ejb.*;
 import es.caib.dir3caib.persistence.model.*;
@@ -51,9 +50,6 @@ public class UnidadController extends BaseController {
 
     @EJB(mappedName = "dir3caib/UnidadEJB/local")
     protected UnidadLocal unidadEjb;
-
-    @EJB(mappedName = "dir3caib/CatAmbitoTerritorialEJB/local")
-    protected CatAmbitoTerritorialLocal catAmbitoTerritorialEjb;
 
     @EJB(mappedName = "dir3caib/ContactoUOEJB/local")
     protected ContactoUOLocal contactoUOEjb;
@@ -381,26 +377,6 @@ public class UnidadController extends BaseController {
         return mav;
 
     }
-
-    /**
-     * Obtiene los {@link es.caib.dir3caib.persistence.model.CatAmbitoTerritorial} del nivel administracion seleccionado
-     */
-    @RequestMapping(value = "/ambitosTerritoriales", method = RequestMethod.GET)
-    public
-    @ResponseBody
-    List<CodigoValor> ambitosTerritoriales(@RequestParam Long id) throws Exception {
-
-        List<CatAmbitoTerritorial> ambitos = catAmbitoTerritorialEjb.getByAdministracion(id);
-        List<CodigoValor> codigosValor = new ArrayList<CodigoValor>();
-        for (CatAmbitoTerritorial ambito : ambitos) {
-            CodigoValor codigoValor = new CodigoValor();
-            codigoValor.setId(ambito.getCodigoAmbito());
-            codigoValor.setDescripcion(ambito.getDescripcionAmbito());
-            codigosValor.add(codigoValor);
-        }
-        return codigosValor;
-    }
-
 
 
     /**

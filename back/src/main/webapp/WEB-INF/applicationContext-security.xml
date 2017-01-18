@@ -10,25 +10,43 @@
     <sec:global-method-security secured-annotations="enabled" jsr250-annotations="enabled" pre-post-annotations="enabled" proxy-target-class="true"/>
 
     <sec:http create-session="never" use-expressions="true" auto-config="false" entry-point-ref="preAuthenticatedProcessingFilterEntryPoint">
-        <sec:intercept-url pattern="/rest/**" access="permitAll"/>
-        <!--<sec:intercept-url pattern="/**" access="hasRole('DIR_ADMIN')"/>-->
-        <sec:intercept-url pattern="/unidad/list" access="hasRole('tothom')"/>
-        <sec:intercept-url pattern="/unidad/ambitosTerritoriales" access="hasRole('tothom')"/>
-        <sec:intercept-url pattern="/unidad/provincias" access="hasRole('tothom')"/>
-        <sec:intercept-url pattern="/unidad/**/arbol" access="hasRole('tothom')"/>
 
-        <sec:intercept-url pattern="/oficina/list" access="hasRole('tothom')"/>
-        <sec:intercept-url pattern="/oficina/ambitosTerritoriales" access="hasRole('tothom')"/>
-        <sec:intercept-url pattern="/oficina/provincias" access="hasRole('tothom')"/>
-        <sec:intercept-url pattern="/oficina/**/arbol" access="hasRole('tothom')"/>
-
-        <sec:intercept-url pattern="/unidad/**" access="hasRole('DIR_ADMIN')"/>
-        <sec:intercept-url pattern="/oficina/**" access="hasRole('DIR_ADMIN')"/>
-        <sec:intercept-url pattern="/catalogo/**" access="hasRole('DIR_ADMIN')"/>
-        <sec:intercept-url pattern="/descarga/**" access="hasRole('DIR_ADMIN')"/>
-        <sec:intercept-url pattern="/archivo/**" access="hasRole('DIR_ADMIN')"/>
-
+        <!--INICIO-->
         <sec:intercept-url pattern="/inicio" access="hasAnyRole('DIR_ADMIN','tothom')"/>
+
+        <!--REST-->
+        <sec:intercept-url pattern="/rest/**" access="permitAll"/>
+
+        <!--UNIDAD-->
+        <sec:intercept-url pattern="/unidad/list" access="hasAnyRole('DIR_ADMIN','tothom')"/>
+        <sec:intercept-url pattern="/unidad/**/arbol" access="hasAnyRole('DIR_ADMIN','tothom')"/>
+
+        <sec:intercept-url pattern="/unidad/ficheros" access="hasRole('DIR_ADMIN')"/>
+        <sec:intercept-url pattern="/unidad/obtener" access="hasRole('DIR_ADMIN')"/>
+        <sec:intercept-url pattern="/unidad/importar" access="hasRole('DIR_ADMIN')"/>
+        <sec:intercept-url pattern="/unidad/eliminar" access="hasRole('DIR_ADMIN')"/>
+        <sec:intercept-url pattern="/unidad/sincronizar" access="hasRole('DIR_ADMIN')"/>
+        <sec:intercept-url pattern="/unidad/descarga/**" access="hasRole('DIR_ADMIN')"/>
+
+        <!--OFICINA-->
+        <sec:intercept-url pattern="/oficina/list" access="hasAnyRole('DIR_ADMIN','tothom')"/>
+        <sec:intercept-url pattern="/oficina/**/arbol" access="hasAnyRole('DIR_ADMIN','tothom')"/>
+
+        <sec:intercept-url pattern="/oficina/ficheros" access="hasRole('DIR_ADMIN')"/>
+        <sec:intercept-url pattern="/oficina/obtener" access="hasRole('DIR_ADMIN')"/>
+        <sec:intercept-url pattern="/oficina/importar" access="hasRole('DIR_ADMIN')"/>
+        <sec:intercept-url pattern="/oficina/eliminar" access="hasRole('DIR_ADMIN')"/>
+        <sec:intercept-url pattern="/oficina/sincronizar" access="hasRole('DIR_ADMIN')"/>
+        <sec:intercept-url pattern="/oficina/descarga/**" access="hasRole('DIR_ADMIN')"/>
+
+        <!--CATALOGO-->
+        <sec:intercept-url pattern="/catalogo/**" access="hasRole('DIR_ADMIN')"/>
+
+        <!--DESCARGA-->
+        <sec:intercept-url pattern="/descarga/**" access="hasRole('DIR_ADMIN')"/>
+
+        <!--ARCHIVO-->
+        <sec:intercept-url pattern="/archivo/**" access="hasRole('DIR_ADMIN')"/>
 
         <sec:custom-filter position="PRE_AUTH_FILTER" ref="preauthFilter"/>
         <sec:session-management session-fixation-protection="none"/>

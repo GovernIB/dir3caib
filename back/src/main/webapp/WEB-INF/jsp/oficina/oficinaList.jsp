@@ -197,7 +197,7 @@
     <script type="text/javascript">
 
 
-        <c:url var="provincias" value="/oficina/provincias" />
+        <c:url var="provincias" value="/rest/provincias" />
 
                 $(document).ready(function() {
                    // actualizamos las provincias para cuando recargamos la pagina.

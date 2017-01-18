@@ -42,6 +42,8 @@ import java.util.List;
 @RequestMapping(value = "/oficina")
 public class OficinaController extends BaseController {
 
+    protected final Logger log = Logger.getLogger(getClass());
+
     @EJB(mappedName = "dir3caib/OficinaEJB/local")
     protected OficinaLocal oficinaEjb;
 
@@ -53,8 +55,6 @@ public class OficinaController extends BaseController {
 
     @EJB(mappedName = "dir3caib/ServicioEJB/local")
     protected ServicioLocal servicioEjb;
-
-    protected final Logger log = Logger.getLogger(getClass());
 
     @EJB(mappedName = "dir3caib/ImportadorOficinasEJB/local")
     private ImportadorOficinasLocal importadorOficinas;
