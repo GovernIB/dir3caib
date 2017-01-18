@@ -97,11 +97,11 @@ public class UnidadController extends BaseController {
         String comunidadAutonoma = Configuracio.getBusquedaComunidad();
 
         if(administracion != null){
-            unidadBusqueda.getUnidad().setNivelAdministracion(new CatNivelAdministracion(Long.valueOf(administracion)));
+            unidadBusqueda.getUnidad().setNivelAdministracion(new CatNivelAdministracion(Long.valueOf(administracion.trim())));
         }
 
         if(comunidadAutonoma != null){
-            unidadBusqueda.getUnidad().setCodComunidad(new CatComunidadAutonoma(Long.valueOf(comunidadAutonoma)));
+            unidadBusqueda.getUnidad().setCodComunidad(new CatComunidadAutonoma(Long.valueOf(comunidadAutonoma.trim())));
         }
 
         model.addAttribute("unidadBusqueda", unidadBusqueda);
