@@ -181,8 +181,8 @@
     create table DIR_RELACIONORGANIZATIVAOFI (
         id int8 not null,
         ESTADO varchar(2),
-        CODOFICINA varchar(9),
-        CODUNIDAD varchar(9),
+        CODOFICINA varchar(9) not null,
+        CODUNIDAD varchar(9) not null,
         primary key (id),
         unique (CODOFICINA, CODUNIDAD)
     );
@@ -190,8 +190,8 @@
     create table DIR_RELACIONSIROFI (
         ID int8 not null,
         ESTADO varchar(2),
-        CODOFICINA varchar(9),
-        CODUNIDAD varchar(9),
+        CODOFICINA varchar(9) not null,
+        CODUNIDAD varchar(9) not null,
         primary key (ID),
         unique (CODOFICINA, CODUNIDAD)
     );

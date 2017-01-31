@@ -157,15 +157,15 @@
     create table DIR_RELACIONORGANIZATIVAOFI (
         id number(19,0) not null,
         ESTADO varchar2(2 char),
-        CODOFICINA varchar2(9 char),
-        CODUNIDAD varchar2(9 char)
+        CODOFICINA varchar2(9 char) not null,
+        CODUNIDAD varchar2(9 char) not null
     );
 
     create table DIR_RELACIONSIROFI (
         ID number(19,0) not null,
         ESTADO varchar2(2 char),
-        CODOFICINA varchar2(9 char),
-        CODUNIDAD varchar2(9 char)
+        CODOFICINA varchar2(9 char) not null,
+        CODUNIDAD varchar2(9 char) not null
     );
 
     create table DIR_SERVICIOOFI (
