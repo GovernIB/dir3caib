@@ -517,7 +517,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     public void arbolHijos(Set<Unidad> unidadesPadres, String estado, Set<Unidad> hijosTotales) throws Exception {
         for (Unidad unidad : unidadesPadres) {
 
-            Query q = em.createQuery("select unidad.codigo, unidad.denominacion from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:estado order by unidad.codigo");
+            Query q = em.createQuery("select unidad.codigo, unidad.denominacion, unidad.codUnidadRaiz.codigo, unidad.codUnidadSuperior.codigo, unidad.esEdp from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:estado order by unidad.codigo");
 
             q.setParameter("codigo", unidad.getCodigo());
             q.setParameter("estado", estado);
@@ -528,7 +528,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
             List<Object[]> result = q.getResultList();
 
             for (Object[] object : result) {
-                hijos.add(new Unidad((String) object[0], (String) object[1]));
+                hijos.add(new Unidad((String) object[0], (String) object[1], new Unidad((String) object[2]), new Unidad((String) object[3]),(Boolean) object[4]));
             }
 
             hijosTotales.addAll(hijos);
@@ -686,7 +686,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     @Override
     public List<Unidad> obtenerArbolUnidadesDestinatarias(String codigo) throws Exception {
 
-        Query q = em.createQuery("Select unidad.codigo, unidad.denominacion from Unidad as unidad where unidad.codigo =:codigo and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.codigo");
+        Query q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.codUnidadRaiz.codigo, unidad.codUnidadSuperior.codigo, unidad.esEdp from Unidad as unidad where unidad.codigo =:codigo and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.codigo");
         q.setParameter("codigo", codigo);
         q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
@@ -696,7 +696,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         List<Object[]> result = q.getResultList();
 
         for (Object[] object : result) {
-            unidades.add(new Unidad((String) object[0], (String) object[1]));
+            unidades.add(new Unidad((String) object[0], (String) object[1], new Unidad((String) object[2]), new Unidad((String) object[3]),(Boolean) object[4]));
         }
 
         Unidad unidadRaiz = null;

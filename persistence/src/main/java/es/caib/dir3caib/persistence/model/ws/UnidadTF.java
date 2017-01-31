@@ -318,7 +318,11 @@ public class UnidadTF {
         UnidadTF unidadTF = null;
         if (unidad != null) {
             unidadTF = new UnidadTF();
-            unidadTF.rellenarLigero(unidad);
+            unidadTF.setCodigo(unidad.getCodigo());
+            unidadTF.setDenominacion(unidad.getDenominacion());
+            unidadTF.setCodUnidadRaiz(unidad.getCodUnidadRaiz().getCodigo());
+            unidadTF.setCodUnidadSuperior(unidad.getCodUnidadSuperior().getCodigo());
+            unidadTF.setEsEdp(unidad.isEsEdp());
         }
 
         return unidadTF;

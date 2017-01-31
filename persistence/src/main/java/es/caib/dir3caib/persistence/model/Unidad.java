@@ -97,6 +97,14 @@ public class Unidad implements Serializable {
     this.denominacion = denominacion;
   }
 
+  public Unidad(String codigo, String denominacion, Unidad codUnidadRaiz, Unidad codUnidadSuperior, boolean esEdp) {
+    this.codigo = codigo;
+    this.denominacion = denominacion;
+    this.codUnidadSuperior = codUnidadSuperior;
+    this.codUnidadRaiz = codUnidadRaiz;
+    this.esEdp = esEdp;
+  }
+
   public Unidad(String codigo) {
     this.codigo = codigo;
   }

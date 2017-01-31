@@ -311,13 +311,17 @@ public class OficinaController extends BaseController {
             // Controlamos que no se puedan sincronizar las oficinas antes que las unidades.
             // Para ello comprobamos que la fecha de importación de las unidades no sea anterior
             // a la fecha de la sincro de las oficinas (hoy)
-            if (Utils.isAfterDay(hoy, ultimaDescargaUnidad.getFechaImportacion())) {
+            if (ultimaDescargaUnidad == null || Utils.isAfterDay(hoy, ultimaDescargaUnidad.getFechaImportacion())) {
                 Mensaje.saveMessageError(request, getMessage("oficina.sincronizacion.nosepuede"));
             } else {
                 final Boolean sincronizacion = true;
+                Date fechaFin = null;
+                if(ultimaDescargaOficina != null){
+                    fechaFin = ultimaDescargaOficina.getFechaFin();
+                }
 
                 // Obtenemos los archivos por WS
-                boolean descargaOk = descargarOficinasWS(request, ultimaDescargaOficina.getFechaFin(), hoy);
+                boolean descargaOk = descargarOficinasWS(request, fechaFin, hoy);
                 // Importamos los datos a la BD.
                 if (descargaOk) {
                     return importarOficinas(request, sincronizacion);

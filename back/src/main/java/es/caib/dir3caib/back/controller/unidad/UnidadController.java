@@ -301,9 +301,13 @@ public class UnidadController extends BaseController {
         try {
             // Obtenemos la fecha de la ultima descarga/sincronizacion
             Descarga ultimaDescarga = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.UNIDAD);
-            Date hoy = new Date();
+            Date fechaFin = null;
+            if(ultimaDescarga != null){
+                fechaFin = ultimaDescarga.getFechaFin();
+            }
+
             // Obtenemos los archivos por WS
-            boolean descargaOk = descargarUnidadesWS(request, ultimaDescarga.getFechaFin(), hoy);
+            boolean descargaOk = descargarUnidadesWS(request, fechaFin, new Date());
             // Importamos los datos a la BD si la descarga ha ido bien
             if (descargaOk) {
                 return importarUnidades(request);
