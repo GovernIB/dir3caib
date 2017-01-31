@@ -99,11 +99,11 @@ public class OficinaController extends BaseController {
         String comunidadAutonoma = Configuracio.getBusquedaComunidad();
 
         if(administracion != null){
-            oficinaBusqueda.getOficina().setNivelAdministracion(new CatNivelAdministracion(Long.valueOf(administracion)));
+            oficinaBusqueda.getOficina().setNivelAdministracion(new CatNivelAdministracion(Long.valueOf(administracion.trim())));
         }
 
         if(comunidadAutonoma != null){
-            oficinaBusqueda.getOficina().setCodComunidad(new CatComunidadAutonoma(Long.valueOf(comunidadAutonoma)));
+            oficinaBusqueda.getOficina().setCodComunidad(new CatComunidadAutonoma(Long.valueOf(comunidadAutonoma.trim())));
         }
 
         model.addAttribute("oficinaBusqueda", oficinaBusqueda);
