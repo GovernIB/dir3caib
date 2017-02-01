@@ -408,15 +408,26 @@ public class UnidadController extends BaseController {
         ModelAndView mav = new ModelAndView("/descargaList");
 
         List<Descarga> listado = descargaEjb.getPaginationByTipo(((pageNumber - 1) * BaseEjbJPA.RESULTADOS_PAGINACION), Dir3caibConstantes.UNIDAD);
-        log.info("LISTADO: " + listado.size());
-
         Long total = descargaEjb.getTotalByTipo(Dir3caibConstantes.UNIDAD);
+
+        ArrayList<String> ficheros = new ArrayList<String>();
+
+        if (listado != null) {
+            for (Descarga descarga : listado) {
+                File f = new File(Configuracio.getUnidadesPath(descarga.getCodigo()));
+                if (f.exists()) {
+                    ficheros = new ArrayList<String>(Arrays.asList(f.list()));
+                }
+                descarga.setFicheros(ficheros);
+            }
+        }
 
         Paginacion paginacion = new Paginacion(total.intValue(), pageNumber);
 
         mav.addObject("paginacion", paginacion);
         mav.addObject("listado", listado);
         mav.addObject("elemento", "unidad");
+        mav.addObject("ficheros", ficheros);
 
         return mav;
     }

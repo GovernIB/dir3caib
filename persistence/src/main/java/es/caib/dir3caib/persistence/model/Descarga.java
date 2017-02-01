@@ -7,6 +7,7 @@ package es.caib.dir3caib.persistence.model;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -25,6 +26,7 @@ public class Descarga implements Serializable {
 
   private String tipo;
   private String estado;
+  private List<String> ficheros;
 
   public Descarga() {
   }
@@ -84,5 +86,14 @@ public class Descarga implements Serializable {
 
   public void setEstado(String estado) {
     this.estado = estado;
+  }
+
+  @Transient
+  public List<String> getFicheros() {
+    return ficheros;
+  }
+
+  public void setFicheros(List<String> ficheros) {
+    this.ficheros = ficheros;
   }
 }

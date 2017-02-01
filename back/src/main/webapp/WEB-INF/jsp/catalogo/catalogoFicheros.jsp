@@ -51,7 +51,7 @@
                                             <c:forEach var="existente" items="${existentes}">
                                                 <tr>
 
-                                                    <td><a href="<c:url value="/archivo/${existente}/catalogo"/>" target="_blank">${existente}</a></td>
+                                                    <td><a href="<c:url value="/archivo/${existente}/${descarga.codigo}"/>" target="_blank">${existente}</a></td>
                                                     <td><fmt:formatDate pattern="dd/MM/yyyy" value="${descarga.fechaFin}" /></td>
                                                     <td><fmt:formatDate pattern="dd/MM/yyyy" value="${descarga.fechaImportacion}" /></td>
                                                 </tr>
@@ -83,10 +83,6 @@
                 </div>
 
                 <hr>
-
-               <%-- <footer>
-                    <p><fmt:message key="dir3caib.version"/>${versio}</p>
-                </footer>--%>
 
             </div>
         </div>

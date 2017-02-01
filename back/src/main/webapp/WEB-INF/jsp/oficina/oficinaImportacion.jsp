@@ -64,10 +64,6 @@
 
                 <hr>
 
-            <%--    <footer>
-                    <p><fmt:message key="dir3caib.version"/></p>
-                </footer>
---%>
             </div>
         </div>
 

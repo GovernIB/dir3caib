@@ -50,23 +50,20 @@
                                 </colgroup>
                                 <thead>
                                 <tr>
-                                    <th><fmt:message key="dir3caib.codigo"/></th>
                                     <th><fmt:message key="dir3caib.intervalo"/>    (<fmt:message key="dir3caib.fechainicio"/> - <fmt:message key="dir3caib.fechafin"/>)</th>
-                                    <%--<th><fmt:message key="dir3caib.fechafin"/></th>--%>
                                     <th><fmt:message key="dir3caib.fechaimportacion"/></th>
                                     <th>Estat</th>
+                                    <th><fmt:message key="dir3caib.ficheros"/></th>
                                 </tr>
                                 </thead>
 
                                 <tbody>
                                 <c:forEach var="descarga" items="${listado}">
                                     <tr>
-                                        <td>${descarga.codigo}</td>
                                         <td>( <c:if test="${empty descarga.fechaInicio}"> ******* </c:if><fmt:formatDate pattern="dd/MM/yyyy" value="${descarga.fechaInicio}" />  -  <c:if test="${empty descarga.fechaFin}"> ******* </c:if><fmt:formatDate pattern="dd/MM/yyyy" value="${descarga.fechaFin}" /> )</td>
-                                       <%-- <td><fmt:formatDate pattern="dd/MM/yyyy" value="${descarga.fechaFin}" /></td>--%>
-                                        <td><fmt:formatDate pattern="dd/MM/yyyy" value="${descarga.fechaImportacion}" /></td>
-                                        <c:set var="codigoVacio"
-                                               value="<%=Dir3caibConstantes.CODIGO_RESPUESTA_VACIO%>"/>
+                                        <td>
+                                            <fmt:formatDate pattern="dd/MM/yyyy" value="${descarga.fechaImportacion}" /></td>
+                                            <c:set var="codigoVacio" value="<%=Dir3caibConstantes.CODIGO_RESPUESTA_VACIO%>"/>
                                         <td>
                                             <c:if test="${not empty descarga.fechaImportacion}">
                                                 <i class="fa fa-check-square fa-lg" style="color:green"></i>
@@ -80,6 +77,11 @@
                                                     <fmt:message key="descarga.error.importacion"/>
                                                 </c:if>
                                             </c:if>
+                                        </td>
+                                        <td class="center">
+                                            <c:forEach var="fichero" items="${descarga.ficheros}">
+                                                <a class="btn btn-warning btn-sm" href="<c:url value="/archivo/${fichero}/${descarga.codigo}"/>" target="_blank" title="${fichero}"><span class="fa fa-pencil"></span></a>
+                                            </c:forEach>
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -98,10 +100,6 @@
         </div>
 
         <hr>
-
-        <%--  <footer>
-              <p><fmt:message key="dir3caib.version"/></p>
-          </footer>--%>
 
     </div>
 </div>

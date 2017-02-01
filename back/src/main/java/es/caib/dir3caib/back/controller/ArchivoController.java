@@ -34,15 +34,13 @@ public class ArchivoController extends BaseController{
     @EJB(mappedName = "dir3caib/DescargaEJB/local")
     protected DescargaLocal descargaEjb;
 
-    @RequestMapping(value = "/{nombreArchivo}/{tipo}", method = RequestMethod.GET)
-    public void  archivo(@PathVariable("nombreArchivo") String nombreArchivo, @PathVariable("tipo") String tipo, HttpServletRequest request, HttpServletResponse response)  {
+    @RequestMapping(value = "/{nombreArchivo}/{idDescarga}", method = RequestMethod.GET)
+    public void  archivo(@PathVariable("nombreArchivo") String nombreArchivo,@PathVariable("idDescarga") Long idDescarga,  HttpServletRequest request, HttpServletResponse response)  {
 
-
-        fullDownload(nombreArchivo,tipo, response);
-
+        fullDownload(nombreArchivo,idDescarga, response);
     }
 
-    public void fullDownload(String nombre, String tipo,  HttpServletResponse response) {
+    public void fullDownload(String nombre, Long idDescarga,  HttpServletResponse response) {
 
         FileInputStream input = null;
         OutputStream output = null;
@@ -52,20 +50,20 @@ public class ArchivoController extends BaseController{
 
         try {
             if (nombre != null) {
-                Descarga descargaCat = descargaEjb.ultimaDescarga(Dir3caibConstantes.CATALOGO);
-                if(Dir3caibConstantes.CATALOGO.equals(tipo)){
-                  file = new File(Configuracio.getCatalogosPath(descargaCat.getCodigo()), nombre);
+
+                Descarga descarga = descargaEjb.findById(idDescarga);
+
+                if(Dir3caibConstantes.CATALOGO.equals(descarga.getTipo())){
+                  file = new File(Configuracio.getCatalogosPath(descarga.getCodigo()), nombre);
                 }
 
-                Descarga descargaUnidad = descargaEjb.ultimaDescarga(Dir3caibConstantes.UNIDAD);
-                if(Dir3caibConstantes.UNIDAD.equals(tipo)){
-                  file = new File(Configuracio.getUnidadesPath(descargaUnidad.getCodigo()), nombre);
-                }
-                Descarga descargaOficina = descargaEjb.ultimaDescarga(Dir3caibConstantes.OFICINA);
-                if(Dir3caibConstantes.OFICINA.equals(tipo)){
-                  file = new File(Configuracio.getOficinasPath(descargaOficina.getCodigo()), nombre);
+                if(Dir3caibConstantes.UNIDAD.equals(descarga.getTipo())){
+                  file = new File(Configuracio.getUnidadesPath(descarga.getCodigo()), nombre);
                 }
 
+                if(Dir3caibConstantes.OFICINA.equals(descarga.getTipo())){
+                  file = new File(Configuracio.getOficinasPath(descarga.getCodigo()), nombre);
+                }
 
                 String contentType = mimeTypesMap.getContentType(file);
 
