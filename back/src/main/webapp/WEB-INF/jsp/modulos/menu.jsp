@@ -54,7 +54,7 @@
                                                onclick="if (! confirmDescarga('<c:url value="/unidad/sincronizar"/>','<fmt:message key="menu.sincronizar.confirm"/>')) { return false; }"><fmt:message key="menu.sincronizar.unidad"/></a></li>
                                     </c:if>
                                 </c:if>
-                                <c:if test="${loginInfo.development== false}">
+                                <%--<c:if test="${loginInfo.development== false}">
                                     <c:if test="${loginInfo.descargaUnidad== false}">
                                         <li><a href="<c:url value="/unidad/obtener"/>"><fmt:message
                                                 key="unidad.obtener"/></a></li>
@@ -64,6 +64,13 @@
                                                onclick="if (! confirmDescarga('<c:url value="/unidad/sincronizar"/>','<fmt:message key="menu.sincronizar.confirm"/>')) { return false; }"><fmt:message
                                                 key="menu.sincronizar.unidad"/></a></li>
                                     </c:if>
+                                </c:if>--%>
+                                <c:if test="${loginInfo.development== false}">
+                                    <li><a href="<c:url value="/unidad/sincronizar"/>"
+                                           onclick="if (! confirmDescarga('<c:url value="/unidad/sincronizar"/>','
+                                               <fmt:message
+                                                       key="menu.sincronizar.confirm"/>')) { return false; }"><fmt:message
+                                            key="menu.sincronizar.unidad"/></a></li>
                                 </c:if>
                             </sec:authorize>
                             <li><a href="<c:url value="/unidad/list"/>"><fmt:message key="menu.buscar.unidad"/></a></li>
@@ -90,15 +97,22 @@
                                                 key="menu.sincronizar.oficina"/></a></li>
                                     </c:if>
                                 </c:if>
+                                <%-- <c:if test="${loginInfo.development== false}">
+                                     <c:if test="${loginInfo.descargaOficina == false}">
+                                         <li><a href="<c:url value="/oficina/obtener"/>"><fmt:message
+                                                 key="oficina.obtener"/></a></li>
+                                     </c:if>
+                                     <c:if test="${loginInfo.descargaOficina == true}">
+                                         <li><a href="<c:url value="/oficina/sincronizar"/>"
+                                                onclick="if (! confirmDescarga('<c:url value="/oficina/sincronizar"/>','<fmt:message key="menu.sincronizar.confirm"/>')) { return false; }"><fmt:message key="menu.sincronizar.oficina"/></a></li>
+                                     </c:if>
+                                 </c:if>--%>
                                 <c:if test="${loginInfo.development== false}">
-                                    <c:if test="${loginInfo.descargaOficina == false}">
-                                        <li><a href="<c:url value="/oficina/obtener"/>"><fmt:message
-                                                key="oficina.obtener"/></a></li>
-                                    </c:if>
-                                    <c:if test="${loginInfo.descargaOficina == true}">
-                                        <li><a href="<c:url value="/oficina/sincronizar"/>"
-                                               onclick="if (! confirmDescarga('<c:url value="/oficina/sincronizar"/>','<fmt:message key="menu.sincronizar.confirm"/>')) { return false; }"><fmt:message key="menu.sincronizar.oficina"/></a></li>
-                                    </c:if>
+                                    <li><a href="<c:url value="/oficina/sincronizar"/>"
+                                           onclick="if (! confirmDescarga('<c:url value="/oficina/sincronizar"/>','
+                                               <fmt:message
+                                                       key="menu.sincronizar.confirm"/>')) { return false; }"><fmt:message
+                                            key="menu.sincronizar.oficina"/></a></li>
                                 </c:if>
                             </sec:authorize>
                             <li><a href="<c:url value="/oficina/list"/>"><fmt:message key="menu.buscar.oficina"/></a></li>
@@ -116,7 +130,7 @@
                                 <li><a href="<c:url value="/catalogo/descarga/list"/>"><fmt:message
                                         key="menu.listado.descargas"/></a></li>
                                 <li class="divider"></li>
-                                <li><a href="<c:url value="/catalogo/obtener"/>"><fmt:message
+                                <li><a href="<c:url value="/catalogo/importar"/>"><fmt:message
                                         key="catalogo.obtener"/></a></li>
                             </ul>
                         </li>

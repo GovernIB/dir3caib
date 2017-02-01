@@ -315,13 +315,17 @@ public class OficinaController extends BaseController {
                 Mensaje.saveMessageError(request, getMessage("oficina.sincronizacion.nosepuede"));
             } else {
                 final Boolean sincronizacion = true;
+                boolean descargaOk = false;
                 Date fechaFin = null;
                 if(ultimaDescargaOficina != null){
                     fechaFin = ultimaDescargaOficina.getFechaFin();
+                    descargaOk = descargarOficinasWS(request, fechaFin, hoy);
+                } else {// es una descarga inicial
+                    descargaOk = descargarOficinasWS(request, null, null);
                 }
 
                 // Obtenemos los archivos por WS
-                boolean descargaOk = descargarOficinasWS(request, fechaFin, hoy);
+
                 // Importamos los datos a la BD.
                 if (descargaOk) {
                     return importarOficinas(request, sincronizacion);

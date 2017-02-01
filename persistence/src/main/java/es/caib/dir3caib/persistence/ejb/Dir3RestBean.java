@@ -246,9 +246,6 @@ public class Dir3RestBean implements Dir3RestLocal {
       StringBuffer query = new StringBuffer("Select distinct(unidad.codigo),unidad.denominacion, unidad.codUnidadRaiz.codigo, unidad.codUnidadRaiz.denominacion, unidad.codUnidadSuperior.codigo, unidad.codUnidadSuperior.denominacion, unilocalidad.descripcionLocalidad  from Unidad  as unidad left outer join unidad.catLocalidad as unilocalidad  ");
 
        // Parametros de busqueda
-      log.info("LOCALIDAD RECIBIDA:  " + localidad);
-      log.info("PROVINCIA RECIBIDA:  " + provincia);
-
        if(codigo!= null && codigo.length() > 0){where.add(DataBaseUtils.like("unidad.codigo","codigo",parametros,codigo));}
        if(denominacion!= null && denominacion.length() > 0){where.add(DataBaseUtils.like("unidad.denominacion", "denominacion", parametros, denominacion));}
        if(codigoNivelAdministracion!= null && codigoNivelAdministracion != -1){where.add(" unidad.nivelAdministracion.codigoNivelAdministracion = :codigoNivelAdministracion "); parametros.put("codigoNivelAdministracion",codigoNivelAdministracion);}
@@ -299,19 +296,17 @@ public class Dir3RestBean implements Dir3RestLocal {
        //Miramos los que tienen oficinas
       List<Nodo> unidades = NodoUtils.getNodoListExtendido(q.getResultList());
 
-         //Si nos indican la variable conOficinas a true es que interesa devolver solo aquellos organismos
-         // que tienen oficinas en las que registrar
-         if(conOficinas){
-             log.info("Entro dentro de busqueda con oficinas");
-             Set<Nodo> unidadesConOficinas = new HashSet<Nodo>();
-             for (Nodo unidad : unidades) {
-
-               if(tieneOficinasOrganismo(unidad.getCodigo())){
-                 unidadesConOficinas.add(unidad);
-               }
+      //Si nos indican la variable conOficinas a true es que interesa devolver solo aquellos organismos
+      // que tienen oficinas en las que registrar
+      if (conOficinas) {
+          Set<Nodo> unidadesConOficinas = new HashSet<Nodo>();
+          for (Nodo unidad : unidades) {
+              if (tieneOficinasOrganismo(unidad.getCodigo())) {
+                  unidadesConOficinas.add(unidad);
            }
-             unidades = new ArrayList<Nodo>(unidadesConOficinas);
          }
+          unidades = new ArrayList<Nodo>(unidadesConOficinas);
+      }
 
        return unidades;
 
@@ -383,8 +378,6 @@ public class Dir3RestBean implements Dir3RestLocal {
              query.append("order by oficina.denominacion asc");
              q = em.createQuery(query.toString());
          }
-
-         log.info("QUERYYYYY : " + query.toString());
 
         return NodoUtils.getNodoListExtendido(q.getResultList());
 

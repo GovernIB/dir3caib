@@ -189,21 +189,24 @@ public class CatalogoController extends BaseController{
      public ModelAndView importarCatalogo(HttpServletRequest request) throws Exception {
          
          ModelAndView mav = new ModelAndView("/catalogo/catalogoImportacion");
-         
+
+
+         boolean descargaOk = descargarCatalogoWS(request, null, null);
 
          long start = System.currentTimeMillis();
+         if (descargaOk) {
+             ResultadosImportacion results = importadorCatalogo.importarCatalogo();
 
-         ResultadosImportacion results = importadorCatalogo.importarCatalogo();
+             long end = System.currentTimeMillis();
+             log.info("Importat cataleg en " + Utils.formatElapsedTime(end - start));
 
-         long end = System.currentTimeMillis();
-         log.info("Importat cataleg en " + Utils.formatElapsedTime(end - start));
+             Mensaje.saveMessageInfo(request, getMessage("catalogo.importacion.ok"));
+             mav.addObject("procesados", results.getProcesados());
+             mav.addObject("ficheros", Dir3caibConstantes.CAT_FICHEROS);
+             mav.addObject("existentes", results.getExistentes());
+             mav.addObject("descarga", results.getDescarga());
 
-         Mensaje.saveMessageInfo(request, getMessage("catalogo.importacion.ok"));
-         mav.addObject("procesados",results.getProcesados());
-         mav.addObject("ficheros",Dir3caibConstantes.CAT_FICHEROS);
-         mav.addObject("existentes",results.getExistentes());
-         mav.addObject("descarga" , results.getDescarga());
-         
+         }
          return mav;
      }
      
