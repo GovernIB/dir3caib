@@ -80,7 +80,10 @@
                                         </td>
                                         <td class="center">
                                             <c:forEach var="fichero" items="${descarga.ficheros}">
-                                                <a class="btn btn-warning btn-sm" href="<c:url value="/archivo/${fichero}/${descarga.codigo}"/>" target="_blank" title="${fichero}"><span class="fa fa-pencil"></span></a>
+                                                <a class="btn btn-success btn-xs"
+                                                   href="<c:url value="/archivo/${fichero}/${descarga.codigo}"/>"
+                                                   target="_blank" title="${fichero}"><span
+                                                        class="fa fa-download"></span></a>
                                             </c:forEach>
                                         </td>
                                     </tr>
