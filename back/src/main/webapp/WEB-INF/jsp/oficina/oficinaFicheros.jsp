@@ -33,7 +33,7 @@
                             </div>
                             </c:if>
                             <c:if test="${not empty descarga}">
-                                <c:if test="${not empty existentes}">
+                                <c:if test="${not empty ficheros}">
 
                                     <table class="table table-bordered">
                                         <colgroup>
@@ -42,16 +42,26 @@
                                         <thead>
                                             <tr>
                                                 <th><fmt:message key="dir3caib.fichero"/></th>
-                                                <th><fmt:message key="dir3caib.fechasincronizacion"/></th>
+                                                <th><fmt:message key="dir3caib.intervalo"/> (<fmt:message
+                                                        key="dir3caib.fechainicio"/> - <fmt:message
+                                                        key="dir3caib.fechafin"/>)
+                                                </th>
                                                 <th><fmt:message key="dir3caib.fechaimportacion"/></th>
                                             </tr>
                                         </thead>
 
                                         <tbody>
-                                            <c:forEach var="existente" items="${existentes}">
+                                        <c:forEach var="fichero" items="${ficheros}">
                                                 <tr>
-                                                    <td><a href="<c:url value="/archivo/${existente}/${descarga.codigo}"/>" target="_blank">${existente}</a></td>
-                                                    <td><fmt:formatDate pattern="dd/MM/yyyy" value="${descarga.fechaFin}" /></td>
+                                                    <td>
+                                                        <a href="<c:url value="/archivo/${fichero}/${descarga.codigo}"/>"
+                                                           target="_blank">${fichero}</a></td>
+                                                    <td>( <c:if
+                                                            test="${empty descarga.fechaInicio}"> ******* </c:if><fmt:formatDate
+                                                            pattern="dd/MM/yyyy" value="${descarga.fechaInicio}"/> -
+                                                        <c:if test="${empty descarga.fechaFin}"> ******* </c:if><fmt:formatDate
+                                                                pattern="dd/MM/yyyy" value="${descarga.fechaFin}"/> )
+                                                    </td>
                                                     <td><fmt:formatDate pattern="dd/MM/yyyy" value="${descarga.fechaImportacion}" /></td>
                                                 </tr>
                                             </c:forEach>
@@ -59,13 +69,7 @@
                                       </table>
                                     <div class="form-horizontal">
                                       <div class="form-actions">
-                                        <%--<c:if test="${not empty mostrarimportacion}">--%>
                                           <input type="button" value="<fmt:message key="dir3caib.boton.importar"/>" onclick="javascript:confirmDescarga('<c:url value="/oficina/importar"/>','<fmt:message key="dir3caib.confirm.importar"/>');" class="btn btn-primary">
-                                       <%-- </c:if>
-                                        <c:if test="${empty mostrarimportacion}">
-                                              <input type="button" value="<fmt:message key="dir3caib.boton.importar"/>" class="btn btn-primary disabled">
-                                        </c:if>--%>
-                                        <input type="button" value="<fmt:message key="dir3caib.boton.eliminartodos"/>" onclick="javascript:confirm('<c:url value="/oficina/eliminar"/>','<fmt:message key="dir3caib.confirm.eliminar"  />');" class="btn btn-primary">
                                        </div>
                                     </div>
                                     <jsp:include page="../modalSincro.jsp" flush="true"/>

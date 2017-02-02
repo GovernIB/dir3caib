@@ -808,7 +808,7 @@ public class ImportadorUnidadesBean implements ImportadorUnidadesLocal {
         }
 
         if (fechaInicio != null) {
-            log.info("Intervalo fechas descarga unidades directorio común: " + formatoFecha.format(fechaInicio) + " - " + formatoFecha.format(fechaFin));
+            log.info("Intervalo fechas descarga unidades directorio común: " + formatoFecha.format(descarga.getFechaInicio()) + " - " + formatoFecha.format(descarga.getFechaFin()));
         }else{
             log.info("Descarga inicial de unidades directorio común");
         }

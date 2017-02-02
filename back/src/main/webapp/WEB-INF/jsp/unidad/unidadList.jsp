@@ -36,19 +36,24 @@
                 <fieldset>
 
                     <div class="row-fluid">
+
                         <div class="span6">
                             <div class="control-group">
-                                <form:label path="unidad.codigo" cssClass="control-label"><fmt:message key="unidad.codigo"/></form:label>
+                                <form:label path="unidad.denominacion" cssClass="control-label"><fmt:message
+                                        key="unidad.denominacion"/></form:label>
                                 <div class="controls">
-                                    <form:input path="unidad.codigo" cssClass="input-xlarge"/> <form:errors path="unidad.codigo" cssClass="help-inline" element="span"/>
+                                    <form:input path="unidad.denominacion" cssClass="input-xlarge"/> <form:errors
+                                        path="unidad.denominacion" cssClass="help-inline" element="span"/>
                                 </div>
                             </div>
                         </div>
                         <div class="span6">
                             <div class="control-group">
-                                <form:label path="unidad.denominacion" cssClass="control-label"><fmt:message key="unidad.denominacion"/></form:label>
+                                <form:label path="unidad.codigo" cssClass="control-label"><fmt:message
+                                        key="unidad.codigo"/></form:label>
                                 <div class="controls">
-                                    <form:input path="unidad.denominacion" cssClass="input-xlarge"/> <form:errors path="unidad.denominacion" cssClass="help-inline" element="span"/>
+                                    <form:input path="unidad.codigo" cssClass="input-xlarge"/> <form:errors
+                                        path="unidad.codigo" cssClass="help-inline" element="span"/>
                                 </div>
                             </div>
                         </div>

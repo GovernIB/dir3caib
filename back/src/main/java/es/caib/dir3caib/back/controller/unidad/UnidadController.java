@@ -162,7 +162,7 @@ public class UnidadController extends BaseController {
     public ModelAndView ficherosList(HttpServletRequest request) throws Exception {
 
         ModelAndView mav = new ModelAndView("/unidad/unidadFicheros");
-        ArrayList<String> existentes = new ArrayList<String>();
+        ArrayList<String> ficheros = new ArrayList<String>();
 
         // Obtenemos el listado de ficheros que hay dentro del directorio indicado
         Descarga descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.UNIDAD);
@@ -170,31 +170,15 @@ public class UnidadController extends BaseController {
         if (descarga != null) {
             File f = new File(Configuracio.getUnidadesPath(descarga.getCodigo()));
             if (f.exists()) {
-                existentes = new ArrayList<String>(Arrays.asList(f.list()));
+                ficheros = new ArrayList<String>(Arrays.asList(f.list()));
 
-                // Miramos si debemos mostrar el botón de importación,
-                // solo se muestra si la fecha de Inicio descarga es superior a la fechaImportacion
-                Date fechaInicio = descarga.getFechaInicio();
-                Date fechaImportacion = descarga.getFechaImportacion();
-
-                if (fechaImportacion != null) {
-                    if (fechaInicio != null) {
-                        if (fechaInicio.after(fechaImportacion)) {
-                            mav.addObject("mostrarimportacion", "mostrarImportacion");
-                        }
-                    }
-                } else {
-                    mav.addObject("mostrarimportacion", "mostrarImportacion");
-                }
-
-                //mav.addObject("descarga", descarga);
             } else {
                 Mensaje.saveMessageError(request, getMessage("descarga.error.importante"));
 
             }
         }
         mav.addObject("descarga", descarga);
-        mav.addObject("existentes", existentes);
+        mav.addObject("ficheros", ficheros);
 
         return mav;
     }

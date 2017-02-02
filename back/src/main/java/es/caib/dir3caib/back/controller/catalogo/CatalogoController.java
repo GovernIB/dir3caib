@@ -103,35 +103,20 @@ public class CatalogoController extends BaseController{
         ModelAndView mav = new ModelAndView("/catalogo/catalogoFicheros");
 
         // Obtenemos el listado de ficheros que hay dentro del directorio indicado
-        ArrayList<String> existentes = new ArrayList<String>();
+        ArrayList<String> ficheros = new ArrayList<String>();
         Descarga descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.CATALOGO);
         if (descarga != null) {
             File f = new File(Configuracio.getCatalogosPath(descarga.getCodigo()));
             if (f.exists()) {
-                existentes = new ArrayList<String>(Arrays.asList(f.list()));
-                // Miramos si debemos mostrar el botón de importación,
-                // solo se muestra si la fecha de Inicio descarga es superior a la fechaImportacion
-                Date fechaInicio = descarga.getFechaInicio();
-                Date fechaImportacion = descarga.getFechaImportacion();
+                ficheros = new ArrayList<String>(Arrays.asList(f.list()));
 
-                if (fechaImportacion != null) {
-                    if (fechaInicio != null) {
-                        if (fechaInicio.after(fechaImportacion)) {
-                            mav.addObject("mostrarimportacion", "mostrarImportacion");
-                        }
-                    }
-                } else {
-                    mav.addObject("mostrarimportacion", "mostrarImportacion");
-                }
-
-                //mav.addObject("descarga", descarga);
             } else {
                 Mensaje.saveMessageError(request, getMessage("descarga.error.importante"));
             }
 
         }
         mav.addObject("descarga", descarga);
-        mav.addObject("existentes", existentes);
+        mav.addObject("ficheros", ficheros);
 
         return mav;
      }
@@ -319,11 +304,24 @@ public class CatalogoController extends BaseController{
 
         Long total = descargaEjb.getTotalByTipo(Dir3caibConstantes.CATALOGO);
 
+        ArrayList<String> ficheros = new ArrayList<String>();
+
+        if (listado != null) {
+            for (Descarga descarga : listado) {
+                File f = new File(Configuracio.getCatalogosPath(descarga.getCodigo()));
+                if (f.exists()) {
+                    ficheros = new ArrayList<String>(Arrays.asList(f.list()));
+                }
+                descarga.setFicheros(ficheros);
+            }
+        }
+
         Paginacion paginacion = new Paginacion(total.intValue(), pageNumber);
 
         mav.addObject("paginacion", paginacion);
         mav.addObject("listado", listado);
         mav.addObject("elemento", "catalogo");
+        mav.addObject("ficheros", ficheros);
 
         return mav;
     }

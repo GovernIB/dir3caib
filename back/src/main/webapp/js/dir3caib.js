@@ -259,9 +259,11 @@ function validateDates(startDate, endDate) {
         alert("Debe indicar también la fecha de inicio");
         return false;
    }*/
-   if ($.datepicker.parseDate('dd/mm/yy', startDate.val()) > $.datepicker.parseDate('dd/mm/yy', endDate.val())) {
-       alert("La Fecha de Inicio debe ser inferior a la Fecha Fin");
-       return false;
+    if ($.datepicker.parseDate('dd/mm/yy', endDate.val()) != null) {
+        if ($.datepicker.parseDate('dd/mm/yy', startDate.val()) > $.datepicker.parseDate('dd/mm/yy', endDate.val())) {
+            alert("La Fecha de Inicio debe ser inferior a la Fecha Fin");
+            return false;
+    }
     }
 }
 

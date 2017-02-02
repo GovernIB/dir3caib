@@ -79,12 +79,19 @@
                                             </c:if>
                                         </td>
                                         <td class="center">
-                                            <c:forEach var="fichero" items="${descarga.ficheros}">
-                                                <a class="btn btn-success btn-xs"
-                                                   href="<c:url value="/archivo/${fichero}/${descarga.codigo}"/>"
-                                                   target="_blank" title="${fichero}"><span
-                                                        class="fa fa-download"></span></a>
-                                            </c:forEach>
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-success dropdown-toggle"
+                                                        data-toggle="dropdown">
+                                                    Descarregar <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <c:forEach var="fichero" items="${descarga.ficheros}">
+                                                        <li class="submenu-complet"><a
+                                                                href="<c:url value="/archivo/${fichero}/${descarga.codigo}"/>">${fichero}</a>
+                                                        </li>
+                                                    </c:forEach>
+                                                </ul>
+                                            </div>
                                         </td>
                                     </tr>
                                 </c:forEach>
