@@ -81,6 +81,10 @@ body { background-image:url(../img/background-pattern.png); color:#666666; paddi
 }
 
 /*Menu*/
+.dropdown-menu {
+    right: 0;
+    left: auto;
+}
 
 .dropdown-menu li > a:hover, .dropdown-menu .active > a, .dropdown-menu .active > a:hover{
     color: #ffffff;

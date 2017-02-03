@@ -88,7 +88,7 @@
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-success dropdown-toggle"
                                                         data-toggle="dropdown"><fmt:message
-                                                        key="dir3caib.descargar"/><span class="caret"></span>
+                                                        key="dir3caib.descargar"/> <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu">
                                                     <c:forEach var="fichero" items="${descarga.ficheros}">
