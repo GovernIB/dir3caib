@@ -47,12 +47,17 @@
                             <table class="table table-bordered">
                                 <colgroup>
                                     <col>
+                                    <col>
+                                    <col>
+                                    <col>
+                                    <col width="130">
                                 </colgroup>
                                 <thead>
                                 <tr>
+                                    <th>id</th>
                                     <th><fmt:message key="dir3caib.intervalo"/>    (<fmt:message key="dir3caib.fechainicio"/> - <fmt:message key="dir3caib.fechafin"/>)</th>
                                     <th><fmt:message key="dir3caib.fechaimportacion"/></th>
-                                    <th>Estat</th>
+                                    <th><fmt:message key="dir3caib.estado"/></th>
                                     <th><fmt:message key="dir3caib.ficheros"/></th>
                                 </tr>
                                 </thead>
@@ -60,6 +65,7 @@
                                 <tbody>
                                 <c:forEach var="descarga" items="${listado}">
                                     <tr>
+                                        <td>${descarga.codigo}</td>
                                         <td>( <c:if test="${empty descarga.fechaInicio}"> ******* </c:if><fmt:formatDate pattern="dd/MM/yyyy" value="${descarga.fechaInicio}" />  -  <c:if test="${empty descarga.fechaFin}"> ******* </c:if><fmt:formatDate pattern="dd/MM/yyyy" value="${descarga.fechaFin}" /> )</td>
                                         <td>
                                             <fmt:formatDate pattern="dd/MM/yyyy" value="${descarga.fechaImportacion}" /></td>
@@ -81,8 +87,8 @@
                                         <td class="center">
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-success dropdown-toggle"
-                                                        data-toggle="dropdown">
-                                                    Descarregar <span class="caret"></span>
+                                                        data-toggle="dropdown"><fmt:message
+                                                        key="dir3caib.descargar"/><span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu">
                                                     <c:forEach var="fichero" items="${descarga.ficheros}">
