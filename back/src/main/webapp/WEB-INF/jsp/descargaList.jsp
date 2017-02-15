@@ -86,10 +86,18 @@
                                         </td>
                                         <td class="center">
                                             <div class="btn-group">
+                                                <c:if test="${not empty descarga.ficheros}">
                                                 <button type="button" class="btn btn-success dropdown-toggle"
                                                         data-toggle="dropdown"><fmt:message
                                                         key="dir3caib.descargar"/> <span class="caret"></span>
                                                 </button>
+                                                </c:if>
+                                                <c:if test="${empty descarga.ficheros}">
+                                                    <button type="button" class="btn btn-success dropdown-toggle"
+                                                            data-toggle="dropdown" disabled="disabled"><fmt:message
+                                                            key="dir3caib.descargar"/> <span class="caret"></span>
+                                                    </button>
+                                                </c:if>
                                                 <ul class="dropdown-menu">
                                                     <c:forEach var="fichero" items="${descarga.ficheros}">
                                                         <li class="submenu-complet"><a
