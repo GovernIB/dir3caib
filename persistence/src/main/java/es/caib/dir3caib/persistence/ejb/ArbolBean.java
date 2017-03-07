@@ -81,9 +81,9 @@ public class ArbolBean implements ArbolLocal {
             //Añadimos las oficinas dependientes al nodo que se està tratando.
             nodo.setOficinasDependientes(oficinasDependientesTransf);
 
-            //Oficinas Funcionales
-            List<Nodo> oficinasFuncionales = relacionOrganizativaOfiEjb.getOrganizativasByUnidadEstado(unidadPadre.getCodigo(), estado);
-            nodo.setOficinasFuncionales(oficinasFuncionales);
+            //Oficinas Organizativas
+            List<Nodo> oficinasOrganizativas = relacionOrganizativaOfiEjb.getOrganizativasByUnidadEstado(unidadPadre.getCodigo(), estado);
+            nodo.setOficinasOrganizativas(oficinasOrganizativas);
         }
 
 

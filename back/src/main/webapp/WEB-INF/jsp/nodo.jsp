@@ -37,9 +37,9 @@
                     </li>
                 </c:forEach>
                 <!--Pintamos relaciones organizativas -->
-                <c:forEach var="ofiFuncional" items="${hijo.oficinasFuncionales}">
+                <c:forEach var="ofiOrganizativa" items="${hijo.oficinasOrganizativas}">
                     <li><span class="badge-arbre btn-success"><i
-                            class="fa fa-institution"></i> ${ofiFuncional.codigo} - ${ofiFuncional.denominacion}</span>
+                            class="fa fa-institution"></i> ${ofiOrganizativa.codigo} - ${ofiOrganizativa.denominacion}</span>
                     </li>
                 </c:forEach>
 
