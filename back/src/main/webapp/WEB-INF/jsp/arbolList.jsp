@@ -41,7 +41,7 @@
 
                             <div class="col-xs-6 pad-bottom5">
                                 <span class="badge-arbre btn-success"><i class="fa fa-institution"></i> <spring:message
-                                        code="dir3caib.oficina.organizativa"/></span>
+                                        code="dir3caib.oficina.funcional"/></span>
                             </div>
                         </div>
                     </div>
@@ -96,12 +96,12 @@
                                         </li>
                                     </c:forEach>
 
-                                    <!-- ORGANIZATIVAS -->
+                                    <!-- FUNCIONALES -->
 
-                                    <c:forEach var="ofiOrganizativa" items="${nodo.oficinasOrganizativas}">
+                                    <c:forEach var="ofiFuncional" items="${nodo.oficinasFuncionales}">
                                         <li><a href="javascript:void(0);"><span class="badge-arbre btn-success"
                                                                                 style="display:closed;"><i
-                                                class="fa fa-institution"></i> ${ofiOrganizativa.codigo} - ${ofiOrganizativa.denominacion}</span></a>
+                                                class="fa fa-institution"></i> ${ofiFuncional.codigo} - ${ofiFuncional.denominacion}</span></a>
                                         </li>
                                     </c:forEach>
                                     <jsp:include page="nodo.jsp"/>

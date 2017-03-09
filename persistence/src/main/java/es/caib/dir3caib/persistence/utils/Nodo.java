@@ -17,7 +17,8 @@ public class Nodo extends ObjetoBasico {
     private List<Nodo> oficinasDependientes;
     private List<Nodo> oficinasDependientesAuxiliares;
     private List<Nodo> oficinasAuxiliares;
-    private List<Nodo> oficinasOrganizativas; //relacionesOrganizativasOfi
+    //TODO cambiar nombre a oficinasFuncionales
+    private List<Nodo> oficinasFuncionales; //relacionesOrganizativasOfi
 
 
     public Nodo() {
@@ -27,14 +28,14 @@ public class Nodo extends ObjetoBasico {
         super(codigo, denominacion, descripcionEstado, raiz, superior, localidad);
     }
 
-    public Nodo(String codigo, String denominacion, String descripcionEstado, String raiz, String superior, String localidad, String idPadre, List<Nodo> hijos, List<Nodo> oficinasDependientes, List<Nodo> oficinasDependientesAuxiliares, List<Nodo> oficinasAuxiliares, List<Nodo> oficinasOrganizativas) {
+    public Nodo(String codigo, String denominacion, String descripcionEstado, String raiz, String superior, String localidad, String idPadre, List<Nodo> hijos, List<Nodo> oficinasDependientes, List<Nodo> oficinasDependientesAuxiliares, List<Nodo> oficinasAuxiliares, List<Nodo> oficinasFuncionales) {
         super(codigo, denominacion, descripcionEstado, raiz, superior, localidad);
         this.idPadre = idPadre;
         this.hijos = hijos;
         this.oficinasDependientes = oficinasDependientes;
         this.oficinasDependientesAuxiliares = oficinasDependientesAuxiliares;
         this.oficinasAuxiliares = oficinasAuxiliares;
-        this.oficinasOrganizativas = oficinasOrganizativas;
+        this.oficinasFuncionales = oficinasFuncionales;
     }
 
 
@@ -82,11 +83,11 @@ public class Nodo extends ObjetoBasico {
         this.oficinasAuxiliares = oficinasAuxiliares;
     }
 
-    public List<Nodo> getOficinasOrganizativas() {
-        return oficinasOrganizativas;
+    public List<Nodo> getOficinasFuncionales() {
+        return oficinasFuncionales;
     }
 
-    public void setOficinasOrganizativas(List<Nodo> oficinasOrganizativas) {
-        this.oficinasOrganizativas = oficinasOrganizativas;
+    public void setOficinasFuncionales(List<Nodo> oficinasFuncionales) {
+        this.oficinasFuncionales = oficinasFuncionales;
     }
 }
