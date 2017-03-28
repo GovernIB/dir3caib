@@ -1,9 +1,6 @@
 package es.caib.dir3caib.persistence.ejb;
 
-import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
-import es.caib.dir3caib.persistence.model.Oficina;
-import es.caib.dir3caib.persistence.model.RelacionOrganizativaOfi;
-import es.caib.dir3caib.persistence.model.Unidad;
+import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.utils.DataBaseUtils;
 import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.NodoUtils;
@@ -321,19 +318,29 @@ public class Dir3RestBean implements Dir3RestLocal {
      * @return Nodo conjunto de datos a mostrar de la oficina
      * @throws Exception
      */
-    public List<Nodo> busquedaOficinas(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, Long provincia, String localidad) throws Exception {
-         Query q;
-         Map<String, Object> parametros = new HashMap<String, Object>();
-         List<String> where = new ArrayList<String>();
+    public List<Nodo> busquedaOficinas(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, Long provincia, String localidad, boolean oficinasSir) throws Exception {
+        Query q;
+        Map<String, Object> parametros = new HashMap<String, Object>();
+        List<String> where = new ArrayList<String>();
 
-         StringBuffer query = new StringBuffer("Select oficina.codigo, oficina.denominacion, orgresponsable.codigo, orgresponsable.denominacion, ofiresponsable.codigo, ofiresponsable.denominacion, ofilocalidad.descripcionLocalidad from Oficina as oficina left outer join oficina.codOfiResponsable as ofiresponsable left outer join oficina.codUoResponsable.codUnidadRaiz as orgresponsable left outer join oficina.localidad as ofilocalidad ");
+        StringBuffer query = new StringBuffer("Select oficina.codigo, oficina.denominacion, orgresponsable.codigo, orgresponsable.denominacion, ofiresponsable.codigo, ofiresponsable.denominacion, ofilocalidad.descripcionLocalidad from Oficina as oficina left outer join oficina.codOfiResponsable as ofiresponsable left outer join oficina.codUoResponsable.codUnidadRaiz as orgresponsable left outer join oficina.localidad as ofilocalidad ");
 
          // Parametros de busqueda
 
-         if(codigo!= null && codigo.length() > 0){where.add(DataBaseUtils.like("oficina.codigo ","codigo",parametros,codigo));}
-         if(denominacion!= null && denominacion.length() > 0){where.add(DataBaseUtils.like("oficina.denominacion ", "denominacion", parametros, denominacion));}
-         if(codComunidad!= null && codComunidad != -1){where.add("oficina.codComunidad.codigoComunidad=:codComunidad "); parametros.put("codComunidad",codComunidad);}
-         if(codigoNivelAdministracion!= null && codigoNivelAdministracion != -1){where.add("oficina.nivelAdministracion.codigoNivelAdministracion=:codigoNivelAdministracion "); parametros.put("codigoNivelAdministracion",codigoNivelAdministracion);}
+        if (codigo != null && codigo.length() > 0) {
+            where.add(DataBaseUtils.like("oficina.codigo ", "codigo", parametros, codigo));
+        }
+        if (denominacion != null && denominacion.length() > 0) {
+            where.add(DataBaseUtils.like("oficina.denominacion ", "denominacion", parametros, denominacion));
+        }
+        if (codComunidad != null && codComunidad != -1) {
+            where.add("oficina.codComunidad.codigoComunidad=:codComunidad ");
+            parametros.put("codComunidad", codComunidad);
+        }
+        if (codigoNivelAdministracion != null && codigoNivelAdministracion != -1) {
+            where.add("oficina.nivelAdministracion.codigoNivelAdministracion=:codigoNivelAdministracion ");
+            parametros.put("codigoNivelAdministracion", codigoNivelAdministracion);
+        }
         if (provincia != null && provincia != -1) {
             where.add("(oficina.codUoResponsable.codAmbProvincia.codigoProvincia=:codigoProvincia or oficina.localidad.provincia.codigoProvincia =:codigoProvincia) ");
             parametros.put("codigoProvincia", provincia);
@@ -355,6 +362,15 @@ public class Dir3RestBean implements Dir3RestLocal {
         }
         where.add(" oficina.estado.codigoEstadoEntidad =:vigente ");
         parametros.put("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+
+        // buscamos aquellas que sean oficinas sir de Recepcion
+        if (oficinasSir) {
+            where.add(" :SERVICIO_SIR in elements(oficina.servicios)  and :SERVICIO_SIR_RECEPCION in elements(oficina.servicios) ");
+            parametros.put("SERVICIO_SIR", new Servicio(Dir3caibConstantes.SERVICIO_SIR));
+            parametros.put("SERVICIO_SIR_RECEPCION", new Servicio(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
+
+        }
+
 
          // Añadimos los parametros a la query
          if (parametros.size() != 0) {
