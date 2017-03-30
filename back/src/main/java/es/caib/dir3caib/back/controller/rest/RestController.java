@@ -54,11 +54,11 @@ public class RestController {
     public
     @ResponseBody
     ResponseEntity<List<Unidad>> unidadesPorDenominacion(@RequestParam String denominacion) throws Exception {
-        log.info("dentro rest unidadPorDenominacion");
+
         //Transformamos el campo denominacion de ISO a UTF-8 para realizar las búsquedas en bd que estan en UTF-8.
         //Esto se hace porque el @RequestParam viene en ISO-8859-1.
         List<Unidad> resultado = dir3RestEjb.findUnidadesByDenominacion(new String(denominacion.getBytes("ISO-8859-1"), "UTF-8"));
-        log.info(" Unidades encontradas: " + resultado.size());
+
         HttpHeaders headers = addAccessControllAllowOrigin();
         return new ResponseEntity<List<Unidad>>(resultado, headers, HttpStatus.OK);
     }
@@ -71,11 +71,11 @@ public class RestController {
     public
     @ResponseBody
     ResponseEntity<List<Oficina>> oficinasPorDenominacion(@RequestParam String denominacion) throws Exception {
-        log.info("dentro rest oficinaPorDenominacion");
+
         //Transformamos el campo denominacion de ISO a UTF-8 para realizar las búsquedas en bd que estan en UTF-8.
         //Esto se hace porque el @RequestParam viene en ISO-8859-1.
         List<Oficina> resultado = dir3RestEjb.findOficinasByDenominacion(new String(denominacion.getBytes("ISO-8859-1"), "UTF-8"));
-        log.info(" Oficinas encontradas: " + resultado.size());
+
         HttpHeaders headers = addAccessControllAllowOrigin();
         return new ResponseEntity<List<Oficina>>(resultado, headers, HttpStatus.OK);
     }
@@ -88,10 +88,9 @@ public class RestController {
     public
     @ResponseBody
     ResponseEntity<List<Unidad>> arbolUnidades(@RequestParam String codigo) throws Exception {
-        log.info("dentro rest Arbol Unidades");
 
         List<Unidad> unidades = dir3RestEjb.obtenerArbolUnidades(codigo, null);
-        log.info("Arbol unidades encontrado " + unidades.size());
+
         HttpHeaders headers = addAccessControllAllowOrigin();
 
         return new ResponseEntity<List<Unidad>>(unidades, headers, HttpStatus.OK);
@@ -106,10 +105,9 @@ public class RestController {
     public
     @ResponseBody
     ResponseEntity<List<Oficina>> oficinasOrganismo(@RequestParam String codigo) throws Exception {
-        log.info("dentro rest Oficinas organismo");
 
         List<Oficina> oficinas = dir3RestEjb.obtenerOficinasOrganismo(codigo, null);
-        log.info("Arbol oficinas encontrado " + oficinas.size());
+
         HttpHeaders headers = addAccessControllAllowOrigin();
 
         return new ResponseEntity<List<Oficina>>(oficinas, headers, HttpStatus.OK);
@@ -124,19 +122,14 @@ public class RestController {
     @ResponseBody
     ResponseEntity<List<Nodo>> busquedaOrganismos(@RequestParam String codigo, @RequestParam String denominacion, @RequestParam Long codNivelAdministracion, @RequestParam Long codComunidadAutonoma, @RequestParam boolean conOficinas, @RequestParam boolean unidadRaiz, @RequestParam Long provincia, @RequestParam String localidad) throws Exception {
 
-        log.info("dentro rest busqueda organismos");
         //log.info("dentro rest busqueda organismos ISO lenght: " + new String(denominacion.getBytes("ISO-8859-1"), "UTF-8").length());
         //Transformamos el campo denominacion de ISO a UTF-8 para realizar las búsquedas en bd que estan en UTF-8.
         //Esto se hace porque el @RequestParam viene en ISO-8859-1.
         List<Nodo> unidades = dir3RestEjb.busquedaOrganismos(codigo, new String(denominacion.getBytes("ISO-8859-1"), "UTF-8"), codNivelAdministracion, codComunidadAutonoma, conOficinas, unidadRaiz, provincia, localidad);
-        log.info("Organismos encontrados " + unidades.size());
+
         HttpHeaders headers = addAccessControllAllowOrigin();
 
         return new ResponseEntity<List<Nodo>>(unidades, headers, HttpStatus.OK);
-
-        //Pruebas con cache rest
-        //return new ResponseEntity<List<Nodo>>(unidades, headers, HttpStatus.NOT_MODIFIED);
-
     }
 
 
@@ -147,15 +140,14 @@ public class RestController {
     public
     @ResponseBody
     ResponseEntity<List<Nodo>> busquedaOficinas(@RequestParam String codigo, @RequestParam String denominacion, @RequestParam Long codNivelAdministracion, @RequestParam Long codComunidadAutonoma, @RequestParam Long provincia, @RequestParam String localidad, @RequestParam boolean oficinasSir) throws Exception {
-        log.info("dentro rest busqueda oficinas");
+
         //Transformamos el campo denominacion de ISO a UTF-8 para realizar las búsquedas en bd que estan en UTF-8.
         // Esto se hace porque el @RequestParam viene en ISO-8859-1.
         List<Nodo> oficinas = dir3RestEjb.busquedaOficinas(codigo, new String(denominacion.getBytes("ISO-8859-1"), "UTF-8"), codNivelAdministracion, codComunidadAutonoma, provincia, localidad, oficinasSir);
-        log.info("Oficinas encontradas " + oficinas.size());
+
         HttpHeaders headers = addAccessControllAllowOrigin();
 
         return new ResponseEntity<List<Nodo>>(oficinas, headers, HttpStatus.OK);
-
     }
 
     /**
@@ -165,9 +157,8 @@ public class RestController {
     public
     @ResponseBody
     ResponseEntity<String> unidadDenominacion(@RequestParam String codigo) throws Exception {
-        log.info("dentro rest unidad denominacion ");
+
         String denominacion = dir3RestEjb.unidadDenominacion(codigo);
-        log.info("Unidad denominacion " + denominacion);
         HttpHeaders headers = addAccessControllAllowOrigin();
 
         return new ResponseEntity<String>(denominacion, headers, HttpStatus.OK);
@@ -181,13 +172,11 @@ public class RestController {
     public
     @ResponseBody
     ResponseEntity<String> oficinaDenominacion(@RequestParam String codigo) throws Exception {
-        log.info("dentro rest oficina denominacion ");
+
         String denominacion = dir3RestEjb.oficinaDenominacion(codigo);
-        log.info("Oficina denominacion " + denominacion);
         HttpHeaders headers = addAccessControllAllowOrigin();
 
         return new ResponseEntity<String>(denominacion, headers, HttpStatus.OK);
-
     }
 
     /**
@@ -201,12 +190,11 @@ public class RestController {
     public
     @ResponseBody
     ResponseEntity<Nodo> organigrama(@RequestParam String codigo) throws Exception {
-        log.info("dentro rest organigrama codigo : " + codigo);
+
         Nodo nodo = new Nodo();
         arbolEjb.arbolUnidadesAscendentes(codigo, nodo, Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE, false);
-        log.info("NODO  REST" + nodo.getDenominacion());
-
         HttpHeaders headers = addAccessControllAllowOrigin();
+
         return new ResponseEntity<Nodo>(nodo, headers, HttpStatus.OK);
 
     }
@@ -227,7 +215,6 @@ public class RestController {
 
         List<Nodo> unidades = dir3RestEjb.busquedaDenominacionComunidad(new String(denominacion.getBytes("ISO-8859-1"), "UTF-8"), codComunidad);
 
-        log.info("Encontradas " + unidades.size());
         HttpHeaders headers = addAccessControllAllowOrigin();
         return new ResponseEntity<List<Nodo>>(unidades, headers, HttpStatus.OK);
 
