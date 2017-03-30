@@ -487,7 +487,7 @@ public class Dir3RestBean implements Dir3RestLocal {
             }
 
             query.append("order by unidad.denominacion asc");
-            log.info("QUERY " + query.toString());
+
             q = em.createQuery(query.toString());
 
             for (Map.Entry<String, Object> param : parametros.entrySet()) {
