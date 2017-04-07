@@ -5,6 +5,8 @@ import es.caib.dir3caib.persistence.model.utils.ObjetoBasico;
 import java.util.List;
 
 /**
+ * Se utiliza para almacenar información de la estructura de Unidades u Oficinas.
+ * Se utiliza para retornar información via JSON de peticiones REST y crear el Arbol de organismos.
  * Created 28/08/14 8:31
  *
  * @author mgonzalez
@@ -15,10 +17,9 @@ public class Nodo extends ObjetoBasico {
     private String idPadre;
     private List<Nodo> hijos;
     private List<Nodo> oficinasDependientes;
-    private List<Nodo> oficinasDependientesAuxiliares;
     private List<Nodo> oficinasAuxiliares;
-    //TODO cambiar nombre a oficinasFuncionales
     private List<Nodo> oficinasFuncionales; //relacionesOrganizativasOfi
+    private Boolean tieneOficinaSir = false;
 
 
     public Nodo() {
@@ -28,14 +29,9 @@ public class Nodo extends ObjetoBasico {
         super(codigo, denominacion, descripcionEstado, raiz, superior, localidad);
     }
 
-    public Nodo(String codigo, String denominacion, String descripcionEstado, String raiz, String superior, String localidad, String idPadre, List<Nodo> hijos, List<Nodo> oficinasDependientes, List<Nodo> oficinasDependientesAuxiliares, List<Nodo> oficinasAuxiliares, List<Nodo> oficinasFuncionales) {
+    public Nodo(String codigo, String denominacion, String descripcionEstado, String raiz, String superior, String localidad, Boolean tieneOficinaSir) {
         super(codigo, denominacion, descripcionEstado, raiz, superior, localidad);
-        this.idPadre = idPadre;
-        this.hijos = hijos;
-        this.oficinasDependientes = oficinasDependientes;
-        this.oficinasDependientesAuxiliares = oficinasDependientesAuxiliares;
-        this.oficinasAuxiliares = oficinasAuxiliares;
-        this.oficinasFuncionales = oficinasFuncionales;
+        this.tieneOficinaSir = tieneOficinaSir;
     }
 
 
@@ -67,14 +63,6 @@ public class Nodo extends ObjetoBasico {
         this.oficinasDependientes = oficinasDependientes;
     }
 
-    public List<Nodo> getOficinasDependientesAuxiliares() {
-        return oficinasDependientesAuxiliares;
-    }
-
-    public void setOficinasDependientesAuxiliares(List<Nodo> oficinasDependientesAuxiliares) {
-        this.oficinasDependientesAuxiliares = oficinasDependientesAuxiliares;
-    }
-
     public List<Nodo> getOficinasAuxiliares() {
         return oficinasAuxiliares;
     }
@@ -89,5 +77,13 @@ public class Nodo extends ObjetoBasico {
 
     public void setOficinasFuncionales(List<Nodo> oficinasFuncionales) {
         this.oficinasFuncionales = oficinasFuncionales;
+    }
+
+    public Boolean getTieneOficinaSir() {
+        return tieneOficinaSir;
+    }
+
+    public void setTieneOficinaSir(Boolean tieneOficinaSir) {
+        this.tieneOficinaSir = tieneOficinaSir;
     }
 }

@@ -240,7 +240,8 @@ public class Dir3RestBean implements Dir3RestLocal {
        Map<String, Object> parametros = new HashMap<String, Object>();
        List<String> where = new ArrayList<String>();
 
-      StringBuffer query = new StringBuffer("Select distinct(unidad.codigo),unidad.denominacion, unidad.codUnidadRaiz.codigo, unidad.codUnidadRaiz.denominacion, unidad.codUnidadSuperior.codigo, unidad.codUnidadSuperior.denominacion, unilocalidad.descripcionLocalidad  from Unidad  as unidad left outer join unidad.catLocalidad as unilocalidad  ");
+      StringBuffer query = new StringBuffer("Select distinct(unidad.codigo),unidad.denominacion, unidad.codUnidadRaiz.codigo, unidad.codUnidadRaiz.denominacion, unidad.codUnidadSuperior.codigo, unidad.codUnidadSuperior.denominacion, unilocalidad.descripcionLocalidad  " +
+              "from Unidad  as unidad left outer join unidad.catLocalidad as unilocalidad  ");
 
        // Parametros de busqueda
        if(codigo!= null && codigo.length() > 0){where.add(DataBaseUtils.like("unidad.codigo","codigo",parametros,codigo));}
@@ -290,7 +291,7 @@ public class Dir3RestBean implements Dir3RestLocal {
            q = em.createQuery(query.toString());
        }
 
-       //Miramos los que tienen oficinas
+       // Generamos el Nodo
       List<Nodo> unidades = NodoUtils.getNodoListExtendido(q.getResultList());
 
       //Si nos indican la variable conOficinas a true es que interesa devolver solo aquellos organismos

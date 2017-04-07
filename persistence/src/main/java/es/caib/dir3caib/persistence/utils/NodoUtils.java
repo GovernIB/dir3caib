@@ -81,31 +81,31 @@ public class NodoUtils {
             if (object[0] != null) {
                 obj0 = (String) object[0];
             }
-            ;
+
             if (object[1] != null) {
                 obj1 = (String) object[1];
             }
-            ;
+
             if (object[2] != null) {
                 obj2 = (String) object[2];
             }
-            ;
+
             if (object[3] != null) {
                 obj3 = (String) object[3];
             }
-            ;
+
             if (object[4] != null) {
                 obj4 = (String) object[4];
             }
-            ;
+
             if (object[5] != null) {
                 obj5 = (String) object[5];
             }
-            ;
+
             if (object[6] != null) {
                 obj6 = (String) object[6];
             }
-            ;
+
 
             Nodo nodo = new Nodo(obj0, obj1, "", obj3 + " - " + obj2, obj5 + " - " + obj4, obj6);
 
