@@ -14,7 +14,6 @@ import org.hibernate.Hibernate;
 import org.jboss.ejb3.annotation.SecurityDomain;
 
 import javax.annotation.security.RolesAllowed;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -37,8 +36,6 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
     @PersistenceContext
     private EntityManager em;
 
-    @EJB(mappedName = "dir3caib/ServicioEJB/local")
-    public ServicioLocal servicioEjb;
 
     @Override
     public Oficina getReference(String id) throws Exception {

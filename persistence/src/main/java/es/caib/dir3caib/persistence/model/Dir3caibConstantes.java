@@ -37,24 +37,7 @@ public class Dir3caibConstantes {
     public static final String CAT_TIPO_VIA = "CAT_TIPO_VIA.CSV"; 
     public static final String[] CAT_FICHEROS = {CAT_ENTIDAD_GEOGRAFICA, CAT_ESTADO_ENTIDAD, CAT_JERARQUIA_OFICINA, CAT_MOTIVO_EXTINCION, CAT_NIVEL_ADMINISTRACION, CAT_PAIS, CAT_COMUNIDAD_AUTONOMA, CAT_PROVINCIA, CAT_ISLA, CAT_TIPO_CONTACTO, CAT_TIPO_ENTIDAD_PUBLICA, CAT_TIPO_UNIDAD_ORGANICA, CAT_TIPO_VIA, CAT_AMBITO_TERRITORIAL, CAT_LOCALIDAD};
     
-    
-    // Cabeceras Catalogo
-    
-    public static final int CAT_AMBITO_TERRITORIAL_CABECERA   = 3; 
-    public static final int CAT_COMUNIDAD_AUTONOMA_CABECERA   = 5 ; 
-    public static final int CAT_ENTIDAD_GEOGRAFICA_CABECERA   = 2; 
-    public static final int CAT_ESTADO_ENTIDAD_CABECERA       = 2; 
-    public static final int CAT_ISLA_CABECERA                 = 3;
-    public static final int CAT_JERARQUIA_OFICINA_CABECERA    = 2; 
-    public static final int CAT_LOCALIDAD_CABECERA            = 5;
-    public static final int CAT_MOTIVO_EXTINCION_CABECERA     = 2; 
-    public static final int CAT_NIVEL_ADMINISTRACION_CABECERA = 2; 
-    public static final int CAT_PAIS_CABECERA                 = 4; 
-    public static final int CAT_PROVINCIA_CABECERA            = 3; 
-    public static final int CAT_TIPO_CONTACTO_CABECERA        = 2; 
-    public static final int CAT_TIPO_ENTIDAD_PUBLICA_CABECERA = 2; 
-    public static final int CAT_TIPO_UNIDAD_ORGANICA_CABECERA = 2; 
-    public static final int CAT_TIPO_VIA_CABECERA             = 3; 
+
     
     
     // Importación Oficinas
@@ -74,20 +57,9 @@ public class Dir3caibConstantes {
     public static final String UO_CONTACTO_UO = "ContactoUO.csv"; 
     public static final String UO_HISTORICOS_UO = "HistoricosUO.csv"; 
     public static final String UO_UNIDADES = "Unidades.csv"; 
-    public static final String[] UO_FICHEROS = {UO_UNIDADES,UO_HISTORICOS_UO,UO_CONTACTO_UO}; 
-    
-    public static final int UNIDADES_CABECERA = 47;
-    public static final int UO_HISTORICOS_CABECERA = 4;
-    public static final int UO_CONTACTO_CABECERA = 4;
-    
-    public static final int OFICINAS_CABECERA = 28;
-    public static final int OFI_CONTACTO_CABECERA = 4;
-    public static final int OFI_HISTORICOS_CABECERA = 4;
-    public static final int OFI_RELACIONES_ORGANIZATIVAS_CABECERA = 5;
-    public static final int OFI_RELACIONES_SIROFI_CABECERA = 5;
-    public static final int OFI_SERVICIOS_CABECERA = 3 ;
-    
-    
+    public static final String[] UO_FICHEROS = {UO_UNIDADES,UO_HISTORICOS_UO,UO_CONTACTO_UO};
+
+
     public static final String FORMATO_FECHA = "dd/MM/yyyy";
     public static final String FORMATO_FECHA_HORA = "dd/MM/yyyy hh:mm:ss";
     
@@ -120,6 +92,6 @@ public class Dir3caibConstantes {
     public static final int RESULTADOS_BUSQUEDA_DENOMINACION = 40;
 
     // Expresión CRON por defecto para actualizar DIR3
-    public static final String CRON_SINCRONIZAR_DIR3= "0 0 3 1/1 * ? *"; // Sincronización diaria a las 03:00 am
+    public static final String CRON_SINCRONIZAR_DIR3 = "0 0 1 1/1 * ? *"; // Sincronización diaria a las 03:00 am
 
 }

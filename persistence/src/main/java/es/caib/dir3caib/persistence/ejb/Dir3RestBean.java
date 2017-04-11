@@ -28,6 +28,7 @@ public class Dir3RestBean implements Dir3RestLocal {
   @PersistenceContext
   private EntityManager em;
 
+
     /**
      * Obtiene las unidades cuya denominación coincide con la indicada.
      * @param denominacion
@@ -223,8 +224,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 
   /**
    * TODO REVISAR
-   * Búsqueda de organismos según los parámetros indicados que esten vigentes y que tengan
-   * al menos una oficina asociada (ya sea organizativa o funcional)
+   * Búsqueda de organismos según los parámetros indicados que esten vigentes
    * @param codigo  código de la unidad
    * @param denominacion  denominación de la unidad
    * @param codigoNivelAdministracion  nivel de administración de la unidad
@@ -235,19 +235,28 @@ public class Dir3RestBean implements Dir3RestLocal {
    * @throws Exception
    */
   public List<Nodo> busquedaOrganismos(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, boolean conOficinas, boolean unidadRaiz, Long provincia, String localidad) throws Exception {
-         log.info("conOficinas " + conOficinas);
-       Query q;
-       Map<String, Object> parametros = new HashMap<String, Object>();
-       List<String> where = new ArrayList<String>();
+      Query q;
+      Map<String, Object> parametros = new HashMap<String, Object>();
+      List<String> where = new ArrayList<String>();
 
       StringBuffer query = new StringBuffer("Select distinct(unidad.codigo),unidad.denominacion, unidad.codUnidadRaiz.codigo, unidad.codUnidadRaiz.denominacion, unidad.codUnidadSuperior.codigo, unidad.codUnidadSuperior.denominacion, unilocalidad.descripcionLocalidad  " +
               "from Unidad  as unidad left outer join unidad.catLocalidad as unilocalidad  ");
 
-       // Parametros de busqueda
-       if(codigo!= null && codigo.length() > 0){where.add(DataBaseUtils.like("unidad.codigo","codigo",parametros,codigo));}
-       if(denominacion!= null && denominacion.length() > 0){where.add(DataBaseUtils.like("unidad.denominacion", "denominacion", parametros, denominacion));}
-       if(codigoNivelAdministracion!= null && codigoNivelAdministracion != -1){where.add(" unidad.nivelAdministracion.codigoNivelAdministracion = :codigoNivelAdministracion "); parametros.put("codigoNivelAdministracion",codigoNivelAdministracion);}
-       if(codComunidad!= null && codComunidad != -1){where.add(" unidad.codAmbComunidad.codigoComunidad = :codComunidad "); parametros.put("codComunidad",codComunidad);}
+      // Parametros de busqueda
+      if (codigo != null && codigo.length() > 0) {
+          where.add(DataBaseUtils.like("unidad.codigo", "codigo", parametros, codigo));
+      }
+      if (denominacion != null && denominacion.length() > 0) {
+          where.add(DataBaseUtils.like("unidad.denominacion", "denominacion", parametros, denominacion));
+      }
+      if (codigoNivelAdministracion != null && codigoNivelAdministracion != -1) {
+          where.add(" unidad.nivelAdministracion.codigoNivelAdministracion = :codigoNivelAdministracion ");
+          parametros.put("codigoNivelAdministracion", codigoNivelAdministracion);
+      }
+      if (codComunidad != null && codComunidad != -1) {
+          where.add(" unidad.codAmbComunidad.codigoComunidad = :codComunidad ");
+          parametros.put("codComunidad", codComunidad);
+      }
       if (provincia != null && provincia != -1) {
           where.add(" unidad.codAmbProvincia.codigoProvincia = :codProvincia");
           parametros.put("codProvincia", provincia);
@@ -265,11 +274,14 @@ public class Dir3RestBean implements Dir3RestLocal {
               }
           }
       }
-       where.add(" unidad.estado.codigoEstadoEntidad =:vigente ");parametros.put("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-       if(unidadRaiz){where.add(" unidad.codUnidadRaiz.codigo = unidad.codigo ");}
+      where.add(" unidad.estado.codigoEstadoEntidad =:vigente ");
+      parametros.put("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+      if (unidadRaiz) {
+          where.add(" unidad.codUnidadRaiz.codigo = unidad.codigo ");
+      }
 
-       // Añadimos los parametros a la query
-       if (parametros.size() != 0) {
+      // Añadimos los parametros a la query
+      if (parametros.size() != 0) {
            query.append("where ");
            int count = 0;
            for (String w : where) {
@@ -286,10 +298,10 @@ public class Dir3RestBean implements Dir3RestLocal {
                q.setParameter(param.getKey(), param.getValue());
            }
 
-       }else{
-           query.append("order by unidad.denominacion asc");
+      } else {
+          query.append("order by unidad.denominacion asc ");
            q = em.createQuery(query.toString());
-       }
+      }
 
        // Generamos el Nodo
       List<Nodo> unidades = NodoUtils.getNodoListExtendido(q.getResultList());
@@ -304,6 +316,13 @@ public class Dir3RestBean implements Dir3RestLocal {
            }
          }
           unidades = new ArrayList<Nodo>(unidadesConOficinas);
+      }
+
+      // Actualizamos las unidades obtenidas y marcamos si tienen oficinasSIR
+      for (Nodo unidad2 : unidades) {
+          if (obtenerOficinasSIRUnidad(unidad2.getCodigo()).size() > 0) {
+              unidad2.setTieneOficinaSir(true);
+          }
       }
 
        return unidades;
@@ -505,6 +524,30 @@ public class Dir3RestBean implements Dir3RestLocal {
         List<Nodo> unidades = NodoUtils.getNodoListUnidadRaizUnidadSuperior(q.getResultList());
 
         return unidades;
+    }
+
+
+    /**
+     * Método repetido en oficinaBean, se ha puesto aqui por problemas de caller unathorized y referencias cruzadas
+     * Obtiene el listado de oficinas Sir de una Unidad
+     * para ello consulta la relacionSirOfi y además que tengan los servicios SIR y SIR_RECEPCION y que sean vigentes.
+     *
+     * @param codigo Código de la unidad
+     */
+    public List<Oficina> obtenerOficinasSIRUnidad(String codigo) throws Exception {
+
+        Query q = em.createQuery("select relacionSirOfi.oficina.codigo from RelacionSirOfi as relacionSirOfi where relacionSirOfi.unidad.codigo =:codigoUnidad " +
+                "and :SERVICIO_SIR_RECEPCION in elements(relacionSirOfi.oficina.servicios) " +
+                "and :SERVICIO_SIR in elements(relacionSirOfi.oficina.servicios) " +
+                "and relacionSirOfi.estado.codigoEstadoEntidad='V' ");
+
+        q.setParameter("codigoUnidad", codigo);
+        q.setParameter("SERVICIO_SIR", new Servicio(Dir3caibConstantes.SERVICIO_SIR));
+        q.setParameter("SERVICIO_SIR_RECEPCION", new Servicio(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
+
+
+        return q.getResultList();
+
     }
 
 
