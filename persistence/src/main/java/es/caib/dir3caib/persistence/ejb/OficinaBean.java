@@ -449,7 +449,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
         Query q = em.createQuery("select relacionSirOfi.oficina from RelacionSirOfi as relacionSirOfi where relacionSirOfi.unidad.codigo =:codigoUnidad " +
                 "and :SERVICIO_SIR_RECEPCION in elements(relacionSirOfi.oficina.servicios) " +
-                "and :SERVICIO_SIR in elements(relacionSirOfi.oficina.servicios) " +
+                "or :SERVICIO_SIR in elements(relacionSirOfi.oficina.servicios) " +
                 "and relacionSirOfi.estado.codigoEstadoEntidad='V' ");
 
         q.setParameter("codigoUnidad", codigo);
