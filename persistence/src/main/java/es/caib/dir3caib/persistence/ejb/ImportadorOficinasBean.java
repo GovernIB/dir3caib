@@ -468,6 +468,9 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
                                     oficina.setTipoVia(null);
                                 }
 
+                                //Pruebas marilen
+                                oficina.setServicios(null);
+
                                 //Oficina Responsable
                                 String codigoOfiResponsable = fila[7].trim();
                                 Oficina ofiResponsable = null;
