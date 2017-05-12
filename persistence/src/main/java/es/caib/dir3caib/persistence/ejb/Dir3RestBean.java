@@ -6,6 +6,7 @@ import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.NodoUtils;
 import org.apache.log4j.Logger;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,6 +28,9 @@ public class Dir3RestBean implements Dir3RestLocal {
 
   @PersistenceContext
   private EntityManager em;
+
+    @EJB(mappedName = "dir3caib/OficinaEJB/local")
+    private OficinaLocal oficinaEjb;
 
 
     /**
@@ -320,7 +324,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 
       // Actualizamos las unidades obtenidas y marcamos si tienen oficinasSIR
       for (Nodo unidad2 : unidades) {
-          if (obtenerOficinasSIRUnidad(unidad2.getCodigo()).size() > 0) {
+          if (oficinaEjb.obtenerOficinasSIRUnidad(unidad2.getCodigo()).size() > 0) {
               unidad2.setTieneOficinaSir(true);
           }
       }
@@ -525,29 +529,5 @@ public class Dir3RestBean implements Dir3RestLocal {
 
         return unidades;
     }
-
-
-    /**
-     * Método repetido en oficinaBean, se ha puesto aqui por problemas de caller unathorized y referencias cruzadas
-     * Obtiene el listado de oficinas Sir de una Unidad
-     * para ello consulta la relacionSirOfi y además que tengan los servicios SIR y SIR_RECEPCION y que sean vigentes.
-     *
-     * @param codigoUnidad Código de la unidad
-     */
-    public List<Oficina> obtenerOficinasSIRUnidad(String codigoUnidad) throws Exception {
-
-        Query q = em.createQuery("select relacionSirOfi.oficina.codigo from RelacionSirOfi as relacionSirOfi where relacionSirOfi.unidad.codigo =:codigoUnidad " +
-                "and :SERVICIO_SIR_RECEPCION in elements(relacionSirOfi.oficina.servicios) " +
-                "and relacionSirOfi.estado.codigoEstadoEntidad='V' ");
-
-        q.setParameter("codigoUnidad", codigoUnidad);
-        //q.setParameter("SERVICIO_SIR", new Servicio(Dir3caibConstantes.SERVICIO_SIR));
-        q.setParameter("SERVICIO_SIR_RECEPCION", new Servicio(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
-
-
-        return q.getResultList();
-
-    }
-
 
 }
