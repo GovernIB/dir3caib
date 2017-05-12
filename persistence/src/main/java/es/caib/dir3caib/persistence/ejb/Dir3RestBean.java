@@ -385,8 +385,8 @@ public class Dir3RestBean implements Dir3RestLocal {
 
         // buscamos aquellas que sean oficinas sir de Recepcion
         if (oficinasSir) {
-            where.add(" :SERVICIO_SIR in elements(oficina.servicios) or :SERVICIO_SIR_RECEPCION in elements(oficina.servicios) ");
-            parametros.put("SERVICIO_SIR", new Servicio(Dir3caibConstantes.SERVICIO_SIR));
+            where.add(" :SERVICIO_SIR_RECEPCION in elements(oficina.servicios) ");
+            //parametros.put("SERVICIO_SIR", new Servicio(Dir3caibConstantes.SERVICIO_SIR));
             parametros.put("SERVICIO_SIR_RECEPCION", new Servicio(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
 
         }
@@ -532,17 +532,16 @@ public class Dir3RestBean implements Dir3RestLocal {
      * Obtiene el listado de oficinas Sir de una Unidad
      * para ello consulta la relacionSirOfi y además que tengan los servicios SIR y SIR_RECEPCION y que sean vigentes.
      *
-     * @param codigo Código de la unidad
+     * @param codigoUnidad Código de la unidad
      */
-    public List<Oficina> obtenerOficinasSIRUnidad(String codigo) throws Exception {
+    public List<Oficina> obtenerOficinasSIRUnidad(String codigoUnidad) throws Exception {
 
         Query q = em.createQuery("select relacionSirOfi.oficina.codigo from RelacionSirOfi as relacionSirOfi where relacionSirOfi.unidad.codigo =:codigoUnidad " +
                 "and :SERVICIO_SIR_RECEPCION in elements(relacionSirOfi.oficina.servicios) " +
-                "or :SERVICIO_SIR in elements(relacionSirOfi.oficina.servicios) " +
                 "and relacionSirOfi.estado.codigoEstadoEntidad='V' ");
 
-        q.setParameter("codigoUnidad", codigo);
-        q.setParameter("SERVICIO_SIR", new Servicio(Dir3caibConstantes.SERVICIO_SIR));
+        q.setParameter("codigoUnidad", codigoUnidad);
+        //q.setParameter("SERVICIO_SIR", new Servicio(Dir3caibConstantes.SERVICIO_SIR));
         q.setParameter("SERVICIO_SIR_RECEPCION", new Servicio(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
 
 

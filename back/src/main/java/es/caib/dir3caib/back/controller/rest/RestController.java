@@ -4,6 +4,7 @@ import es.caib.dir3caib.back.utils.CodigoValor;
 import es.caib.dir3caib.persistence.ejb.*;
 import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.utils.Nodo;
+import es.caib.dir3caib.utils.TimeUtils;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -122,11 +123,12 @@ public class RestController {
     @ResponseBody
     ResponseEntity<List<Nodo>> busquedaOrganismos(@RequestParam String codigo, @RequestParam String denominacion, @RequestParam Long codNivelAdministracion, @RequestParam Long codComunidadAutonoma, @RequestParam boolean conOficinas, @RequestParam boolean unidadRaiz, @RequestParam Long provincia, @RequestParam String localidad) throws Exception {
 
-        //log.info("dentro rest busqueda organismos ISO lenght: " + new String(denominacion.getBytes("ISO-8859-1"), "UTF-8").length());
         //Transformamos el campo denominacion de ISO a UTF-8 para realizar las búsquedas en bd que estan en UTF-8.
         //Esto se hace porque el @RequestParam viene en ISO-8859-1.
+        Long start = System.currentTimeMillis();
         List<Nodo> unidades = dir3RestEjb.busquedaOrganismos(codigo, new String(denominacion.getBytes("ISO-8859-1"), "UTF-8"), codNivelAdministracion, codComunidadAutonoma, conOficinas, unidadRaiz, provincia, localidad);
-
+        Long end = System.currentTimeMillis();
+        log.debug("TIEMPO CARGA busqueda oficinas: " + TimeUtils.formatElapsedTime(end - start));
         HttpHeaders headers = addAccessControllAllowOrigin();
 
         return new ResponseEntity<List<Nodo>>(unidades, headers, HttpStatus.OK);
