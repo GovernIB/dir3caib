@@ -343,7 +343,7 @@ public class Dir3RestBean implements Dir3RestLocal {
         Map<String, Object> parametros = new HashMap<String, Object>();
         List<String> where = new ArrayList<String>();
 
-        StringBuffer query = new StringBuffer("Select oficina.codigo, oficina.denominacion, orgresponsable.codigo, orgresponsable.denominacion, ofiresponsable.codigo, ofiresponsable.denominacion, ofilocalidad.descripcionLocalidad from Oficina as oficina left outer join oficina.codOfiResponsable as ofiresponsable left outer join oficina.codUoResponsable.codUnidadRaiz as orgresponsable left outer join oficina.localidad as ofilocalidad ");
+        StringBuffer query = new StringBuffer("Select oficina.codigo, oficina.denominacion, unidadRaiz.codigo, unidadRaiz.denominacion, oficina.codUoResponsable.codigo, oficina.codUoResponsable.denominacion, ofilocalidad.descripcionLocalidad from Oficina as oficina left outer join oficina.codUoResponsable.codUnidadRaiz as unidadRaiz left outer join oficina.localidad as ofilocalidad ");
 
          // Parametros de busqueda
 
