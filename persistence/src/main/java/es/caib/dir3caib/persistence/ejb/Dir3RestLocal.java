@@ -2,6 +2,7 @@ package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.Oficina;
 import es.caib.dir3caib.persistence.model.Unidad;
+import es.caib.dir3caib.persistence.utils.CodigoValor;
 import es.caib.dir3caib.persistence.utils.Nodo;
 
 import javax.ejb.Local;
@@ -31,5 +32,17 @@ public interface Dir3RestLocal  {
   public String oficinaDenominacion(String codigo) throws Exception;
 
   public List<Nodo> busquedaDenominacionComunidad(String denominacion, Long codComunidad) throws Exception;
+
+    public List<CodigoValor> getLocalidadByProvinciaEntidadGeografica(Long codigoProvincia, String codigoEntidadGeografica) throws Exception;
+
+    public List<CodigoValor> getComunidadesAutonomas() throws Exception;
+
+    public List<CodigoValor> getEntidadesGeograficas() throws Exception;
+
+    public List<CodigoValor> getProvincias() throws Exception;
+
+    public List<CodigoValor> getProvinciasByComunidad(Long codComunidad) throws Exception;
+
+    public List<CodigoValor> getNivelesAdministracion() throws Exception;
 
 }

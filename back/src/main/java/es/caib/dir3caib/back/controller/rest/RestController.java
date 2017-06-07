@@ -1,8 +1,8 @@
 package es.caib.dir3caib.back.controller.rest;
 
-import es.caib.dir3caib.back.utils.CodigoValor;
 import es.caib.dir3caib.persistence.ejb.*;
 import es.caib.dir3caib.persistence.model.*;
+import es.caib.dir3caib.persistence.utils.CodigoValor;
 import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.utils.TimeUtils;
 import org.apache.log4j.Logger;
@@ -239,8 +239,9 @@ public class RestController {
 
     /**
      * Obtiene los {@link es.caib.dir3caib.persistence.model.CatProvincia} de la comunidad autonoma seleccionada
+     * Se emplea en unidadList.jsp
      */
-    @RequestMapping(value = "/provincias", method = RequestMethod.GET)
+    @RequestMapping(value = "catalogo/provincias/comunAutonoma", method = RequestMethod.GET)
     public
     @ResponseBody
     List<CodigoValor> provincias(@RequestParam Long id) throws Exception {
@@ -258,8 +259,9 @@ public class RestController {
 
     /**
      * Obtiene los {@link es.caib.dir3caib.persistence.model.CatAmbitoTerritorial} del nivel administracion seleccionado
+     * Se emplea en unidadList.jsp
      */
-    @RequestMapping(value = "/ambitosTerritoriales", method = RequestMethod.GET)
+    @RequestMapping(value = "/catalogo/ambitosTerritoriales", method = RequestMethod.GET)
     public
     @ResponseBody
     List<CodigoValor> ambitosTerritoriales(@RequestParam Long id) throws Exception {
@@ -274,28 +276,28 @@ public class RestController {
         }
         return codigosValor;
     }
-    
-    
-       //
-   // Métodos de catàlogo
+
+
+    //
+    // Métodos de catàlogo para Helium(CMAIB)
    //
    
     
     /**
-     * Obtiene los
+     * Obtiene todas las comunidades autónomas
      * {@link es.caib.dir3caib.persistence.model.CatComunidadAutonoma}
      *
      */
     @RequestMapping(value = "/catalogo/comunidadesAutonomas", method = RequestMethod.GET)
     public @ResponseBody
-    ResponseEntity<List<CatComunidadAutonoma>> comunidadesAutonomas() throws Exception {
+    ResponseEntity<List<CodigoValor>> comunidadesAutonomas() throws Exception {
         log.info("dentro rest comunidadesAutonomas");
 
-        List<CatComunidadAutonoma> resultado = catComunidadAutonomaEjb.getAll();
+        List<CodigoValor> resultado = dir3RestEjb.getComunidadesAutonomas();
 
         log.info(" Comunidades Autonomas encontradas: " + resultado.size());
         HttpHeaders headers = addAccessControllAllowOrigin();
-        return new ResponseEntity<List<CatComunidadAutonoma>>(resultado, headers, HttpStatus.OK);
+        return new ResponseEntity<List<CodigoValor>>(resultado, headers, HttpStatus.OK);
     }
 
     
@@ -306,14 +308,14 @@ public class RestController {
      */
     @RequestMapping(value = "/catalogo/entidadesGeograficas", method = RequestMethod.GET)
     public @ResponseBody
-    ResponseEntity<List<CatEntidadGeografica>> entidadesGeograficas() throws Exception {
+    ResponseEntity<List<CodigoValor>> entidadesGeograficas() throws Exception {
         log.info("dentro rest entidadesGeograficas");
 
-        List<CatEntidadGeografica> resultado = catEntidadGeograficaEjb.getAll();
+        List<CodigoValor> resultado = dir3RestEjb.getEntidadesGeograficas();
 
         log.info(" Entidades geograficas encontradas: " + resultado.size());
         HttpHeaders headers = addAccessControllAllowOrigin();
-        return new ResponseEntity<List<CatEntidadGeografica>>(resultado, headers, HttpStatus.OK);
+        return new ResponseEntity<List<CodigoValor>>(resultado, headers, HttpStatus.OK);
     }
 
    
@@ -324,76 +326,76 @@ public class RestController {
      */
     @RequestMapping(value = "/catalogo/provincias", method = RequestMethod.GET)
     public @ResponseBody
-    ResponseEntity<List<CatProvincia>> provincias() throws Exception {
+    ResponseEntity<List<CodigoValor>> provincias() throws Exception {
         log.info("dentro rest provincias");
 
-        List<CatProvincia> resultado = catProvinciaEjb.getAll();
+        List<CodigoValor> resultado = dir3RestEjb.getProvincias();
 
         log.info(" Provincias encontradas: " + resultado.size());
         HttpHeaders headers = addAccessControllAllowOrigin();
-        return new ResponseEntity<List<CatProvincia>>(resultado, headers, HttpStatus.OK);
+        return new ResponseEntity<List<CodigoValor>>(resultado, headers, HttpStatus.OK);
     }
 
     
      /**
      * Obtiene los
-     * {@link es.caib.dir3caib.persistence.model.CatProvincia}
+      * {@link es.caib.dir3caib.persistence.model.CatProvincia} por comunidad autonoma
      *
      */
-    @RequestMapping(value = "/catalogo/provinciasca", method = RequestMethod.GET)
+     @RequestMapping(value = "/catalogo/provincias/comunidadAutonoma", method = RequestMethod.GET)
     public @ResponseBody
-    ResponseEntity<List<CatProvincia>> provinciasCA(@RequestParam Long codComunidadAutonoma) throws Exception {
+     ResponseEntity<List<CodigoValor>> provinciasCA(@RequestParam Long codComunidadAutonoma) throws Exception {
         log.info("dentro rest provinciasCA");
 
-        List<CatProvincia> resultado = catProvinciaEjb.getByComunidadAutonoma(codComunidadAutonoma);
+         List<CodigoValor> resultado = dir3RestEjb.getProvinciasByComunidad(codComunidadAutonoma);
 
         log.info(" Provincias encontradas: " + resultado.size());
         HttpHeaders headers = addAccessControllAllowOrigin();
-        return new ResponseEntity<List<CatProvincia>>(resultado, headers, HttpStatus.OK);
+         return new ResponseEntity<List<CodigoValor>>(resultado, headers, HttpStatus.OK);
     }
     
     
      /**
      * Obtiene los
-     * {@link es.caib.dir3caib.persistence.model.CatProvincia}
+      * {@link es.caib.dir3caib.persistence.model.CatLocalidad} por provincia y entidad geografica
      *
      */
-    @RequestMapping(value = "/catalogo/localidades", method = RequestMethod.GET)
+     @RequestMapping(value = "/catalogo/localidades/provincia/entidadGeografica", method = RequestMethod.GET)
     public @ResponseBody
-    ResponseEntity<List<CatLocalidad>> localidades(@RequestParam Long codigoProvincia, String codigoEntidadGeografica) throws Exception {
+     ResponseEntity<List<CodigoValor>> localidades(@RequestParam Long codigoProvincia, String codigoEntidadGeografica) throws Exception {
         log.info("dentro rest localidades");
 
-        List<CatLocalidad> resultado = catLocalidadEjb.findByProvincia(codigoProvincia, codigoEntidadGeografica); 
-        //catLocalidadEjb.getByComunidadAutonoma(codComunidadAutonoma);
+         List<CodigoValor> localidades = dir3RestEjb.getLocalidadByProvinciaEntidadGeografica(codigoProvincia, codigoEntidadGeografica);
 
-        log.info(" Localidades encontradas: " + resultado.size());
+
+         log.info(" Localidades encontradas: " + localidades.size());
         HttpHeaders headers = addAccessControllAllowOrigin();
-        return new ResponseEntity<List<CatLocalidad>>(resultado, headers, HttpStatus.OK);
+         return new ResponseEntity<List<CodigoValor>>(localidades, headers, HttpStatus.OK);
     }
     
     
     
      /**
      * Obtiene los
-     * {@link es.caib.dir3caib.persistence.model.CatNivelAdministacion}
+      * {@link es.caib.dir3caib.persistence.model.CatNivelAdministracion}
      *
      */
-    @RequestMapping(value = "/catalogo/nivelAdministracion", method = RequestMethod.GET)
+     @RequestMapping(value = "/catalogo/nivelesAdministracion", method = RequestMethod.GET)
     public @ResponseBody
-    ResponseEntity<List<CatNivelAdministracion>> nivelAdministracion() throws Exception {
+     ResponseEntity<List<CodigoValor>> nivelesAdministracion() throws Exception {
         log.info("dentro rest nivel administracion");
 
-        List<CatNivelAdministracion> resultado = catNivelAdministracionEjb.getAll();
+         List<CodigoValor> resultado = dir3RestEjb.getNivelesAdministracion();
 
         log.info(" Niveles administracion encontrados: " + resultado.size());
         HttpHeaders headers = addAccessControllAllowOrigin();
-        return new ResponseEntity<List<CatNivelAdministracion>>(resultado, headers, HttpStatus.OK);
+         return new ResponseEntity<List<CodigoValor>>(resultado, headers, HttpStatus.OK);
     }
     
     
     //
     // End metodos de catalogo
-//
+    //
     
     
 

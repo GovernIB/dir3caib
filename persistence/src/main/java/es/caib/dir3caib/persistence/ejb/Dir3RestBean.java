@@ -1,6 +1,7 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.*;
+import es.caib.dir3caib.persistence.utils.CodigoValor;
 import es.caib.dir3caib.persistence.utils.DataBaseUtils;
 import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.NodoUtils;
@@ -519,8 +520,6 @@ public class Dir3RestBean implements Dir3RestLocal {
             q = em.createQuery(query.toString());
         }
 
-        //Fijamos un máximo de resultados a devolver
-        q.setMaxResults(Dir3caibConstantes.RESULTADOS_BUSQUEDA_DENOMINACION);
         List<Nodo> unidades = NodoUtils.getNodoListUnidadRaizUnidadSuperior(q.getResultList());
 
         return unidades;
@@ -538,6 +537,125 @@ public class Dir3RestBean implements Dir3RestLocal {
 
 
         return q.getResultList();
+
+    }
+
+    /**
+     * Método que obtiene las localidades en funcion de una provincia y de una entidad geografica
+     *
+     * @param codigoProvincia
+     * @param codigoEntidadGeografica
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public List<CodigoValor> getLocalidadByProvinciaEntidadGeografica(Long codigoProvincia, String codigoEntidadGeografica) throws Exception {
+
+
+        Query q;
+
+        q = em.createQuery("Select catLocalidad.codigoLocalidad, catLocalidad.descripcionLocalidad from CatLocalidad as catLocalidad "
+                + " left outer join catLocalidad.provincia as provincia "
+                + " left outer join catLocalidad.entidadGeografica as entidadGeografica " +
+                " where provincia.codigoProvincia =:codigoProvincia and entidadGeografica.codigoEntidadGeografica=:codigoEntidadGeografica ");
+
+        q.setParameter("codigoProvincia", codigoProvincia);
+        q.setParameter("codigoEntidadGeografica", codigoEntidadGeografica);
+
+
+        return transformarACodigoValor(q.getResultList());
+
+
+    }
+
+    /**
+     * Obtiene todas las comunidades Autónomas
+     *
+     * @return
+     * @throws Exception
+     */
+    public List<CodigoValor> getComunidadesAutonomas() throws Exception {
+        Query q = em.createQuery("select ca.codigoComunidad, ca.descripcionComunidad from CatComunidadAutonoma as ca order by ca.descripcionComunidad");
+
+        return transformarACodigoValor(q.getResultList());
+
+    }
+
+    /**
+     * Obtiene todas las entidades geográficas
+     *
+     * @return
+     * @throws Exception
+     */
+    public List<CodigoValor> getEntidadesGeograficas() throws Exception {
+        Query q = em.createQuery("select eg.codigoEntidadGeografica, eg.descripcionEntidadGeografica from CatEntidadGeografica as eg");
+
+        return transformarACodigoValor(q.getResultList());
+
+    }
+
+
+    /**
+     * Obtiene todas las Provincias
+     *
+     * @return
+     * @throws Exception
+     */
+    public List<CodigoValor> getProvincias() throws Exception {
+        Query q = em.createQuery("select prov.codigoProvincia, prov.descripcionProvincia from CatProvincia as prov order by prov.descripcionProvincia");
+
+        return transformarACodigoValor(q.getResultList());
+
+    }
+
+
+    /**
+     * Obtiene todas las Provincias de una comunidad
+     *
+     * @return
+     * @throws Exception
+     */
+    public List<CodigoValor> getProvinciasByComunidad(Long codComunidad) throws Exception {
+        Query q = em.createQuery("Select prov.codigoProvincia, prov.descripcionProvincia from CatProvincia as prov " +
+                "where prov.comunidadAutonoma.codigoComunidad =:codComunidad order by prov.codigoProvincia");
+
+        q.setParameter("codComunidad", codComunidad);
+
+        return transformarACodigoValor(q.getResultList());
+
+    }
+
+
+    /**
+     * Obtiene todas los niveles de administración
+     *
+     * @return
+     * @throws Exception
+     */
+    public List<CodigoValor> getNivelesAdministracion() throws Exception {
+        Query q = em.createQuery("select na.codigoNivelAdministracion, na.descripcionNivelAdministracion from CatNivelAdministracion as na order by na.descripcionNivelAdministracion");
+
+        return transformarACodigoValor(q.getResultList());
+
+    }
+
+
+    /**
+     * Método que transforma los resultados de una query en una lista de CodigoValor
+     *
+     * @param resultados
+     * @return
+     */
+    private List<CodigoValor> transformarACodigoValor(List<Object[]> resultados) {
+        List<CodigoValor> codigosValor = new ArrayList<CodigoValor>();
+        for (Object[] obj : resultados) {
+            CodigoValor codigoValor = new CodigoValor();
+            codigoValor.setId(obj[0]);
+            codigoValor.setDescripcion((String) obj[1]);
+            codigosValor.add(codigoValor);
+        }
+
+        return codigosValor;
 
     }
 
