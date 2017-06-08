@@ -45,4 +45,6 @@ public interface Dir3RestLocal  {
 
     public List<CodigoValor> getNivelesAdministracion() throws Exception;
 
+  public List<CodigoValor> getAmbitoTerritorialByAdministracion(Long nivelAdministracion) throws Exception;
+
 }

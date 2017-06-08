@@ -1,7 +1,9 @@
 package es.caib.dir3caib.back.controller.rest;
 
 import es.caib.dir3caib.persistence.ejb.*;
-import es.caib.dir3caib.persistence.model.*;
+import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
+import es.caib.dir3caib.persistence.model.Oficina;
+import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.persistence.utils.CodigoValor;
 import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.utils.TimeUtils;
@@ -16,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.ejb.EJB;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -217,6 +218,12 @@ public class RestController {
     }
 
 
+    //
+    // Métodos de catàlogo para Helium(CMAIB)
+    //
+
+
+
     /**
      * Método que realiza la busqueda de unidades por denominación y comunidad autónoma para utilidad HELIUM
      *
@@ -237,25 +244,6 @@ public class RestController {
 
     }
 
-    /**
-     * Obtiene los {@link es.caib.dir3caib.persistence.model.CatProvincia} de la comunidad autonoma seleccionada
-     * Se emplea en unidadList.jsp
-     */
-    @RequestMapping(value = "catalogo/provincias/comunAutonoma", method = RequestMethod.GET)
-    public
-    @ResponseBody
-    List<CodigoValor> provincias(@RequestParam Long id) throws Exception {
-
-        List<CatProvincia> provincias = catProvinciaEjb.getByComunidadAutonoma(id);
-        List<CodigoValor> codigosValor = new ArrayList<CodigoValor>();
-        for (CatProvincia provincia : provincias) {
-            CodigoValor codigoValor = new CodigoValor();
-            codigoValor.setId(provincia.getCodigoProvincia());
-            codigoValor.setDescripcion(provincia.getDescripcionProvincia());
-            codigosValor.add(codigoValor);
-        }
-        return codigosValor;
-    }
 
     /**
      * Obtiene los {@link es.caib.dir3caib.persistence.model.CatAmbitoTerritorial} del nivel administracion seleccionado
@@ -264,24 +252,17 @@ public class RestController {
     @RequestMapping(value = "/catalogo/ambitosTerritoriales", method = RequestMethod.GET)
     public
     @ResponseBody
-    List<CodigoValor> ambitosTerritoriales(@RequestParam Long id) throws Exception {
+    ResponseEntity<List<CodigoValor>> ambitosTerritoriales(@RequestParam Long id) throws Exception {
 
-        List<CatAmbitoTerritorial> ambitos = catAmbitoTerritorialEjb.getByAdministracion(id);
-        List<CodigoValor> codigosValor = new ArrayList<CodigoValor>();
-        for (CatAmbitoTerritorial ambito : ambitos) {
-            CodigoValor codigoValor = new CodigoValor();
-            codigoValor.setId(ambito.getCodigoAmbito());
-            codigoValor.setDescripcion(ambito.getDescripcionAmbito());
-            codigosValor.add(codigoValor);
-        }
-        return codigosValor;
+        List<CodigoValor> resultado = dir3RestEjb.getAmbitoTerritorialByAdministracion(id);
+
+
+        log.info(" Ambitos Territoriales Encontrados: " + resultado.size());
+        HttpHeaders headers = addAccessControllAllowOrigin();
+        return new ResponseEntity<List<CodigoValor>>(resultado, headers, HttpStatus.OK);
     }
 
 
-    //
-    // Métodos de catàlogo para Helium(CMAIB)
-   //
-   
     
     /**
      * Obtiene todas las comunidades autónomas
@@ -344,10 +325,10 @@ public class RestController {
      */
      @RequestMapping(value = "/catalogo/provincias/comunidadAutonoma", method = RequestMethod.GET)
     public @ResponseBody
-     ResponseEntity<List<CodigoValor>> provinciasCA(@RequestParam Long codComunidadAutonoma) throws Exception {
+     ResponseEntity<List<CodigoValor>> provinciasCA(@RequestParam Long id) throws Exception {
         log.info("dentro rest provinciasCA");
 
-         List<CodigoValor> resultado = dir3RestEjb.getProvinciasByComunidad(codComunidadAutonoma);
+         List<CodigoValor> resultado = dir3RestEjb.getProvinciasByComunidad(id);
 
         log.info(" Provincias encontradas: " + resultado.size());
         HttpHeaders headers = addAccessControllAllowOrigin();

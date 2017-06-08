@@ -222,7 +222,7 @@
     <script type="text/javascript">
 
         <c:url var="ambitosTerritoriales" value="/rest/catalogo/ambitosTerritoriales" />
-        <c:url var="provincias" value="/rest/catalogo/provincias/comunAutonoma" />
+        <c:url var="provincias" value="/rest/catalogo/provincias/comunidadAutonoma" />
 
         $(document).ready(function() {
            // actualizamos los ambitos y provincias para cuando recargamos la pagina.

@@ -640,6 +640,17 @@ public class Dir3RestBean implements Dir3RestLocal {
     }
 
 
+    public List<CodigoValor> getAmbitoTerritorialByAdministracion(Long nivelAdministracion) throws Exception {
+
+        Query q = em.createQuery("Select catAmbitoTerritorial.codigoAmbito,catAmbitoTerritorial.descripcionAmbito  from CatAmbitoTerritorial as catAmbitoTerritorial " +
+                "where catAmbitoTerritorial.nivelAdministracion.codigoNivelAdministracion = :nivelAdministracion order by catAmbitoTerritorial.codigoAmbito");
+
+        q.setParameter("nivelAdministracion", nivelAdministracion);
+
+        return transformarACodigoValor(q.getResultList());
+    }
+
+
     /**
      * Método que transforma los resultados de una query en una lista de CodigoValor
      *

@@ -201,7 +201,7 @@
     <script type="text/javascript">
 
 
-        <c:url var="provincias" value="/rest/catalogo/provincias/comunAutonoma" />
+        <c:url var="provincias" value="/rest/catalogo/provincias/comunidadAutonoma" />
 
                 $(document).ready(function() {
                    // actualizamos las provincias para cuando recargamos la pagina.

@@ -70,16 +70,6 @@ public class CatAmbitoTerritorialBean extends BaseEjbJPA<CatAmbitoTerritorial, L
         em.createQuery("delete from CatAmbitoTerritorial").executeUpdate();
         
     }
-
-    public List<CatAmbitoTerritorial> getByAdministracion(Long nivelAdministracion) throws Exception {
-
-        Query q = em.createQuery("Select catAmbitoTerritorial from CatAmbitoTerritorial as catAmbitoTerritorial " +
-                "where catAmbitoTerritorial.nivelAdministracion.codigoNivelAdministracion = :nivelAdministracion order by catAmbitoTerritorial.codigoAmbito");
-
-        q.setParameter("nivelAdministracion", nivelAdministracion);
-
-        return q.getResultList();
-    }
     
     
     public CatAmbitoTerritorial findByPKs(String codigoAmbito, Long codigoNivelAdministracion) throws Exception {
