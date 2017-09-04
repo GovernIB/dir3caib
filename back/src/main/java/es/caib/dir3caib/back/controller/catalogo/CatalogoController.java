@@ -3,14 +3,14 @@ package es.caib.dir3caib.back.controller.catalogo;
 import es.caib.dir3caib.back.controller.BaseController;
 import es.caib.dir3caib.back.form.FechasForm;
 import es.caib.dir3caib.back.utils.Mensaje;
-import es.caib.dir3caib.persistence.ejb.*;
+import es.caib.dir3caib.persistence.ejb.BaseEjbJPA;
+import es.caib.dir3caib.persistence.ejb.ImportadorCatalogoLocal;
 import es.caib.dir3caib.persistence.model.Descarga;
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.utils.Paginacion;
 import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
 import es.caib.dir3caib.utils.Configuracio;
 import es.caib.dir3caib.utils.Utils;
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,59 +38,13 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "/catalogo")
 public class CatalogoController extends BaseController{
-  
-  @EJB(mappedName = "dir3caib/CatAmbitoTerritorialEJB/local")
-  protected CatAmbitoTerritorialLocal catAmbitoTerritorialEjb;
-  
-  @EJB(mappedName = "dir3caib/CatEntidadGeograficaEJB/local")
-  protected CatEntidadGeograficaLocal catEntidadGeograficaEjb;
+
 
   @EJB(mappedName = "dir3caib/ImportadorCatalogoEJB/local")
   private ImportadorCatalogoLocal importadorCatalogo;
-  
-  @EJB(mappedName = "dir3caib/CatEstadoEntidadEJB/local")
-  protected CatEstadoEntidadLocal catEstadoEntidadEjb;
-  
-  @EJB(mappedName = "dir3caib/CatIslaEJB/local")
-  protected CatIslaLocal catIslaEjb;
-  
-  @EJB(mappedName = "dir3caib/CatJerarquiaOficinaEJB/local")
-  protected CatJerarquiaOficinaLocal catJerarquiaOficinaEjb;
-  
-  @EJB(mappedName = "dir3caib/CatMotivoExtincionEJB/local")
-  protected CatMotivoExtincionLocal catMotivoExtincionEjb;
-  
-  @EJB(mappedName = "dir3caib/CatNivelAdministracionEJB/local")
-  protected CatNivelAdministracionLocal catNivelAdministracionEjb;
-  
-  @EJB(mappedName = "dir3caib/CatPaisEJB/local")
-  protected CatPaisLocal catPaisEjb;
-  
-  @EJB(mappedName = "dir3caib/CatTipoContactoEJB/local")
-  protected CatTipoContactoLocal catTipoContactoEjb;
-  
-  @EJB(mappedName = "dir3caib/CatTipoEntidadPublicaEJB/local")
-  protected CatTipoEntidadPublicaLocal catTipoEntidadPublicaEjb;
-  
-  @EJB(mappedName = "dir3caib/CatTipoUnidadOrganicaEJB/local")
-  protected CatTipoUnidadOrganicaLocal catTipoUnidadOrganicaEjb;
-  
-  @EJB(mappedName = "dir3caib/CatTipoViaEJB/local")
-  protected CatTipoViaLocal catTipoViaEjb;
-  
-  @EJB(mappedName = "dir3caib/CatComunidadAutonomaEJB/local")
-  protected CatComunidadAutonomaLocal catComunidadAutonomaEjb;
-  
-  @EJB(mappedName = "dir3caib/CatProvinciaEJB/local")
-  protected CatProvinciaLocal catProvinciaEjb;
-  
-  @EJB(mappedName = "dir3caib/CatLocalidadEJB/local")
-  protected CatLocalidadLocal catLocalidadEjb;
-  
-  @EJB(mappedName = "dir3caib/DescargaEJB/local")
-  protected DescargaLocal descargaEjb;
-  
-  // Indicamos el formato de fecha dd/MM/yyyy hh:mm:ss
+
+
+    // Indicamos el formato de fecha dd/MM/yyyy hh:mm:ss
   SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
   
     /**
@@ -206,35 +160,10 @@ public class CatalogoController extends BaseController{
      public ModelAndView eliminarCatalogoCompleto(HttpServletRequest request){
          ModelAndView mav = new ModelAndView("/catalogo/catalogoFicheros");
 
-
-         
          try {
-             Descarga descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.CATALOGO);
-             File directorio = new File(Configuracio.getCatalogosPath(descarga.getCodigo()));
-             FileUtils.cleanDirectory(directorio);
-             
-             // Borrado del catalago de la BD
-             
-             catLocalidadEjb.deleteAll();
-             catIslaEjb.deleteAll();
-             catProvinciaEjb.deleteAll();
-             catComunidadAutonomaEjb.deleteAll();
-             catAmbitoTerritorialEjb.deleteAll();
-             catTipoViaEjb.deleteAll();
-             catTipoUnidadOrganicaEjb.deleteAll();
-             catTipoEntidadPublicaEjb.deleteAll();
-             catTipoContactoEjb.deleteAll();
-             catPaisEjb.deleteAll();
-             catNivelAdministracionEjb.deleteAll();
-             catMotivoExtincionEjb.deleteAll();
-             catJerarquiaOficinaEjb.deleteAll();
-             //catIslaEjb.deleteAll();
-             catEstadoEntidadEjb.deleteAll();
-             catEntidadGeograficaEjb.deleteAll(); 
-             descargaEjb.deleteAllByTipo(Dir3caibConstantes.CATALOGO);
-             
-             
+             eliminarCatalogoCompleto();
              Mensaje.saveMessageInfo(request, getMessage("catalogo.borrar.ok"));
+
          } catch (IOException ex) {
              Mensaje.saveMessageError(request, getMessage("catalogo.borrar.nook") + Configuracio.getArchivosPath());
              ex.printStackTrace();
@@ -245,7 +174,6 @@ public class CatalogoController extends BaseController{
          
          return mav;
      }
-     
      
      /**
      * Método que se encarga de obtener los archivos del catálogo  a través de request.
