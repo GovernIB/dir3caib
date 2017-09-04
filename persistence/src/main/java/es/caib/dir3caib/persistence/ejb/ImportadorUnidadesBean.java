@@ -16,6 +16,8 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.xml.ws.BindingProvider;
 import java.io.*;
 import java.net.URL;
@@ -89,18 +91,23 @@ public class ImportadorUnidadesBean implements ImportadorUnidadesLocal {
     @EJB(mappedName = "dir3caib/DescargaEJB/local")
     protected DescargaLocal descargaEjb;
 
+    @PersistenceContext
+    private EntityManager em;
+
     SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
 
     /**
      * Método que importa el contenido de los archivos de las unidades descargados previamente a través
      * de los WS.
+     * Añadido batch processing, con el entity Manager y el batchSize para mejorar el rendimiento.
      */
     @Override
-    @TransactionTimeout(value = 18000)
+    @TransactionTimeout(value = 54000)
     public ResultadosImportacion importarUnidades() throws Exception {
 
         log.info("");
         log.info("Inicio importación Unidades");
+        int batchSize = 30;
 
         ResultadosImportacion results = new ResultadosImportacion();
 
@@ -242,12 +249,13 @@ public class ImportadorUnidadesBean implements ImportadorUnidadesLocal {
                     String[] fila;
                     int count = 1;
                     // Comprobamos el nombre del fichero
-                    if (Dir3caibConstantes.UO_UNIDADES.equals(nombreFichero)) {
+                    if (Dir3caibConstantes.UO_UNIDADES.equals(nombreFichero)) { // Procesamos el fichero Unidades.csv
 
                         reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
                         start = System.currentTimeMillis();
 
                         while ((fila = reader.readNext()) != null) {
+
                             //Obtenemos codigo y miramos si ya existe en la BD
                             try {
                                 //  Miramos si existe ya en la BD
@@ -522,9 +530,10 @@ public class ImportadorUnidadesBean implements ImportadorUnidadesLocal {
 
                                 // Guardamos o Actualizamos la Unidad
                                 if (existeix) {
-                                    unidad = unidadEjb.merge(unidad);
+                                    unidad = em.merge(unidad);
+                                    contactoUOEjb.deleteByUnidad(unidad.getCodigo());
                                 } else {
-                                    unidad = unidadEjb.persistReal(unidad);
+                                    em.persist(unidad);
                                 }
                                 existInBBDD.add(codigoUnidad);
                                 persist = persist + (System.currentTimeMillis() - s);
@@ -573,7 +582,12 @@ public class ImportadorUnidadesBean implements ImportadorUnidadesLocal {
                                 }
 
                                 //Actualizamos la Unidad
-                                unidadEjb.merge(unidad);
+                                em.merge(unidad);
+                                //Borramos los contactos de la unidad
+                                if (count % batchSize == 0) {
+                                    em.flush();
+                                    em.clear();
+                                }
 
                                 merge = merge + (System.currentTimeMillis() - s);
 
@@ -588,11 +602,12 @@ public class ImportadorUnidadesBean implements ImportadorUnidadesLocal {
                                 log.info("Procesades 500 Unidades (" + (count - 500) + " - " + count
                                         + ") en " + Utils.formatElapsedTime(end - start));
 
-                                log.debug("   findbyid: " + Utils.formatElapsedTime(findbyid));
-                                log.debug("findbyidcount: " + findbyidcount);
-                                log.debug("   caches  : " + Utils.formatElapsedTime(caches));
-                                log.debug("   merge   : " + Utils.formatElapsedTime(merge));
-                                log.debug("   persist : " + Utils.formatElapsedTime(persist));
+                                //  log.debug("   findbyid: " + Utils.formatElapsedTime(findbyid));
+                                //  log.debug("findbyidcount: " + findbyidcount);
+                                //  log.debug("   caches  : " + Utils.formatElapsedTime(caches));
+                                //  log.debug("   merge   : " + Utils.formatElapsedTime(merge));
+                                //  log.debug("   persist : " + Utils.formatElapsedTime(persist));
+
 
 
                                 start = end;
@@ -656,7 +671,7 @@ public class ImportadorUnidadesBean implements ImportadorUnidadesLocal {
     }
 
     /*
-        Importa las relaciones de historicos entre unidades
+        Importa las relaciones de historicos entre unidades. Procesa el fichero HistoricosUO.csv
      */
     private void importarHistoricos(String nombreFichero, CSVReader reader) throws Exception {
 
@@ -685,8 +700,8 @@ public class ImportadorUnidadesBean implements ImportadorUnidadesLocal {
                         unidadAnterior.setHistoricoUO(historicosAnterior);
                     }
                     if (unidadUltima == null) {
-                        log.info(" ======================== ");
-                        log.info(" unidadUltima == NULL !!!!! ");
+                        //  log.info(" ======================== ");
+                        //  log.info(" unidadUltima == NULL !!!!! ");
                         throw new Exception();
                     }
 
@@ -715,12 +730,13 @@ public class ImportadorUnidadesBean implements ImportadorUnidadesLocal {
     }
 
     /**
-     * Método que importa los contactos de unas unidades
+     * Método que importa los contactos de las unidades. Procesa el fichero ContactosUO.csv
      *
      * @param nombreFichero fichero que contiene los contactos
      * @param reader        nos permite leer el archivo en cuestión
      */
     private void importarContactos(String nombreFichero, CSVReader reader) throws Exception {
+
         if (Dir3caibConstantes.UO_CONTACTO_UO.equals(nombreFichero)) {
 
             Map<String, CatTipoContacto> cacheCatTipoContacto = new TreeMap<String, CatTipoContacto>();
@@ -754,7 +770,8 @@ public class ImportadorUnidadesBean implements ImportadorUnidadesLocal {
                     //Valor contacto
                     String valorContacto = fila[2].trim();
                     contacto.setValorContacto(valorContacto);
-                    Boolean visibilidad = fila[3].equals("S");
+
+                    boolean visibilidad = fila[3].trim().equals("1");
                     contacto.setVisibilidad(visibilidad);
 
                     contactoUOEjb.persistReal(contacto);

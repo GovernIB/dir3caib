@@ -16,6 +16,8 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.xml.ws.BindingProvider;
 import java.io.*;
 import java.net.URL;
@@ -92,6 +94,8 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
     @EJB(mappedName = "dir3caib/DescargaEJB/local")
     protected DescargaLocal descargaEjb;
 
+    @PersistenceContext
+    private EntityManager em;
 
     SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
 
@@ -190,16 +194,17 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
     /**
      * Método que importa el contenido de los archivos de las oficinas y sus relaciones descargados previamente a través
      * de los WS.
-     *
+     * Añadido batch processing, con el entity Manager y el batchSize para mejorar el rendimiento.
      * @param isUpdate booleano que indica si la llamada es una sincronización(actualizacion)
      */
     @Override
-    @TransactionTimeout(value = 18000)
+    @TransactionTimeout(value = 54000)
     public ResultadosImportacion importarOficinas(boolean isUpdate) throws Exception {
 
         log.info("");
         log.info("Inicio importación Oficinas");
 
+        int batchSize = 30;
         Date hoy = new Date();
 
         System.gc();
@@ -328,7 +333,7 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
                     // Leemos el contenido y lo guardamos en un List
                     String nombreFichero = fichero;
                     String[] fila;
-                    if (Dir3caibConstantes.OFI_OFICINAS.equals(nombreFichero)) {
+                    if (Dir3caibConstantes.OFI_OFICINAS.equals(nombreFichero)) { //Procesamos el fichero Oficinas.csv
                         reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
                         int count = 1;
                         while ((fila = reader.readNext()) != null) {
@@ -493,12 +498,19 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
                                 }
 
                                 if (existeix) {
-                                    oficina = oficinaEjb.merge(oficina);
+                                    contactoOfiEjb.deleteByOficina(oficina.getCodigo());
+                                    oficina = em.merge(oficina);
+
                                 } else {
-                                    oficina = oficinaEjb.persistReal(oficina);
+                                    em.persist(oficina);
                                     existInBBDD.add(codigoOficina);
                                 }
 
+                                // Cada batchSize hacemos flush y clear, esto permite que el proceso sea más rapido y libere memoria.
+                                if (count % batchSize == 0) {
+                                    em.flush();
+                                    em.clear();
+                                }
 
                                 oficinesCache.put(oficina.getCodigo(), oficina);
                             } catch (Exception e) {
@@ -525,286 +537,20 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
 
 
                     // CONTACTOS
-                    if (Dir3caibConstantes.OFI_CONTACTO_OFI.equals(nombreFichero)) {
-                        reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
-                        while ((fila = reader.readNext()) != null) {
-                            try {
-                                ContactoOfi contacto = new ContactoOfi();
-
-                                // Asociamos oficina
-                                String sOficina = fila[0].trim();
-                                if (!sOficina.isEmpty()) {
-                                    Oficina oficina = oficinaEjb.getReference(sOficina);
-                                    contacto.setOficina(oficina);
-                                } else {
-                                    contacto.setOficina(null);
-                                }
-
-                                //Tipo contacto
-                                String stipoContacto = fila[1].trim();
-                                if (!stipoContacto.isEmpty()) {
-                                    contacto.setTipoContacto(cacheTipoContacto.get(stipoContacto));
-                                } else {
-                                    contacto.setTipoContacto(null);
-                                }
-
-                                //Valor contacto
-                                String valorContacto = fila[2].trim();
-                                contacto.setValorContacto(valorContacto);
-                                Boolean visibilidad = fila[3].equals("S");
-                                contacto.setVisibilidad(visibilidad);
-
-
-                                contactoOfiEjb.persistReal(contacto);
-
-                            } catch (Exception e) {
-                                log.error("Error important contactos: " + e.getMessage(), e);
-                            }
-                        }
-                    }
+                    importarContactos(nombreFichero, reader, cacheTipoContacto);
 
                     //HISTORICOS OFI
-                    if (Dir3caibConstantes.OFI_HISTORICOS_OFI.equals(nombreFichero)) {
-
-                        reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
-                        while ((fila = reader.readNext()) != null) {
-                            //Obtenemos codigo y miramos si ya existe en la BD
-
-                            String codigoOficinaAnterior = fila[0];
-                            String codigoOficinaUltima = fila[2];
-                            Oficina oficinaUltima = null;
-                            Oficina oficinaAnterior = null;
-                            try {
-
-                                if (!codigoOficinaUltima.isEmpty()) {
-                                    oficinaUltima = oficinesCache.get(codigoOficinaUltima);
-                                    if (oficinaUltima == null) {
-                                        oficinaUltima = oficinaEjb.getReference(codigoOficinaUltima);
-                                    }
-                                }
-                                if (!codigoOficinaAnterior.isEmpty()) {
-                                    oficinaAnterior = oficinesCache.get(codigoOficinaAnterior);
-                                    if (oficinaAnterior == null) {
-                                        oficinaAnterior = oficinaEjb.findById(codigoOficinaAnterior);
-                                    }
-                                }
-
-                                if (oficinaAnterior == null) {
-                                    throw new Exception();
-                                }
-
-                                //Obtenemos los historicos de la oficinaAnterior y añadimos la oficinaUltima
-                                Set<Oficina> historicosAnterior = oficinaAnterior.getHistoricosOfi();
-                                if (historicosAnterior == null) {
-                                    historicosAnterior = new HashSet<Oficina>();
-                                    oficinaAnterior.setHistoricosOfi(historicosAnterior);
-                                }
-
-                                if (oficinaUltima == null) {
-                                    throw new Exception();
-                                }
-                                historicosAnterior.add(oficinaUltima);
-
-                                oficinaEjb.merge(oficinaAnterior);
-
-                            } catch (Exception e) {
-                                log.error("=======================================");
-                                log.error("codigoOficinaAnterior: " + codigoOficinaAnterior);
-                                log.error("oficinaAnterior: " + oficinaAnterior);
-                                log.error("codigoOficinaUltima: " + codigoOficinaUltima);
-                                log.error("String oficinaUltima: " + oficinaUltima);
-                                log.error("Error important Historicos-Oficines " + e.getMessage());
-                                StackTraceElement[] stack = e.getStackTrace();
-                                int maxLines = (stack.length > 4) ? 5 : stack.length;
-                                for (int n = 0; n < maxLines; n++) {
-                                    log.error(stack[n].toString());
-                                }
-                            }
-                        }
-                    }
+                    importarHistoricos(nombreFichero, reader, oficinesCache);
 
                     // Relaciones organizativas
-                    if (Dir3caibConstantes.OFI_RELACIONES_ORGANIZATIVAS_OFI.equals(nombreFichero)) {
-                        reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
-                        long s = System.currentTimeMillis();
-                        long findby = 0;
-                        int c = 1;
-                        CacheUnidadOficina cache = new CacheUnidadOficina(relOrgOfiEjb.getUnidadesOficinas());
-                        while ((fila = reader.readNext()) != null) {
-                            //Obtenemos codigo y miramos si ya existe en la BD
-                            try {
-                                String sOficina = fila[0].trim();
-                                String sUnidad = fila[2].trim();
-                                if (!sOficina.isEmpty() && !sUnidad.isEmpty()) {
-
-                                    boolean existeix;
-
-                                    RelacionOrganizativaOfi relacionOrganizativaOfi;
-                                    if (cache.existsUnidadOficina(sUnidad, sOficina)) {
-                                        long s1 = System.currentTimeMillis();
-                                        relacionOrganizativaOfi = relOrgOfiEjb.findByPKs(sUnidad, sOficina);
-                                        existeix = true;
-                                        findby = findby + (System.currentTimeMillis() - s1);
-                                    } else {
-                                        relacionOrganizativaOfi = null;
-                                        existeix = false;
-                                    }
-                                    if (relacionOrganizativaOfi == null) {
-                                        relacionOrganizativaOfi = new RelacionOrganizativaOfi();
-
-                                        Oficina oficina = oficinesCache.get(sOficina);
-                                        if (oficina == null) {
-                                            oficina = oficinaEjb.getReference(sOficina);
-                                        }
-
-                                        Unidad unidad = cacheUnidad.get(sUnidad);
-
-                                        relacionOrganizativaOfi.setOficina(oficina);
-                                        relacionOrganizativaOfi.setUnidad(unidad);
-                                    }
-                                    String codigoEstado = fila[4].trim();
-                                    if (!codigoEstado.isEmpty()) {
-                                        relacionOrganizativaOfi.setEstado(cacheEstadoEntidad.get(codigoEstado));
-                                    }
-
-
-                                    if(existeix){
-                                        relOrgOfiEjb.merge(relacionOrganizativaOfi);
-                                    }else{
-                                        relOrgOfiEjb.persistReal(relacionOrganizativaOfi);
-                                    }
-
-                                    c++;
-                                    if (c % 100 == 0) {
-                                        log.info("Procesades OFI_RELACIONES_ORGANIZATIVAS_OFI (" + c + ") "
-                                                + " en " + Utils.formatElapsedTime(System.currentTimeMillis() - s));
-
-                                        log.debug("           * Time FIND = " + Utils.formatElapsedTime(findby));
-                                        s = System.currentTimeMillis();
-                                        findby = 0;
-                                    }
-
-                                }
-
-                            } catch (Exception e) {
-                                log.error("Error important relaciones organizativas " + e.getMessage(), e);
-                            }
-                        }
-                    }
+                    importarRelacionesOrganizativas(nombreFichero, reader);
 
                     // Relaciones SIR Oficina
-                    if (Dir3caibConstantes.OFI_RELACIONES_SIROFI.equals(nombreFichero)) {
-                        int c = 0;
-                        long s = System.currentTimeMillis();
-                        long findby = 0;
-                        CacheUnidadOficina cache = new CacheUnidadOficina(relSirOfiEjb.getUnidadesOficinas());
-                        reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
-                        while ((fila = reader.readNext()) != null) {
-                            //Obtenemos codigo y miramos si ya existe en la BD
-                            try {
-                                String sOficina = fila[0].trim();
-                                String sUnidad = fila[2].trim();
-                                if (!sOficina.isEmpty() && !sUnidad.isEmpty()) {
-
-                                    boolean existe;
-                                    RelacionSirOfi relacionSirOfi = null;
-
-                                    if (cache.existsUnidadOficina(sUnidad, sOficina)) {
-                                        long s1 = System.currentTimeMillis();
-                                        relacionSirOfi = relSirOfiEjb.findByPKs(sUnidad, sOficina);
-                                        existe = true;
-                                        findby = findby + (System.currentTimeMillis() - s1);
-                                    }else{
-
-                                        existe = false;
-
-                                        relacionSirOfi = new RelacionSirOfi();
-
-                                        Oficina oficina = oficinesCache.get(sOficina);
-
-                                        if (oficina == null) {
-                                            oficina = oficinaEjb.getReference(sOficina);
-                                        }
-                                        Unidad unidad = cacheUnidad.get(sUnidad);
-
-
-                                        relacionSirOfi.setOficina(oficina);
-                                        relacionSirOfi.setUnidad(unidad);
-                                    }
-                                    String codigoEstado = fila[4].trim();
-                                    if (!codigoEstado.isEmpty()) {
-                                        relacionSirOfi.setEstado(cacheEstadoEntidad.get(codigoEstado));
-                                    }
-
-
-                                    if(existe){
-                                        relSirOfiEjb.merge(relacionSirOfi);
-                                    }else{
-                                        relSirOfiEjb.persistReal(relacionSirOfi);
-                                    }
-
-
-                                    c++;
-                                    if (c % 100 == 0) {
-                                        log.info("Procesades RelacionesSIROFI:  (" + c + ") "
-                                                + " en " + Utils.formatElapsedTime(System.currentTimeMillis() - s));
-
-                                        log.debug("           * Time FIND = " + Utils.formatElapsedTime(findby));
-                                        s = System.currentTimeMillis();
-                                        findby = 0;
-                                    }
-
-                                }
-                            } catch (Exception e) {
-                                log.error("Error important RELACIONES_SIROFI: " + e.getMessage(), e);
-                            }
-                        }
-                    }
+                    importarRelacionesSir(nombreFichero, reader);
 
                     //Servicios
-                    if (Dir3caibConstantes.OFI_SERVICIOS_OFI.equals(nombreFichero)) {
-                        reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
-                        while ((fila = reader.readNext()) != null) {
-                            //Obtenemos codigo y miramos si ya existe en la BD
-                            try {
-                                String codigoOficina = fila[0].trim();
-                                String codigoServicio = fila[1].trim();
-                                if (!codigoOficina.isEmpty() && !codigoServicio.isEmpty()) {
-                                    Long codServicio = new Long(codigoServicio);
+                    importarServicios(nombreFichero, reader);
 
-                                    Oficina oficina = oficinesCache.get(codigoOficina);
-
-                                    if (oficina == null) {
-                                        oficina = oficinaEjb.findById(codigoOficina);
-                                    }
-
-                                    Servicio servicio = servicioEjb.findById(codServicio);
-
-
-                                    if (servicio == null) {
-                                        servicio = new Servicio();
-                                        servicio.setCodServicio(codServicio);
-                                        servicio.setDescServicio(fila[2].trim());
-
-                                        servicio = servicioEjb.persistReal(servicio);
-
-                                    }
-                                    Set<Servicio> servicios = oficina.getServicios();
-                                    if (servicios == null) {
-                                        servicios = new HashSet<Servicio>();
-                                    }
-
-                                    servicios.add(servicio);
-                                    oficina.setServicios(servicios);
-
-                                    oficinaEjb.merge(oficina);
-
-                                }
-                            } catch (Exception e) {
-                                log.error(" Error EnOFI_SERVICIOS_OFI " + e.getMessage(), e);
-                            }
-                        }
-                    }
                     log.info("Fin importar fichero: " + nombreFichero);
 
                     procesados.add(fichero);
@@ -848,6 +594,349 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
         oficina.setDenominacion(new String());
 
         return oficina;
+    }
+
+    /**
+     * Método que importa los históricos de las oficinas. Procesa el fichero HistoricosOFI.csv
+     *
+     * @param nombreFichero
+     * @param reader
+     * @param oficinesCache cache de las oficinas para un procesado más óptimo
+     * @throws Exception
+     */
+    private void importarHistoricos(String nombreFichero, CSVReader reader, Map<String, Oficina> oficinesCache) throws Exception {
+        String[] fila;
+        if (Dir3caibConstantes.OFI_HISTORICOS_OFI.equals(nombreFichero)) {
+
+            reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
+            while ((fila = reader.readNext()) != null) {
+                //Obtenemos el histórico
+                String codigoOficinaAnterior = fila[0]; //codigo de la oficina que es sustituida
+                String codigoOficinaUltima = fila[2]; // código de la oficina que sustituye
+                Oficina oficinaUltima = null;
+                Oficina oficinaAnterior = null;
+                try {
+                    // si existe la oficina la cogemos de cache, si no de la bd
+                    if (!codigoOficinaUltima.isEmpty()) {
+                        oficinaUltima = oficinesCache.get(codigoOficinaUltima);
+                        if (oficinaUltima == null) {
+                            oficinaUltima = oficinaEjb.getReference(codigoOficinaUltima);
+                        }
+                    }
+                    // si existe la oficina la cogemos de cache, si no de la bd
+                    if (!codigoOficinaAnterior.isEmpty()) {
+                        oficinaAnterior = oficinesCache.get(codigoOficinaAnterior);
+                        if (oficinaAnterior == null) {
+                            oficinaAnterior = oficinaEjb.findById(codigoOficinaAnterior);
+                        }
+                    }
+
+                    //si no existe la oficina que es sustituida hay un error.
+                    if (oficinaAnterior == null) {
+                        throw new Exception();
+                    }
+
+                    //Obtenemos los historicos de la oficinaAnterior y añadimos la oficinaUltima
+                    Set<Oficina> historicosAnterior = oficinaAnterior.getHistoricosOfi();
+                    if (historicosAnterior == null) {
+                        historicosAnterior = new HashSet<Oficina>();
+                        oficinaAnterior.setHistoricosOfi(historicosAnterior);
+                    }
+
+                    //si no existe la oficina que sustituye hay un error.
+                    if (oficinaUltima == null) {
+                        throw new Exception();
+                    }
+                    historicosAnterior.add(oficinaUltima);
+
+                    oficinaEjb.merge(oficinaAnterior);
+
+                } catch (Exception e) {
+                    log.error("=======================================");
+                    log.error("codigoOficinaAnterior: " + codigoOficinaAnterior);
+                    log.error("oficinaAnterior: " + oficinaAnterior);
+                    log.error("codigoOficinaUltima: " + codigoOficinaUltima);
+                    log.error("String oficinaUltima: " + oficinaUltima);
+                    log.error("Error important Historicos-Oficines " + e.getMessage());
+                    StackTraceElement[] stack = e.getStackTrace();
+                    int maxLines = (stack.length > 4) ? 5 : stack.length;
+                    for (int n = 0; n < maxLines; n++) {
+                        log.error(stack[n].toString());
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Método que importa los contactos de una Oficina. Procesa el fichero ContactoOFI.csv
+     * (Solo vienen los que estan visibles en el momento de la descarga)
+     *
+     * @param nombreFichero
+     * @param reader
+     * @param cacheTipoContacto
+     * @throws Exception
+     */
+    private void importarContactos(String nombreFichero, CSVReader reader, Map<String, CatTipoContacto> cacheTipoContacto) throws Exception {
+        String[] fila;
+        if (Dir3caibConstantes.OFI_CONTACTO_OFI.equals(nombreFichero)) {
+            reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
+            while ((fila = reader.readNext()) != null) {
+                try {
+                    ContactoOfi contacto = new ContactoOfi();
+
+                    // Asociamos oficina
+                    String sOficina = fila[0].trim();
+                    if (!sOficina.isEmpty()) {
+                        Oficina oficina = oficinaEjb.getReference(sOficina);
+                        contacto.setOficina(oficina);
+                    } else {
+                        contacto.setOficina(null);
+                    }
+
+                    //Tipo contacto
+                    String stipoContacto = fila[1].trim();
+                    if (!stipoContacto.isEmpty()) {
+                        contacto.setTipoContacto(cacheTipoContacto.get(stipoContacto));
+                    } else {
+                        contacto.setTipoContacto(null);
+                    }
+
+                    //Valor contacto
+                    String valorContacto = fila[2].trim();
+                    contacto.setValorContacto(valorContacto);
+                    boolean visibilidad = fila[3].trim().equals("1");
+                    contacto.setVisibilidad(visibilidad);
+
+
+                    contactoOfiEjb.persistReal(contacto);
+
+                } catch (Exception e) {
+                    log.error("Error important contactos: " + e.getMessage(), e);
+                }
+            }
+        }
+
+    }
+
+    /**
+     * Método que importa las relaciones Organizativas de las oficinas. Procesa el fichero RelacionesOrganizativasOFI.csv
+     *
+     * @param nombreFichero
+     * @param reader
+     * @throws Exception
+     */
+    private void importarRelacionesOrganizativas(String nombreFichero, CSVReader reader) throws Exception {
+        // Relaciones organizativas
+        if (Dir3caibConstantes.OFI_RELACIONES_ORGANIZATIVAS_OFI.equals(nombreFichero)) {
+            reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
+            long s = System.currentTimeMillis();
+            long findby = 0;
+            int c = 1;
+            String[] fila;
+            int batchSize = 30;
+            //Se monta una cache con los codigos (Unidad-Oficina)
+            CacheUnidadOficina cache = new CacheUnidadOficina(relOrgOfiEjb.getUnidadesOficinas());
+            while ((fila = reader.readNext()) != null) {
+                //Obtenemos codigo y miramos si ya existe en la BD
+                try {
+                    String sOficina = fila[0].trim();
+                    String sUnidad = fila[2].trim();
+                    if (!sOficina.isEmpty() && !sUnidad.isEmpty()) {
+
+                        boolean existeix;
+
+                        RelacionOrganizativaOfi relacionOrganizativaOfi;
+                        //Miramos si existe la relacionOrganizativa
+                        if (cache.existsUnidadOficina(sUnidad, sOficina)) {
+                            long s1 = System.currentTimeMillis();
+                            relacionOrganizativaOfi = relOrgOfiEjb.findByPKs(sUnidad, sOficina);
+                            existeix = true;
+                            findby = findby + (System.currentTimeMillis() - s1);
+                        } else {
+                            relacionOrganizativaOfi = null;
+                            existeix = false;
+                        }
+                        //Si no existe creamos una nueva
+                        if (relacionOrganizativaOfi == null) {
+                            relacionOrganizativaOfi = new RelacionOrganizativaOfi();
+
+                            Oficina oficina = oficinaEjb.getReference(sOficina);
+
+                            Unidad unidad = unidadEjb.getReference(sUnidad);
+
+                            relacionOrganizativaOfi.setOficina(oficina);
+                            relacionOrganizativaOfi.setUnidad(unidad);
+                        }
+                        //Actualizamo el estado en ambos casos
+                        String codigoEstado = fila[4].trim();
+                        if (!codigoEstado.isEmpty()) {
+                            relacionOrganizativaOfi.setEstado(catEstadoEntidadEjb.getReference(codigoEstado));
+                        }
+
+
+                        if (existeix) {
+                            em.merge(relacionOrganizativaOfi);
+                        } else {
+                            em.persist(relacionOrganizativaOfi);
+                        }
+
+                        // Cada batchSize hacemos flush y clear, esto permite que el proceso sea más rapido y libere memoria.
+                        if (c % batchSize == 0) {
+                            em.flush();
+                            em.clear();
+                        }
+
+                        c++;
+                        if (c % 100 == 0) {
+                            log.info("Procesades OFI_RELACIONES_ORGANIZATIVAS_OFI (" + c + ") "
+                                    + " en " + Utils.formatElapsedTime(System.currentTimeMillis() - s));
+
+                            log.debug("           * Time FIND = " + Utils.formatElapsedTime(findby));
+                            s = System.currentTimeMillis();
+                            findby = 0;
+                        }
+
+                    }
+
+                } catch (Exception e) {
+                    log.error("Error important relaciones organizativas " + e.getMessage(), e);
+                }
+            }
+        }
+
+    }
+
+    /**
+     * Método que importa las relaciones Sir entre oficinas. Procesa el fichero RelacionesSIROFI.csv
+     *
+     * @param nombreFichero
+     * @param reader
+     * @throws Exception
+     */
+    private void importarRelacionesSir(String nombreFichero, CSVReader reader) throws Exception {
+
+        if (Dir3caibConstantes.OFI_RELACIONES_SIROFI.equals(nombreFichero)) {
+            int c = 0;
+            long s = System.currentTimeMillis();
+            long findby = 0;
+            CacheUnidadOficina cache = new CacheUnidadOficina(relSirOfiEjb.getUnidadesOficinas());
+            String[] fila;
+            int batchSize = 30;
+            reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
+            while ((fila = reader.readNext()) != null) {
+                //Obtenemos codigo y miramos si ya existe en la BD
+                try {
+                    String sOficina = fila[0].trim();
+                    String sUnidad = fila[2].trim();
+                    if (!sOficina.isEmpty() && !sUnidad.isEmpty()) {
+
+                        boolean existe;
+                        RelacionSirOfi relacionSirOfi = null;
+                        //Miramos si existe previamente la relacionSir
+                        if (cache.existsUnidadOficina(sUnidad, sOficina)) {
+                            long s1 = System.currentTimeMillis();
+                            relacionSirOfi = relSirOfiEjb.findByPKs(sUnidad, sOficina);
+                            existe = true;
+                            findby = findby + (System.currentTimeMillis() - s1);
+                        } else {
+                            existe = false;
+                            relacionSirOfi = new RelacionSirOfi();
+                            Oficina oficina = oficinaEjb.getReference(sOficina);
+                            if (oficina == null) {
+                                oficina = oficinaEjb.getReference(sOficina);
+                            }
+
+                            Unidad unidad = unidadEjb.getReference(sUnidad);
+
+                            relacionSirOfi.setOficina(oficina);
+                            relacionSirOfi.setUnidad(unidad);
+                        }
+                        String codigoEstado = fila[4].trim();
+                        if (!codigoEstado.isEmpty()) {
+                            relacionSirOfi.setEstado(catEstadoEntidadEjb.getReference(codigoEstado));
+                        }
+
+                        if (existe) {
+                            em.merge(relacionSirOfi);
+                        } else {
+                            em.persist(relacionSirOfi);
+                        }
+                        if (c % batchSize == 0) {
+                            em.flush();
+                            em.clear();
+                        }
+
+                        c++;
+                        if (c % 100 == 0) {
+                            log.info("Procesades RelacionesSIROFI:  (" + c + ") "
+                                    + " en " + Utils.formatElapsedTime(System.currentTimeMillis() - s));
+
+                            log.debug("           * Time FIND = " + Utils.formatElapsedTime(findby));
+                            s = System.currentTimeMillis();
+                            findby = 0;
+                        }
+
+                    }
+                } catch (Exception e) {
+                    log.error("Error important RELACIONES_SIROFI: " + e.getMessage(), e);
+                }
+            }
+        }
+    }
+
+    /**
+     * Método que importa los servicios de las oficinas. Procesa el fichero ServiciosOFI.csv
+     *
+     * @param nombreFichero
+     * @param reader
+     * @throws Exception
+     */
+    private void importarServicios(String nombreFichero, CSVReader reader) throws Exception {
+        String[] fila;
+        if (Dir3caibConstantes.OFI_SERVICIOS_OFI.equals(nombreFichero)) {
+            reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
+            while ((fila = reader.readNext()) != null) {
+                //Obtenemos codigo y miramos si ya existe en la BD
+                try {
+                    String codigoOficina = fila[0].trim();
+                    String codigoServicio = fila[1].trim();
+                    if (!codigoOficina.isEmpty() && !codigoServicio.isEmpty()) {
+                        Long codServicio = new Long(codigoServicio);
+
+                        Oficina oficina = oficinaEjb.getReference(codigoOficina);
+
+                        if (oficina == null) {
+                            oficina = oficinaEjb.findById(codigoOficina);
+                        }
+
+                        Servicio servicio = servicioEjb.findById(codServicio);
+
+
+                        if (servicio == null) {
+                            servicio = new Servicio();
+                            servicio.setCodServicio(codServicio);
+                            servicio.setDescServicio(fila[2].trim());
+
+                            servicio = servicioEjb.persistReal(servicio);
+
+                        }
+                        Set<Servicio> servicios = oficina.getServicios();
+                        if (servicios == null) {
+                            servicios = new HashSet<Servicio>();
+                        }
+
+                        servicios.add(servicio);
+                        oficina.setServicios(servicios);
+
+                        oficinaEjb.merge(oficina);
+
+                    }
+                } catch (Exception e) {
+                    log.error(" Error EnOFI_SERVICIOS_OFI " + e.getMessage(), e);
+                }
+            }
+        }
     }
 
     /*
@@ -1050,10 +1139,9 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
 
             String[] fila;
 
-            reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
+            reader.readNext();
 
             while ((fila = reader.readNext()) != null) {
-                //Obtenemos codigo y miramos si ya existe en la BD
 
                 String codUOResponsable = fila[5].trim();
 
