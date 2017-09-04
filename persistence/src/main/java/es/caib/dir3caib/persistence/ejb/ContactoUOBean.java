@@ -72,5 +72,14 @@ public class ContactoUOBean extends BaseEjbJPA<ContactoUnidadOrganica, Long> imp
         em.createQuery("delete from ContactoUnidadOrganica").executeUpdate();
         
     }
-  
+
+
+    public void deleteByUnidad(String idUnidad) throws Exception {
+
+        Query q = em.createQuery("delete from ContactoUnidadOrganica where unidad.codigo=:idUnidad");
+        q.setParameter("idUnidad", idUnidad);
+
+        q.executeUpdate();
+
+    }
 }

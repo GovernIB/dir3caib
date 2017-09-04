@@ -1,11 +1,10 @@
 package es.caib.dir3caib.persistence.model.ws;
 
+import es.caib.dir3caib.persistence.model.ContactoUnidadOrganica;
 import es.caib.dir3caib.persistence.model.Unidad;
 import org.apache.log4j.Logger;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Fundació BIT.
@@ -40,6 +39,7 @@ public class UnidadTF {
    private Long codigoTipoVia;
    private String codPostal;
    private Set<String> historicosUO;
+    private List<ContactoTF> contactos;
 
 
     public UnidadTF() {
@@ -237,6 +237,26 @@ public class UnidadTF {
       this.historicosUO = historicosUO;
     }
 
+
+    public List<ContactoTF> getContactos() {
+        return contactos;
+    }
+
+    public void setContactos(List<ContactoTF> contactos) {
+        this.contactos = contactos;
+    }
+
+    public void setContactosTF(List<ContactoUnidadOrganica> contactos) {
+        List<ContactoTF> contactoTFList = new ArrayList<ContactoTF>();
+
+        for (ContactoUnidadOrganica contactoOfi : contactos) {
+            ContactoTF contactoTF = ContactoTF.generar(contactoOfi);
+            contactoTFList.add(contactoTF);
+        }
+
+        this.contactos = contactoTFList;
+    }
+
     public void rellenar(Unidad unidad){
         this.setCodigo(unidad.getCodigo());
         this.setCodUnidadRaiz(unidad.getCodUnidadRaiz().getCodigo());
@@ -295,6 +315,12 @@ public class UnidadTF {
           sHistoricosUO.add(historico.getCodigo());
         }
         this.setHistoricosUO(sHistoricosUO);
+
+        if (unidad.getContactos() != null) {
+            this.setContactosTF(unidad.getContactos());
+        } else {
+            this.setContactosTF(null);
+        }
 
     }
 

@@ -1,9 +1,6 @@
 package es.caib.dir3caib.persistence.model.ws;
 
-import es.caib.dir3caib.persistence.model.Oficina;
-import es.caib.dir3caib.persistence.model.RelacionOrganizativaOfi;
-import es.caib.dir3caib.persistence.model.RelacionSirOfi;
-import es.caib.dir3caib.persistence.model.Servicio;
+import es.caib.dir3caib.persistence.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +30,7 @@ public class OficinaTF {
     private Long codigoTipoVia;
     private String codPostal;
     private List<Long> servicios;
+    private List<ContactoTF> contactos;
 
     public OficinaTF() {
     }
@@ -165,6 +163,24 @@ public class OficinaTF {
         this.servicios = servicios;
     }
 
+    public List<ContactoTF> getContactos() {
+        return contactos;
+    }
+
+    public void setContactos(List<ContactoTF> contactos) {
+        this.contactos = contactos;
+    }
+
+    public void setContactosTF(List<ContactoOfi> contactos) {
+        List<ContactoTF> contactoTFList = new ArrayList<ContactoTF>();
+
+        for (ContactoOfi contactoOfi : contactos) {
+            ContactoTF contactoTF = ContactoTF.generar(contactoOfi);
+            contactoTFList.add(contactoTF);
+        }
+
+        this.contactos = contactoTFList;
+    }
     /**
      * Transforma un List de {@link es.caib.dir3caib.persistence.model.RelacionSirOfi} en {@link es.caib.dir3caib.persistence.model.ws.RelacionSirOfiTF}
      * @param sirOfi
@@ -275,6 +291,12 @@ public class OficinaTF {
             this.setServicios(serviciosIds);
         } else {
             this.setServicios(null);
+        }
+
+        if (oficina.getContactos() != null) {
+            this.setContactosTF(oficina.getContactos());
+        } else {
+            this.setContactosTF(null);
         }
     }
 

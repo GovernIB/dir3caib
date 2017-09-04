@@ -51,6 +51,15 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
 
         if (oficina != null) {
             OficinaTF oficinaTF = null;
+
+            List<ContactoOfi> contactosVisibles = new ArrayList<ContactoOfi>();
+            for (ContactoOfi contactoOfi : oficina.getContactos()) {
+                if (contactoOfi.isVisibilidad()) {
+                    contactosVisibles.add(contactoOfi);
+                }
+            }
+            log.info("XYZ ZZZ CONTACTOS VISIBLES: " + contactosVisibles.size());
+            oficina.setContactos(contactosVisibles);
             if (fechaActualizacion != null) {
 
                 if (fechaActualizacion.before(oficina.getFechaImportacion())) {

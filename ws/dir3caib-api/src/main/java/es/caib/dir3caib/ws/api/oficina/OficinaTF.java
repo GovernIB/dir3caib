@@ -11,9 +11,9 @@ import java.util.List;
 
 /**
  * <p>Java class for oficinaTF complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="oficinaTF">
  *   &lt;complexContent>
@@ -26,6 +26,7 @@ import java.util.List;
  *         &lt;element name="codigoComunidad" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
  *         &lt;element name="codigoPais" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
  *         &lt;element name="codigoTipoVia" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
+ *         &lt;element name="contactos" type="{http://oficina.ws.dir3caib.caib.es/}contactoTF" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="denominacion" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="descripcionLocalidad" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="estado" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -41,8 +42,8 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
+ *
+ *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "oficinaTF", propOrder = {
@@ -53,6 +54,7 @@ import java.util.List;
     "codigoComunidad",
     "codigoPais",
     "codigoTipoVia",
+        "contactos",
     "denominacion",
     "descripcionLocalidad",
     "estado",
@@ -73,6 +75,8 @@ public class OficinaTF {
     protected Long codigoComunidad;
     protected Long codigoPais;
     protected Long codigoTipoVia;
+    @XmlElement(nillable = true)
+    protected List<ContactoTF> contactos;
     protected String denominacion;
     protected String descripcionLocalidad;
     protected String estado;
@@ -253,6 +257,33 @@ public class OficinaTF {
      */
     public void setCodigoTipoVia(Long value) {
         this.codigoTipoVia = value;
+    }
+
+    /**
+     * Gets the value of the contactos property.
+     * <p>
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the contactos property.
+     * <p>
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getContactos().add(newItem);
+     * </pre>
+     * <p>
+     * <p>
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link ContactoTF }
+     */
+    public List<ContactoTF> getContactos() {
+        if (contactos == null) {
+            contactos = new ArrayList<ContactoTF>();
+        }
+        return this.contactos;
     }
 
     /**

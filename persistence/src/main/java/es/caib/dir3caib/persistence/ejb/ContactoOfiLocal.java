@@ -13,6 +13,6 @@ import es.caib.dir3caib.persistence.model.ContactoOfi;
 public interface ContactoOfiLocal extends BaseEjb<ContactoOfi, Long>{
   
    public void deleteAll() throws Exception;
-  
-  
+
+    public void deleteByOficina(String idOficina) throws Exception;
 }

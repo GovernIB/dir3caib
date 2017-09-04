@@ -72,5 +72,14 @@ public class ContactoOfiBean extends BaseEjbJPA<ContactoOfi, Long> implements Co
         em.createQuery("delete from ContactoOfi").executeUpdate();
         
     }
+
+    public void deleteByOficina(String idOficina) throws Exception {
+
+        Query q = em.createQuery("delete from ContactoOfi where oficina.codigo=:idOficina");
+        q.setParameter("idOficina", idOficina);
+
+        q.executeUpdate();
+
+    }
   
 }

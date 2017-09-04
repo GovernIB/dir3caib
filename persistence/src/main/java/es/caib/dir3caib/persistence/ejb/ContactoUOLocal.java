@@ -13,6 +13,8 @@ import es.caib.dir3caib.persistence.model.ContactoUnidadOrganica;
 public interface ContactoUOLocal extends BaseEjb<ContactoUnidadOrganica, Long>{
   
    public void deleteAll() throws Exception;
+
+    public void deleteByUnidad(String idUnidad) throws Exception;
   
   
 }

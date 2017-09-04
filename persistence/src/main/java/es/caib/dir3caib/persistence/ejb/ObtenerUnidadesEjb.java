@@ -1,5 +1,6 @@
 package es.caib.dir3caib.persistence.ejb;
 
+import es.caib.dir3caib.persistence.model.ContactoUnidadOrganica;
 import es.caib.dir3caib.persistence.model.Descarga;
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.model.Unidad;
@@ -54,6 +55,14 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
 
         Unidad unidad = unidadEjb.findConHistoricosVigente(codigo);
         UnidadTF unidadTF = null;
+        List<ContactoUnidadOrganica> contactosVisibles = new ArrayList<ContactoUnidadOrganica>();
+        for (ContactoUnidadOrganica contactoUO : unidad.getContactos()) {
+            if (contactoUO.isVisibilidad()) {
+                contactosVisibles.add(contactoUO);
+
+            }
+        }
+        unidad.setContactos(contactosVisibles);
         // Si hay fecha de actualización y es anterior a la fecha de importación se debe transmitir
         if (fechaActualizacion != null) {
             // Miramos si ha sido actualizada
