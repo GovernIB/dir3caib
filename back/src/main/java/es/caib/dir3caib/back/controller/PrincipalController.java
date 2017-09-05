@@ -1,10 +1,12 @@
 package es.caib.dir3caib.back.controller;
 
+import es.caib.dir3caib.back.utils.Mensaje;
 import es.caib.dir3caib.persistence.ejb.DescargaLocal;
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.ejb.EJB;
@@ -46,6 +48,20 @@ public class PrincipalController extends BaseController {
     }
 
 
+    @RequestMapping(value = "/eliminarCompleto", method = RequestMethod.GET)
+    public ModelAndView eliminarCompletoGet(HttpServletRequest request) throws Exception {
+        ModelAndView mav = new ModelAndView("principal");
 
+        try {
+            eliminarTodoCompleto();
+            Mensaje.saveMessageInfo(request, getMessage("dir3caib.borrar.todo.ok"));
+
+
+        } catch (Exception ex) {
+            Mensaje.saveMessageError(request, getMessage("dir3caib.borrar.todo.error"));
+            ex.printStackTrace();
+        }
+        return mav;
+    }
 
 }

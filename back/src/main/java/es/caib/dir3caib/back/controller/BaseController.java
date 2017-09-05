@@ -122,6 +122,7 @@ public class BaseController {
      * @throws Exception
      */
     public void eliminarOficinasCompleto() throws Exception {
+        log.info("Eliminar Oficinas completo");
         //Eliminamos oficinas
         Descarga descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.OFICINA);
         if (descarga != null) {
@@ -146,7 +147,7 @@ public class BaseController {
      */
     public void eliminarUnidadesCompleto() throws Exception {
         //Eliminamos unidades
-
+        log.info("Eliminar Unidades completo");
         Descarga descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.UNIDAD);
         if (descarga != null) {
             File directorio = new File(Configuracio.getUnidadesPath(descarga.getCodigo()));
@@ -168,7 +169,7 @@ public class BaseController {
      */
     public void eliminarCatalogoCompleto() throws Exception {
 
-
+        log.info("Eliminar Catalogo completo");
         Descarga descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.CATALOGO);
         if (descarga != null) {
             File directorio = new File(Configuracio.getCatalogosPath(descarga.getCodigo()));
