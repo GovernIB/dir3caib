@@ -79,4 +79,8 @@ public interface BaseEjb<T extends Serializable, E> {
      * @throws Exception
      */
     public List<T> getPagination(int inicio) throws Exception;
+
+    public void flush() throws Exception;
+
+    public void clear() throws Exception;
 }

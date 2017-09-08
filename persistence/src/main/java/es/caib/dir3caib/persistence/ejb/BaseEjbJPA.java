@@ -67,4 +67,14 @@ public abstract class BaseEjbJPA<T extends Serializable, E> implements BaseEjb<T
         }
 
     }
+
+    @RolesAllowed("DIR_ADMIN")
+    public void flush() throws Exception {
+        em.flush();
+    }
+
+    @RolesAllowed("DIR_ADMIN")
+    public void clear() throws Exception {
+        em.clear();
+    }
 }

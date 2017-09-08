@@ -16,8 +16,6 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.xml.ws.BindingProvider;
 import java.io.*;
 import java.net.URL;
@@ -93,9 +91,6 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
 
     @EJB(mappedName = "dir3caib/DescargaEJB/local")
     protected DescargaLocal descargaEjb;
-
-    @PersistenceContext
-    private EntityManager em;
 
     SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
 
@@ -194,17 +189,16 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
     /**
      * Método que importa el contenido de los archivos de las oficinas y sus relaciones descargados previamente a través
      * de los WS.
-     * Añadido batch processing, con el entity Manager y el batchSize para mejorar el rendimiento.
      * @param isUpdate booleano que indica si la llamada es una sincronización(actualizacion)
      */
     @Override
-    @TransactionTimeout(value = 54000)
+    @TransactionTimeout(value = 30000)
     public ResultadosImportacion importarOficinas(boolean isUpdate) throws Exception {
 
         log.info("");
         log.info("Inicio importación Oficinas");
 
-        int batchSize = 30;
+
         Date hoy = new Date();
 
         System.gc();
@@ -302,6 +296,7 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
 
         Set<String> existInBBDD = new TreeSet<String>();
         existInBBDD.addAll(oficinaEjb.getAllCodigos());
+        boolean actualizacion = existInBBDD.size() > 0;
 
 
         Map<String, Oficina> oficinesCache = new TreeMap<String, Oficina>();
@@ -341,6 +336,12 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
                             try {
                                 //  Miramos si existe ya en la BD
                                 String codigoOficina = fila[0];
+
+                                //eliminamos sus contactos en la actualizacion
+                                if (actualizacion) {
+                                    contactoOfiEjb.deleteByOficina(codigoOficina);
+                                }
+
                                 Oficina oficina = null;
                                 boolean existeix;
 
@@ -498,19 +499,12 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
                                 }
 
                                 if (existeix) {
-                                    contactoOfiEjb.deleteByOficina(oficina.getCodigo());
-                                    oficina = em.merge(oficina);
-
+                                    oficina = oficinaEjb.merge(oficina);
                                 } else {
-                                    em.persist(oficina);
+                                    oficina = oficinaEjb.persistReal(oficina);
                                     existInBBDD.add(codigoOficina);
                                 }
 
-                                // Cada batchSize hacemos flush y clear, esto permite que el proceso sea más rapido y libere memoria.
-                                if (count % batchSize == 0) {
-                                    em.flush();
-                                    em.clear();
-                                }
 
                                 oficinesCache.put(oficina.getCodigo(), oficina);
                             } catch (Exception e) {
@@ -530,6 +524,9 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
                                 cacheUnidad.countCache = 0;
                                 cacheUnidad.countFind = 0;
                                 cacheUnidad.findByTime = 0;
+
+                                oficinaEjb.flush();
+                                oficinaEjb.clear();
 
                             }
                         }
@@ -776,16 +773,11 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
 
 
                         if (existeix) {
-                            em.merge(relacionOrganizativaOfi);
+                            relOrgOfiEjb.merge(relacionOrganizativaOfi);
                         } else {
-                            em.persist(relacionOrganizativaOfi);
+                            relOrgOfiEjb.persistReal(relacionOrganizativaOfi);
                         }
 
-                        // Cada batchSize hacemos flush y clear, esto permite que el proceso sea más rapido y libere memoria.
-                        if (c % batchSize == 0) {
-                            em.flush();
-                            em.clear();
-                        }
 
                         c++;
                         if (c % 100 == 0) {
@@ -795,6 +787,9 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
                             log.debug("           * Time FIND = " + Utils.formatElapsedTime(findby));
                             s = System.currentTimeMillis();
                             findby = 0;
+
+                            relOrgOfiEjb.flush();
+                            relOrgOfiEjb.clear();
                         }
 
                     }
@@ -858,14 +853,11 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
                         }
 
                         if (existe) {
-                            em.merge(relacionSirOfi);
+                            relSirOfiEjb.merge(relacionSirOfi);
                         } else {
-                            em.persist(relacionSirOfi);
+                            relSirOfiEjb.persistReal(relacionSirOfi);
                         }
-                        if (c % batchSize == 0) {
-                            em.flush();
-                            em.clear();
-                        }
+
 
                         c++;
                         if (c % 100 == 0) {
@@ -875,6 +867,9 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
                             log.debug("           * Time FIND = " + Utils.formatElapsedTime(findby));
                             s = System.currentTimeMillis();
                             findby = 0;
+
+                            relSirOfiEjb.flush();
+                            relSirOfiEjb.clear();
                         }
 
                     }

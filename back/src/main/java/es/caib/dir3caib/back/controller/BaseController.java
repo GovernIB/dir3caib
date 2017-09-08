@@ -113,6 +113,8 @@ public class BaseController {
         eliminarOficinasCompleto();
         eliminarUnidadesCompleto();
         eliminarCatalogoCompleto();
+        File directorio = new File(Configuracio.getArchivosPath());
+        FileUtils.cleanDirectory(directorio);
     }
 
 
@@ -126,9 +128,6 @@ public class BaseController {
         //Eliminamos oficinas
         Descarga descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.OFICINA);
         if (descarga != null) {
-            File directorio = new File(Configuracio.getOficinasPath(descarga.getCodigo()));
-            FileUtils.cleanDirectory(directorio);
-
             relSirOfiEjb.deleteAll();
             relOrgOfiEjb.deleteAll();
             contactoOfiEjb.deleteAll();
@@ -150,8 +149,6 @@ public class BaseController {
         log.info("Eliminar Unidades completo");
         Descarga descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.UNIDAD);
         if (descarga != null) {
-            File directorio = new File(Configuracio.getUnidadesPath(descarga.getCodigo()));
-            FileUtils.cleanDirectory(directorio);
             // Contactos
             contactoUOEjb.deleteAll();
             //Unidades
@@ -172,8 +169,6 @@ public class BaseController {
         log.info("Eliminar Catalogo completo");
         Descarga descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.CATALOGO);
         if (descarga != null) {
-            File directorio = new File(Configuracio.getCatalogosPath(descarga.getCodigo()));
-            FileUtils.cleanDirectory(directorio);
             // Eliminamos catálogo
             catLocalidadEjb.deleteAll();
             catIslaEjb.deleteAll();

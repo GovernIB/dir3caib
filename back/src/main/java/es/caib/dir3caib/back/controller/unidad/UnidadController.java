@@ -4,14 +4,15 @@ import es.caib.dir3caib.back.controller.BaseController;
 import es.caib.dir3caib.back.form.FechasForm;
 import es.caib.dir3caib.back.form.UnidadBusquedaForm;
 import es.caib.dir3caib.back.utils.Mensaje;
-import es.caib.dir3caib.persistence.ejb.*;
+import es.caib.dir3caib.persistence.ejb.ArbolLocal;
+import es.caib.dir3caib.persistence.ejb.BaseEjbJPA;
+import es.caib.dir3caib.persistence.ejb.ImportadorUnidadesLocal;
 import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.Paginacion;
 import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
 import es.caib.dir3caib.utils.Configuracio;
 import es.caib.dir3caib.utils.Utils;
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -48,17 +49,8 @@ public class UnidadController extends BaseController {
     @EJB(mappedName = "dir3caib/ImportadorUnidadesEJB/local")
     private ImportadorUnidadesLocal importadorUnidades;
 
-    @EJB(mappedName = "dir3caib/UnidadEJB/local")
-    protected UnidadLocal unidadEjb;
-
-    @EJB(mappedName = "dir3caib/ContactoUOEJB/local")
-    protected ContactoUOLocal contactoUOEjb;
-
-    @EJB(mappedName = "dir3caib/OficinaEJB/local")
-    protected OficinaLocal oficinaEjb;
-
     @EJB(mappedName = "dir3caib/ArbolEJB/local")
-    protected ArbolLocal arbolEjb;
+    private ArbolLocal arbolEjb;
 
 
     // Indicamos el formato de fecha dd/MM/yyyy hh:mm:ss
@@ -253,16 +245,8 @@ public class UnidadController extends BaseController {
 
 
         try {
-            Descarga descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.UNIDAD);
-            File directorio = new File(Configuracio.getUnidadesPath(descarga.getCodigo()));
-            // Contactos
-            contactoUOEjb.deleteAll();
-            //Unidades
-            unidadEjb.deleteHistoricosUnidad();
-            unidadEjb.deleteAll();
-            descargaEjb.deleteAllByTipo(Dir3caibConstantes.UNIDAD);
+            eliminarUnidadesCompleto();
 
-            FileUtils.cleanDirectory(directorio);
             Mensaje.saveMessageInfo(request, getMessage("unidad.borrar.ok"));
         } catch (Exception ex) {
             Mensaje.saveMessageError(request, getMessage("dir3caib.borrar.directorio.error"));

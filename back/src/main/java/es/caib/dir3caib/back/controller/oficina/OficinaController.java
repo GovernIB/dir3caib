@@ -4,14 +4,15 @@ import es.caib.dir3caib.back.controller.BaseController;
 import es.caib.dir3caib.back.form.FechasForm;
 import es.caib.dir3caib.back.form.OficinaBusquedaForm;
 import es.caib.dir3caib.back.utils.Mensaje;
-import es.caib.dir3caib.persistence.ejb.*;
+import es.caib.dir3caib.persistence.ejb.ArbolLocal;
+import es.caib.dir3caib.persistence.ejb.BaseEjbJPA;
+import es.caib.dir3caib.persistence.ejb.ImportadorOficinasLocal;
 import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.Paginacion;
 import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
 import es.caib.dir3caib.utils.Configuracio;
 import es.caib.dir3caib.utils.Utils;
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -44,26 +45,14 @@ public class OficinaController extends BaseController {
 
     protected final Logger log = Logger.getLogger(getClass());
 
-    @EJB(mappedName = "dir3caib/OficinaEJB/local")
-    protected OficinaLocal oficinaEjb;
 
-    @EJB(mappedName = "dir3caib/ContactoOfiEJB/local")
-    protected ContactoOfiLocal contactoOfiEjb;
-
-    @EJB(mappedName = "dir3caib/RelacionOrganizativaOfiEJB/local")
-    protected RelacionOrganizativaOfiLocal relOrgOfiEjb;
-
-    @EJB(mappedName = "dir3caib/ServicioEJB/local")
-    protected ServicioLocal servicioEjb;
 
     @EJB(mappedName = "dir3caib/ImportadorOficinasEJB/local")
     private ImportadorOficinasLocal importadorOficinas;
 
-    @EJB(mappedName = "dir3caib/RelacionSirOfiEJB/local")
-    protected RelacionSirOfiLocal relSirOfiEjb;
 
     @EJB(mappedName = "dir3caib/ArbolEJB/local")
-    protected ArbolLocal arbolEjb;
+    private ArbolLocal arbolEjb;
 
     // Indicamos el formato de fecha dd/MM/yyyy hh:mm:ss
     SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
@@ -251,18 +240,7 @@ public class OficinaController extends BaseController {
         ModelAndView mav = new ModelAndView("/oficina/oficinaFicheros");
 
         try {
-            Descarga descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.OFICINA);
-            File directorio = new File(Configuracio.getOficinasPath(descarga.getCodigo()));
-            relSirOfiEjb.deleteAll();
-            relOrgOfiEjb.deleteAll();
-            contactoOfiEjb.deleteAll();
-            oficinaEjb.deleteHistoricosOficina();
-            oficinaEjb.deleteServiciosOficina();
-            oficinaEjb.deleteAll();
-            servicioEjb.deleteAll();
-            descargaEjb.deleteAllByTipo(Dir3caibConstantes.OFICINA);
-
-            FileUtils.cleanDirectory(directorio);
+            eliminarOficinasCompleto();
             Mensaje.saveMessageInfo(request, getMessage("oficina.borrar.ok"));
         } catch (Exception ex) {
             Mensaje.saveMessageError(request, getMessage("dir3caib.borrar.directorio.error"));
