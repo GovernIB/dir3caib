@@ -2,6 +2,7 @@ package es.caib.dir3caib.persistence.ejb;
 
 import au.com.bytecode.opencsv.CSVReader;
 import es.caib.dir3caib.persistence.model.*;
+import es.caib.dir3caib.persistence.utils.ImportadorBase;
 import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
 import es.caib.dir3caib.utils.Configuracio;
 import es.caib.dir3caib.utils.Utils;
@@ -19,7 +20,6 @@ import javax.ejb.Stateless;
 import javax.xml.ws.BindingProvider;
 import java.io.*;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -38,152 +38,37 @@ import java.util.zip.ZipInputStream;
 @SecurityDomain("seycon")
 @RunAs(Dir3caibConstantes.DIR_ADMIN)
 @PermitAll
-public class ImportadorOficinasBean implements ImportadorOficinasLocal {
+public class ImportadorOficinasBean extends ImportadorBase implements ImportadorOficinasLocal {
+
     protected final Logger log = Logger.getLogger(getClass());
 
     @EJB(mappedName = "dir3caib/UnidadEJB/local")
-    protected UnidadLocal unidadEjb;
+    private UnidadLocal unidadEjb;
 
     @EJB(mappedName = "dir3caib/OficinaEJB/local")
-    protected OficinaLocal oficinaEjb;
-
-    @EJB(mappedName = "dir3caib/CatEntidadGeograficaEJB/local")
-    protected CatEntidadGeograficaLocal catEntidadGeograficaEjb;
+    private OficinaLocal oficinaEjb;
 
     @EJB(mappedName = "dir3caib/CatEstadoEntidadEJB/local")
-    protected CatEstadoEntidadLocal catEstadoEntidadEjb;
+    private CatEstadoEntidadLocal catEstadoEntidadEjb;
 
     @EJB(mappedName = "dir3caib/CatJerarquiaOficinaEJB/local")
-    protected CatJerarquiaOficinaLocal catJerarquiaOficinaEjb;
-
-    @EJB(mappedName = "dir3caib/CatNivelAdministracionEJB/local")
-    protected CatNivelAdministracionLocal catNivelAdministracionEjb;
-
-    @EJB(mappedName = "dir3caib/CatPaisEJB/local")
-    protected CatPaisLocal catPaisEjb;
-
-    @EJB(mappedName = "dir3caib/CatTipoContactoEJB/local")
-    protected CatTipoContactoLocal catTipoContactoEjb;
-
-    @EJB(mappedName = "dir3caib/CatTipoViaEJB/local")
-    protected CatTipoViaLocal catTipoViaEjb;
-
-    @EJB(mappedName = "dir3caib/CatComunidadAutonomaEJB/local")
-    protected CatComunidadAutonomaLocal catComunidadAutonomaEjb;
-
-    @EJB(mappedName = "dir3caib/CatProvinciaEJB/local")
-    protected CatProvinciaLocal catProvinciaEjb;
-
-    @EJB(mappedName = "dir3caib/CatLocalidadEJB/local")
-    protected CatLocalidadLocal catLocalidadEjb;
+    private CatJerarquiaOficinaLocal catJerarquiaOficinaEjb;
 
     @EJB(mappedName = "dir3caib/ContactoOfiEJB/local")
-    protected ContactoOfiLocal contactoOfiEjb;
+    private ContactoOfiLocal contactoOfiEjb;
 
     @EJB(mappedName = "dir3caib/RelacionOrganizativaOfiEJB/local")
-    protected RelacionOrganizativaOfiLocal relOrgOfiEjb;
+    private RelacionOrganizativaOfiLocal relOrgOfiEjb;
 
     @EJB(mappedName = "dir3caib/RelacionSirOfiEJB/local")
-    protected RelacionSirOfiLocal relSirOfiEjb;
+    private RelacionSirOfiLocal relSirOfiEjb;
 
     @EJB(mappedName = "dir3caib/ServicioEJB/local")
-    protected ServicioLocal servicioEjb;
+    private ServicioLocal servicioEjb;
 
     @EJB(mappedName = "dir3caib/DescargaEJB/local")
     protected DescargaLocal descargaEjb;
 
-    SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
-
-
-    public class CacheUnidadOficina {
-
-        Set<String> caches = new TreeSet<String>();
-
-
-        public CacheUnidadOficina(List<String> uniofi) {
-            this.caches.addAll(uniofi);
-        }
-
-
-        public boolean existsUnidadOficina(String unidad, String oficina) {
-            return this.caches.contains(unidad + "_" + oficina);
-        }
-
-
-    }
-
-
-    public class UnidadesCacheManager {
-
-
-        public int countFind = 0;
-        public int countCache = 0;
-        public long findByTime = 0;
-
-        private final UnidadLocal unidadEjb;
-
-        Map<String, Unidad> cacheUnidad = new TreeMap<String, Unidad>();
-
-        public UnidadesCacheManager(UnidadLocal unidadEjb) {
-            super();
-            this.unidadEjb = unidadEjb;
-        }
-
-        // * @param isupdate
-        public UnidadesCacheManager(UnidadLocal unidadEjb, List<List<String>> unidadesRequeridas, int total) throws Exception {
-            this(unidadEjb);
-
-            //final int numberOfItems = 500;
-            //int startItem = 1;
-            List<Unidad> unidades;
-            int count = 0;
-
-            for (List<String> ids : unidadesRequeridas) {
-                long start2 = System.currentTimeMillis();
-
-
-                if (log.isDebugEnabled()) {
-                    log.debug(" ids.size = " + ids.size());
-                }
-                unidades = unidadEjb.getListByIds(ids);
-                if (log.isDebugEnabled()) {
-                    log.info(" getListByIds(ids).size = " + unidades.size());
-                }
-
-                for (Unidad ca : unidades) {
-                    cacheUnidad.put(ca.getCodigo(), ca);
-                    count++;
-                }
-                long end2 = System.currentTimeMillis();
-
-                log.info(" Cache de Unidades " + count + " / " + total + "   -->   " + Utils.formatElapsedTime(end2 - start2));
-
-            }
-
-            log.info(" Cache Of Unidades. Total = " + count);
-
-        }
-
-
-        public Unidad get(String codigo) throws Exception {
-
-            Unidad unidad = cacheUnidad.get(codigo);
-
-            if (unidad == null) {
-                long start = System.currentTimeMillis();
-                unidad = this.unidadEjb.getReference(codigo);
-                findByTime = findByTime + (System.currentTimeMillis() - start);
-                cacheUnidad.put(codigo, unidad);
-                countFind++;
-            } else {
-                countCache++;
-            }
-            return unidad;
-
-        }
-
-
-    }
 
 
     /**
@@ -198,113 +83,29 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
         log.info("");
         log.info("Inicio importación Oficinas");
 
-
-        Date hoy = new Date();
-
         System.gc();
 
         ResultadosImportacion results = new ResultadosImportacion();
 
-        List<String> procesados = results.getProcesados();
-        List<String> inexistentes = results.getInexistentes();
+        List<String> procesados = new ArrayList<String>();
+        List<String> inexistentes = new ArrayList<String>();
 
-    
-    /*  CACHES */
 
+        // Inicializamos la cache para la importación de Unidades
+        cacheImportadorOficinas(isUpdate);
+
+        // Tiempos
         long start = System.currentTimeMillis();
+        long end;
 
-        UnidadesCacheManager cacheUnidad;
-
-        if (isUpdate) {
-            cacheUnidad = new UnidadesCacheManager(this.unidadEjb);
-        } else {
-            List<List<String>> unitsIds = new ArrayList<List<String>>();
-            int total = getRequiredUnidades(unitsIds, 250);
-            cacheUnidad = new UnidadesCacheManager(this.unidadEjb, unitsIds, total);
-        }
-
-
-        long end = System.currentTimeMillis();
-        log.debug("Inicialitzat Cache de Unidades en " + Utils.formatElapsedTime(end - start));
-
-        start = System.currentTimeMillis();
-        log.debug("Inicialitzant Varies Caches per Importar Oficinas ...");
-
-
-        Map<String, CatTipoContacto> cacheTipoContacto = new TreeMap<String, CatTipoContacto>();
-        for (CatTipoContacto ca : catTipoContactoEjb.getAll()) {
-            cacheTipoContacto.put(ca.getCodigoTipoContacto(), ca);
-        }
-        log.debug(" TipoContacto : " + cacheTipoContacto.size());
-
-        Map<Long, CatTipoVia> cacheTipoVia = new TreeMap<Long, CatTipoVia>();
-        for (CatTipoVia ca : catTipoViaEjb.getAll()) {
-            cacheTipoVia.put(ca.getCodigoTipoVia(), ca);
-        }
-        log.debug(" TipoVias : " + cacheTipoVia.size());
-
-
-        Map<Long, CatNivelAdministracion> cacheNivelAdministracion = new TreeMap<Long, CatNivelAdministracion>();
-        for (CatNivelAdministracion na : catNivelAdministracionEjb.getAll()) {
-            cacheNivelAdministracion.put(na.getCodigoNivelAdministracion(), na);
-        }
-        log.debug(" NivelAdministracion : " + cacheNivelAdministracion.size());
-
-        Map<Long, CatProvincia> cacheProvincia = new TreeMap<Long, CatProvincia>();
-        for (CatProvincia ca : catProvinciaEjb.getAll()) {
-            cacheProvincia.put(ca.getCodigoProvincia(), ca);
-        }
-        log.debug(" Provincia: " + cacheProvincia.size());
-
-        Map<Long, CatComunidadAutonoma> cacheComunidadAutonoma = new TreeMap<Long, CatComunidadAutonoma>();
-        for (CatComunidadAutonoma ca : catComunidadAutonomaEjb.getAll()) {
-            cacheComunidadAutonoma.put(ca.getCodigoComunidad(), ca);
-        }
-        log.debug(" Comunidad Autonoma : " + cacheComunidadAutonoma.size());
-
-        Map<Long, CatPais> cachePais = new TreeMap<Long, CatPais>();
-        for (CatPais ca : catPaisEjb.getAll()) {
-            cachePais.put(ca.getCodigoPais(), ca);
-        }
-        log.debug(" Pais : " + cachePais.size());
-
-
-        Map<String, CatEstadoEntidad> cacheEstadoEntidad = new TreeMap<String, CatEstadoEntidad>();
-        for (CatEstadoEntidad ca : catEstadoEntidadEjb.getAll()) {
-            cacheEstadoEntidad.put(ca.getCodigoEstadoEntidad(), ca);
-        }
-        log.debug(" Estado Entidad : " + cacheEstadoEntidad.size());
-
-
-        Map<String, CatEntidadGeografica> cacheEntidadGeografica = new TreeMap<String, CatEntidadGeografica>();
-        for (CatEntidadGeografica ca : catEntidadGeograficaEjb.getAll()) {
-            cacheEntidadGeografica.put(ca.getCodigoEntidadGeografica(), ca);
-        }
-        log.debug(" EntidadGeografica : " + cacheEntidadGeografica.size());
-
-        Map<CatLocalidadPK, CatLocalidad> cacheLocalidad = new HashMap<CatLocalidadPK, CatLocalidad>();
-        for (CatLocalidad ca : catLocalidadEjb.getAll()) {
-            CatLocalidadPK catLocalidadPK = new CatLocalidadPK(ca.getCodigoLocalidad(), ca.getProvincia(), ca.getEntidadGeografica());
-            cacheLocalidad.put(catLocalidadPK, ca);
-        }
-        log.debug(" Localidad: " + cacheLocalidad.size());
-
-
-        end = System.currentTimeMillis();
-        log.info("Inicialitzades Varies Caches per Importar Oficinas en " + Utils.formatElapsedTime(end - start));
-
-
-        Set<String> existInBBDD = new TreeSet<String>();
-        existInBBDD.addAll(oficinaEjb.getAllCodigos());
-        boolean actualizacion = existInBBDD.size() > 0;
-
-
+        // Cache de oficinas creadas
         Map<String, Oficina> oficinesCache = new TreeMap<String, Oficina>();
 
 
-        // Obtenemos el listado de ficheros que hay dentro del directorio indicado que se
-        // corresponde con la descarga hecha previamente
+        // Obtenemos la última descarga de los ficheros de Oficinas realizada
         Descarga descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.OFICINA);
+
+        // Obtenemos el listado de ficheros que hay dentro del directorio de la última descarga
         File f = new File(Configuracio.getOficinasPath(descarga.getCodigo()));
         ArrayList<String> existentes = new ArrayList<String>(Arrays.asList(f.list()));
 
@@ -338,7 +139,7 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
                                 String codigoOficina = fila[0];
 
                                 //eliminamos sus contactos en la actualizacion
-                                if (actualizacion) {
+                                if (isUpdate) {
                                     contactoOfiEjb.deleteByOficina(codigoOficina);
                                 }
 
@@ -355,7 +156,7 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
                                 }
 
                                 //Fecha Importacion
-                                oficina.setFechaImportacion(hoy);
+                                oficina.setFechaImportacion(new Date());
 
                                 // Comunidad Autonoma
                                 String codigoComunidadAutonoma = fila[21].trim();
@@ -572,7 +373,7 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
                 }
             }
             if (procesados.size() > 0) {
-                descarga.setFechaImportacion(hoy);
+                descarga.setFechaImportacion(new Date());
                 descargaEjb.merge(descarga);
 
             }
@@ -586,9 +387,187 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
         return results;
     }
 
-    public Oficina oficinaVacia() {
+
+    /*
+    * Método que se encarga de obtener los archivos de las oficinas a través de WS
+    * @param request
+    * @param fechaInicio
+    * @param fechaFin
+    */
+    @Override
+    public String[] descargarOficinasWS(Date fechaInicio, Date fechaFin) throws Exception {
+
+        byte[] buffer = new byte[1024];
+        String[] resp = new String[2];
+
+        // Guardaremos la fecha de la ultima descarga
+        Descarga descarga = new Descarga();
+        descarga.setTipo(Dir3caibConstantes.OFICINA);
+
+        //guardamos todas las fechas de la descarga
+        if (fechaInicio != null) {
+            descarga.setFechaInicio(fechaInicio);
+        }
+        if (fechaFin != null) {
+            descarga.setFechaFin(fechaFin);
+        }
+
+        // Si las fechas estan vacias, las de descarga tenemos que fijar la fecha de hoy.
+        if (fechaFin == null) {
+            descarga.setFechaFin(new Date());
+        }
+
+        if (fechaInicio != null) {
+            log.info("Intervalo fechas descarga oficinas directorio común: " + formatoFecha.format(descarga.getFechaInicio()) + " - " + formatoFecha.format(descarga.getFechaFin()));
+        }else{
+            log.info("Descarga inicial de oficinas directorio común");
+        }
+
+        descarga = descargaEjb.persist(descarga);
+
+        try {
+
+            //Obtenemos las diferentes rutas para invocar a los WS y almacenar la información obtenida
+            String usuario = Configuracio.getDir3WsUser();
+            String password = Configuracio.getDir3WsPassword();
+            String ruta = Configuracio.getArchivosPath();
+
+            String rutaOficinas = Configuracio.getOficinasPath(descarga.getCodigo());
+
+            String endPoint = Configuracio.getOficinaEndPoint();
+
+            SD02OFDescargaOficinasService oficinasService = new SD02OFDescargaOficinasService(new URL(endPoint + "?wsdl"));
+            SD02OFDescargaOficinas service = oficinasService.getSD02OFDescargaOficinas();
+            Map<String, Object> reqContext = ((BindingProvider) service).getRequestContext();
+            reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endPoint);
+
+            // Establecemos los parametros necesarios para el WS
+            OficinasWs parametros = new OficinasWs();
+            parametros.setUsuario(usuario);
+            parametros.setClave(password);
+            parametros.setFormatoFichero(FormatoFichero.CSV);
+            parametros.setTipoConsulta(TipoConsultaOF.COMPLETO);
+
+            // definimos fechas
+            if (fechaInicio != null) {
+                parametros.setFechaInicio(formatoFecha.format(fechaInicio));
+            }
+            if (fechaFin != null) {
+                parametros.setFechaFin(formatoFecha.format(fechaFin));
+            }
+
+            // Invocamos el WS
+            RespuestaWS respuesta = service.exportar(parametros);
+            Base64 decoder = new Base64();
+
+            log.info("Respuesta WS oficinas DIR3: " + respuesta.getCodigo() + " - " + respuesta.getDescripcion());
+
+            //Montamos la respuesta del ws para controlar los errores a mostrar
+            resp[0] = respuesta.getCodigo();
+            resp[1] = respuesta.getDescripcion();
+
+            if (!respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO) && !respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_VACIO)) {
+                descargaEjb.remove(descarga);
+                return resp;
+            }
+
+            //actualizamos el estado de la descarga.
+            descarga.setEstado(respuesta.getCodigo());
+            descargaEjb.merge(descarga);
+
+
+            // Realizamos una copia del archivo zip de la ultima descarga
+            String archivoOficinaZip = ruta + Dir3caibConstantes.OFICINAS_ARCHIVO_ZIP + descarga.getCodigo() + ".zip";
+            File file = new File(archivoOficinaZip);
+
+
+            //Guardamos el zip devuelto por el WS en el directorio.
+            FileUtils.writeByteArrayToFile(file, decoder.decode(respuesta.getFichero()));
+
+            // Se crea el directorio para el catálogo
+            File dir = new File(rutaOficinas);
+            if (!dir.exists()) {
+                if (!dir.mkdirs()) {
+                    //Borramos la descarga creada previamente.
+                    descargaEjb.remove(descarga);
+                    log.error(" No se ha podido crear el directorio");
+                }
+            }
+
+            //Descomprimir el archivo
+            ZipInputStream zis = new ZipInputStream(new FileInputStream(archivoOficinaZip));
+            ZipEntry zipEntry = zis.getNextEntry();
+
+            while (zipEntry != null) {
+                String fileName = zipEntry.getName();
+                File newFile = new File(rutaOficinas + fileName);
+                log.info("Fichero descomprimido: " + newFile.getAbsoluteFile());
+
+                //create all non exists folders
+                //else you will hit FileNotFoundException for compressed folder
+                new File(newFile.getParent()).mkdirs();
+                FileOutputStream fos = new FileOutputStream(newFile);
+
+                int len;
+                while ((len = zis.read(buffer)) > 0) {
+                    fos.write(buffer, 0, len);
+                }
+                fos.close();
+                zipEntry = zis.getNextEntry();
+
+            }
+            zis.closeEntry();
+            zis.close();
+
+            log.info("Fin descarga de oficinas directorio común");
+            return resp;
+        } catch (Exception e) {
+            descargaEjb.remove(descarga);
+            throw new Exception(e.getMessage());
+        }
+
+
+    }
+
+    /* Tarea que en un primer paso descarga los archivos csv de las oficinas y posteriormente importa el contenido
+     *  en la base de datos, de esta manera realiza el proceso de sincronizacion con Madrid en un sólo
+     *  proceso
+     *  */
+    @TransactionTimeout(value = 18000)
+    public void importarOficinasTask() {
+
+        try {
+            //Obtenemos las fechas entre las que hay que hacer la descarga
+
+            // obtenemos los datos de la última descarga
+            Descarga ultimaDescarga = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.OFICINA);
+            Date fechaInicio = ultimaDescarga.getFechaFin(); // fecha de la ultima descarga
+
+            // obtenemos la fecha de hoy
+            Date fechaFin = new Date();
+
+            // Obtiene los archivos csv via WS
+            String[] respuesta = descargarOficinasWS(fechaInicio, fechaFin);
+            if (Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO.equals(respuesta[0])) {
+                // importamos las oficinas a la bd.
+                importarOficinas(true);
+            }
+
+
+            // importamos las oficinas a la bd.
+            //importarOficinas(true);
+        } catch (Exception e) {
+            log.error("Error important Oficines: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     *
+     * @return
+     */
+    private Oficina oficinaVacia() {
         Oficina oficina = new Oficina();
-        oficina.setDenominacion(new String());
+        oficina.setDenominacion("");
 
         return oficina;
     }
@@ -929,245 +908,6 @@ public class ImportadorOficinasBean implements ImportadorOficinasLocal {
                     }
                 } catch (Exception e) {
                     log.error(" Error EnOFI_SERVICIOS_OFI " + e.getMessage(), e);
-                }
-            }
-        }
-    }
-
-    /*
-    * Método que se encarga de obtener los archivos de las oficinas a través de WS
-    * @param request
-    * @param fechaInicio
-    * @param fechaFin
-    */
-    @Override
-    public String[] descargarOficinasWS(Date fechaInicio, Date fechaFin) throws Exception {
-
-        byte[] buffer = new byte[1024];
-        String[] resp = new String[2];
-
-        // Guardaremos la fecha de la ultima descarga
-        Descarga descarga = new Descarga();
-        descarga.setTipo(Dir3caibConstantes.OFICINA);
-
-        //guardamos todas las fechas de la descarga
-        if (fechaInicio != null) {
-            descarga.setFechaInicio(fechaInicio);
-        }
-        if (fechaFin != null) {
-            descarga.setFechaFin(fechaFin);
-        }
-
-        // Si las fechas estan vacias, las de descarga tenemos que fijar la fecha de hoy.
-        Date hoy = new Date();
-
-        if (fechaFin == null) {
-            descarga.setFechaFin(hoy);
-        }
-
-        if (fechaInicio != null) {
-            log.info("Intervalo fechas descarga oficinas directorio común: " + formatoFecha.format(descarga.getFechaInicio()) + " - " + formatoFecha.format(descarga.getFechaFin()));
-        }else{
-            log.info("Descarga inicial de oficinas directorio común");
-        }
-
-        descarga = descargaEjb.persist(descarga);
-
-        try {
-
-            //Obtenemos las diferentes rutas para invocar a los WS y almacenar la información obtenida
-            String usuario = Configuracio.getDir3WsUser();
-            String password = Configuracio.getDir3WsPassword();
-            String ruta = Configuracio.getArchivosPath();
-
-            String rutaOficinas = Configuracio.getOficinasPath(descarga.getCodigo());
-
-            String endPoint = Configuracio.getOficinaEndPoint();
-
-            SD02OFDescargaOficinasService oficinasService = new SD02OFDescargaOficinasService(new URL(endPoint + "?wsdl"));
-            SD02OFDescargaOficinas service = oficinasService.getSD02OFDescargaOficinas();
-            Map<String, Object> reqContext = ((BindingProvider) service).getRequestContext();
-            reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endPoint);
-
-            // Establecemos los parametros necesarios para el WS
-            OficinasWs parametros = new OficinasWs();
-            parametros.setUsuario(usuario);
-            parametros.setClave(password);
-            parametros.setFormatoFichero(FormatoFichero.CSV);
-            parametros.setTipoConsulta(TipoConsultaOF.COMPLETO);
-
-            // definimos fechas
-            if (fechaInicio != null) {
-                parametros.setFechaInicio(formatoFecha.format(fechaInicio));
-            }
-            if (fechaFin != null) {
-                parametros.setFechaFin(formatoFecha.format(fechaFin));
-            }
-
-            // Invocamos el WS
-            RespuestaWS respuesta = service.exportar(parametros);
-            Base64 decoder = new Base64();
-
-            log.info("Respuesta WS oficinas DIR3: " + respuesta.getCodigo() + " - " + respuesta.getDescripcion());
-
-            //Montamos la respuesta del ws para controlar los errores a mostrar
-            resp[0] = respuesta.getCodigo();
-            resp[1] = respuesta.getDescripcion();
-
-            if (!respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO) && !respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_VACIO)) {
-                descargaEjb.remove(descarga);
-                return resp;
-            }
-
-            //actualizamos el estado de la descarga.
-            descarga.setEstado(respuesta.getCodigo());
-            descargaEjb.merge(descarga);
-
-
-            // Realizamos una copia del archivo zip de la ultima descarga
-            String archivoOficinaZip = ruta + Dir3caibConstantes.OFICINAS_ARCHIVO_ZIP + descarga.getCodigo() + ".zip";
-            File file = new File(archivoOficinaZip);
-
-
-            //Guardamos el zip devuelto por el WS en el directorio.
-            FileUtils.writeByteArrayToFile(file, decoder.decode(respuesta.getFichero()));
-
-            // Se crea el directorio para el catálogo
-            File dir = new File(rutaOficinas);
-            if (!dir.exists()) {
-                if (!dir.mkdirs()) {
-                    //Borramos la descarga creada previamente.
-                    descargaEjb.remove(descarga);
-                    log.error(" No se ha podido crear el directorio");
-                }
-            }
-
-            //Descomprimir el archivo
-            ZipInputStream zis = new ZipInputStream(new FileInputStream(archivoOficinaZip));
-            ZipEntry zipEntry = zis.getNextEntry();
-
-            while (zipEntry != null) {
-                String fileName = zipEntry.getName();
-                File newFile = new File(rutaOficinas + fileName);
-                log.info("Fichero descomprimido: " + newFile.getAbsoluteFile());
-
-                //create all non exists folders
-                //else you will hit FileNotFoundException for compressed folder
-                new File(newFile.getParent()).mkdirs();
-                FileOutputStream fos = new FileOutputStream(newFile);
-
-                int len;
-                while ((len = zis.read(buffer)) > 0) {
-                    fos.write(buffer, 0, len);
-                }
-                fos.close();
-                zipEntry = zis.getNextEntry();
-
-            }
-            zis.closeEntry();
-            zis.close();
-
-            log.info("Fin descarga de oficinas directorio común");
-            return resp;
-        } catch (Exception e) {
-            descargaEjb.remove(descarga);
-            throw new Exception(e.getMessage());
-        }
-
-
-    }
-
-    /* Tarea que en un primer paso descarga los archivos csv de las oficinas y posteriormente importa el contenido
-     *  en la base de datos, de esta manera realiza el proceso de sincronizacion con Madrid en un sólo
-     *  proceso
-     *  */
-    @TransactionTimeout(value = 18000)
-    public void importarOficinasTask() {
-
-        try {
-            //Obtenemos las fechas entre las que hay que hacer la descarga
-
-            // obtenemos los datos de la última descarga
-            Descarga ultimaDescarga = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.OFICINA);
-            Date fechaInicio = ultimaDescarga.getFechaFin(); // fecha de la ultima descarga
-
-            // obtenemos la fecha de hoy
-            Date fechaFin = new Date();
-
-            // Obtiene los archivos csv via WS
-            String[] respuesta = descargarOficinasWS(fechaInicio, fechaFin);
-            if (Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO.equals(respuesta[0])) {
-                // importamos las oficinas a la bd.
-                importarOficinas(true);
-            }
-
-
-            // importamos las oficinas a la bd.
-            //importarOficinas(true);
-        } catch (Exception e) {
-            log.error("Error important Oficines: " + e.getMessage(), e);
-        }
-    }
-
-
-    private int getRequiredUnidades(List<List<String>> all, int size) throws Exception {
-        FileInputStream is1 = null;
-        CSVReader reader = null;
-
-        Set<String> allCodes = new HashSet<String>();
-
-
-        List<String> codigosUnidad = new ArrayList<String>();
-        all.add(codigosUnidad);
-
-        int count = 0;
-        int allCount = 0;
-        try {
-            Descarga descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.OFICINA);
-            File file = new File(Configuracio.getOficinasPath(descarga.getCodigo()), Dir3caibConstantes.OFI_OFICINAS);
-            is1 = new FileInputStream(file);
-            BufferedReader is = new BufferedReader(new InputStreamReader(is1, "UTF-8"));
-            reader = new CSVReader(is, ';');
-
-
-            // Leemos el contenido y lo guardamos en un List
-
-            String[] fila;
-
-            reader.readNext();
-
-            while ((fila = reader.readNext()) != null) {
-
-                String codUOResponsable = fila[5].trim();
-
-
-                if (!allCodes.contains(codUOResponsable)) {
-
-                    allCount++;
-                    count++;
-                    if (count > 500) {
-                        codigosUnidad = new ArrayList<String>();
-                        all.add(codigosUnidad);
-                        count = 0;
-                    }
-
-                    codigosUnidad.add(codUOResponsable);
-                    allCodes.add(codUOResponsable);
-                }
-            }
-
-            return allCount;
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (Exception e) {
-                }
-            }
-            if (is1 != null) {
-                try {
-                    is1.close();
-                } catch (Exception e) {
                 }
             }
         }

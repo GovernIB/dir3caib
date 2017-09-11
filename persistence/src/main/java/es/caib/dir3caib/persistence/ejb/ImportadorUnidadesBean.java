@@ -2,6 +2,7 @@ package es.caib.dir3caib.persistence.ejb;
 
 import au.com.bytecode.opencsv.CSVReader;
 import es.caib.dir3caib.persistence.model.*;
+import es.caib.dir3caib.persistence.utils.ImportadorBase;
 import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
 import es.caib.dir3caib.utils.Configuracio;
 import es.caib.dir3caib.utils.Utils;
@@ -19,7 +20,6 @@ import javax.ejb.Stateless;
 import javax.xml.ws.BindingProvider;
 import java.io.*;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -38,74 +38,18 @@ import java.util.zip.ZipInputStream;
 @SecurityDomain("seycon")
 @RunAs(Dir3caibConstantes.DIR_ADMIN)
 @PermitAll
-public class ImportadorUnidadesBean implements ImportadorUnidadesLocal {
+public class ImportadorUnidadesBean extends ImportadorBase implements ImportadorUnidadesLocal {
+
     protected final Logger log = Logger.getLogger(getClass());
 
     @EJB(mappedName = "dir3caib/UnidadEJB/local")
     private UnidadLocal unidadEjb;
-
-    @EJB(mappedName = "dir3caib/CatAmbitoTerritorialEJB/local")
-    private CatAmbitoTerritorialLocal catAmbitoTerritorialEjb;
-
-    @EJB(mappedName = "dir3caib/CatEntidadGeograficaEJB/local")
-    private CatEntidadGeograficaLocal catEntidadGeograficaEjb;
-
-    @EJB(mappedName = "dir3caib/CatEstadoEntidadEJB/local")
-    private CatEstadoEntidadLocal catEstadoEntidadEjb;
-
-    @EJB(mappedName = "dir3caib/CatIslaEJB/local")
-    private CatIslaLocal catIslaEjb;
-
-    @EJB(mappedName = "dir3caib/CatNivelAdministracionEJB/local")
-    private CatNivelAdministracionLocal catNivelAdministracionEjb;
-
-    @EJB(mappedName = "dir3caib/CatPaisEJB/local")
-    private CatPaisLocal catPaisEjb;
-
-    @EJB(mappedName = "dir3caib/CatTipoContactoEJB/local")
-    private CatTipoContactoLocal catTipoContactoEjb;
-
-    @EJB(mappedName = "dir3caib/CatTipoEntidadPublicaEJB/local")
-    private CatTipoEntidadPublicaLocal catTipoEntidadPublicaEjb;
-
-    @EJB(mappedName = "dir3caib/CatTipoUnidadOrganicaEJB/local")
-    private CatTipoUnidadOrganicaLocal catTipoUnidadOrganicaEjb;
-
-    @EJB(mappedName = "dir3caib/CatTipoViaEJB/local")
-    private CatTipoViaLocal catTipoViaEjb;
-
-    @EJB(mappedName = "dir3caib/CatComunidadAutonomaEJB/local")
-    private CatComunidadAutonomaLocal catComunidadAutonomaEjb;
-
-    @EJB(mappedName = "dir3caib/CatProvinciaEJB/local")
-    private CatProvinciaLocal catProvinciaEjb;
-
-    @EJB(mappedName = "dir3caib/CatLocalidadEJB/local")
-    private CatLocalidadLocal catLocalidadEjb;
 
     @EJB(mappedName = "dir3caib/ContactoUOEJB/local")
     private ContactoUOLocal contactoUOEjb;
 
     @EJB(mappedName = "dir3caib/DescargaEJB/local")
     private DescargaLocal descargaEjb;
-
-
-    SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
-
-    //Caches
-    private Map<Long, CatTipoVia> cacheTipoVia = new TreeMap<Long, CatTipoVia>();
-    private Map<String, CatEstadoEntidad> cacheEstadoEntidad = new TreeMap<String, CatEstadoEntidad>();
-    private Map<String, CatTipoUnidadOrganica> cacheTipoUnidadOrganica = new TreeMap<String, CatTipoUnidadOrganica>();
-    private Map<String, CatTipoEntidadPublica> cacheTipoEntidadPublica = new TreeMap<String, CatTipoEntidadPublica>();
-    private Map<Long, CatPais> cachePais = new TreeMap<Long, CatPais>();
-    private Map<CatLocalidadPK, CatLocalidad> cacheLocalidad = new HashMap<CatLocalidadPK, CatLocalidad>();
-    private Map<Long, CatProvincia> cacheProvincia = new TreeMap<Long, CatProvincia>();
-    private Map<Long, CatIsla> cacheIsla = new TreeMap<Long, CatIsla>();
-    private Map<String, CatEntidadGeografica> cacheEntidadGeografica = new TreeMap<String, CatEntidadGeografica>();
-    private Map<Long, CatComunidadAutonoma> cacheComunidadAutonoma = new TreeMap<Long, CatComunidadAutonoma>();
-    private Map<CatAmbitoTerritorialPK, CatAmbitoTerritorial> cacheAmbitoTerritorial = new HashMap<CatAmbitoTerritorialPK, CatAmbitoTerritorial>();
-    private Map<Long, CatNivelAdministracion> cacheNivelAdministracion = new TreeMap<Long, CatNivelAdministracion>();
-    private Set<String> existInBBDD = new TreeSet<String>();
 
 
     /**
@@ -119,97 +63,24 @@ public class ImportadorUnidadesBean implements ImportadorUnidadesLocal {
         log.info("");
         log.info("Inicio importación Unidades");
 
+        System.gc();
+
         ResultadosImportacion results = new ResultadosImportacion();
 
         //Lista de archivos que han sido procesados al finalizar la importación
-        List<String> procesados = results.getProcesados();
+        List<String> procesados = new ArrayList<String>();
         //Lista de archivos que no existen y deberian existir
-        List<String> inexistentes = results.getInexistentes();
+        List<String> inexistentes = new ArrayList<String>();
 
+        // Inicializamos la cache para la importación de Unidades
+        cacheImportadorUnidades();
 
-    /*  CACHES */
-
-        long start = System.currentTimeMillis();
-
-        for (CatTipoVia ca : catTipoViaEjb.getAll()) {
-            cacheTipoVia.put(ca.getCodigoTipoVia(), ca);
-        }
-        log.debug(" TipoVias : " + cacheTipoVia.size());
-
-        for (CatEstadoEntidad ca : catEstadoEntidadEjb.getAll()) {
-            cacheEstadoEntidad.put(ca.getCodigoEstadoEntidad(), ca);
-        }
-        log.debug(" Estado Entidad : " + cacheEstadoEntidad.size());
-
-        for (CatTipoUnidadOrganica ca : catTipoUnidadOrganicaEjb.getAll()) {
-            cacheTipoUnidadOrganica.put(ca.getCodigoTipoUnidadOrganica(), ca);
-        }
-        log.debug(" TipoUnidadOrganica : " + cacheTipoUnidadOrganica.size());
-
-        for (CatTipoEntidadPublica ca : catTipoEntidadPublicaEjb.getAll()) {
-            cacheTipoEntidadPublica.put(ca.getCodigoTipoEntidadPublica(), ca);
-        }
-
-        for (CatPais ca : catPaisEjb.getAll()) {
-            cachePais.put(ca.getCodigoPais(), ca);
-        }
-        log.debug(" Pais : " + cachePais.size());
-
-        for (CatLocalidad ca : catLocalidadEjb.getAll()) {
-            CatLocalidadPK catLocalidadPK = new CatLocalidadPK(ca.getCodigoLocalidad(), ca.getProvincia(), ca.getEntidadGeografica());
-            cacheLocalidad.put(catLocalidadPK, ca);
-        }
-        log.debug(" Localidad: " + cacheLocalidad.size());
-
-
-        for (CatProvincia ca : catProvinciaEjb.getAll()) {
-            cacheProvincia.put(ca.getCodigoProvincia(), ca);
-        }
-        log.debug(" Provincia: " + cacheProvincia.size());
-
-        for (CatIsla ca : catIslaEjb.getAll()) {
-            cacheIsla.put(ca.getCodigoIsla(), ca);
-        }
-        log.debug(" Islas : " + cacheIsla.size());
-
-
-        for (CatEntidadGeografica ca : catEntidadGeograficaEjb.getAll()) {
-            cacheEntidadGeografica.put(ca.getCodigoEntidadGeografica(), ca);
-        }
-        log.debug(" Entidad Geografica : " + cacheEntidadGeografica.size());
-
-        for (CatComunidadAutonoma ca : catComunidadAutonomaEjb.getAll()) {
-            cacheComunidadAutonoma.put(ca.getCodigoComunidad(), ca);
-        }
-        log.debug(" Comunidad Autonoma : " + cacheComunidadAutonoma.size());
-
-
-        for (CatAmbitoTerritorial at : catAmbitoTerritorialEjb.getAll()) {
-            CatAmbitoTerritorialPK catAmbitoTerritorialPk = new CatAmbitoTerritorialPK(at.getCodigoAmbito(), at.getNivelAdministracion().getCodigoNivelAdministracion());
-            cacheAmbitoTerritorial.put(catAmbitoTerritorialPk, at);
-        }
-        log.debug(" Ambito Territorial : " + cacheAmbitoTerritorial.size());
-
-        for (CatNivelAdministracion na : catNivelAdministracionEjb.getAll()) {
-            cacheNivelAdministracion.put(na.getCodigoNivelAdministracion(), na);
-        }
-        log.debug(" Nivel Administracion : " + cacheNivelAdministracion.size());
-
-        long end = System.currentTimeMillis();
-        log.debug("Inicialitzades Caches de Importar Unidades en " + Utils.formatElapsedTime(end - start));
-
-
-        start = end;
-
-        existInBBDD.addAll(unidadEjb.getAllCodigos());
+        // Averiguamos si es una Carga de datos inicial o una Actualización
         boolean actualizacion = existInBBDD.size() > 0;
 
-
-        end = System.currentTimeMillis();
-        log.debug("Inicialitzada Cache Unidades existents en " + Utils.formatElapsedTime(end - start));
-
-
-        // XYZ
+        // Tiempos
+        long start;
+        long end;
         long findbyid = 0;
         int findbyidcount = 0;
         long caches = 0;
@@ -217,9 +88,11 @@ public class ImportadorUnidadesBean implements ImportadorUnidadesLocal {
         long persist = 0;
         long s;
 
-        // Obtenemos el listado de ficheros que hay dentro del directorio indicado que se
-        // corresponde con la descarga hecha previamente
+
+        // Obtenemos la última descarga de los ficheros de Unidades realizada
         Descarga descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.UNIDAD);
+
+        // Obtenemos el listado de ficheros que hay dentro del directorio de la última descarga
         File f = new File(Configuracio.getUnidadesPath(descarga.getCodigo()));
         ArrayList<String> existentes = new ArrayList<String>(Arrays.asList(f.list()));
 
@@ -423,6 +296,181 @@ public class ImportadorUnidadesBean implements ImportadorUnidadesLocal {
         System.gc();
 
         return results;
+    }
+
+
+    /**
+     * Método que se encarga de obtener los archivos de las unidades a través de WS
+     *
+     * @param fechaInicio
+     * @param fechaFin
+     */
+    public String[] descargarUnidadesWS(Date fechaInicio, Date fechaFin) throws Exception {
+
+        byte[] buffer = new byte[1024];
+        String[] resp = new String[2];
+
+        // Guardaremos la fecha de la ultima descarga
+        Descarga descarga = new Descarga();
+        descarga.setTipo(Dir3caibConstantes.UNIDAD);
+
+        //guardamos todas las fechas de la descarga
+        if (fechaInicio != null) {
+            descarga.setFechaInicio(fechaInicio);
+        }
+        if (fechaFin != null) {
+            descarga.setFechaFin(fechaFin);
+        }
+
+    /* El funcionamiento de los ws de madrid no permiten que la fecha de inicio sea null si la fecha fin es distinta de null.
+       Descarga incremental: Hay dos opciones, incluir solo la fecha de inicio que devolverá la información que existe
+       desde la fecha indicada hasta la fecha en la que se realiza la petición y la otra opción es incluir
+       fecha de inicio y fecha fin. Esta devuelve la información añadida o modificada entre esas dos fechas.*/
+        if (fechaFin == null) {
+            descarga.setFechaFin(new Date());
+        }
+
+        if (fechaInicio != null) {
+            log.info("Intervalo fechas descarga unidades directorio común: " + formatoFecha.format(descarga.getFechaInicio()) + " - " + formatoFecha.format(descarga.getFechaFin()));
+        }else{
+            log.info("Descarga inicial de unidades directorio común");
+        }
+
+        // Guardamos la descarga porque emplearemos el identificador para el nombre del directorio y el archivo.
+        descarga = descargaEjb.persist(descarga);
+
+        try {
+            // Obtenemos rutas y usuario para el WS
+            String usuario = Configuracio.getDir3WsUser();
+            String password = Configuracio.getDir3WsPassword();
+            String ruta = Configuracio.getArchivosPath();
+
+            String rutaUnidades = Configuracio.getUnidadesPath(descarga.getCodigo());
+
+            String endPoint = Configuracio.getUnidadEndPoint();
+
+            SD01UNDescargaUnidadesService unidadesService = new SD01UNDescargaUnidadesService(new URL(endPoint + "?wsdl"));
+            SD01UNDescargaUnidades service = unidadesService.getSD01UNDescargaUnidades();
+            Map<String, Object> reqContext = ((BindingProvider) service).getRequestContext();
+            reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endPoint);
+
+            // Establecemos parametros de WS
+            UnidadesWs parametros = new UnidadesWs();
+            parametros.setUsuario(usuario);
+            parametros.setClave(password);
+            parametros.setFormatoFichero(FormatoFichero.CSV);
+            parametros.setTipoConsulta(TipoConsultaUO.COMPLETO);
+            //parametros.setUnidadesDependientes(Boolean.TRUE);
+
+            if (fechaInicio != null) {
+                parametros.setFechaInicio(formatoFecha.format(fechaInicio));
+            }
+            if (fechaFin != null) {
+                parametros.setFechaFin(formatoFecha.format(fechaFin));
+            }
+
+            // Invocamos el WS
+            RespuestaWS respuesta = service.exportar(parametros);
+
+            Base64 decoder = new Base64();
+            log.info("Respuesta WS unidades DIR3: " + respuesta.getCodigo() + " - " + respuesta.getDescripcion());
+
+            //Montamos la respuesta del ws para controlar los errores a mostrar
+            resp[0] = respuesta.getCodigo();
+            resp[1] = respuesta.getDescripcion();
+
+            if (!respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO) && !respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_VACIO)) {
+                descargaEjb.remove(descarga);
+                return resp;
+            }
+            //actualizamos el estado de la descarga.
+            descarga.setEstado(respuesta.getCodigo());
+            descargaEjb.merge(descarga);
+
+            // definimos el archivo zip a descargar
+            String archivoUnidadZip = ruta + Dir3caibConstantes.UNIDADES_ARCHIVO_ZIP + descarga.getCodigo() + ".zip";
+            File file = new File(archivoUnidadZip);
+
+            // Guardamos el archivo descargado
+            FileUtils.writeByteArrayToFile(file, decoder.decode(respuesta.getFichero()));
+
+            // Se crea el directorio para la unidad
+            File dir = new File(rutaUnidades);
+            if (!dir.exists()) {
+                if (!dir.mkdirs()) {
+                    //Borramos la descarga creada previamente.
+                    descargaEjb.remove(descarga);
+                    log.error(" No se ha podido crear el directorio");
+                }
+            }
+
+            //Descomprimir el archivo
+            ZipInputStream zis = new ZipInputStream(new FileInputStream(archivoUnidadZip));
+            ZipEntry zipEntry = zis.getNextEntry();
+
+            while (zipEntry != null) {
+                String fileName = zipEntry.getName();
+                File newFile = new File(rutaUnidades + fileName);
+
+                log.info("Fichero descomprimido: " + newFile.getAbsoluteFile());
+
+                //create all non exists folders
+                //else you will hit FileNotFoundException for compressed folder
+                new File(newFile.getParent()).mkdirs();
+                FileOutputStream fos = new FileOutputStream(newFile);
+
+                int len;
+                while ((len = zis.read(buffer)) > 0) {
+                    fos.write(buffer, 0, len);
+                }
+                fos.close();
+                zipEntry = zis.getNextEntry();
+            }
+            zis.closeEntry();
+            zis.close();
+
+
+            return resp;
+        } catch (Exception e) {
+            descargaEjb.remove(descarga);
+            throw new Exception(e.getMessage());
+        }
+
+    }
+
+    /* Tarea que en un primer paso descarga los archivos csv de las unidades y posteriormente importa el contenido en
+   *  la base de datos, de esta manera realiza el proceso de sincronizacion con Madrid en un sólo
+   *  proceso
+   *  */
+    @Override
+    @TransactionTimeout(value = 18000)
+    public void importarUnidadesTask() {
+
+        try {
+            //Obtenemos las fechas entre las que hay que hacer la descarga
+
+            // obtenemos los datos de la última descarga
+            Descarga ultimaDescarga = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.UNIDAD);
+            Date fechaInicio = ultimaDescarga.getFechaFin(); // fecha de la ultima descarga
+
+            // obtenemos la fecha de hoy
+            Date fechaFin = new Date();
+
+            // Obtiene los archivos csv via WS
+            String[] respuesta = descargarUnidadesWS(fechaInicio, fechaFin);
+            if (Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO.equals(respuesta[0])) {
+                //importamos las unidades a la bd.
+                importarUnidades();
+                //Mensaje.saveMessageInfo(request, "Se han obtenido correctamente las unidades");
+                //return true;
+            }
+
+
+            // importamos las unidades a la bd.
+            //importarUnidades();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -679,8 +727,11 @@ public class ImportadorUnidadesBean implements ImportadorUnidadesLocal {
         }
     }
 
-    /*
-        Importa las relaciones de historicos entre unidades. Procesa el fichero HistoricosUO.csv
+    /**
+     * Importa las relaciones de historicos entre unidades. Procesa el fichero HistoricosUO.csv
+     * @param nombreFichero
+     * @param reader
+     * @throws Exception
      */
     private void importarHistoricos(String nombreFichero, CSVReader reader) throws Exception {
 
@@ -748,12 +799,6 @@ public class ImportadorUnidadesBean implements ImportadorUnidadesLocal {
 
         if (Dir3caibConstantes.UO_CONTACTO_UO.equals(nombreFichero)) {
 
-            Map<String, CatTipoContacto> cacheCatTipoContacto = new TreeMap<String, CatTipoContacto>();
-            for (CatTipoContacto na : catTipoContactoEjb.getAll()) {
-                cacheCatTipoContacto.put(na.getCodigoTipoContacto(), na);
-            }
-
-
             try {
                 String[] fila;
                 reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
@@ -772,7 +817,7 @@ public class ImportadorUnidadesBean implements ImportadorUnidadesLocal {
                     String stipoContacto = fila[1].trim();
                     if (!stipoContacto.isEmpty()) {
                         CatTipoContacto tipoContacto;
-                        tipoContacto = cacheCatTipoContacto.get(stipoContacto);
+                        tipoContacto = cacheTipoContacto.get(stipoContacto);
                         contacto.setTipoContacto(tipoContacto);
                     }
 
@@ -792,187 +837,13 @@ public class ImportadorUnidadesBean implements ImportadorUnidadesLocal {
         }
     }
 
-    public Unidad unidadVacia() {
+    private Unidad unidadVacia() {
 
         Unidad unidad = new Unidad();
-        unidad.setDenominacion(new String());
-        unidad.setEsEdp(new Boolean(false));
+        unidad.setDenominacion("");
+        unidad.setEsEdp(Boolean.FALSE);
 
         return unidad;
-    }
-
-    /**
-     * Método que se encarga de obtener los archivos de las unidades a través de WS
-     *
-     * @param fechaInicio
-     * @param fechaFin
-     */
-    public String[] descargarUnidadesWS(Date fechaInicio, Date fechaFin) throws Exception {
-
-        byte[] buffer = new byte[1024];
-        String[] resp = new String[2];
-
-        // Guardaremos la fecha de la ultima descarga
-        Descarga descarga = new Descarga();
-        descarga.setTipo(Dir3caibConstantes.UNIDAD);
-
-        //guardamos todas las fechas de la descarga
-        if (fechaInicio != null) {
-            descarga.setFechaInicio(fechaInicio);
-        }
-        if (fechaFin != null) {
-            descarga.setFechaFin(fechaFin);
-        }
-
-    /* El funcionamiento de los ws de madrid no permiten que la fecha de inicio sea null si la fecha fin es distinta de null.
-       Descarga incremental: Hay dos opciones, incluir solo la fecha de inicio que devolverá la información que existe
-       desde la fecha indicada hasta la fecha en la que se realiza la petición y la otra opción es incluir
-       fecha de inicio y fecha fin. Esta devuelve la información añadida o modificada entre esas dos fechas.*/
-        if (fechaFin == null) {
-            descarga.setFechaFin(new Date());
-        }
-
-        if (fechaInicio != null) {
-            log.info("Intervalo fechas descarga unidades directorio común: " + formatoFecha.format(descarga.getFechaInicio()) + " - " + formatoFecha.format(descarga.getFechaFin()));
-        }else{
-            log.info("Descarga inicial de unidades directorio común");
-        }
-
-        // Guardamos la descarga porque emplearemos el identificador para el nombre del directorio y el archivo.
-        descarga = descargaEjb.persist(descarga);
-
-        try {
-            // Obtenemos rutas y usuario para el WS
-            String usuario = Configuracio.getDir3WsUser();
-            String password = Configuracio.getDir3WsPassword();
-            String ruta = Configuracio.getArchivosPath();
-
-            String rutaUnidades = Configuracio.getUnidadesPath(descarga.getCodigo());
-
-            String endPoint = Configuracio.getUnidadEndPoint();
-
-            SD01UNDescargaUnidadesService unidadesService = new SD01UNDescargaUnidadesService(new URL(endPoint + "?wsdl"));
-            SD01UNDescargaUnidades service = unidadesService.getSD01UNDescargaUnidades();
-            Map<String, Object> reqContext = ((BindingProvider) service).getRequestContext();
-            reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endPoint);
-
-            // Establecemos parametros de WS
-            UnidadesWs parametros = new UnidadesWs();
-            parametros.setUsuario(usuario);
-            parametros.setClave(password);
-            parametros.setFormatoFichero(FormatoFichero.CSV);
-            parametros.setTipoConsulta(TipoConsultaUO.COMPLETO);
-            //parametros.setUnidadesDependientes(Boolean.TRUE);
-
-            if (fechaInicio != null) {
-                parametros.setFechaInicio(formatoFecha.format(fechaInicio));
-            }
-            if (fechaFin != null) {
-                parametros.setFechaFin(formatoFecha.format(fechaFin));
-            }
-
-            // Invocamos el WS
-            RespuestaWS respuesta = service.exportar(parametros);
-
-            Base64 decoder = new Base64();
-            log.info("Respuesta WS unidades DIR3: " + respuesta.getCodigo() + " - " + respuesta.getDescripcion());
-
-            //Montamos la respuesta del ws para controlar los errores a mostrar
-            resp[0] = respuesta.getCodigo();
-            resp[1] = respuesta.getDescripcion();
-
-            if (!respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO) && !respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_VACIO)) {
-                descargaEjb.remove(descarga);
-                return resp;
-            }
-            //actualizamos el estado de la descarga.
-            descarga.setEstado(respuesta.getCodigo());
-            descargaEjb.merge(descarga);
-
-            // definimos el archivo zip a descargar
-            String archivoUnidadZip = ruta + Dir3caibConstantes.UNIDADES_ARCHIVO_ZIP + descarga.getCodigo() + ".zip";
-            File file = new File(archivoUnidadZip);
-
-            // Guardamos el archivo descargado
-            FileUtils.writeByteArrayToFile(file, decoder.decode(respuesta.getFichero()));
-
-            // Se crea el directorio para la unidad
-            File dir = new File(rutaUnidades);
-            if (!dir.exists()) {
-                if (!dir.mkdirs()) {
-                    //Borramos la descarga creada previamente.
-                    descargaEjb.remove(descarga);
-                    log.error(" No se ha podido crear el directorio");
-                }
-            }
-
-            //Descomprimir el archivo
-            ZipInputStream zis = new ZipInputStream(new FileInputStream(archivoUnidadZip));
-            ZipEntry zipEntry = zis.getNextEntry();
-
-            while (zipEntry != null) {
-                String fileName = zipEntry.getName();
-                File newFile = new File(rutaUnidades + fileName);
-
-                log.info("Fichero descomprimido: " + newFile.getAbsoluteFile());
-
-                //create all non exists folders
-                //else you will hit FileNotFoundException for compressed folder
-                new File(newFile.getParent()).mkdirs();
-                FileOutputStream fos = new FileOutputStream(newFile);
-
-                int len;
-                while ((len = zis.read(buffer)) > 0) {
-                    fos.write(buffer, 0, len);
-                }
-                fos.close();
-                zipEntry = zis.getNextEntry();
-            }
-            zis.closeEntry();
-            zis.close();
-
-
-            return resp;
-        } catch (Exception e) {
-            descargaEjb.remove(descarga);
-            throw new Exception(e.getMessage());
-        }
-
-    }
-
-    /* Tarea que en un primer paso descarga los archivos csv de las unidades y posteriormente importa el contenido en
-   *  la base de datos, de esta manera realiza el proceso de sincronizacion con Madrid en un sólo
-   *  proceso
-   *  */
-    @Override
-    @TransactionTimeout(value = 18000)
-    public void importarUnidadesTask() {
-
-        try {
-            //Obtenemos las fechas entre las que hay que hacer la descarga
-
-            // obtenemos los datos de la última descarga
-            Descarga ultimaDescarga = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.UNIDAD);
-            Date fechaInicio = ultimaDescarga.getFechaFin(); // fecha de la ultima descarga
-
-            // obtenemos la fecha de hoy
-            Date fechaFin = new Date();
-
-            // Obtiene los archivos csv via WS
-            String[] respuesta = descargarUnidadesWS(fechaInicio, fechaFin);
-            if (Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO.equals(respuesta[0])) {
-                //importamos las unidades a la bd.
-                importarUnidades();
-                //Mensaje.saveMessageInfo(request, "Se han obtenido correctamente las unidades");
-                //return true;
-            }
-
-
-            // importamos las unidades a la bd.
-            //importarUnidades();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
 }
