@@ -1,7 +1,6 @@
 package es.caib.dir3caib.back.controller.unidad;
 
 import es.caib.dir3caib.back.controller.BaseController;
-import es.caib.dir3caib.back.form.FechasForm;
 import es.caib.dir3caib.back.form.UnidadBusquedaForm;
 import es.caib.dir3caib.back.utils.Mensaje;
 import es.caib.dir3caib.persistence.ejb.ArbolLocal;
@@ -179,37 +178,47 @@ public class UnidadController extends BaseController {
     }
 
     /**
-     * Muestra el formulario para obtener los unidades mediante el WS de DIR3
+     * Elimina todas las Unidades de la bbdd y las sincroniza con al información actual
      */
-    @RequestMapping(value = "/obtener", method = RequestMethod.GET)
-    public String obtenerUnidades(Model model) throws Exception {
+    @RequestMapping(value = "/restaurarDirectorio", method = RequestMethod.GET)
+    public String restaurarUnidades(Model model) throws Exception {
 
-        //Obtiene la última descarga que se sincronizó correctamente, para informar de cuando se realizó
-        Descarga descarga = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.UNIDAD);
-        if (descarga != null) {
-            model.addAttribute("descarga", descarga);
-        }
         model.addAttribute("development", Configuracio.isDevelopment());
-        model.addAttribute("fechasForm", new FechasForm());
+        model.addAttribute("unidadForm", new Unidad());
 
-        return "/unidad/unidadObtener";
+        return "unidad/unidadRestaurar";
     }
 
 
     /**
-     * descarga las unidades mediante el WS de DIR3 en función de las fechas indicadas en el formulario
-     * @param fechasForm inter
+     * Elimina todas las Unidades de la bbdd y las sincroniza con al información actual
+     * @param unidadForm
      * @param request
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/obtener", method = RequestMethod.POST)
-    public String descargaUnidades(@ModelAttribute FechasForm fechasForm, HttpServletRequest request) throws Exception {
+    @RequestMapping(value = "/restaurarDirectorio", method = RequestMethod.POST)
+    public ModelAndView restaurarUnidades(@ModelAttribute Unidad unidadForm, HttpServletRequest request) throws Exception {
 
-        if (descargarUnidadesWS(request, fechasForm.getFechaInicio(), fechasForm.getFechaFin())) {
-            return "redirect:/unidad/ficheros";
-        } else { //Vuelve al formulario
-            return "redirect:/unidad/obtener";
+        ModelAndView mav = new ModelAndView("/unidad/unidadImportacion");
+
+        // Restaurar las Unidades
+        ResultadosImportacion results = importadorUnidades.restaurarUnidades();
+
+        if(results != null){
+
+            Mensaje.saveMessageInfo(request, getMessage("unidad.importacion.ok"));
+            mav.addObject("procesados", results.getProcesados());// Nombre de los ficheros procesados
+            mav.addObject("ficheros", Dir3caibConstantes.UO_FICHEROS);//Nombre de los ficheros obtenidos
+            mav.addObject("existentes", results.getExistentes());//Nombre de los ficheros que realmente han venido en la descarga
+            mav.addObject("descarga", results.getDescarga());//Datos de la descarga
+
+            return mav;
+
+        }else{
+            Mensaje.saveMessageError(request, getMessage("unidad.descarga.nook"));
+
+            return new ModelAndView("redirect:/unidad/restaurarDirectorio");
         }
 
     }
@@ -236,29 +245,6 @@ public class UnidadController extends BaseController {
         mav.addObject("ficheros", Dir3caibConstantes.UO_FICHEROS);//Nombre de los ficheros obtenidos
         mav.addObject("existentes", results.getExistentes());//Nombre de los ficheros que realmente han venido en la descarga
         mav.addObject("descarga", results.getDescarga());//Datos de la descarga
-
-        return mav;
-    }
-
-    /**
-     * Elimina todas las unidades, históricos de unidades y contactos de las unidades de la bd.
-     *
-     * @param request
-     * @return
-     */
-    @RequestMapping(value = "/eliminar", method = RequestMethod.GET)
-    public ModelAndView eliminarUnidadesCompleto(HttpServletRequest request) {
-        ModelAndView mav = new ModelAndView("/unidad/unidadFicheros");
-
-
-        try {
-            eliminarUnidadesCompleto();
-
-            Mensaje.saveMessageInfo(request, getMessage("unidad.borrar.ok"));
-        } catch (Exception ex) {
-            Mensaje.saveMessageError(request, getMessage("dir3caib.borrar.directorio.error"));
-            ex.printStackTrace();
-        }
 
         return mav;
     }
@@ -306,7 +292,7 @@ public class UnidadController extends BaseController {
      * @param fechaInicio
      * @param fechaFin
      */
-    public boolean descargarUnidadesWS(HttpServletRequest request, Date fechaInicio, Date fechaFin) throws Exception {
+    private boolean descargarUnidadesWS(HttpServletRequest request, Date fechaInicio, Date fechaFin) throws Exception {
 
         try {
             //Invoca a los ws para obtener los archivos de las unidades

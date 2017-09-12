@@ -51,6 +51,9 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
     @EJB(mappedName = "dir3caib/DescargaEJB/local")
     private DescargaLocal descargaEjb;
 
+    @EJB(mappedName = "dir3caib/Dir3CaibEJB/local")
+    private Dir3CaibLocal dir3CaibEjb;
+
 
     /**
      * Método que importa el contenido de los archivos de las unidades, historicos y contactos descargados previamente a través
@@ -301,6 +304,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
     }
 
 
+
     /**
      * Obtiene los ficheros de las unidades y sus relaciones a través de los WS de Madrid.
      * @param fechaInicio fecha de inicio de la descarga
@@ -308,6 +312,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
      * @return listado de los nombres de los archivos CSV descargados
      * @throws Exception
      */
+    @Override
     public String[] descargarUnidadesWS(Date fechaInicio, Date fechaFin) throws Exception {
 
         byte[] buffer = new byte[1024];
@@ -474,6 +479,26 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public ResultadosImportacion restaurarUnidades() throws Exception {
+
+        // Eliminamos las Unidades
+        dir3CaibEjb.eliminarUnidades();
+
+        // Realizamos una descarga de Unidades
+        String[] respuesta = descargarUnidadesWS(null, null);
+
+        // Si la descarga ha sido correcta, importamos las Unidades
+        if(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO.equals(respuesta[0])){
+
+            return importarUnidades();
+
+        }
+
+       return null;
+
     }
 
     /**

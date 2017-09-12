@@ -42,26 +42,23 @@
                         <a id="drop2" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"><fmt:message
                                 key="menu.unidad"/><b class="caret"></b></a>
                         <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
+
                             <sec:authorize access="hasRole('DIR_ADMIN')">
                                 <li><a href="<c:url value="/unidad/descarga/list"/>"><fmt:message key="menu.listado.descargas"/></a></li>
                                 <li class="divider"></li>
-                                <c:if test="${loginInfo.development== true}">
-                                    <li><a href="<c:url value="/unidad/obtener"/>"><fmt:message key="unidad.obtener"/></a>
-                                    </li>
-                                    <c:if test="${loginInfo.descargaUnidad == true}">
-                                        <li><a href="<c:url value="/unidad/sincronizar"/>"
-                                               onclick="if (! confirmDescarga('<c:url value="/unidad/sincronizar"/>','<fmt:message key="menu.sincronizar.confirm"/>')) { return false; }"><fmt:message key="menu.sincronizar.unidad"/></a></li>
-                                    </c:if>
-                                </c:if>
-                                <c:if test="${loginInfo.development== false}">
-                                    <li><a href="<c:url value="/unidad/sincronizar"/>"
-                                           onclick="if (! confirmDescarga('<c:url value="/unidad/sincronizar"/>','
-                                               <fmt:message
-                                                       key="menu.sincronizar.confirm"/>')) { return false; }"><fmt:message
-                                            key="menu.sincronizar.unidad"/></a></li>
+
+                                <li><a href="javascript:void(0);" onclick="if (! confirmDescarga('<c:url value="/unidad/sincronizar"/>','<fmt:message key="menu.sincronizar.confirm"/>')) { return false; }"><fmt:message key="menu.sincronizar.unidad"/></a></li>
+                            </sec:authorize>
+
+                            <li><a href="<c:url value="/unidad/list"/>"><fmt:message key="menu.buscar.unidad"/></a></li>
+
+                            <sec:authorize access="hasRole('DIR_ADMIN')">
+                                <c:if test="${loginInfo.development == true}">
+                                    <li class="divider"></li>
+                                    <li><a href="<c:url value="/unidad/restaurarDirectorio"/>"><fmt:message key="unidad.restaurarDirectorio"/></a></li>
                                 </c:if>
                             </sec:authorize>
-                            <li><a href="<c:url value="/unidad/list"/>"><fmt:message key="menu.buscar.unidad"/></a></li>
+
                         </ul>
                     </li>
 
@@ -70,28 +67,23 @@
                         <a id="drop1" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">
                             <fmt:message key="menu.oficina"/><b class="caret"></b></a>
                         <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
+
                             <sec:authorize access="hasRole('DIR_ADMIN')">
-                                <li><a href="<c:url value="/oficina/descarga/list"/>"><fmt:message
-                                        key="menu.listado.descargas"/></a></li>
+                                <li><a href="<c:url value="/oficina/descarga/list"/>"><fmt:message key="menu.listado.descargas"/></a></li>
                                 <li class="divider"></li>
-                                <c:if test="${loginInfo.development== true}">
-                                    <li><a href="<c:url value="/oficina/obtener"/>"><fmt:message key="oficina.obtener"/></a>
-                                    </li>
-                                    <c:if test="${loginInfo.descargaOficina == true}">
-                                        <li><a href="<c:url value="/oficina/sincronizar"/>"
-                                               onclick="if (! confirmDescarga('<c:url value="/oficina/sincronizar"/>','<fmt:message key="menu.sincronizar.confirm"/>')) { return false; }"><fmt:message
-                                                key="menu.sincronizar.oficina"/></a></li>
-                                    </c:if>
-                                </c:if>
-                                <c:if test="${loginInfo.development== false}">
-                                    <li><a href="<c:url value="/oficina/sincronizar"/>"
-                                           onclick="if (! confirmDescarga('<c:url value="/oficina/sincronizar"/>','
-                                               <fmt:message
-                                                       key="menu.sincronizar.confirm"/>')) { return false; }"><fmt:message
-                                            key="menu.sincronizar.oficina"/></a></li>
+
+                                <li><a href="javascript:void(0);" onclick="if (! confirmDescarga('<c:url value="/oficina/sincronizar"/>','<fmt:message key="menu.sincronizar.confirm"/>')) { return false; }"><fmt:message key="menu.sincronizar.oficina"/></a></li>
+
+                            </sec:authorize>
+
+                            <li><a href="<c:url value="/oficina/list"/>"><fmt:message key="menu.buscar.oficina"/></a></li>
+
+                            <sec:authorize access="hasRole('DIR_ADMIN')">
+                                <c:if test="${loginInfo.development == true}">
+                                    <li class="divider"></li>
+                                    <li><a href="<c:url value="/oficina/restaurarDirectorio"/>"><fmt:message key="oficina.restaurarDirectorio"/></a></li>
                                 </c:if>
                             </sec:authorize>
-                            <li><a href="<c:url value="/oficina/list"/>"><fmt:message key="menu.buscar.oficina"/></a></li>
                         </ul>
                     </li>
 
@@ -101,11 +93,9 @@
                             <a id="drop3" href="#" role="button" class="dropdown-toggle"
                                data-toggle="dropdown"><fmt:message key="menu.catalogo"/><b class="caret"></b></a>
                             <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
-                                <li><a href="<c:url value="/catalogo/descarga/list"/>"><fmt:message
-                                        key="menu.listado.descargas"/></a></li>
+                                <li><a href="<c:url value="/catalogo/descarga/list"/>"><fmt:message key="menu.listado.descargas"/></a></li>
                                 <li class="divider"></li>
-                                <li><a href="<c:url value="/catalogo/importar"/>"><fmt:message
-                                        key="catalogo.obtener"/></a></li>
+                                <li><a href="javascript:void(0);" onclick="if (! confirmDescarga('<c:url value="/catalogo/importar"/>','<fmt:message key="menu.sincronizar.confirm"/>')) { return false; }"><fmt:message key="catalogo.obtener"/></a></li>
                             </ul>
                         </li>
                     </sec:authorize>

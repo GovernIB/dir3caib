@@ -2,7 +2,10 @@ package es.caib.dir3caib.back.controller;
 
 import es.caib.dir3caib.back.utils.Mensaje;
 import es.caib.dir3caib.persistence.ejb.DescargaLocal;
+import es.caib.dir3caib.persistence.ejb.Dir3CaibLocal;
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
+import es.caib.dir3caib.utils.Configuracio;
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 
 /**
  * Created by Fundació BIT.
@@ -22,11 +26,14 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class PrincipalController extends BaseController {
 
-
     protected final Logger log = Logger.getLogger(getClass());
 
     @EJB(mappedName = "dir3caib/DescargaEJB/local")
-    protected DescargaLocal descargaEjb;
+    private DescargaLocal descargaEjb;
+
+    @EJB(mappedName = "dir3caib/Dir3CaibEJB/local")
+    private Dir3CaibLocal dir3CaibEjb;
+
 
     @RequestMapping(value = "/inicio")
     public ModelAndView principal(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -50,10 +57,17 @@ public class PrincipalController extends BaseController {
 
     @RequestMapping(value = "/eliminarCompleto", method = RequestMethod.GET)
     public ModelAndView eliminarCompletoGet(HttpServletRequest request) throws Exception {
+
         ModelAndView mav = new ModelAndView("principal");
 
         try {
-            eliminarTodoCompleto();
+            // Eliminamos el Directorio de al bbdd
+            dir3CaibEjb.eliminarDirectorio();
+
+            // Eliminamos todas las descargas realizadas
+            File directorio = new File(Configuracio.getArchivosPath());
+            FileUtils.cleanDirectory(directorio);
+
             Mensaje.saveMessageInfo(request, getMessage("dir3caib.borrar.todo.ok"));
 
 

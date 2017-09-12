@@ -70,6 +70,9 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
     @EJB(mappedName = "dir3caib/DescargaEJB/local")
     protected DescargaLocal descargaEjb;
 
+    @EJB(mappedName = "dir3caib/Dir3CaibEJB/local")
+    private Dir3CaibLocal dir3CaibEjb;
+
 
 
     /**
@@ -540,6 +543,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
      *  proceso
      *  */
     @TransactionTimeout(value = 18000)
+    @Override
     public void importarOficinasTask() {
 
         try {
@@ -564,6 +568,26 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
         } catch (Exception e) {
             log.error("Error important Oficines: " + e.getMessage(), e);
         }
+    }
+
+    @Override
+    public ResultadosImportacion restaurarOficinas() throws Exception {
+
+        // Eliminamos las Oficinas
+        dir3CaibEjb.eliminarOficinas();
+
+        // Realizamos una descarga de Oficinas
+        String[] respuesta = descargarOficinasWS(null, null);
+
+        // Si la descarga ha sido correcta, importamos las Oficinas
+        if(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO.equals(respuesta[0])){
+
+            return importarOficinas(false);
+
+        }
+
+        return null;
+
     }
 
     /**

@@ -148,32 +148,7 @@ public class CatalogoController extends BaseController{
          }
          return mav;
      }
-     
-     
-     
-     /**
-      * Elimina los ficheros del catalogo del sistema de archivos
-      * @param request
-      * @return 
-      */
-     @RequestMapping(value = "/eliminar", method = RequestMethod.GET)
-     public ModelAndView eliminarCatalogoCompleto(HttpServletRequest request){
-         ModelAndView mav = new ModelAndView("/catalogo/catalogoFicheros");
 
-         try {
-             eliminarCatalogoCompleto();
-             Mensaje.saveMessageInfo(request, getMessage("catalogo.borrar.ok"));
-
-         } catch (IOException ex) {
-             Mensaje.saveMessageError(request, getMessage("catalogo.borrar.nook") + Configuracio.getArchivosPath());
-             ex.printStackTrace();
-         } catch ( Exception e) {
-               Mensaje.saveMessageError(request, getMessage("catalogo.borrar.bd.nook"));
-               e.printStackTrace();
-         }
-         
-         return mav;
-     }
      
      /**
      * Método que se encarga de obtener los archivos del catálogo  a través de request.

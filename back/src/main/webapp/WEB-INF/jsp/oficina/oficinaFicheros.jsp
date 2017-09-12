@@ -29,7 +29,7 @@
                         <div class="box-content">
                            <c:if test="${empty descarga}">
                                 <div class="alert fade in">
-                                <fmt:message key="oficina.existentes.notfound"/><strong><a href="<c:url value="/oficina/obtener"/>"><fmt:message key="dir3caib.obtenerws"/></a></strong>
+                                <fmt:message key="oficina.existentes.notfound"/><strong><a href="<c:url value="/oficina/sincronizar"/>"><fmt:message key="dir3caib.obtenerws"/></a></strong>
                             </div>
                             </c:if>
                             <c:if test="${not empty descarga}">

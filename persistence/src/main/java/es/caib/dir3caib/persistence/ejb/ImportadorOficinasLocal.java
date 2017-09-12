@@ -39,4 +39,11 @@ public interface ImportadorOficinasLocal {
    */
   public void importarOficinasTask();
 
+  /**
+   * Elimina las Oficinas existentes, realiza una descarga e importa los datos
+   * @return
+   * @throws Exception
+   */
+  public ResultadosImportacion restaurarOficinas() throws Exception;
+
 }

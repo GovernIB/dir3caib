@@ -1,7 +1,6 @@
 package es.caib.dir3caib.back.controller.oficina;
 
 import es.caib.dir3caib.back.controller.BaseController;
-import es.caib.dir3caib.back.form.FechasForm;
 import es.caib.dir3caib.back.form.OficinaBusquedaForm;
 import es.caib.dir3caib.back.utils.Mensaje;
 import es.caib.dir3caib.persistence.ejb.ArbolLocal;
@@ -176,31 +175,40 @@ public class OficinaController extends BaseController {
     /**
      * Muestra el formulario para obtener las oficinas mediante el WS de DIR3
      */
-    @RequestMapping(value = "/obtener", method = RequestMethod.GET)
-    public String obtenerOficinas(Model model) throws Exception {
+    @RequestMapping(value = "restaurarDirectorio", method = RequestMethod.GET)
+    public String restaurarOficinas(Model model) throws Exception {
 
-        //Obtiene la última descarga que se sincronizó correctamente, para informar de cuando se realizó
-        Descarga descarga = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.OFICINA);
-        if (descarga != null) {
-            model.addAttribute("descarga", descarga);
-        }
         model.addAttribute("development", Configuracio.isDevelopment());
-        model.addAttribute("oficina", new FechasForm());
+        model.addAttribute("oficinaForm", new Oficina());
 
-        return "/oficina/oficinaObtener";
+        return "oficina/oficinaRestaurar";
     }
 
     /**
      * Obtiene las oficinas mediante el WS de DIR3
      */
-    @RequestMapping(value = "/obtener", method = RequestMethod.POST)
-    public String descargaOficinas(@ModelAttribute FechasForm fechasForm, HttpServletRequest request) throws Exception {
+    @RequestMapping(value = "/restaurarDirectorio", method = RequestMethod.POST)
+    public ModelAndView restaurarOficinas(@ModelAttribute Oficina oficinaForm, HttpServletRequest request) throws Exception {
 
-        // realiza la llamada a los Ws para descargarse las oficinas
-        if (descargarOficinasWS(request, fechasForm.getFechaInicio(), fechasForm.getFechaFin())) {
-            return "redirect:/oficina/ficheros";
-        } else { //Si no ha ido bien la descarga, volvemos al formulario
-            return "redirect:/oficina/obtener";
+        ModelAndView mav = new ModelAndView("/oficina/oficinaImportacion");
+
+        // Restaurar las Oficinas
+        ResultadosImportacion results = importadorOficinas.restaurarOficinas();
+
+        if(results != null){
+
+            Mensaje.saveMessageInfo(request, getMessage("oficina.importacion.ok"));
+            mav.addObject("procesados", results.getProcesados());// Nombre de los ficheros procesados
+            mav.addObject("ficheros", Dir3caibConstantes.UO_FICHEROS);//Nombre de los ficheros obtenidos
+            mav.addObject("existentes", results.getExistentes());//Nombre de los ficheros que realmente han venido en la descarga
+            mav.addObject("descarga", results.getDescarga());//Datos de la descarga
+
+            return mav;
+
+        }else{
+            Mensaje.saveMessageError(request, getMessage("oficina.descarga.nook"));
+
+            return new ModelAndView("redirect:/oficina/restaurarDirectorio");
         }
     }
 
@@ -229,28 +237,6 @@ public class OficinaController extends BaseController {
         mav.addObject("ficheros", Dir3caibConstantes.OFI_FICHEROS); //Nombre de los ficheros obtenidos
         mav.addObject("existentes", resultados.getExistentes()); //Nombre de los ficheros que realmente han venido en la descarga
         mav.addObject("descarga", resultados.getDescarga()); //Datos de la descarga
-
-        return mav;
-    }
-
-    /**
-     * Elimina el contenido de las oficinas y todas sus relaciones de la BD
-     *
-     * @param request
-     * @return
-     */
-    @RequestMapping(value = "/eliminar", method = RequestMethod.GET)
-    public ModelAndView eliminarOficinasCompleto(HttpServletRequest request) {
-
-        ModelAndView mav = new ModelAndView("/oficina/oficinaFicheros");
-
-        try {
-            eliminarOficinasCompleto();
-            Mensaje.saveMessageInfo(request, getMessage("oficina.borrar.ok"));
-        } catch (Exception ex) {
-            Mensaje.saveMessageError(request, getMessage("dir3caib.borrar.directorio.error"));
-            ex.printStackTrace();
-        }
 
         return mav;
     }
