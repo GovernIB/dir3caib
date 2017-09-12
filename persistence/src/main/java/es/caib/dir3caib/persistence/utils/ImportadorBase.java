@@ -17,6 +17,8 @@ import java.util.*;
 
 /**
  * Clase base que agrupa funcionalidades comunes para los Importadores
+ * Se definen las diferentes caches para optimizar las consultas a la bd en los procesos
+ * de importación de unidades y oficinas.
  */
 public class ImportadorBase {
 
@@ -194,17 +196,18 @@ public class ImportadorBase {
 
     /**
      * Inicializamos los caches necesarios para importar las Oficinas
+     * @param isUpdate indica que es una actualización de datos( ya existen los datos en la BD)
      * @throws Exception
      */
     public void cacheImportadorOficinas(boolean isUpdate) throws Exception {
 
         long start = System.currentTimeMillis();
 
-        if (isUpdate) {
+        if (isUpdate) { // cache unidades vacia
             cacheUnidad = new UnidadesCacheManager(this.unidadEjb);
-        } else {
+        } else { // Si es creación/sincronización solo inicializamos las requeridas(unidades Responsables de las oficinas que se van a sincronizar)
             List<List<String>> unitsIds = new ArrayList<List<String>>();
-            int total = getRequiredUnidades(unitsIds, 250);
+            int total = getRequiredUnidades(unitsIds);
             cacheUnidad = new UnidadesCacheManager(this.unidadEjb, unitsIds, total);
         }
 
@@ -280,18 +283,18 @@ public class ImportadorBase {
     }
 
     /**
-     *
-     * @param all
-     * @param size
+     * Esta función obtiene los códigos de todas las unidades responsables de las oficinas que
+     * han venido en el fichero "OFICINAS.CSV" que son las que se deben importar. Estas unidades responsables es lo que llamamos unidadesRequeridas.
+     * @param all donde guardamos los códigos de las unidades requeridas finales
      * @return
      * @throws Exception
      */
-    private int getRequiredUnidades(List<List<String>> all, int size) throws Exception {
+    private int getRequiredUnidades(List<List<String>> all) throws Exception {
         FileInputStream is1 = null;
         CSVReader reader = null;
 
+        // Conjunto donde guardamos todos los códigos de las unidades Responsables para procesarlas
         Set<String> allCodes = new HashSet<String>();
-
 
         List<String> codigosUnidad = new ArrayList<String>();
         all.add(codigosUnidad);
@@ -299,6 +302,7 @@ public class ImportadorBase {
         int count = 0;
         int allCount = 0;
         try {
+            //Obtenemos la ultima descarga de oficinas
             Descarga descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.OFICINA);
             File file = new File(Configuracio.getOficinasPath(descarga.getCodigo()), Dir3caibConstantes.OFI_OFICINAS);
             is1 = new FileInputStream(file);
@@ -306,21 +310,18 @@ public class ImportadorBase {
             reader = new CSVReader(is, ';');
 
 
-            // Leemos el contenido y lo guardamos en un List
-
+            //Recorremos cada una de las filas del fichero para ir obteniendo la unidadResponsable de cada oficina
             String[] fila;
-
             reader.readNext();
-
             while ((fila = reader.readNext()) != null) {
 
                 String codUOResponsable = fila[5].trim();
 
-
+                // Si no la contiene la añadimos a la lista
                 if (!allCodes.contains(codUOResponsable)) {
-
                     allCount++;
                     count++;
+                    //Traspasamos a la lista final de 500 en 500
                     if (count > 500) {
                         codigosUnidad = new ArrayList<String>();
                         all.add(codigosUnidad);
@@ -352,7 +353,7 @@ public class ImportadorBase {
     /**
      *
      */
-    public class CacheUnidadOficina {
+   /* public class CacheUnidadOficina {
 
         Set<String> caches = new TreeSet<String>();
 
@@ -367,12 +368,12 @@ public class ImportadorBase {
         }
 
 
-    }
+    }*/
 
     /**
      *
      */
-    public class UnidadesCacheManager {
+    /*public class UnidadesCacheManager {
 
 
         private final UnidadLocal unidadEjb;
@@ -421,12 +422,12 @@ public class ImportadorBase {
 
         }
 
-        /**
+        *//**
          *
          * @param codigo
          * @return
          * @throws Exception
-         */
+     *//*
         public Unidad get(String codigo) throws Exception {
 
             Unidad unidad = cacheUnidad.get(codigo);
@@ -445,6 +446,6 @@ public class ImportadorBase {
         }
 
 
-    }
+    }*/
 
 }

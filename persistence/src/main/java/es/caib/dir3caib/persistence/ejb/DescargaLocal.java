@@ -22,7 +22,7 @@ public interface DescargaLocal extends BaseEjb<Descarga, Long> {
   public Descarga ultimaDescarga(String tipo) throws Exception;
 
   /**
-   * Obtiene al última descarga correctamente sincronizada según el tipo indicado
+   * Obtiene la última descarga correctamente sincronizada según el tipo indicado
    * @param tipo de la descarga (Oficina || Unidad)
    * @return
    * @throws Exception

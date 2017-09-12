@@ -67,7 +67,7 @@ public class OficinaController extends BaseController {
 
 
     /**
-     * Carga el formulario para la busqueda de {@link es.caib.dir3caib.persistence.model.Oficina}
+     * Carga el formulario para la búsqueda de {@link es.caib.dir3caib.persistence.model.Oficina}
      */
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list(Model model) throws Exception {
@@ -76,9 +76,10 @@ public class OficinaController extends BaseController {
 
         Oficina oficina = new Oficina();
         oficina.setEstado(vigente);
-
+        //Establecemos el estado por defecto de la oficina
         OficinaBusquedaForm oficinaBusqueda = new OficinaBusquedaForm(oficina, 1);
 
+        //Cargamos el conjunto de los valores posibles del formulario
         List<CatNivelAdministracion> administraciones = catNivelAdministracionEjb.getAll();
         List<CatComunidadAutonoma> comunidades = catComunidadAutonomaEjb.getAll();
         List<CatEstadoEntidad> estadosEntidad = catEstadoEntidadEjb.getAll();
@@ -87,6 +88,7 @@ public class OficinaController extends BaseController {
         String administracion = Configuracio.getBusquedaAdministracion();
         String comunidadAutonoma = Configuracio.getBusquedaComunidad();
 
+        //Asignamos los valores por defecto a la búsqueda
         if(administracion != null){
             oficinaBusqueda.getOficina().setNivelAdministracion(new CatNivelAdministracion(Long.valueOf(administracion.trim())));
         }
@@ -106,7 +108,7 @@ public class OficinaController extends BaseController {
 
 
     /**
-     * Realiza la busqueda de {@link es.caib.dir3caib.persistence.model.Oficina} según los parametros del formulario
+     * Realiza la búsqueda de {@link es.caib.dir3caib.persistence.model.Oficina} según los parámetros del formulario
      */
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     public ModelAndView list(@ModelAttribute OficinaBusquedaForm busqueda) throws Exception {
@@ -115,11 +117,13 @@ public class OficinaController extends BaseController {
 
         Oficina oficina = busqueda.getOficina();
 
+        //Cogemos los valores del formulario
         Long codNivelAdministracion = (oficina.getNivelAdministracion() != null) ? oficina.getNivelAdministracion().getCodigoNivelAdministracion() : null;
         Long codComunidad = (oficina.getCodComunidad() != null) ? oficina.getCodComunidad().getCodigoComunidad() : null;
         Long codAmbProvincia = (oficina.getLocalidad() != null) ? oficina.getLocalidad().getProvincia().getCodigoProvincia() : null;
         String codEstado = (oficina.getEstado() != null) ? oficina.getEstado().getCodigoEstadoEntidad() : null;
 
+        //Realizamos la búsqueda paginada
         Paginacion paginacion = oficinaEjb.busqueda(busqueda.getPageNumber(),
                 oficina.getCodigo(),
                 oficina.getDenominacion(),
@@ -142,7 +146,7 @@ public class OficinaController extends BaseController {
 
 
     /**
-     * Muestra los ficheros de oficinas que hay en el directorio
+     * Muestra los ficheros de oficinas que hay en el directorio de la última descarga
      *
      * @param request
      * @return
@@ -152,14 +156,14 @@ public class OficinaController extends BaseController {
 
         ModelAndView mav = new ModelAndView("/oficina/oficinaFicheros");
         ArrayList<String> ficheros = new ArrayList<String>();
-        // Obtenemos el listado de ficheros que hay dentro del directorio indicado
+        // Obtenemos la última descarga
         Descarga descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.OFICINA);
 
         if (descarga != null) {
             File f = new File(Configuracio.getOficinasPath(descarga.getCodigo()));
-            if (f.exists()) {
+            if (f.exists()) { // Si hay ficheros, se muestran
                 ficheros = new ArrayList<String>(Arrays.asList(f.list()));
-            } else {
+            } else { // Si no, mensaje de error
                 Mensaje.saveMessageError(request, getMessage("descarga.error.importante"));
             }
         }
@@ -175,6 +179,7 @@ public class OficinaController extends BaseController {
     @RequestMapping(value = "/obtener", method = RequestMethod.GET)
     public String obtenerOficinas(Model model) throws Exception {
 
+        //Obtiene la última descarga que se sincronizó correctamente, para informar de cuando se realizó
         Descarga descarga = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.OFICINA);
         if (descarga != null) {
             model.addAttribute("descarga", descarga);
@@ -191,15 +196,16 @@ public class OficinaController extends BaseController {
     @RequestMapping(value = "/obtener", method = RequestMethod.POST)
     public String descargaOficinas(@ModelAttribute FechasForm fechasForm, HttpServletRequest request) throws Exception {
 
+        // realiza la llamada a los Ws para descargarse las oficinas
         if (descargarOficinasWS(request, fechasForm.getFechaInicio(), fechasForm.getFechaFin())) {
-            return "redirect:/oficina/ficheros ";
-        } else {
+            return "redirect:/oficina/ficheros";
+        } else { //Si no ha ido bien la descarga, volvemos al formulario
             return "redirect:/oficina/obtener";
         }
     }
 
     /**
-     * Importa el contenido de un fichero de las Oficinas a la bbdd
+     * Importa  todas  las oficinas, históricos, contactos, relaciones organizativas, relaciones SIR, servicios a la BD.
      *
      * @param request
      * @return
@@ -212,24 +218,23 @@ public class OficinaController extends BaseController {
         long start = System.currentTimeMillis();
 
         ResultadosImportacion resultados;
+        //Importamos a la BD todos los datos obtenidos de las oficinas y sus relaciones, se indica  si es una sincro o una actualización
         resultados = importadorOficinas.importarOficinas(sincro == null ? false : sincro);
 
         long end = System.currentTimeMillis();
         log.info("Importat oficinas en " + Utils.formatElapsedTime(end - start));
 
-        System.gc();
-
         Mensaje.saveMessageInfo(request, getMessage("oficina.importacion.ok"));
-        mav.addObject("procesados", resultados.getProcesados());
-        mav.addObject("ficheros", Dir3caibConstantes.OFI_FICHEROS);
-        mav.addObject("existentes", resultados.getExistentes());
-        mav.addObject("descarga", resultados.getDescarga());
+        mav.addObject("procesados", resultados.getProcesados()); // Nombre de los ficheros procesados
+        mav.addObject("ficheros", Dir3caibConstantes.OFI_FICHEROS); //Nombre de los ficheros obtenidos
+        mav.addObject("existentes", resultados.getExistentes()); //Nombre de los ficheros que realmente han venido en la descarga
+        mav.addObject("descarga", resultados.getDescarga()); //Datos de la descarga
 
         return mav;
     }
 
     /**
-     * Elimina los ficheros de las oficinas del sistema de archivos
+     * Elimina el contenido de las oficinas y todas sus relaciones de la BD
      *
      * @param request
      * @return
@@ -252,7 +257,7 @@ public class OficinaController extends BaseController {
 
 
     /**
-     * Sincroniza las oficinas.Obtiene las oficinas y sus relaciones a traves de WS desde la última fecha de
+     * Sincroniza las oficinas. Obtiene las oficinas y sus relaciones a traves de WS desde la última fecha de
      * sincronización e importa los datos.
      *
      * @param request
@@ -278,14 +283,14 @@ public class OficinaController extends BaseController {
                 final Boolean sincronizacion = true;
                 boolean descargaOk = false;
                 Date fechaFin = null;
-                if(ultimaDescargaOficina != null){
-                    fechaFin = ultimaDescargaOficina.getFechaFin();
+                if (ultimaDescargaOficina != null) { // Si hay una descarga oficina sincronizada
+                    fechaFin = ultimaDescargaOficina.getFechaFin(); //establecemos la fecha de inicio de la descarga como la fecha Fin de la última descarga
+                    // Obtenemos los archivos por WS
                     descargaOk = descargarOficinasWS(request, fechaFin, hoy);
-                } else {// es una descarga inicial
+                } else {// es una descarga inicial(sincro)
+                    // Obtenemos los archivos por WS
                     descargaOk = descargarOficinasWS(request, null, null);
                 }
-
-                // Obtenemos los archivos por WS
 
                 // Importamos los datos a la BD.
                 if (descargaOk) {
@@ -311,15 +316,17 @@ public class OficinaController extends BaseController {
     public boolean descargarOficinasWS(HttpServletRequest request, Date fechaInicio, Date fechaFin) throws Exception {
 
         try {
+            //Invoca a los ws para obtener los archivos de las unidades
             String[] respuesta = importadorOficinas.descargarOficinasWS(fechaInicio, fechaFin);
+            //Mostramos los mensajes en función de la respuesta del WS de Madrid
             if (Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO.equals(respuesta[0])) {
                 Mensaje.saveMessageInfo(request, getMessage("oficina.descarga.ok"));
                 return true;
             } else {
-                if (Dir3caibConstantes.CODIGO_RESPUESTA_VACIO.equals(respuesta[0])) {
+                if (Dir3caibConstantes.CODIGO_RESPUESTA_VACIO.equals(respuesta[0])) { //No ha devuelto datos
                     Mensaje.saveMessageInfo(request, getMessage("oficina.nueva.nohay"));
                     return true;
-                } else {
+                } else { //Ha habido un error en la descarga
                     Mensaje.saveMessageError(request, getMessage("oficina.descarga.nook") + ": " + respuesta[1]);
                     return false;
                 }
@@ -350,7 +357,9 @@ public class OficinaController extends BaseController {
 
         ModelAndView mav = new ModelAndView("/arbolList");
         Nodo nodo = new Nodo();
+        //Obtenemos los datos básicos de la oficina que nos indican(suele ser la raíz del árbol)
         Oficina oficina = oficinaEjb.findByCodigoLigero(idOficina);
+        //Obtenemos el árbol de oficinas
         arbolEjb.arbolOficinas(idOficina, nodo, oficina.getEstado().getCodigoEstadoEntidad());
         mav.addObject("nodo", nodo);
         mav.addObject("oficinas", "oficinas");
@@ -361,7 +370,7 @@ public class OficinaController extends BaseController {
 
 
     /**
-     * Método que se encarga de listar todas las descargas que se han realizado del catálogo
+     * Método que se encarga de listar todas las descargas que se han realizado de las oficinas
      */
     @RequestMapping(value = "/descarga/list", method = RequestMethod.GET)
     public String listadoDescargaOficina() {
@@ -370,7 +379,7 @@ public class OficinaController extends BaseController {
     }
 
     /**
-     * Listado de tipos de asunto
+     * Listado de las descargas de las oficinas
      *
      * @param pageNumber
      * @return
@@ -381,12 +390,14 @@ public class OficinaController extends BaseController {
 
         ModelAndView mav = new ModelAndView("/descargaList");
 
+        //Obtenemos el listado paginado de las descargas
         List<Descarga> listado = descargaEjb.getPaginationByTipo(((pageNumber - 1) * BaseEjbJPA.RESULTADOS_PAGINACION), Dir3caibConstantes.OFICINA);
 
         Long total = descargaEjb.getTotalByTipo(Dir3caibConstantes.OFICINA);
 
         ArrayList<String> ficheros = new ArrayList<String>();
 
+        //Obtenemos todos los ficheros asociados a cada descarga
         if (listado != null) {
             for (Descarga descarga : listado) {
                 File f = new File(Configuracio.getOficinasPath(descarga.getCodigo()));

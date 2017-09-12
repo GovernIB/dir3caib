@@ -90,6 +90,7 @@ public class Dir3caibConstantes {
 
 
     // Expresión CRON por defecto para actualizar DIR3
-    public static final String CRON_SINCRONIZAR_DIR3 = "0 0 1 1/1 * ? *"; // Sincronización diaria a las 03:00 am
+    // public static final String CRON_SINCRONIZAR_DIR3 = "0 0 1 1/1 * ? *"; // Sincronización diaria a las 01:00 am
+    public static final String CRON_SINCRONIZAR_DIR3 = ""; // Sincronización diaria a las 01:00 am
 
 }

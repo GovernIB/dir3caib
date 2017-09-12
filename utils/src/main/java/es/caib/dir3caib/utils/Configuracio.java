@@ -28,15 +28,25 @@ public class Configuracio {
         return getArchivosPath() + "catalogo" + idDescarga + "/";
     }
 
- /* public static String getOficinasPath() {
-    return System.getProperty(DIR3CAIB_PROPERTY_BASE + "oficinas.path");
-  }*/
 
+    /**
+     * Obtiene el nombre del directorio donde estan guardados los archivos de la descarga de las unidades
+     *
+     * @param idDescarga
+     * @return
+     */
     public static String getUnidadesPath(Long idDescarga) {
+        //EL nombre del directorio es "unidad"+idDescarga
         return getArchivosPath() + "unidad" + idDescarga + "/";
     }
 
+    /**
+     * Obtiene el nombre del directorio donde estan guardados los archivos de la descarga de las oficinas
+     * @param idDescarga
+     * @return
+     */
     public static String getOficinasPath(Long idDescarga) {
+        //EL nombre del directorio es "oficina"+idDescarga
         return getArchivosPath() + "oficina" + idDescarga + "/";
     }
 

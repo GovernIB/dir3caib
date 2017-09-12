@@ -2,6 +2,7 @@ package es.caib.dir3caib.persistence.ejb;
 
 import au.com.bytecode.opencsv.CSVReader;
 import es.caib.dir3caib.persistence.model.*;
+import es.caib.dir3caib.persistence.utils.CacheUnidadOficina;
 import es.caib.dir3caib.persistence.utils.ImportadorBase;
 import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
 import es.caib.dir3caib.utils.Configuracio;
@@ -72,9 +73,10 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
 
 
     /**
-     * Método que importa el contenido de los archivos de las oficinas y sus relaciones descargados previamente a través
-     * de los WS.
-     * @param isUpdate booleano que indica si la llamada es una sincronización(actualizacion)
+     * Importa en la Bd los datos que contienen los archivos descargados previamente via WS
+     * @param isUpdate indica si es una sincronización o es una actualización
+     * @return
+     * @throws Exception
      */
     @Override
     @TransactionTimeout(value = 30000)
@@ -87,7 +89,8 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
 
         ResultadosImportacion results = new ResultadosImportacion();
 
-        List<String> procesados = new ArrayList<String>();
+        // List<String> procesados = new ArrayList<String>();
+        List<String> procesados = results.getProcesados();
         List<String> inexistentes = new ArrayList<String>();
 
 
@@ -381,6 +384,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
 
         }
         results.setExistentes(existentes);
+        results.setProcesados(procesados);
 
         System.gc();
 
@@ -388,12 +392,14 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
     }
 
 
-    /*
-    * Método que se encarga de obtener los archivos de las oficinas a través de WS
-    * @param request
-    * @param fechaInicio
-    * @param fechaFin
-    */
+    /**
+     * Obtiene los ficheros de las oficinas y sus relaciones a través de los WS de Madrid.
+     *
+     * @param fechaInicio fecha de inicio de la descarga
+     * @param fechaFin    fecha fin de la descarga
+     * @return listado de los nombres de los archivos CSV descargados
+     * @throws Exception
+     */
     @Override
     public String[] descargarOficinasWS(Date fechaInicio, Date fechaFin) throws Exception {
 
@@ -541,21 +547,20 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
 
             // obtenemos los datos de la última descarga
             Descarga ultimaDescarga = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.OFICINA);
-            Date fechaInicio = ultimaDescarga.getFechaFin(); // fecha de la ultima descarga
+            if (ultimaDescarga != null) {
+                Date fechaInicio = ultimaDescarga.getFechaFin(); // fecha de la ultima descarga
 
-            // obtenemos la fecha de hoy
-            Date fechaFin = new Date();
+                // obtenemos la fecha de hoy
+                Date fechaFin = new Date();
 
-            // Obtiene los archivos csv via WS
-            String[] respuesta = descargarOficinasWS(fechaInicio, fechaFin);
-            if (Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO.equals(respuesta[0])) {
-                // importamos las oficinas a la bd.
-                importarOficinas(true);
+                // Obtiene los archivos csv via WS
+                String[] respuesta = descargarOficinasWS(fechaInicio, fechaFin);
+                if (Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO.equals(respuesta[0])) {
+                    // importamos las oficinas a la bd.
+                    importarOficinas(true);
+                }
             }
 
-
-            // importamos las oficinas a la bd.
-            //importarOficinas(true);
         } catch (Exception e) {
             log.error("Error important Oficines: " + e.getMessage(), e);
         }
@@ -585,6 +590,8 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
         if (Dir3caibConstantes.OFI_HISTORICOS_OFI.equals(nombreFichero)) {
 
             reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
+            int count = 1;
+            long start = System.currentTimeMillis();
             while ((fila = reader.readNext()) != null) {
                 //Obtenemos el histórico
                 String codigoOficinaAnterior = fila[0]; //codigo de la oficina que es sustituida
@@ -627,6 +634,17 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
 
                     oficinaEjb.merge(oficinaAnterior);
 
+                    count++;
+                    if (count % 500 == 0) {
+                        long end = System.currentTimeMillis();
+                        log.info("Procesats 500 Històrics (" + (count - 500) + " - " + count
+                                + ") en " + Utils.formatElapsedTime(end - start));
+
+                        oficinaEjb.flush();
+                        oficinaEjb.clear();
+                        start = end;
+                    }
+
                 } catch (Exception e) {
                     log.error("=======================================");
                     log.error("codigoOficinaAnterior: " + codigoOficinaAnterior);
@@ -657,6 +675,8 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
         String[] fila;
         if (Dir3caibConstantes.OFI_CONTACTO_OFI.equals(nombreFichero)) {
             reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
+            int count = 1;
+            long start = System.currentTimeMillis();
             while ((fila = reader.readNext()) != null) {
                 try {
                     ContactoOfi contacto = new ContactoOfi();
@@ -686,6 +706,15 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
 
 
                     contactoOfiEjb.persistReal(contacto);
+                    count++;
+                    if (count % 500 == 0) {
+                        long end = System.currentTimeMillis();
+                        log.info("Procesats 500 contactes (" + (count - 500) + " - " + count
+                                + ") en " + Utils.formatElapsedTime(end - start));
+                        contactoOfiEjb.flush();
+                        contactoOfiEjb.clear();
+                        start = end;
+                    }
 
                 } catch (Exception e) {
                     log.error("Error important contactos: " + e.getMessage(), e);
@@ -870,6 +899,8 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
         String[] fila;
         if (Dir3caibConstantes.OFI_SERVICIOS_OFI.equals(nombreFichero)) {
             reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
+            int count = 1;
+            long start = System.currentTimeMillis();
             while ((fila = reader.readNext()) != null) {
                 //Obtenemos codigo y miramos si ya existe en la BD
                 try {
@@ -904,6 +935,16 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                         oficina.setServicios(servicios);
 
                         oficinaEjb.merge(oficina);
+
+                        count++;
+                        if (count % 500 == 0) {
+                            long end = System.currentTimeMillis();
+                            log.info("Procesats 500 Serveis (" + (count - 500) + " - " + count
+                                    + ") en " + Utils.formatElapsedTime(end - start));
+                            oficinaEjb.flush();
+                            oficinaEjb.clear();
+                            start = end;
+                        }
 
                     }
                 } catch (Exception e) {

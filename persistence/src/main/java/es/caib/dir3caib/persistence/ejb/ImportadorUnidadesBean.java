@@ -53,7 +53,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
 
     /**
-     * Método que importa el contenido de los archivos de las unidades descargados previamente a través
+     * Método que importa el contenido de los archivos de las unidades, historicos y contactos descargados previamente a través
      * de los WS.
      */
     @Override
@@ -113,7 +113,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
                 if (reader != null) {
                     // Inicio importación
-                    String[] fila;
+                    String[] fila; //Contiene la información de una fila del fichero que estamos tratando
                     int count = 1;
                     // Comprobamos el nombre del fichero
                     if (Dir3caibConstantes.UO_UNIDADES.equals(fichero)) { // Procesamos el fichero Unidades.csv
@@ -121,7 +121,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                         reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
                         start = System.currentTimeMillis();
 
-                        while ((fila = reader.readNext()) != null) {
+                        while ((fila = reader.readNext()) != null) { //mientras haya filas
 
                             try {
                                 //Obtenemos codigo de la unidad del fichero
@@ -132,10 +132,9 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                                     contactoUOEjb.deleteByUnidad(codigoUnidad);
                                 }
 
-                                //  Miramos si existe ya en la BD
                                 Unidad unidad = null;
                                 boolean existeix;
-
+                                //  Miramos si existe ya en la BD
                                 if (existInBBDD.contains(codigoUnidad)) {
                                     s = System.currentTimeMillis();
                                     unidad = unidadEjb.findById(codigoUnidad);
@@ -156,7 +155,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                                 // Componemos la unidad con todos los datos del csv
                                 componerUnidad(unidad, fila);
 
-
+                                //actualizamos la variable cache para ver cuanto tiempo ha transcurrido gestionando la unidad
                                 caches = caches + (System.currentTimeMillis() - s);
                                 s = System.currentTimeMillis();
 
@@ -167,12 +166,13 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                                 } else {
                                     unidad = unidadEjb.persistReal(unidad);
                                 }
+                                //la añadimos a la lista de los existentes
                                 existInBBDD.add(codigoUnidad);
                                 persist = persist + (System.currentTimeMillis() - s);
 
                                 s = System.currentTimeMillis();
 
-                                // Unidad Raiz
+                                // Asignamos la Unidad Raiz de la que depende
                                 String codigoUnidadRaiz = fila[9].trim();
                                 if (!codigoUnidadRaiz.isEmpty()) {
                                     Unidad unidadRaiz = null;
@@ -193,7 +193,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                                 }
 
 
-                                //Unidad Superior
+                                //Asignamos la Unidad Superior de la que depende
                                 String codigoUnidadSuperior = fila[7].trim();
                                 if (!codigoUnidadSuperior.isEmpty()) {
                                     Unidad unidadSuperior = null;
@@ -223,7 +223,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                             }
 
                             count++;
-
+                            //cada 500 realizamos flush y clear para liberar memoria, reseteamos contadores
                             if (count % 500 == 0) {
                                 end = System.currentTimeMillis();
                                 log.info("Procesades 500 Unidades (" + (count - 500) + " - " + count
@@ -283,15 +283,17 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
         }
 
-        // Guardamos fecha Importacion y tipo
+        // Guardamos fecha Importacion y tipo de la descarga
         if (procesados.size() > 0) {
             descarga.setFechaImportacion(new Date());
             descargaEjb.merge(descarga);
         }
 
 
+        //Actualizamos los resultados Importación.
         results.setDescarga(descarga);
         results.setExistentes(existentes);
+        results.setProcesados(procesados);
 
         System.gc();
 
@@ -300,10 +302,11 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
 
     /**
-     * Método que se encarga de obtener los archivos de las unidades a través de WS
-     *
-     * @param fechaInicio
-     * @param fechaFin
+     * Obtiene los ficheros de las unidades y sus relaciones a través de los WS de Madrid.
+     * @param fechaInicio fecha de inicio de la descarga
+     * @param fechaFin fecha fin de la descarga
+     * @return listado de los nombres de los archivos CSV descargados
+     * @throws Exception
      */
     public String[] descargarUnidadesWS(Date fechaInicio, Date fechaFin) throws Exception {
 
@@ -343,9 +346,9 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
             // Obtenemos rutas y usuario para el WS
             String usuario = Configuracio.getDir3WsUser();
             String password = Configuracio.getDir3WsPassword();
-            String ruta = Configuracio.getArchivosPath();
+            String archivosPath = Configuracio.getArchivosPath();
 
-            String rutaUnidades = Configuracio.getUnidadesPath(descarga.getCodigo());
+            String pathFicherosUnidades = Configuracio.getUnidadesPath(descarga.getCodigo());
 
             String endPoint = Configuracio.getUnidadEndPoint();
 
@@ -379,6 +382,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
             resp[0] = respuesta.getCodigo();
             resp[1] = respuesta.getDescripcion();
 
+            //Si la respuesta ha sido incorrecta o vacia, eliminamos la descarga y devolvemos la respuesta incorrecta
             if (!respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO) && !respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_VACIO)) {
                 descargaEjb.remove(descarga);
                 return resp;
@@ -388,15 +392,15 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
             descargaEjb.merge(descarga);
 
             // definimos el archivo zip a descargar
-            String archivoUnidadZip = ruta + Dir3caibConstantes.UNIDADES_ARCHIVO_ZIP + descarga.getCodigo() + ".zip";
+            String archivoUnidadZip = archivosPath + Dir3caibConstantes.UNIDADES_ARCHIVO_ZIP + descarga.getCodigo() + ".zip";
             File file = new File(archivoUnidadZip);
 
             // Guardamos el archivo descargado
             FileUtils.writeByteArrayToFile(file, decoder.decode(respuesta.getFichero()));
 
             // Se crea el directorio para la unidad
-            File dir = new File(rutaUnidades);
-            if (!dir.exists()) {
+            File dir = new File(pathFicherosUnidades);
+            if (!dir.exists()) { //Si no existe el directorio de las unidades
                 if (!dir.mkdirs()) {
                     //Borramos la descarga creada previamente.
                     descargaEjb.remove(descarga);
@@ -410,7 +414,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
             while (zipEntry != null) {
                 String fileName = zipEntry.getName();
-                File newFile = new File(rutaUnidades + fileName);
+                File newFile = new File(pathFicherosUnidades + fileName);
 
                 log.info("Fichero descomprimido: " + newFile.getAbsoluteFile());
 
@@ -431,7 +435,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
 
             return resp;
-        } catch (Exception e) {
+        } catch (Exception e) { //si hay algun problema, eliminamos la descarga
             descargaEjb.remove(descarga);
             throw new Exception(e.getMessage());
         }
@@ -451,23 +455,22 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
             // obtenemos los datos de la última descarga
             Descarga ultimaDescarga = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.UNIDAD);
-            Date fechaInicio = ultimaDescarga.getFechaFin(); // fecha de la ultima descarga
+            if (ultimaDescarga != null) {
+                Date fechaInicio = ultimaDescarga.getFechaFin(); // fecha de la ultima descarga
 
-            // obtenemos la fecha de hoy
-            Date fechaFin = new Date();
+                // obtenemos la fecha de hoy
+                Date fechaFin = new Date();
 
-            // Obtiene los archivos csv via WS
-            String[] respuesta = descargarUnidadesWS(fechaInicio, fechaFin);
-            if (Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO.equals(respuesta[0])) {
-                //importamos las unidades a la bd.
-                importarUnidades();
-                //Mensaje.saveMessageInfo(request, "Se han obtenido correctamente las unidades");
-                //return true;
+                // Obtiene los archivos csv via WS
+                String[] respuesta = descargarUnidadesWS(fechaInicio, fechaFin);
+                if (Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO.equals(respuesta[0])) {
+                    //importamos las unidades a la bd.
+                    importarUnidades();
+                    //Mensaje.saveMessageInfo(request, "Se han obtenido correctamente las unidades");
+                    //return true;
+                }
             }
 
-
-            // importamos las unidades a la bd.
-            //importarUnidades();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -739,7 +742,8 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
             String[] fila;
             reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
-
+            int count = 1;
+            long start = System.currentTimeMillis();
             while ((fila = reader.readNext()) != null) {
                 String codigoUnidadAnterior = fila[0];
                 String codigoUnidadUltima = fila[2];
@@ -768,6 +772,18 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                     historicosAnterior.add(unidadUltima);
 
                     unidadEjb.merge(unidadAnterior);
+
+                    count++;
+                    if (count % 500 == 0) {
+                        long end = System.currentTimeMillis();
+                        log.info("Procesats 500 Historics (" + (count - 500) + " - " + count
+                                + ") en " + Utils.formatElapsedTime(end - start));
+
+                        unidadEjb.flush();
+                        unidadEjb.clear();
+                        start = end;
+
+                    }
 
                 } catch (Exception e) {
                     log.error(" --------------------------------------------------");
@@ -802,6 +818,8 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
             try {
                 String[] fila;
                 reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
+                int count = 1;
+                long start = System.currentTimeMillis();
                 while ((fila = reader.readNext()) != null) {
                     ContactoUnidadOrganica contacto = new ContactoUnidadOrganica();
 
@@ -829,6 +847,16 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                     contacto.setVisibilidad(visibilidad);
 
                     contactoUOEjb.persistReal(contacto);
+
+                    count++;
+                    if (count % 500 == 0) {
+                        long end = System.currentTimeMillis();
+                        log.info("Procesats 500 contactes (" + (count - 500) + " - " + count
+                                + ") en " + Utils.formatElapsedTime(end - start));
+                        contactoUOEjb.flush();
+                        contactoUOEjb.clear();
+                        start = end;
+                    }
 
                 }
             } catch (Exception e) {

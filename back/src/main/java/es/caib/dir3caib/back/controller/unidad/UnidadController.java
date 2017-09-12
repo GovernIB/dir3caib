@@ -80,6 +80,7 @@ public class UnidadController extends BaseController {
 
         UnidadBusquedaForm unidadBusqueda = new UnidadBusquedaForm(unidad, 1, false);
 
+        //Cargamos el conjunto de los valores posibles del formulario
         List<CatNivelAdministracion> administraciones = catNivelAdministracionEjb.getAll();
         List<CatComunidadAutonoma> comunidades = catComunidadAutonomaEjb.getAll();
         List<CatEstadoEntidad> estadosEntidad = catEstadoEntidadEjb.getAll();
@@ -88,6 +89,7 @@ public class UnidadController extends BaseController {
         String administracion = Configuracio.getBusquedaAdministracion();
         String comunidadAutonoma = Configuracio.getBusquedaComunidad();
 
+        //Establece los valores por defecto en la búsqueda
         if(administracion != null){
             unidadBusqueda.getUnidad().setNivelAdministracion(new CatNivelAdministracion(Long.valueOf(administracion.trim())));
         }
@@ -107,7 +109,7 @@ public class UnidadController extends BaseController {
 
 
     /**
-     * Realiza la busqueda de {@link es.caib.dir3caib.persistence.model.Unidad} según los parametros del formulario
+     * Realiza la búsqueda de {@link es.caib.dir3caib.persistence.model.Unidad} según los parámetros del formulario
      */
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     public ModelAndView list(@ModelAttribute UnidadBusquedaForm busqueda) throws Exception {
@@ -145,7 +147,7 @@ public class UnidadController extends BaseController {
 
 
     /**
-     * Muestra los ficheros de unidades que hay en el directorio
+     * Muestra los ficheros de unidades que hay en el directorio de la última descarga
      *
      * @param request
      * @return
@@ -156,12 +158,13 @@ public class UnidadController extends BaseController {
         ModelAndView mav = new ModelAndView("/unidad/unidadFicheros");
         ArrayList<String> ficheros = new ArrayList<String>();
 
-        // Obtenemos el listado de ficheros que hay dentro del directorio indicado
+        // Obtenemos la última descarga
         Descarga descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.UNIDAD);
 
         if (descarga != null) {
+            //Creamos el fichero con el directorio de la última descarga.
             File f = new File(Configuracio.getUnidadesPath(descarga.getCodigo()));
-            if (f.exists()) {
+            if (f.exists()) {//Obtenemos los ficheros del directorio
                 ficheros = new ArrayList<String>(Arrays.asList(f.list()));
 
             } else {
@@ -181,6 +184,7 @@ public class UnidadController extends BaseController {
     @RequestMapping(value = "/obtener", method = RequestMethod.GET)
     public String obtenerUnidades(Model model) throws Exception {
 
+        //Obtiene la última descarga que se sincronizó correctamente, para informar de cuando se realizó
         Descarga descarga = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.UNIDAD);
         if (descarga != null) {
             model.addAttribute("descarga", descarga);
@@ -193,22 +197,25 @@ public class UnidadController extends BaseController {
 
 
     /**
-     * Obtiene las unidades mediante el WS de DIR3
+     * descarga las unidades mediante el WS de DIR3 en función de las fechas indicadas en el formulario
+     * @param fechasForm inter
+     * @param request
+     * @return
+     * @throws Exception
      */
     @RequestMapping(value = "/obtener", method = RequestMethod.POST)
     public String descargaUnidades(@ModelAttribute FechasForm fechasForm, HttpServletRequest request) throws Exception {
 
         if (descargarUnidadesWS(request, fechasForm.getFechaInicio(), fechasForm.getFechaFin())) {
             return "redirect:/unidad/ficheros";
-        } else {
+        } else { //Vuelve al formulario
             return "redirect:/unidad/obtener";
         }
 
     }
 
     /**
-     * Importa el contenido de un fichero de las Unidades a la bbdd
-     *
+     * Importa  todas  las unidades, históricos de unidades y contactos de las unidades a la BD.
      * @param request
      * @return
      */
@@ -225,16 +232,16 @@ public class UnidadController extends BaseController {
         log.info("Importat unidades en " + Utils.formatElapsedTime(end - start));
 
         Mensaje.saveMessageInfo(request, getMessage("unidad.importacion.ok"));
-        mav.addObject("procesados", results.getProcesados());
-        mav.addObject("ficheros", Dir3caibConstantes.UO_FICHEROS);
-        mav.addObject("existentes", results.getExistentes());
-        mav.addObject("descarga", results.getDescarga());
+        mav.addObject("procesados", results.getProcesados());// Nombre de los ficheros procesados
+        mav.addObject("ficheros", Dir3caibConstantes.UO_FICHEROS);//Nombre de los ficheros obtenidos
+        mav.addObject("existentes", results.getExistentes());//Nombre de los ficheros que realmente han venido en la descarga
+        mav.addObject("descarga", results.getDescarga());//Datos de la descarga
 
         return mav;
     }
 
     /**
-     * Elimina los ficheros de las unidades del sistema de archivos
+     * Elimina todas las unidades, históricos de unidades y contactos de las unidades de la bd.
      *
      * @param request
      * @return
@@ -258,7 +265,7 @@ public class UnidadController extends BaseController {
 
 
     /**
-     * Sincroniza las unidades.Obtiene las unidades y sus relaciones a traves de WS desde la última fecha de
+     * Sincroniza las unidades. Obtiene las unidades, sus históricos y sus contactos a través de WS desde la última fecha de
      * sincronización e importa los datos.
      *
      * @param request
@@ -302,16 +309,17 @@ public class UnidadController extends BaseController {
     public boolean descargarUnidadesWS(HttpServletRequest request, Date fechaInicio, Date fechaFin) throws Exception {
 
         try {
+            //Invoca a los ws para obtener los archivos de las unidades
             String[] respuesta = importadorUnidades.descargarUnidadesWS(fechaInicio, fechaFin);
+            //Mostramos los mensajes en función de la respuesta del WS de Madrid
             if (Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO.equals(respuesta[0])) {
                 Mensaje.saveMessageInfo(request, getMessage("unidad.descarga.ok"));
                 return true;
             } else {
-
-                if (Dir3caibConstantes.CODIGO_RESPUESTA_VACIO.equals(respuesta[0])) {
+                if (Dir3caibConstantes.CODIGO_RESPUESTA_VACIO.equals(respuesta[0])) { // No ha devuelto datos
                     Mensaje.saveMessageInfo(request, getMessage("unidad.nueva.nohay"));
                     return true;
-                } else {
+                } else { // Ha habido un error en la descarga
                     Mensaje.saveMessageError(request, getMessage("unidad.descarga.nook") + ": " + respuesta[1]);
                     return false;
                 }
@@ -340,9 +348,11 @@ public class UnidadController extends BaseController {
         Long start = System.currentTimeMillis();
         ModelAndView mav = new ModelAndView("/arbolList");
 
+        //Obtenemos los datos básicos de la unidad que nos indican(suele ser la raíz del árbol)
         Unidad unidad = unidadEjb.findByCodigoLigero(idUnidad);
 
-        Nodo nodo = new Nodo();
+        Nodo nodo = new Nodo(); //Representa el nodo raiz del árbol que se quiere mostrar.
+        //Obtenemos el árbol de unidades
         arbolEjb.arbolUnidades(idUnidad, nodo, unidad.getEstado().getCodigoEstadoEntidad(), true);
         Long end = System.currentTimeMillis();
 
@@ -355,7 +365,7 @@ public class UnidadController extends BaseController {
 
 
     /**
-     * Método que se encarga de listar todas las descargas que se han realizado del catálogo
+     * Método que se encarga de listar todas las descargas que se han realizado de las unidades
      */
     @RequestMapping(value = "/descarga/list", method = RequestMethod.GET)
     public String listadoDescargaUnidad() {
@@ -364,7 +374,7 @@ public class UnidadController extends BaseController {
     }
 
     /**
-     * Listado de tipos de asunto
+     * Listado de las descargas realizadas de las unidades
      *
      * @param pageNumber
      * @return
@@ -375,11 +385,12 @@ public class UnidadController extends BaseController {
 
         ModelAndView mav = new ModelAndView("/descargaList");
 
+        //Obtenemos el listado paginado de las descargas
         List<Descarga> listado = descargaEjb.getPaginationByTipo(((pageNumber - 1) * BaseEjbJPA.RESULTADOS_PAGINACION), Dir3caibConstantes.UNIDAD);
         Long total = descargaEjb.getTotalByTipo(Dir3caibConstantes.UNIDAD);
 
         ArrayList<String> ficheros = new ArrayList<String>();
-
+        //Obtenemos todos los ficheros asociados a cada descarga
         if (listado != null) {
             for (Descarga descarga : listado) {
                 File f = new File(Configuracio.getUnidadesPath(descarga.getCodigo()));
