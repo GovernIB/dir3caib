@@ -91,7 +91,6 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
         long persist = 0;
         long s;
 
-
         // Obtenemos la última descarga de los ficheros de Unidades realizada
         Descarga descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.UNIDAD);
 
@@ -130,14 +129,14 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                                 //Obtenemos codigo de la unidad del fichero
                                 String codigoUnidad = fila[0];
 
-                                //eliminamos sus contactos en la actualizacion
+                                // Si es una actualización: Eliminamos los contactos de la Unidad
                                 if (actualizacion) {
                                     contactoUOEjb.deleteByUnidad(codigoUnidad);
                                 }
 
                                 Unidad unidad = null;
-                                boolean existeix;
-                                //  Miramos si existe ya en la BD
+
+                                //  Comprobamos si existe ya en la BD
                                 if (existInBBDD.contains(codigoUnidad)) {
                                     s = System.currentTimeMillis();
                                     unidad = unidadEjb.findById(codigoUnidad);
@@ -145,9 +144,11 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                                     findbyidcount++;
                                 }
 
-
                                 s = System.currentTimeMillis();
-                                if (unidad == null) {  //Si es nuevo creamos el objeto a introducir
+
+                                //Si es nuevo creamos el objeto a introducir
+                                boolean existeix;
+                                if (unidad == null) {
                                     unidad = new Unidad();
                                     unidad.setCodigo(codigoUnidad);
                                     existeix = false;
@@ -298,6 +299,9 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
         results.setProcesados(procesados);
 
         System.gc();
+
+        log.info("");
+        log.info("Fin importar UNIDADES");
 
         return results;
     }
@@ -600,7 +604,6 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
         } else {
             unidad.setCodAmbProvincia(null);
         }
-        //log.info("Amb Provincia");
 
         //Localidad
         String codigoMunicipio = fila[21].trim();
@@ -640,7 +643,6 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
         } else {
             unidad.setCodEdpPrincipal(null);
         }
-        //log.info("Edp Principal");
 
         //Codigo de la unidad que proviene de su fuente
         unidad.setCodExterno(fila[31].trim());
@@ -667,7 +669,6 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
         } else {
             unidad.setCodLocalidad(null);
         }
-
 
         //Pais
         String codigoPaisD = fila[39].trim();
@@ -785,6 +786,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                 Unidad unidadUltima = null;
                 Unidad unidadAnterior = null;
                 try {
+
                     //Obtenemos codigo y miramos si ya existe en la BD
                     if (!codigoUnidadUltima.isEmpty()) {
                         unidadUltima = unidadEjb.getReference(codigoUnidadUltima);
@@ -792,7 +794,6 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                     if (!codigoUnidadAnterior.isEmpty()) {
                         unidadAnterior = unidadEjb.findById(codigoUnidadAnterior);
                     }
-
 
                     Set<Unidad> historicosAnterior = unidadAnterior.getHistoricoUO();
                     //Si no tiene historicos, asignamos una lista vacia
@@ -805,9 +806,11 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                         //  log.info(" unidadUltima == NULL !!!!! ");
                         throw new Exception();
                     }
+
                     //Añadimos la unidad que le sustituye
                     historicosAnterior.add(unidadUltima);
 
+                    // Actualizamos la Unidad con sus históricos
                     unidadEjb.merge(unidadAnterior);
 
                     count++;
@@ -870,23 +873,22 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                         contacto.setUnidad(unidad);
                     }
 
-                    //Establecemos el Tipo contacto
+                    // Establecemos el Tipo contacto
                     String stipoContacto = fila[1].trim();
                     if (!stipoContacto.isEmpty()) {
-                        CatTipoContacto tipoContacto;
-                        tipoContacto = cacheTipoContacto.get(stipoContacto);
+                        CatTipoContacto tipoContacto = cacheTipoContacto.get(stipoContacto);
                         contacto.setTipoContacto(tipoContacto);
                     }
 
-                    //Valor contacto
+                    // Valor contacto
                     String valorContacto = fila[2].trim();
                     contacto.setValorContacto(valorContacto);
 
-                    //Visibilidad
+                    // Visibilidad
                     boolean visibilidad = fila[3].trim().equals("1");
                     contacto.setVisibilidad(visibilidad);
 
-                    //Creamos el contacto
+                    // Creamos el contacto
                     contactoUOEjb.persistReal(contacto);
 
                     count++;

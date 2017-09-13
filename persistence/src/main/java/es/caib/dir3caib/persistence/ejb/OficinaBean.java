@@ -689,5 +689,16 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
         q.setParameter("estado", estado);
         return NodoUtils.getNodoList(q.getResultList());
     }
+
+    @Override
+    @SuppressWarnings(value = "unchecked")
+    public void crearServicioOficina(String codigoOficina, Long codigoServicio) throws Exception{
+
+        Query q = em.createNativeQuery("insert into dir_servicioofi (codoficina, codservicio) values (?,?) ");
+        q.setParameter(1, codigoOficina);
+        q.setParameter(2, codigoServicio);
+
+        q.executeUpdate();
+    }
 }
 

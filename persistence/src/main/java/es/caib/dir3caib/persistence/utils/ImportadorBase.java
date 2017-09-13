@@ -72,6 +72,12 @@ public class ImportadorBase {
     @EJB(mappedName = "dir3caib/CatLocalidadEJB/local")
     private CatLocalidadLocal catLocalidadEjb;
 
+    @EJB(mappedName = "dir3caib/ServicioEJB/local")
+    private ServicioLocal servicioEjb;
+
+    @EJB(mappedName = "dir3caib/CatJerarquiaOficinaEJB/local")
+    private CatJerarquiaOficinaLocal catJerarquiaOficinaEjb;
+
     public static final SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
 
     //Caches
@@ -88,6 +94,8 @@ public class ImportadorBase {
     public Map<CatAmbitoTerritorialPK, CatAmbitoTerritorial> cacheAmbitoTerritorial = new HashMap<CatAmbitoTerritorialPK, CatAmbitoTerritorial>();
     public Map<Long, CatNivelAdministracion> cacheNivelAdministracion = new TreeMap<Long, CatNivelAdministracion>();
     public Map<String, CatTipoContacto> cacheTipoContacto = new TreeMap<String, CatTipoContacto>();
+    public Map<Long, Servicio> cacheServicioOfi = new TreeMap<Long, Servicio>();
+    public Map<Long, CatJerarquiaOficina> cacheJerarquiaOficina = new TreeMap<Long, CatJerarquiaOficina>();
     public Set<String> existInBBDD = new TreeSet<String>();
     public UnidadesCacheManager cacheUnidad;
 
@@ -180,7 +188,6 @@ public class ImportadorBase {
         }
         log.debug(" TipoContacto : " + cacheTipoContacto.size());
 
-
         long end = System.currentTimeMillis();
         log.debug("Inicialitzades Caches de Importar Unidades en " + Utils.formatElapsedTime(end - start));
 
@@ -235,6 +242,18 @@ public class ImportadorBase {
             cacheNivelAdministracion.put(na.getCodigoNivelAdministracion(), na);
         }
         log.debug(" NivelAdministracion : " + cacheNivelAdministracion.size());
+
+        // CatJerarquiaOficina
+        for (CatJerarquiaOficina je : catJerarquiaOficinaEjb.getAll()) {
+            cacheJerarquiaOficina.put(je.getCodigoJerarquiaOficina(), je);
+        }
+        log.debug(" CatJerarquiaOficina : " + cacheNivelAdministracion.size());
+
+        // CatServicio
+        for (Servicio se : servicioEjb.getAll()) {
+            cacheServicioOfi.put(se.getCodServicio(), se);
+        }
+        log.debug(" ServicioOfi : " + cacheServicioOfi.size());
 
         // CatProvincia
         for (CatProvincia ca : catProvinciaEjb.getAll()) {

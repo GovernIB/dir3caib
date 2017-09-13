@@ -167,4 +167,12 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      * @return {@link es.caib.dir3caib.persistence.utils.Nodo}
      */
     public List<Nodo> oficinasAuxiliares(String codigo, String estado) throws Exception;
+
+    /**
+     *
+     * @param codigoOficina
+     * @param codigoServicio
+     * @throws Exception
+     */
+    public void crearServicioOficina(String codigoOficina, Long codigoServicio) throws Exception;
 }
