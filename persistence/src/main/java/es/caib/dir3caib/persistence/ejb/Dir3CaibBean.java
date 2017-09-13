@@ -77,6 +77,7 @@ public class Dir3CaibBean implements Dir3CaibLocal{
             catJerarquiaOficinaEjb.deleteAll();
             catEstadoEntidadEjb.deleteAll();
             catEntidadGeograficaEjb.deleteAll();
+            servicioEjb.deleteAll();
             descargaEjb.deleteAllByTipo(Dir3caibConstantes.CATALOGO);
         }
     }
@@ -110,7 +111,6 @@ public class Dir3CaibBean implements Dir3CaibLocal{
             oficinaEjb.deleteHistoricosOficina();
             oficinaEjb.deleteServiciosOficina();
             oficinaEjb.deleteAll();
-            servicioEjb.deleteAll();
             descargaEjb.deleteAllByTipo(Dir3caibConstantes.OFICINA);
         }
     }
