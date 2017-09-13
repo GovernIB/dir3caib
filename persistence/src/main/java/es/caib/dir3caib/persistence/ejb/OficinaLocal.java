@@ -175,4 +175,12 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      * @throws Exception
      */
     public void crearServicioOficina(String codigoOficina, Long codigoServicio) throws Exception;
+
+    /**
+     *
+     * @param codigoAnterior
+     * @param codigoUltima
+     * @throws Exception
+     */
+    public void crearHistoricoOficina(String codigoAnterior, String codigoUltima) throws Exception;
 }

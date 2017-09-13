@@ -700,5 +700,16 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
         q.executeUpdate();
     }
+
+    @Override
+    @SuppressWarnings(value = "unchecked")
+    public void crearHistoricoOficina(String codigoAnterior, String codigoUltima) throws Exception{
+
+        Query q = em.createNativeQuery("insert into dir_historicoofi (codanterior, codultima) values (?,?) ");
+        q.setParameter(1, codigoAnterior);
+        q.setParameter(2, codigoUltima);
+
+        q.executeUpdate();
+    }
 }
 

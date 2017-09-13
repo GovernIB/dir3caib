@@ -626,7 +626,12 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                 Oficina oficinaUltima = null;
                 Oficina oficinaAnterior = null;
                 try {
-                    // si existe la oficina la cogemos de cache, si no de la bd
+
+                    if (!codigoOficinaAnterior.isEmpty() && !codigoOficinaUltima.isEmpty()) {
+                        oficinaEjb.crearHistoricoOficina(codigoOficinaAnterior, codigoOficinaUltima);
+                    }
+
+                  /*  // si existe la oficina la cogemos de cache, si no de la bd
                     if (!codigoOficinaUltima.isEmpty()) {
                         oficinaUltima = oficinesCache.get(codigoOficinaUltima);
                         if (oficinaUltima == null) {
@@ -659,7 +664,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                     }
                     historicosAnterior.add(oficinaUltima);
 
-                    oficinaEjb.merge(oficinaAnterior);
+                    oficinaEjb.merge(oficinaAnterior);*/
 
                     count++;
                     //Cada 500 realizamos flush y clear para evitar problemas de outofmemory
@@ -935,7 +940,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
             long start = System.currentTimeMillis();
             while ((fila = reader.readNext()) != null) {
 
-                //Obtenemos codigo y miramos si ya existe en la BD
+                //Obtenemos codigo
                 try {
                     String codigoOficina = fila[0].trim();
                     String codigoServicio = fila[1].trim();

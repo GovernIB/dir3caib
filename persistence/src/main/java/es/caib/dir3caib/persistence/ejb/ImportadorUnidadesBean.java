@@ -835,9 +835,6 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                     log.error(" codigoUnidadUltima = " + codigoUnidadUltima);
 
 
-                    log.error(" UnidadAnterior = " + unidadAnterior);
-                    log.error(" UnidadUltima = " + unidadUltima);
-
                     log.error("Error Important Unidad HISTORICO " + e.getMessage());
                     StackTraceElement[] stack = e.getStackTrace();
                     int maxLines = (stack.length > 4) ? 5 : stack.length;
