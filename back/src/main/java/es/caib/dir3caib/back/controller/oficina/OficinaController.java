@@ -199,7 +199,7 @@ public class OficinaController extends BaseController {
 
             Mensaje.saveMessageInfo(request, getMessage("oficina.importacion.ok"));
             mav.addObject("procesados", results.getProcesados());// Nombre de los ficheros procesados
-            mav.addObject("ficheros", Dir3caibConstantes.UO_FICHEROS);//Nombre de los ficheros obtenidos
+            mav.addObject("ficheros", Dir3caibConstantes.OFI_FICHEROS);//Nombre de los ficheros obtenidos
             mav.addObject("existentes", results.getExistentes());//Nombre de los ficheros que realmente han venido en la descarga
             mav.addObject("descarga", results.getDescarga());//Datos de la descarga
 
