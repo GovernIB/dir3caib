@@ -944,22 +944,8 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
 
                     if (!codigoOficina.isEmpty() && !codigoServicio.isEmpty()) {
 
-                        // Obtenemos la Oficina
-                        Oficina oficina = oficinesCache.get(codigoOficina);
-                        if (oficina == null) {
-                            oficina = oficinaEjb.findById(codigoOficina);
-                        }
-
-                        // Obtenemos el Servicio
-                        Servicio servicio = cacheServicioOfi.get(Long.valueOf(codigoServicio));
-
-
                         // Creamos el Servicio
-                        if(oficina!= null && servicio != null){
-                            oficinaEjb.crearServicioOficina(codigoOficina, Long.valueOf(codigoServicio));
-                        }else{
-                            log.info("La Oficina (" + codigoOficina + ") no existe o el Servicio (" + codigoServicio + ") no existe.");
-                        }
+                        oficinaEjb.crearServicioOficina(codigoOficina, Long.valueOf(codigoServicio));
 
                         count++;
                         if (count % 500 == 0) {
