@@ -95,7 +95,7 @@
                             <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
                                 <li><a href="<c:url value="/catalogo/descarga/list"/>"><fmt:message key="menu.listado.descargas"/></a></li>
                                 <li class="divider"></li>
-                                <li><a href="javascript:void(0);" onclick="if (! confirmDescarga('<c:url value="/catalogo/importar"/>','<fmt:message key="menu.sincronizar.confirm"/>')) { return false; }"><fmt:message key="catalogo.obtener"/></a></li>
+                                <li><a href="javascript:void(0);" onclick="if (! confirmDescarga('<c:url value="/catalogo/sincronizar"/>','<fmt:message key="menu.sincronizar.confirm"/>')) { return false; }"><fmt:message key="catalogo.obtener"/></a></li>
                             </ul>
                         </li>
                     </sec:authorize>

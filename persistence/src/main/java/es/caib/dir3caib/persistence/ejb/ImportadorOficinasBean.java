@@ -90,7 +90,6 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
 
         ResultadosImportacion results = new ResultadosImportacion();
 
-        // List<String> procesados = new ArrayList<String>();
         List<String> procesados = results.getProcesados();
         List<String> inexistentes = new ArrayList<String>();
 

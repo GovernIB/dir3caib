@@ -73,7 +73,6 @@ public class UnidadController extends BaseController {
 
         CatEstadoEntidad vigente = catEstadoEntidadEjb.findByCodigo(Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
-
         Unidad unidad = new Unidad();
         unidad.setEstado(vigente);
 
@@ -146,38 +145,6 @@ public class UnidadController extends BaseController {
 
 
     /**
-     * Muestra los ficheros de unidades que hay en el directorio de la última descarga
-     *
-     * @param request
-     * @return
-     */
-    @RequestMapping(value = "/ficheros", method = RequestMethod.GET)
-    public ModelAndView ficherosList(HttpServletRequest request) throws Exception {
-
-        ModelAndView mav = new ModelAndView("/unidad/unidadFicheros");
-        ArrayList<String> ficheros = new ArrayList<String>();
-
-        // Obtenemos la última descarga
-        Descarga descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.UNIDAD);
-
-        if (descarga != null) {
-            //Creamos el fichero con el directorio de la última descarga.
-            File f = new File(Configuracio.getUnidadesPath(descarga.getCodigo()));
-            if (f.exists()) {//Obtenemos los ficheros del directorio
-                ficheros = new ArrayList<String>(Arrays.asList(f.list()));
-
-            } else {
-                Mensaje.saveMessageError(request, getMessage("descarga.error.importante"));
-
-            }
-        }
-        mav.addObject("descarga", descarga);
-        mav.addObject("ficheros", ficheros);
-
-        return mav;
-    }
-
-    /**
      * Elimina todas las Unidades de la bbdd y las sincroniza con al información actual
      */
     @RequestMapping(value = "/restaurarDirectorio", method = RequestMethod.GET)
@@ -223,32 +190,6 @@ public class UnidadController extends BaseController {
 
     }
 
-    /**
-     * Importa  todas  las unidades, históricos de unidades y contactos de las unidades a la BD.
-     * @param request
-     * @return
-     */
-    @RequestMapping(value = "/importar", method = RequestMethod.GET)
-    public ModelAndView importarUnidades(HttpServletRequest request) throws Exception {
-
-        ModelAndView mav = new ModelAndView("/unidad/unidadImportacion");
-
-        long start = System.currentTimeMillis();
-
-        ResultadosImportacion results = importadorUnidades.importarUnidades();
-
-        long end = System.currentTimeMillis();
-        log.info("Importat unidades en " + Utils.formatElapsedTime(end - start));
-
-        Mensaje.saveMessageInfo(request, getMessage("unidad.importacion.ok"));
-        mav.addObject("procesados", results.getProcesados());// Nombre de los ficheros procesados
-        mav.addObject("ficheros", Dir3caibConstantes.UO_FICHEROS);//Nombre de los ficheros obtenidos
-        mav.addObject("existentes", results.getExistentes());//Nombre de los ficheros que realmente han venido en la descarga
-        mav.addObject("descarga", results.getDescarga());//Datos de la descarga
-
-        return mav;
-    }
-
 
     /**
      * Sincroniza las unidades. Obtiene las unidades, sus históricos y sus contactos a través de WS desde la última fecha de
@@ -259,22 +200,43 @@ public class UnidadController extends BaseController {
     @RequestMapping(value = "/sincronizar", method = RequestMethod.GET)
     public ModelAndView sincronizarUnidades(HttpServletRequest request) {
 
+        ModelAndView mav = new ModelAndView("/unidad/unidadImportacion");
+
         try {
+
             // Obtenemos la fecha de la ultima descarga/sincronizacion
             Descarga ultimaDescarga = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.UNIDAD);
-            Date fechaFin = null;
             boolean descargaOk = false;
+
+            // Descarga de las unidades
             if(ultimaDescarga != null){
-                fechaFin = ultimaDescarga.getFechaFin();
+                Date fechaFin = ultimaDescarga.getFechaFin();
                 descargaOk = descargarUnidadesWS(request, fechaFin, new Date());
             } else {//Es una descarga inicial
                 descargaOk = descargarUnidadesWS(request, null, null);
             }
 
-
             // Importamos los datos a la BD si la descarga ha ido bien
             if (descargaOk) {
-                return importarUnidades(request);
+
+                long start = System.currentTimeMillis();
+
+                // Realiza la importación de al última descarga de Unidades
+                ResultadosImportacion results = importadorUnidades.importarUnidades();
+
+                long end = System.currentTimeMillis();
+                log.info("Importat unidades en " + Utils.formatElapsedTime(end - start));
+
+                Mensaje.saveMessageInfo(request, getMessage("unidad.importacion.ok"));
+
+                mav.addObject("procesados", results.getProcesados());// Nombre de los ficheros procesados
+                mav.addObject("ficheros", Dir3caibConstantes.UO_FICHEROS);//Nombre de los ficheros obtenidos
+                mav.addObject("existentes", results.getExistentes());//Nombre de los ficheros que realmente han venido en la descarga
+                mav.addObject("descarga", results.getDescarga());//Datos de la descarga
+
+            }else{
+
+                return new ModelAndView("redirect:/inicio");
             }
 
         } catch (Exception ex) {
@@ -282,43 +244,8 @@ public class UnidadController extends BaseController {
             ex.printStackTrace();
             return new ModelAndView("redirect:/inicio");
         }
-        return new ModelAndView("/unidad/unidadImportacion");
-    }
 
-    /**
-     * Método que se encarga de obtener los archivos de las unidades a través de WS
-     *
-     * @param request
-     * @param fechaInicio
-     * @param fechaFin
-     */
-    private boolean descargarUnidadesWS(HttpServletRequest request, Date fechaInicio, Date fechaFin) throws Exception {
-
-        try {
-            //Invoca a los ws para obtener los archivos de las unidades
-            String[] respuesta = importadorUnidades.descargarUnidadesWS(fechaInicio, fechaFin);
-            //Mostramos los mensajes en función de la respuesta del WS de Madrid
-            if (Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO.equals(respuesta[0])) {
-                Mensaje.saveMessageInfo(request, getMessage("unidad.descarga.ok"));
-                return true;
-            } else {
-                if (Dir3caibConstantes.CODIGO_RESPUESTA_VACIO.equals(respuesta[0])) { // No ha devuelto datos
-                    Mensaje.saveMessageInfo(request, getMessage("unidad.nueva.nohay"));
-                    return true;
-                } else { // Ha habido un error en la descarga
-                    Mensaje.saveMessageError(request, getMessage("unidad.descarga.nook") + ": " + respuesta[1]);
-                    return false;
-                }
-            }
-        } catch (IOException ex) {
-            Mensaje.saveMessageError(request, getMessage("unidad.descomprimir.error"));
-            ex.printStackTrace();
-            return false;
-        } catch (Exception e) {
-            Mensaje.saveMessageError(request, getMessage("unidad.descarga.nook"));
-            e.printStackTrace();
-            return false;
-        }
+        return mav;
     }
 
     /**
@@ -397,6 +324,42 @@ public class UnidadController extends BaseController {
         return mav;
     }
 
+    /**
+     * Método que se encarga de obtener los archivos de las unidades a través de WS
+     *
+     * @param request
+     * @param fechaInicio
+     * @param fechaFin
+     */
+    private boolean descargarUnidadesWS(HttpServletRequest request, Date fechaInicio, Date fechaFin) throws Exception {
+
+        try {
+            //Invoca a los ws para obtener los archivos de las unidades
+            String[] respuesta = importadorUnidades.descargarUnidadesWS(fechaInicio, fechaFin);
+            //Mostramos los mensajes en función de la respuesta del WS de Madrid
+            if (Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO.equals(respuesta[0])) {
+                Mensaje.saveMessageInfo(request, getMessage("unidad.descarga.ok"));
+                return true;
+            } else {
+                if (Dir3caibConstantes.CODIGO_RESPUESTA_VACIO.equals(respuesta[0])) { // No ha devuelto datos
+                    Mensaje.saveMessageInfo(request, getMessage("unidad.nueva.nohay"));
+                    return false;
+                } else { // Ha habido un error en la descarga
+                    Mensaje.saveMessageError(request, getMessage("unidad.descarga.nook") + ": " + respuesta[1]);
+                    return false;
+                }
+            }
+        } catch (IOException ex) {
+            Mensaje.saveMessageError(request, getMessage("unidad.descomprimir.error"));
+            ex.printStackTrace();
+            return false;
+        } catch (Exception e) {
+            Mensaje.saveMessageError(request, getMessage("unidad.descarga.nook"));
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
@@ -405,5 +368,7 @@ public class UnidadController extends BaseController {
 
         binder.registerCustomEditor(java.util.Date.class, dateEditor);
     }
+
+
 
 }

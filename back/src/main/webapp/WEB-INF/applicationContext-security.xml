@@ -21,9 +21,7 @@
         <sec:intercept-url pattern="/unidad/list" access="hasAnyRole('DIR_ADMIN','tothom')"/>
         <sec:intercept-url pattern="/unidad/**/arbol" access="hasAnyRole('DIR_ADMIN','tothom')"/>
 
-        <sec:intercept-url pattern="/unidad/ficheros" access="hasRole('DIR_ADMIN')"/>
         <sec:intercept-url pattern="/unidad/restaurarDirectorio" access="hasRole('DIR_ADMIN')"/>
-        <sec:intercept-url pattern="/unidad/importar" access="hasRole('DIR_ADMIN')"/>
         <sec:intercept-url pattern="/unidad/sincronizar" access="hasRole('DIR_ADMIN')"/>
         <sec:intercept-url pattern="/unidad/descarga/**" access="hasRole('DIR_ADMIN')"/>
 
@@ -31,9 +29,7 @@
         <sec:intercept-url pattern="/oficina/list" access="hasAnyRole('DIR_ADMIN','tothom')"/>
         <sec:intercept-url pattern="/oficina/**/arbol" access="hasAnyRole('DIR_ADMIN','tothom')"/>
 
-        <sec:intercept-url pattern="/oficina/ficheros" access="hasRole('DIR_ADMIN')"/>
         <sec:intercept-url pattern="/oficina/restaurarDirectorio" access="hasRole('DIR_ADMIN')"/>
-        <sec:intercept-url pattern="/oficina/importar" access="hasRole('DIR_ADMIN')"/>
         <sec:intercept-url pattern="/oficina/sincronizar" access="hasRole('DIR_ADMIN')"/>
         <sec:intercept-url pattern="/oficina/descarga/**" access="hasRole('DIR_ADMIN')"/>
 

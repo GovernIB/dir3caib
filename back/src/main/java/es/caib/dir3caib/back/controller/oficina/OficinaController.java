@@ -45,16 +45,12 @@ public class OficinaController extends BaseController {
     protected final Logger log = Logger.getLogger(getClass());
 
 
-
     @EJB(mappedName = "dir3caib/ImportadorOficinasEJB/local")
     private ImportadorOficinasLocal importadorOficinas;
-
 
     @EJB(mappedName = "dir3caib/ArbolEJB/local")
     private ArbolLocal arbolEjb;
 
-    // Indicamos el formato de fecha dd/MM/yyyy hh:mm:ss
-    SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
 
     /**
      * Listado de los {@link es.caib.dir3caib.persistence.model.Oficina}
@@ -145,29 +141,74 @@ public class OficinaController extends BaseController {
 
 
     /**
-     * Muestra los ficheros de oficinas que hay en el directorio de la última descarga
+     * Sincroniza las oficinas. Obtiene las oficinas y sus relaciones a traves de WS desde la última fecha de
+     * sincronización e importa los datos.
      *
      * @param request
      * @return
      */
-    @RequestMapping(value = "/ficheros", method = RequestMethod.GET)
-    public ModelAndView ficherosList(HttpServletRequest request) throws Exception {
+    @RequestMapping(value = "/sincronizar", method = RequestMethod.GET)
+    public ModelAndView sincronizarOficinas(HttpServletRequest request) {
 
-        ModelAndView mav = new ModelAndView("/oficina/oficinaFicheros");
-        ArrayList<String> ficheros = new ArrayList<String>();
-        // Obtenemos la última descarga
-        Descarga descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.OFICINA);
+        ModelAndView mav = new ModelAndView("/oficina/oficinaImportacion");
 
-        if (descarga != null) {
-            File f = new File(Configuracio.getOficinasPath(descarga.getCodigo()));
-            if (f.exists()) { // Si hay ficheros, se muestran
-                ficheros = new ArrayList<String>(Arrays.asList(f.list()));
-            } else { // Si no, mensaje de error
-                Mensaje.saveMessageError(request, getMessage("descarga.error.importante"));
+        try {
+            //Establecemos la fecha de hoy
+            Date hoy = new Date();
+
+            //Obtenemos las ultimas descargas de Unidades y Oficinas
+            Descarga ultimaDescargaUnidad = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.UNIDAD);
+            Descarga ultimaDescargaOficina = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.OFICINA);
+
+            // Controlamos que no se puedan sincronizar las oficinas antes que las unidades.
+            // Para ello comprobamos que la fecha de importación de las unidades no sea anterior
+            // a la fecha de la sincro de las oficinas (hoy)
+            if (ultimaDescargaUnidad == null || Utils.isAfterDay(hoy, ultimaDescargaUnidad.getFechaImportacion())) {
+                Mensaje.saveMessageError(request, getMessage("oficina.sincronizacion.nosepuede"));
+            } else {
+
+                Boolean sincronizacion = true;
+                boolean descargaOk;
+
+                if (ultimaDescargaOficina != null) { // Si hay una descarga oficina sincronizada
+                    Date fechaFin = ultimaDescargaOficina.getFechaFin(); //establecemos la fecha de inicio de la descarga como la fecha Fin de la última descarga
+                    // Obtenemos los archivos por WS
+                    descargaOk = descargarOficinasWS(request, fechaFin, hoy);
+                } else {// es una descarga inicial(sincro)
+                    // Obtenemos los archivos por WS
+                    sincronizacion = false;
+                    descargaOk = descargarOficinasWS(request, null, null);
+                }
+
+                // Si la descarga ha funcionado, importamos los datos a la BD.
+                if (descargaOk) {
+
+                    long start = System.currentTimeMillis();
+
+                    ResultadosImportacion resultados;
+                    //Importamos a la BD todos los datos obtenidos de las oficinas y sus relaciones, se indica  si es una sincro o una actualización
+                    resultados = importadorOficinas.importarOficinas(sincronizacion);
+
+                    long end = System.currentTimeMillis();
+                    log.info("Importat oficinas en " + Utils.formatElapsedTime(end - start));
+
+                    Mensaje.saveMessageInfo(request, getMessage("oficina.importacion.ok"));
+                    mav.addObject("procesados", resultados.getProcesados()); // Nombre de los ficheros procesados
+                    mav.addObject("ficheros", Dir3caibConstantes.OFI_FICHEROS); //Nombre de los ficheros obtenidos
+                    mav.addObject("existentes", resultados.getExistentes()); //Nombre de los ficheros que realmente han venido en la descarga
+                    mav.addObject("descarga", resultados.getDescarga()); //Datos de la descarga
+
+                }else{
+                    return new ModelAndView("redirect:/inicio");
+                }
+
             }
+
+        } catch (Exception ex) {
+            Mensaje.saveMessageError(request, getMessage("oficina.sincronizacion.error"));
+            ex.printStackTrace();
+            return new ModelAndView("redirect:/inicio");
         }
-        mav.addObject("descarga", descarga);
-        mav.addObject("ficheros", ficheros);
 
         return mav;
     }
@@ -212,94 +253,13 @@ public class OficinaController extends BaseController {
         }
     }
 
-    /**
-     * Importa  todas  las oficinas, históricos, contactos, relaciones organizativas, relaciones SIR, servicios a la BD.
-     *
-     * @param request
-     * @return
-     */
-    @RequestMapping(value = "/importar", method = RequestMethod.GET)
-    public ModelAndView importarOficinas(HttpServletRequest request, Boolean sincro) throws Exception {
-
-        ModelAndView mav = new ModelAndView("/oficina/oficinaImportacion");
-
-        long start = System.currentTimeMillis();
-
-        ResultadosImportacion resultados;
-        //Importamos a la BD todos los datos obtenidos de las oficinas y sus relaciones, se indica  si es una sincro o una actualización
-        resultados = importadorOficinas.importarOficinas(sincro == null ? false : sincro);
-
-        long end = System.currentTimeMillis();
-        log.info("Importat oficinas en " + Utils.formatElapsedTime(end - start));
-
-        Mensaje.saveMessageInfo(request, getMessage("oficina.importacion.ok"));
-        mav.addObject("procesados", resultados.getProcesados()); // Nombre de los ficheros procesados
-        mav.addObject("ficheros", Dir3caibConstantes.OFI_FICHEROS); //Nombre de los ficheros obtenidos
-        mav.addObject("existentes", resultados.getExistentes()); //Nombre de los ficheros que realmente han venido en la descarga
-        mav.addObject("descarga", resultados.getDescarga()); //Datos de la descarga
-
-        return mav;
-    }
-
-
-    /**
-     * Sincroniza las oficinas. Obtiene las oficinas y sus relaciones a traves de WS desde la última fecha de
-     * sincronización e importa los datos.
-     *
-     * @param request
-     * @return
-     */
-    @RequestMapping(value = "/sincronizar", method = RequestMethod.GET)
-    public ModelAndView sincronizarOficinas(HttpServletRequest request) {
-
-        try {
-            //Establecemos la fecha de hoy
-            Date hoy = new Date();
-
-            //Obtenemos las ultimas descargas de Unidades y Oficinas
-            Descarga ultimaDescargaUnidad = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.UNIDAD);
-            Descarga ultimaDescargaOficina = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.OFICINA);
-
-            // Controlamos que no se puedan sincronizar las oficinas antes que las unidades.
-            // Para ello comprobamos que la fecha de importación de las unidades no sea anterior
-            // a la fecha de la sincro de las oficinas (hoy)
-            if (ultimaDescargaUnidad == null || Utils.isAfterDay(hoy, ultimaDescargaUnidad.getFechaImportacion())) {
-                Mensaje.saveMessageError(request, getMessage("oficina.sincronizacion.nosepuede"));
-            } else {
-                final Boolean sincronizacion = true;
-                boolean descargaOk = false;
-                Date fechaFin = null;
-                if (ultimaDescargaOficina != null) { // Si hay una descarga oficina sincronizada
-                    fechaFin = ultimaDescargaOficina.getFechaFin(); //establecemos la fecha de inicio de la descarga como la fecha Fin de la última descarga
-                    // Obtenemos los archivos por WS
-                    descargaOk = descargarOficinasWS(request, fechaFin, hoy);
-                } else {// es una descarga inicial(sincro)
-                    // Obtenemos los archivos por WS
-                    descargaOk = descargarOficinasWS(request, null, null);
-                }
-
-                // Importamos los datos a la BD.
-                if (descargaOk) {
-                    return importarOficinas(request, sincronizacion);
-                }
-
-            }
-
-        } catch (Exception ex) {
-            Mensaje.saveMessageError(request, getMessage("oficina.sincronizacion.error"));
-            ex.printStackTrace();
-            return new ModelAndView("redirect:/inicio");
-        }
-        return new ModelAndView("/oficina/oficinaImportacion");
-    }
-
     /*
      * Método que se encarga de obtener los archivos de las oficinas a través de WS
      * @param request
      * @param fechaInicio
      * @param fechaFin
      */
-    public boolean descargarOficinasWS(HttpServletRequest request, Date fechaInicio, Date fechaFin) throws Exception {
+    private boolean descargarOficinasWS(HttpServletRequest request, Date fechaInicio, Date fechaFin) throws Exception {
 
         try {
             //Invoca a los ws para obtener los archivos de las unidades
@@ -311,7 +271,8 @@ public class OficinaController extends BaseController {
             } else {
                 if (Dir3caibConstantes.CODIGO_RESPUESTA_VACIO.equals(respuesta[0])) { //No ha devuelto datos
                     Mensaje.saveMessageInfo(request, getMessage("oficina.nueva.nohay"));
-                    return true;
+                    return false;
+
                 } else { //Ha habido un error en la descarga
                     Mensaje.saveMessageError(request, getMessage("oficina.descarga.nook") + ": " + respuesta[1]);
                     return false;
