@@ -808,4 +808,15 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         List<String> codigos = q.getResultList();
         return codigos;
     }
+
+    @Override
+    @SuppressWarnings(value = "unchecked")
+    public void crearHistoricoUnidad(String codigoAnterior, String codigoUltima) throws Exception{
+
+        Query q = em.createNativeQuery("insert into dir_historicouo (codanterior, codultima) values (?,?) ");
+        q.setParameter(1, codigoAnterior);
+        q.setParameter(2, codigoUltima);
+
+        q.executeUpdate();
+    }
 }

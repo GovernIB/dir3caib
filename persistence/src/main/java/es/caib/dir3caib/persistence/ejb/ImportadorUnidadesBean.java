@@ -786,6 +786,10 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                 Unidad unidadAnterior = null;
                 try {
 
+                    if (!codigoUnidadUltima.isEmpty() && !codigoUnidadAnterior.isEmpty()) {
+                        unidadEjb.crearHistoricoUnidad(codigoUnidadAnterior, codigoUnidadUltima);
+                    }
+/*
                     //Obtenemos codigo y miramos si ya existe en la BD
                     if (!codigoUnidadUltima.isEmpty()) {
                         unidadUltima = unidadEjb.getReference(codigoUnidadUltima);
@@ -810,7 +814,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                     historicosAnterior.add(unidadUltima);
 
                     // Actualizamos la Unidad con sus históricos
-                    unidadEjb.merge(unidadAnterior);
+                    unidadEjb.merge(unidadAnterior);*/
 
                     count++;
                     // cada 500 realizamos un flush y un clear para evitar problemas de Outofmemory

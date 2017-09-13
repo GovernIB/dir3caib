@@ -7,6 +7,7 @@ import org.hibernate.annotations.Index;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -90,6 +91,7 @@ public class Unidad implements Serializable {
   private Set<Unidad> historicoUO;
 
   public Unidad(){
+    this.historicoUO = new HashSet<Unidad>();
   }
 
   public Unidad(String codigo, String denominacion) {
