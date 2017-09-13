@@ -322,8 +322,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
         String[] resp = new String[2];
 
         // Guardaremos la fecha de la ultima descarga
-        Descarga descarga = new Descarga();
-        descarga.setTipo(Dir3caibConstantes.UNIDAD);
+        Descarga descarga = new Descarga(Dir3caibConstantes.UNIDAD);
 
         //guardamos todas las fechas de la descarga
         if (fechaInicio != null) {

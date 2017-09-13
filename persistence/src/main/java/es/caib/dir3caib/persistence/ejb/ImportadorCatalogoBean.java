@@ -743,30 +743,20 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
         String[] resp = new String[2];
 
 
-        //Definimos el formato de la fecha para las descargas de los WS.
-
         // Guardaremos la fecha de la ultima descarga
-        Descarga descarga = new Descarga();
-        descarga.setTipo(Dir3caibConstantes.CATALOGO);
+        Descarga descarga = new Descarga(Dir3caibConstantes.CATALOGO);
 
-
-        //guardamos todas las fechas de la descarga
+        // Establecemos las Fechas de la descarga
         if (fechaInicio != null) {
             descarga.setFechaInicio(fechaInicio);
-
+        }else{
+            descarga.setFechaInicio(new Date());
         }
+
         if (fechaFin != null) {
             descarga.setFechaFin(fechaFin);
-
-        }
-        // establecemos la fecha de hoy si las fechas estan vacias.
-        Date hoy = new Date();
-
-        if (fechaInicio == null) {
-            descarga.setFechaInicio(hoy);
-        }
-        if (fechaFin == null) {
-            descarga.setFechaFin(hoy);
+        }else{
+            descarga.setFechaFin(new Date());
         }
 
         log.info("Inicio descarga de catalogo directorio común");
@@ -790,11 +780,10 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
             // Invocamos al WS
             RespuestaWS respuestaCsv = service.exportar(usuario, password, "csv", "COMPLETO");
-            //RespuestaWS respuestaXml = service.getSC21CTVolcadoCatalogos().exportar(usuario,password,"xml","COMPLETO")
+
             Base64 decoder = new Base64();
 
-            log.info("Codigo: " + respuestaCsv.getCodigo());
-            log.info("Descripcion: " + respuestaCsv.getDescripcion());
+            log.info("Respuesta Ws catalogo: " + respuestaCsv.getCodigo() + " - " + respuestaCsv.getDescripcion());
 
             //Montamos la respuesta del ws para controlar los errores a mostrar
             resp[0] = respuestaCsv.getCodigo();
@@ -809,7 +798,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
             descarga.setEstado(respuestaCsv.getCodigo());
             descargaEjb.merge(descarga);
 
-            // Definimos el nombre del archivo zip a descargar
+            // Definimos el nombre del archivo zip a guardar
             String archivoCatalogoZip = ruta + Dir3caibConstantes.CATALOGOS_ARCHIVO_ZIP + descarga.getCodigo() + ".zip";
             File file = new File(archivoCatalogoZip);
 
@@ -824,6 +813,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                     //Borramos la descarga creada previamente.
                     descargaEjb.remove(descarga);
                     log.error(" No se ha podido crear el directorio");
+                    throw new Exception("No se ha podido crear el directorio");
                 }
             }
 

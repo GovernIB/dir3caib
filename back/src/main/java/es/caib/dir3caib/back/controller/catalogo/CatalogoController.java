@@ -55,6 +55,9 @@ public class CatalogoController extends BaseController {
     @RequestMapping(value = "/sincronizar", method = RequestMethod.GET)
     public ModelAndView sincronizarCatalogo(HttpServletRequest request) throws Exception {
 
+        log.info("");
+        log.info("Inicio sincronizacion CATALOGO");
+
         ModelAndView mav = new ModelAndView("/catalogo/catalogoImportacion");
 
         boolean descargaOk = descargarCatalogoWS(request, null, null);
@@ -64,7 +67,8 @@ public class CatalogoController extends BaseController {
             ResultadosImportacion results = importadorCatalogo.importarCatalogo();
 
             long end = System.currentTimeMillis();
-            log.info("Importat cataleg en " + Utils.formatElapsedTime(end - start));
+            log.info("");
+            log.info("Fin sincronizacion catalogo en " + Utils.formatElapsedTime(end - start));
 
             Mensaje.saveMessageInfo(request, getMessage("catalogo.importacion.ok"));
             mav.addObject("procesados", results.getProcesados());
@@ -132,7 +136,7 @@ public class CatalogoController extends BaseController {
      * @param fechaInicio
      * @param fechaFin
      */
-    public boolean descargarCatalogoWS(HttpServletRequest request, Date fechaInicio, Date fechaFin) throws Exception {
+    private boolean descargarCatalogoWS(HttpServletRequest request, Date fechaInicio, Date fechaFin) throws Exception {
 
         try {
             String[] respuesta = importadorCatalogo.descargarCatalogoWS(fechaInicio, fechaFin);

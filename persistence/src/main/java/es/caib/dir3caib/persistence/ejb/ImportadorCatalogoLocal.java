@@ -6,18 +6,28 @@ import javax.ejb.Local;
 import java.util.Date;
 
 /**
- * 
  * @author anadal
- * 
  */
 @Local
 public interface ImportadorCatalogoLocal {
 
-  public String[] descargarCatalogoWS(Date fechaInicio, Date fechaFin)
-      throws Exception;
+    /**
+     * @param fechaInicio
+     * @param fechaFin
+     * @return
+     * @throws Exception
+     */
+    public String[] descargarCatalogoWS(Date fechaInicio, Date fechaFin) throws Exception;
 
-  public void importarCatalogoTask();
+    /**
+     *
+     */
+    public void importarCatalogoTask();
 
-  public ResultadosImportacion importarCatalogo() throws Exception;
+    /**
+     * @return
+     * @throws Exception
+     */
+    public ResultadosImportacion importarCatalogo() throws Exception;
 
 }

@@ -270,8 +270,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
         String[] resp = new String[2];
 
         // Guardaremos la fecha de la ultima descarga
-        Descarga descarga = new Descarga();
-        descarga.setTipo(Dir3caibConstantes.OFICINA);
+        Descarga descarga = new Descarga(Dir3caibConstantes.OFICINA);
 
         //guardamos todas las fechas de la descarga
         if (fechaInicio != null) {

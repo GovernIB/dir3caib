@@ -30,7 +30,11 @@ public class Descarga implements Serializable {
 
   public Descarga() {
   }
-  
+
+  public Descarga(String tipo) {
+    this.tipo = tipo;
+  }
+
   @Column(name = "CODIGO", nullable = false, length = 3)
   @Id
   @GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "generator")
