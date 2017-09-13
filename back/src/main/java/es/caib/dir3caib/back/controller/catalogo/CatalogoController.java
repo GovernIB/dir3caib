@@ -101,9 +101,7 @@ public class CatalogoController extends BaseController {
 
         ModelAndView mav = new ModelAndView("/descargaList");
 
-
         List<Descarga> listado = descargaEjb.getPaginationByTipo(((pageNumber - 1) * BaseEjbJPA.RESULTADOS_PAGINACION), Dir3caibConstantes.CATALOGO);
-        log.info("LISTADO: " + listado.size());
 
         Long total = descargaEjb.getTotalByTipo(Dir3caibConstantes.CATALOGO);
 
