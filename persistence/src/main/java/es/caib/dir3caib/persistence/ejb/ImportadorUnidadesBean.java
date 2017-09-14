@@ -778,11 +778,6 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
             Long totalDescargasUnidad = descargaEjb.totalDescargas(Dir3caibConstantes.UNIDAD);
 
-            log.info("");
-            log.info("actualizacion: " + actualizacion);
-            log.info("totalDescargasUnidad: " + totalDescargasUnidad);
-            log.info("");
-
             String[] fila;
             reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
             int count = 1;
