@@ -778,6 +778,11 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
             Long totalDescargasUnidad = descargaEjb.totalDescargas(Dir3caibConstantes.UNIDAD);
 
+            log.info("");
+            log.info("actualizacion: " + actualizacion);
+            log.info("totalDescargasUnidad: " + totalDescargasUnidad);
+            log.info("");
+
             String[] fila;
             reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
             int count = 1;
@@ -797,14 +802,16 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                         // y pueden venir datos repetidos.
                         if(actualizacion && totalDescargasUnidad == 1){
 
+                            log.info("Primera actualización tras carga inicial de datos");
                             // Comprobamos si existe este HU
                             if(!unidadEjb.existeHistoricoUnidad(codigoUnidadAnterior, codigoUnidadUltima)){
-
+                                log.info("No existe la UO, la creamos");
                                 // Creamos el HU mediante una NativeQuery muy eficiente
                                 unidadEjb.crearHistoricoUnidad(codigoUnidadAnterior, codigoUnidadUltima);
                             }
 
                         }else{// Carga inicial de datos o actualización
+                            log.info("Carga inicial de datos o actualizacion");
 
                             // Creamos el HU mediante una NativeQuery muy eficiente
                             unidadEjb.crearHistoricoUnidad(codigoUnidadAnterior, codigoUnidadUltima);

@@ -830,6 +830,8 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
         List<Object> historicos = q.getResultList();
 
+        log.info("Unidades: " + codigoAnterior + " - " + codigoUltima);
+        log.info("historicosUnidad.size(): " + historicos.size());
         return historicos.size() > 0;
     }
 }
