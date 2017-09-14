@@ -55,6 +55,8 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
     private Dir3CaibLocal dir3CaibEjb;
 
 
+    private Boolean actualizacion;
+
     /**
      * Método que importa el contenido de los archivos de las unidades, historicos y contactos descargados previamente a través
      * de los WS.
@@ -79,7 +81,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
         cacheImportadorUnidades();
 
         // Averiguamos si es una Carga de datos inicial o una Actualización
-        boolean actualizacion = existInBBDD.size() > 0;
+        actualizacion = existInBBDD.size() > 0;
 
         // Tiempos
         long start;
@@ -774,6 +776,8 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
         if (Dir3caibConstantes.UO_HISTORICOS_UO.equals(nombreFichero)) {
 
+            Long totalDescargas = descargaEjb.totalDescargas(Dir3caibConstantes.UNIDAD);
+
             String[] fila;
             reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
             int count = 1;
@@ -787,7 +791,24 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                 try {
 
                     if (!codigoUnidadUltima.isEmpty() && !codigoUnidadAnterior.isEmpty()) {
-                        unidadEjb.crearHistoricoUnidad(codigoUnidadAnterior, codigoUnidadUltima);
+
+                        // Se trata de la primera actualización tras la Sincronización inicial
+                        // y pueden venir datos repetidos.
+                        if(actualizacion && totalDescargas == 1){
+
+                            // Comprobamos si existe este HU
+                            if(!unidadEjb.existeHistoricoUnidad(codigoUnidadAnterior, codigoUnidadUltima)){
+
+                                // Creamos el HU mediante una NativeQuery muy eficiente
+                                unidadEjb.crearHistoricoUnidad(codigoUnidadAnterior, codigoUnidadUltima);
+                            }
+
+                        }else{// Carga inicial de datos o actualización
+
+                            // Creamos el HU mediante una NativeQuery muy eficiente
+                            unidadEjb.crearHistoricoUnidad(codigoUnidadAnterior, codigoUnidadUltima);
+                        }
+
                     }
 /*
                     //Obtenemos codigo y miramos si ya existe en la BD

@@ -264,5 +264,14 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      */
     public void crearHistoricoUnidad(String codigoAnterior, String codigoUltima) throws Exception;
 
+    /**
+     * Comprueba la existencia de un HistoriooUnidad en concreto
+     * @param codigoAnterior
+     * @param codigoUltima
+     * @return
+     * @throws Exception
+     */
+    public Boolean existeHistoricoUnidad(String codigoAnterior, String codigoUltima) throws Exception;
+
 
 }

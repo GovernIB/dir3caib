@@ -39,7 +39,8 @@ public class DescargaBean extends BaseEjbJPA<Descarga, Long> implements Descarga
 
         return em.find(Descarga.class, id);
     }
-    
+
+    @Override
     public Descarga ultimaDescarga(String tipo) throws Exception {
         
         Query query = em.createQuery( "select descarga from Descarga as descarga where descarga.tipo= :tipo order by descarga.codigo desc");
@@ -50,6 +51,16 @@ public class DescargaBean extends BaseEjbJPA<Descarga, Long> implements Descarga
         } else {
           return null;
         } 
+    }
+
+    @Override
+    public Long totalDescargas(String tipo) throws Exception {
+
+        Query q = em.createQuery("Select count(descarga.codigo) from Descarga as descarga where descarga.tipo = :tipo");
+        q.setParameter("tipo", tipo);
+
+        return (Long) q.getSingleResult();
+
     }
 
     public Descarga ultimaDescargaSincronizada(String tipo) throws Exception {

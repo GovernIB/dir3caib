@@ -819,4 +819,17 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
         q.executeUpdate();
     }
+
+    @Override
+    @SuppressWarnings(value = "unchecked")
+    public Boolean existeHistoricoUnidad(String codigoAnterior, String codigoUltima) throws Exception{
+
+        Query q = em.createNativeQuery("select * from dir_historicouo where codanterior = ? and codultima = ? ");
+        q.setParameter(1, codigoAnterior);
+        q.setParameter(2, codigoUltima);
+
+        List<Object> historicos = q.getResultList();
+
+        return historicos.size() > 0;
+    }
 }
