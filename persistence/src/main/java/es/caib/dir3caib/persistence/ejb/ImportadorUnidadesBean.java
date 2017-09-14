@@ -800,7 +800,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
                         // Se trata de la primera actualización tras la Sincronización inicial
                         // y pueden venir datos repetidos.
-                        if(actualizacion && totalDescargasUnidad == 1){
+                        if(actualizacion && totalDescargasUnidad == 2){
 
                             log.info("Primera actualización tras carga inicial de datos");
                             // Comprobamos si existe este HU

@@ -636,7 +636,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
 
                         // Se trata de la primera actualización tras la Sincronización inicial
                         // y pueden venir datos repetidos.
-                        if(actualizacion && totalDescargas == 1){
+                        if(actualizacion && totalDescargas == 2){
 
                             // Comprobamos si existe este HO
                             if(!oficinaEjb.existeHistoricoOficina(codigoOficinaAnterior, codigoOficinaUltima)){
