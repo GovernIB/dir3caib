@@ -30,7 +30,7 @@ body { background-image:url(../img/background-pattern.png); color:#666666; paddi
 
 .nav-container { background-color:#ff9523;}
 .nav-container .govern-logo{
-    margin: 20px 10px 0px 20px;
+    margin: 10px 10px 0px 20px;
     padding: 0px 20px 0px 0px;
     border-right: 1px solid #FFFFFF;
 }
