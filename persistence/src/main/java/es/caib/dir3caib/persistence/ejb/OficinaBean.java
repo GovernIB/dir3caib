@@ -711,5 +711,29 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
         q.executeUpdate();
     }
+
+    @Override
+    public Boolean existeServicioOficina(String codigoOficina, Long codigoServicio) throws Exception {
+
+        Query q = em.createNativeQuery("select * from dir_servicioofi where codoficina = ? and codservicio = ? ");
+        q.setParameter(1, codigoOficina);
+        q.setParameter(2, codigoServicio);
+
+        List<Object> servicios = q.getResultList();
+
+        return servicios.size() > 0;
+    }
+
+    @Override
+    public Boolean existeHistoricoOficina(String codigoAnterior, String codigoUltima) throws Exception {
+
+        Query q = em.createNativeQuery("select * from dir_historicoofi where codigoAnterior = ? and codigoUltima = ? ");
+        q.setParameter(1, codigoAnterior);
+        q.setParameter(2, codigoUltima);
+
+        List<Object> historicos = q.getResultList();
+
+        return historicos.size() > 0;
+    }
 }
 

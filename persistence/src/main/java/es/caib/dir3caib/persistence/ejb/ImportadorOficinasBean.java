@@ -201,7 +201,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                     importarContactos(nombreFichero, reader);
 
                     //HISTORICOS OFI
-                    importarHistoricos(nombreFichero, reader);
+                    importarHistoricos(nombreFichero, reader, isUpdate);
 
                     // Relaciones organizativas
                     importarRelacionesOrganizativas(nombreFichero, reader);
@@ -210,7 +210,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                     importarRelacionesSir(nombreFichero, reader);
 
                     //Servicios
-                    importarServicios(nombreFichero, reader);
+                    importarServicios(nombreFichero, reader, isUpdate);
 
                     log.info("Fin importar fichero: " + nombreFichero);
 
@@ -610,80 +610,65 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
      *
      * @param nombreFichero
      * @param reader
+     * @param actualizacion
      * @throws Exception
      */
-    private void importarHistoricos(String nombreFichero, CSVReader reader) throws Exception {
-        String[] fila;
+    private void importarHistoricos(String nombreFichero, CSVReader reader, boolean actualizacion) throws Exception {
+
         if (Dir3caibConstantes.OFI_HISTORICOS_OFI.equals(nombreFichero)) {
 
+            Long totalDescargas = descargaEjb.totalDescargas(Dir3caibConstantes.OFICINA);
+
+            String[] fila;
             reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
             int count = 1;
             long start = System.currentTimeMillis();
+
             while ((fila = reader.readNext()) != null) {
-                //Obtenemos el histórico
+
+                //Obtenemos los códigos
                 String codigoOficinaAnterior = fila[0]; //codigo de la oficina que es sustituida
                 String codigoOficinaUltima = fila[2]; // código de la oficina que sustituye
-                Oficina oficinaUltima = null;
-                Oficina oficinaAnterior = null;
+
                 try {
 
-                    if (!codigoOficinaAnterior.isEmpty() && !codigoOficinaUltima.isEmpty()) {
-                        oficinaEjb.crearHistoricoOficina(codigoOficinaAnterior, codigoOficinaUltima);
-                    }
+                    if (!codigoOficinaUltima.isEmpty() && !codigoOficinaAnterior.isEmpty()) {// Si no están vacios
 
-                  /*  // si existe la oficina la cogemos de cache, si no de la bd
-                    if (!codigoOficinaUltima.isEmpty()) {
-                        oficinaUltima = oficinesCache.get(codigoOficinaUltima);
-                        if (oficinaUltima == null) {
-                            oficinaUltima = oficinaEjb.getReference(codigoOficinaUltima);
+                        // Se trata de la primera actualización tras la Sincronización inicial
+                        // y pueden venir datos repetidos.
+                        if(actualizacion && totalDescargas == 1){
+
+                            // Comprobamos si existe este HO
+                            if(!oficinaEjb.existeHistoricoOficina(codigoOficinaAnterior, codigoOficinaUltima)){
+
+                                // Creamos el HO mediante una NativeQuery muy eficiente
+                                oficinaEjb.crearHistoricoOficina(codigoOficinaAnterior, codigoOficinaUltima);
+                            }
+
+                        }else{// Carga inicial de datos o actualización
+
+                            // Creamos el HO mediante una NativeQuery muy eficiente
+                            oficinaEjb.crearHistoricoOficina(codigoOficinaAnterior, codigoOficinaUltima);
                         }
-                    }
-                    // si existe la oficina la cogemos de cache, si no de la bd
-                    if (!codigoOficinaAnterior.isEmpty()) {
-                        oficinaAnterior = oficinesCache.get(codigoOficinaAnterior);
-                        if (oficinaAnterior == null) {
-                            oficinaAnterior = oficinaEjb.findById(codigoOficinaAnterior);
+
+                        count++;
+                        //Cada 500 realizamos flush y clear para evitar problemas de outofmemory
+                        if (count % 500 == 0) {
+                            long end = System.currentTimeMillis();
+                            log.info("Procesats 500 Històrics (" + (count - 500) + " - " + count
+                                    + ") en " + Utils.formatElapsedTime(end - start));
+
+                            oficinaEjb.flush();
+                            oficinaEjb.clear();
+                            start = end;
                         }
-                    }
 
-                    //si no existe la oficina que es sustituida hay un error.
-                    if (oficinaAnterior == null) {
-                        throw new Exception();
-                    }
-
-                    //Obtenemos los historicos de la oficinaAnterior y añadimos la oficinaUltima
-                    Set<Oficina> historicosAnterior = oficinaAnterior.getHistoricosOfi();
-                    if (historicosAnterior == null) {
-                        historicosAnterior = new HashSet<Oficina>();
-                        oficinaAnterior.setHistoricosOfi(historicosAnterior);
-                    }
-
-                    //si no existe la oficina que sustituye hay un error.
-                    if (oficinaUltima == null) {
-                        throw new Exception();
-                    }
-                    historicosAnterior.add(oficinaUltima);
-
-                    oficinaEjb.merge(oficinaAnterior);*/
-
-                    count++;
-                    //Cada 500 realizamos flush y clear para evitar problemas de outofmemory
-                    if (count % 500 == 0) {
-                        long end = System.currentTimeMillis();
-                        log.info("Procesats 500 Històrics (" + (count - 500) + " - " + count
-                                + ") en " + Utils.formatElapsedTime(end - start));
-
-                        oficinaEjb.flush();
-                        oficinaEjb.clear();
-                        start = end;
                     }
 
                 } catch (Exception e) {
                     log.error("=======================================");
                     log.error("codigoOficinaAnterior: " + codigoOficinaAnterior);
-                    log.error("oficinaAnterior: " + oficinaAnterior);
                     log.error("codigoOficinaUltima: " + codigoOficinaUltima);
-                    log.error("String oficinaUltima: " + oficinaUltima);
                     log.error("Error important Historicos-Oficines " + e.getMessage());
                     StackTraceElement[] stack = e.getStackTrace();
                     int maxLines = (stack.length > 4) ? 5 : stack.length;
@@ -930,25 +915,46 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
      *
      * @param nombreFichero
      * @param reader
+     * @param actualizacion
      * @throws Exception
      */
-    private void importarServicios(String nombreFichero, CSVReader reader) throws Exception {
-        String[] fila;
+    private void importarServicios(String nombreFichero, CSVReader reader, boolean actualizacion) throws Exception {
+
+
         if (Dir3caibConstantes.OFI_SERVICIOS_OFI.equals(nombreFichero)) {
+
+            Long totalDescargasOficina = descargaEjb.totalDescargas(Dir3caibConstantes.OFICINA);
+
+            String[] fila;
             reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
             int count = 1;
             long start = System.currentTimeMillis();
+
             while ((fila = reader.readNext()) != null) {
 
-                //Obtenemos codigo
                 try {
+                    // Obtenemos los códigos
                     String codigoOficina = fila[0].trim();
                     String codigoServicio = fila[1].trim();
 
-                    if (!codigoOficina.isEmpty() && !codigoServicio.isEmpty()) {
+                    if (!codigoOficina.isEmpty() && !codigoServicio.isEmpty()) { // Si no están vacios
 
-                        // Creamos el Servicio
-                        oficinaEjb.crearServicioOficina(codigoOficina, Long.valueOf(codigoServicio));
+                        // Se trata de la primera actualización tras la Sincronización inicial
+                        // y pueden venir datos repetidos.
+                        if(actualizacion && totalDescargasOficina == 1){
+
+                            // Comprobamos si existe este Servicio
+                            if(!oficinaEjb.existeServicioOficina(codigoOficina, Long.valueOf(codigoServicio))){
+
+                                // Creamos el Servicio mediante una NativeQuery muy eficiente
+                                oficinaEjb.crearServicioOficina(codigoOficina, Long.valueOf(codigoServicio));
+                            }
+
+                        }else{// Carga inicial de datos o actualización
+
+                            // Creamos el Servicio mediante una NativeQuery muy eficiente
+                            oficinaEjb.crearServicioOficina(codigoOficina, Long.valueOf(codigoServicio));
+                        }
 
                         count++;
                         if (count % 500 == 0) {
@@ -961,6 +967,8 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                         }
 
                     }
+
+
                 } catch (Exception e) {
                     log.error(" Error en OFI_SERVICIOS_OFI " + e.getMessage(), e);
                 }

@@ -183,4 +183,22 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      * @throws Exception
      */
     public void crearHistoricoOficina(String codigoAnterior, String codigoUltima) throws Exception;
+
+    /**
+     * Comprueba la existencia de un ServicioOficina en concreto
+     * @param codigoOficina
+     * @param codigoServicio
+     * @return
+     * @throws Exception
+     */
+    public Boolean existeServicioOficina(String codigoOficina, Long codigoServicio) throws Exception;
+
+    /**
+     * Comprueba la existencia de un HistoricoOficina en concreto
+     * @param codigoAnterior
+     * @param codigoUltima
+     * @return
+     * @throws Exception
+     */
+    public Boolean existeHistoricoOficina(String codigoAnterior, String codigoUltima) throws Exception;
 }

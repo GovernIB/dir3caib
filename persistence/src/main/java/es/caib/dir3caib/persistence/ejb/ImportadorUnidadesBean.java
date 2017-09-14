@@ -776,25 +776,26 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
         if (Dir3caibConstantes.UO_HISTORICOS_UO.equals(nombreFichero)) {
 
-            Long totalDescargas = descargaEjb.totalDescargas(Dir3caibConstantes.UNIDAD);
+            Long totalDescargasUnidad = descargaEjb.totalDescargas(Dir3caibConstantes.UNIDAD);
 
             String[] fila;
             reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
             int count = 1;
             long start = System.currentTimeMillis();
+
             while ((fila = reader.readNext()) != null) {
+
                 //Un histórico esta representado por la tupla codUnidadAnterior-codUnidadUltima
                 String codigoUnidadAnterior = fila[0]; //Unidad que es sustituida
                 String codigoUnidadUltima = fila[2]; //unidad que la sustituye
-                Unidad unidadUltima = null;
-                Unidad unidadAnterior = null;
+
                 try {
 
-                    if (!codigoUnidadUltima.isEmpty() && !codigoUnidadAnterior.isEmpty()) {
+                    if (!codigoUnidadUltima.isEmpty() && !codigoUnidadAnterior.isEmpty()) { // Si no están vacios
 
                         // Se trata de la primera actualización tras la Sincronización inicial
                         // y pueden venir datos repetidos.
-                        if(actualizacion && totalDescargas == 1){
+                        if(actualizacion && totalDescargasUnidad == 1){
 
                             // Comprobamos si existe este HU
                             if(!unidadEjb.existeHistoricoUnidad(codigoUnidadAnterior, codigoUnidadUltima)){
@@ -809,44 +810,19 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                             unidadEjb.crearHistoricoUnidad(codigoUnidadAnterior, codigoUnidadUltima);
                         }
 
-                    }
-/*
-                    //Obtenemos codigo y miramos si ya existe en la BD
-                    if (!codigoUnidadUltima.isEmpty()) {
-                        unidadUltima = unidadEjb.getReference(codigoUnidadUltima);
-                    }
-                    if (!codigoUnidadAnterior.isEmpty()) {
-                        unidadAnterior = unidadEjb.findById(codigoUnidadAnterior);
-                    }
 
-                    Set<Unidad> historicosAnterior = unidadAnterior.getHistoricoUO();
-                    //Si no tiene historicos, asignamos una lista vacia
-                    if (historicosAnterior == null) {
-                        historicosAnterior = new HashSet<Unidad>();
-                        unidadAnterior.setHistoricoUO(historicosAnterior);
-                    }
-                    if (unidadUltima == null) {
-                        //  log.info(" ======================== ");
-                        //  log.info(" unidadUltima == NULL !!!!! ");
-                        throw new Exception();
-                    }
+                        count++;
+                        // cada 500 realizamos un flush y un clear para evitar problemas de Outofmemory
+                        if (count % 500 == 0) {
+                            long end = System.currentTimeMillis();
+                            log.info("Procesats 500 Historics (" + (count - 500) + " - " + count
+                                    + ") en " + Utils.formatElapsedTime(end - start));
 
-                    //Añadimos la unidad que le sustituye
-                    historicosAnterior.add(unidadUltima);
+                            unidadEjb.flush();
+                            unidadEjb.clear();
+                            start = end;
 
-                    // Actualizamos la Unidad con sus históricos
-                    unidadEjb.merge(unidadAnterior);*/
-
-                    count++;
-                    // cada 500 realizamos un flush y un clear para evitar problemas de Outofmemory
-                    if (count % 500 == 0) {
-                        long end = System.currentTimeMillis();
-                        log.info("Procesats 500 Historics (" + (count - 500) + " - " + count
-                                + ") en " + Utils.formatElapsedTime(end - start));
-
-                        unidadEjb.flush();
-                        unidadEjb.clear();
-                        start = end;
+                        }
 
                     }
 
