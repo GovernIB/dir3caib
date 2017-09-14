@@ -802,16 +802,13 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                         // y pueden venir datos repetidos.
                         if(actualizacion && totalDescargasUnidad == 2){
 
-                            log.info("Primera actualización tras carga inicial de datos");
                             // Comprobamos si existe este HU
                             if(!unidadEjb.existeHistoricoUnidad(codigoUnidadAnterior, codigoUnidadUltima)){
-                                log.info("No existe la UO, la creamos");
                                 // Creamos el HU mediante una NativeQuery muy eficiente
                                 unidadEjb.crearHistoricoUnidad(codigoUnidadAnterior, codigoUnidadUltima);
                             }
 
                         }else{// Carga inicial de datos o actualización
-                            log.info("Carga inicial de datos o actualizacion");
 
                             // Creamos el HU mediante una NativeQuery muy eficiente
                             unidadEjb.crearHistoricoUnidad(codigoUnidadAnterior, codigoUnidadUltima);

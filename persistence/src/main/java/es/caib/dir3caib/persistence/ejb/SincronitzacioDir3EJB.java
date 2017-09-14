@@ -136,13 +136,17 @@ public class SincronitzacioDir3EJB implements SincronitzacioDir3Local {
     @TransactionTimeout(value = 18000)
     public void sincronitzar() {
 
-        log.info("");
+        log.info("-------------------------------------------");
         log.info("INICIO ACTUALIZACION PROGRAMADA DE UNIDADES Y OFICINAS");
-
+        log.info("");
         try {
 
             importadorUnidades.importarUnidadesTask();
             importadorOficinas.importarOficinasTask();
+
+            log.info("-------------------------------------------");
+            log.info("FIN ACTUALIZACION PROGRAMADA DE UNIDADES Y OFICINAS");
+            log.info("");
 
         } catch (Throwable e) {
             log.error("Error Sincronitzant ...", e);
