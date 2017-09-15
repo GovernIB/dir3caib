@@ -617,8 +617,6 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
 
         if (Dir3caibConstantes.OFI_HISTORICOS_OFI.equals(nombreFichero)) {
 
-            Long totalDescargas = descargaEjb.totalDescargas(Dir3caibConstantes.OFICINA);
-
             String[] fila;
             reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
             int count = 1;
@@ -634,9 +632,13 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
 
                     if (!codigoOficinaUltima.isEmpty() && !codigoOficinaAnterior.isEmpty()) {// Si no están vacios
 
-                        // Se trata de la primera actualización tras la Sincronización inicial
-                        // y pueden venir datos repetidos.
-                        if(actualizacion && totalDescargas == 2){
+                        // Carga inicial de datos o actualización
+                        if(!actualizacion ){
+
+                            // Creamos el HO mediante una NativeQuery muy eficiente
+                            oficinaEjb.crearHistoricoOficina(codigoOficinaAnterior, codigoOficinaUltima);
+
+                        }else{// Se trata una actualización
 
                             // Comprobamos si existe este HO
                             if(!oficinaEjb.existeHistoricoOficina(codigoOficinaAnterior, codigoOficinaUltima)){
@@ -645,10 +647,6 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                                 oficinaEjb.crearHistoricoOficina(codigoOficinaAnterior, codigoOficinaUltima);
                             }
 
-                        }else{// Carga inicial de datos o actualización
-
-                            // Creamos el HO mediante una NativeQuery muy eficiente
-                            oficinaEjb.crearHistoricoOficina(codigoOficinaAnterior, codigoOficinaUltima);
                         }
 
                         count++;
@@ -923,8 +921,6 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
 
         if (Dir3caibConstantes.OFI_SERVICIOS_OFI.equals(nombreFichero)) {
 
-            Long totalDescargasOficina = descargaEjb.totalDescargas(Dir3caibConstantes.OFICINA);
-
             String[] fila;
             reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
             int count = 1;
@@ -939,9 +935,13 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
 
                     if (!codigoOficina.isEmpty() && !codigoServicio.isEmpty()) { // Si no están vacios
 
-                        // Se trata de la primera actualización tras la Sincronización inicial
-                        // y pueden venir datos repetidos.
-                        if(actualizacion && totalDescargasOficina == 1){
+                        // Carga inicial de datos o actualización
+                        if(!actualizacion){
+
+                            // Creamos el Servicio mediante una NativeQuery muy eficiente
+                            oficinaEjb.crearServicioOficina(codigoOficina, Long.valueOf(codigoServicio));
+
+                        }else{// Se trata de una actualización
 
                             // Comprobamos si existe este Servicio
                             if(!oficinaEjb.existeServicioOficina(codigoOficina, Long.valueOf(codigoServicio))){
@@ -949,11 +949,6 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                                 // Creamos el Servicio mediante una NativeQuery muy eficiente
                                 oficinaEjb.crearServicioOficina(codigoOficina, Long.valueOf(codigoServicio));
                             }
-
-                        }else{// Carga inicial de datos o actualización
-
-                            // Creamos el Servicio mediante una NativeQuery muy eficiente
-                            oficinaEjb.crearServicioOficina(codigoOficina, Long.valueOf(codigoServicio));
                         }
 
                         count++;

@@ -776,8 +776,6 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
         if (Dir3caibConstantes.UO_HISTORICOS_UO.equals(nombreFichero)) {
 
-            Long totalDescargasUnidad = descargaEjb.totalDescargas(Dir3caibConstantes.UNIDAD);
-
             String[] fila;
             reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
             int count = 1;
@@ -793,20 +791,20 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
                     if (!codigoUnidadUltima.isEmpty() && !codigoUnidadAnterior.isEmpty()) { // Si no están vacios
 
-                        // Se trata de la primera actualización tras la Sincronización inicial
-                        // y pueden venir datos repetidos.
-                        if(actualizacion && totalDescargasUnidad == 2){
-
-                            // Comprobamos si existe este HU
-                            if(!unidadEjb.existeHistoricoUnidad(codigoUnidadAnterior, codigoUnidadUltima)){
-                                // Creamos el HU mediante una NativeQuery muy eficiente
-                                unidadEjb.crearHistoricoUnidad(codigoUnidadAnterior, codigoUnidadUltima);
-                            }
-
-                        }else{// Carga inicial de datos o actualización
+                        // Carga inicial de datos o actualización
+                        if(!actualizacion){
 
                             // Creamos el HU mediante una NativeQuery muy eficiente
                             unidadEjb.crearHistoricoUnidad(codigoUnidadAnterior, codigoUnidadUltima);
+
+                        }else{ // Se trata de una actualización
+
+                            // Comprobamos si existe este HU
+                            if(!unidadEjb.existeHistoricoUnidad(codigoUnidadAnterior, codigoUnidadUltima)){
+
+                                // Creamos el HU mediante una NativeQuery muy eficiente
+                                unidadEjb.crearHistoricoUnidad(codigoUnidadAnterior, codigoUnidadUltima);
+                            }
                         }
 
 
