@@ -791,7 +791,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
                     if (!codigoUnidadUltima.isEmpty() && !codigoUnidadAnterior.isEmpty()) { // Si no están vacios
 
-                        // Carga inicial de datos o actualización
+                        // Carga inicial de datos
                         if(!actualizacion){
 
                             // Creamos el HU mediante una NativeQuery muy eficiente

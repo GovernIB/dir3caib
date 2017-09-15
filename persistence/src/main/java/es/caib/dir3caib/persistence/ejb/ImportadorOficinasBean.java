@@ -935,7 +935,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
 
                     if (!codigoOficina.isEmpty() && !codigoServicio.isEmpty()) { // Si no están vacios
 
-                        // Carga inicial de datos o actualización
+                        // Carga inicial de datos
                         if(!actualizacion){
 
                             // Creamos el Servicio mediante una NativeQuery muy eficiente
