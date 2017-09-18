@@ -764,6 +764,9 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
         } else {
             unidad.setTipoVia(null);
         }
+
+        //Historicos UO
+        unidad.setHistoricoUO(null);
     }
 
     /**
@@ -791,22 +794,8 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
                     if (!codigoUnidadUltima.isEmpty() && !codigoUnidadAnterior.isEmpty()) { // Si no están vacios
 
-                        // Carga inicial de datos
-                        if(!actualizacion){
-
-                            // Creamos el HU mediante una NativeQuery muy eficiente
-                            unidadEjb.crearHistoricoUnidad(codigoUnidadAnterior, codigoUnidadUltima);
-
-                        }else{ // Se trata de una actualización
-
-                            // Comprobamos si existe este HU
-                            if(!unidadEjb.existeHistoricoUnidad(codigoUnidadAnterior, codigoUnidadUltima)){
-
-                                // Creamos el HU mediante una NativeQuery muy eficiente
-                                unidadEjb.crearHistoricoUnidad(codigoUnidadAnterior, codigoUnidadUltima);
-                            }
-                        }
-
+                        // Creamos el HU mediante una NativeQuery muy eficiente
+                        unidadEjb.crearHistoricoUnidad(codigoUnidadAnterior, codigoUnidadUltima);
 
                         count++;
                         // cada 500 realizamos un flush y un clear para evitar problemas de Outofmemory

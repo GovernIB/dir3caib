@@ -579,9 +579,6 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
             oficina.setTipoVia(null);
         }
 
-        // Eliminamos la relacion con los servicios
-        oficina.setServicios(null);
-
         // Asignamos la Oficina Responsable
         String codigoOfiResponsable = fila[7].trim();
         Oficina ofiResponsable = null;
@@ -602,6 +599,12 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
         } else { // actualizamos en el caso de que no tenga oficina responsable
             oficina.setCodOfiResponsable(null);
         }
+
+        // Eliminamos la relacion con los servicios
+        oficina.setServicios(null);
+
+        // Eliminamos la relacion con los historicos
+        oficina.setHistoricosOfi(null);
     }
 
 
@@ -632,22 +635,8 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
 
                     if (!codigoOficinaUltima.isEmpty() && !codigoOficinaAnterior.isEmpty()) {// Si no están vacios
 
-                        // Carga inicial de datos o actualización
-                        if(!actualizacion ){
-
-                            // Creamos el HO mediante una NativeQuery muy eficiente
-                            oficinaEjb.crearHistoricoOficina(codigoOficinaAnterior, codigoOficinaUltima);
-
-                        }else{// Se trata una actualización
-
-                            // Comprobamos si existe este HO
-                            if(!oficinaEjb.existeHistoricoOficina(codigoOficinaAnterior, codigoOficinaUltima)){
-
-                                // Creamos el HO mediante una NativeQuery muy eficiente
-                                oficinaEjb.crearHistoricoOficina(codigoOficinaAnterior, codigoOficinaUltima);
-                            }
-
-                        }
+                        // Creamos el HO mediante una NativeQuery muy eficiente
+                        oficinaEjb.crearHistoricoOficina(codigoOficinaAnterior, codigoOficinaUltima);
 
                         count++;
                         //Cada 500 realizamos flush y clear para evitar problemas de outofmemory
@@ -935,21 +924,8 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
 
                     if (!codigoOficina.isEmpty() && !codigoServicio.isEmpty()) { // Si no están vacios
 
-                        // Carga inicial de datos
-                        if(!actualizacion){
-
-                            // Creamos el Servicio mediante una NativeQuery muy eficiente
-                            oficinaEjb.crearServicioOficina(codigoOficina, Long.valueOf(codigoServicio));
-
-                        }else{// Se trata de una actualización
-
-                            // Comprobamos si existe este Servicio
-                            if(!oficinaEjb.existeServicioOficina(codigoOficina, Long.valueOf(codigoServicio))){
-
-                                // Creamos el Servicio mediante una NativeQuery muy eficiente
-                                oficinaEjb.crearServicioOficina(codigoOficina, Long.valueOf(codigoServicio));
-                            }
-                        }
+                        // Creamos el Servicio mediante una NativeQuery muy eficiente
+                        oficinaEjb.crearServicioOficina(codigoOficina, Long.valueOf(codigoServicio));
 
                         count++;
                         if (count % 500 == 0) {
