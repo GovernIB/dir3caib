@@ -34,7 +34,7 @@ import java.util.*;
 public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLocal {
 
     @EJB(mappedName = "dir3caib/OficinaEJB/local")
-    public OficinaLocal oficinaEjb;
+    private OficinaLocal oficinaEjb;
 
     protected final Logger log = Logger.getLogger(getClass());
     protected SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
@@ -811,6 +811,29 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
     @Override
     @SuppressWarnings(value = "unchecked")
+    public void crearUnidad(String codigoUnidad) throws Exception{
+
+        Query q = em.createNativeQuery("insert into dir_unidad (codigo, esedp) values (?,?)");
+        q.setParameter(1, codigoUnidad);
+        q.setParameter(2, false);
+
+        q.executeUpdate();
+    }
+
+    @Override
+    @SuppressWarnings(value = "unchecked")
+    public void actualizarUnidad(String codigoUnidad, String codigoUnidadRaiz, String codigoUnidadSuperior) throws Exception{
+
+        Query q = em.createNativeQuery("update dir_unidad set codunidadraiz=?, codunidadsuperior=? where codigo=? ");
+        q.setParameter(1, codigoUnidadRaiz);
+        q.setParameter(2, codigoUnidadSuperior);
+        q.setParameter(3, codigoUnidad);
+
+        q.executeUpdate();
+    }
+
+    @Override
+    @SuppressWarnings(value = "unchecked")
     public void crearHistoricoUnidad(String codigoAnterior, String codigoUltima) throws Exception{
 
         Query q = em.createNativeQuery("insert into dir_historicouo (codanterior, codultima) values (?,?) ");
@@ -818,6 +841,17 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         q.setParameter(2, codigoUltima);
 
         q.executeUpdate();
+    }
+
+    @Override
+    @SuppressWarnings(value = "unchecked")
+    public void eliminarHistoricosUnidad(String idUnidad) throws Exception {
+
+        Query q =  em.createNativeQuery("delete from dir_historicouo where codanterior=?");
+        q.setParameter(1, idUnidad);
+
+        q.executeUpdate();
+
     }
 
     @Override

@@ -179,11 +179,23 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
      * Elimina todos los servicios de oficinas de la tabla de servicios.
      * @throws Exception
      */
+    @Override
     public void deleteServiciosOficina() throws Exception {
 
         em.createNativeQuery("delete from DIR_SERVICIOOFI").executeUpdate();
     }
 
+    @Override
+    public void deleteServiciosOficina(String idOficina) throws Exception {
+
+        Query q = em.createNativeQuery("delete from DIR_SERVICIOOFI where codoficina=?");
+        q.setParameter(1, idOficina);
+
+        q.executeUpdate();
+
+    }
+
+    @Override
     public void deleteAll() throws Exception {
 
         em.createQuery("delete from Oficina ").executeUpdate();

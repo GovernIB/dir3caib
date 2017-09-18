@@ -139,9 +139,10 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
 
                                 String codigoOficina = fila[0];
 
-                                //eliminamos sus contactos en la actualizacion
+                                //eliminamos sus contactos y servicios en la actualizacion
                                 if (isUpdate) {
                                     contactoOfiEjb.deleteByOficina(codigoOficina);
+                                    oficinaEjb.deleteServiciosOficina(codigoOficina);
                                 }
 
                                 Oficina oficina = null;

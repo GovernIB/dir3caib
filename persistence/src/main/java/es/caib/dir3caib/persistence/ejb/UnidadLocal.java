@@ -258,11 +258,34 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
     public boolean unidadValida(Unidad unidad, Date fechaSincro) throws Exception;
 
     /**
+     *
+     * @param codigoUnidad
+     * @throws Exception
+     */
+    public void crearUnidad(String codigoUnidad) throws Exception;
+
+    /**
+     *
+     * @param codigoUnidad
+     * @param codigoUnidadRaiz
+     * @param codigoUnidadSuperior
+     * @throws Exception
+     */
+    public void actualizarUnidad(String codigoUnidad, String codigoUnidadRaiz, String codigoUnidadSuperior) throws Exception;
+
+    /**
      * @param codigoAnterior
      * @param codigoUltima
      * @throws Exception
      */
     public void crearHistoricoUnidad(String codigoAnterior, String codigoUltima) throws Exception;
+
+    /**
+     *
+     * @param idUnidad
+     * @throws Exception
+     */
+    public void eliminarHistoricosUnidad(String idUnidad) throws Exception;
 
     /**
      * Comprueba la existencia de un HistoriooUnidad en concreto

@@ -131,9 +131,10 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                                 //Obtenemos codigo de la unidad del fichero
                                 String codigoUnidad = fila[0];
 
-                                // Si es una actualización: Eliminamos los contactos de la Unidad
+                                // Si es una actualización: Eliminamos los contactos e historicos de la Unidad
                                 if (actualizacion) {
                                     contactoUOEjb.deleteByUnidad(codigoUnidad);
+                                    unidadEjb.eliminarHistoricosUnidad(codigoUnidad);
                                 }
 
                                 Unidad unidad = null;
@@ -765,8 +766,9 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
             unidad.setTipoVia(null);
         }
 
-        //Historicos UO
+        //Historicos UO y Contactos a null
         unidad.setHistoricoUO(null);
+        unidad.setContactos(null);
     }
 
     /**

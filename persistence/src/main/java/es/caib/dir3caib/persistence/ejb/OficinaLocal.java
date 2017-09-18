@@ -56,6 +56,13 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
     public void deleteServiciosOficina() throws Exception;
 
     /**
+     * Elimina los Servicios de la oficina en cuestión
+     * @param idOficina
+     * @throws Exception
+     */
+    public void deleteServiciosOficina(String idOficina) throws Exception;
+
+    /**
      * Obtiene una oficina con sus historicos y sus servicios
      * @param id
      * @return
