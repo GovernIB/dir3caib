@@ -479,6 +479,14 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                     //Mensaje.saveMessageInfo(request, "Se han obtenido correctamente las unidades");
                     //return true;
                 }
+            }else{
+                String[] respuesta = descargarUnidadesWS(null, null);
+                if (Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO.equals(respuesta[0])) {
+                    //importamos las unidades a la bd.
+                    importarUnidades();
+                    //Mensaje.saveMessageInfo(request, "Se han obtenido correctamente las unidades");
+                    //return true;
+                }
             }
 
         } catch (Exception e) {

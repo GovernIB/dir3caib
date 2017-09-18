@@ -423,6 +423,13 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                     // importamos las oficinas a la bd.
                     importarOficinas(true);
                 }
+            }else{
+                // Obtiene los archivos csv via WS
+                String[] respuesta = descargarOficinasWS(null, null);
+                if (Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO.equals(respuesta[0])) {
+                    // importamos las oficinas a la bd.
+                    importarOficinas(false);
+                }
             }
 
         } catch (Exception e) {
