@@ -847,7 +847,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     @SuppressWarnings(value = "unchecked")
     public void eliminarHistoricosUnidad(String idUnidad) throws Exception {
 
-        Query q =  em.createNativeQuery("delete from dir_historicouo where codanterior=?");
+        Query q =  em.createNativeQuery("delete from dir_historicouo where codultima=?");
         q.setParameter(1, idUnidad);
 
         q.executeUpdate();
