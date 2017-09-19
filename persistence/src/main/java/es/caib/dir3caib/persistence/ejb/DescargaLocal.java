@@ -3,6 +3,7 @@ package es.caib.dir3caib.persistence.ejb;
 import es.caib.dir3caib.persistence.model.Descarga;
 
 import javax.ejb.Local;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -76,4 +77,14 @@ public interface DescargaLocal extends BaseEjb<Descarga, Long> {
    * @throws Exception
    */
   public List<Descarga> getPaginationByTipo(int inicio, String tipo) throws Exception;
+
+  /**
+   *
+   * @param tipo
+   * @param fechaInicio
+   * @param fechaFin
+   * @return
+   * @throws Exception
+   */
+  public Descarga descargarDirectorioWS(String tipo, Date fechaInicio, Date fechaFin) throws Exception;
 }

@@ -414,7 +414,6 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
     public void importarOficinasTask() {
 
         try {
-            //Obtenemos las fechas entre las que hay que hacer la descarga
 
             // obtenemos los datos de la última descarga
             Descarga ultimaDescarga = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.OFICINA);
@@ -425,7 +424,8 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                 Date fechaFin = new Date();
 
                 // Obtiene los archivos csv via WS
-                Descarga descarga = descargarOficinasWS(fechaInicio, fechaFin);
+                //Descarga descarga = descargarOficinasWS(fechaInicio, fechaFin);
+                Descarga descarga = descargaEjb.descargarDirectorioWS(Dir3caibConstantes.OFICINA, fechaInicio, fechaFin);
 
                 if (descarga != null && descarga.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
                     // importamos las oficinas a la bd.

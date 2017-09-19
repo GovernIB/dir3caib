@@ -5,6 +5,7 @@ import es.caib.dir3caib.back.form.OficinaBusquedaForm;
 import es.caib.dir3caib.back.utils.Mensaje;
 import es.caib.dir3caib.persistence.ejb.ArbolLocal;
 import es.caib.dir3caib.persistence.ejb.BaseEjbJPA;
+import es.caib.dir3caib.persistence.ejb.DescargaLocal;
 import es.caib.dir3caib.persistence.ejb.ImportadorOficinasLocal;
 import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.utils.Nodo;
@@ -50,6 +51,9 @@ public class OficinaController extends BaseController {
 
     @EJB(mappedName = "dir3caib/ArbolEJB/local")
     private ArbolLocal arbolEjb;
+
+    @EJB(mappedName = "dir3caib/DescargaEJB/local")
+    private DescargaLocal descargaEjb;
 
 
     /**
@@ -275,7 +279,8 @@ public class OficinaController extends BaseController {
 
         try {
             //Invoca a los ws para obtener los archivos de las unidades
-            Descarga descarga = importadorOficinas.descargarOficinasWS(fechaInicio, fechaFin);
+            //Descarga descarga = importadorOficinas.descargarOficinasWS(fechaInicio, fechaFin);
+            Descarga descarga = descargaEjb.descargarDirectorioWS(Dir3caibConstantes.OFICINA, fechaInicio, fechaFin);
 
             //Mostramos los mensajes en función de la respuesta del WS de Madrid
             if(descarga != null){

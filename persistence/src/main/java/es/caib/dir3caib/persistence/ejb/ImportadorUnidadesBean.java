@@ -473,7 +473,6 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
             // obtenemos los datos de la última descarga
             Descarga ultimaDescarga = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.UNIDAD);
-            Descarga descarga;
 
             if (ultimaDescarga != null) {
                 Date fechaInicio = ultimaDescarga.getFechaFin(); // fecha de la ultima descarga
@@ -482,7 +481,8 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                 Date fechaFin = new Date();
 
                 // Obtiene los archivos csv via WS
-                descarga = descargarUnidadesWS(fechaInicio, fechaFin);
+                //descarga = descargarUnidadesWS(fechaInicio, fechaFin);
+                Descarga descarga = descargaEjb.descargarDirectorioWS(Dir3caibConstantes.UNIDAD, fechaInicio, fechaFin);
 
                 if (descarga != null && descarga.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
                     //importamos las unidades a la bd.

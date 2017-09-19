@@ -5,6 +5,7 @@ import es.caib.dir3caib.back.form.UnidadBusquedaForm;
 import es.caib.dir3caib.back.utils.Mensaje;
 import es.caib.dir3caib.persistence.ejb.ArbolLocal;
 import es.caib.dir3caib.persistence.ejb.BaseEjbJPA;
+import es.caib.dir3caib.persistence.ejb.DescargaLocal;
 import es.caib.dir3caib.persistence.ejb.ImportadorUnidadesLocal;
 import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.utils.Nodo;
@@ -51,9 +52,9 @@ public class UnidadController extends BaseController {
     @EJB(mappedName = "dir3caib/ArbolEJB/local")
     private ArbolLocal arbolEjb;
 
+    @EJB(mappedName = "dir3caib/DescargaEJB/local")
+    private DescargaLocal descargaEjb;
 
-    // Indicamos el formato de fecha dd/MM/yyyy hh:mm:ss
-    SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
 
 
     /**
@@ -347,7 +348,8 @@ public class UnidadController extends BaseController {
 
         try {
             //Invoca a los ws para obtener los archivos de las unidades
-            Descarga descarga = importadorUnidades.descargarUnidadesWS(fechaInicio, fechaFin);
+            //Descarga descarga = importadorUnidades.descargarUnidadesWS(fechaInicio, fechaFin);
+            Descarga descarga = descargaEjb.descargarDirectorioWS(Dir3caibConstantes.UNIDAD, fechaInicio, fechaFin);
 
             //Mostramos los mensajes en función de la respuesta del WS de Madrid
             if(descarga != null){

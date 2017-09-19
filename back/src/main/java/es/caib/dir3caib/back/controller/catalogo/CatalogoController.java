@@ -3,6 +3,7 @@ package es.caib.dir3caib.back.controller.catalogo;
 import es.caib.dir3caib.back.controller.BaseController;
 import es.caib.dir3caib.back.utils.Mensaje;
 import es.caib.dir3caib.persistence.ejb.BaseEjbJPA;
+import es.caib.dir3caib.persistence.ejb.DescargaLocal;
 import es.caib.dir3caib.persistence.ejb.ImportadorCatalogoLocal;
 import es.caib.dir3caib.persistence.model.Descarga;
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
@@ -45,6 +46,8 @@ public class CatalogoController extends BaseController {
     @EJB(mappedName = "dir3caib/ImportadorCatalogoEJB/local")
     private ImportadorCatalogoLocal importadorCatalogo;
 
+    @EJB(mappedName = "dir3caib/DescargaEJB/local")
+    private DescargaLocal descargaEjb;
 
     /**
      * Descarga y sincroniza el catálogo
@@ -162,7 +165,8 @@ public class CatalogoController extends BaseController {
     private Descarga descargarCatalogoWS(HttpServletRequest request, Date fechaInicio, Date fechaFin) throws Exception {
 
         try {
-            Descarga descarga = importadorCatalogo.descargarCatalogoWS(fechaInicio, fechaFin);
+            //Descarga descarga = importadorCatalogo.descargarCatalogoWS(fechaInicio, fechaFin);
+            Descarga descarga = descargaEjb.descargarDirectorioWS(Dir3caibConstantes.CATALOGO, fechaInicio, fechaFin);
 
             //Mostramos los mensajes en función de la respuesta del WS de Madrid
             if(descarga != null){

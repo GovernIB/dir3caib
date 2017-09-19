@@ -878,14 +878,15 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
             // obtenemos los datos de la última descarga
             Descarga ultimaDescarga = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.CATALOGO);
-            Descarga descarga;
+
             Date fechaInicio = ultimaDescarga.getFechaFin(); // fecha de la ultima descarga
 
             // obtenemos la fecha de hoy
             Date fechaFin = new Date();
 
             // Obtiene los archivos csv via WS
-            descarga = descargarCatalogoWS(fechaInicio, fechaFin);
+            //descarga = descargarCatalogoWS(fechaInicio, fechaFin);
+            Descarga descarga = descargaEjb.descargarDirectorioWS(Dir3caibConstantes.CATALOGO, fechaInicio, fechaFin);
 
             // importamos el catálogo a la bd.
             if (descarga != null && descarga.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
