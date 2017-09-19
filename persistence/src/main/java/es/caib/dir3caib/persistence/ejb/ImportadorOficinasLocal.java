@@ -1,5 +1,6 @@
 package es.caib.dir3caib.persistence.ejb;
 
+import es.caib.dir3caib.persistence.model.Descarga;
 import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
 
 import javax.ejb.Local;
@@ -21,7 +22,7 @@ public interface ImportadorOficinasLocal {
    * @return listado de los nombres de los archivos CSV descargados
    * @throws Exception
    */
-  public String[] descargarOficinasWS(Date fechaInicio, Date fechaFin) throws Exception;
+  public Descarga descargarOficinasWS(Date fechaInicio, Date fechaFin) throws Exception;
 
   /**
    * Importa en la Bd los datos que contienen los archivos descargados previamente via WS

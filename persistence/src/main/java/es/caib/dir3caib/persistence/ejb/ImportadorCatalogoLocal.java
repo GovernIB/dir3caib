@@ -1,5 +1,6 @@
 package es.caib.dir3caib.persistence.ejb;
 
+import es.caib.dir3caib.persistence.model.Descarga;
 import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
 
 import javax.ejb.Local;
@@ -17,7 +18,7 @@ public interface ImportadorCatalogoLocal {
      * @return
      * @throws Exception
      */
-    public String[] descargarCatalogoWS(Date fechaInicio, Date fechaFin) throws Exception;
+    public Descarga descargarCatalogoWS(Date fechaInicio, Date fechaFin) throws Exception;
 
     /**
      *

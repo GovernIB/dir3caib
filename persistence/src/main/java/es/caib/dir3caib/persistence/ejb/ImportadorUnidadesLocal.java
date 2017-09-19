@@ -1,6 +1,7 @@
 package es.caib.dir3caib.persistence.ejb;
 
 
+import es.caib.dir3caib.persistence.model.Descarga;
 import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
 
 import javax.ejb.Local;
@@ -21,7 +22,7 @@ public interface ImportadorUnidadesLocal {
      * @return listado de los nombres de los archivos CSV descargados
      * @throws Exception
      */
-    public String[] descargarUnidadesWS(Date fechaInicio, Date fechaFin) throws Exception;
+    public Descarga descargarUnidadesWS(Date fechaInicio, Date fechaFin) throws Exception;
 
     /**
      * Método que importa el contenido de los archivos de las unidades, historicos y contactos descargados previamente a través

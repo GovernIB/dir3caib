@@ -737,7 +737,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
      * @param fechaFin
      */
     @Override
-    public String[] descargarCatalogoWS(Date fechaInicio, Date fechaFin) throws Exception {
+    public Descarga descargarCatalogoWS(Date fechaInicio, Date fechaFin) throws Exception {
 
         byte[] buffer = new byte[1024];
         String[] resp = new String[2];
@@ -779,31 +779,36 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
 
             // Invocamos al WS
-            RespuestaWS respuestaCsv = service.exportar(usuario, password, "csv", "COMPLETO");
+            RespuestaWS respuesta = service.exportar(usuario, password, "csv", "COMPLETO");
 
             Base64 decoder = new Base64();
 
-            log.info("Respuesta Ws catalogo: " + respuestaCsv.getCodigo() + " - " + respuestaCsv.getDescripcion());
+            log.info("Respuesta Ws catalogo: " + respuesta.getCodigo() + " - " + respuesta.getDescripcion());
 
             //Montamos la respuesta del ws para controlar los errores a mostrar
-            resp[0] = respuestaCsv.getCodigo();
-            resp[1] = respuestaCsv.getDescripcion();
+            resp[0] = respuesta.getCodigo();
+            resp[1] = respuesta.getDescripcion();
 
-            if (!respuestaCsv.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO)) {
+            if (!respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO)) {
                 descargaEjb.remove(descarga);
-                return resp;
+                return null;
             }
 
             //actualizamos el estado de la descarga.
-            descarga.setEstado(respuestaCsv.getCodigo());
-            descargaEjb.merge(descarga);
+            if(respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO)){
+                descarga.setEstado(Dir3caibConstantes.SINCRONIZACION_DESCARGADA);
+                descargaEjb.merge(descarga);
+            } else if(respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_VACIO)){
+                descarga.setEstado(Dir3caibConstantes.SINCRONIZACION_VACIA);
+                descargaEjb.merge(descarga);
+            }
 
             // Definimos el nombre del archivo zip a guardar
             String archivoCatalogoZip = ruta + Dir3caibConstantes.CATALOGOS_ARCHIVO_ZIP + descarga.getCodigo() + ".zip";
             File file = new File(archivoCatalogoZip);
 
             // guardamos el nuevo fichero descargado
-            FileUtils.writeByteArrayToFile(file, decoder.decode(respuestaCsv.getFichero()));
+            FileUtils.writeByteArrayToFile(file, decoder.decode(respuesta.getFichero()));
 
 
             // Se crea el directorio para el catálogo
@@ -813,7 +818,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                     //Borramos la descarga creada previamente.
                     descargaEjb.remove(descarga);
                     log.error(" No se ha podido crear el directorio");
-                    throw new Exception("No se ha podido crear el directorio");
+                    return null;
                 }
             }
 
@@ -850,7 +855,8 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
             log.info("Fin descarga de catalogo directorio comun");
 
-            return resp;
+            return descarga;
+
         } catch (Exception e) {
             descargaEjb.remove(descarga);
             throw new Exception(e.getMessage());
@@ -872,17 +878,21 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
             // obtenemos los datos de la última descarga
             Descarga ultimaDescarga = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.CATALOGO);
+            Descarga descarga;
             Date fechaInicio = ultimaDescarga.getFechaFin(); // fecha de la ultima descarga
 
             // obtenemos la fecha de hoy
             Date fechaFin = new Date();
 
             // Obtiene los archivos csv via WS
-            descargarCatalogoWS(fechaInicio, fechaFin);
+            descarga = descargarCatalogoWS(fechaInicio, fechaFin);
 
             // importamos el catálogo a la bd.
+            if (descarga != null && descarga.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
 
-            importarCatalogo();
+                importarCatalogo();
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

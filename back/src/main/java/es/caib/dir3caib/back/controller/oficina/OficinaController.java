@@ -151,6 +151,7 @@ public class OficinaController extends BaseController {
     public ModelAndView sincronizarOficinas(HttpServletRequest request) {
 
         ModelAndView mav = new ModelAndView("/oficina/oficinaImportacion");
+        Descarga descarga = null;
 
         try {
             //Establecemos la fecha de hoy
@@ -168,29 +169,30 @@ public class OficinaController extends BaseController {
             } else {
 
                 Boolean sincronizacion = true;
-                boolean descargaOk;
 
                 if (ultimaDescargaOficina != null) { // Si hay una descarga oficina sincronizada
                     Date fechaFin = ultimaDescargaOficina.getFechaFin(); //establecemos la fecha de inicio de la descarga como la fecha Fin de la última descarga
                     // Obtenemos los archivos por WS
-                    descargaOk = descargarOficinasWS(request, fechaFin, hoy);
+                    descarga = descargarOficinasWS(request, fechaFin, hoy);
                 } else {// es una descarga inicial(sincro)
                     // Obtenemos los archivos por WS
                     sincronizacion = false;
-                    descargaOk = descargarOficinasWS(request, null, null);
+                    descarga = descargarOficinasWS(request, null, null);
                 }
 
                 // Si la descarga ha funcionado, importamos los datos a la BD.
-                if (descargaOk) {
+                if (descarga != null && descarga.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
 
                     long start = System.currentTimeMillis();
 
-                    ResultadosImportacion resultados;
                     //Importamos a la BD todos los datos obtenidos de las oficinas y sus relaciones, se indica  si es una sincro o una actualización
-                    resultados = importadorOficinas.importarOficinas(sincronizacion);
+                    descargaEjb.actualizarEstado(descarga.getCodigo(), Dir3caibConstantes.SINCRONIZACION_EN_CURSO);
+                    ResultadosImportacion resultados = importadorOficinas.importarOficinas(sincronizacion);
 
-                    long end = System.currentTimeMillis();
-                    log.info("Importat oficinas en " + Utils.formatElapsedTime(end - start));
+                    // Importación correcta
+                    descargaEjb.actualizarEstado(descarga.getCodigo(), Dir3caibConstantes.SINCRONIZACION_CORRECTA);
+
+                    log.info("Importat oficinas en " + Utils.formatElapsedTime(System.currentTimeMillis() - start));
 
                     Mensaje.saveMessageInfo(request, getMessage("oficina.importacion.ok"));
                     mav.addObject("procesados", resultados.getProcesados()); // Nombre de los ficheros procesados
@@ -199,15 +201,25 @@ public class OficinaController extends BaseController {
                     mav.addObject("descarga", resultados.getDescarga()); //Datos de la descarga
 
                 }else{
-                    return new ModelAndView("redirect:/inicio");
+                    Mensaje.saveMessageInfo(request, getMessage("oficina.sincronizacion.vacia"));
+                    return new ModelAndView("redirect:/oficina/descarga/list");
                 }
 
             }
 
         } catch (Exception ex) {
+            // Si ha habido un Error en la sincronización, modificamos el estado de la descarga
+            if(descarga != null){
+                try {
+                    descargaEjb.actualizarEstado(descarga.getCodigo(), Dir3caibConstantes.SINCRONIZACION_ERRONEA);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
             Mensaje.saveMessageError(request, getMessage("oficina.sincronizacion.error"));
             ex.printStackTrace();
-            return new ModelAndView("redirect:/inicio");
+            return new ModelAndView("redirect:/oficina/descarga/list");
         }
 
         return mav;
@@ -259,34 +271,38 @@ public class OficinaController extends BaseController {
      * @param fechaInicio
      * @param fechaFin
      */
-    private boolean descargarOficinasWS(HttpServletRequest request, Date fechaInicio, Date fechaFin) throws Exception {
+    private Descarga descargarOficinasWS(HttpServletRequest request, Date fechaInicio, Date fechaFin) throws Exception {
 
         try {
             //Invoca a los ws para obtener los archivos de las unidades
-            String[] respuesta = importadorOficinas.descargarOficinasWS(fechaInicio, fechaFin);
-            //Mostramos los mensajes en función de la respuesta del WS de Madrid
-            if (Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO.equals(respuesta[0])) {
-                Mensaje.saveMessageInfo(request, getMessage("oficina.descarga.ok"));
-                return true;
-            } else {
-                if (Dir3caibConstantes.CODIGO_RESPUESTA_VACIO.equals(respuesta[0])) { //No ha devuelto datos
-                    Mensaje.saveMessageInfo(request, getMessage("oficina.nueva.nohay"));
-                    return false;
+            Descarga descarga = importadorOficinas.descargarOficinasWS(fechaInicio, fechaFin);
 
-                } else { //Ha habido un error en la descarga
-                    Mensaje.saveMessageError(request, getMessage("oficina.descarga.nook") + ": " + respuesta[1]);
-                    return false;
+            //Mostramos los mensajes en función de la respuesta del WS de Madrid
+            if(descarga != null){
+
+                if (descarga.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
+                    Mensaje.saveMessageInfo(request, getMessage("oficina.descarga.ok"));
+
+                }else if (descarga.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_VACIA)) { // No ha devuelto datos
+                    Mensaje.saveMessageInfo(request, getMessage("oficina.sincronizacion.vacia"));
                 }
 
+                return descarga;
+
+            }else{
+                Mensaje.saveMessageError(request, getMessage("oficina.descarga.nook"));
+                return null;
             }
+
         } catch (IOException ex) {
             Mensaje.saveMessageError(request, getMessage("oficina.descomprimir.error"));
             ex.printStackTrace();
-            return false;
+            return null;
+
         } catch (Exception e) {
             Mensaje.saveMessageError(request, getMessage("oficina.descarga.nook"));
             e.printStackTrace();
-            return false;
+            return null;
         }
 
     }

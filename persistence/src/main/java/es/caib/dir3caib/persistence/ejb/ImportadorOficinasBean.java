@@ -265,7 +265,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
      * @throws Exception
      */
     @Override
-    public String[] descargarOficinasWS(Date fechaInicio, Date fechaFin) throws Exception {
+    public Descarga descargarOficinasWS(Date fechaInicio, Date fechaFin) throws Exception {
 
         byte[] buffer = new byte[1024];
         String[] resp = new String[2];
@@ -337,12 +337,17 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
 
             if (!respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO) && !respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_VACIO)) {
                 descargaEjb.remove(descarga);
-                return resp;
+                return null;
             }
 
             //actualizamos el estado de la descarga.
-            descarga.setEstado(respuesta.getCodigo());
-            descargaEjb.merge(descarga);
+            if(respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO)){
+                descarga.setEstado(Dir3caibConstantes.SINCRONIZACION_DESCARGADA);
+                descargaEjb.merge(descarga);
+            } else if(respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_VACIO)){
+                descarga.setEstado(Dir3caibConstantes.SINCRONIZACION_VACIA);
+                descargaEjb.merge(descarga);
+            }
 
 
             // Realizamos una copia del archivo zip de la ultima descarga
@@ -360,6 +365,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                     //Borramos la descarga creada previamente.
                     descargaEjb.remove(descarga);
                     log.error(" No se ha podido crear el directorio");
+                    return null;
                 }
             }
 
@@ -389,7 +395,8 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
             zis.close();
 
             log.info("Fin descarga de oficinas directorio común");
-            return resp;
+            return descarga;
+
         } catch (Exception e) {
             descargaEjb.remove(descarga);
             throw new Exception(e.getMessage());
@@ -418,17 +425,11 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                 Date fechaFin = new Date();
 
                 // Obtiene los archivos csv via WS
-                String[] respuesta = descargarOficinasWS(fechaInicio, fechaFin);
-                if (Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO.equals(respuesta[0])) {
+                Descarga descarga = descargarOficinasWS(fechaInicio, fechaFin);
+
+                if (descarga != null && descarga.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
                     // importamos las oficinas a la bd.
                     importarOficinas(true);
-                }
-            }else{
-                // Obtiene los archivos csv via WS
-                String[] respuesta = descargarOficinasWS(null, null);
-                if (Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO.equals(respuesta[0])) {
-                    // importamos las oficinas a la bd.
-                    importarOficinas(false);
                 }
             }
 
@@ -444,13 +445,12 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
         dir3CaibEjb.eliminarOficinas();
 
         // Realizamos una descarga de Oficinas
-        String[] respuesta = descargarOficinasWS(null, null);
+        Descarga descarga = descargarOficinasWS(null, null);
 
         // Si la descarga ha sido correcta, importamos las Oficinas
-        if(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO.equals(respuesta[0])){
+        if (descarga != null && descarga.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
 
             return importarOficinas(false);
-
         }
 
         return null;

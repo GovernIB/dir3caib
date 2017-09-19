@@ -1,4 +1,3 @@
-<%@ page import="es.caib.dir3caib.persistence.model.Dir3caibConstantes" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ include file="/WEB-INF/jsp/modulos/includes.jsp" %>
 
@@ -68,22 +67,30 @@
                                         <td>${descarga.codigo}</td>
                                         <td>( <c:if test="${empty descarga.fechaInicio}"> ******* </c:if><fmt:formatDate pattern="dd/MM/yyyy" value="${descarga.fechaInicio}" />  -  <c:if test="${empty descarga.fechaFin}"> ******* </c:if><fmt:formatDate pattern="dd/MM/yyyy" value="${descarga.fechaFin}" /> )</td>
                                         <td>
-                                            <fmt:formatDate pattern="dd/MM/yyyy" value="${descarga.fechaImportacion}" /></td>
-                                            <c:set var="codigoVacio" value="<%=Dir3caibConstantes.CODIGO_RESPUESTA_VACIO%>"/>
-                                        <td>
-                                            <c:if test="${not empty descarga.fechaImportacion}">
-                                                <i class="fa fa-check-square fa-lg" style="color:green"></i>
-                                                <spring:message code="dir3caib.importado"/>
-                                            </c:if>
-                                            <c:if test="${empty descarga.fechaImportacion}">
-                                                <i class="fa fa-exclamation-triangle fa-lg" style="color:red"></i>
-                                                <c:if test="${not empty descarga.estado && descarga.estado==codigoVacio}">
-                                                    <fmt:message key="descarga.vacio"/></c:if>
-                                                <c:if test="${not empty descarga.estado && descarga.estado!=codigoVacio}">
-                                                    <fmt:message key="descarga.error.importacion"/>
-                                                </c:if>
-                                            </c:if>
+                                            <fmt:formatDate pattern="dd/MM/yyyy hh:mm:ss" value="${descarga.fechaImportacion}" />
                                         </td>
+
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${descarga.estado == 1}">
+                                                    <span class="label label-info"><spring:message code="sincronizacion.${descarga.estado}"/></span>
+                                                </c:when>
+                                                <c:when test="${descarga.estado == 2}">
+                                                    <span class="label label-success"><spring:message code="sincronizacion.${descarga.estado}"/></span>
+                                                </c:when>
+                                                <c:when test="${descarga.estado == 3}">
+                                                    <span class="label label-warning"><spring:message code="sincronizacion.${descarga.estado}"/></span>
+                                                </c:when>
+                                                <c:when test="${descarga.estado == 4}">
+                                                    <span class="label label-important"><spring:message code="sincronizacion.${descarga.estado}"/></span>
+                                                </c:when>
+                                                <c:when test="${descarga.estado == 5}">
+                                                    <span class="label label-success"><spring:message code="sincronizacion.${descarga.estado}"/></span>
+                                                </c:when>
+
+                                            </c:choose>
+                                        </td>
+
                                         <td class="center">
                                             <div class="btn-group">
                                                 <c:if test="${not empty descarga.ficheros}">

@@ -59,24 +59,49 @@ public class CatalogoController extends BaseController {
         log.info("Inicio sincronizacion CATALOGO");
 
         ModelAndView mav = new ModelAndView("/catalogo/catalogoImportacion");
+        Descarga descarga = null;
 
-        boolean descargaOk = descargarCatalogoWS(request, null, null);
+        try {
 
-        long start = System.currentTimeMillis();
-        if (descargaOk) {
-            ResultadosImportacion results = importadorCatalogo.importarCatalogo();
+            descarga = descargarCatalogoWS(request, null, null);
 
-            long end = System.currentTimeMillis();
-            log.info("");
-            log.info("Fin sincronizacion catalogo en " + Utils.formatElapsedTime(end - start));
+            if (descarga != null && descarga.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
 
-            Mensaje.saveMessageInfo(request, getMessage("catalogo.importacion.ok"));
-            mav.addObject("procesados", results.getProcesados());
-            mav.addObject("ficheros", Dir3caibConstantes.CAT_FICHEROS);
-            mav.addObject("existentes", results.getExistentes());
-            mav.addObject("descarga", results.getDescarga());
+                long start = System.currentTimeMillis();
+                descargaEjb.actualizarEstado(descarga.getCodigo(), Dir3caibConstantes.SINCRONIZACION_EN_CURSO);
+                ResultadosImportacion results = importadorCatalogo.importarCatalogo();
 
+                // Importación correcta
+                descargaEjb.actualizarEstado(descarga.getCodigo(), Dir3caibConstantes.SINCRONIZACION_CORRECTA);
+
+                log.info("Fin sincronizacion catalogo en " + Utils.formatElapsedTime(System.currentTimeMillis() - start));
+
+                Mensaje.saveMessageInfo(request, getMessage("catalogo.importacion.ok"));
+                mav.addObject("procesados", results.getProcesados());
+                mav.addObject("ficheros", Dir3caibConstantes.CAT_FICHEROS);
+                mav.addObject("existentes", results.getExistentes());
+                mav.addObject("descarga", results.getDescarga());
+
+            }else{
+                Mensaje.saveMessageInfo(request, getMessage("catalogo.sincronizacion.vacio"));
+                return new ModelAndView("redirect:/catalogo/descarga/list");
+            }
+
+        } catch (Exception ex) {
+            // Si ha habido un Error en la sincronización, modificamos el estado de la descarga
+            if(descarga != null){
+                try {
+                    descargaEjb.actualizarEstado(descarga.getCodigo(), Dir3caibConstantes.SINCRONIZACION_ERRONEA);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            Mensaje.saveMessageError(request, getMessage("catalogo.sincronizacion.error"));
+            ex.printStackTrace();
+            return new ModelAndView("redirect:/catalogo/descarga/list");
         }
+
         return mav;
     }
 
@@ -134,26 +159,37 @@ public class CatalogoController extends BaseController {
      * @param fechaInicio
      * @param fechaFin
      */
-    private boolean descargarCatalogoWS(HttpServletRequest request, Date fechaInicio, Date fechaFin) throws Exception {
+    private Descarga descargarCatalogoWS(HttpServletRequest request, Date fechaInicio, Date fechaFin) throws Exception {
 
         try {
-            String[] respuesta = importadorCatalogo.descargarCatalogoWS(fechaInicio, fechaFin);
-            if (Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO.equals(respuesta[0])) {
-                Mensaje.saveMessageInfo(request, getMessage("catalogo.descarga.ok"));
-                return true;
-            } else {
-                Mensaje.saveMessageError(request, getMessage("catalogo.descarga.nook") + ": " + respuesta[1]);
-                return false;
+            Descarga descarga = importadorCatalogo.descargarCatalogoWS(fechaInicio, fechaFin);
+
+            //Mostramos los mensajes en función de la respuesta del WS de Madrid
+            if(descarga != null){
+
+                if (descarga.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
+                    Mensaje.saveMessageInfo(request, getMessage("catalogo.descarga.ok"));
+
+                }else if (descarga.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_VACIA)) { // No ha devuelto datos
+                    Mensaje.saveMessageInfo(request, getMessage("catalogo.nueva.nohay"));
+                }
+
+                return descarga;
+
+            }else{
+                Mensaje.saveMessageError(request, getMessage("catalogo.descarga.nook"));
+                return null;
             }
+
 
         } catch (IOException ex) {
             Mensaje.saveMessageError(request, getMessage("catalogo.descomprimir.nook"));
             ex.printStackTrace();
-            return false;
+            return null;
         } catch (Exception e) {
             Mensaje.saveMessageError(request, getMessage("catalogo.descarga.nook"));
             e.printStackTrace();
-            return false;
+            return null;
         }
     }
 

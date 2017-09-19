@@ -89,6 +89,12 @@ public class Dir3caibConstantes {
     public static final long SERVICIO_SIR_ENVIO = 6;
     public static final long SERVICIO_SIR_RECEPCION = 7;
 
+    // Estados Sincronización
+    public static final String SINCRONIZACION_DESCARGADA = "1";
+    public static final String SINCRONIZACION_VACIA = "2";
+    public static final String SINCRONIZACION_EN_CURSO = "3";
+    public static final String SINCRONIZACION_ERRONEA = "4";
+    public static final String SINCRONIZACION_CORRECTA = "5";
 
     // Expresión CRON por defecto para actualizar DIR3
     public static final String CRON_SINCRONIZAR_DIR3 = "0 0 1 1/1 * ? *"; // Sincronización diaria a las 01:00 am

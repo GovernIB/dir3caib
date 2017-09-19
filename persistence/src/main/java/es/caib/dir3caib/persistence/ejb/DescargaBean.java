@@ -65,11 +65,11 @@ public class DescargaBean extends BaseEjbJPA<Descarga, Long> implements Descarga
 
     public Descarga ultimaDescargaSincronizada(String tipo) throws Exception {
 
-        Query query = em.createQuery( "select descarga from Descarga as descarga where descarga.tipo= :tipo and descarga.estado= :correcto and " +
-                "descarga.fechaImportacion != null order by descarga.codigo desc");
+        Query query = em.createQuery( "select descarga from Descarga as descarga where descarga.tipo = :tipo and descarga.estado = :correcto " +
+                " order by descarga.codigo desc");
 
         query.setParameter("tipo", tipo);
-        query.setParameter("correcto", Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO);
+        query.setParameter("correcto", Dir3caibConstantes.SINCRONIZACION_CORRECTA);
 
         List<Descarga> descargas = query.getResultList();
         if(!descargas.isEmpty()){
@@ -122,7 +122,7 @@ public class DescargaBean extends BaseEjbJPA<Descarga, Long> implements Descarga
         return q.getResultList();
     }
 
-
+    @Override
     public List<Descarga> getPaginationByTipo(int inicio, String tipo) throws Exception {
 
         Query q = em.createQuery("Select descarga from Descarga as descarga where descarga.tipo=? order by descarga.codigo desc");
@@ -133,9 +133,19 @@ public class DescargaBean extends BaseEjbJPA<Descarga, Long> implements Descarga
         return q.getResultList();
     }
 
+    @Override
     public void deleteAllByTipo(String tipo) throws Exception {
         Query query = em.createQuery( "delete from Descarga as descarga where descarga.tipo=? ");
         query.setParameter(1, tipo);
+        query.executeUpdate();
+    }
+
+    @Override
+    public void actualizarEstado(Long codigo, String estado) throws Exception {
+
+        Query query = em.createQuery( "update Descarga set estado = :estado where codigo = :codigo ");
+        query.setParameter("codigo", codigo);
+        query.setParameter("estado", estado);
         query.executeUpdate();
     }
 }

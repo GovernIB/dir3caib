@@ -201,31 +201,34 @@ public class UnidadController extends BaseController {
     public ModelAndView sincronizarUnidades(HttpServletRequest request) {
 
         ModelAndView mav = new ModelAndView("/unidad/unidadImportacion");
+        Descarga descarga = null;
 
         try {
 
             // Obtenemos la fecha de la ultima descarga/sincronizacion
             Descarga ultimaDescarga = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.UNIDAD);
-            boolean descargaOk = false;
 
             // Descarga de las unidades
             if(ultimaDescarga != null){
                 Date fechaFin = ultimaDescarga.getFechaFin();
-                descargaOk = descargarUnidadesWS(request, fechaFin, new Date());
+                descarga = descargarUnidadesWS(request, fechaFin, new Date());
             } else {//Es una descarga inicial
-                descargaOk = descargarUnidadesWS(request, null, null);
+                descarga = descargarUnidadesWS(request, null, null);
             }
 
             // Importamos los datos a la BD si la descarga ha ido bien
-            if (descargaOk) {
+            if (descarga != null && descarga.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
 
                 long start = System.currentTimeMillis();
 
                 // Realiza la importación de al última descarga de Unidades
+                descargaEjb.actualizarEstado(descarga.getCodigo(), Dir3caibConstantes.SINCRONIZACION_EN_CURSO);
                 ResultadosImportacion results = importadorUnidades.importarUnidades();
 
-                long end = System.currentTimeMillis();
-                log.info("Importat unidades en " + Utils.formatElapsedTime(end - start));
+                // Importación correcta
+                descargaEjb.actualizarEstado(descarga.getCodigo(), Dir3caibConstantes.SINCRONIZACION_CORRECTA);
+
+                log.info("Unidades importadas en " + Utils.formatElapsedTime(System.currentTimeMillis() - start));
 
                 Mensaje.saveMessageInfo(request, getMessage("unidad.importacion.ok"));
 
@@ -235,14 +238,23 @@ public class UnidadController extends BaseController {
                 mav.addObject("descarga", results.getDescarga());//Datos de la descarga
 
             }else{
-
-                return new ModelAndView("redirect:/inicio");
+                Mensaje.saveMessageInfo(request, getMessage("unidad.sincronizacion.vacia"));
+                return new ModelAndView("redirect:/unidad/descarga/list");
             }
 
         } catch (Exception ex) {
+            // Si ha habido un Error en la sincronización, modificamos el estado de la descarga
+            if(descarga != null){
+                try {
+                    descargaEjb.actualizarEstado(descarga.getCodigo(), Dir3caibConstantes.SINCRONIZACION_ERRONEA);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
             Mensaje.saveMessageError(request, getMessage("unidad.sincronizacion.error"));
             ex.printStackTrace();
-            return new ModelAndView("redirect:/inicio");
+            return new ModelAndView("redirect:/unidad/descarga/list");
         }
 
         return mav;
@@ -331,32 +343,38 @@ public class UnidadController extends BaseController {
      * @param fechaInicio
      * @param fechaFin
      */
-    private boolean descargarUnidadesWS(HttpServletRequest request, Date fechaInicio, Date fechaFin) throws Exception {
+    private Descarga descargarUnidadesWS(HttpServletRequest request, Date fechaInicio, Date fechaFin) throws Exception {
 
         try {
             //Invoca a los ws para obtener los archivos de las unidades
-            String[] respuesta = importadorUnidades.descargarUnidadesWS(fechaInicio, fechaFin);
+            Descarga descarga = importadorUnidades.descargarUnidadesWS(fechaInicio, fechaFin);
+
             //Mostramos los mensajes en función de la respuesta del WS de Madrid
-            if (Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO.equals(respuesta[0])) {
-                Mensaje.saveMessageInfo(request, getMessage("unidad.descarga.ok"));
-                return true;
-            } else {
-                if (Dir3caibConstantes.CODIGO_RESPUESTA_VACIO.equals(respuesta[0])) { // No ha devuelto datos
-                    Mensaje.saveMessageInfo(request, getMessage("unidad.nueva.nohay"));
-                    return false;
-                } else { // Ha habido un error en la descarga
-                    Mensaje.saveMessageError(request, getMessage("unidad.descarga.nook") + ": " + respuesta[1]);
-                    return false;
+            if(descarga != null){
+
+                if (descarga.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
+                    Mensaje.saveMessageInfo(request, getMessage("unidad.descarga.ok"));
+
+                }else if (descarga.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_VACIA)) { // No ha devuelto datos
+                    Mensaje.saveMessageInfo(request, getMessage("unidad.sincronizacion.vacia"));
                 }
+
+                return descarga;
+
+            }else{
+                Mensaje.saveMessageError(request, getMessage("unidad.descarga.nook"));
+                return null;
             }
+
+
         } catch (IOException ex) {
             Mensaje.saveMessageError(request, getMessage("unidad.descomprimir.error"));
             ex.printStackTrace();
-            return false;
+            return null;
         } catch (Exception e) {
             Mensaje.saveMessageError(request, getMessage("unidad.descarga.nook"));
             e.printStackTrace();
-            return false;
+            return null;
         }
     }
 

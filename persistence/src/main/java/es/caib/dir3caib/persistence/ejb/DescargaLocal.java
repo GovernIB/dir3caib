@@ -53,6 +53,14 @@ public interface DescargaLocal extends BaseEjb<Descarga, Long> {
   public void deleteAllByTipo(String tipo) throws Exception;
 
   /**
+   * Actualiza el estado de una Descarga
+   * @param codigo
+   * @param estado
+   * @throws Exception
+   */
+  public void actualizarEstado(Long codigo, String estado) throws Exception;
+
+  /**
    * Obtiene el total por tipo.
    * @param tipo
    * @return

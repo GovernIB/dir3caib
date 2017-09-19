@@ -319,7 +319,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
      * @throws Exception
      */
     @Override
-    public String[] descargarUnidadesWS(Date fechaInicio, Date fechaFin) throws Exception {
+    public Descarga descargarUnidadesWS(Date fechaInicio, Date fechaFin) throws Exception {
 
         byte[] buffer = new byte[1024];
         String[] resp = new String[2];
@@ -395,11 +395,18 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
             //Si la respuesta ha sido incorrecta o vacia, eliminamos la descarga y devolvemos la respuesta incorrecta
             if (!respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO) && !respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_VACIO)) {
                 descargaEjb.remove(descarga);
-                return resp;
+                return null;
             }
+
             //actualizamos el estado de la descarga.
-            descarga.setEstado(respuesta.getCodigo());
-            descargaEjb.merge(descarga);
+            if(respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO)){
+                descarga.setEstado(Dir3caibConstantes.SINCRONIZACION_DESCARGADA);
+                descargaEjb.merge(descarga);
+            } else if(respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_VACIO)){
+                descarga.setEstado(Dir3caibConstantes.SINCRONIZACION_VACIA);
+                descargaEjb.merge(descarga);
+            }
+
 
             // definimos el archivo zip a descargar
             String archivoUnidadZip = archivosPath + Dir3caibConstantes.UNIDADES_ARCHIVO_ZIP + descarga.getCodigo() + ".zip";
@@ -415,6 +422,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                     //Borramos la descarga creada previamente.
                     descargaEjb.remove(descarga);
                     log.error(" No se ha podido crear el directorio");
+                    return null;
                 }
             }
 
@@ -444,7 +452,8 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
             zis.close();
 
 
-            return resp;
+            return descarga;
+
         } catch (Exception e) { //si hay algun problema, eliminamos la descarga
             descargaEjb.remove(descarga);
             throw new Exception(e.getMessage());
@@ -461,10 +470,11 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
     public void importarUnidadesTask() {
 
         try {
-            //Obtenemos las fechas entre las que hay que hacer la descarga
 
             // obtenemos los datos de la última descarga
             Descarga ultimaDescarga = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.UNIDAD);
+            Descarga descarga;
+
             if (ultimaDescarga != null) {
                 Date fechaInicio = ultimaDescarga.getFechaFin(); // fecha de la ultima descarga
 
@@ -472,20 +482,12 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                 Date fechaFin = new Date();
 
                 // Obtiene los archivos csv via WS
-                String[] respuesta = descargarUnidadesWS(fechaInicio, fechaFin);
-                if (Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO.equals(respuesta[0])) {
+                descarga = descargarUnidadesWS(fechaInicio, fechaFin);
+
+                if (descarga != null && descarga.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
                     //importamos las unidades a la bd.
                     importarUnidades();
-                    //Mensaje.saveMessageInfo(request, "Se han obtenido correctamente las unidades");
-                    //return true;
-                }
-            }else{
-                String[] respuesta = descargarUnidadesWS(null, null);
-                if (Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO.equals(respuesta[0])) {
-                    //importamos las unidades a la bd.
-                    importarUnidades();
-                    //Mensaje.saveMessageInfo(request, "Se han obtenido correctamente las unidades");
-                    //return true;
+
                 }
             }
 
@@ -511,13 +513,12 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
         dir3CaibEjb.eliminarUnidades();
 
         // Realizamos una descarga de Unidades
-        String[] respuesta = descargarUnidadesWS(null, null);
+        Descarga descarga = descargarUnidadesWS(null, null);
 
         // Si la descarga ha sido correcta, importamos las Unidades
-        if(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO.equals(respuesta[0])){
+        if (descarga != null && descarga.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
 
             return importarUnidades();
-
         }
 
         return null;
