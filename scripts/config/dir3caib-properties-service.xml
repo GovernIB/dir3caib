@@ -20,11 +20,9 @@
 
             <!-- Directorio base para los archivos generales -->
             es.caib.dir3caib.archivos.path=D:/dades/dades/Proyectos/SICRES3/dir3caib/archivos/
-			es.caib.dir3caib.catalogos.path=D:/dades/dades/Proyectos/SICRES3/dir3caib/archivos/catalogos/
-			es.caib.dir3caib.oficinas.path=D:/dades/dades/Proyectos/SICRES3/dir3caib/archivos/oficinas/
-			es.caib.dir3caib.unidades.path=D:/dades/dades/Proyectos/SICRES3/dir3caib/archivos/unidades/
-            <!-- Autentificación para los dir3ws -->
 
+
+			<!-- Autentificación para los dir3ws -->
             <!--endpoints de ws-->
             es.caib.dir3caib.catalogo.endpoint=http://pre-dir3ws.redsara.es/directorio/services/SC21CT_VolcadoCatalogos
             es.caib.dir3caib.unidad.endpoint=http://pre-dir3ws.redsara.es/directorio/services/SD01UN_DescargaUnidades
@@ -34,8 +32,7 @@
             es.caib.dir3caib.dir3ws.pass=password
 
             <!-- Sincronitzacio DIR3. L'exemple correspon a una sincronització diaria a les 3:00 de la dematinada -->
-			<!-- Per defecte desactivada -->
-            # es.caib.dir3caib.cronExpression=0 0 3 1/1 * ? *
+			es.caib.dir3caib.cronExpression=0 0 3 1/1 * ? *
 
 			<!--Valores por defecto para la búsqueda de Unidades y Oficinas-->
 			es.caib.dir3caib.busqueda.administracion=2
