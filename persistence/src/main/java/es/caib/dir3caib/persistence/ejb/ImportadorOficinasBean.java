@@ -445,7 +445,8 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
         dir3CaibEjb.eliminarOficinas();
 
         // Realizamos una descarga de Oficinas
-        Descarga descarga = descargarOficinasWS(null, null);
+        //Descarga descarga = descargarOficinasWS(null, null);
+        Descarga descarga = descargaEjb.descargarDirectorioWS(Dir3caibConstantes.OFICINA, null, null);
 
         // Si la descarga ha sido correcta, importamos las Oficinas
         if (descarga != null && descarga.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {

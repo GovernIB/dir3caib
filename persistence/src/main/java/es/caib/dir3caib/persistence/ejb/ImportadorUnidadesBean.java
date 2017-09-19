@@ -513,7 +513,8 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
         dir3CaibEjb.eliminarUnidades();
 
         // Realizamos una descarga de Unidades
-        Descarga descarga = descargarUnidadesWS(null, null);
+        //Descarga descarga = descargarUnidadesWS(null, null);
+        Descarga descarga = descargaEjb.descargarDirectorioWS(Dir3caibConstantes.UNIDAD, null, null);
 
         // Si la descarga ha sido correcta, importamos las Unidades
         if (descarga != null && descarga.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
