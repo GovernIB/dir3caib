@@ -67,7 +67,7 @@
                                         <td>${descarga.codigo}</td>
                                         <td>( <c:if test="${empty descarga.fechaInicio}"> ******* </c:if><fmt:formatDate pattern="dd/MM/yyyy" value="${descarga.fechaInicio}" />  -  <c:if test="${empty descarga.fechaFin}"> ******* </c:if><fmt:formatDate pattern="dd/MM/yyyy" value="${descarga.fechaFin}" /> )</td>
                                         <td>
-                                            <fmt:formatDate pattern="dd/MM/yyyy hh:mm:ss" value="${descarga.fechaImportacion}" />
+                                            <fmt:formatDate pattern="dd/MM/yyyy HH:mm:ss" value="${descarga.fechaImportacion}" />
                                         </td>
 
                                         <td>
