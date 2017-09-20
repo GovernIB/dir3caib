@@ -173,6 +173,15 @@
         CODSERVICIO number(19,0) not null
     );
 
+    create table DIR_SINCRONIZACION (
+        CODIGO number(19,0) not null,
+        ESTADO number(19,0),
+        FECHAFIN timestamp,
+        FECHAIMPORTACION timestamp,
+        FECHAINICIO timestamp,
+        TIPO varchar2(255 char)
+    );
+
     create table DIR_UNIDAD (
         CODIGO varchar2(9 char) not null,
         CODAMBELM number(19,0),
@@ -320,6 +329,8 @@
     alter table DIR_RELACIONSIROFI add constraint DIR_RELACIONSIROFI_pk primary key (ID);
 
     alter table DIR_SERVICIOOFI add constraint DIR_SERVICIOOFI_pk primary key (CODOFICINA, CODSERVICIO);
+
+    alter table DIR_SINCRONIZACION add constraint DIR_SINCRONIZACION_pk primary key (CODIGO);
 
     alter table DIR_UNIDAD add constraint DIR_UNIDAD_pk primary key (CODIGO);
 
