@@ -23,16 +23,18 @@ import java.util.*;
 public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
 
     protected final Logger log = Logger.getLogger(getClass());
-    protected SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
-
+    
     @EJB(mappedName = "dir3caib/OficinaEJB/local")
-    protected OficinaLocal oficinaEjb;
+    private OficinaLocal oficinaEjb;
 
     @EJB(mappedName = "dir3caib/UnidadEJB/local")
-    protected UnidadLocal unidadEjb;
+    private UnidadLocal unidadEjb;
 
-    @EJB(mappedName = "dir3caib/DescargaEJB/local")
-    protected DescargaLocal descargaEjb;
+    @EJB(mappedName = "dir3caib/SincronizacionEJB/local")
+    private SincronizacionLocal sincronizacionEjb;
+    
+    
+    protected SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
 
     /**
      * Obtiene los datos de una {@link es.caib.dir3caib.persistence.model.ws.OficinaTF}  en función del codigo y la
@@ -190,9 +192,9 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
     @Override
     public Date obtenerFechaUltimaActualizacion() throws Exception {
 
-        Descarga descarga = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.OFICINA);
+        Sincronizacion sincronizacion = sincronizacionEjb.ultimaSincronizacionCorrecta(Dir3caibConstantes.DIRECTORIO);
 
-        return descarga.getFechaImportacion();
+        return sincronizacion.getFechaImportacion();
     }
 
 }

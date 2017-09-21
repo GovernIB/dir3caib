@@ -3,11 +3,6 @@ package es.caib.dir3caib.persistence.ejb;
 import au.com.bytecode.opencsv.CSVReader;
 import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.utils.Configuracio;
-import es.caib.dir3caib.ws.dir3.catalogo.client.RespuestaWS;
-import es.caib.dir3caib.ws.dir3.catalogo.client.SC21CTVolcadoCatalogos;
-import es.caib.dir3caib.ws.dir3.catalogo.client.SC21CTVolcadoCatalogosService;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.SecurityDomain;
 import org.jboss.ejb3.annotation.TransactionTimeout;
@@ -16,15 +11,10 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.xml.ws.BindingProvider;
 import java.io.*;
-import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 /**
  * Created 10/03/14 14:20
@@ -94,9 +84,6 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
     @EJB(mappedName = "dir3caib/ServicioEJB/local")
     private ServicioLocal servicioEjb;
-
-    @EJB(mappedName = "dir3caib/DescargaEJB/local")
-    private DescargaLocal descargaEjb;
 
 
     /**
@@ -703,141 +690,6 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
         } else {
             log.error(" Fitxer " + file.getAbsolutePath() + " no existeix.");
             return null;
-        }
-
-    }
-
-
-    /**
-     * Método que se encarga de obtener los archivos del catálogo a través de WS
-     *
-     * @param fechaInicio
-     * @param fechaFin
-     */
-    @Override
-    public Descarga descargarCatalogoWS(Date fechaInicio, Date fechaFin) throws Exception {
-
-        byte[] buffer = new byte[1024];
-        String[] resp = new String[2];
-
-
-        // Guardaremos la fecha de la ultima descarga
-        Descarga descarga = new Descarga(Dir3caibConstantes.CATALOGO);
-
-        // Establecemos las Fechas de la descarga
-        if (fechaInicio != null) {
-            descarga.setFechaInicio(fechaInicio);
-        }else{
-            descarga.setFechaInicio(new Date());
-        }
-
-        if (fechaFin != null) {
-            descarga.setFechaFin(fechaFin);
-        }else{
-            descarga.setFechaFin(new Date());
-        }
-
-        log.info("Inicio descarga de catalogo directorio común");
-
-        // Guardamos la descarga porque emplearemos el identificador para el nombre del directorio y el archivo.
-        descarga = descargaEjb.persist(descarga);
-        try {
-            // Obtenemos  usuario y rutas para los WS.
-            String usuario = Configuracio.getDir3WsUser();
-            String password = Configuracio.getDir3WsPassword();
-            String ruta = Configuracio.getArchivosPath();
-            String rutaCatalogos = Configuracio.getCatalogosPath(descarga.getCodigo());
-
-            String endpoint = Configuracio.getCatalogoEndPoint();
-
-            SC21CTVolcadoCatalogosService catalogoService = new SC21CTVolcadoCatalogosService(new URL(endpoint + "?wsdl"));
-            SC21CTVolcadoCatalogos service = catalogoService.getSC21CTVolcadoCatalogos();
-            Map<String, Object> reqContext = ((BindingProvider) service).getRequestContext();
-            reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpoint);
-
-
-            // Invocamos al WS
-            RespuestaWS respuesta = service.exportar(usuario, password, "csv", "COMPLETO");
-
-            Base64 decoder = new Base64();
-
-            log.info("Respuesta Ws catalogo: " + respuesta.getCodigo() + " - " + respuesta.getDescripcion());
-
-            //Montamos la respuesta del ws para controlar los errores a mostrar
-            resp[0] = respuesta.getCodigo();
-            resp[1] = respuesta.getDescripcion();
-
-            if (!respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_CORRECTO)) {
-                descargaEjb.remove(descarga);
-                return null;
-            }
-
-            //actualizamos el estado de la descarga.
-            if(respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_CORRECTO)){
-                descarga.setEstado(Dir3caibConstantes.SINCRONIZACION_DESCARGADA.toString());
-                descargaEjb.merge(descarga);
-            } else if(respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_VACIO)){
-                descarga.setEstado(Dir3caibConstantes.SINCRONIZACION_VACIA.toString());
-                descargaEjb.merge(descarga);
-            }
-
-            // Definimos el nombre del archivo zip a guardar
-            String archivoCatalogoZip = ruta + Dir3caibConstantes.CATALOGOS_ARCHIVO_ZIP + descarga.getCodigo() + ".zip";
-            File file = new File(archivoCatalogoZip);
-
-            // guardamos el nuevo fichero descargado
-            FileUtils.writeByteArrayToFile(file, decoder.decode(respuesta.getFichero()));
-
-
-            // Se crea el directorio para el catálogo
-            File dir = new File(rutaCatalogos);
-            if (!dir.exists()) {
-                if (!dir.mkdirs()) {
-                    //Borramos la descarga creada previamente.
-                    descargaEjb.remove(descarga);
-                    log.error(" No se ha podido crear el directorio");
-                    return null;
-                }
-            }
-
-            //Descomprimir el archivo
-            ZipInputStream zis = new ZipInputStream(new FileInputStream(archivoCatalogoZip));
-            ZipEntry zipEntry = zis.getNextEntry();
-
-
-            while (zipEntry != null) {
-
-                String fileName = zipEntry.getName();
-                File newFile = new File(rutaCatalogos + fileName);
-
-                log.info("Fichero descomprimido: " + newFile.getAbsoluteFile());
-
-                //create all non exists folders
-                //else you will hit FileNotFoundException for compressed folder
-                new File(newFile.getParent()).mkdirs();
-
-
-                FileOutputStream fos = new FileOutputStream(newFile);
-
-                int len;
-                while ((len = zis.read(buffer)) > 0) {
-                    fos.write(buffer, 0, len);
-                }
-
-                fos.close();
-                zipEntry = zis.getNextEntry();
-
-            }
-            zis.closeEntry();
-            zis.close();
-
-            log.info("Fin descarga de catalogo directorio comun");
-
-            return descarga;
-
-        } catch (Exception e) {
-            descargaEjb.remove(descarga);
-            throw new Exception(e.getMessage());
         }
 
     }

@@ -2,32 +2,22 @@ package es.caib.dir3caib.back.controller.oficina;
 
 import es.caib.dir3caib.back.controller.BaseController;
 import es.caib.dir3caib.back.form.OficinaBusquedaForm;
-import es.caib.dir3caib.back.utils.Mensaje;
 import es.caib.dir3caib.persistence.ejb.ArbolLocal;
-import es.caib.dir3caib.persistence.ejb.BaseEjbJPA;
-import es.caib.dir3caib.persistence.ejb.DescargaLocal;
-import es.caib.dir3caib.persistence.ejb.ImportadorOficinasLocal;
 import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.Paginacion;
-import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
 import es.caib.dir3caib.utils.Configuracio;
 import org.apache.log4j.Logger;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -44,15 +34,8 @@ public class OficinaController extends BaseController {
 
     protected final Logger log = Logger.getLogger(getClass());
 
-
-    @EJB(mappedName = "dir3caib/ImportadorOficinasEJB/local")
-    private ImportadorOficinasLocal importadorOficinas;
-
     @EJB(mappedName = "dir3caib/ArbolEJB/local")
     private ArbolLocal arbolEjb;
-
-    @EJB(mappedName = "dir3caib/DescargaEJB/local")
-    private DescargaLocal descargaEjb;
 
 
     /**
@@ -144,175 +127,6 @@ public class OficinaController extends BaseController {
 
 
     /**
-     * Sincroniza las oficinas. Obtiene las oficinas y sus relaciones a traves de WS desde la última fecha de
-     * sincronización e importa los datos.
-     *
-     * @param request
-     * @return
-     */
-    /*@RequestMapping(value = "/sincronizar", method = RequestMethod.GET)
-    public ModelAndView sincronizarOficinas(HttpServletRequest request) {
-
-        ModelAndView mav = new ModelAndView("/oficina/oficinaImportacion");
-        Descarga descarga = null;
-
-        try {
-            //Establecemos la fecha de hoy
-            Date hoy = new Date();
-
-            //Obtenemos las ultimas descargas de Unidades y Oficinas
-            Descarga ultimaDescargaUnidad = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.UNIDAD);
-            Descarga ultimaDescargaOficina = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.OFICINA);
-
-            // Controlamos que no se puedan sincronizar las oficinas antes que las unidades.
-            // Para ello comprobamos que la fecha de importación de las unidades no sea anterior
-            // a la fecha de la sincro de las oficinas (hoy)
-            if (ultimaDescargaUnidad == null || Utils.isAfterDay(hoy, ultimaDescargaUnidad.getFechaImportacion())) {
-                Mensaje.saveMessageError(request, getMessage("oficina.sincronizacion.nosepuede"));
-            } else {
-
-                Boolean sincronizacion = true;
-
-                if (ultimaDescargaOficina != null) { // Si hay una descarga oficina sincronizada
-                    Date fechaFin = ultimaDescargaOficina.getFechaFin(); //establecemos la fecha de inicio de la descarga como la fecha Fin de la última descarga
-                    // Obtenemos los archivos por WS
-                    descarga = descargarOficinasWS(request, fechaFin, hoy);
-                } else {// es una descarga inicial(sincro)
-                    // Obtenemos los archivos por WS
-                    sincronizacion = false;
-                    descarga = descargarOficinasWS(request, null, null);
-                }
-
-                // Si la descarga ha funcionado, importamos los datos a la BD.
-                if (descarga != null && descarga.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
-
-                    long start = System.currentTimeMillis();
-
-                    //Importamos a la BD todos los datos obtenidos de las oficinas y sus relaciones, se indica  si es una sincro o una actualización
-                    descargaEjb.actualizarEstado(descarga.getCodigo(), Dir3caibConstantes.SINCRONIZACION_EN_CURSO.toString());
-                    ResultadosImportacion resultados = importadorOficinas.importarOficinas(sincronizacion);
-
-                    // Importación correcta
-                    descargaEjb.actualizarEstado(descarga.getCodigo(), Dir3caibConstantes.SINCRONIZACION_CORRECTA.toString());
-
-                    log.info("Importat oficinas en " + Utils.formatElapsedTime(System.currentTimeMillis() - start));
-
-                    Mensaje.saveMessageInfo(request, getMessage("oficina.importacion.ok"));
-                    mav.addObject("procesados", resultados.getProcesados()); // Nombre de los ficheros procesados
-                    mav.addObject("ficheros", Dir3caibConstantes.OFI_FICHEROS); //Nombre de los ficheros obtenidos
-                    mav.addObject("existentes", resultados.getExistentes()); //Nombre de los ficheros que realmente han venido en la descarga
-                    mav.addObject("descarga", resultados.getDescarga()); //Datos de la descarga
-
-                }else{
-                    Mensaje.saveMessageInfo(request, getMessage("oficina.sincronizacion.vacia"));
-                    return new ModelAndView("redirect:/oficina/descarga/list");
-                }
-
-            }
-
-        } catch (Exception ex) {
-            // Si ha habido un Error en la sincronización, modificamos el estado de la descarga
-            if(descarga != null){
-                try {
-                    descargaEjb.actualizarEstado(descarga.getCodigo(), Dir3caibConstantes.SINCRONIZACION_ERRONEA.toString());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            Mensaje.saveMessageError(request, getMessage("oficina.sincronizacion.error"));
-            ex.printStackTrace();
-            return new ModelAndView("redirect:/oficina/descarga/list");
-        }
-
-        return mav;
-    }*/
-
-    /**
-     * Muestra el formulario para obtener las oficinas mediante el WS de DIR3
-     */
-    @RequestMapping(value = "restaurarDirectorio", method = RequestMethod.GET)
-    public String restaurarOficinas(Model model) throws Exception {
-
-        model.addAttribute("development", Configuracio.isDevelopment());
-        model.addAttribute("oficinaForm", new Oficina());
-
-        return "oficina/oficinaRestaurar";
-    }
-
-    /**
-     * Obtiene las oficinas mediante el WS de DIR3
-     */
-    @RequestMapping(value = "/restaurarDirectorio", method = RequestMethod.POST)
-    public ModelAndView restaurarOficinas(@ModelAttribute Oficina oficinaForm, HttpServletRequest request) throws Exception {
-
-        ModelAndView mav = new ModelAndView("/oficina/oficinaImportacion");
-
-        // Restaurar las Oficinas
-        ResultadosImportacion results = importadorOficinas.restaurarOficinas();
-
-        if(results != null){
-
-            Mensaje.saveMessageInfo(request, getMessage("oficina.importacion.ok"));
-            mav.addObject("procesados", results.getProcesados());// Nombre de los ficheros procesados
-            mav.addObject("ficheros", Dir3caibConstantes.OFI_FICHEROS);//Nombre de los ficheros obtenidos
-            mav.addObject("existentes", results.getExistentes());//Nombre de los ficheros que realmente han venido en la descarga
-            mav.addObject("descarga", results.getDescarga());//Datos de la descarga
-
-            return mav;
-
-        }else{
-            Mensaje.saveMessageError(request, getMessage("oficina.descarga.nook"));
-
-            return new ModelAndView("redirect:/oficina/restaurarDirectorio");
-        }
-    }
-
-    /*
-     * Método que se encarga de obtener los archivos de las oficinas a través de WS
-     * @param request
-     * @param fechaInicio
-     * @param fechaFin
-     */
-    private Descarga descargarOficinasWS(HttpServletRequest request, Date fechaInicio, Date fechaFin) throws Exception {
-
-        try {
-            //Invoca a los ws para obtener los archivos de las unidades
-            //Descarga descarga = importadorOficinas.descargarOficinasWS(fechaInicio, fechaFin);
-            Descarga descarga = descargaEjb.descargarDirectorioWS(Dir3caibConstantes.OFICINA, fechaInicio, fechaFin);
-
-            //Mostramos los mensajes en función de la respuesta del WS de Madrid
-            if(descarga != null){
-
-                if (descarga.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
-                    Mensaje.saveMessageInfo(request, getMessage("oficina.descarga.ok"));
-
-                }else if (descarga.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_VACIA)) { // No ha devuelto datos
-                    Mensaje.saveMessageInfo(request, getMessage("oficina.sincronizacion.vacia"));
-                }
-
-                return descarga;
-
-            }else{
-                Mensaje.saveMessageError(request, getMessage("oficina.descarga.nook"));
-                return null;
-            }
-
-        } catch (IOException ex) {
-            Mensaje.saveMessageError(request, getMessage("oficina.descomprimir.error"));
-            ex.printStackTrace();
-            return null;
-
-        } catch (Exception e) {
-            Mensaje.saveMessageError(request, getMessage("oficina.descarga.nook"));
-            e.printStackTrace();
-            return null;
-        }
-
-    }
-
-
-    /**
      * Método que obtiene el árbol de oficinas de una oficina
      *
      * @param request
@@ -333,65 +147,6 @@ public class OficinaController extends BaseController {
 
         return mav;
 
-    }
-
-
-    /**
-     * Método que se encarga de listar todas las descargas que se han realizado de las oficinas
-     */
-    @RequestMapping(value = "/descarga/list", method = RequestMethod.GET)
-    public String listadoDescargaOficina() {
-
-        return "redirect:/oficina/descarga/list/1";
-    }
-
-    /**
-     * Listado de las descargas de las oficinas
-     *
-     * @param pageNumber
-     * @return
-     * @throws Exception
-     */
-    @RequestMapping(value = "/descarga/list/{pageNumber}", method = RequestMethod.GET)
-    public ModelAndView descargaOficinaList(@PathVariable Integer pageNumber) throws Exception {
-
-        ModelAndView mav = new ModelAndView("/descargaList");
-
-        //Obtenemos el listado paginado de las descargas
-        List<Descarga> listado = descargaEjb.getPaginationByTipo(((pageNumber - 1) * BaseEjbJPA.RESULTADOS_PAGINACION), Dir3caibConstantes.OFICINA);
-
-        Long total = descargaEjb.getTotalByTipo(Dir3caibConstantes.OFICINA);
-
-        ArrayList<String> ficheros = new ArrayList<String>();
-
-        //Obtenemos todos los ficheros asociados a cada descarga
-        if (listado != null) {
-            for (Descarga descarga : listado) {
-                File f = new File(Configuracio.getOficinasPath(descarga.getCodigo()));
-                if (f.exists()) {
-                    ficheros = new ArrayList<String>(Arrays.asList(f.list()));
-                }
-                descarga.setFicheros(ficheros);
-            }
-        }
-
-        Paginacion paginacion = new Paginacion(total.intValue(), pageNumber);
-
-        mav.addObject("paginacion", paginacion);
-        mav.addObject("listado", listado);
-        mav.addObject("elemento", "oficina");
-        mav.addObject("ficheros", ficheros);
-
-        return mav;
-    }
-
-
-    @InitBinder
-    public void initBinder(WebDataBinder binder) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        CustomDateEditor dateEditor = new CustomDateEditor(sdf, true);
-
-        binder.registerCustomEditor(java.util.Date.class, dateEditor);
     }
 
 }

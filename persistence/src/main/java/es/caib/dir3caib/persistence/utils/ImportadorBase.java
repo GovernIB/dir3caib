@@ -24,9 +24,6 @@ public class ImportadorBase {
 
     protected final Logger log = Logger.getLogger(getClass());
 
-    @EJB(mappedName = "dir3caib/DescargaEJB/local")
-    protected DescargaLocal descargaEjb;
-
     @EJB(mappedName = "dir3caib/UnidadEJB/local")
     private UnidadLocal unidadEjb;
 

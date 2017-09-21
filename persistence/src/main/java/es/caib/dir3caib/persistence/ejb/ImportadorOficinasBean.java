@@ -4,12 +4,8 @@ import au.com.bytecode.opencsv.CSVReader;
 import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.utils.CacheUnidadOficina;
 import es.caib.dir3caib.persistence.utils.ImportadorBase;
-import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
 import es.caib.dir3caib.utils.Configuracio;
 import es.caib.dir3caib.utils.Utils;
-import es.caib.dir3caib.ws.dir3.oficina.client.*;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.SecurityDomain;
 import org.jboss.ejb3.annotation.TransactionTimeout;
@@ -18,14 +14,10 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.xml.ws.BindingProvider;
 import java.io.*;
-import java.net.URL;
 import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 /**
  * Created 10/03/14 14:38
@@ -62,9 +54,6 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
 
     @EJB(mappedName = "dir3caib/RelacionSirOfiEJB/local")
     private RelacionSirOfiLocal relSirOfiEjb;
-
-    @EJB(mappedName = "dir3caib/DescargaEJB/local")
-    protected DescargaLocal descargaEjb;
 
 
     private Boolean actualizacion;
@@ -231,209 +220,6 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
         log.info("Fin importar OFICINAS");
     }
 
-
-    /**
-     * Obtiene los ficheros de las oficinas y sus relaciones a través de los WS de Madrid.
-     *
-     * @param fechaInicio fecha de inicio de la descarga
-     * @param fechaFin    fecha fin de la descarga
-     * @return listado de los nombres de los archivos CSV descargados
-     * @throws Exception
-     */
-    @Override
-    public Descarga descargarOficinasWS(Date fechaInicio, Date fechaFin) throws Exception {
-
-        byte[] buffer = new byte[1024];
-        String[] resp = new String[2];
-
-        // Guardaremos la fecha de la ultima descarga
-        Descarga descarga = new Descarga(Dir3caibConstantes.OFICINA);
-
-        //guardamos todas las fechas de la descarga
-        if (fechaInicio != null) {
-            descarga.setFechaInicio(fechaInicio);
-        }
-        if (fechaFin != null) {
-            descarga.setFechaFin(fechaFin);
-        }
-
-        // Si las fechas estan vacias, las de descarga tenemos que fijar la fecha de hoy.
-        if (fechaFin == null) {
-            descarga.setFechaFin(new Date());
-        }
-
-        if (fechaInicio != null) {
-            log.info("Intervalo fechas descarga oficinas directorio comun: " + formatoFecha.format(descarga.getFechaInicio()) + " - " + formatoFecha.format(descarga.getFechaFin()));
-        }else{
-            log.info("Descarga inicial de oficinas directorio comun");
-        }
-
-        descarga = descargaEjb.persist(descarga);
-
-        try {
-
-            //Obtenemos las diferentes rutas para invocar a los WS y almacenar la información obtenida
-            String usuario = Configuracio.getDir3WsUser();
-            String password = Configuracio.getDir3WsPassword();
-            String ruta = Configuracio.getArchivosPath();
-
-            String rutaOficinas = Configuracio.getOficinasPath(descarga.getCodigo());
-
-            String endPoint = Configuracio.getOficinaEndPoint();
-
-            SD02OFDescargaOficinasService oficinasService = new SD02OFDescargaOficinasService(new URL(endPoint + "?wsdl"));
-            SD02OFDescargaOficinas service = oficinasService.getSD02OFDescargaOficinas();
-            Map<String, Object> reqContext = ((BindingProvider) service).getRequestContext();
-            reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endPoint);
-
-            // Establecemos los parametros necesarios para el WS
-            OficinasWs parametros = new OficinasWs();
-            parametros.setUsuario(usuario);
-            parametros.setClave(password);
-            parametros.setFormatoFichero(FormatoFichero.CSV);
-            parametros.setTipoConsulta(TipoConsultaOF.COMPLETO);
-
-            // definimos fechas
-            if (fechaInicio != null) {
-                parametros.setFechaInicio(formatoFecha.format(fechaInicio));
-            }
-            if (fechaFin != null) {
-                parametros.setFechaFin(formatoFecha.format(fechaFin));
-            }
-
-            // Invocamos el WS
-            RespuestaWS respuesta = service.exportar(parametros);
-            Base64 decoder = new Base64();
-
-            log.info("Respuesta WS oficinas DIR3: " + respuesta.getCodigo() + " - " + respuesta.getDescripcion());
-
-            //Montamos la respuesta del ws para controlar los errores a mostrar
-            resp[0] = respuesta.getCodigo();
-            resp[1] = respuesta.getDescripcion();
-
-            if (!respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_CORRECTO) && !respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_VACIO)) {
-                descargaEjb.remove(descarga);
-                return null;
-            }
-
-            //actualizamos el estado de la descarga.
-            if(respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_CORRECTO)){
-                descarga.setEstado(Dir3caibConstantes.SINCRONIZACION_DESCARGADA.toString());
-                descargaEjb.merge(descarga);
-
-            } else if(respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_VACIO)){
-                descarga.setEstado(Dir3caibConstantes.SINCRONIZACION_VACIA.toString());
-                descargaEjb.merge(descarga);
-            }
-
-
-            // Realizamos una copia del archivo zip de la ultima descarga
-            String archivoOficinaZip = ruta + Dir3caibConstantes.OFICINAS_ARCHIVO_ZIP + descarga.getCodigo() + ".zip";
-            File file = new File(archivoOficinaZip);
-
-
-            //Guardamos el zip devuelto por el WS en el directorio.
-            FileUtils.writeByteArrayToFile(file, decoder.decode(respuesta.getFichero()));
-
-            // Se crea el directorio para el catálogo
-            File dir = new File(rutaOficinas);
-            if (!dir.exists()) {
-                if (!dir.mkdirs()) {
-                    //Borramos la descarga creada previamente.
-                    descargaEjb.remove(descarga);
-                    log.error(" No se ha podido crear el directorio");
-                    return null;
-                }
-            }
-
-            //Descomprimir el archivo
-            ZipInputStream zis = new ZipInputStream(new FileInputStream(archivoOficinaZip));
-            ZipEntry zipEntry = zis.getNextEntry();
-
-            while (zipEntry != null) {
-                String fileName = zipEntry.getName();
-                File newFile = new File(rutaOficinas + fileName);
-                log.info("Fichero descomprimido: " + newFile.getAbsoluteFile());
-
-                //create all non exists folders
-                //else you will hit FileNotFoundException for compressed folder
-                new File(newFile.getParent()).mkdirs();
-                FileOutputStream fos = new FileOutputStream(newFile);
-
-                int len;
-                while ((len = zis.read(buffer)) > 0) {
-                    fos.write(buffer, 0, len);
-                }
-                fos.close();
-                zipEntry = zis.getNextEntry();
-
-            }
-            zis.closeEntry();
-            zis.close();
-
-            log.info("Fin descarga de oficinas directorio común");
-            return descarga;
-
-        } catch (Exception e) {
-            descargaEjb.remove(descarga);
-            throw new Exception(e.getMessage());
-        }
-
-
-    }
-
-    /* Tarea que en un primer paso descarga los archivos csv de las oficinas y posteriormente importa el contenido
-     *  en la base de datos, de esta manera realiza el proceso de sincronizacion con Madrid en un sólo
-     *  proceso
-     *  */
-    @TransactionTimeout(value = 18000)
-    @Override
-    public void importarOficinasTask() {
-
-        try {
-
-            // obtenemos los datos de la última descarga
-            Descarga ultimaDescarga = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.OFICINA);
-            if (ultimaDescarga != null) {
-                Date fechaInicio = ultimaDescarga.getFechaFin(); // fecha de la ultima descarga
-
-                // obtenemos la fecha de hoy
-                Date fechaFin = new Date();
-
-                // Obtiene los archivos csv via WS
-                //Descarga descarga = descargarOficinasWS(fechaInicio, fechaFin);
-                Descarga descarga = descargaEjb.descargarDirectorioWS(Dir3caibConstantes.OFICINA, fechaInicio, fechaFin);
-
-                if (descarga != null && descarga.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
-                    // importamos las oficinas a la bd.
-                    //importarOficinas(true);
-                }
-            }
-
-        } catch (Exception e) {
-            log.error("Error important Oficines: " + e.getMessage(), e);
-        }
-    }
-
-    @Override
-    public ResultadosImportacion restaurarOficinas() throws Exception {
-
-        /*// Eliminamos las Oficinas
-        dir3CaibEjb.eliminarOficinas();
-
-        // Realizamos una descarga de Oficinas
-        //Descarga descarga = descargarOficinasWS(null, null);
-        Descarga descarga = descargaEjb.descargarDirectorioWS(Dir3caibConstantes.OFICINA, null, null);
-
-        // Si la descarga ha sido correcta, importamos las Oficinas
-        if (descarga != null && descarga.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
-
-            return importarOficinas(false);
-        }*/
-
-        return null;
-
-    }
 
     /**
      * Método que compone todos los datos de la oficina

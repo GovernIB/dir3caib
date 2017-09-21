@@ -1,8 +1,8 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.ContactoUnidadOrganica;
-import es.caib.dir3caib.persistence.model.Descarga;
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
+import es.caib.dir3caib.persistence.model.Sincronizacion;
 import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.persistence.model.ws.UnidadTF;
 import es.caib.dir3caib.utils.Utils;
@@ -33,13 +33,15 @@ import java.util.Set;
 public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
 
     protected final Logger log = Logger.getLogger(getClass());
-    protected SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
 
     @EJB(mappedName = "dir3caib/UnidadEJB/local")
     protected UnidadLocal unidadEjb;
 
-    @EJB(mappedName = "dir3caib/DescargaEJB/local")
-    protected DescargaLocal descargaEjb;
+    @EJB(mappedName = "dir3caib/SincronizacionEJB/local")
+    private SincronizacionLocal sincronizacionEjb;
+
+
+    protected SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
 
     /**
      Método que devuelve una {@link es.caib.dir3caib.persistence.model.ws.UnidadTF} a partir del código
@@ -209,9 +211,9 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
     @Override
     public Date obtenerFechaUltimaActualizacion() throws Exception {
 
-        Descarga descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.UNIDAD);
+        Sincronizacion sincronizacion = sincronizacionEjb.ultimaSincronizacionCorrecta(Dir3caibConstantes.DIRECTORIO);
 
-        return descarga.getFechaImportacion();
+        return sincronizacion.getFechaImportacion();
     }
 
 }

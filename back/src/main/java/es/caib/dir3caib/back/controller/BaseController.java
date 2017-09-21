@@ -16,9 +16,6 @@ import javax.ejb.EJB;
  */
 public class BaseController {
 
-    @EJB(mappedName = "dir3caib/DescargaEJB/local")
-    protected DescargaLocal descargaEjb;
-
     @EJB(mappedName = "dir3caib/OficinaEJB/local")
     protected OficinaLocal oficinaEjb;
 
