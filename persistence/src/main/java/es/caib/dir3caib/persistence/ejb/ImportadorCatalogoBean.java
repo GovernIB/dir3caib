@@ -2,7 +2,6 @@ package es.caib.dir3caib.persistence.ejb;
 
 import au.com.bytecode.opencsv.CSVReader;
 import es.caib.dir3caib.persistence.model.*;
-import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
 import es.caib.dir3caib.utils.Configuracio;
 import es.caib.dir3caib.ws.dir3.catalogo.client.RespuestaWS;
 import es.caib.dir3caib.ws.dir3.catalogo.client.SC21CTVolcadoCatalogos;
@@ -21,7 +20,9 @@ import javax.xml.ws.BindingProvider;
 import java.io.*;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -104,31 +105,13 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
      */
     @Override
     @TransactionTimeout(value = 3600)
-    public ResultadosImportacion importarCatalogo() throws Exception {
-
-
-        ResultadosImportacion results = new ResultadosImportacion();
-        //Lista de archivos que han sido procesados al finalizar la importación
-        List<String> procesados = results.getProcesados();
-        //Lista de archivos que no existen y deberian existir
-        List<String> inexistentes = results.getInexistentes();
-
-        // Obtenemos el listado de ficheros que hay dentro del directorio indicado que se
-        // corresponde con la descarga hecha previamente
-        Descarga descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.CATALOGO);
-        File f = new File(Configuracio.getCatalogosPath(descarga.getCodigo()));
-        ArrayList<String> existentes = new ArrayList<String>(Arrays.asList(f.list()));
-        results.setExistentes(existentes);
+    public void importarCatalogo(Sincronizacion sincronizacion) throws Exception {
 
         // caches
         Map<String, CatEntidadGeografica> cacheEntidadGeografica = new TreeMap<String, CatEntidadGeografica>();
-
         Map<Long, CatNivelAdministracion> cacheNivelAdministracion = new TreeMap<Long, CatNivelAdministracion>();
-
         Map<Long, CatPais> cachePais = new TreeMap<Long, CatPais>();
-
         Map<Long, CatComunidadAutonoma> cacheComunidadAutonoma = new TreeMap<Long, CatComunidadAutonoma>();
-
         Map<Long, CatProvincia> cacheProvincia = new TreeMap<Long, CatProvincia>();
 
 
@@ -142,16 +125,14 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
             try {
 
-                reader = getCSVReader(fichero, descarga.getCodigo());
+                reader = getCSVReader(fichero, sincronizacion.getCodigo());
 
-                //reader=new CSVReader(new InputStreamReader(new FileInputStream(FileSystemManager.getArchivo(Dir3caibConstantes.CATALOGOS_LOCATION_PROPERTY,fichero)), "ISO-8859-15"), '|');
                 if (reader != null) {
+                    
                     // Inicio importación
-                    String nombreFichero = fichero;
-
-
+               
                     //CATENTIDADGEOGRAFICA
-                    if (nombreFichero.equals(Dir3caibConstantes.CAT_ENTIDAD_GEOGRAFICA)) {
+                    if (fichero.equals(Dir3caibConstantes.CAT_ENTIDAD_GEOGRAFICA)) {
 
                         reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
                         while ((fila = reader.readNext()) != null) {
@@ -185,7 +166,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                     }
 
                     //CATESTADOENTIDAD
-                    if (Dir3caibConstantes.CAT_ESTADO_ENTIDAD.equals(nombreFichero)) {
+                    if (Dir3caibConstantes.CAT_ESTADO_ENTIDAD.equals(fichero)) {
 
                         reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
                         while ((fila = reader.readNext()) != null) {
@@ -211,9 +192,8 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
                     }
 
-
                     //CATJERARQUIAOFICINA
-                    if (Dir3caibConstantes.CAT_JERARQUIA_OFICINA.equals(nombreFichero)) {
+                    if (Dir3caibConstantes.CAT_JERARQUIA_OFICINA.equals(fichero)) {
                         reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
                         while ((fila = reader.readNext()) != null) {
 
@@ -243,7 +223,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                     }
 
                     //CATMOTIVOEXTINCION
-                    if (Dir3caibConstantes.CAT_MOTIVO_EXTINCION.equals(nombreFichero)) {
+                    if (Dir3caibConstantes.CAT_MOTIVO_EXTINCION.equals(fichero)) {
 
                         reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
                         while ((fila = reader.readNext()) != null) {
@@ -272,7 +252,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                     }
 
                     // CATNIVELADMINISTRACION
-                    if (Dir3caibConstantes.CAT_NIVEL_ADMINISTRACION.equals(nombreFichero)) {
+                    if (Dir3caibConstantes.CAT_NIVEL_ADMINISTRACION.equals(fichero)) {
                         reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
                         while ((fila = reader.readNext()) != null) {
                             // Obtenemos codigo y miramos si ya existe en la BD
@@ -303,7 +283,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                     }
 
                     //CATPAIS
-                    if (Dir3caibConstantes.CAT_PAIS.equals(nombreFichero)) {
+                    if (Dir3caibConstantes.CAT_PAIS.equals(fichero)) {
 
                         reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
                         while ((fila = reader.readNext()) != null) {
@@ -333,7 +313,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
 
                     //CATCOMUNIDADAUTONOMA
-                    if (Dir3caibConstantes.CAT_COMUNIDAD_AUTONOMA.equals(nombreFichero)) {
+                    if (Dir3caibConstantes.CAT_COMUNIDAD_AUTONOMA.equals(fichero)) {
                         reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
                         while ((fila = reader.readNext()) != null) {
 
@@ -371,7 +351,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                     }
 
                     //CATPROVINCIA
-                    if (Dir3caibConstantes.CAT_PROVINCIA.equals(nombreFichero)) {
+                    if (Dir3caibConstantes.CAT_PROVINCIA.equals(fichero)) {
 
 
                         reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
@@ -410,7 +390,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                     }
 
                     //CATISLA
-                    if (Dir3caibConstantes.CAT_ISLA.equals(nombreFichero)) {
+                    if (Dir3caibConstantes.CAT_ISLA.equals(fichero)) {
 
                         reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
                         while ((fila = reader.readNext()) != null) {
@@ -441,7 +421,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                     }
 
                     //CATTIPOCONTACTO
-                    if (Dir3caibConstantes.CAT_TIPO_CONTACTO.equals(nombreFichero)) {
+                    if (Dir3caibConstantes.CAT_TIPO_CONTACTO.equals(fichero)) {
                         reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
                         while ((fila = reader.readNext()) != null) {
 
@@ -468,7 +448,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                     }
 
                     //CATTIPOENTIDADPUBLICA
-                    if (Dir3caibConstantes.CAT_TIPO_ENTIDAD_PUBLICA.equals(nombreFichero)) {
+                    if (Dir3caibConstantes.CAT_TIPO_ENTIDAD_PUBLICA.equals(fichero)) {
 
                         reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
                         while ((fila = reader.readNext()) != null) {
@@ -495,7 +475,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                     }
 
                     //CATTIPOUNIDADORGANICA
-                    if (Dir3caibConstantes.CAT_TIPO_UNIDAD_ORGANICA.equals(nombreFichero)) {
+                    if (Dir3caibConstantes.CAT_TIPO_UNIDAD_ORGANICA.equals(fichero)) {
 
                         reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
                         while ((fila = reader.readNext()) != null) {
@@ -522,7 +502,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                     }
 
                     //CATTIPOVIA
-                    if (Dir3caibConstantes.CAT_TIPO_VIA.equals(nombreFichero)) {
+                    if (Dir3caibConstantes.CAT_TIPO_VIA.equals(fichero)) {
 
                         reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
                         while ((fila = reader.readNext()) != null) {
@@ -547,7 +527,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
 
                     // CATAMBITOTERRITORIAL
-                    if (Dir3caibConstantes.CAT_AMBITO_TERRITORIAL.equals(nombreFichero)) {
+                    if (Dir3caibConstantes.CAT_AMBITO_TERRITORIAL.equals(fichero)) {
 
                         reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
                         while ((fila = reader.readNext()) != null) {
@@ -577,7 +557,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                     }
 
                     // CAT_SERVICIO
-                    if (Dir3caibConstantes.CAT_SERVICIOS.equals(nombreFichero)) {
+                    if (Dir3caibConstantes.CAT_SERVICIOS.equals(fichero)) {
 
                         reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
                         while ((fila = reader.readNext()) != null) {
@@ -604,7 +584,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                     }
 
                     //CATLOCALIDAD
-                    if (Dir3caibConstantes.CAT_LOCALIDAD.equals(nombreFichero)) {
+                    if (Dir3caibConstantes.CAT_LOCALIDAD.equals(fichero)) {
 
 
                         reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
@@ -670,16 +650,13 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                         cacheProvincia = null;
 
                     }
-                    log.info(" Acabados procesamiento: " + nombreFichero);
-                    procesados.add(fichero);
-
+                    log.info(" Acabados procesamiento: " + fichero);
                 }
 
                 reader.close();
 
 
             } catch (FileNotFoundException ex) {
-                inexistentes.add(fichero);
                 log.warn("Fichero no encontrado " + fichero);
             } catch (IOException io) {
                 io.printStackTrace();
@@ -697,18 +674,19 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
         }
 
-        // Actualizamos la descarga con la fecha de importación.
-        descarga.setFechaImportacion(new Date());
-        descarga = descargaEjb.merge(descarga);
-
-        results.setDescarga(descarga);
-
         System.gc();
 
-        return results;
     }
 
-    public CSVReader getCSVReader(String fichero, Long idDescarga) throws FileNotFoundException,
+    /**
+     * 
+     * @param fichero
+     * @param idSincronizacion
+     * @return
+     * @throws FileNotFoundException
+     * @throws UnsupportedEncodingException
+     */
+    private CSVReader getCSVReader(String fichero, Long idSincronizacion) throws FileNotFoundException,
             UnsupportedEncodingException {
         CSVReader reader;
         log.info("");
@@ -716,7 +694,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
         log.info("------------------------------------");
 
         // Obtenemos el fichero del sistema de archivos
-        File file = new File(Configuracio.getCatalogosPath(idDescarga), fichero);
+        File file = new File(Configuracio.getCatalogosPath(idSincronizacion), fichero);
         if (file.exists()) {
             FileInputStream is1 = new FileInputStream(file);
             BufferedReader is = new BufferedReader(new InputStreamReader(is1, "UTF-8"));
@@ -789,17 +767,17 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
             resp[0] = respuesta.getCodigo();
             resp[1] = respuesta.getDescripcion();
 
-            if (!respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO)) {
+            if (!respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_CORRECTO)) {
                 descargaEjb.remove(descarga);
                 return null;
             }
 
             //actualizamos el estado de la descarga.
-            if(respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO)){
-                descarga.setEstado(Dir3caibConstantes.SINCRONIZACION_DESCARGADA);
+            if(respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_CORRECTO)){
+                descarga.setEstado(Dir3caibConstantes.SINCRONIZACION_DESCARGADA.toString());
                 descargaEjb.merge(descarga);
-            } else if(respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_VACIO)){
-                descarga.setEstado(Dir3caibConstantes.SINCRONIZACION_VACIA);
+            } else if(respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_VACIO)){
+                descarga.setEstado(Dir3caibConstantes.SINCRONIZACION_VACIA.toString());
                 descargaEjb.merge(descarga);
             }
 
@@ -863,41 +841,5 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
         }
 
     }
-
-
-    /* Tarea que en un primer paso descarga los archivos csv del catálogo y posteriormente importa el contenido
-     *  en la base de datos, de esta manera realiza el proceso de sincronizacion con Madrid en un sólo
-     *  proceso
-     *  */
-    @Override
-    @TransactionTimeout(value = 3600)
-    public void importarCatalogoTask() {
-
-        try {
-            //Obtenemos las fechas entre las que hay que hacer la descarga
-
-            // obtenemos los datos de la última descarga
-            Descarga ultimaDescarga = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.CATALOGO);
-
-            Date fechaInicio = ultimaDescarga.getFechaFin(); // fecha de la ultima descarga
-
-            // obtenemos la fecha de hoy
-            Date fechaFin = new Date();
-
-            // Obtiene los archivos csv via WS
-            //descarga = descargarCatalogoWS(fechaInicio, fechaFin);
-            Descarga descarga = descargaEjb.descargarDirectorioWS(Dir3caibConstantes.CATALOGO, fechaInicio, fechaFin);
-
-            // importamos el catálogo a la bd.
-            if (descarga != null && descarga.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
-
-                importarCatalogo();
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 
 }

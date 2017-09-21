@@ -206,7 +206,7 @@ public class ImportadorBase {
      * @param isUpdate indica que es una actualización de datos( ya existen los datos en la BD)
      * @throws Exception
      */
-    public void cacheImportadorOficinas(boolean isUpdate) throws Exception {
+    public void cacheImportadorOficinas(boolean isUpdate, Sincronizacion sincronizacion) throws Exception {
 
         long start = System.currentTimeMillis();
 
@@ -214,7 +214,7 @@ public class ImportadorBase {
             cacheUnidad = new UnidadesCacheManager(this.unidadEjb);
         } else { // Si es creación/sincronización solo inicializamos las requeridas(unidades Responsables de las oficinas que se van a sincronizar)
             List<List<String>> unitsIds = new ArrayList<List<String>>();
-            int total = getRequiredUnidades(unitsIds);
+            int total = getRequiredUnidades(unitsIds, sincronizacion);
             cacheUnidad = new UnidadesCacheManager(this.unidadEjb, unitsIds, total);
         }
 
@@ -308,7 +308,7 @@ public class ImportadorBase {
      * @return
      * @throws Exception
      */
-    private int getRequiredUnidades(List<List<String>> all) throws Exception {
+    private int getRequiredUnidades(List<List<String>> all, Sincronizacion sincronizacion) throws Exception {
         FileInputStream is1 = null;
         CSVReader reader = null;
 
@@ -320,11 +320,11 @@ public class ImportadorBase {
 
         int count = 0;
         int allCount = 0;
+
         try {
-            //Obtenemos la ultima descarga de oficinas
-            Descarga descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.OFICINA);
-            File file = new File(Configuracio.getOficinasPath(descarga.getCodigo()), Dir3caibConstantes.OFI_OFICINAS);
-            is1 = new FileInputStream(file);
+
+            is1 = new FileInputStream(new File(Configuracio.getDirectorioPath(sincronizacion.getCodigo()), Dir3caibConstantes.OFI_OFICINAS));
+
             BufferedReader is = new BufferedReader(new InputStreamReader(is1, "UTF-8"));
             reader = new CSVReader(is, ';');
 
@@ -368,103 +368,5 @@ public class ImportadorBase {
             }
         }
     }
-
-    /**
-     *
-     */
-   /* public class CacheUnidadOficina {
-
-        Set<String> caches = new TreeSet<String>();
-
-
-        public CacheUnidadOficina(List<String> uniofi) {
-            this.caches.addAll(uniofi);
-        }
-
-
-        public boolean existsUnidadOficina(String unidad, String oficina) {
-            return this.caches.contains(unidad + "_" + oficina);
-        }
-
-
-    }*/
-
-    /**
-     *
-     */
-    /*public class UnidadesCacheManager {
-
-
-        private final UnidadLocal unidadEjb;
-        public int countFind = 0;
-        public int countCache = 0;
-        public long findByTime = 0;
-        Map<String, Unidad> cacheUnidad = new TreeMap<String, Unidad>();
-
-        public UnidadesCacheManager(UnidadLocal unidadEjb) {
-            super();
-            this.unidadEjb = unidadEjb;
-        }
-
-        // * @param isupdate
-        public UnidadesCacheManager(UnidadLocal unidadEjb, List<List<String>> unidadesRequeridas, int total) throws Exception {
-            this(unidadEjb);
-
-            //final int numberOfItems = 500;
-            //int startItem = 1;
-            List<Unidad> unidades;
-            int count = 0;
-
-            for (List<String> ids : unidadesRequeridas) {
-                long start2 = System.currentTimeMillis();
-
-
-                if (log.isDebugEnabled()) {
-                    log.debug(" ids.size = " + ids.size());
-                }
-                unidades = unidadEjb.getListByIds(ids);
-                if (log.isDebugEnabled()) {
-                    log.info(" getListByIds(ids).size = " + unidades.size());
-                }
-
-                for (Unidad ca : unidades) {
-                    cacheUnidad.put(ca.getCodigo(), ca);
-                    count++;
-                }
-                long end2 = System.currentTimeMillis();
-
-                log.info(" Cache de Unidades " + count + " / " + total + "   -->   " + Utils.formatElapsedTime(end2 - start2));
-
-            }
-
-            log.info(" Cache Of Unidades. Total = " + count);
-
-        }
-
-        *//**
-         *
-         * @param codigo
-         * @return
-         * @throws Exception
-     *//*
-        public Unidad get(String codigo) throws Exception {
-
-            Unidad unidad = cacheUnidad.get(codigo);
-
-            if (unidad == null) {
-                long start = System.currentTimeMillis();
-                unidad = this.unidadEjb.getReference(codigo);
-                findByTime = findByTime + (System.currentTimeMillis() - start);
-                cacheUnidad.put(codigo, unidad);
-                countFind++;
-            } else {
-                countCache++;
-            }
-            return unidad;
-
-        }
-
-
-    }*/
 
 }

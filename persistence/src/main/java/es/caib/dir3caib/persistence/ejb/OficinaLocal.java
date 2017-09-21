@@ -208,4 +208,11 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      * @throws Exception
      */
     public Boolean existeHistoricoOficina(String codigoAnterior, String codigoUltima) throws Exception;
+
+    /**
+     * Elmina los HistoricoOfi de una Oficina
+     * @param idOficina
+     * @throws Exception
+     */
+    public void eliminarHistoricosOficina(String idOficina) throws Exception;
 }

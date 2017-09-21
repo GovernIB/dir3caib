@@ -73,19 +73,19 @@
                                         <td>
                                             <c:choose>
                                                 <c:when test="${descarga.estado == 1}">
-                                                    <span class="label label-info"><spring:message code="sincronizacion.${descarga.estado}"/></span>
+                                                    <span class="label label-info"><spring:message code="sincronizacion.estado.${descarga.estado}"/></span>
                                                 </c:when>
                                                 <c:when test="${descarga.estado == 2}">
-                                                    <span class="label label-success"><spring:message code="sincronizacion.${descarga.estado}"/></span>
+                                                    <span class="label label-success"><spring:message code="sincronizacion.estado.${descarga.estado}"/></span>
                                                 </c:when>
                                                 <c:when test="${descarga.estado == 3}">
-                                                    <span class="label label-warning"><spring:message code="sincronizacion.${descarga.estado}"/></span>
+                                                    <span class="label label-warning"><spring:message code="sincronizacion.estado.${descarga.estado}"/></span>
                                                 </c:when>
                                                 <c:when test="${descarga.estado == 4}">
-                                                    <span class="label label-important"><spring:message code="sincronizacion.${descarga.estado}"/></span>
+                                                    <span class="label label-important"><spring:message code="sincronizacion.estado.${descarga.estado}"/></span>
                                                 </c:when>
                                                 <c:when test="${descarga.estado == 5}">
-                                                    <span class="label label-success"><spring:message code="sincronizacion.${descarga.estado}"/></span>
+                                                    <span class="label label-success"><spring:message code="sincronizacion.estado.${descarga.estado}"/></span>
                                                 </c:when>
 
                                             </c:choose>

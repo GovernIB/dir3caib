@@ -24,8 +24,31 @@ public class Configuracio {
         return System.getProperty(DIR3CAIB_PROPERTY_BASE + "archivos.path");
     }
 
-    public static String getCatalogosPath(Long idDescarga) {
-        return getArchivosPath() + "catalogo" + idDescarga + "/";
+    /**
+     *
+     * @param idSincronizacion
+     * @return
+     */
+    public static String getSincronizacionPath(Long idSincronizacion) {
+        return getArchivosPath() + "sincronizacion" + idSincronizacion + "/";
+    }
+
+    /**
+     *
+     * @param idSincronizacion
+     * @return
+     */
+    public static String getCatalogosPath(Long idSincronizacion) {
+        return getSincronizacionPath(idSincronizacion) + "catalogos/";
+    }
+
+    /**
+     *
+     * @param idSincronizacion
+     * @return
+     */
+    public static String getDirectorioPath(Long idSincronizacion) {
+        return getSincronizacionPath(idSincronizacion) + "directorio/";
     }
 
 

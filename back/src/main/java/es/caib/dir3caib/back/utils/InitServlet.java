@@ -1,6 +1,6 @@
 package es.caib.dir3caib.back.utils;
 
-import es.caib.dir3caib.persistence.ejb.SincronitzacioDir3Local;
+import es.caib.dir3caib.persistence.ejb.TimerDir3Local;
 import es.caib.dir3caib.persistence.utils.DataBaseUtils;
 import es.caib.dir3caib.persistence.utils.Versio;
 import es.caib.dir3caib.utils.Configuracio;
@@ -46,9 +46,7 @@ public class InitServlet extends HttpServlet {
 
     // Sincronitzador amb Dir3
     try {
-      SincronitzacioDir3Local sinc;
-      sinc = (SincronitzacioDir3Local) new InitialContext()
-          .lookup("dir3caib/SincronitzacioDir3EJB/local");
+      TimerDir3Local sinc = (TimerDir3Local) new InitialContext().lookup("dir3caib/TimerDir3EJB/local");
       
       sinc.clearTimers();
       

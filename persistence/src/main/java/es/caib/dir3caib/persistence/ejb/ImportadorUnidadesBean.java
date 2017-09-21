@@ -20,7 +20,8 @@ import javax.ejb.Stateless;
 import javax.xml.ws.BindingProvider;
 import java.io.*;
 import java.net.URL;
-import java.util.*;
+import java.util.Date;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -51,9 +52,6 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
     @EJB(mappedName = "dir3caib/DescargaEJB/local")
     private DescargaLocal descargaEjb;
 
-    @EJB(mappedName = "dir3caib/Dir3CaibEJB/local")
-    private Dir3CaibLocal dir3CaibEjb;
-
 
     private Boolean actualizacion;
 
@@ -63,25 +61,18 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
      */
     @Override
     @TransactionTimeout(value = 30000)
-    public ResultadosImportacion importarUnidades() throws Exception {
+    public void importarUnidades(Sincronizacion sincronizacion) throws Exception {
 
         log.info("");
         log.info("Inicio importación Unidades");
 
         System.gc();
 
-        ResultadosImportacion results = new ResultadosImportacion();
-
-        //Lista de archivos que han sido procesados al finalizar la importación
-        List<String> procesados = new ArrayList<String>();
-        //Lista de archivos que no existen y deberian existir
-        List<String> inexistentes = new ArrayList<String>();
+        // Averiguamos si es una Carga de datos inicial o una Actualización
+        actualizacion = sincronizacion.getFechaInicio() != null;
 
         // Inicializamos la cache para la importación de Unidades
         cacheImportadorUnidades();
-
-        // Averiguamos si es una Carga de datos inicial o una Actualización
-        actualizacion = existInBBDD.size() > 0;
 
         // Tiempos
         long start;
@@ -93,13 +84,6 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
         long persist = 0;
         long s;
 
-        // Obtenemos la última descarga de los ficheros de Unidades realizada
-        Descarga descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.UNIDAD);
-
-        // Obtenemos el listado de ficheros que hay dentro del directorio de la última descarga
-        File f = new File(Configuracio.getUnidadesPath(descarga.getCodigo()));
-        ArrayList<String> existentes = new ArrayList<String>(Arrays.asList(f.list()));
-
         // Buscamos los posibles ficheros de las unidades que pueden existir en el directorio
         for (int i = 0; i < Dir3caibConstantes.UO_FICHEROS.length; i++) {
             String fichero = Dir3caibConstantes.UO_FICHEROS[i];
@@ -110,7 +94,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
             log.info("------------------------------------");
             try {
                 // Obtenemos el fichero del sistema de archivos
-                File file = new File(Configuracio.getUnidadesPath(descarga.getCodigo()), fichero);
+                File file = new File(Configuracio.getDirectorioPath(sincronizacion.getCodigo()), fichero);
                 FileInputStream is1 = new FileInputStream(file);
                 BufferedReader is = new BufferedReader(new InputStreamReader(is1, "UTF-8"));
                 reader = new CSVReader(is, ';');
@@ -139,7 +123,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
                                 Unidad unidad = null;
 
-                                //  Comprobamos si existe ya en la BD
+                                // Comprobamos si existe ya en la BD
                                 if (existInBBDD.contains(codigoUnidad)) {
                                     s = System.currentTimeMillis();
                                     unidad = unidadEjb.findById(codigoUnidad);
@@ -149,7 +133,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
                                 s = System.currentTimeMillis();
 
-                                //Si es nuevo creamos el objeto a introducir
+                                // Si es nuevo creamos el objeto a introducir
                                 boolean existeix;
                                 if (unidad == null) {
                                     unidad = new Unidad();
@@ -264,14 +248,13 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                     importarContactos(fichero, reader);
 
                     log.info("Fin importar fichero: " + fichero);
-                    procesados.add(fichero);
                 }
 
                 reader.close();
 
 
             } catch (FileNotFoundException ex) {
-                inexistentes.add(fichero);
+
                 log.warn("Fichero no encontrado " + fichero);
             } catch (IOException io) {
                 io.printStackTrace();
@@ -289,24 +272,11 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
         }
 
-        // Guardamos fecha Importacion y tipo de la descarga
-        if (procesados.size() > 0) {
-            descarga.setFechaImportacion(new Date());
-            descargaEjb.merge(descarga);
-        }
-
-
-        //Actualizamos los resultados Importación.
-        results.setDescarga(descarga);
-        results.setExistentes(existentes);
-        results.setProcesados(procesados);
-
         System.gc();
 
         log.info("");
         log.info("Fin importar UNIDADES");
 
-        return results;
     }
 
 
@@ -393,17 +363,17 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
             resp[1] = respuesta.getDescripcion();
 
             //Si la respuesta ha sido incorrecta o vacia, eliminamos la descarga y devolvemos la respuesta incorrecta
-            if (!respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO) && !respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_VACIO)) {
+            if (!respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_CORRECTO) && !respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_VACIO)) {
                 descargaEjb.remove(descarga);
                 return null;
             }
 
             //actualizamos el estado de la descarga.
-            if(respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO)){
-                descarga.setEstado(Dir3caibConstantes.SINCRONIZACION_DESCARGADA);
+            if(respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_CORRECTO)){
+                descarga.setEstado(Dir3caibConstantes.SINCRONIZACION_DESCARGADA.toString());
                 descargaEjb.merge(descarga);
-            } else if(respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_VACIO)){
-                descarga.setEstado(Dir3caibConstantes.SINCRONIZACION_VACIA);
+            } else if(respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_VACIO)){
+                descarga.setEstado(Dir3caibConstantes.SINCRONIZACION_VACIA.toString());
                 descargaEjb.merge(descarga);
             }
 
@@ -469,10 +439,11 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
     @TransactionTimeout(value = 18000)
     public void importarUnidadesTask() {
 
-        try {
+        /*try {
 
             // obtenemos los datos de la última descarga
             Descarga ultimaDescarga = descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.UNIDAD);
+
 
             if (ultimaDescarga != null) {
                 Date fechaInicio = ultimaDescarga.getFechaFin(); // fecha de la ultima descarga
@@ -493,7 +464,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     /**
@@ -506,21 +477,20 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
     @TransactionTimeout(value = 30000)
     public ResultadosImportacion restaurarUnidades() throws Exception {
 
-        // Eliminamos las Oficinas
+        /*// Eliminamos las Oficinas
         dir3CaibEjb.eliminarOficinas();
 
         // Eliminamos las Unidades
         dir3CaibEjb.eliminarUnidades();
 
         // Realizamos una descarga de Unidades
-        //Descarga descarga = descargarUnidadesWS(null, null);
         Descarga descarga = descargaEjb.descargarDirectorioWS(Dir3caibConstantes.UNIDAD, null, null);
 
         // Si la descarga ha sido correcta, importamos las Unidades
         if (descarga != null && descarga.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
 
             return importarUnidades();
-        }
+        }*/
 
         return null;
 
@@ -804,7 +774,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
                 try {
 
-                    if (!codigoUnidadUltima.isEmpty() && !codigoUnidadAnterior.isEmpty()) { // Si no están vacios
+                    if (!codigoUnidadUltima.isEmpty() && !codigoUnidadAnterior.isEmpty() && existInBBDD.contains(codigoUnidadUltima)) { // Si no están vacios
 
                         // Creamos el HU mediante una NativeQuery muy eficiente
                         unidadEjb.crearHistoricoUnidad(codigoUnidadAnterior, codigoUnidadUltima);
@@ -858,13 +828,13 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                 int count = 1;
                 long start = System.currentTimeMillis();
                 while ((fila = reader.readNext()) != null) {
+
                     ContactoUnidadOrganica contacto = new ContactoUnidadOrganica();
 
                     // Asociamos unidad
                     String sUnidad = fila[0].trim();
                     if (!sUnidad.isEmpty()) {
-                        Unidad unidad;
-                        unidad = unidadEjb.getReference(sUnidad);
+                        Unidad unidad = unidadEjb.getReference(sUnidad);
                         contacto.setUnidad(unidad);
                     }
 

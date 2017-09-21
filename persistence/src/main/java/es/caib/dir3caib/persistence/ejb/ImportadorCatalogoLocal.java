@@ -1,7 +1,7 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.Descarga;
-import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
+import es.caib.dir3caib.persistence.model.Sincronizacion;
 
 import javax.ejb.Local;
 import java.util.Date;
@@ -21,14 +21,9 @@ public interface ImportadorCatalogoLocal {
     public Descarga descargarCatalogoWS(Date fechaInicio, Date fechaFin) throws Exception;
 
     /**
-     *
-     */
-    public void importarCatalogoTask();
-
-    /**
      * @return
      * @throws Exception
      */
-    public ResultadosImportacion importarCatalogo() throws Exception;
+    public void importarCatalogo(Sincronizacion sincronizacion) throws Exception;
 
 }

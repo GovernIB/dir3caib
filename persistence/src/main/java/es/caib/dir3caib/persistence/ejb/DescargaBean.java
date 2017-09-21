@@ -91,7 +91,7 @@ public class DescargaBean extends BaseEjbJPA<Descarga, Long> implements Descarga
                 " order by descarga.codigo desc");
 
         query.setParameter("tipo", tipo);
-        query.setParameter("correcto", Dir3caibConstantes.SINCRONIZACION_CORRECTA);
+        query.setParameter("correcto", "5");
 
         List<Descarga> descargas = query.getResultList();
         if(!descargas.isEmpty()){
@@ -137,7 +137,7 @@ public class DescargaBean extends BaseEjbJPA<Descarga, Long> implements Descarga
     @Override
     public List<Descarga> getPagination(int inicio) throws Exception {
 
-        Query q = em.createQuery("Select descarga from Descarga as descarga order by descarga.codigo");
+        Query q = em.createQuery("Select descarga from Descarga as descarga order by descarga.codigo desc");
         q.setFirstResult(inicio);
         q.setMaxResults(RESULTADOS_PAGINACION);
 
@@ -318,10 +318,10 @@ public class DescargaBean extends BaseEjbJPA<Descarga, Long> implements Descarga
             }
 
             // Si la descarga ha sido Correcta
-            if(codigoRespuesta.trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO)){
+            if(codigoRespuesta.trim().equals(Dir3caibConstantes.CODIGO_CORRECTO)){
 
                 // Actualizamos el estado de la Descarga
-                descarga.setEstado(Dir3caibConstantes.SINCRONIZACION_DESCARGADA);
+                descarga.setEstado(Dir3caibConstantes.SINCRONIZACION_DESCARGADA.toString());
                 merge(descarga);
 
                 // Guardamos el archivo descargado en un zip en la ruta indicada
@@ -365,10 +365,10 @@ public class DescargaBean extends BaseEjbJPA<Descarga, Long> implements Descarga
                 zis.close();
 
 
-            }else if(codigoRespuesta.trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_VACIO)){
+            }else if(codigoRespuesta.trim().equals(Dir3caibConstantes.CODIGO_VACIO)){
 
                 // Actualizamos el estado de la Descarga
-                descarga.setEstado(Dir3caibConstantes.SINCRONIZACION_VACIA);
+                descarga.setEstado(Dir3caibConstantes.SINCRONIZACION_VACIA.toString());
                 merge(descarga);
 
             }else{

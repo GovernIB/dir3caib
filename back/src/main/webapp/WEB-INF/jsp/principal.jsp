@@ -21,58 +21,136 @@
 
                 <div class="box-header well">
                     <h2>DIR3CAIB</h2>
-
                 </div>
 
                 <c:import url="modulos/mensajes.jsp"/>
 
 
                 <div class="box-content">
-                    <table class="table table-bordered">
-                        <colgroup>
-                            <col>
-                        </colgroup>
-                        <thead>
-                        <tr>
-                            <th></th>
-                            <th><fmt:message key="menu.catalogo"/></th>
-                            <th><fmt:message key="menu.unidad"/></th>
-                            <th><fmt:message key="menu.oficina"/></th>
-                        </tr>
-                        </thead>
 
-                        <tbody>
-                        <tr>
-                            <td><strong><spring:message code="dir3caib.ultima.actualizacion"/></strong></td>
-                            <td>
-                                <c:if test="${not empty ultimaDescargaCatalogo}">
-                                    <fmt:formatDate pattern="dd/MM/yyyy" value="${ultimaDescargaCatalogo.fechaImportacion}"/>
-                                </c:if>
-                                <c:if test="${empty ultimaDescargaCatalogo}">
-                                    <fmt:message key="descarga.existentes.notfound"/>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${not empty ultimaDescargaUnidad}">
-                                    <fmt:formatDate pattern="dd/MM/yyyy" value="${ultimaDescargaUnidad.fechaImportacion}"/>
-                                </c:if>
-                                <c:if test="${empty ultimaDescargaUnidad}">
-                                    <fmt:message key="descarga.existentes.notfound"/>
-                                </c:if>
+                    <c:if test="${empty sincronizaciones}">
+                        No se ha realizado ninguna Sincronización, sincronice primero el catálogo y luego el directorio
+                    </c:if>
 
-                            </td>
+                    <c:if test="${not empty sincronizaciones}">
 
-                            <td>
-                                <c:if test="${not empty ultimaDescargaOficina}">
-                                    <fmt:formatDate pattern="dd/MM/yyyy" value="${ultimaDescargaOficina.fechaImportacion}"/>
-                                </c:if>
-                                <c:if test="${empty ultimaDescargaOficina}">
-                                    <fmt:message key="descarga.existentes.notfound"/>
-                                </c:if>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                        <div class="page-header">
+                            <h2><spring:message code="sincronizacion.ultimas"/></h2>
+                        </div>
+
+                        <table class="table table-bordered">
+                            <%--<colgroup>
+                                <col>
+                                <col>
+                                <col>
+                                <col>
+                                <col width="130">
+                            </colgroup>--%>
+                            <thead>
+                            <tr>
+                                <%--<th>Id</th>--%>
+                                <th>Tipo</th>
+                                <th><fmt:message key="dir3caib.intervalo"/>    (<fmt:message key="dir3caib.fechainicio"/> - <fmt:message key="dir3caib.fechafin"/>)</th>
+                                <th><fmt:message key="dir3caib.fechaimportacion"/></th>
+                                <th><fmt:message key="dir3caib.estado"/></th>
+                                <th>Ficheros directorio</th>
+                                <th>Ficheros catálogo</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            <c:forEach var="sincronizacion" items="${sincronizaciones}">
+                                <tr>
+                                    <%--<td>${sincronizacion.codigo}</td>--%>
+                                    <td>
+                                        <c:if test="${sincronizacion.tipo == 1}">
+                                            <span class="label label-info"><spring:message code="sincronizacion.tipo.${sincronizacion.tipo}"/></span>
+                                        </c:if>
+                                        <c:if test="${sincronizacion.tipo == 2}">
+                                            <span class="label label-success"><spring:message code="sincronizacion.tipo.${sincronizacion.tipo}"/></span>
+                                        </c:if>
+                                    </td>
+                                    <td>(<c:if test="${empty sincronizacion.fechaInicio}"> ******* </c:if><fmt:formatDate pattern="dd/MM/yyyy" value="${sincronizacion.fechaInicio}" />  -  <c:if test="${empty sincronizacion.fechaFin}"> ******* </c:if><fmt:formatDate pattern="dd/MM/yyyy" value="${sincronizacion.fechaFin}" />)</td>
+                                    <td>
+                                        <fmt:formatDate pattern="dd/MM/yyyy HH:mm:ss" value="${sincronizacion.fechaImportacion}" />
+                                    </td>
+
+                                    <td>
+                                        <c:choose>
+                                            <c:when test="${sincronizacion.estado == 1}">
+                                                <span class="label label-info"><spring:message code="sincronizacion.estado.${sincronizacion.estado}"/></span>
+                                            </c:when>
+                                            <c:when test="${sincronizacion.estado == 2}">
+                                                <span class="label label-success"><spring:message code="sincronizacion.estado.${sincronizacion.estado}"/></span>
+                                            </c:when>
+                                            <c:when test="${sincronizacion.estado == 3}">
+                                                <span class="label label-warning"><spring:message code="sincronizacion.estado.${sincronizacion.estado}"/></span>
+                                            </c:when>
+                                            <c:when test="${sincronizacion.estado == 4}">
+                                                <span class="label label-important"><spring:message code="sincronizacion.estado.${sincronizacion.estado}"/></span>
+                                            </c:when>
+                                            <c:when test="${sincronizacion.estado == 5}">
+                                                <span class="label label-success"><spring:message code="sincronizacion.estado.${sincronizacion.estado}"/></span>
+                                            </c:when>
+
+                                        </c:choose>
+                                    </td>
+
+                                    <td class="center">
+                                        <div class="btn-group">
+                                            <c:if test="${not empty sincronizacion.ficherosDirectorio}">
+                                                <button type="button" class="btn btn-success dropdown-toggle"
+                                                        data-toggle="dropdown"><fmt:message
+                                                        key="dir3caib.descargar"/> <span class="caret"></span>
+                                                </button>
+                                            </c:if>
+                                            <c:if test="${empty sincronizacion.ficherosDirectorio}">
+                                                <button type="button" class="btn btn-success dropdown-toggle"
+                                                        data-toggle="dropdown" disabled="disabled"><fmt:message
+                                                        key="dir3caib.descargar"/> <span class="caret"></span>
+                                                </button>
+                                            </c:if>
+                                            <ul class="dropdown-menu">
+                                                <c:forEach var="fichero" items="${sincronizacion.ficherosDirectorio}">
+                                                    <li class="submenu-complet"><a
+                                                            href="<c:url value="/archivo/${fichero}/${sincronizacion.codigo}"/>">${fichero}</a>
+                                                    </li>
+                                                </c:forEach>
+                                            </ul>
+                                        </div>
+                                    </td>
+
+                                    <td class="center">
+                                        <div class="btn-group">
+                                            <c:if test="${not empty sincronizacion.ficherosCatalogo}">
+                                                <button type="button" class="btn btn-success dropdown-toggle"
+                                                        data-toggle="dropdown"><fmt:message
+                                                        key="dir3caib.descargar"/> <span class="caret"></span>
+                                                </button>
+                                            </c:if>
+                                            <c:if test="${empty sincronizacion.ficherosCatalogo}">
+                                                <button type="button" class="btn btn-success dropdown-toggle"
+                                                        data-toggle="dropdown" disabled="disabled"><fmt:message
+                                                        key="dir3caib.descargar"/> <span class="caret"></span>
+                                                </button>
+                                            </c:if>
+                                            <ul class="dropdown-menu">
+                                                <c:forEach var="fichero" items="${sincronizacion.ficherosCatalogo}">
+                                                    <li class="submenu-complet"><a
+                                                            href="<c:url value="/archivo/${fichero}/${sincronizacion.codigo}"/>">${fichero}</a>
+                                                    </li>
+                                                </c:forEach>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
+                    </c:if>
+
+
+
                 </div>
             </div>
         </div>

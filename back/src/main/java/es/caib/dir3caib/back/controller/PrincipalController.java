@@ -1,9 +1,10 @@
 package es.caib.dir3caib.back.controller;
 
 import es.caib.dir3caib.back.utils.Mensaje;
-import es.caib.dir3caib.persistence.ejb.DescargaLocal;
 import es.caib.dir3caib.persistence.ejb.Dir3CaibLocal;
+import es.caib.dir3caib.persistence.ejb.SincronizacionLocal;
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
+import es.caib.dir3caib.persistence.model.Sincronizacion;
 import es.caib.dir3caib.utils.Configuracio;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -16,6 +17,7 @@ import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Created by Fundació BIT.
@@ -28,8 +30,8 @@ public class PrincipalController extends BaseController {
 
     protected final Logger log = Logger.getLogger(getClass());
 
-    @EJB(mappedName = "dir3caib/DescargaEJB/local")
-    private DescargaLocal descargaEjb;
+    @EJB(mappedName = "dir3caib/SincronizacionEJB/local")
+    private SincronizacionLocal sincronizacionEjb;
 
     @EJB(mappedName = "dir3caib/Dir3CaibEJB/local")
     private Dir3CaibLocal dir3CaibEjb;
@@ -43,9 +45,25 @@ public class PrincipalController extends BaseController {
         if(request.isUserInRole(Dir3caibConstantes.DIR_ADMIN)){
             mav = new ModelAndView("principal");
 
-            mav.addObject("ultimaDescargaCatalogo",descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.CATALOGO));
-            mav.addObject("ultimaDescargaUnidad",descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.UNIDAD));
-            mav.addObject("ultimaDescargaOficina",descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.OFICINA));
+            ArrayList<Sincronizacion> sincronizaciones = new ArrayList<Sincronizacion>();
+
+            Sincronizacion catalogo = sincronizacionEjb.ultimaSincronizacionCorrecta(Dir3caibConstantes.CATALOGO);
+            Sincronizacion directorio = sincronizacionEjb.ultimaSincronizacionCorrecta(Dir3caibConstantes.DIRECTORIO);
+
+            if(catalogo != null){
+                catalogo.obtenerFicheros();
+                sincronizaciones.add(catalogo);
+            }
+            if(directorio != null){
+                directorio.obtenerFicheros();
+                sincronizaciones.add(directorio);
+            }
+
+            mav.addObject("sincronizaciones", sincronizaciones);
+
+            //mav.addObject("ultimaDescargaCatalogo",descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.CATALOGO));
+            //mav.addObject("ultimaDescargaUnidad",descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.UNIDAD));
+            //mav.addObject("ultimaDescargaOficina",descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.OFICINA));
 
         }else if(request.isUserInRole(Dir3caibConstantes.ROL_TOTHOM)){
             mav = new ModelAndView("redirect:/unidad/list");
@@ -62,7 +80,7 @@ public class PrincipalController extends BaseController {
 
         try {
             // Eliminamos el Directorio de al bbdd
-            dir3CaibEjb.eliminarDirectorio();
+            dir3CaibEjb.eliminarCompleto();
 
             // Eliminamos todas las descargas realizadas
             File directorio = new File(Configuracio.getArchivosPath());

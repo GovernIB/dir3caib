@@ -21,7 +21,9 @@ import javax.ejb.Stateless;
 import javax.xml.ws.BindingProvider;
 import java.io.*;
 import java.net.URL;
-import java.util.*;
+import java.util.Date;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -61,55 +63,39 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
     @EJB(mappedName = "dir3caib/RelacionSirOfiEJB/local")
     private RelacionSirOfiLocal relSirOfiEjb;
 
-    @EJB(mappedName = "dir3caib/ServicioEJB/local")
-    private ServicioLocal servicioEjb;
-
     @EJB(mappedName = "dir3caib/DescargaEJB/local")
     protected DescargaLocal descargaEjb;
 
-    @EJB(mappedName = "dir3caib/Dir3CaibEJB/local")
-    private Dir3CaibLocal dir3CaibEjb;
+
+    private Boolean actualizacion;
 
     // Cache de oficinas creadas
     private Map<String, Oficina> oficinesCache = new TreeMap<String, Oficina>();
 
     /**
      * Importa en la Bd los datos que contienen los archivos descargados previamente via WS
-     * @param isUpdate indica si es una sincronización o es una actualización
+     * @param
      * @return
      * @throws Exception
      */
     @Override
     @TransactionTimeout(value = 30000)
-    public ResultadosImportacion importarOficinas(boolean isUpdate) throws Exception {
+    public void importarOficinas(Sincronizacion sincronizacion) throws Exception {
 
         log.info("");
         log.info("Inicio importación Oficinas");
 
         System.gc();
 
-        ResultadosImportacion results = new ResultadosImportacion();
-
-        List<String> procesados = results.getProcesados();
-        List<String> inexistentes = new ArrayList<String>();
-
+        // Averiguamos si es una Carga de datos inicial o una Actualización
+        actualizacion = sincronizacion.getFechaInicio() != null;
 
         // Inicializamos la cache para la importación de Unidades
-        cacheImportadorOficinas(isUpdate);
+        cacheImportadorOficinas(actualizacion, sincronizacion);
 
         // Tiempos
         long start = System.currentTimeMillis();
         long end;
-
-
-
-        // Obtenemos la última descarga de los ficheros de Oficinas realizada
-        Descarga descarga = descargaEjb.ultimaDescarga(Dir3caibConstantes.OFICINA);
-
-        // Obtenemos el listado de ficheros que hay dentro del directorio de la última descarga
-        File f = new File(Configuracio.getOficinasPath(descarga.getCodigo()));
-        ArrayList<String> existentes = new ArrayList<String>(Arrays.asList(f.list()));
-
 
         // Buscamos los posibles ficheros de oficinas que pueden existir en el directorio
         for (int i = 0; i < Dir3caibConstantes.OFI_FICHEROS.length; i++) {
@@ -120,13 +106,13 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
             log.info("Inicio fichero: " + fichero);
             log.info("------------------------------------");
 
-
             try {
                 // Obtenemos el fichero del sistema de archivos
-                FileInputStream is1 = new FileInputStream(new File(Configuracio.getOficinasPath(descarga.getCodigo()), fichero));
+                FileInputStream is1 = new FileInputStream(new File(Configuracio.getDirectorioPath(sincronizacion.getCodigo()), fichero));
                 BufferedReader is = new BufferedReader(new InputStreamReader(is1, "UTF-8"));
                 reader = new CSVReader(is, ';');
                 if (reader != null) {
+
                     // Leemos el contenido y lo guardamos en un List
                     String nombreFichero = fichero;
                     String[] fila;
@@ -140,13 +126,15 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                                 String codigoOficina = fila[0];
 
                                 //eliminamos sus contactos y servicios en la actualizacion
-                                if (isUpdate) {
+                                if (actualizacion) {
                                     contactoOfiEjb.deleteByOficina(codigoOficina);
                                     oficinaEjb.deleteServiciosOficina(codigoOficina);
+                                    oficinaEjb.eliminarHistoricosOficina(codigoOficina);
                                 }
 
                                 Oficina oficina = null;
                                 boolean existeix;
+
                                 //  Miramos si existe ya en la BD
                                 if (existInBBDD.contains(codigoOficina)) {
                                     oficina = oficinaEjb.findById(codigoOficina);
@@ -197,12 +185,11 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                         }
                     }
 
-
                     // CONTACTOS
                     importarContactos(nombreFichero, reader);
 
                     //HISTORICOS OFI
-                    importarHistoricos(nombreFichero, reader, isUpdate);
+                    importarHistoricos(nombreFichero, reader, actualizacion);
 
                     // Relaciones organizativas
                     importarRelacionesOrganizativas(nombreFichero, reader);
@@ -211,17 +198,14 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                     importarRelacionesSir(nombreFichero, reader);
 
                     //Servicios
-                    importarServicios(nombreFichero, reader, isUpdate);
+                    importarServicios(nombreFichero, reader, actualizacion);
 
                     log.info("Fin importar fichero: " + nombreFichero);
-
-                    procesados.add(fichero);
                 }
+
                 reader.close();
 
-
             } catch (FileNotFoundException ex) {
-                inexistentes.add(fichero);
                 log.warn("Fichero no encontrado " + fichero);
             } catch (IOException io) {
                 io.printStackTrace();
@@ -236,23 +220,13 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                     }
                 }
             }
-            if (procesados.size() > 0) {
-                descarga.setFechaImportacion(new Date());
-                descargaEjb.merge(descarga);
-
-            }
-            results.setDescarga(descarga);
 
         }
-        results.setExistentes(existentes);
-        results.setProcesados(procesados);
 
         System.gc();
 
         log.info("");
         log.info("Fin importar OFICINAS");
-
-        return results;
     }
 
 
@@ -335,17 +309,18 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
             resp[0] = respuesta.getCodigo();
             resp[1] = respuesta.getDescripcion();
 
-            if (!respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO) && !respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_VACIO)) {
+            if (!respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_CORRECTO) && !respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_VACIO)) {
                 descargaEjb.remove(descarga);
                 return null;
             }
 
             //actualizamos el estado de la descarga.
-            if(respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_CORRECTO)){
-                descarga.setEstado(Dir3caibConstantes.SINCRONIZACION_DESCARGADA);
+            if(respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_CORRECTO)){
+                descarga.setEstado(Dir3caibConstantes.SINCRONIZACION_DESCARGADA.toString());
                 descargaEjb.merge(descarga);
-            } else if(respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_RESPUESTA_VACIO)){
-                descarga.setEstado(Dir3caibConstantes.SINCRONIZACION_VACIA);
+
+            } else if(respuesta.getCodigo().trim().equals(Dir3caibConstantes.CODIGO_VACIO)){
+                descarga.setEstado(Dir3caibConstantes.SINCRONIZACION_VACIA.toString());
                 descargaEjb.merge(descarga);
             }
 
@@ -429,7 +404,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
 
                 if (descarga != null && descarga.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
                     // importamos las oficinas a la bd.
-                    importarOficinas(true);
+                    //importarOficinas(true);
                 }
             }
 
@@ -441,7 +416,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
     @Override
     public ResultadosImportacion restaurarOficinas() throws Exception {
 
-        // Eliminamos las Oficinas
+        /*// Eliminamos las Oficinas
         dir3CaibEjb.eliminarOficinas();
 
         // Realizamos una descarga de Oficinas
@@ -452,7 +427,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
         if (descarga != null && descarga.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
 
             return importarOficinas(false);
-        }
+        }*/
 
         return null;
 
@@ -642,7 +617,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
 
                 try {
 
-                    if (!codigoOficinaUltima.isEmpty() && !codigoOficinaAnterior.isEmpty()) {// Si no están vacios
+                    if (!codigoOficinaUltima.isEmpty() && !codigoOficinaAnterior.isEmpty() && existInBBDD.contains(codigoOficinaUltima)) {// Si no están vacios
 
                         // Creamos el HO mediante una NativeQuery muy eficiente
                         oficinaEjb.crearHistoricoOficina(codigoOficinaAnterior, codigoOficinaUltima);
@@ -931,7 +906,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                     String codigoOficina = fila[0].trim();
                     String codigoServicio = fila[1].trim();
 
-                    if (!codigoOficina.isEmpty() && !codigoServicio.isEmpty()) { // Si no están vacios
+                    if (!codigoOficina.isEmpty() && !codigoServicio.isEmpty() && existInBBDD.contains(codigoOficina)) { // Si no están vacios
 
                         // Creamos el Servicio mediante una NativeQuery muy eficiente
                         oficinaEjb.crearServicioOficina(codigoOficina, Long.valueOf(codigoServicio));
@@ -945,9 +920,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                             oficinaEjb.clear();
                             start = end;
                         }
-
                     }
-
 
                 } catch (Exception e) {
                     log.error(" Error en OFI_SERVICIOS_OFI " + e.getMessage(), e);

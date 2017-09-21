@@ -2,6 +2,7 @@ package es.caib.dir3caib.persistence.ejb;
 
 
 import es.caib.dir3caib.persistence.model.Descarga;
+import es.caib.dir3caib.persistence.model.Sincronizacion;
 import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
 
 import javax.ejb.Local;
@@ -31,7 +32,7 @@ public interface ImportadorUnidadesLocal {
      * @return
      * @throws Exception
      */
-    public ResultadosImportacion importarUnidades() throws Exception;
+    public void importarUnidades(Sincronizacion sincronizacion) throws Exception;
 
 
     /**

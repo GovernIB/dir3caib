@@ -8,9 +8,7 @@ import es.caib.dir3caib.persistence.ejb.ImportadorCatalogoLocal;
 import es.caib.dir3caib.persistence.model.Descarga;
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.utils.Paginacion;
-import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
 import es.caib.dir3caib.utils.Configuracio;
-import es.caib.dir3caib.utils.Utils;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -55,7 +53,7 @@ public class CatalogoController extends BaseController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "/sincronizar", method = RequestMethod.GET)
+    /*@RequestMapping(value = "/sincronizar", method = RequestMethod.GET)
     public ModelAndView sincronizarCatalogo(HttpServletRequest request) throws Exception {
 
         log.info("");
@@ -71,11 +69,11 @@ public class CatalogoController extends BaseController {
             if (descarga != null && descarga.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
 
                 long start = System.currentTimeMillis();
-                descargaEjb.actualizarEstado(descarga.getCodigo(), Dir3caibConstantes.SINCRONIZACION_EN_CURSO);
+                descargaEjb.actualizarEstado(descarga.getCodigo(), Dir3caibConstantes.SINCRONIZACION_EN_CURSO.toString());
                 ResultadosImportacion results = importadorCatalogo.importarCatalogo();
 
                 // Importación correcta
-                descargaEjb.actualizarEstado(descarga.getCodigo(), Dir3caibConstantes.SINCRONIZACION_CORRECTA);
+                descargaEjb.actualizarEstado(descarga.getCodigo(), Dir3caibConstantes.SINCRONIZACION_CORRECTA.toString());
 
                 log.info("Fin sincronizacion catalogo en " + Utils.formatElapsedTime(System.currentTimeMillis() - start));
 
@@ -94,7 +92,7 @@ public class CatalogoController extends BaseController {
             // Si ha habido un Error en la sincronización, modificamos el estado de la descarga
             if(descarga != null){
                 try {
-                    descargaEjb.actualizarEstado(descarga.getCodigo(), Dir3caibConstantes.SINCRONIZACION_ERRONEA);
+                    descargaEjb.actualizarEstado(descarga.getCodigo(), Dir3caibConstantes.SINCRONIZACION_ERRONEA.toString());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -106,7 +104,7 @@ public class CatalogoController extends BaseController {
         }
 
         return mav;
-    }
+    }*/
 
     /**
      * Método que se encarga de listar todas las descargas que se han realizado del catálogo

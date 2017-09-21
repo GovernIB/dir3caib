@@ -18,8 +18,7 @@ public class Dir3caibConstantes {
     public static final String SECURITY_DOMAIN = "seycon";
 
     // Importación Catalogo
-    //public static final String CATALOGOS_LOCATION_PROPERTY = "es.caib.dir3caib.catalogos.path";
-    public static final String CATALOGOS_ARCHIVO_ZIP = "catalogosCSV";
+    public static final String CATALOGOS_ARCHIVO_ZIP = "catalogos";
     public static final String CAT_AMBITO_TERRITORIAL = "CAT_AMBITO_TERRITORIAL.CSV"; 
     public static final String CAT_COMUNIDAD_AUTONOMA = "CAT_COMUNIDAD_AUTONOMA.CSV"; 
     public static final String CAT_ENTIDAD_GEOGRAFICA = "CAT_ENTIDAD_GEOGRAFICA.CSV"; 
@@ -42,8 +41,7 @@ public class Dir3caibConstantes {
     
     
     // Importación Oficinas
-    //public static final String OFICINAS_LOCATION_PROPERTY = "es.caib.dir3caib.oficinas.path";
-    public static final String OFICINAS_ARCHIVO_ZIP = "oficinasCSV";
+    public static final String OFICINAS_ARCHIVO_ZIP = "oficinas";
     public static final String OFI_CONTACTO_OFI = "ContactoOFI.csv"; 
     public static final String OFI_HISTORICOS_OFI = "HistoricosOFI.csv"; 
     public static final String OFI_OFICINAS = "Oficinas.csv"; 
@@ -53,8 +51,7 @@ public class Dir3caibConstantes {
     public static final String[] OFI_FICHEROS = {OFI_OFICINAS,OFI_CONTACTO_OFI,OFI_HISTORICOS_OFI,OFI_RELACIONES_ORGANIZATIVAS_OFI,OFI_RELACIONES_SIROFI,OFI_SERVICIOS_OFI};
     
      // Importación UNIDADES
-    //public static final String UNIDADES_LOCATION_PROPERTY = "es.caib.dir3caib.unidades.path";
-    public static final String UNIDADES_ARCHIVO_ZIP = "unidadesCSV";
+    public static final String UNIDADES_ARCHIVO_ZIP = "unidades";
     public static final String UO_CONTACTO_UO = "ContactoUO.csv"; 
     public static final String UO_HISTORICOS_UO = "HistoricosUO.csv"; 
     public static final String UO_UNIDADES = "Unidades.csv"; 
@@ -65,9 +62,10 @@ public class Dir3caibConstantes {
     public static final String FORMATO_FECHA_HORA = "dd/MM/yyyy hh:mm:ss";
     
     //Descarga tipos
+    public static final String CATALOGO = "1";
+    public static final String DIRECTORIO = "2";
     public static final String UNIDAD = "unidad";
     public static final String OFICINA = "oficina";
-    public static final String CATALOGO = "catalogo";
 
     //Estados entidad
     public static final String ESTADO_ENTIDAD_VIGENTE= "V";
@@ -81,8 +79,8 @@ public class Dir3caibConstantes {
     public static final String DESCRIPCION_ESTADO_ENTIDAD_TRANSITORIO = "Transitorio";
 
     //codigo respuesta correcto ws descarga madrid
-    public static final String CODIGO_RESPUESTA_CORRECTO= "01";
-    public static final String CODIGO_RESPUESTA_VACIO= "14";
+    public static final String CODIGO_CORRECTO = "01";
+    public static final String CODIGO_VACIO = "14";
 
     //servicios SIR
     public static final long SERVICIO_SIR = 5;
@@ -90,11 +88,11 @@ public class Dir3caibConstantes {
     public static final long SERVICIO_SIR_RECEPCION = 7;
 
     // Estados Sincronización
-    public static final String SINCRONIZACION_DESCARGADA = "1";
-    public static final String SINCRONIZACION_VACIA = "2";
-    public static final String SINCRONIZACION_EN_CURSO = "3";
-    public static final String SINCRONIZACION_ERRONEA = "4";
-    public static final String SINCRONIZACION_CORRECTA = "5";
+    public static final Long SINCRONIZACION_DESCARGADA = 1L;
+    public static final Long SINCRONIZACION_VACIA = 2L;
+    public static final Long SINCRONIZACION_EN_CURSO = 3L;
+    public static final Long SINCRONIZACION_ERRONEA = 4L;
+    public static final Long SINCRONIZACION_CORRECTA = 5L;
 
     // Expresión CRON por defecto para actualizar DIR3
     public static final String CRON_SINCRONIZAR_DIR3 = "0 0 1 1/1 * ? *"; // Sincronización diaria a las 01:00 am

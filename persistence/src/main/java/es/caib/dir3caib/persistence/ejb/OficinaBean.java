@@ -747,5 +747,16 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
         return historicos.size() > 0;
     }
+
+    @Override
+    @SuppressWarnings(value = "unchecked")
+    public void eliminarHistoricosOficina(String idOficina) throws Exception {
+
+        Query q =  em.createNativeQuery("delete from dir_historicoofi where codultima=?");
+        q.setParameter(1, idOficina);
+
+        q.executeUpdate();
+
+    }
 }
 

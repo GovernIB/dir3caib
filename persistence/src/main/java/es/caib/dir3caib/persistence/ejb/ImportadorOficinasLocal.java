@@ -1,6 +1,7 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.Descarga;
+import es.caib.dir3caib.persistence.model.Sincronizacion;
 import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
 
 import javax.ejb.Local;
@@ -27,11 +28,11 @@ public interface ImportadorOficinasLocal {
   /**
    * Importa en la Bd los datos que contienen los archivos descargados previamente via WS
    *
-   * @param isUpdate indica si es una sincronización o es una actualización
+   * @param
    * @return
    * @throws Exception
    */
-  public ResultadosImportacion importarOficinas(boolean isUpdate) throws Exception;
+  public void importarOficinas(Sincronizacion sincronizacion) throws Exception;
 
   /**
    *  Tarea que en un primer paso descarga los archivos csv de las oficinas y posteriormente importa el contenido en

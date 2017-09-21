@@ -12,7 +12,6 @@ import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.Paginacion;
 import es.caib.dir3caib.persistence.utils.ResultadosImportacion;
 import es.caib.dir3caib.utils.Configuracio;
-import es.caib.dir3caib.utils.Utils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -151,7 +150,7 @@ public class OficinaController extends BaseController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "/sincronizar", method = RequestMethod.GET)
+    /*@RequestMapping(value = "/sincronizar", method = RequestMethod.GET)
     public ModelAndView sincronizarOficinas(HttpServletRequest request) {
 
         ModelAndView mav = new ModelAndView("/oficina/oficinaImportacion");
@@ -190,11 +189,11 @@ public class OficinaController extends BaseController {
                     long start = System.currentTimeMillis();
 
                     //Importamos a la BD todos los datos obtenidos de las oficinas y sus relaciones, se indica  si es una sincro o una actualización
-                    descargaEjb.actualizarEstado(descarga.getCodigo(), Dir3caibConstantes.SINCRONIZACION_EN_CURSO);
+                    descargaEjb.actualizarEstado(descarga.getCodigo(), Dir3caibConstantes.SINCRONIZACION_EN_CURSO.toString());
                     ResultadosImportacion resultados = importadorOficinas.importarOficinas(sincronizacion);
 
                     // Importación correcta
-                    descargaEjb.actualizarEstado(descarga.getCodigo(), Dir3caibConstantes.SINCRONIZACION_CORRECTA);
+                    descargaEjb.actualizarEstado(descarga.getCodigo(), Dir3caibConstantes.SINCRONIZACION_CORRECTA.toString());
 
                     log.info("Importat oficinas en " + Utils.formatElapsedTime(System.currentTimeMillis() - start));
 
@@ -215,7 +214,7 @@ public class OficinaController extends BaseController {
             // Si ha habido un Error en la sincronización, modificamos el estado de la descarga
             if(descarga != null){
                 try {
-                    descargaEjb.actualizarEstado(descarga.getCodigo(), Dir3caibConstantes.SINCRONIZACION_ERRONEA);
+                    descargaEjb.actualizarEstado(descarga.getCodigo(), Dir3caibConstantes.SINCRONIZACION_ERRONEA.toString());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -227,7 +226,7 @@ public class OficinaController extends BaseController {
         }
 
         return mav;
-    }
+    }*/
 
     /**
      * Muestra el formulario para obtener las oficinas mediante el WS de DIR3

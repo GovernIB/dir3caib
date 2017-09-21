@@ -1,10 +1,10 @@
 package es.caib.dir3caib.back.controller;
 
 
-import es.caib.dir3caib.persistence.ejb.DescargaLocal;
-import es.caib.dir3caib.persistence.model.Descarga;
+import es.caib.dir3caib.persistence.ejb.SincronizacionLocal;
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.model.FileSystemManager;
+import es.caib.dir3caib.persistence.model.Sincronizacion;
 import es.caib.dir3caib.utils.Configuracio;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -31,16 +31,17 @@ public class ArchivoController extends BaseController{
 
     protected final Logger log = Logger.getLogger(getClass());
 
-    @EJB(mappedName = "dir3caib/DescargaEJB/local")
-    protected DescargaLocal descargaEjb;
+    @EJB(mappedName = "dir3caib/SincronizacionEJB/local")
+    private SincronizacionLocal sincronizacionEjb;
 
-    @RequestMapping(value = "/{nombreArchivo}/{idDescarga}", method = RequestMethod.GET)
-    public void  archivo(@PathVariable("nombreArchivo") String nombreArchivo,@PathVariable("idDescarga") Long idDescarga,  HttpServletRequest request, HttpServletResponse response)  {
 
-        fullDownload(nombreArchivo,idDescarga, response);
+    @RequestMapping(value = "/{nombreArchivo}/{idSincronizacion}", method = RequestMethod.GET)
+    public void  archivo(@PathVariable("nombreArchivo") String nombreArchivo,@PathVariable("idSincronizacion") Long idSincronizacion,  HttpServletRequest request, HttpServletResponse response)  {
+
+        fullDownload(nombreArchivo,idSincronizacion, response);
     }
 
-    public void fullDownload(String nombre, Long idDescarga,  HttpServletResponse response) {
+    public void fullDownload(String nombre, Long idSincronizacion,  HttpServletResponse response) {
 
         FileInputStream input = null;
         OutputStream output = null;
@@ -51,18 +52,14 @@ public class ArchivoController extends BaseController{
         try {
             if (nombre != null) {
 
-                Descarga descarga = descargaEjb.findById(idDescarga);
+                Sincronizacion sincronizacion = sincronizacionEjb.findById(idSincronizacion);
 
-                if(Dir3caibConstantes.CATALOGO.equals(descarga.getTipo())){
-                  file = new File(Configuracio.getCatalogosPath(descarga.getCodigo()), nombre);
+                if(Dir3caibConstantes.CATALOGO.equals(sincronizacion.getTipo())){
+                  file = new File(Configuracio.getCatalogosPath(sincronizacion.getCodigo()), nombre);
                 }
 
-                if(Dir3caibConstantes.UNIDAD.equals(descarga.getTipo())){
-                  file = new File(Configuracio.getUnidadesPath(descarga.getCodigo()), nombre);
-                }
-
-                if(Dir3caibConstantes.OFICINA.equals(descarga.getTipo())){
-                  file = new File(Configuracio.getOficinasPath(descarga.getCodigo()), nombre);
+                if(Dir3caibConstantes.DIRECTORIO.equals(sincronizacion.getTipo())){
+                  file = new File(Configuracio.getDirectorioPath(sincronizacion.getCodigo()), nombre);
                 }
 
                 String contentType = mimeTypesMap.getContentType(file);

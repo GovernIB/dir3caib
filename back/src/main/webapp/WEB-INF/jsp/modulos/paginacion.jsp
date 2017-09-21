@@ -22,7 +22,7 @@
             </c:choose>
 
             <c:forEach var="i" begin="${paginacion.beginIndex}" end="${paginacion.endIndex}">
-                <c:url var="pageUrl" value="/${param.elemento}/${param.entidad}/list/${i}" />
+                <c:url var="pageUrl" value="/${param.entidad}/list/${i}" />
                 <c:choose>
                     <c:when test="${i == paginacion.currentIndex}">
                         <li class="active"><a href="${pageUrl}"><c:out value="${i}" /></a></li>

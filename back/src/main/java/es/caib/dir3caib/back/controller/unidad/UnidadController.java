@@ -198,7 +198,7 @@ public class UnidadController extends BaseController {
      *
      * @param request
      */
-    @RequestMapping(value = "/sincronizar", method = RequestMethod.GET)
+    /*@RequestMapping(value = "/sincronizar", method = RequestMethod.GET)
     public ModelAndView sincronizarUnidades(HttpServletRequest request) {
 
         ModelAndView mav = new ModelAndView("/unidad/unidadImportacion");
@@ -223,11 +223,11 @@ public class UnidadController extends BaseController {
                 long start = System.currentTimeMillis();
 
                 // Realiza la importación de al última descarga de Unidades
-                descargaEjb.actualizarEstado(descarga.getCodigo(), Dir3caibConstantes.SINCRONIZACION_EN_CURSO);
+                descargaEjb.actualizarEstado(descarga.getCodigo(), Dir3caibConstantes.SINCRONIZACION_EN_CURSO.toString());
                 ResultadosImportacion results = importadorUnidades.importarUnidades();
 
                 // Importación correcta
-                descargaEjb.actualizarEstado(descarga.getCodigo(), Dir3caibConstantes.SINCRONIZACION_CORRECTA);
+                descargaEjb.actualizarEstado(descarga.getCodigo(), Dir3caibConstantes.SINCRONIZACION_CORRECTA.toString());
 
                 log.info("Unidades importadas en " + Utils.formatElapsedTime(System.currentTimeMillis() - start));
 
@@ -247,7 +247,7 @@ public class UnidadController extends BaseController {
             // Si ha habido un Error en la sincronización, modificamos el estado de la descarga
             if(descarga != null){
                 try {
-                    descargaEjb.actualizarEstado(descarga.getCodigo(), Dir3caibConstantes.SINCRONIZACION_ERRONEA);
+                    descargaEjb.actualizarEstado(descarga.getCodigo(), Dir3caibConstantes.SINCRONIZACION_ERRONEA.toString());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -259,7 +259,7 @@ public class UnidadController extends BaseController {
         }
 
         return mav;
-    }
+    }*/
 
     /**
      * Método que obtiene el árbol de unidades de una unidad.

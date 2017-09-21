@@ -27,8 +27,6 @@ public class LoginInfo {
 
 
   final boolean roleAdmin;
-  final boolean descargaUnidad;
-  final boolean descargaOficina;
   final boolean development;
 
 
@@ -42,17 +40,13 @@ public class LoginInfo {
    *
    * @param springSecurityUser
    * @param roleAdmin
-   * @param descargaUnidad
-   * @param descargaOficina
    * @param roles
    */
   public LoginInfo(User springSecurityUser,
-                   boolean roleAdmin, boolean descargaUnidad, boolean descargaOficina, boolean development, Collection<GrantedAuthority> roles) {
+                   boolean roleAdmin, boolean development, Collection<GrantedAuthority> roles) {
     
     this.springSecurityUser = springSecurityUser;
     this.roleAdmin = roleAdmin;
-    this.descargaUnidad = descargaUnidad;
-    this.descargaOficina = descargaOficina;
     this.springRoles = roles;
     this.development= development;
 
@@ -62,13 +56,6 @@ public class LoginInfo {
     return roleAdmin;
   }
 
-  public boolean isDescargaUnidad() {
-    return descargaUnidad;
-  }
-
-  public boolean isDescargaOficina() {
-    return descargaOficina;
-  }
 
   public boolean isDevelopment() {
     return development;

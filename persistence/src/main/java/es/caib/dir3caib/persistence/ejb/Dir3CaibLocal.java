@@ -11,23 +11,39 @@ import javax.ejb.Local;
 public interface Dir3CaibLocal {
 
     /**
+     *
+     * @throws Exception
+     */
+    public void eliminarCompleto() throws Exception;
+
+    /**
+     *
      * @throws Exception
      */
     public void eliminarDirectorio() throws Exception;
 
     /**
+     *
      * @throws Exception
      */
     public void eliminarCatalogo() throws Exception;
 
     /**
+     *
      * @throws Exception
      */
     public void eliminarUnidades() throws Exception;
 
     /**
+     *
      * @throws Exception
      */
     public void eliminarOficinas() throws Exception;
+
+    /**
+     *
+     * @throws Exception
+     */
+    public void restaurarDirectorio() throws Exception;
 
 }
