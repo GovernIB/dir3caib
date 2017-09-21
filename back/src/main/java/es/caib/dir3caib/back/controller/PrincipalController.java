@@ -50,13 +50,13 @@ public class PrincipalController extends BaseController {
             Sincronizacion catalogo = sincronizacionEjb.ultimaSincronizacionCorrecta(Dir3caibConstantes.CATALOGO);
             Sincronizacion directorio = sincronizacionEjb.ultimaSincronizacionCorrecta(Dir3caibConstantes.DIRECTORIO);
 
-            if(catalogo != null){
-                catalogo.obtenerFicheros();
-                sincronizaciones.add(catalogo);
-            }
             if(directorio != null){
                 directorio.obtenerFicheros();
                 sincronizaciones.add(directorio);
+            }
+            if(catalogo != null){
+                catalogo.obtenerFicheros();
+                sincronizaciones.add(catalogo);
             }
 
             mav.addObject("sincronizaciones", sincronizaciones);
