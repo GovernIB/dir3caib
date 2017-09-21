@@ -115,16 +115,15 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                                 //Obtenemos codigo de la unidad del fichero
                                 String codigoUnidad = fila[0];
 
-                                // Si es una actualización: Eliminamos los contactos e historicos de la Unidad
-                                if (actualizacion) {
-                                    contactoUOEjb.deleteByUnidad(codigoUnidad);
-                                    unidadEjb.eliminarHistoricosUnidad(codigoUnidad);
-                                }
-
                                 Unidad unidad = null;
 
                                 // Comprobamos si existe ya en la BD
                                 if (existInBBDD.contains(codigoUnidad)) {
+
+                                    // Si es una actualización: Eliminamos los contactos e historicos de la Unidad
+                                    contactoUOEjb.deleteByUnidad(codigoUnidad);
+                                    unidadEjb.eliminarHistoricosUnidad(codigoUnidad);
+
                                     s = System.currentTimeMillis();
                                     unidad = unidadEjb.findById(codigoUnidad);
                                     findbyid = findbyid + (System.currentTimeMillis() - s);
@@ -240,6 +239,9 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                         }
 
                     }
+
+                    unidadEjb.flush();
+                    unidadEjb.clear();
 
                     // Historicos
                     importarHistoricos(fichero, reader);

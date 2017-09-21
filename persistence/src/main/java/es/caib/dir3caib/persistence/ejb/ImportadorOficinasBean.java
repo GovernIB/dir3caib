@@ -125,18 +125,17 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
 
                                 String codigoOficina = fila[0];
 
-                                //eliminamos sus contactos y servicios en la actualizacion
-                                if (actualizacion) {
-                                    contactoOfiEjb.deleteByOficina(codigoOficina);
-                                    oficinaEjb.deleteServiciosOficina(codigoOficina);
-                                    oficinaEjb.eliminarHistoricosOficina(codigoOficina);
-                                }
-
                                 Oficina oficina = null;
                                 boolean existeix;
 
                                 //  Miramos si existe ya en la BD
                                 if (existInBBDD.contains(codigoOficina)) {
+
+                                    // Eliminamos sus contactos y servicios en la actualizacion
+                                    contactoOfiEjb.deleteByOficina(codigoOficina);
+                                    oficinaEjb.deleteServiciosOficina(codigoOficina);
+                                    oficinaEjb.eliminarHistoricosOficina(codigoOficina);
+
                                     oficina = oficinaEjb.findById(codigoOficina);
                                     existeix = true;
                                 } else { // si no existe
@@ -184,6 +183,9 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                             }
                         }
                     }
+
+                    oficinaEjb.flush();
+                    oficinaEjb.clear();
 
                     // CONTACTOS
                     importarContactos(nombreFichero, reader);
