@@ -39,29 +39,20 @@
                         </div>
 
                         <table class="table table-bordered">
-                            <%--<colgroup>
-                                <col>
-                                <col>
-                                <col>
-                                <col>
-                                <col width="130">
-                            </colgroup>--%>
                             <thead>
                             <tr>
-                                <%--<th>Id</th>--%>
-                                <th>Tipo</th>
+                                <th><spring:message code="sincronizacion.tipo"/></th>
                                 <th><fmt:message key="dir3caib.intervalo"/>    (<fmt:message key="dir3caib.fechainicio"/> - <fmt:message key="dir3caib.fechafin"/>)</th>
                                 <th><fmt:message key="dir3caib.fechaimportacion"/></th>
                                 <th><fmt:message key="dir3caib.estado"/></th>
-                                <th>Ficheros directorio</th>
-                                <th>Ficheros catálogo</th>
+                                <th><spring:message code="sincronizacion.ficheros.directorio"/></th>
+                                <th><spring:message code="sincronizacion.ficheros.catalogo"/></th>
                             </tr>
                             </thead>
 
                             <tbody>
                             <c:forEach var="sincronizacion" items="${sincronizaciones}">
                                 <tr>
-                                    <%--<td>${sincronizacion.codigo}</td>--%>
                                     <td>
                                         <c:if test="${sincronizacion.tipo == 1}">
                                             <span class="label label-info"><spring:message code="sincronizacion.tipo.${sincronizacion.tipo}"/></span>
