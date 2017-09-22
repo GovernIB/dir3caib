@@ -119,7 +119,7 @@ public class RestController {
         Long start = System.currentTimeMillis();
         List<Nodo> unidades = dir3RestEjb.busquedaOrganismos(codigo, new String(denominacion.getBytes("ISO-8859-1"), "UTF-8"), codNivelAdministracion, codComunidadAutonoma, conOficinas, unidadRaiz, provincia, localidad);
         Long end = System.currentTimeMillis();
-        log.debug("TIEMPO CARGA busqueda oficinas: " + TimeUtils.formatElapsedTime(end - start));
+        log.info("TIEMPO CARGA busqueda organismos: " + TimeUtils.formatElapsedTime(end - start));
         HttpHeaders headers = addAccessControllAllowOrigin();
 
         return new ResponseEntity<List<Nodo>>(unidades, headers, HttpStatus.OK);
