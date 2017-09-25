@@ -280,10 +280,15 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
                 codigoOficinas = respuestaOficinas.getCodigo().trim();
                 ficheroOficinas = respuestaOficinas.getFichero();
 
-                // Procesamos los Archivoz zip recibidos
-                if( (codigoUnidades.equals(Dir3caibConstantes.CODIGO_CORRECTO) || codigoUnidades.equals(Dir3caibConstantes.CODIGO_VACIO)) &&
-                        (codigoOficinas.equals(Dir3caibConstantes.CODIGO_CORRECTO) || codigoOficinas.equals(Dir3caibConstantes.CODIGO_VACIO))){
+                // Procesamos los Archivos zip recibidos
+                if(codigoUnidades.equals(Dir3caibConstantes.CODIGO_VACIO) && codigoOficinas.equals(Dir3caibConstantes.CODIGO_VACIO)){
 
+                    // Actualizamos el estado de la Sincronizacion
+                    sincronizacion.setEstado(Dir3caibConstantes.SINCRONIZACION_VACIA);
+                    merge(sincronizacion);
+
+                }else if( (codigoUnidades.equals(Dir3caibConstantes.CODIGO_CORRECTO) || codigoUnidades.equals(Dir3caibConstantes.CODIGO_VACIO)) &&
+                    (codigoOficinas.equals(Dir3caibConstantes.CODIGO_CORRECTO) || codigoOficinas.equals(Dir3caibConstantes.CODIGO_VACIO))){
 
                     // Actualizamos el estado de la Sincronizacion
                     sincronizacion.setEstado(Dir3caibConstantes.SINCRONIZACION_DESCARGADA);
@@ -299,13 +304,6 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
                         //Borramos la sincronizacion creada previamente.
                         remove(sincronizacion);
                     }
-
-
-                }else if(codigoUnidades.equals(Dir3caibConstantes.CODIGO_VACIO) && codigoOficinas.equals(Dir3caibConstantes.CODIGO_VACIO)){
-
-                    // Actualizamos el estado de la Sincronizacion
-                    sincronizacion.setEstado(Dir3caibConstantes.SINCRONIZACION_VACIA);
-                    merge(sincronizacion);
 
                 }else{
                     // La sincronizacion ha ido mal, la eliminamos
