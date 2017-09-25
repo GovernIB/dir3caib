@@ -455,35 +455,35 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
             long start = System.currentTimeMillis();
             while ((fila = reader.readNext()) != null) {
                 try {
-                    ContactoOfi contacto = new ContactoOfi();
 
-                    // Asociamos oficina
                     String sOficina = fila[0].trim();
-                    if (!sOficina.isEmpty()) {
+                    String stipoContacto = fila[1].trim();
+                    String valorContacto = fila[2].trim();
+                    boolean visibilidad = fila[3].trim().equals("1");
+
+                    if(!sOficina.isEmpty() && !stipoContacto.isEmpty() && !valorContacto.isEmpty() && visibilidad){
+
+                        ContactoOfi contacto = new ContactoOfi();
+
+                        // Asociamos oficina
                         Oficina oficina = oficinaEjb.getReference(sOficina);
                         contacto.setOficina(oficina);
-                    } else {
-                        contacto.setOficina(null);
-                    }
 
-                    //Tipo contacto
-                    String stipoContacto = fila[1].trim();
-                    if (!stipoContacto.isEmpty()) {
+                        //Tipo contacto
                         contacto.setTipoContacto(cacheTipoContacto.get(stipoContacto));
-                    } else {
-                        contacto.setTipoContacto(null);
+
+                        //Valor contacto
+                        contacto.setValorContacto(valorContacto);
+
+                        //Visibilidad
+                        contacto.setVisibilidad(visibilidad);
+
+                        // Guardamos el Contacto
+                        contactoOfiEjb.persistReal(contacto);
+
+                        count++;
                     }
 
-                    //Valor contacto
-                    String valorContacto = fila[2].trim();
-                    contacto.setValorContacto(valorContacto);
-                    boolean visibilidad = fila[3].trim().equals("1");
-                    contacto.setVisibilidad(visibilidad);
-
-                    // Guardamos el Contacto
-                    contactoOfiEjb.persistReal(contacto);
-
-                    count++;
                     if (count % 500 == 0) {
                         long end = System.currentTimeMillis();
                         log.info("Procesats 500 contactes (" + (count - 500) + " - " + count
@@ -524,6 +524,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                 try {
                     String sOficina = fila[0].trim();
                     String sUnidad = fila[2].trim();
+
                     if (!sOficina.isEmpty() && !sUnidad.isEmpty()) {
 
                         boolean existeix;
@@ -610,6 +611,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                 try {
                     String sOficina = fila[0].trim();
                     String sUnidad = fila[2].trim();
+
                     if (!sOficina.isEmpty() && !sUnidad.isEmpty()) {
 
                         boolean existe;

@@ -603,34 +603,35 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                 long start = System.currentTimeMillis();
                 while ((fila = reader.readNext()) != null) {
 
-                    ContactoUnidadOrganica contacto = new ContactoUnidadOrganica();
-
-                    // Asociamos unidad
                     String sUnidad = fila[0].trim();
-                    if (!sUnidad.isEmpty()) {
+                    String stipoContacto = fila[1].trim();
+                    String valorContacto = fila[2].trim();
+                    boolean visibilidad = fila[3].trim().equals("1");
+
+                    if(!sUnidad.isEmpty() && !stipoContacto.isEmpty() && !valorContacto.isEmpty() && visibilidad){
+
+                        ContactoUnidadOrganica contacto = new ContactoUnidadOrganica();
+
+                        // Asociamos unidad
                         Unidad unidad = unidadEjb.getReference(sUnidad);
                         contacto.setUnidad(unidad);
-                    }
 
-                    // Establecemos el Tipo contacto
-                    String stipoContacto = fila[1].trim();
-                    if (!stipoContacto.isEmpty()) {
+                        // Establecemos el Tipo contacto
                         CatTipoContacto tipoContacto = cacheTipoContacto.get(stipoContacto);
                         contacto.setTipoContacto(tipoContacto);
+
+                        // Valor contacto
+                        contacto.setValorContacto(valorContacto);
+
+                        // Visibilidad
+                        contacto.setVisibilidad(visibilidad);
+
+                        // Creamos el contacto
+                        contactoUOEjb.persistReal(contacto);
+
+                        count++;
                     }
 
-                    // Valor contacto
-                    String valorContacto = fila[2].trim();
-                    contacto.setValorContacto(valorContacto);
-
-                    // Visibilidad
-                    boolean visibilidad = fila[3].trim().equals("1");
-                    contacto.setVisibilidad(visibilidad);
-
-                    // Creamos el contacto
-                    contactoUOEjb.persistReal(contacto);
-
-                    count++;
                     //cada 500 realizamos flush y clear para evitar problemas de Outofmemory
                     if (count % 500 == 0) {
                         long end = System.currentTimeMillis();
