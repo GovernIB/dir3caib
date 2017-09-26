@@ -7,7 +7,6 @@ import es.caib.dir3caib.persistence.model.Oficina;
 import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.persistence.utils.CodigoValor;
 import es.caib.dir3caib.persistence.utils.Nodo;
-import es.caib.dir3caib.utils.TimeUtils;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -120,14 +119,10 @@ public class RestController {
     public
     @ResponseBody
     ResponseEntity<List<Nodo>> busquedaOrganismos(@RequestParam String codigo, @RequestParam String denominacion, @RequestParam Long codNivelAdministracion, @RequestParam Long codComunidadAutonoma, @RequestParam boolean conOficinas, @RequestParam boolean unidadRaiz, @RequestParam Long provincia, @RequestParam String localidad) throws Exception {
-        log.info(" Entro en busquedaOrganismos ");
 
         //Transformamos el campo denominacion de ISO a UTF-8 para realizar las búsquedas en bd que estan en UTF-8.
         //Esto se hace porque el @RequestParam viene en ISO-8859-1.
-        Long start = System.currentTimeMillis();
         List<Nodo> unidades = dir3RestEjb.busquedaOrganismos(codigo, new String(denominacion.getBytes("ISO-8859-1"), "UTF-8"), codNivelAdministracion, codComunidadAutonoma, conOficinas, unidadRaiz, provincia, localidad);
-        Long end = System.currentTimeMillis();
-        log.info("TIEMPO CARGA busqueda organismos: " + TimeUtils.formatElapsedTime(end - start));
         HttpHeaders headers = addAccessControllAllowOrigin();
 
         return new ResponseEntity<List<Nodo>>(unidades, headers, HttpStatus.OK);
@@ -141,7 +136,6 @@ public class RestController {
     public
     @ResponseBody
     ResponseEntity<List<Nodo>> busquedaOficinas(@RequestParam String codigo, @RequestParam String denominacion, @RequestParam Long codNivelAdministracion, @RequestParam Long codComunidadAutonoma, @RequestParam Long provincia, @RequestParam String localidad, @RequestParam boolean oficinasSir) throws Exception {
-        log.info(" Entro en busquedaOficinas ");
 
         //Transformamos el campo denominacion de ISO a UTF-8 para realizar las búsquedas en bd que estan en UTF-8.
         // Esto se hace porque el @RequestParam viene en ISO-8859-1.
@@ -160,8 +154,6 @@ public class RestController {
     @ResponseBody
     ResponseEntity<String> unidadDenominacion(@RequestParam String codigo) throws Exception {
 
-        log.info(" Entro en unidadDenominacion ");
-
         String denominacion = dir3RestEjb.unidadDenominacion(codigo);
         HttpHeaders headers = addAccessControllAllowOrigin();
 
@@ -176,8 +168,6 @@ public class RestController {
     public
     @ResponseBody
     ResponseEntity<String> oficinaDenominacion(@RequestParam String codigo) throws Exception {
-
-        log.info(" Entro en oficinaDenominacion ");
 
         String denominacion = dir3RestEjb.oficinaDenominacion(codigo);
         HttpHeaders headers = addAccessControllAllowOrigin();
@@ -196,8 +186,6 @@ public class RestController {
     public
     @ResponseBody
     ResponseEntity<Nodo> organigrama(@RequestParam String codigo) throws Exception {
-
-        log.info(" Entro en organigrama ");
 
         Nodo nodo = new Nodo();
         arbolEjb.arbolUnidadesAscendentes(codigo, nodo, Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE, false);
@@ -226,8 +214,6 @@ public class RestController {
     ResponseEntity<List<Nodo>> obtenerUnidadesDenominacionComunidad(@RequestParam String denominacion, @RequestParam Long codComunidad)
             throws Exception {
 
-        log.info(" Entro en obtenerUnidadesDenominacionComunidad ");
-
         List<Nodo> unidades = dir3RestEjb.busquedaDenominacionComunidad(new String(denominacion.getBytes("ISO-8859-1"), "UTF-8"), codComunidad);
 
         HttpHeaders headers = addAccessControllAllowOrigin();
@@ -245,12 +231,8 @@ public class RestController {
     @ResponseBody
     ResponseEntity<List<CodigoValor>> ambitosTerritoriales(@RequestParam Long id) throws Exception {
 
-        log.info(" Entro en ambitosTerritoriales ");
-
         List<CodigoValor> resultado = dir3RestEjb.getAmbitoTerritorialByAdministracion(id);
 
-
-        log.info(" Ambitos Territoriales Encontrados: " + resultado.size());
         HttpHeaders headers = addAccessControllAllowOrigin();
         return new ResponseEntity<List<CodigoValor>>(resultado, headers, HttpStatus.OK);
     }
@@ -264,11 +246,8 @@ public class RestController {
     public @ResponseBody
     ResponseEntity<List<CodigoValor>> comunidadesAutonomas() throws Exception {
 
-        log.info(" Entro en comunidadesAutonomas ");
-
         List<CodigoValor> resultado = dir3RestEjb.getComunidadesAutonomas();
 
-        log.info(" Comunidades Autonomas encontradas: " + resultado.size());
         HttpHeaders headers = addAccessControllAllowOrigin();
         return new ResponseEntity<List<CodigoValor>>(resultado, headers, HttpStatus.OK);
     }
@@ -282,11 +261,8 @@ public class RestController {
     public @ResponseBody
     ResponseEntity<List<CodigoValor>> entidadesGeograficas() throws Exception {
 
-        log.info(" Entro en entidadesGeograficas ");
-
         List<CodigoValor> resultado = dir3RestEjb.getEntidadesGeograficas();
 
-        log.info(" Entidades geograficas encontradas: " + resultado.size());
         HttpHeaders headers = addAccessControllAllowOrigin();
         return new ResponseEntity<List<CodigoValor>>(resultado, headers, HttpStatus.OK);
     }
@@ -299,11 +275,9 @@ public class RestController {
     @RequestMapping(value = "/catalogo/provincias", method = RequestMethod.GET)
     public @ResponseBody
     ResponseEntity<List<CodigoValor>> provincias() throws Exception {
-        log.info(" Entro en provincias ");
 
         List<CodigoValor> resultado = dir3RestEjb.getProvincias();
 
-        log.info(" Provincias encontradas: " + resultado.size());
         HttpHeaders headers = addAccessControllAllowOrigin();
         return new ResponseEntity<List<CodigoValor>>(resultado, headers, HttpStatus.OK);
     }
@@ -316,11 +290,9 @@ public class RestController {
     @RequestMapping(value = "/catalogo/provincias/comunidadAutonoma", method = RequestMethod.GET)
     public @ResponseBody
     ResponseEntity<List<CodigoValor>> provinciasCA(@RequestParam Long id) throws Exception {
-        log.info(" Entro en provinciasCA ");
 
         List<CodigoValor> resultado = dir3RestEjb.getProvinciasByComunidad(id);
 
-        log.info(" Provincias encontradas: " + resultado.size());
         HttpHeaders headers = addAccessControllAllowOrigin();
         return new ResponseEntity<List<CodigoValor>>(resultado, headers, HttpStatus.OK);
     }
@@ -333,11 +305,8 @@ public class RestController {
     @RequestMapping(value = "/catalogo/localidades/provincia/entidadGeografica", method = RequestMethod.GET)
     public @ResponseBody
     ResponseEntity<List<CodigoValor>> localidades(@RequestParam Long codigoProvincia, String codigoEntidadGeografica) throws Exception {
-        log.info(" Entro en localidades ");
         List<CodigoValor> localidades = dir3RestEjb.getLocalidadByProvinciaEntidadGeografica(codigoProvincia, codigoEntidadGeografica);
 
-
-        log.info(" Localidades encontradas: " + localidades.size());
         HttpHeaders headers = addAccessControllAllowOrigin();
         return new ResponseEntity<List<CodigoValor>>(localidades, headers, HttpStatus.OK);
     }
@@ -350,11 +319,9 @@ public class RestController {
     @RequestMapping(value = "/catalogo/nivelesAdministracion", method = RequestMethod.GET)
     public @ResponseBody
     ResponseEntity<List<CodigoValor>> nivelesAdministracion() throws Exception {
-        log.info(" Entro en nivelesAdministracion ");
 
         List<CodigoValor> resultado = dir3RestEjb.getNivelesAdministracion();
 
-        log.info(" Niveles administracion encontrados: " + resultado.size());
         HttpHeaders headers = addAccessControllAllowOrigin();
         return new ResponseEntity<List<CodigoValor>>(resultado, headers, HttpStatus.OK);
     }
