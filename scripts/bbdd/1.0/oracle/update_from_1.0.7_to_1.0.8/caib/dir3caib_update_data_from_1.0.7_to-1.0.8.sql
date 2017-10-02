@@ -1,5 +1,6 @@
 drop SEQUENCE DIR_SEQ_ALL;
 create sequence DIR_SEQ_ALL;
+grant select on DIR_SEQ_ALL to www_dir3caib;
 
 BEGIN
   FOR c IN (SELECT table_name, constraint_name FROM user_constraints WHERE constraint_type = 'R')
