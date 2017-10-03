@@ -43,7 +43,7 @@
                             <tr>
                                 <th><spring:message code="sincronizacion.tipo"/></th>
                                 <th><fmt:message key="dir3caib.intervalo"/>    (<fmt:message key="dir3caib.fechainicio"/> - <fmt:message key="dir3caib.fechafin"/>)</th>
-                                <th><fmt:message key="dir3caib.fechaimportacion"/></th>
+                                <th><fmt:message key="dir3caib.fechaSincronizacion"/></th>
                                 <th><fmt:message key="dir3caib.estado"/></th>
                                 <th><spring:message code="sincronizacion.ficheros.directorio"/></th>
                                 <th><spring:message code="sincronizacion.ficheros.catalogo"/></th>
