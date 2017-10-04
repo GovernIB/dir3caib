@@ -21,13 +21,13 @@ public class ArbolBean implements ArbolLocal {
 
 
     @EJB(mappedName = "dir3caib/UnidadEJB/local")
-    protected UnidadLocal unidadEjb;
+    private UnidadLocal unidadEjb;
 
     @EJB(mappedName = "dir3caib/OficinaEJB/local")
-    protected OficinaLocal oficinaEjb;
+    private OficinaLocal oficinaEjb;
 
     @EJB(mappedName = "dir3caib/RelacionOrganizativaOfiEJB/local")
-    protected RelacionOrganizativaOfiLocal relacionOrganizativaOfiEjb;
+    private RelacionOrganizativaOfiLocal relacionOrganizativaOfiEjb;
 
 
     /**
@@ -39,7 +39,6 @@ public class ArbolBean implements ArbolLocal {
      * @param estado      estado de las unidades que queremos mostrar en el arbol.
      * @param conOficinas indica si se quieren incluir las oficinas en el organigrama (es para mostrar el arbol en las
      *                    búsquedas de organismo destinatario de regweb3)
-     * @return Nodo (arbol)
      */
     public void arbolUnidades(String idUnidad, Nodo nodo, String estado, boolean conOficinas) throws Exception {
 
@@ -62,10 +61,8 @@ public class ArbolBean implements ArbolLocal {
 
             List<Nodo> oficinasDependientesTransf = new ArrayList<Nodo>();
             for (Nodo oficina : oficinasDependientes) {
-                // Obtenemos las oficinas auxliares del nodo oficina que estamos tratando
-                List<Nodo> oficinasAuxiliares = oficinaEjb.oficinasAuxiliares(oficina.getCodigo(), estado);
-
-                List<Nodo> oficinasAuxTransformadas = oficinasAuxiliares;
+                // Obtenemos las oficinas auxiliares del nodo oficina que estamos tratando
+                List<Nodo> oficinasAuxTransformadas = oficinaEjb.oficinasAuxiliares(oficina.getCodigo(), estado);
 
                 //Obtenemos las oficinas auxiliares de segundo nivel
                 obtenerAuxiliares(oficinasAuxTransformadas, estado);
@@ -118,7 +115,6 @@ public class ArbolBean implements ArbolLocal {
      * @param estado      estado de las unidades que queremos mostrar en el arbol.
      * @param conOficinas indica si se quieren incluir las oficinas en el organigrama (es para mostrar el arbol en las
      *                    búsquedas de organismo destinatario de regweb3)
-     * @return Nodo (arbol)
      */
     public void arbolUnidadesAscendentes(String idUnidad, Nodo nodo, String estado, boolean conOficinas) throws Exception {
 

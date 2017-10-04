@@ -26,31 +26,31 @@ public class ObtenerCatalogosEjb implements ObtenerCatalogosLocal {
     protected final Logger log = Logger.getLogger(getClass());
 
     @EJB(mappedName = "dir3caib/CatEstadoEntidadEJB/local")
-    protected CatEstadoEntidadLocal catEstadoEntidadEjb;
+    private CatEstadoEntidadLocal catEstadoEntidadEjb;
 
     @EJB(mappedName = "dir3caib/CatNivelAdministracionEJB/local")
-    protected CatNivelAdministracionLocal catNivelAdministracionEjb;
+    private CatNivelAdministracionLocal catNivelAdministracionEjb;
 
     @EJB(mappedName = "dir3caib/CatPaisEJB/local")
-    protected CatPaisLocal catPaisEjb;
+    private CatPaisLocal catPaisEjb;
 
     @EJB(mappedName = "dir3caib/CatComunidadAutonomaEJB/local")
-    protected CatComunidadAutonomaLocal catComunidadAutonomaEjb;
+    private CatComunidadAutonomaLocal catComunidadAutonomaEjb;
 
     @EJB(mappedName = "dir3caib/CatProvinciaEJB/local")
-    protected CatProvinciaLocal catProvinciaEjb;
+    private CatProvinciaLocal catProvinciaEjb;
 
     @EJB(mappedName = "dir3caib/CatLocalidadEJB/local")
-    protected CatLocalidadLocal catLocalidadEjb;
+    private CatLocalidadLocal catLocalidadEjb;
 
     @EJB(mappedName = "dir3caib/CatEntidadGeograficaEJB/local")
-    protected CatEntidadGeograficaLocal catEntidadGeograficaEjb;
+    private CatEntidadGeograficaLocal catEntidadGeograficaEjb;
 
     @EJB(mappedName = "dir3caib/ServicioEJB/local")
-    protected ServicioLocal servicioEjb;
+    private ServicioLocal servicioEjb;
 
     @EJB(mappedName = "dir3caib/CatTipoViaEJB/local")
-    protected CatTipoViaLocal catTipoViaEjb;
+    private CatTipoViaLocal catTipoViaEjb;
 
 
   /**

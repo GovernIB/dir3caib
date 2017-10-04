@@ -4,6 +4,7 @@ import es.caib.dir3caib.persistence.model.Oficina;
 import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.persistence.utils.CodigoValor;
 import es.caib.dir3caib.persistence.utils.Nodo;
+import es.caib.dir3caib.persistence.utils.ObjetoDirectorio;
 
 import javax.ejb.Local;
 import java.util.List;
@@ -16,8 +17,9 @@ import java.util.List;
 @Local
 public interface Dir3RestLocal  {
 
-  public List<Unidad> findUnidadesByDenominacion(String denominacion) throws Exception;
-  public List<Oficina> findOficinasByDenominacion(String denominacion) throws Exception;
+  public List<ObjetoDirectorio> findUnidadesByDenominacion(String denominacion) throws Exception;
+
+  public List<ObjetoDirectorio> findOficinasByDenominacion(String denominacion) throws Exception;
   public Boolean tieneHijos(String codigo) throws Exception;
   public List<Unidad> obtenerArbolUnidades(String codigo, String fechaActualizacion) throws Exception;
 

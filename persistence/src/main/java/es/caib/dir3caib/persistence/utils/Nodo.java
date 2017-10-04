@@ -5,8 +5,8 @@ import es.caib.dir3caib.persistence.model.utils.ObjetoBasico;
 import java.util.List;
 
 /**
- * Se utiliza para almacenar información de la estructura de Unidades u Oficinas.
- * Se utiliza para retornar información via JSON de peticiones REST y crear el Arbol de organismos.
+ * Se utiliza para almacenar información reducida de la estructura en árbol de Unidades u Oficinas.
+ * Se utiliza para retornar información via JSON de peticiones REST.
  * Created 28/08/14 8:31
  *
  * @author mgonzalez

@@ -1,10 +1,7 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.*;
-import es.caib.dir3caib.persistence.utils.CodigoValor;
-import es.caib.dir3caib.persistence.utils.DataBaseUtils;
-import es.caib.dir3caib.persistence.utils.Nodo;
-import es.caib.dir3caib.persistence.utils.NodoUtils;
+import es.caib.dir3caib.persistence.utils.*;
 import org.apache.log4j.Logger;
 
 import javax.ejb.Stateless;
@@ -31,35 +28,39 @@ public class Dir3RestBean implements Dir3RestLocal {
 
 
     /**
-     * Obtiene las unidades cuya denominación coincide con la indicada.
+     * Obtiene las unidades(codigo-denominacion) cuya denominación coincide con la indicada.
      * @param denominacion
      * @return
      * @throws Exception
      */
   @Override
-  public List<Unidad> findUnidadesByDenominacion(String denominacion) throws Exception {
+  public List<ObjetoDirectorio> findUnidadesByDenominacion(String denominacion) throws Exception {
 
-    Query q = em.createQuery("select unidad from Unidad as unidad where upper(unidad.denominacion) like upper(:denominacion)");
-
-    q.setParameter("denominacion", "%"+denominacion.toLowerCase()+"%");
-
-    return q.getResultList();
+      if (!denominacion.isEmpty()) {
+          Query q = em.createQuery("select unidad.codigo, unidad.denominacion from Unidad as unidad where upper(unidad.denominacion) like upper(:denominacion)");
+          q.setParameter("denominacion", "%" + denominacion.toLowerCase() + "%");
+          return transformarAObjetoDirectorio(q.getResultList());
+      } else {
+          return new ArrayList<ObjetoDirectorio>();
+      }
   }
 
     /**
-     * Obtiene las oficinas cuya denominación coincide con la indicada.
+     * Obtiene las oficinas(codigo-denominacion) cuya denominación coincide con la indicada.
      * @param denominacion
      * @return
      * @throws Exception
      */
   @Override
-  public List<Oficina> findOficinasByDenominacion(String denominacion) throws Exception {
+  public List<ObjetoDirectorio> findOficinasByDenominacion(String denominacion) throws Exception {
 
-      Query q = em.createQuery("select oficina from Oficina as oficina where upper(oficina.denominacion) like upper(:denominacion)");
-
-      q.setParameter("denominacion", "%"+denominacion.toLowerCase()+"%");
-
-      return q.getResultList();
+      if (!denominacion.isEmpty()) {
+          Query q = em.createQuery("select oficina.codigo, oficina.denominacion from Oficina as oficina where upper(oficina.denominacion) like upper(:denominacion)");
+          q.setParameter("denominacion", "%" + denominacion.toLowerCase() + "%");
+          return transformarAObjetoDirectorio(q.getResultList());
+      } else {
+          return new ArrayList<ObjetoDirectorio>();
+      }
     }
 
     /**
@@ -79,11 +80,13 @@ public class Dir3RestBean implements Dir3RestLocal {
 
     /**
      * Obtiene el arbol de unidades de la unidad indicada por código.
+     *
      * @param codigo
      * @param fechaActualizacion
      * @return
      * @throws Exception
      */
+    //TODO REVISAR PARECE QUE NO SE EMPLEA, en REGWEB3 NO SE EMPLEA(03/10/2017)
   @Override
   public List<Unidad> obtenerArbolUnidades(String codigo, String fechaActualizacion) throws Exception{
       Query q;
@@ -118,7 +121,6 @@ public class Dir3RestBean implements Dir3RestLocal {
       for (Unidad unidad : padres) {
           if(tieneHijos(unidad.getCodigo())){
               List<Unidad> hijos = obtenerArbolUnidades(unidad.getCodigo(),fechaActualizacion);
-              log.info("Unidad " + unidad.getDenominacion() + ", tiene "+ hijos.size()+" hijos!");
               listaCompleta.addAll(hijos);
           }
       }
@@ -133,6 +135,7 @@ public class Dir3RestBean implements Dir3RestLocal {
    * @return
    * @throws Exception
    */
+  //TODO REVISAR PARECE QUE NO SE EMPLEA NI EN EL RestController, en REGWEB3 NO SE EMPLEA(03/10/2017)
   @Override
   public List<Nodo> obtenerArbolUnidades(String codigo) throws Exception {
       Query q;
@@ -145,9 +148,7 @@ public class Dir3RestBean implements Dir3RestLocal {
       List<Nodo> padres = NodoUtils.getNodoList(q.getResultList());
       List<Nodo> listaCompleta;
 
-
       listaCompleta = new ArrayList<Nodo>(padres);
-
 
       for (Nodo unidad : padres) {
           if(tieneHijos(unidad.getCodigo())){
@@ -173,7 +174,7 @@ public class Dir3RestBean implements Dir3RestLocal {
         q.setParameter("codigo",codigo);
 
         List<Oficina> oficinas = q.getResultList();
-        List<Oficina> oficinasCompletas = new ArrayList<Oficina>();
+        List<Oficina> oficinasCompletas;
         List<Oficina> oficinasActualizadas = new ArrayList<Oficina>();
         // Si hay fecha de actualización y es anterior a la fecha de importación se debe
         // incluir en la lista de actualizadas
@@ -224,7 +225,7 @@ public class Dir3RestBean implements Dir3RestLocal {
     }
 
   /**
-   * TODO REVISAR
+   * TODO REVISAR, parece que el parametro "conOficinas" siempre se indica a "false"
    * Búsqueda de organismos según los parámetros indicados que esten vigentes
    * @param codigo  código de la unidad
    * @param denominacion  denominación de la unidad
@@ -436,7 +437,7 @@ public class Dir3RestBean implements Dir3RestLocal {
            if(unidades.size() > 0){
                return unidades.get(0);
            }else {
-               return  null;
+               return new String();
            }
        }
 
@@ -457,7 +458,7 @@ public class Dir3RestBean implements Dir3RestLocal {
          if(oficinas.size() > 0){
             return oficinas.get(0);
          }else {
-             return  null;
+             return new String();
          }
      }
 
@@ -536,7 +537,7 @@ public class Dir3RestBean implements Dir3RestLocal {
         q.setParameter("SERVICIO_SIR_RECEPCION", new Servicio(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
 
 
-        return q.getResultList();
+        return q.getResultList() != null ? q.getResultList() : new ArrayList<Oficina>();
 
     }
 
@@ -652,7 +653,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 
 
     /**
-     * Método que transforma los resultados de una query en una lista de CodigoValor
+     * Método que transforma los resultados de una lista de Object[] en una lista de CodigoValor
      *
      * @param resultados
      * @return
@@ -669,5 +670,26 @@ public class Dir3RestBean implements Dir3RestLocal {
         return codigosValor;
 
     }
+
+    /**
+     * Método que transforma los resultados de una lista de Object[] en una lista de ObjetoDirectorio
+     *
+     * @param resultados
+     * @return
+     */
+    private List<ObjetoDirectorio> transformarAObjetoDirectorio(List<Object[]> resultados) {
+        List<ObjetoDirectorio> objetoDirectorios = new ArrayList<ObjetoDirectorio>();
+        for (Object[] obj : resultados) {
+            ObjetoDirectorio objetoDirectorio = new ObjetoDirectorio();
+            objetoDirectorio.setCodigo((String) obj[0]);
+            objetoDirectorio.setDenominacion((String) obj[1]);
+            objetoDirectorios.add(objetoDirectorio);
+        }
+
+        return objetoDirectorios;
+
+    }
+
+
 
 }

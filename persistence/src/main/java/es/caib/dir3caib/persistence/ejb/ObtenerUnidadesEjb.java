@@ -35,7 +35,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
     protected final Logger log = Logger.getLogger(getClass());
 
     @EJB(mappedName = "dir3caib/UnidadEJB/local")
-    protected UnidadLocal unidadEjb;
+    private UnidadLocal unidadEjb;
 
     @EJB(mappedName = "dir3caib/SincronizacionEJB/local")
     private SincronizacionLocal sincronizacionEjb;
