@@ -4,9 +4,10 @@ package es.caib.dir3caib.persistence.model.utils;
  * Created 10/03/15 12:17
  *
  * @author mgonzalez
- * Representa un conjunto mínimo de datos de una unidad o oficina. Los datos mínimos son
+ * Representa un conjunto de datos reducidos de uan estructura en árbol de una unidad o oficina. Los datos son
  * el código, la denominación y el estado y dos atributos más genericos para mostrar más
- * información en función de si es unidad o oficina
+ * información en función de si es unidad o oficina. Esta clase se emplea para mostrar estructuras en árbol,
+ * tanto de unidad como oficina en los métodos rest y para mostrar la información en jsp de dir3caib.
  */
 public class ObjetoBasico {
 
