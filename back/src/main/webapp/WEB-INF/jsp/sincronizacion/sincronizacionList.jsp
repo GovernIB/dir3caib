@@ -77,7 +77,7 @@
                                                     <span class="label label-info"><spring:message code="sincronizacion.estado.${sincronizacion.estado}"/></span>
                                                 </c:when>
                                                 <c:when test="${sincronizacion.estado == 2}">
-                                                    <span class="label label-success"><spring:message code="sincronizacion.estado.${sincronizacion.estado}"/></span>
+                                                    <span class="label label-warning"><spring:message code="sincronizacion.estado.${sincronizacion.estado}"/></span>
                                                 </c:when>
                                                 <c:when test="${sincronizacion.estado == 3}">
                                                     <span class="label label-warning"><spring:message code="sincronizacion.estado.${sincronizacion.estado}"/></span>
