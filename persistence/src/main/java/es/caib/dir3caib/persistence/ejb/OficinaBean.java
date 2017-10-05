@@ -586,7 +586,6 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
             if (relorg.size() > 0) {
                 return true;
             } else {// no tiene oficinas, miramos sus hijos
-                log.info("Entramos aquí");
                 Query q2 = em.createQuery("Select unidad.codigo from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:estado order by unidad.codigo");
 
                 q2.setParameter("codigo", codigo);

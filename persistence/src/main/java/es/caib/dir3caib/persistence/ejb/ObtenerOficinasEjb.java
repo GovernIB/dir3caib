@@ -60,7 +60,6 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
                     contactosVisibles.add(contactoOfi);
                 }
             }
-            log.info("XYZ ZZZ CONTACTOS VISIBLES: " + contactosVisibles.size());
             oficina.setContactos(contactosVisibles);
             if (fechaActualizacion != null) {
 

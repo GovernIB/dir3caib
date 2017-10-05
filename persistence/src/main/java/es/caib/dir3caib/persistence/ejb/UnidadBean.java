@@ -197,7 +197,6 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
     @Override
     public Long getTotal() throws Exception {
-        log.info("Entramos en getTotal");
         Query q = em.createQuery("Select count(distinct unidad.codigo) from Unidad as unidad");
 
         return (Long) q.getSingleResult();
