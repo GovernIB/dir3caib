@@ -1,7 +1,5 @@
 package es.caib.dir3caib.back.utils;
 
-import es.caib.dir3caib.persistence.ejb.TimerDir3Local;
-import es.caib.dir3caib.persistence.utils.DataBaseUtils;
 import es.caib.dir3caib.persistence.utils.Versio;
 import es.caib.dir3caib.utils.Configuracio;
 import org.apache.log4j.Logger;
@@ -9,7 +7,6 @@ import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.stereotype.Component;
 
-import javax.naming.InitialContext;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -44,7 +41,7 @@ public class InitServlet extends HttpServlet {
 
 
 
-    // Sincronitzador amb Dir3
+    /*// Sincronitzador amb Dir3
     try {
       TimerDir3Local sinc = (TimerDir3Local) new InitialContext().lookup("dir3caib/TimerDir3EJB/local");
       
@@ -73,7 +70,7 @@ public class InitServlet extends HttpServlet {
       }
     } catch (Throwable th) {
       log.error("Error desconegut establint LikeManager " + th.getMessage(), th);
-    }
+    }*/
 
     // Mostrar Versió
     String ver = Versio.VERSIO + (Configuracio.isCAIB() ? "-caib" : "");
