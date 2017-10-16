@@ -105,7 +105,7 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
     public Sincronizacion ultimaSincronizacionCompletada(String tipo) throws Exception {
 
         Query query = em.createQuery( "select sincronizacion from Sincronizacion as sincronizacion where sincronizacion.tipo = :tipo " +
-                "and sincronizacion.estado = :correcto or sincronizacion.estado = :vacia " +
+                "and (sincronizacion.estado = :correcto or sincronizacion.estado = :vacia) " +
                 " order by sincronizacion.codigo desc");
 
         query.setParameter("tipo", tipo);
