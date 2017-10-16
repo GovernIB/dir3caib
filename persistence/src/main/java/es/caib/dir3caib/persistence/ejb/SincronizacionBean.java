@@ -74,7 +74,7 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
     }
 
     @Override
-    public Sincronizacion ultimaSincronizacion(String tipo) throws Exception {
+    public Sincronizacion ultimaSincronizacionByTipo(String tipo) throws Exception {
         
         Query query = em.createQuery( "select sincronizacion from Sincronizacion as sincronizacion where sincronizacion.tipo= :tipo order by sincronizacion.codigo desc");
         query.setParameter("tipo", tipo);
@@ -84,16 +84,6 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
         } else {
           return null;
         } 
-    }
-
-    @Override
-    public Long totalSincronizacions(String tipo) throws Exception {
-
-        Query q = em.createQuery("Select count(sincronizacion.codigo) from Sincronizacion as sincronizacion where sincronizacion.tipo = :tipo");
-        q.setParameter("tipo", tipo);
-
-        return (Long) q.getSingleResult();
-
     }
 
     public Sincronizacion ultimaSincronizacionCorrecta(String tipo) throws Exception {
@@ -112,20 +102,29 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
         }
     }
 
+    public Sincronizacion ultimaSincronizacionCompletada(String tipo) throws Exception {
+
+        Query query = em.createQuery( "select sincronizacion from Sincronizacion as sincronizacion where sincronizacion.tipo = :tipo " +
+                "and sincronizacion.estado = :correcto or sincronizacion.estado = :vacia " +
+                " order by sincronizacion.codigo desc");
+
+        query.setParameter("tipo", tipo);
+        query.setParameter("correcto", Dir3caibConstantes.SINCRONIZACION_CORRECTA);
+        query.setParameter("vacia", Dir3caibConstantes.SINCRONIZACION_VACIA);
+
+        List<Sincronizacion> sincronizacions = query.getResultList();
+        if(!sincronizacions.isEmpty()){
+            return (Sincronizacion) query.getResultList().get(0);
+        } else {
+            return null;
+        }
+    }
+
     @Override
     @SuppressWarnings(value = "unchecked")
     public List<Sincronizacion> getAll() throws Exception {
 
         return  em.createQuery("Select sincronizacion from Sincronizacion as sincronizacion order by sincronizacion.codigo").getResultList();
-    }
-
-    @Override
-    @SuppressWarnings(value = "unchecked")
-    public List<Sincronizacion> getAllByTipo(String tipo) throws Exception {
-
-        Query query =em.createQuery("Select sincronizacion from Sincronizacion as sincronizacion where sincronizacion.tipo=:tipo order by sincronizacion.codigo desc");
-        query.setParameter("tipo", tipo);
-        return query.getResultList();
     }
 
     @Override
@@ -136,14 +135,6 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
         return (Long) q.getSingleResult();
     }
 
-
-    public Long getTotalByTipo(String tipo) throws Exception {
-
-        Query q = em.createQuery("Select count(sincronizacion.codigo) from Sincronizacion as sincronizacion where sincronizacion.tipo=:tipo");
-        q.setParameter("tipo", tipo);
-
-        return (Long) q.getSingleResult();
-    }
 
     @Override
     public List<Sincronizacion> getPagination(int inicio) throws Exception {
@@ -417,7 +408,7 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
 
 
         // Obtenemos la fecha de la ultima descarga/sincronizacion
-        Sincronizacion ultimaSincro = ultimaSincronizacionCorrecta(Dir3caibConstantes.DIRECTORIO);
+        Sincronizacion ultimaSincro = ultimaSincronizacionCompletada(Dir3caibConstantes.DIRECTORIO);
         Sincronizacion sincronizacion = null;
 
         // Descarga de directorio DIR3

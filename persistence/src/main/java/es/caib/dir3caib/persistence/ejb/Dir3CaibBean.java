@@ -66,7 +66,7 @@ public class Dir3CaibBean implements Dir3CaibLocal{
     @Override
     public void eliminarCatalogo() throws Exception {
 
-        Sincronizacion sincronizacion = sincronizacionEjb.ultimaSincronizacion(Dir3caibConstantes.CATALOGO);
+        Sincronizacion sincronizacion = sincronizacionEjb.ultimaSincronizacionByTipo(Dir3caibConstantes.CATALOGO);
 
         if (sincronizacion != null) {
             catLocalidadEjb.deleteAll();
@@ -94,7 +94,7 @@ public class Dir3CaibBean implements Dir3CaibLocal{
     @Override
     public void eliminarUnidades() throws Exception {
 
-        Sincronizacion sincronizacion = sincronizacionEjb.ultimaSincronizacion(Dir3caibConstantes.UNIDAD);
+        Sincronizacion sincronizacion = sincronizacionEjb.ultimaSincronizacionByTipo(Dir3caibConstantes.UNIDAD);
 
         if (sincronizacion != null) {
             // Contactos
@@ -110,7 +110,7 @@ public class Dir3CaibBean implements Dir3CaibLocal{
     @Override
     public void eliminarOficinas() throws Exception {
 
-        Sincronizacion sincronizacion = sincronizacionEjb.ultimaSincronizacion(Dir3caibConstantes.OFICINA);
+        Sincronizacion sincronizacion = sincronizacionEjb.ultimaSincronizacionByTipo(Dir3caibConstantes.OFICINA);
 
         if (sincronizacion != null) {
             relSirOfiEjb.deleteAll();

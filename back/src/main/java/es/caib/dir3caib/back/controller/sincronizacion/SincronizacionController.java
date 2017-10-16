@@ -59,7 +59,7 @@ public class SincronizacionController extends BaseController {
         try {
 
             // Obtenemos la fecha de la ultima descarga/sincronizacion
-            Sincronizacion ultimaSincro = sincronizacionEjb.ultimaSincronizacionCorrecta(Dir3caibConstantes.DIRECTORIO);
+            Sincronizacion ultimaSincro = sincronizacionEjb.ultimaSincronizacionCompletada(Dir3caibConstantes.DIRECTORIO);
 
             // Descarga de directorio DIR3
             if(ultimaSincro != null){
