@@ -47,7 +47,7 @@
                     </div>
 
                     <div class="btn-group infoBranca">
-                        <button type="button" id="infoCopy" class="btn infoBranca hide" disabled style="cursor:default"><i class="fa fa-info-circle colophon">  <spring:message code="dir3caib.organismo.arbol.copiar"/></i></button>
+                        <button type="button" id="infoCopy" class="btn infoBranca" disabled style="cursor:default"><i class="fa fa-info-circle colophon">  <spring:message code="dir3caib.organismo.arbol.copiar"/></i></button>
                     </div>
 
                     <div class="tree">
@@ -57,22 +57,22 @@
                         <c:if test="${nodoraiz!=nodoactual}">
                         <ul>
                             <li>
-                                <span class="badge-arbre btn-primary" style="cursor:copy" onclick="copyToClipboard(this)" onmouseover="mostraInfo()" onmouseleave="amagaInfo()"><i class=""></i> ${nodo.raiz}</span>
+                                <span class="badge-arbre btn-primary" style="cursor:copy" onclick="copyToClipboard(this)"><i class=""></i> ${nodo.raiz}</span>
                                 </c:if>
                                 <c:if test="${nodoraiz!=nodosuperior}">
                                 <ul>
                                     <li>
-                                        <span class="badge-arbre btn-primary" style="cursor:copy" onclick="copyToClipboard(this)" onmouseover="mostraInfo()" onmouseleave="amagaInfo()"><i class=""></i> ${nodo.superior}</span>
+                                        <span class="badge-arbre btn-primary" style="cursor:copy" onclick="copyToClipboard(this)"><i class=""></i> ${nodo.superior}</span>
                                         </c:if>
                                         <ul>
 
                             <li>
                                 <c:if test="${empty oficinas}">
-                                    <span class="badge-arbre btn-primary" style="cursor:copy" onclick="copyToClipboard(this)" onmouseover="mostraInfo()" onmouseleave="amagaInfo()"><i
+                                    <span class="badge-arbre btn-primary" style="cursor:copy" onclick="copyToClipboard(this)"><i
                                             class=""></i> ${nodo.codigo} - ${nodo.denominacion}</span>
                                 </c:if>
                                 <c:if test="${not empty oficinas}">
-                                    <span class="badge-arbre btn-warning" style="cursor:copy" onclick="copyToClipboard(this)" onmouseover="mostraInfo()" onmouseleave="amagaInfo()"><i
+                                    <span class="badge-arbre btn-warning" style="cursor:copy" onclick="copyToClipboard(this)"><i
                                             class=""></i> ${nodo.codigo} - ${nodo.denominacion}</span>
                                 </c:if>
 
@@ -80,7 +80,7 @@
                                 <ul>
                                     <c:forEach var="ofiDependiente" items="${nodo.oficinasDependientes}">
                                         <li><a href="javascript:void(0);"><span class="badge-arbre btn-warning"
-                                                                                style="cursor:copy" onclick="copyToClipboard(this)" onmouseover="mostraInfo()" onmouseleave="amagaInfo()"><i
+                                                                                style="cursor:copy" onclick="copyToClipboard(this)"><i
                                                 class="fa fa-home"></i> ${ofiDependiente.codigo} - ${ofiDependiente.denominacion}</span></a>
                                             <!-- Pintamos las auxiliares -->
                                             <c:if test="${not empty ofiDependiente.oficinasAuxiliares }">
@@ -88,7 +88,7 @@
                                                     <c:forEach var="ofiAuxiliar" items="${ofiDependiente.oficinasAuxiliares}">
                                                         <%-- <li><a href="javascript:void(0);"><span class="badge-arbre btn-ofaux" style="display:closed;"> <i class="fa fa-home"></i> ${ofiAuxiliar.codigo} - ${ofiAuxiliar.denominacion}</span></a></li>--%>
                                                         <li><a href="javascript:void(0);"><span
-                                                                class="badge-arbre btn-ofaux" style="cursor:copy" onclick="copyToClipboard(this)" onmouseover="mostraInfo()" onmouseleave="amagaInfo()"><i
+                                                                class="badge-arbre btn-ofaux" style="cursor:copy" onclick="copyToClipboard(this)"><i
                                                                 class="fa fa-home"></i> ${ofiAuxiliar.codigo} - ${ofiAuxiliar.denominacion}</span></a>
                                                             <!-- Pintamos las auxiliares de todos los niveles -->
                                                             <c:set var="oficinaAuxiliar" value="${ofiAuxiliar}" scope="request"/>
@@ -104,7 +104,7 @@
 
                                     <c:forEach var="ofiFuncional" items="${nodo.oficinasFuncionales}">
                                         <li><a href="javascript:void(0);"><span class="badge-arbre btn-success"
-                                                                                style="cursor:copy" onclick="copyToClipboard(this)" onmouseover="mostraInfo()" onmouseleave="amagaInfo()"><i
+                                                                                style="cursor:copy" onclick="copyToClipboard(this)"><i
                                                 class="fa fa-institution"></i> ${ofiFuncional.codigo} - ${ofiFuncional.denominacion}</span></a>
                                         </li>
                                     </c:forEach>
@@ -145,17 +145,6 @@
 </script>
 
 <script type="text/javascript">
-
-    // Mostra la informació de copy text
-    function mostraInfo(){
-        $('#infoCopy').removeClass('hide');
-    }
-
-    // Amaga la informació de copy text
-    function amagaInfo(){
-        $('#infoCopy').addClass('hide');
-    }
-
     // Permet copiar la informació d'un span a dins el portapapers
     function copyToClipboard(that){
         var inp =document.createElement('input');
