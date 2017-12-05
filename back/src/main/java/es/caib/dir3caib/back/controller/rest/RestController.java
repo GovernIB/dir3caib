@@ -197,12 +197,11 @@ public class RestController {
     ResponseEntity<Nodo> organigrama(@RequestParam String codigo) throws Exception {
 
         Nodo nodo = new Nodo();
-        if (codigo.isEmpty()) {
-            arbolEjb.arbolUnidadesAscendentes(codigo, nodo, Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE, false);
-        }
+        arbolEjb.arbolUnidadesAscendentes(codigo, nodo, Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE, false);
+
         HttpHeaders headers = addAccessControllAllowOrigin();
         //Si hay resultados fijamos el HttpStatus a OK, sino indicamos que no hay resultados.
-        HttpStatus status = (!nodo.getCodigo().isEmpty()) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
+        HttpStatus status = (nodo.getCodigo() != null) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
         return new ResponseEntity<Nodo>(nodo, headers, status);
 
     }
