@@ -276,6 +276,7 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
 
                     // Actualizamos el estado de la Sincronizacion
                     sincronizacion.setEstado(Dir3caibConstantes.SINCRONIZACION_VACIA);
+                    sincronizacion.setFechaImportacion(new Date());
                     merge(sincronizacion);
 
                 }else if( (codigoUnidades.equals(Dir3caibConstantes.CODIGO_CORRECTO) || codigoUnidades.equals(Dir3caibConstantes.CODIGO_VACIO)) &&
