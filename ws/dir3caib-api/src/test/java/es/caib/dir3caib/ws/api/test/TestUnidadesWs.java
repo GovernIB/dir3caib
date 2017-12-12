@@ -12,7 +12,7 @@ import java.util.List;
 public class TestUnidadesWs extends Dir3CaibTestUtils{
 
 
-    @Test
+    // @Test
     public void obtenerArbolUnidadesDestinatarias() {
       try{
           Dir3CaibObtenerUnidadesWs apiUnidades = getObtenerUnidadesApi(true);
@@ -22,6 +22,43 @@ public class TestUnidadesWs extends Dir3CaibTestUtils{
             System.out.println(unidadTF.getCodigo() + "\t\t"
                     + unidadTF.getDenominacion());
           }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //Descomentar cuando regeneremos la api ws ccn contactos
+   /* public void obtenerOficina() {
+        try{
+            Dir3CaibObtenerUnidadesWs apiUnidades = getObtenerUnidadesApi(true);
+            UnidadTF unidadTF = apiUnidades.obtenerUnidad("E00120903", null, null);
+
+            System.out.println(unidadTF.getCodigo() + "\t\t"
+                    + unidadTF.getDenominacion()  );
+            System.out.println("SIZE: "+unidadTF.getContactos().size());
+            for(ContactoTF contactoTF :unidadTF.getContactos()){
+                System.out.println(contactoTF.getTipoContacto() + "\t\t"
+                        + contactoTF.getValorContacto()  );
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }*/
+
+    @Test
+    public void testUnidadExtinguida() {
+        try {
+            Dir3CaibObtenerUnidadesWs apiUnidades = getObtenerUnidadesApi(true);
+            UnidadTF unidad = apiUnidades.obtenerUnidad("A04009905", null, null);
+            if (unidad != null) {
+                System.out.println(unidad.getDenominacion());
+            }
+
+            List<UnidadTF> unidades = apiUnidades.obtenerArbolUnidades("A04009905", null, null);
+            System.out.println(unidades.size());
+            List<UnidadTF> unidades2 = apiUnidades.obtenerArbolUnidadesDestinatarias("A04009905");
+            System.out.println(unidades2.size());
         } catch (Exception e) {
             e.printStackTrace();
         }

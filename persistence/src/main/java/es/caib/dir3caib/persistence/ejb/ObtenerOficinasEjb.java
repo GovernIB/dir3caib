@@ -85,7 +85,7 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
 
             return oficinaTF;
         } else {
-            log.info("WS: Oficina cuyo codigoDir3 es " + codigo + " no existe");
+            log.info("WS: Oficina cuyo codigoDir3 es " + codigo + " no existe o no es vigente");
             return null;
         }
 

@@ -57,28 +57,34 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
 
         Unidad unidad = unidadEjb.findConHistoricosVigente(codigo);
         UnidadTF unidadTF = null;
-        List<ContactoUnidadOrganica> contactosVisibles = new ArrayList<ContactoUnidadOrganica>();
-        for (ContactoUnidadOrganica contactoUO : unidad.getContactos()) {
-            if (contactoUO.isVisibilidad()) {
-                contactosVisibles.add(contactoUO);
 
-            }
-        }
-        unidad.setContactos(contactosVisibles);
-        // Si hay fecha de actualización y es anterior a la fecha de importación se debe transmitir
-        if (fechaActualizacion != null) {
-            // Miramos si ha sido actualizada
-            if (fechaActualizacion.before(unidad.getFechaImportacion()) || fechaActualizacion.equals(unidad.getFechaImportacion())) {
-                // miramos que no esté extinguida o anulada antes de la primera sincro.
-                if (unidadEjb.unidadValida(unidad, fechaSincronizacion)) {
-                    unidadTF = UnidadTF.generar(unidad);
+        if (unidad != null) {
+            List<ContactoUnidadOrganica> contactosVisibles = new ArrayList<ContactoUnidadOrganica>();
+            for (ContactoUnidadOrganica contactoUO : unidad.getContactos()) {
+                if (contactoUO.isVisibilidad()) {
+                    contactosVisibles.add(contactoUO);
+
                 }
             }
-        } else { // Si no hay fecha Actualización se trata de una sincronización y se debe enviar
-            unidadTF = UnidadTF.generar(unidad);
+            unidad.setContactos(contactosVisibles);
+            // Si hay fecha de actualización y es anterior a la fecha de importación se debe transmitir
+            if (fechaActualizacion != null) {
+                // Miramos si ha sido actualizada
+                if (fechaActualizacion.before(unidad.getFechaImportacion()) || fechaActualizacion.equals(unidad.getFechaImportacion())) {
+                    // miramos que no esté extinguida o anulada antes de la primera sincro.
+                    if (unidadEjb.unidadValida(unidad, fechaSincronizacion)) {
+                        unidadTF = UnidadTF.generar(unidad);
+                    }
+                }
+            } else { // Si no hay fecha Actualización se trata de una sincronización y se debe enviar
+                unidadTF = UnidadTF.generar(unidad);
+            }
+            return unidadTF;
+        } else {
+            log.info("WS: la Unidad cuyo codigoDir3 es " + codigo + " está extinguida");
+            return null;
         }
 
-        return unidadTF;
     }
 
     @Override
@@ -154,28 +160,34 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
             }
         }
 
-        //obtenemos el arbol de la unidad que nos han indicado para que se actualice bien
-        if (unidad.equals(unidadRaiz) ) { // Caso que la unidad que nos indican es unidad raiz
-            log.info("CASO UNIDAD QUE NOS PASAN ES RAIZ");
-            arbol.addAll(unidadEjb.obtenerArbolUnidadesUnidadRaiz(codigo, fechaActualizacion, fechaSincronizacion));
-            log.info("Numero TOTAL de unidades a actualizar: " + arbol.size());
-
-        } else { // caso de que la unidad que nos indican no es raiz
-            log.info("CASO UNIDAD QUE NOS PASAN NO ES RAIZ");
-            arbol.addAll(unidadEjb.obtenerArbolUnidadesUnidadNoRaiz(codigo, fechaActualizacion, fechaSincronizacion));
-            log.info("Numero TOTAL de unidades a actualizar: " + arbol.size());
-        }
-
-        //Montamos la lista de unidadesTF a enviar
         List<UnidadTF> arbolTF = new ArrayList<UnidadTF>();
-        for (Unidad uni : arbol) {
-            arbolTF.add(UnidadTF.generar(uni));
+        if (unidad != null) {
+            //obtenemos el arbol de la unidad que nos han indicado para que se actualice bien
+            if (unidad.equals(unidadRaiz)) { // Caso que la unidad que nos indican es unidad raiz
+                log.info("CASO UNIDAD QUE NOS PASAN ES RAIZ");
+                arbol.addAll(unidadEjb.obtenerArbolUnidadesUnidadRaiz(codigo, fechaActualizacion, fechaSincronizacion));
+                log.info("Numero TOTAL de unidades a actualizar: " + arbol.size());
+
+            } else { // caso de que la unidad que nos indican no es raiz
+                log.info("CASO UNIDAD QUE NOS PASAN NO ES RAIZ");
+                arbol.addAll(unidadEjb.obtenerArbolUnidadesUnidadNoRaiz(codigo, fechaActualizacion, fechaSincronizacion));
+                log.info("Numero TOTAL de unidades a actualizar: " + arbol.size());
+            }
+
+            //Montamos la lista de unidadesTF a enviar
+
+            for (Unidad uni : arbol) {
+                arbolTF.add(UnidadTF.generar(uni));
+            }
+
+            Long end = System.currentTimeMillis();
+            log.info("tiempo obtenerArbolUnidadesTF: " + Utils.formatElapsedTime(end - start));
+
+        } else {
+            log.info("WS: La unidad con codigoDir3 " + codigo + " no existe o está extinguida");
+
         }
-
-        Long end = System.currentTimeMillis();
-        log.info("tiempo obtenerArbolUnidadesTF: " + Utils.formatElapsedTime(end - start));
         return arbolTF;
-
     }
 
 
