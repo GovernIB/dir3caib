@@ -1,5 +1,7 @@
 package es.caib.dir3caib.ws.api.test;
 
+import es.caib.dir3caib.ws.api.oficina.Dir3CaibObtenerOficinasWs;
+import es.caib.dir3caib.ws.api.oficina.Dir3CaibObtenerOficinasWsService;
 import es.caib.dir3caib.ws.api.unidad.Dir3CaibObtenerUnidadesWs;
 import es.caib.dir3caib.ws.api.unidad.Dir3CaibObtenerUnidadesWsService;
 
@@ -16,6 +18,7 @@ import java.util.Properties;
 public class Dir3CaibTestUtils{
 
     public static final String OBTENERUNIDADES = "Dir3CaibObtenerUnidades";
+    public static final String OBTENEROFICINAS = "Dir3CaibObtenerOficinas";
 
     private static Properties testProperties = new Properties();
 
@@ -66,6 +69,29 @@ public class Dir3CaibTestUtils{
                 wsdlLocation);
 
         Dir3CaibObtenerUnidadesWs api = service.getDir3CaibObtenerUnidadesWs();
+
+        if (setUsrPwd) {
+            configAddressUserPassword(getTestAppUserName(), getTestAppPassword(), endpoint, api);
+        }
+
+        return api;
+    }
+
+
+    public static Dir3CaibObtenerOficinasWs getObtenerOficinasApi(boolean setUsrPwd)
+            throws Exception {
+        final String endpoint = getEndPoint(OBTENEROFICINAS);
+
+        System.out.println("endPoint: " + endpoint);
+
+
+        URL wsdlLocation = new URL(endpoint + "?wsdl");
+        System.out.println("WSDL: " + wsdlLocation);
+
+        Dir3CaibObtenerOficinasWsService service = new Dir3CaibObtenerOficinasWsService(
+                wsdlLocation);
+
+        Dir3CaibObtenerOficinasWs api = service.getDir3CaibObtenerOficinasWs();
 
         if (setUsrPwd) {
             configAddressUserPassword(getTestAppUserName(), getTestAppPassword(), endpoint, api);
