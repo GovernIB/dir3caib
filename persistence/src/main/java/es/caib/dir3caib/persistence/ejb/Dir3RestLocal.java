@@ -27,9 +27,9 @@ public interface Dir3RestLocal  {
   public List<Oficina> obtenerOficinasOrganismo(String codigo, String fechaActualizacion) throws Exception;
   public Boolean tieneOficinasOrganismo(String codigo) throws Exception;
 
-  public List<Nodo> busquedaOrganismos(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, boolean conOficinas, boolean unidadRaiz, Long provincia, String localidad) throws Exception;
+  public List<Nodo> busquedaOrganismos(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, boolean conOficinas, boolean unidadRaiz, Long provincia, String localidad, boolean vigentes) throws Exception;
 
-  public List<Nodo> busquedaOficinas(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, Long provincia, String localidad, boolean oficinasSir) throws Exception;
+  public List<Nodo> busquedaOficinas(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, Long provincia, String localidad, boolean oficinasSir, boolean vigentes) throws Exception;
   public String unidadDenominacion(String codigo) throws Exception;
   public String oficinaDenominacion(String codigo) throws Exception;
 

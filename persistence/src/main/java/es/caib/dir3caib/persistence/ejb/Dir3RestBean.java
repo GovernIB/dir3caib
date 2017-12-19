@@ -236,12 +236,12 @@ public class Dir3RestBean implements Dir3RestLocal {
    * coincide con los parámetros de búsqueda
    * @throws Exception
    */
-  public List<Nodo> busquedaOrganismos(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, boolean conOficinas, boolean unidadRaiz, Long provincia, String localidad) throws Exception {
+  public List<Nodo> busquedaOrganismos(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, boolean conOficinas, boolean unidadRaiz, Long provincia, String localidad, boolean vigentes) throws Exception {
       Query q;
       Map<String, Object> parametros = new HashMap<String, Object>();
       List<String> where = new ArrayList<String>();
 
-      StringBuffer query = new StringBuffer("Select distinct(unidad.codigo),unidad.denominacion, unidad.codUnidadRaiz.codigo, unidad.codUnidadRaiz.denominacion, unidad.codUnidadSuperior.codigo, unidad.codUnidadSuperior.denominacion, unilocalidad.descripcionLocalidad  " +
+      StringBuffer query = new StringBuffer("Select distinct(unidad.codigo),unidad.denominacion, unidad.estado.codigoEstadoEntidad, unidad.codUnidadRaiz.codigo, unidad.codUnidadRaiz.denominacion, unidad.codUnidadSuperior.codigo, unidad.codUnidadSuperior.denominacion, unilocalidad.descripcionLocalidad  " +
               "from Unidad  as unidad left outer join unidad.catLocalidad as unilocalidad  ");
 
       // Parametros de busqueda
@@ -276,8 +276,11 @@ public class Dir3RestBean implements Dir3RestLocal {
               }
           }
       }
-      where.add(" unidad.estado.codigoEstadoEntidad =:vigente ");
-      parametros.put("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+      //Solo se buscaran vigentes cuando lo indiquen
+      if (vigentes) {
+          where.add(" unidad.estado.codigoEstadoEntidad =:vigente ");
+          parametros.put("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+      }
       if (unidadRaiz) {
           where.add(" unidad.codUnidadRaiz.codigo = unidad.codigo ");
       }
@@ -326,7 +329,6 @@ public class Dir3RestBean implements Dir3RestLocal {
               unidad2.setTieneOficinaSir(true);
           }
       }
-
        return unidades;
 
      }
@@ -340,12 +342,12 @@ public class Dir3RestBean implements Dir3RestLocal {
      * @return Nodo conjunto de datos a mostrar de la oficina
      * @throws Exception
      */
-    public List<Nodo> busquedaOficinas(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, Long provincia, String localidad, boolean oficinasSir) throws Exception {
+    public List<Nodo> busquedaOficinas(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, Long provincia, String localidad, boolean oficinasSir, boolean vigentes) throws Exception {
         Query q;
         Map<String, Object> parametros = new HashMap<String, Object>();
         List<String> where = new ArrayList<String>();
 
-        StringBuffer query = new StringBuffer("Select oficina.codigo, oficina.denominacion, unidadRaiz.codigo, unidadRaiz.denominacion, oficina.codUoResponsable.codigo, oficina.codUoResponsable.denominacion, ofilocalidad.descripcionLocalidad from Oficina as oficina left outer join oficina.codUoResponsable.codUnidadRaiz as unidadRaiz left outer join oficina.localidad as ofilocalidad ");
+        StringBuffer query = new StringBuffer("Select oficina.codigo, oficina.denominacion, oficina.estado.codigoEstadoEntidad, unidadRaiz.codigo, unidadRaiz.denominacion, oficina.codUoResponsable.codigo, oficina.codUoResponsable.denominacion, ofilocalidad.descripcionLocalidad from Oficina as oficina left outer join oficina.codUoResponsable.codUnidadRaiz as unidadRaiz left outer join oficina.localidad as ofilocalidad ");
 
          // Parametros de busqueda
 
@@ -382,8 +384,11 @@ public class Dir3RestBean implements Dir3RestLocal {
                 }
             }
         }
-        where.add(" oficina.estado.codigoEstadoEntidad =:vigente ");
-        parametros.put("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+        //Solo se buscaran con estado vigente cuando lo indiquen
+        if (vigentes) {
+            where.add(" oficina.estado.codigoEstadoEntidad =:vigente ");
+            parametros.put("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+        }
 
         // buscamos aquellas que sean oficinas sir de Recepcion
         if (oficinasSir) {

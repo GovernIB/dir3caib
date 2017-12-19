@@ -66,11 +66,13 @@ public class NodoUtils {
             // UNIDADES
             //object[0] --> codigo
             //object[1] --> denominacion
-            //object[2] --> raiz.codigo
-            //object[3] --> raiz.denominacion
-            //object[4] --> superior.codigo
-            //object[5] --> superior.denominacion
-            //object[6] --> localidad
+            //object[2] --> descripcionEstado
+            //object[3] --> raiz.codigo
+            //object[4] --> raiz.denominacion
+            //object[5] --> superior.codigo
+            //object[6] --> superior.denominacion
+            //object[7] --> localidad
+
             String obj0 = "";
             String obj1 = "";
             String obj2 = "";
@@ -78,6 +80,7 @@ public class NodoUtils {
             String obj4 = "";
             String obj5 = "";
             String obj6 = "";
+            String obj7 = "";
             if (object[0] != null) {
                 obj0 = (String) object[0];
             }
@@ -106,8 +109,12 @@ public class NodoUtils {
                 obj6 = (String) object[6];
             }
 
+            if (object[7] != null) {
+                obj7 = (String) object[7];
+            }
 
-            Nodo nodo = new Nodo(obj0, obj1, "", obj3 + " - " + obj2, obj5 + " - " + obj4, obj6);
+
+            Nodo nodo = new Nodo(obj0, obj1, obj2, obj4 + " - " + obj3, obj6 + " - " + obj5, obj7);
 
 
             nodos.add(nodo);
