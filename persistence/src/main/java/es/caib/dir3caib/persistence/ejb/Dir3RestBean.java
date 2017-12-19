@@ -296,7 +296,7 @@ public class Dir3RestBean implements Dir3RestLocal {
                query.append(w);
                count++;
            }
-           query.append("order by unidad.denominacion asc");
+           query.append("order by unidad.estado.codigoEstadoEntidad desc, unidad.denominacion asc ");
            q = em.createQuery(query.toString());
 
            for (Map.Entry<String, Object> param : parametros.entrySet()) {
@@ -304,7 +304,7 @@ public class Dir3RestBean implements Dir3RestLocal {
            }
 
       } else {
-          query.append("order by unidad.denominacion asc ");
+          query.append("order by unidad.estado.codigoEstadoEntidad desc, unidad.denominacion asc ");
            q = em.createQuery(query.toString());
       }
 
