@@ -121,70 +121,70 @@ public class ArbolBean implements ArbolLocal {
 
         Nodo nodoInicial = new Nodo(); // Nodo en el que guardaremos los datos de la unidad indicada por IdUnidad
         Nodo unidad = unidadEjb.findUnidad(idUnidad, estado); // Obtenemos la unidad que nos han indicado(solo se obtienen parte de los datos del nodo)
-        String codigoSuperior = new StringTokenizer(unidad.getSuperior(), " - ").nextToken();//Obtenemos el código de la Unidad Superior
-        unidad.setIdPadre(codigoSuperior); //Asignamos el identificador del padre de la unidad.
+        if (unidad != null) {
+            String codigoSuperior = new StringTokenizer(unidad.getSuperior(), " - ").nextToken();//Obtenemos el código de la Unidad Superior
+            unidad.setIdPadre(codigoSuperior); //Asignamos el identificador del padre de la unidad.
 
 
-        // Creamos el nodo asociado a la unidad indicada por idUnidad
-        // este nodo lo necesitaremos posteriormente para montar todo el arbol hacia arriba y hacia abajo
-        nodoInicial.setCodigo(unidad.getCodigo());
-        nodoInicial.setIdPadre(codigoSuperior);
-        nodoInicial.setDenominacion(unidad.getDenominacion());
-        nodoInicial.setRaiz(unidad.getRaiz());
-        nodoInicial.setSuperior(unidad.getSuperior());
-        nodoInicial.setDescripcionEstado(unidad.getDescripcionEstado());
+            // Creamos el nodo asociado a la unidad indicada por idUnidad
+            // este nodo lo necesitaremos posteriormente para montar todo el arbol hacia arriba y hacia abajo
+            nodoInicial.setCodigo(unidad.getCodigo());
+            nodoInicial.setIdPadre(codigoSuperior);
+            nodoInicial.setDenominacion(unidad.getDenominacion());
+            nodoInicial.setRaiz(unidad.getRaiz());
+            nodoInicial.setSuperior(unidad.getSuperior());
+            nodoInicial.setDescripcionEstado(unidad.getDescripcionEstado());
 
-        //Obtenemos todos los hijos hacia abajo con el metodo de arbolUnidades
-        List<Nodo> hijos = new ArrayList<Nodo>();
-        List<Nodo> unidadesHijas = unidadEjb.hijos(idUnidad, estado);
-        //Llamada a arbolUnidades para cada uno de los hijos encontrados
-        for (Nodo unidadHija : unidadesHijas) {
-            Nodo hijo = new Nodo();
-            hijo.setCodigo(unidadHija.getCodigo());
-            hijo.setIdPadre(idUnidad);
-            hijo.setDenominacion(unidadHija.getDenominacion());
-            hijo.setSuperior(unidadHija.getSuperior());
-            hijo.setRaiz(unidadHija.getRaiz());
-            hijo.setDescripcionEstado(unidadHija.getDescripcionEstado());
-            hijos.add(hijo);
-            // llamada recursiva
-            arbolUnidades(unidadHija.getCodigo(), hijo, unidadHija.getDescripcionEstado(), conOficinas);
-        }
-        nodoInicial.setHijos(hijos);
+            //Obtenemos todos los hijos hacia abajo con el metodo de arbolUnidades
+            List<Nodo> hijos = new ArrayList<Nodo>();
+            List<Nodo> unidadesHijas = unidadEjb.hijos(idUnidad, estado);
+            //Llamada a arbolUnidades para cada uno de los hijos encontrados
+            for (Nodo unidadHija : unidadesHijas) {
+                Nodo hijo = new Nodo();
+                hijo.setCodigo(unidadHija.getCodigo());
+                hijo.setIdPadre(idUnidad);
+                hijo.setDenominacion(unidadHija.getDenominacion());
+                hijo.setSuperior(unidadHija.getSuperior());
+                hijo.setRaiz(unidadHija.getRaiz());
+                hijo.setDescripcionEstado(unidadHija.getDescripcionEstado());
+                hijos.add(hijo);
+                // llamada recursiva
+                arbolUnidades(unidadHija.getCodigo(), hijo, unidadHija.getDescripcionEstado(), conOficinas);
+            }
+            nodoInicial.setHijos(hijos);
 
-        //Empezamos el proceso ascendente, obtenemos las unidades ascendentes del nodo inicial
-        Nodo nodoActual = nodoInicial;
-        String codigoRaiz = new StringTokenizer(nodoActual.getRaiz(), " - ").nextToken();
-        while (!nodoActual.getCodigo().equals(codigoRaiz)) {//mientras el codigo del nodo actual con el codigo de su raiz sean distintos
+            //Empezamos el proceso ascendente, obtenemos las unidades ascendentes del nodo inicial
+            Nodo nodoActual = nodoInicial;
+            String codigoRaiz = new StringTokenizer(nodoActual.getRaiz(), " - ").nextToken();
+            while (!nodoActual.getCodigo().equals(codigoRaiz)) {//mientras el codigo del nodo actual con el codigo de su raiz sean distintos
+                Nodo nodoSuperior = new Nodo();
+                codigoSuperior = new StringTokenizer(nodoActual.getSuperior(), " - ").nextToken();//Obtenemos el código de la Unidad Superior
+                nodoSuperior = unidadEjb.findUnidad(codigoSuperior, estado); // Obtenemos la unidad que nos han indicado(solo se obtienen parte de los datos del nodo)
+                List<Nodo> hijosS = new ArrayList<Nodo>();
+                hijosS.add(nodoActual);
+                nodoSuperior.setHijos(hijosS);
+                nodoActual = nodoSuperior;
+                codigoRaiz = new StringTokenizer(nodoActual.getRaiz(), " - ").nextToken();
+            }
+
+            //TRATAMOS RAIZ
             Nodo nodoSuperior = new Nodo();
             codigoSuperior = new StringTokenizer(nodoActual.getSuperior(), " - ").nextToken();//Obtenemos el código de la Unidad Superior
             nodoSuperior = unidadEjb.findUnidad(codigoSuperior, estado); // Obtenemos la unidad que nos han indicado(solo se obtienen parte de los datos del nodo)
             List<Nodo> hijosS = new ArrayList<Nodo>();
             hijosS.add(nodoActual);
             nodoSuperior.setHijos(hijosS);
-            nodoActual = nodoSuperior;
-            codigoRaiz = new StringTokenizer(nodoActual.getRaiz(), " - ").nextToken();
+
+
+            //Asignamos al nodo a devolver la raiz del árbol.
+            nodo.setCodigo(nodoSuperior.getCodigo());
+            nodo.setDenominacion(nodoSuperior.getDenominacion());
+            nodo.setIdPadre(codigoSuperior);
+            nodo.setRaiz(nodoSuperior.getRaiz());
+            nodo.setSuperior(nodoSuperior.getSuperior());
+            nodo.setDescripcionEstado(nodoSuperior.getDescripcionEstado());
+            nodo.setHijos(nodoSuperior.getHijos());
         }
-
-        //TRATAMOS RAIZ
-        Nodo nodoSuperior = new Nodo();
-        codigoSuperior = new StringTokenizer(nodoActual.getSuperior(), " - ").nextToken();//Obtenemos el código de la Unidad Superior
-        nodoSuperior = unidadEjb.findUnidad(codigoSuperior, estado); // Obtenemos la unidad que nos han indicado(solo se obtienen parte de los datos del nodo)
-        List<Nodo> hijosS = new ArrayList<Nodo>();
-        hijosS.add(nodoActual);
-        nodoSuperior.setHijos(hijosS);
-
-
-        //Asignamos al nodo a devolver la raiz del árbol.
-        nodo.setCodigo(nodoSuperior.getCodigo());
-        nodo.setDenominacion(nodoSuperior.getDenominacion());
-        nodo.setIdPadre(codigoSuperior);
-        nodo.setRaiz(nodoSuperior.getRaiz());
-        nodo.setSuperior(nodoSuperior.getSuperior());
-        nodo.setDescripcionEstado(nodoSuperior.getDescripcionEstado());
-        nodo.setHijos(nodoSuperior.getHijos());
-
-
     }
 
 
