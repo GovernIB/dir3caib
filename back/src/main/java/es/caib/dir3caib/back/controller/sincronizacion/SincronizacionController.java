@@ -215,6 +215,36 @@ public class SincronizacionController extends BaseController {
         return mav;
     }
 
+    /**
+     * Eliminar una {@link es.caib.dir3caib.persistence.model.Sincronizacion}
+     */
+    @RequestMapping(value = "/{idSincronizacion}/delete")
+    public String eliminarTipoDocumental(@PathVariable Long idSincronizacion, HttpServletRequest request) {
+
+        try {
+
+            // Obtenemos la fecha de la ultima descarga/sincronizacion
+            Sincronizacion ultimaSincro = sincronizacionEjb.ultimaSincronizacionCompletada(Dir3caibConstantes.DIRECTORIO);
+
+            Sincronizacion sincronizacion = sincronizacionEjb.findById(idSincronizacion);
+
+            if(sincronizacion.getCodigo().equals(ultimaSincro.getCodigo())){
+                Mensaje.saveMessageError(request, getMessage("sincronizacion.eliminar.correcta"));
+                return "redirect:/sincronizacion/list/1";
+            }
+
+            sincronizacionEjb.eliminarSincronizacion(sincronizacion);
+
+            Mensaje.saveMessageInfo(request, getMessage("dir3caib.eliminar.registro"));
+
+        } catch (Exception e) {
+            Mensaje.saveMessageError(request, getMessage("sincronizacion.eliminar.error"));
+            e.printStackTrace();
+        }
+
+        return "redirect:/sincronizacion/list/1";
+    }
+
 
     /**
      * Elimina el Directório de la bbdd y las sincroniza con al información actual

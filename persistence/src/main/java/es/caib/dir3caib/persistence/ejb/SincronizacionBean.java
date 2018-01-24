@@ -366,6 +366,20 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
         }
     }
 
+    @Override
+    public void eliminarSincronizacion(Sincronizacion sincronizacion) throws Exception{
+
+        String sincronizacionPath = Configuracio.getSincronizacionPath(sincronizacion.getCodigo());
+
+        // Eliminamos todas las descargas realizadas
+        File directorio = new File(sincronizacionPath);
+        FileUtils.cleanDirectory(directorio);
+        FileUtils.deleteDirectory(directorio);
+
+        remove(sincronizacion);
+
+    }
+
     /**
      *
      * @param sincronizacion

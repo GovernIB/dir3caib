@@ -52,11 +52,12 @@
                                     <th><fmt:message key="dir3caib.estado"/></th>
                                     <th><spring:message code="sincronizacion.ficheros.directorio"/></th>
                                     <th><spring:message code="sincronizacion.ficheros.catalogo"/></th>
+                                    <th><spring:message code="dir3caib.acciones"/></th>
                                 </tr>
                                 </thead>
 
                                 <tbody>
-                                <c:forEach var="sincronizacion" items="${listado}">
+                                <c:forEach var="sincronizacion" items="${listado}" varStatus="status">
                                     <tr>
                                         <td>
                                             <c:if test="${sincronizacion.tipo == 1}">
@@ -138,6 +139,15 @@
                                                     </c:forEach>
                                                 </ul>
                                             </div>
+                                        </td>
+                                        <td class="center">
+                                            <c:if test="${status.first}">
+                                                <a class="btn btn-danger btn-sm disabled" href="javascript:void(0);" title="<spring:message code="dir3caib.eliminar"/>"><span class="fa fa-eraser"></span></a>
+                                            </c:if>
+                                            <c:if test="${!status.first}">
+                                                <a class="btn btn-danger btn-sm" onclick='javascript:confirm("<c:url value="/sincronizacion/${sincronizacion.codigo}/delete"/>","<spring:message code="dir3caib.confirmar.eliminacion" htmlEscape="true"/>")' href="javascript:void(0);" title="<spring:message code="dir3caib.eliminar"/>"><span class="fa fa-eraser"></span></a>
+                                            </c:if>
+
                                         </td>
                                     </tr>
                                 </c:forEach>

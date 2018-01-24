@@ -64,6 +64,13 @@ public interface SincronizacionLocal extends BaseEjb<Sincronizacion, Long> {
   public Sincronizacion descargarDirectorioWS(String tipo, Date fechaInicio, Date fechaFin) throws Exception;
 
   /**
+   * Elimina una sincronización y sus ficheros correspondientes
+   * @param sincronizacion
+   * @throws Exception
+   */
+  public void eliminarSincronizacion(Sincronizacion sincronizacion) throws Exception;
+
+  /**
    * Realiza la importación del directório (Unidades y Oficinas)
    * @param sincronizacion
    * @throws Exception

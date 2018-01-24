@@ -67,7 +67,6 @@ $(document).ready(function() {
  * @param texto texto de confirmación a mostrar
  */
 function confirm(url,texto) {
-   alert("Entro en confirm");
     var confirmModal = 
       $('<div class="modal hide fade">' +    
           '<div class="modal-header">' +
