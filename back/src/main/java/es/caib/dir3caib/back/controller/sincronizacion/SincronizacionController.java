@@ -19,7 +19,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -44,6 +43,54 @@ public class SincronizacionController extends BaseController {
     @EJB(mappedName = "dir3caib/Dir3CaibEJB/local")
     private Dir3CaibLocal dir3CaibEjb;
 
+
+    /**
+     * Método que se encarga de listar todas las descargas que se han realizado de las unidades
+     */
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public String listadoDescargaUnidad() {
+
+        return "redirect:/sincronizacion/list/1";
+    }
+
+    /**
+     * Listado de las descargas realizadas de las unidades
+     *
+     * @param pageNumber
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/list/{pageNumber}", method = RequestMethod.GET)
+    public ModelAndView descargaUnidadList(@PathVariable Integer pageNumber) throws Exception {
+
+        ModelAndView mav = new ModelAndView("/sincronizacion/sincronizacionList");
+
+        // Obtenemos descarga correcta de Directorio y Catálogo
+        Sincronizacion ultimaSincroDirectorio = sincronizacionEjb.ultimaSincronizacionCompletada(Dir3caibConstantes.DIRECTORIO);
+        Sincronizacion ultimaSincroCatalogo = sincronizacionEjb.ultimaSincronizacionCompletada(Dir3caibConstantes.CATALOGO);
+
+        //Obtenemos el listado paginado de las sincronizaciones
+        List<Sincronizacion> listado = sincronizacionEjb.getPagination(((pageNumber - 1) * BaseEjbJPA.RESULTADOS_PAGINACION));
+        Long total = sincronizacionEjb.getTotal();
+
+        //Obtenemos todos los ficheros asociados a cada descarga
+        if (listado != null) {
+            for (Sincronizacion sincronizacion : listado) {
+
+                sincronizacion.obtenerFicheros();
+
+            }
+        }
+
+        Paginacion paginacion = new Paginacion(total.intValue(), pageNumber);
+
+        mav.addObject("paginacion", paginacion);
+        mav.addObject("listado", listado);
+        mav.addObject("ultimaSincroDirectorio", ultimaSincroDirectorio);
+        mav.addObject("ultimaSincroCatalogo", ultimaSincroCatalogo);
+
+        return mav;
+    }
 
     /**
      * Sincroniza el Directorio
@@ -171,51 +218,6 @@ public class SincronizacionController extends BaseController {
     }
 
     /**
-     * Método que se encarga de listar todas las descargas que se han realizado de las unidades
-     */
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public String listadoDescargaUnidad() {
-
-        return "redirect:/sincronizacion/list/1";
-    }
-
-    /**
-     * Listado de las descargas realizadas de las unidades
-     *
-     * @param pageNumber
-     * @return
-     * @throws Exception
-     */
-    @RequestMapping(value = "/list/{pageNumber}", method = RequestMethod.GET)
-    public ModelAndView descargaUnidadList(@PathVariable Integer pageNumber) throws Exception {
-
-        ModelAndView mav = new ModelAndView("/sincronizacion/sincronizacionList");
-
-        //Obtenemos el listado paginado de las sincronizaciones
-        List<Sincronizacion> listado = sincronizacionEjb.getPagination(((pageNumber - 1) * BaseEjbJPA.RESULTADOS_PAGINACION));
-        Long total = sincronizacionEjb.getTotal();
-
-        ArrayList<String> ficherosDirectorio = new ArrayList<String>();
-        ArrayList<String> ficherosCatalogo = new ArrayList<String>();
-
-        //Obtenemos todos los ficheros asociados a cada descarga
-        if (listado != null) {
-            for (Sincronizacion sincronizacion : listado) {
-
-                sincronizacion.obtenerFicheros();
-
-            }
-        }
-
-        Paginacion paginacion = new Paginacion(total.intValue(), pageNumber);
-
-        mav.addObject("paginacion", paginacion);
-        mav.addObject("listado", listado);
-
-        return mav;
-    }
-
-    /**
      * Eliminar una {@link es.caib.dir3caib.persistence.model.Sincronizacion}
      */
     @RequestMapping(value = "/{idSincronizacion}/delete")
@@ -223,16 +225,19 @@ public class SincronizacionController extends BaseController {
 
         try {
 
-            // Obtenemos la fecha de la ultima descarga/sincronizacion
-            Sincronizacion ultimaSincro = sincronizacionEjb.ultimaSincronizacionCompletada(Dir3caibConstantes.DIRECTORIO);
+            // Obtenemos la última sincronizacion correcta
+            Sincronizacion ultimaSincroDirectorio = sincronizacionEjb.ultimaSincronizacionCompletada(Dir3caibConstantes.DIRECTORIO);
+            Sincronizacion ultimaSincroCatalogo = sincronizacionEjb.ultimaSincronizacionCompletada(Dir3caibConstantes.CATALOGO);
 
             Sincronizacion sincronizacion = sincronizacionEjb.findById(idSincronizacion);
 
-            if(sincronizacion.getCodigo().equals(ultimaSincro.getCodigo())){
+            // Comprobamos que no se trate de la última sincronización correcta
+            if(sincronizacion.getCodigo().equals(ultimaSincroDirectorio.getCodigo()) || sincronizacion.getCodigo().equals(ultimaSincroCatalogo.getCodigo())){
                 Mensaje.saveMessageError(request, getMessage("sincronizacion.eliminar.correcta"));
                 return "redirect:/sincronizacion/list/1";
             }
 
+            // Eliminamos la sincronización y sus ficheros asociados
             sincronizacionEjb.eliminarSincronizacion(sincronizacion);
 
             Mensaje.saveMessageInfo(request, getMessage("dir3caib.eliminar.registro"));

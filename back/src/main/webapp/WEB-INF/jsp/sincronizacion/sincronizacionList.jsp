@@ -141,10 +141,10 @@
                                             </div>
                                         </td>
                                         <td class="center">
-                                            <c:if test="${status.first}">
-                                                <a class="btn btn-danger btn-sm disabled" href="javascript:void(0);" title="<spring:message code="dir3caib.eliminar"/>"><span class="fa fa-eraser"></span></a>
+                                            <c:if test="${ultimaSincroDirectorio.codigo == sincronizacion.codigo || ultimaSincroCatalogo.codigo == sincronizacion.codigo}">
+                                                <a class="btn btn-danger btn-sm disabled" href="javascript:void(0);" title="<spring:message code="sincronizacion.eliminar.correcta"/>"><span class="fa fa-eraser"></span></a>
                                             </c:if>
-                                            <c:if test="${!status.first}">
+                                            <c:if test="${ultimaSincroDirectorio.codigo != sincronizacion.codigo && ultimaSincroCatalogo.codigo != sincronizacion.codigo}">
                                                 <a class="btn btn-danger btn-sm" onclick='javascript:confirm("<c:url value="/sincronizacion/${sincronizacion.codigo}/delete"/>","<spring:message code="dir3caib.confirmar.eliminacion" htmlEscape="true"/>")' href="javascript:void(0);" title="<spring:message code="dir3caib.eliminar"/>"><span class="fa fa-eraser"></span></a>
                                             </c:if>
 
