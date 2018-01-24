@@ -15,12 +15,12 @@ import java.util.List;
 @Local
 public interface ObtenerUnidadesLocal {
 
-    public UnidadTF obtenerUnidad(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception;
+    UnidadTF obtenerUnidad(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception;
 
-    public List<UnidadTF> obtenerArbolUnidadesTF(String codigo, Date fechaActualizada, Date fechaSincronizacion) throws Exception;
+    List<UnidadTF> obtenerArbolUnidadesTF(String codigo, Date fechaActualizada, Date fechaSincronizacion) throws Exception;
 
-    public List<UnidadTF> obtenerArbolUnidadesDestinatarias(String codigo) throws Exception;
+    List<UnidadTF> obtenerArbolUnidadesDestinatarias(String codigo) throws Exception;
 
-    public Date obtenerFechaUltimaActualizacion() throws Exception;
+    Date obtenerFechaUltimaActualizacion() throws Exception;
 
 }

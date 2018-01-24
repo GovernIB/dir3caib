@@ -14,9 +14,9 @@ import javax.ejb.Local;
 @Local
 public interface CatLocalidadLocal extends BaseEjb<CatLocalidad, Long> {
   
-  public CatLocalidad findByPKs(Long codigoLocalidad, Long codigoProvincia,
-      String codigoEntidadGeografica) throws Exception;
+  CatLocalidad findByPKs(Long codigoLocalidad, Long codigoProvincia,
+                         String codigoEntidadGeografica) throws Exception;
   
-  public void deleteAll() throws Exception;
+  void deleteAll() throws Exception;
 
 }

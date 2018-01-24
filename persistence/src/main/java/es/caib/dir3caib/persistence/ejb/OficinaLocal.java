@@ -25,7 +25,7 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      *
      * @throws Exception
      */
-    public void deleteAll() throws Exception;
+    void deleteAll() throws Exception;
 
     /**
      * Realiza la búsqueda de oficinas en función de los criterios especificados
@@ -39,28 +39,28 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      * @return
      * @throws Exception
      */
-    public Paginacion busqueda(Integer pageNumber, String codigo, String denominacion,
-                               Long codigoNivelAdministracion, Long codComunidad, Long codigoProvincia, String codigoEstado)
+    Paginacion busqueda(Integer pageNumber, String codigo, String denominacion,
+                        Long codigoNivelAdministracion, Long codComunidad, Long codigoProvincia, String codigoEstado)
             throws Exception;
 
     /**
      * Elimina todos los registros de la tabla de históricos de oficinas
      * @throws Exception
      */
-    public void deleteHistoricosOficina() throws Exception;
+    void deleteHistoricosOficina() throws Exception;
 
     /**
      * Elimina todos los servicios de oficinas de la tabla de servicios.
      * @throws Exception
      */
-    public void deleteServiciosOficina() throws Exception;
+    void deleteServiciosOficina() throws Exception;
 
     /**
      * Elimina los Servicios de la oficina en cuestión
      * @param idOficina
      * @throws Exception
      */
-    public void deleteServiciosOficina(String idOficina) throws Exception;
+    void deleteServiciosOficina(String idOficina) throws Exception;
 
     /**
      * Obtiene una oficina con sus historicos y sus servicios
@@ -68,7 +68,7 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      * @return
      * @throws Exception
      */
-    public Oficina findFullById(String id) throws Exception;
+    Oficina findFullById(String id) throws Exception;
 
     /**
      * Obtiene el código, denominación y estado de la oficina indicada
@@ -76,7 +76,7 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      * @return
      * @throws Exception
      */
-    public Oficina findByCodigoLigero(String codigo) throws Exception;
+    Oficina findByCodigoLigero(String codigo) throws Exception;
 
     /**
      * Obtiene una Oficina según su código y estado
@@ -85,7 +85,7 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      * @return
      * @throws Exception
      */
-    public Oficina findById(String codigo, String estado) throws Exception;
+    Oficina findById(String codigo, String estado) throws Exception;
 
 
     /**
@@ -96,12 +96,12 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      * @return
      * @throws Exception
      */
-    public Nodo findOficina(String id, String estado) throws Exception;
+    Nodo findOficina(String id, String estado) throws Exception;
 
     /*
        Método que comprueba si una oficina tiene más oficinas hijas
     */
-    public Boolean tieneHijos(String codigo) throws Exception;
+    Boolean tieneHijos(String codigo) throws Exception;
 
     /**
      * Metodo que obtiene los hijos de primer nivel de una oficina en funcion del estado del padre.
@@ -110,7 +110,7 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      * @param estado estado de la oficina padre.
      * @return {@link es.caib.dir3caib.persistence.utils.Nodo}
      */
-    public List<Nodo> hijos(String codigo, String estado) throws Exception;
+    List<Nodo> hijos(String codigo, String estado) throws Exception;
 
 
     /**
@@ -124,8 +124,8 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      * @return
      * @throws Exception
      */
-    public List<Oficina> obtenerOficinasOrganismo(String codigo, Date fechaActualizacion,
-                                                  Date fechaSincronizacion) throws Exception;
+    List<Oficina> obtenerOficinasOrganismo(String codigo, Date fechaActualizacion,
+                                           Date fechaSincronizacion) throws Exception;
 
     /**
      * Obtiene el listado de oficinas Sir de una Unidad
@@ -135,7 +135,7 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      *          Código de la unidad
      *
      */
-    public List<Oficina> obtenerOficinasSIRUnidad(String codigo) throws Exception;
+    List<Oficina> obtenerOficinasSIRUnidad(String codigo) throws Exception;
 
     /**
      * Este método mira si la unidad del código especificado tiene oficinas donde registrar.
@@ -145,14 +145,14 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      * @return
      * @throws Exception
      */
-    public Boolean tieneOficinasArbol(String codigo) throws Exception;
+    Boolean tieneOficinasArbol(String codigo) throws Exception;
 
     /**
      * Obtiene todos los código de las oficinas. Se emplea en la importación de oficinas desde Madrid.
      * @return
      * @throws Exception
      */
-    public List<String> getAllCodigos() throws Exception;
+    List<String> getAllCodigos() throws Exception;
 
     /**
      * Obtiene las oficinas que dependen directamente de la unidad, es decir cuya unidad responsable es la del codigo
@@ -163,7 +163,7 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      *
      * @return {@link es.caib.dir3caib.persistence.utils.Nodo}
      */
-    public List<Nodo> oficinasDependientes(String codigo, String estado) throws Exception;
+    List<Nodo> oficinasDependientes(String codigo, String estado) throws Exception;
 
     /**
      * Obtiene las oficinas auxiliares de un Oficina padre, es decir aquellas que dependen de la oficina del código
@@ -173,7 +173,7 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      * @param estado estado de la oficina
      * @return {@link es.caib.dir3caib.persistence.utils.Nodo}
      */
-    public List<Nodo> oficinasAuxiliares(String codigo, String estado) throws Exception;
+    List<Nodo> oficinasAuxiliares(String codigo, String estado) throws Exception;
 
     /**
      *
@@ -181,7 +181,7 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      * @param codigoServicio
      * @throws Exception
      */
-    public void crearServicioOficina(String codigoOficina, Long codigoServicio) throws Exception;
+    void crearServicioOficina(String codigoOficina, Long codigoServicio) throws Exception;
 
     /**
      *
@@ -189,7 +189,7 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      * @param codigoUltima
      * @throws Exception
      */
-    public void crearHistoricoOficina(String codigoAnterior, String codigoUltima) throws Exception;
+    void crearHistoricoOficina(String codigoAnterior, String codigoUltima) throws Exception;
 
     /**
      * Comprueba la existencia de un ServicioOficina en concreto
@@ -198,7 +198,7 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      * @return
      * @throws Exception
      */
-    public Boolean existeServicioOficina(String codigoOficina, Long codigoServicio) throws Exception;
+    Boolean existeServicioOficina(String codigoOficina, Long codigoServicio) throws Exception;
 
     /**
      * Comprueba la existencia de un HistoricoOficina en concreto
@@ -207,12 +207,12 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      * @return
      * @throws Exception
      */
-    public Boolean existeHistoricoOficina(String codigoAnterior, String codigoUltima) throws Exception;
+    Boolean existeHistoricoOficina(String codigoAnterior, String codigoUltima) throws Exception;
 
     /**
      * Elmina los HistoricoOfi de una Oficina
      * @param idOficina
      * @throws Exception
      */
-    public void eliminarHistoricosOficina(String idOficina) throws Exception;
+    void eliminarHistoricosOficina(String idOficina) throws Exception;
 }

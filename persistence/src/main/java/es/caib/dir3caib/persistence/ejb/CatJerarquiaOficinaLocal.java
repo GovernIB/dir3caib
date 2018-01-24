@@ -13,5 +13,5 @@ import javax.ejb.Local;
 @Local
 public interface CatJerarquiaOficinaLocal extends BaseEjb<CatJerarquiaOficina, Long> {
   
-  public void deleteAll() throws Exception;
+  void deleteAll() throws Exception;
 }

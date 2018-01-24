@@ -17,7 +17,7 @@ public interface BaseEjb<T extends Serializable, E> {
    * @param transientInstance
    * @throws Exception
    */
-  public T persistReal(T transientInstance) throws Exception;
+  T persistReal(T transientInstance) throws Exception;
   
     /**
      * Crear registro
@@ -25,7 +25,7 @@ public interface BaseEjb<T extends Serializable, E> {
      * @param transientInstance
      * @throws Exception
      */
-    public T persist(T transientInstance) throws Exception;
+    T persist(T transientInstance) throws Exception;
 
     /**
      *  Actualizar registro
@@ -33,14 +33,14 @@ public interface BaseEjb<T extends Serializable, E> {
      * @return
      * @throws Exception
      */
-    public T merge(T instance) throws Exception;
+    T merge(T instance) throws Exception;
 
     /**
      *  Eliminar registro
      * @param persistentInstance
      * @throws Exception
      */
-    public void remove(T persistentInstance) throws Exception;
+    void remove(T persistentInstance) throws Exception;
 
     /**
      *  Obtener registro por id
@@ -48,7 +48,7 @@ public interface BaseEjb<T extends Serializable, E> {
      * @return
      * @throws Exception
      */
-    public T findById(E id) throws Exception;
+    T findById(E id) throws Exception;
 
   /**
    *  Obtener la referencia al registro por id
@@ -56,21 +56,21 @@ public interface BaseEjb<T extends Serializable, E> {
    * @return
    * @throws Exception
    */
-  public T getReference(E id) throws Exception;
+  T getReference(E id) throws Exception;
 
     /**
      *  Obtener todos los registros
      * @return
      * @throws Exception
      */
-    public List<T> getAll() throws Exception;
+    List<T> getAll() throws Exception;
 
     /**
      * Obtiene el total de registros para la paginacion
      * @return
      * @throws Exception
      */
-    public Long getTotal() throws Exception;
+    Long getTotal() throws Exception;
 
     /**
      * Obtiene X valores comenzando en la posicion pasada por parametro
@@ -78,9 +78,9 @@ public interface BaseEjb<T extends Serializable, E> {
      * @return
      * @throws Exception
      */
-    public List<T> getPagination(int inicio) throws Exception;
+    List<T> getPagination(int inicio) throws Exception;
 
-    public void flush() throws Exception;
+    void flush() throws Exception;
 
-    public void clear() throws Exception;
+    void clear() throws Exception;
 }

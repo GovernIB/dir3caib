@@ -21,8 +21,8 @@ public interface SD01UNDescargaUnidades {
 
     @WebResult(name = "exportarReturn", targetNamespace = "http://impl.manager.directorio.map.es", partName = "exportarReturn")
     @WebMethod
-    public RespuestaWS exportar(
-        @WebParam(partName = "unidadesRequest", name = "unidadesRequest")
-        UnidadesWs unidadesRequest
+    RespuestaWS exportar(
+            @WebParam(partName = "unidadesRequest", name = "unidadesRequest")
+                    UnidadesWs unidadesRequest
     );
 }

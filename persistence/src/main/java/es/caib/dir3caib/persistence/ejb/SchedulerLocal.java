@@ -9,5 +9,5 @@ import javax.ejb.Local;
 @Local
 public interface SchedulerLocal {
 
-    public void sincronizarDirectorio() throws Exception;
+    void sincronizarDirectorio() throws Exception;
 }

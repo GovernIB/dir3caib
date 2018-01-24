@@ -22,52 +22,52 @@ public interface Dir3CaibObtenerOficinasWs {
     @RequestWrapper(localName = "obtenerOficinasSIRUnidad", targetNamespace = "http://oficina.ws.dir3caib.caib.es/", className = "es.caib.dir3caib.ws.api.oficina.ObtenerOficinasSIRUnidad")
     @WebMethod
     @ResponseWrapper(localName = "obtenerOficinasSIRUnidadResponse", targetNamespace = "http://oficina.ws.dir3caib.caib.es/", className = "es.caib.dir3caib.ws.api.oficina.ObtenerOficinasSIRUnidadResponse")
-    public java.util.List<es.caib.dir3caib.ws.api.oficina.OficinaTF> obtenerOficinasSIRUnidad(
-        @WebParam(name = "arg0", targetNamespace = "")
-        java.lang.String arg0
+    java.util.List<es.caib.dir3caib.ws.api.oficina.OficinaTF> obtenerOficinasSIRUnidad(
+            @WebParam(name = "arg0", targetNamespace = "")
+                    java.lang.String arg0
     );
 
     @WebResult(name = "return", targetNamespace = "")
     @RequestWrapper(localName = "getVersion", targetNamespace = "http://oficina.ws.dir3caib.caib.es/", className = "es.caib.dir3caib.ws.api.oficina.GetVersion")
     @WebMethod
     @ResponseWrapper(localName = "getVersionResponse", targetNamespace = "http://oficina.ws.dir3caib.caib.es/", className = "es.caib.dir3caib.ws.api.oficina.GetVersionResponse")
-    public java.lang.String getVersion();
+    java.lang.String getVersion();
 
     @WebResult(name = "return", targetNamespace = "")
     @RequestWrapper(localName = "getVersionWs", targetNamespace = "http://oficina.ws.dir3caib.caib.es/", className = "es.caib.dir3caib.ws.api.oficina.GetVersionWs")
     @WebMethod
     @ResponseWrapper(localName = "getVersionWsResponse", targetNamespace = "http://oficina.ws.dir3caib.caib.es/", className = "es.caib.dir3caib.ws.api.oficina.GetVersionWsResponse")
-    public java.lang.String getVersionWs();
+    java.lang.String getVersionWs();
 
     @WebResult(name = "return", targetNamespace = "")
     @RequestWrapper(localName = "obtenerFechaUltimaActualizacion", targetNamespace = "http://oficina.ws.dir3caib.caib.es/", className = "es.caib.dir3caib.ws.api.oficina.ObtenerFechaUltimaActualizacion")
     @WebMethod
     @ResponseWrapper(localName = "obtenerFechaUltimaActualizacionResponse", targetNamespace = "http://oficina.ws.dir3caib.caib.es/", className = "es.caib.dir3caib.ws.api.oficina.ObtenerFechaUltimaActualizacionResponse")
-    public java.sql.Timestamp obtenerFechaUltimaActualizacion();
+    java.sql.Timestamp obtenerFechaUltimaActualizacion();
 
     @WebResult(name = "return", targetNamespace = "")
     @RequestWrapper(localName = "obtenerArbolOficinas", targetNamespace = "http://oficina.ws.dir3caib.caib.es/", className = "es.caib.dir3caib.ws.api.oficina.ObtenerArbolOficinas")
     @WebMethod
     @ResponseWrapper(localName = "obtenerArbolOficinasResponse", targetNamespace = "http://oficina.ws.dir3caib.caib.es/", className = "es.caib.dir3caib.ws.api.oficina.ObtenerArbolOficinasResponse")
-    public java.util.List<es.caib.dir3caib.ws.api.oficina.OficinaTF> obtenerArbolOficinas(
-        @WebParam(name = "arg0", targetNamespace = "")
-        java.lang.String arg0,
-        @WebParam(name = "arg1", targetNamespace = "")
-        java.sql.Timestamp arg1,
-        @WebParam(name = "arg2", targetNamespace = "")
-        java.sql.Timestamp arg2
+    java.util.List<es.caib.dir3caib.ws.api.oficina.OficinaTF> obtenerArbolOficinas(
+            @WebParam(name = "arg0", targetNamespace = "")
+                    java.lang.String arg0,
+            @WebParam(name = "arg1", targetNamespace = "")
+                    java.sql.Timestamp arg1,
+            @WebParam(name = "arg2", targetNamespace = "")
+                    java.sql.Timestamp arg2
     );
 
     @WebResult(name = "return", targetNamespace = "")
     @RequestWrapper(localName = "obtenerOficina", targetNamespace = "http://oficina.ws.dir3caib.caib.es/", className = "es.caib.dir3caib.ws.api.oficina.ObtenerOficina")
     @WebMethod
     @ResponseWrapper(localName = "obtenerOficinaResponse", targetNamespace = "http://oficina.ws.dir3caib.caib.es/", className = "es.caib.dir3caib.ws.api.oficina.ObtenerOficinaResponse")
-    public es.caib.dir3caib.ws.api.oficina.OficinaTF obtenerOficina(
-        @WebParam(name = "arg0", targetNamespace = "")
-        java.lang.String arg0,
-        @WebParam(name = "arg1", targetNamespace = "")
-        java.sql.Timestamp arg1,
-        @WebParam(name = "arg2", targetNamespace = "")
-        java.sql.Timestamp arg2
+    es.caib.dir3caib.ws.api.oficina.OficinaTF obtenerOficina(
+            @WebParam(name = "arg0", targetNamespace = "")
+                    java.lang.String arg0,
+            @WebParam(name = "arg1", targetNamespace = "")
+                    java.sql.Timestamp arg1,
+            @WebParam(name = "arg2", targetNamespace = "")
+                    java.sql.Timestamp arg2
     );
 }

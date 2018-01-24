@@ -10,7 +10,6 @@
         <version>1.0.7</version>
     </parent>
 
-    <groupId>es.caib.dir3caib</groupId>
     <artifactId>dir3caib-ws-dir3api</artifactId>
     <version>1.0.7</version>
 	<packaging>jar</packaging>

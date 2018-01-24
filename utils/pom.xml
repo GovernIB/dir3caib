@@ -8,7 +8,6 @@
       <version>1.0.7</version>
   </parent>
 
-  <groupId>es.caib.dir3caib</groupId>
   <artifactId>dir3caib-utils</artifactId>
     <version>1.0.7</version>
   <packaging>jar</packaging>

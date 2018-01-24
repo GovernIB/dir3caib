@@ -82,6 +82,7 @@ public class CatLocalidadBean extends BaseEjbJPA<CatLocalidad, Long> implements 
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<CatLocalidad> getPagination(int inicio) throws Exception {
 
         Query q = em.createQuery("Select catLocalidad from CatLocalidad as catLocalidad order by catLocalidad.codigoLocalidad");

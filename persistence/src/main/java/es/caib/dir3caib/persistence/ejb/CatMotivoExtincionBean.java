@@ -55,6 +55,7 @@ public class CatMotivoExtincionBean extends BaseEjbJPA<CatMotivoExtincion, Strin
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<CatMotivoExtincion> getPagination(int inicio) throws Exception {
 
         Query q = em.createQuery("Select catMotivoExtincion from CatMotivoExtincion as catMotivoExtincion order by catMotivoExtincion.id");

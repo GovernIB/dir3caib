@@ -55,6 +55,7 @@ public class CatTipoViaBean extends BaseEjbJPA<CatTipoVia, Long> implements CatT
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<CatTipoVia> getPagination(int inicio) throws Exception {
 
         Query q = em.createQuery("Select catTipoVia from CatTipoVia as catTipoVia order by catTipoVia.codigoTipoVia");

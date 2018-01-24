@@ -11,10 +11,10 @@ import java.io.Serializable;
 @Local
 public interface TimerDir3Local extends Serializable {
   
-  public void sincronitzar();
+  void sincronitzar();
   
-  public void createTimer();
+  void createTimer();
   
-  public void clearTimers();
+  void clearTimers();
 
 }

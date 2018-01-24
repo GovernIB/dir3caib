@@ -20,63 +20,69 @@ import java.util.*;
 @Stateless(name = "Dir3RestEJB")
 public class Dir3RestBean implements Dir3RestLocal {
 
-  protected final Logger log = Logger.getLogger(getClass());
-  protected SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
+    protected final Logger log = Logger.getLogger(getClass());
+    protected SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
 
-  @PersistenceContext
-  private EntityManager em;
+    @PersistenceContext
+    private EntityManager em;
 
 
     /**
      * Obtiene las unidades(codigo-denominacion) cuya denominación coincide con la indicada.
+     *
      * @param denominacion
      * @return
      * @throws Exception
      */
-  @Override
-  public List<ObjetoDirectorio> findUnidadesByDenominacion(String denominacion) throws Exception {
+    @Override
+    @SuppressWarnings(value = "unchecked")
+    public List<ObjetoDirectorio> findUnidadesByDenominacion(String denominacion) throws Exception {
 
-      if (!denominacion.isEmpty()) {
-          Query q = em.createQuery("select unidad.codigo, unidad.denominacion from Unidad as unidad where upper(unidad.denominacion) like upper(:denominacion)");
-          q.setParameter("denominacion", "%" + denominacion.toLowerCase() + "%");
-          return transformarAObjetoDirectorio(q.getResultList());
-      } else {
-          return new ArrayList<ObjetoDirectorio>();
-      }
-  }
+        if (!denominacion.isEmpty()) {
+            Query q = em.createQuery("select unidad.codigo, unidad.denominacion from Unidad as unidad where upper(unidad.denominacion) like upper(:denominacion)");
+            q.setParameter("denominacion", "%" + denominacion.toLowerCase() + "%");
+            return transformarAObjetoDirectorio(q.getResultList());
+        } else {
+            return new ArrayList<ObjetoDirectorio>();
+        }
+    }
 
     /**
      * Obtiene las oficinas(codigo-denominacion) cuya denominación coincide con la indicada.
+     *
      * @param denominacion
      * @return
      * @throws Exception
      */
-  @Override
-  public List<ObjetoDirectorio> findOficinasByDenominacion(String denominacion) throws Exception {
+    @Override
+    @SuppressWarnings(value = "unchecked")
+    public List<ObjetoDirectorio> findOficinasByDenominacion(String denominacion) throws Exception {
 
-      if (!denominacion.isEmpty()) {
-          Query q = em.createQuery("select oficina.codigo, oficina.denominacion from Oficina as oficina where upper(oficina.denominacion) like upper(:denominacion)");
-          q.setParameter("denominacion", "%" + denominacion.toLowerCase() + "%");
-          return transformarAObjetoDirectorio(q.getResultList());
-      } else {
-          return new ArrayList<ObjetoDirectorio>();
-      }
+        if (!denominacion.isEmpty()) {
+            Query q = em.createQuery("select oficina.codigo, oficina.denominacion from Oficina as oficina where upper(oficina.denominacion) like upper(:denominacion)");
+            q.setParameter("denominacion", "%" + denominacion.toLowerCase() + "%");
+            return transformarAObjetoDirectorio(q.getResultList());
+        } else {
+            return new ArrayList<ObjetoDirectorio>();
+        }
     }
 
     /**
      * Método que comprueba si una unidad tiene más unidades hijas
+     *
      * @param codigo
      * @return
      * @throws Exception
      */
-  @Override
-  public Boolean tieneHijos(String codigo) throws Exception{
-      Query q = em.createQuery("Select unidad.codigo from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo order by unidad.codigo");
-      q.setParameter("codigo",codigo);
+    @Override
+    @SuppressWarnings(value = "unchecked")
+    public Boolean tieneHijos(String codigo) throws Exception {
+        Query q = em.createQuery("Select unidad.codigo from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo order by unidad.codigo");
+        q.setParameter("codigo", codigo);
 
-      List<Unidad> hijos = q.getResultList();
-      return hijos.size() > 0;
-  }
+        List<Unidad> hijos = q.getResultList();
+        return hijos.size() > 0;
+    }
 
     /**
      * Obtiene el arbol de unidades de la unidad indicada por código.
@@ -87,269 +93,280 @@ public class Dir3RestBean implements Dir3RestLocal {
      * @throws Exception
      */
     //TODO REVISAR PARECE QUE NO SE EMPLEA, en REGWEB3 NO SE EMPLEA(03/10/2017)
-  @Override
-  public List<Unidad> obtenerArbolUnidades(String codigo, String fechaActualizacion) throws Exception{
-      Query q;
-      if(fechaActualizacion == null){ // Es una sincronizacion, solo traemos vigentes
-        q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.codigo");
-        q.setParameter("codigo",codigo);
-        q.setParameter("vigente",Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-      } else {// es una actualizacion, lo traemos todo
-        q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo  order by unidad.codigo");
-        q.setParameter("codigo",codigo);
-
-      }
-
-      List<Unidad> padres = q.getResultList();
-      List<Unidad> padresActualizados = new ArrayList<Unidad>();
-      List<Unidad> listaCompleta;
-
-      //log.info("Número de PADRES: " + padres.size());
-
-      if(fechaActualizacion!= null){ // Si hay fecha de actualizacion solo se envian las actualizadas
-         Date fechaAct = formatoFecha.parse(fechaActualizacion);
-         for(Unidad unidad: padres){
-           if(fechaAct.before(unidad.getFechaImportacion())){
-             padresActualizados.add(unidad);
-           }
-         }
-         listaCompleta = new ArrayList<Unidad>(padresActualizados);
-      } else { // si no hay fecha, se trata de una sincronización
-         listaCompleta = new ArrayList<Unidad>(padres);
-      }
-
-      for (Unidad unidad : padres) {
-          if(tieneHijos(unidad.getCodigo())){
-              List<Unidad> hijos = obtenerArbolUnidades(unidad.getCodigo(),fechaActualizacion);
-              listaCompleta.addAll(hijos);
-          }
-      }
-
-      return listaCompleta;
-  }
-
-  /**
-   * Función que obtiene los hijos vigentes de una Unidad pero como Nodo ya que solo interesa
-   * el código, denominación y estado .
-   * @param codigo
-   * @return
-   * @throws Exception
-   */
-  //TODO REVISAR PARECE QUE NO SE EMPLEA NI EN EL RestController, en REGWEB3 NO SE EMPLEA(03/10/2017)
-  @Override
-  public List<Nodo> obtenerArbolUnidades(String codigo) throws Exception {
-      Query q;
-
-      q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.estado.descripcionEstadoEntidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.codigo");
-      q.setParameter("codigo",codigo);
-      q.setParameter("vigente",Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-
-
-      List<Nodo> padres = NodoUtils.getNodoList(q.getResultList());
-      List<Nodo> listaCompleta;
-
-      listaCompleta = new ArrayList<Nodo>(padres);
-
-      for (Nodo unidad : padres) {
-          if(tieneHijos(unidad.getCodigo())){
-              List<Nodo> hijos = obtenerArbolUnidades(unidad.getCodigo());
-              listaCompleta.addAll(hijos);
-          }
-      }
-
-      return listaCompleta;
-  }
-
-
-  /*
-    * Método que devuelve las oficinas de un organismo,
-    * teniendo en cuenta la fecha de la ultima actualización de regweb.
-    * Se emplea para la sincronizacion y actualización con regweb
-    * */
     @Override
-    public List<Oficina> obtenerOficinasOrganismo(String codigo, String fechaActualizacion) throws Exception{
+    @SuppressWarnings(value = "unchecked")
+    public List<Unidad> obtenerArbolUnidades(String codigo, String fechaActualizacion) throws Exception {
+        Query q;
+        if (fechaActualizacion == null) { // Es una sincronizacion, solo traemos vigentes
+            q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.codigo");
+            q.setParameter("codigo", codigo);
+            q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+        } else {// es una actualizacion, lo traemos todo
+            q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo  order by unidad.codigo");
+            q.setParameter("codigo", codigo);
+
+        }
+
+        List<Unidad> padres = q.getResultList();
+        List<Unidad> padresActualizados = new ArrayList<Unidad>();
+        List<Unidad> listaCompleta;
+
+        //log.info("Número de PADRES: " + padres.size());
+
+        if (fechaActualizacion != null) { // Si hay fecha de actualizacion solo se envian las actualizadas
+            Date fechaAct = formatoFecha.parse(fechaActualizacion);
+            for (Unidad unidad : padres) {
+                if (fechaAct.before(unidad.getFechaImportacion())) {
+                    padresActualizados.add(unidad);
+                }
+            }
+            listaCompleta = new ArrayList<Unidad>(padresActualizados);
+        } else { // si no hay fecha, se trata de una sincronización
+            listaCompleta = new ArrayList<Unidad>(padres);
+        }
+
+        for (Unidad unidad : padres) {
+            if (tieneHijos(unidad.getCodigo())) {
+                List<Unidad> hijos = obtenerArbolUnidades(unidad.getCodigo(), fechaActualizacion);
+                listaCompleta.addAll(hijos);
+            }
+        }
+
+        return listaCompleta;
+    }
+
+    /**
+     * Función que obtiene los hijos vigentes de una Unidad pero como Nodo ya que solo interesa
+     * el código, denominación y estado .
+     *
+     * @param codigo
+     * @return
+     * @throws Exception
+     */
+    //TODO REVISAR PARECE QUE NO SE EMPLEA NI EN EL RestController, en REGWEB3 NO SE EMPLEA(03/10/2017)
+    @Override
+    @SuppressWarnings(value = "unchecked")
+    public List<Nodo> obtenerArbolUnidades(String codigo) throws Exception {
+        Query q;
+
+        q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.estado.descripcionEstadoEntidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.codigo");
+        q.setParameter("codigo", codigo);
+        q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+
+
+        List<Nodo> padres = NodoUtils.getNodoList(q.getResultList());
+        List<Nodo> listaCompleta;
+
+        listaCompleta = new ArrayList<Nodo>(padres);
+
+        for (Nodo unidad : padres) {
+            if (tieneHijos(unidad.getCodigo())) {
+                List<Nodo> hijos = obtenerArbolUnidades(unidad.getCodigo());
+                listaCompleta.addAll(hijos);
+            }
+        }
+
+        return listaCompleta;
+    }
+
+
+    /*
+     * Método que devuelve las oficinas de un organismo,
+     * teniendo en cuenta la fecha de la ultima actualización de regweb.
+     * Se emplea para la sincronizacion y actualización con regweb
+     * */
+    @Override
+    @SuppressWarnings(value = "unchecked")
+    public List<Oficina> obtenerOficinasOrganismo(String codigo, String fechaActualizacion) throws Exception {
 
         Query q = em.createQuery("Select oficina from Oficina as oficina where oficina.codUoResponsable.codigo =:codigo and oficina.estado.codigoEstadoEntidad='V' order by oficina.codigo");
 
-        q.setParameter("codigo",codigo);
+        q.setParameter("codigo", codigo);
 
         List<Oficina> oficinas = q.getResultList();
         List<Oficina> oficinasCompletas;
         List<Oficina> oficinasActualizadas = new ArrayList<Oficina>();
         // Si hay fecha de actualización y es anterior a la fecha de importación se debe
         // incluir en la lista de actualizadas
-        if(fechaActualizacion!=null){
-          Date fechaAct = formatoFecha.parse(fechaActualizacion);
-          for(Oficina oficina: oficinas){
-             if(fechaAct.before(oficina.getFechaImportacion())){
-              oficinasActualizadas.add(oficina);
-             }
-          }
-          oficinasCompletas = new ArrayList<Oficina>(oficinasActualizadas);
-        }else{ // Si no hay fecha de actualización se trata de una sincronización
-           oficinasCompletas = new ArrayList<Oficina>(oficinas);
+        if (fechaActualizacion != null) {
+            Date fechaAct = formatoFecha.parse(fechaActualizacion);
+            for (Oficina oficina : oficinas) {
+                if (fechaAct.before(oficina.getFechaImportacion())) {
+                    oficinasActualizadas.add(oficina);
+                }
+            }
+            oficinasCompletas = new ArrayList<Oficina>(oficinasActualizadas);
+        } else { // Si no hay fecha de actualización se trata de una sincronización
+            oficinasCompletas = new ArrayList<Oficina>(oficinas);
         }
 
         return oficinasCompletas;
 
     }
 
-  /**
-   *  Método que nos dice sin una unidad tiene oficinas donde registrar.
-   *  Solo mira relacion funcional y organizativa. Pendiente SIR y Oficinas Virtuales.
-   * @param codigo de la unidad que queremos consultar
-   * @return
-   * @throws Exception
-   *
-   */
+    /**
+     * Método que nos dice sin una unidad tiene oficinas donde registrar.
+     * Solo mira relacion funcional y organizativa. Pendiente SIR y Oficinas Virtuales.
+     *
+     * @param codigo de la unidad que queremos consultar
+     * @return
+     * @throws Exception
+     */
     @Override
+    @SuppressWarnings(value = "unchecked")
     public Boolean tieneOficinasOrganismo(String codigo) throws Exception {
 
-      Query q = em.createQuery("Select oficina from Oficina as oficina where oficina.codUoResponsable.codigo =:codigo and oficina.estado.codigoEstadoEntidad=:vigente order by oficina.codigo");
-
-      q.setParameter("codigo", codigo);
-      q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-
-      List<Oficina> oficinas =  q.getResultList();
-      if (oficinas.size() > 0) {
-        return true;
-      }else{
-        q = em.createQuery("Select relorg from RelacionOrganizativaOfi as relorg where relorg.unidad.codigo=:codigo and relorg.estado.codigoEstadoEntidad=:vigente order by relorg.id ");
+        Query q = em.createQuery("Select oficina from Oficina as oficina where oficina.codUoResponsable.codigo =:codigo and oficina.estado.codigoEstadoEntidad=:vigente order by oficina.codigo");
 
         q.setParameter("codigo", codigo);
         q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-        List<RelacionOrganizativaOfi> relorg= q.getResultList();
-        return relorg.size() > 0;
-      }
+
+        List<Oficina> oficinas = q.getResultList();
+        if (oficinas.size() > 0) {
+            return true;
+        } else {
+            q = em.createQuery("Select relorg from RelacionOrganizativaOfi as relorg where relorg.unidad.codigo=:codigo and relorg.estado.codigoEstadoEntidad=:vigente order by relorg.id ");
+
+            q.setParameter("codigo", codigo);
+            q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+            List<RelacionOrganizativaOfi> relorg = q.getResultList();
+            return relorg.size() > 0;
+        }
 
     }
 
-  /**
-   * TODO REVISAR, parece que el parametro "conOficinas" siempre se indica a "false"
-   * Búsqueda de organismos según los parámetros indicados que esten vigentes
-   * @param codigo  código de la unidad
-   * @param denominacion  denominación de la unidad
-   * @param codigoNivelAdministracion  nivel de administración de la unidad
-   * @param codComunidad  comunidad autónoma a la que pertenece.
-   * @param conOficinas  indica el conOficinas de la búsqueda desde regweb "OrganismoInteresado" , "OrganismoDestinatario"
-   * @return List<Nodo> conjunto de datos a mostrar del organismo
-   * coincide con los parámetros de búsqueda
-   * @throws Exception
-   */
-  public List<Nodo> busquedaOrganismos(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, boolean conOficinas, boolean unidadRaiz, Long provincia, String localidad, boolean vigentes) throws Exception {
-      Query q;
-      Map<String, Object> parametros = new HashMap<String, Object>();
-      List<String> where = new ArrayList<String>();
+    /**
+     * TODO REVISAR, parece que el parametro "conOficinas" siempre se indica a "false"
+     * Búsqueda de organismos según los parámetros indicados que esten vigentes
+     *
+     * @param codigo                    código de la unidad
+     * @param denominacion              denominación de la unidad
+     * @param codigoNivelAdministracion nivel de administración de la unidad
+     * @param codComunidad              comunidad autónoma a la que pertenece.
+     * @param conOficinas               indica el conOficinas de la búsqueda desde regweb "OrganismoInteresado" , "OrganismoDestinatario"
+     * @return List<Nodo> conjunto de datos a mostrar del organismo
+     * coincide con los parámetros de búsqueda
+     * @throws Exception
+     */
+    @Override
+    @SuppressWarnings(value = "unchecked")
+    public List<Nodo> busquedaOrganismos(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, boolean conOficinas, boolean unidadRaiz, Long provincia, String localidad, boolean vigentes) throws Exception {
+        Query q;
+        Map<String, Object> parametros = new HashMap<String, Object>();
+        List<String> where = new ArrayList<String>();
 
-      StringBuffer query = new StringBuffer("Select distinct(unidad.codigo),unidad.denominacion, unidad.estado.codigoEstadoEntidad, unidad.codUnidadRaiz.codigo, unidad.codUnidadRaiz.denominacion, unidad.codUnidadSuperior.codigo, unidad.codUnidadSuperior.denominacion, unilocalidad.descripcionLocalidad  " +
-              "from Unidad  as unidad left outer join unidad.catLocalidad as unilocalidad  ");
+        StringBuilder query = new StringBuilder("Select distinct(unidad.codigo),unidad.denominacion, unidad.estado.codigoEstadoEntidad, unidad.codUnidadRaiz.codigo, unidad.codUnidadRaiz.denominacion, unidad.codUnidadSuperior.codigo, unidad.codUnidadSuperior.denominacion, unilocalidad.descripcionLocalidad  " +
+                "from Unidad  as unidad left outer join unidad.catLocalidad as unilocalidad  ");
 
-      // Parametros de busqueda
-      if (codigo != null && codigo.length() > 0) {
-          where.add(DataBaseUtils.like("unidad.codigo", "codigo", parametros, codigo));
-      }
-      if (denominacion != null && denominacion.length() > 0) {
-          where.add(DataBaseUtils.like("unidad.denominacion", "denominacion", parametros, denominacion));
-      }
-      if (codigoNivelAdministracion != null && codigoNivelAdministracion != -1) {
-          where.add(" unidad.nivelAdministracion.codigoNivelAdministracion = :codigoNivelAdministracion ");
-          parametros.put("codigoNivelAdministracion", codigoNivelAdministracion);
-      }
-      if (codComunidad != null && codComunidad != -1) {
-          where.add(" unidad.codAmbComunidad.codigoComunidad = :codComunidad ");
-          parametros.put("codComunidad", codComunidad);
-      }
-      if (provincia != null && provincia != -1) {
-          where.add(" unidad.codAmbProvincia.codigoProvincia = :codProvincia");
-          parametros.put("codProvincia", provincia);
-      }
-      if (localidad != null && !localidad.equals("-1") && !localidad.isEmpty()) {
-          String[] localidadsplit = localidad.split("-");
-          where.add(" unidad.catLocalidad.codigoLocalidad = :localidad ");
-          parametros.put("localidad", new Long(localidadsplit[0]));
-          if (provincia != null && provincia != -1) {
-              where.add(" unidad.catLocalidad.provincia.codigoProvincia = :provincia ");
-              parametros.put("provincia", provincia);
-              if (localidadsplit[1] != null && localidadsplit[1].length() > 0) {
-                  where.add(" unidad.catLocalidad.entidadGeografica.codigoEntidadGeografica = :entidadGeografica ");
-                  parametros.put("entidadGeografica", localidadsplit[1]);
-              }
-          }
-      }
-      //Solo se buscaran vigentes cuando lo indiquen
-      if (vigentes) {
-          where.add(" unidad.estado.codigoEstadoEntidad =:vigente ");
-          parametros.put("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-      }
-      if (unidadRaiz) {
-          where.add(" unidad.codUnidadRaiz.codigo = unidad.codigo ");
-      }
+        // Parametros de busqueda
+        if (codigo != null && codigo.length() > 0) {
+            where.add(DataBaseUtils.like("unidad.codigo", "codigo", parametros, codigo));
+        }
+        if (denominacion != null && denominacion.length() > 0) {
+            where.add(DataBaseUtils.like("unidad.denominacion", "denominacion", parametros, denominacion));
+        }
+        if (codigoNivelAdministracion != null && codigoNivelAdministracion != -1) {
+            where.add(" unidad.nivelAdministracion.codigoNivelAdministracion = :codigoNivelAdministracion ");
+            parametros.put("codigoNivelAdministracion", codigoNivelAdministracion);
+        }
+        if (codComunidad != null && codComunidad != -1) {
+            where.add(" unidad.codAmbComunidad.codigoComunidad = :codComunidad ");
+            parametros.put("codComunidad", codComunidad);
+        }
+        if (provincia != null && provincia != -1) {
+            where.add(" unidad.codAmbProvincia.codigoProvincia = :codProvincia");
+            parametros.put("codProvincia", provincia);
+        }
+        if (localidad != null && !localidad.equals("-1") && !localidad.isEmpty()) {
+            String[] localidadsplit = localidad.split("-");
+            where.add(" unidad.catLocalidad.codigoLocalidad = :localidad ");
+            parametros.put("localidad", new Long(localidadsplit[0]));
+            if (provincia != null && provincia != -1) {
+                where.add(" unidad.catLocalidad.provincia.codigoProvincia = :provincia ");
+                parametros.put("provincia", provincia);
+                if (localidadsplit[1] != null && localidadsplit[1].length() > 0) {
+                    where.add(" unidad.catLocalidad.entidadGeografica.codigoEntidadGeografica = :entidadGeografica ");
+                    parametros.put("entidadGeografica", localidadsplit[1]);
+                }
+            }
+        }
+        //Solo se buscaran vigentes cuando lo indiquen
+        if (vigentes) {
+            where.add(" unidad.estado.codigoEstadoEntidad =:vigente ");
+            parametros.put("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+        }
+        if (unidadRaiz) {
+            where.add(" unidad.codUnidadRaiz.codigo = unidad.codigo ");
+        }
 
-      // Añadimos los parametros a la query
-      if (parametros.size() != 0) {
-           query.append("where ");
-           int count = 0;
-           for (String w : where) {
-               if (count != 0) {
-                   query.append(" and ");
-               }
-               query.append(w);
-               count++;
-           }
-           query.append("order by unidad.estado.codigoEstadoEntidad desc, unidad.denominacion asc ");
-           q = em.createQuery(query.toString());
+        // Añadimos los parametros a la query
+        if (parametros.size() != 0) {
+            query.append("where ");
+            int count = 0;
+            for (String w : where) {
+                if (count != 0) {
+                    query.append(" and ");
+                }
+                query.append(w);
+                count++;
+            }
+            query.append("order by unidad.estado.codigoEstadoEntidad desc, unidad.denominacion asc ");
+            q = em.createQuery(query.toString());
 
-           for (Map.Entry<String, Object> param : parametros.entrySet()) {
-               q.setParameter(param.getKey(), param.getValue());
-           }
+            for (Map.Entry<String, Object> param : parametros.entrySet()) {
+                q.setParameter(param.getKey(), param.getValue());
+            }
 
-      } else {
-          query.append("order by unidad.estado.codigoEstadoEntidad desc, unidad.denominacion asc ");
-           q = em.createQuery(query.toString());
-      }
+        } else {
+            query.append("order by unidad.estado.codigoEstadoEntidad desc, unidad.denominacion asc ");
+            q = em.createQuery(query.toString());
+        }
 
-       // Generamos el Nodo
-      List<Nodo> unidades = NodoUtils.getNodoListExtendido(q.getResultList());
+        // Generamos el Nodo
+        List<Nodo> unidades = NodoUtils.getNodoListExtendido(q.getResultList());
 
-      //Si nos indican la variable conOficinas a true es que interesa devolver solo aquellos organismos
-      // que tienen oficinas en las que registrar
-      if (conOficinas) {
-          Set<Nodo> unidadesConOficinas = new HashSet<Nodo>();
-          for (Nodo unidad : unidades) {
-              if (tieneOficinasOrganismo(unidad.getCodigo())) {
-                  unidadesConOficinas.add(unidad);
-           }
-         }
-          unidades = new ArrayList<Nodo>(unidadesConOficinas);
-      }
+        //Si nos indican la variable conOficinas a true es que interesa devolver solo aquellos organismos
+        // que tienen oficinas en las que registrar
+        if (conOficinas) {
+            Set<Nodo> unidadesConOficinas = new HashSet<Nodo>();
+            for (Nodo unidad : unidades) {
+                if (tieneOficinasOrganismo(unidad.getCodigo())) {
+                    unidadesConOficinas.add(unidad);
+                }
+            }
+            unidades = new ArrayList<Nodo>(unidadesConOficinas);
+        }
 
-      // Actualizamos las unidades obtenidas y marcamos si tienen oficinasSIR
-      for (Nodo unidad2 : unidades) {
-          if (obtenerOficinasSIRUnidad(unidad2.getCodigo()).size() > 0) {
-              unidad2.setTieneOficinaSir(true);
-          }
-      }
-       return unidades;
+        // Actualizamos las unidades obtenidas y marcamos si tienen oficinasSIR
+        for (Nodo unidad2 : unidades) {
+            if (obtenerOficinasSIRUnidad(unidad2.getCodigo()).size() > 0) {
+                unidad2.setTieneOficinaSir(true);
+            }
+        }
+        return unidades;
 
-     }
+    }
 
     /**
      * Método que permite buscar oficinas según el conjunto de criterios indicados en los parámetros.
-     * @param codigo código de la oficina
-     * @param denominacion denominación de la oficina
+     *
+     * @param codigo                    código de la oficina
+     * @param denominacion              denominación de la oficina
      * @param codigoNivelAdministracion nivel de administración de la oficina
-     * @param codComunidad comunidad a la que pertenece la oficina
+     * @param codComunidad              comunidad a la que pertenece la oficina
      * @return Nodo conjunto de datos a mostrar de la oficina
      * @throws Exception
      */
+    @Override
+    @SuppressWarnings(value = "unchecked")
     public List<Nodo> busquedaOficinas(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, Long provincia, String localidad, boolean oficinasSir, boolean vigentes) throws Exception {
         Query q;
         Map<String, Object> parametros = new HashMap<String, Object>();
         List<String> where = new ArrayList<String>();
 
-        StringBuffer query = new StringBuffer("Select oficina.codigo, oficina.denominacion, oficina.estado.codigoEstadoEntidad, unidadRaiz.codigo, unidadRaiz.denominacion, oficina.codUoResponsable.codigo, oficina.codUoResponsable.denominacion, ofilocalidad.descripcionLocalidad from Oficina as oficina left outer join oficina.codUoResponsable.codUnidadRaiz as unidadRaiz left outer join oficina.localidad as ofilocalidad ");
+        StringBuilder query = new StringBuilder("Select oficina.codigo, oficina.denominacion, oficina.estado.codigoEstadoEntidad, unidadRaiz.codigo, unidadRaiz.denominacion, oficina.codUoResponsable.codigo, oficina.codUoResponsable.denominacion, ofilocalidad.descripcionLocalidad from Oficina as oficina left outer join oficina.codUoResponsable.codUnidadRaiz as unidadRaiz left outer join oficina.localidad as ofilocalidad ");
 
-         // Parametros de busqueda
+        // Parametros de busqueda
 
         if (codigo != null && codigo.length() > 0) {
             where.add(DataBaseUtils.like("oficina.codigo ", "codigo", parametros, codigo));
@@ -399,73 +416,77 @@ public class Dir3RestBean implements Dir3RestLocal {
         }
 
 
-         // Añadimos los parametros a la query
-         if (parametros.size() != 0) {
-             query.append("where ");
-             int count = 0;
-             for (String w : where) {
-                 if (count != 0) {
-                     query.append(" and ");
-                 }
-                 query.append(w);
-                 count++;
-             }
-             query.append("order by oficina.denominacion asc");
-             q = em.createQuery(query.toString());
+        // Añadimos los parametros a la query
+        if (parametros.size() != 0) {
+            query.append("where ");
+            int count = 0;
+            for (String w : where) {
+                if (count != 0) {
+                    query.append(" and ");
+                }
+                query.append(w);
+                count++;
+            }
+            query.append("order by oficina.denominacion asc");
+            q = em.createQuery(query.toString());
 
-             for (Map.Entry<String, Object> param : parametros.entrySet()) {
-                 q.setParameter(param.getKey(), param.getValue());
-             }
+            for (Map.Entry<String, Object> param : parametros.entrySet()) {
+                q.setParameter(param.getKey(), param.getValue());
+            }
 
-         }else{
-             query.append("order by oficina.denominacion asc");
-             q = em.createQuery(query.toString());
-         }
+        } else {
+            query.append("order by oficina.denominacion asc");
+            q = em.createQuery(query.toString());
+        }
 
         return NodoUtils.getNodoListExtendido(q.getResultList());
 
-     }
+    }
 
     /**
      * Devuelve la denominación de la unidad especificada por codigo
+     *
      * @param codigo
      * @return
      * @throws Exception
      */
-       @Override
-       public String unidadDenominacion(String codigo) throws Exception {
+    @Override
+    @SuppressWarnings(value = "unchecked")
+    public String unidadDenominacion(String codigo) throws Exception {
 
-         Query q = em.createQuery("select unidad.denominacion from Unidad as unidad where unidad.codigo=:codigo").setParameter("codigo", codigo);
+        Query q = em.createQuery("select unidad.denominacion from Unidad as unidad where unidad.codigo=:codigo").setParameter("codigo", codigo);
 
-           List<String> unidades = q.getResultList();
+        List<String> unidades = q.getResultList();
 
-           if(unidades.size() > 0){
-               return unidades.get(0);
-           }else {
-               return new String();
-           }
-       }
+        if (unidades.size() > 0) {
+            return unidades.get(0);
+        } else {
+            return "";
+        }
+    }
 
     /**
      * Devuelve la denominación de la oficina especificada por codigo
+     *
      * @param codigo
      * @return
      * @throws Exception
      */
 
-     @Override
-     public String oficinaDenominacion(String codigo) throws Exception {
+    @Override
+    @SuppressWarnings(value = "unchecked")
+    public String oficinaDenominacion(String codigo) throws Exception {
 
-         Query q = em.createQuery("select oficina.denominacion from Oficina as oficina where oficina.codigo=:codigo").setParameter("codigo", codigo);
+        Query q = em.createQuery("select oficina.denominacion from Oficina as oficina where oficina.codigo=:codigo").setParameter("codigo", codigo);
 
-         List<String> oficinas = q.getResultList();
+        List<String> oficinas = q.getResultList();
 
-         if(oficinas.size() > 0){
+        if (oficinas.size() > 0) {
             return oficinas.get(0);
-         }else {
-             return new String();
-         }
-     }
+        } else {
+            return "";
+        }
+    }
 
 
     /**
@@ -478,13 +499,14 @@ public class Dir3RestBean implements Dir3RestLocal {
      */
 
     @Override
+    @SuppressWarnings(value = "unchecked")
     public List<Nodo> busquedaDenominacionComunidad(String denominacion, Long codComunidad) throws Exception {
 
 
         Query q;
         List<String> where = new ArrayList<String>();
         Map<String, Object> parametros = new HashMap<String, Object>();
-        StringBuffer query = new StringBuffer("Select unidad.codigo, unidad.denominacion, unidad.codUnidadRaiz.denominacion, unidad.codUnidadSuperior.denominacion from Unidad as unidad ");
+        StringBuilder query = new StringBuilder("Select unidad.codigo, unidad.denominacion, unidad.codUnidadRaiz.denominacion, unidad.codUnidadSuperior.denominacion from Unidad as unidad ");
 
         //Denominación
         if (denominacion != null && denominacion.length() > 0) {
@@ -526,11 +548,11 @@ public class Dir3RestBean implements Dir3RestLocal {
             q = em.createQuery(query.toString());
         }
 
-        List<Nodo> unidades = NodoUtils.getNodoListUnidadRaizUnidadSuperior(q.getResultList());
-
-        return unidades;
+        return NodoUtils.getNodoListUnidadRaizUnidadSuperior(q.getResultList());
     }
 
+
+    @SuppressWarnings(value = "unchecked")
     private List<Oficina> obtenerOficinasSIRUnidad(String codigoUnidad) throws Exception {
 
         Query q = em.createQuery("select relacionSirOfi.oficina from RelacionSirOfi as relacionSirOfi where relacionSirOfi.unidad.codigo =:codigoUnidad " +
@@ -555,6 +577,7 @@ public class Dir3RestBean implements Dir3RestLocal {
      * @throws Exception
      */
     @Override
+    @SuppressWarnings(value = "unchecked")
     public List<CodigoValor> getLocalidadByProvinciaEntidadGeografica(Long codigoProvincia, String codigoEntidadGeografica) throws Exception {
 
 
@@ -580,6 +603,8 @@ public class Dir3RestBean implements Dir3RestLocal {
      * @return
      * @throws Exception
      */
+    @Override
+    @SuppressWarnings(value = "unchecked")
     public List<CodigoValor> getComunidadesAutonomas() throws Exception {
         Query q = em.createQuery("select ca.codigoComunidad, ca.descripcionComunidad from CatComunidadAutonoma as ca order by ca.descripcionComunidad");
 
@@ -593,6 +618,8 @@ public class Dir3RestBean implements Dir3RestLocal {
      * @return
      * @throws Exception
      */
+    @Override
+    @SuppressWarnings(value = "unchecked")
     public List<CodigoValor> getEntidadesGeograficas() throws Exception {
         Query q = em.createQuery("select eg.codigoEntidadGeografica, eg.descripcionEntidadGeografica from CatEntidadGeografica as eg");
 
@@ -607,6 +634,8 @@ public class Dir3RestBean implements Dir3RestLocal {
      * @return
      * @throws Exception
      */
+    @Override
+    @SuppressWarnings(value = "unchecked")
     public List<CodigoValor> getProvincias() throws Exception {
         Query q = em.createQuery("select prov.codigoProvincia, prov.descripcionProvincia from CatProvincia as prov order by prov.descripcionProvincia");
 
@@ -621,6 +650,8 @@ public class Dir3RestBean implements Dir3RestLocal {
      * @return
      * @throws Exception
      */
+    @Override
+    @SuppressWarnings(value = "unchecked")
     public List<CodigoValor> getProvinciasByComunidad(Long codComunidad) throws Exception {
         Query q = em.createQuery("Select prov.codigoProvincia, prov.descripcionProvincia from CatProvincia as prov " +
                 "where prov.comunidadAutonoma.codigoComunidad =:codComunidad order by prov.codigoProvincia");
@@ -638,6 +669,8 @@ public class Dir3RestBean implements Dir3RestLocal {
      * @return
      * @throws Exception
      */
+    @Override
+    @SuppressWarnings(value = "unchecked")
     public List<CodigoValor> getNivelesAdministracion() throws Exception {
         Query q = em.createQuery("select na.codigoNivelAdministracion, na.descripcionNivelAdministracion from CatNivelAdministracion as na order by na.descripcionNivelAdministracion");
 
@@ -645,7 +678,8 @@ public class Dir3RestBean implements Dir3RestLocal {
 
     }
 
-
+    @Override
+    @SuppressWarnings(value = "unchecked")
     public List<CodigoValor> getAmbitoTerritorialByAdministracion(Long nivelAdministracion) throws Exception {
 
         Query q = em.createQuery("Select catAmbitoTerritorial.codigoAmbito,catAmbitoTerritorial.descripcionAmbito  from CatAmbitoTerritorial as catAmbitoTerritorial " +
@@ -694,7 +728,5 @@ public class Dir3RestBean implements Dir3RestLocal {
         return objetoDirectorios;
 
     }
-
-
 
 }

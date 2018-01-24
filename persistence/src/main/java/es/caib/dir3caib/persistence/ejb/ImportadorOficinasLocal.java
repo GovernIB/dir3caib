@@ -19,6 +19,6 @@ public interface ImportadorOficinasLocal {
    * @return
    * @throws Exception
    */
-  public void importarOficinas(Sincronizacion sincronizacion) throws Exception;
+  void importarOficinas(Sincronizacion sincronizacion) throws Exception;
 
 }

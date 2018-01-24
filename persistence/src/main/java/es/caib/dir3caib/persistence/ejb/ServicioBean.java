@@ -55,6 +55,7 @@ public class ServicioBean extends BaseEjbJPA<Servicio, Long> implements Servicio
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<Servicio> getPagination(int inicio) throws Exception {
 
         Query q = em.createQuery("Select servicio from Servicio as servicio order by servicio.codServicio");

@@ -56,6 +56,7 @@ public class CatAmbitoTerritorialBean extends BaseEjbJPA<CatAmbitoTerritorial, L
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<CatAmbitoTerritorial> getPagination(int inicio) throws Exception {
 
         Query q = em.createQuery("Select catAmbitoTerritorial from CatAmbitoTerritorial as catAmbitoTerritorial order by catAmbitoTerritorial.codigoAmbito");
@@ -64,14 +65,16 @@ public class CatAmbitoTerritorialBean extends BaseEjbJPA<CatAmbitoTerritorial, L
 
         return q.getResultList();
     }
+
     @Override
+    @SuppressWarnings("unchecked")
     public void deleteAll() throws Exception {
 
         em.createQuery("delete from CatAmbitoTerritorial").executeUpdate();
         
     }
-    
-    
+
+    @Override
     public CatAmbitoTerritorial findByPKs(String codigoAmbito, Long codigoNivelAdministracion) throws Exception {
       Query q = em.createQuery("Select catAmbitoTerritorial from CatAmbitoTerritorial as catAmbitoTerritorial "
           + " where catAmbitoTerritorial.nivelAdministracion.codigoNivelAdministracion = :nivelAdministracion "

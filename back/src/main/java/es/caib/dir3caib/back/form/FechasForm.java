@@ -43,7 +43,7 @@ public class FechasForm {
         if( fechaInicio != null){
           return formato.format(fechaInicio);
         }else {
-          return new String();
+          return "";
         }
     
     } 
@@ -54,7 +54,7 @@ public class FechasForm {
         if( fechaFin != null){
           return formato.format(fechaFin);
         }else {
-          return new String();
+          return "";
         }
     }
 

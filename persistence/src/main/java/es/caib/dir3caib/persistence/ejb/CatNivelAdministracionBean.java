@@ -54,6 +54,7 @@ public class CatNivelAdministracionBean extends BaseEjbJPA<CatNivelAdministracio
         return (Long) q.getSingleResult();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<CatNivelAdministracion> getPagination(int inicio) throws Exception {
 

@@ -19,7 +19,7 @@ public interface ImportadorUnidadesLocal {
      * @return
      * @throws Exception
      */
-    public void importarUnidades(Sincronizacion sincronizacion) throws Exception;
+    void importarUnidades(Sincronizacion sincronizacion) throws Exception;
 
 
 }

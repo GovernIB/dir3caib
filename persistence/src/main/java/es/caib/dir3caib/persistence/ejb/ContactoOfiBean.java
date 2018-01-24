@@ -57,6 +57,7 @@ public class ContactoOfiBean extends BaseEjbJPA<ContactoOfi, Long> implements Co
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<ContactoOfi> getPagination(int inicio) throws Exception {
 
         Query q = em.createQuery("Select contacto from ContactoOfi as contacto order by contacto.codContacto");

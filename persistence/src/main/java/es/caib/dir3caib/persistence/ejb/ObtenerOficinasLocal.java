@@ -16,11 +16,11 @@ import java.util.List;
 @Local
 public interface ObtenerOficinasLocal {
 
-    public OficinaTF obtenerOficina(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception;
+    OficinaTF obtenerOficina(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception;
 
-    public List<OficinaTF> obtenerArbolOficinas(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception;
+    List<OficinaTF> obtenerArbolOficinas(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception;
 
-    public List<OficinaTF> obtenerOficinasSIRUnidad(String codigoUnidad) throws Exception;
+    List<OficinaTF> obtenerOficinasSIRUnidad(String codigoUnidad) throws Exception;
 
-    public Date obtenerFechaUltimaActualizacion() throws Exception;
+    Date obtenerFechaUltimaActualizacion() throws Exception;
 }

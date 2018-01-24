@@ -27,46 +27,46 @@ public interface Dir3CaibObtenerCatalogosWs {
 
   @WebMethod
   @PermitAll
-  public String getVersion();
+  String getVersion();
 
   @WebMethod
   @PermitAll
-  public String getVersionWs();
+  String getVersionWs();
 
 
   @WebMethod
   @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
-  public List<CatEstadoEntidad> obtenerCatEstadoEntidad() throws Exception;
+  List<CatEstadoEntidad> obtenerCatEstadoEntidad() throws Exception;
 
   @WebMethod
   @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
-  public List<CatNivelAdministracion> obtenerCatNivelAdministracion() throws Exception;
+  List<CatNivelAdministracion> obtenerCatNivelAdministracion() throws Exception;
 
   @WebMethod
   @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
-  public List<CatPais> obtenerCatPais() throws Exception;
+  List<CatPais> obtenerCatPais() throws Exception;
 
   @WebMethod
   @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
-  public List<CatComunidadAutonomaTF> obtenerCatComunidadAutonoma() throws Exception;
+  List<CatComunidadAutonomaTF> obtenerCatComunidadAutonoma() throws Exception;
 
   @WebMethod
   @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
-  public List<CatProvinciaTF> obtenerCatProvincia() throws Exception;
+  List<CatProvinciaTF> obtenerCatProvincia() throws Exception;
 
   @WebMethod
   @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
-  public List<CatLocalidadTF> obtenerCatLocalidad() throws Exception;
+  List<CatLocalidadTF> obtenerCatLocalidad() throws Exception;
 
   @WebMethod
   @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
-  public List<CatEntidadGeograficaTF> obtenerCatEntidadGeografica() throws Exception;
+  List<CatEntidadGeograficaTF> obtenerCatEntidadGeografica() throws Exception;
 
   @WebMethod
   @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
-  public List<Servicio> obtenerCatServicio() throws Exception;
+  List<Servicio> obtenerCatServicio() throws Exception;
 
   @WebMethod
   @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
-  public List<CatTipoVia> obtenerCatTipoVia() throws Exception;
+  List<CatTipoVia> obtenerCatTipoVia() throws Exception;
 }

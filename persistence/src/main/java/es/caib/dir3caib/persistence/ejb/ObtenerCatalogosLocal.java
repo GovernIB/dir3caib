@@ -18,22 +18,22 @@ import java.util.List;
 @Local
 public interface ObtenerCatalogosLocal {
 
-    public List<CatEstadoEntidad> obtenerCatEstadoEntidad() throws Exception;
+    List<CatEstadoEntidad> obtenerCatEstadoEntidad() throws Exception;
 
-    public List<CatNivelAdministracion> obtenerCatNivelAdministracion() throws Exception;
+    List<CatNivelAdministracion> obtenerCatNivelAdministracion() throws Exception;
 
-    public List<CatPais> obtenerCatPais() throws Exception;
+    List<CatPais> obtenerCatPais() throws Exception;
 
-    public List<CatComunidadAutonomaTF> obtenerCatComunidadAutonoma() throws Exception;
+    List<CatComunidadAutonomaTF> obtenerCatComunidadAutonoma() throws Exception;
 
-    public List<CatProvinciaTF> obtenerCatProvincia() throws Exception;
+    List<CatProvinciaTF> obtenerCatProvincia() throws Exception;
 
-    public List<CatLocalidadTF> obtenerCatLocalidad() throws Exception;
+    List<CatLocalidadTF> obtenerCatLocalidad() throws Exception;
 
-    public List<CatEntidadGeograficaTF> obtenerCatEntidadGeografica() throws Exception;
+    List<CatEntidadGeograficaTF> obtenerCatEntidadGeografica() throws Exception;
 
-    public List<Servicio> obtenerCatServicio() throws Exception;
+    List<Servicio> obtenerCatServicio() throws Exception;
 
-    public List<CatTipoVia> obtenerCatTipoVia() throws Exception;
+    List<CatTipoVia> obtenerCatTipoVia() throws Exception;
 
 }

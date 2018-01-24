@@ -55,6 +55,7 @@ public class CatProvinciaBean extends BaseEjbJPA<CatProvincia, Long> implements 
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<CatProvincia> getPagination(int inicio) throws Exception {
 
         Query q = em.createQuery("Select catProvincia from CatProvincia as catProvincia order by catProvincia.codigoProvincia");
@@ -63,13 +64,16 @@ public class CatProvinciaBean extends BaseEjbJPA<CatProvincia, Long> implements 
 
         return q.getResultList();
     }
-    
+
+    @Override
     public void deleteAll() throws Exception {
 
         em.createQuery("delete from CatProvincia").executeUpdate();
         
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
     public List<CatProvincia> getByComunidadAutonoma(Long idComunidadAutonoma) throws Exception {
 
         Query q = em.createQuery("Select catProvincia from CatProvincia as catProvincia " +

@@ -74,6 +74,7 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Sincronizacion ultimaSincronizacionByTipo(String tipo) throws Exception {
         
         Query query = em.createQuery( "select sincronizacion from Sincronizacion as sincronizacion where sincronizacion.tipo= :tipo order by sincronizacion.codigo desc");
@@ -86,6 +87,8 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
         } 
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
     public Sincronizacion ultimaSincronizacionCorrecta(String tipo) throws Exception {
 
         Query query = em.createQuery( "select sincronizacion from Sincronizacion as sincronizacion where sincronizacion.tipo = :tipo and sincronizacion.estado = :correcto " +
@@ -102,6 +105,8 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
         }
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
     public Sincronizacion ultimaSincronizacionCompletada(String tipo) throws Exception {
 
         Query query = em.createQuery( "select sincronizacion from Sincronizacion as sincronizacion where sincronizacion.tipo = :tipo " +
@@ -137,6 +142,7 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
 
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<Sincronizacion> getPagination(int inicio) throws Exception {
 
         Query q = em.createQuery("Select sincronizacion from Sincronizacion as sincronizacion order by sincronizacion.codigo desc");

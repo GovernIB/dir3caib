@@ -20,7 +20,7 @@ public interface DescargaLocal extends BaseEjb<Descarga, Long> {
    * @return
    * @throws Exception
    */
-  public Descarga ultimaDescarga(String tipo) throws Exception;
+  Descarga ultimaDescarga(String tipo) throws Exception;
 
   /**
    * Obtiene el total de Descargas realizadas del tipo indicado
@@ -28,7 +28,7 @@ public interface DescargaLocal extends BaseEjb<Descarga, Long> {
    * @return
    * @throws Exception
    */
-  public Long totalDescargas(String tipo) throws Exception;
+  Long totalDescargas(String tipo) throws Exception;
 
   /**
    * Obtiene la última descarga correctamente sincronizada según el tipo indicado
@@ -36,7 +36,7 @@ public interface DescargaLocal extends BaseEjb<Descarga, Long> {
    * @return
    * @throws Exception
      */
-  public Descarga ultimaDescargaSincronizada(String tipo) throws Exception;
+  Descarga ultimaDescargaSincronizada(String tipo) throws Exception;
 
   /**
    * Obtiene todas las descargas del tipo indicado
@@ -44,14 +44,14 @@ public interface DescargaLocal extends BaseEjb<Descarga, Long> {
    * @return
    * @throws Exception
    */
-  public List<Descarga> getAllByTipo(String tipo) throws Exception;
+  List<Descarga> getAllByTipo(String tipo) throws Exception;
 
   /**
    * Borra todas las descargas del tipo indicado
    * @param tipo
    * @throws Exception
    */
-  public void deleteAllByTipo(String tipo) throws Exception;
+  void deleteAllByTipo(String tipo) throws Exception;
 
   /**
    * Actualiza el estado de una Descarga
@@ -59,7 +59,7 @@ public interface DescargaLocal extends BaseEjb<Descarga, Long> {
    * @param estado
    * @throws Exception
    */
-  public void actualizarEstado(Long codigo, String estado) throws Exception;
+  void actualizarEstado(Long codigo, String estado) throws Exception;
 
   /**
    * Obtiene el total por tipo.
@@ -67,7 +67,7 @@ public interface DescargaLocal extends BaseEjb<Descarga, Long> {
    * @return
    * @throws Exception
    */
-  public Long getTotalByTipo(String tipo) throws Exception;
+  Long getTotalByTipo(String tipo) throws Exception;
 
   /**
    *  Calcula la paginació de les descarregues
@@ -76,7 +76,7 @@ public interface DescargaLocal extends BaseEjb<Descarga, Long> {
    * @return
    * @throws Exception
    */
-  public List<Descarga> getPaginationByTipo(int inicio, String tipo) throws Exception;
+  List<Descarga> getPaginationByTipo(int inicio, String tipo) throws Exception;
 
   /**
    *
@@ -86,5 +86,5 @@ public interface DescargaLocal extends BaseEjb<Descarga, Long> {
    * @return
    * @throws Exception
    */
-  public Descarga descargarDirectorioWS(String tipo, Date fechaInicio, Date fechaFin) throws Exception;
+  Descarga descargarDirectorioWS(String tipo, Date fechaInicio, Date fechaFin) throws Exception;
 }

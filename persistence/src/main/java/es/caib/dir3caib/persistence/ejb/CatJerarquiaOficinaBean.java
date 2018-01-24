@@ -55,6 +55,7 @@ public class CatJerarquiaOficinaBean extends BaseEjbJPA<CatJerarquiaOficina, Lon
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<CatJerarquiaOficina> getPagination(int inicio) throws Exception {
 
         Query q = em.createQuery("Select catJerarquiaOficina from CatJerarquiaOficina as catJerarquiaOficina order by catJerarquiaOficina.codigoJerarquiaOficina");

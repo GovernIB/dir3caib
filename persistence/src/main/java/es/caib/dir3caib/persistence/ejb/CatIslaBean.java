@@ -55,6 +55,7 @@ public class CatIslaBean extends BaseEjbJPA<CatIsla, Long> implements CatIslaLoc
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<CatIsla> getPagination(int inicio) throws Exception {
 
         Query q = em.createQuery("Select catIsla from CatIsla as catIsla order by catIsla.codigoIsla");
@@ -63,7 +64,8 @@ public class CatIslaBean extends BaseEjbJPA<CatIsla, Long> implements CatIslaLoc
 
         return q.getResultList();
     }
-    
+
+    @Override
     public void deleteAll() throws Exception {
 
         em.createQuery("delete from CatIsla").executeUpdate();

@@ -55,6 +55,7 @@ public class CatTipoContactoBean extends BaseEjbJPA<CatTipoContacto, String> imp
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<CatTipoContacto> getPagination(int inicio) throws Exception {
 
         Query q = em.createQuery("Select catTipoContacto from CatTipoContacto as catTipoContacto order by catTipoContacto.id");

@@ -62,6 +62,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
      * @return
      * @throws Exception
      */
+    @SuppressWarnings("unchecked")
     @Override
     public Unidad findConHistoricosVigente(String id) throws Exception {
         Query q = em.createQuery("select unidad from Unidad as unidad where unidad.codigo=:id and unidad.estado.codigoEstadoEntidad=:vigente");
@@ -90,6 +91,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
      * @return
      * @throws Exception
      */
+    @SuppressWarnings("unchecked")
     public Unidad findUnidadEstado(String id, String estado) throws Exception {
         Query q = em.createQuery("select unidad from Unidad as unidad where unidad.codigo=:id and unidad.estado.codigoEstadoEntidad=:estado");
         q.setParameter("id", id);
@@ -112,6 +114,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
      * @return {@link es.caib.dir3caib.persistence.utils.Nodo}
      */
     @Override
+    @SuppressWarnings("unchecked")
     public Nodo findUnidad(String id, String estado) throws Exception {
 
         Query q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.estado.descripcionEstadoEntidad, unidad.codUnidadRaiz.codigo, unidad.codUnidadRaiz.denominacion, unidad.codUnidadSuperior.codigo, unidad.codUnidadSuperior.denominacion from Unidad as unidad where unidad.codigo=:id and unidad.estado.codigoEstadoEntidad =:estado");
@@ -141,6 +144,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
      * @throws Exception
      */
     @Override
+    @SuppressWarnings("unchecked")
     public Unidad findUnidadActualizada(String id, Date fechaActualizacion) throws Exception {
         Query q = em.createQuery("Select unidad from Unidad as unidad where unidad.codigo =:id " +
                 " and :fechaActualizacion < unidad.fechaImportacion ");
@@ -165,6 +169,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
      * @throws Exception
      */
     @Override
+    @SuppressWarnings("unchecked")
     public Unidad findByCodigoLigero(String codigo) throws Exception {
         Query q = em.createQuery("select unidad.codigo, unidad.denominacion, unidad.estado.codigoEstadoEntidad from Unidad as unidad where unidad.codigo=:codigo ");
         q.setParameter("codigo", codigo);
@@ -191,6 +196,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         return em.createQuery("Select unidad from Unidad as unidad order by unidad.codigo").getResultList();
     }
 
+    @SuppressWarnings(value = "unchecked")
     public List<Unidad> getMaxResult(int maxResult) throws Exception {
         return em.createQuery("Select unidad from Unidad as unidad order by unidad.codigo").setMaxResults(maxResult).getResultList();
     }
@@ -209,6 +215,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
      * @throws Exception
      */
     @Override
+    @SuppressWarnings(value = "unchecked")
     public List<Unidad> getPagination(int inicio) throws Exception {
 
         Query q = em.createQuery("Select unidad from Unidad as unidad order by unidad.codigo");
@@ -226,6 +233,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
      * @throws Exception
      */
     @Override
+    @SuppressWarnings(value = "unchecked")
     public List<Unidad> getPagination(int startItem, int numberOfItems) throws Exception {
 
         Query q = em.createQuery("Select unidad from Unidad as unidad order by unidad.codigo");
@@ -243,6 +251,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
      * @throws Exception
      */
     @Override
+    @SuppressWarnings(value = "unchecked")
     public String unidadDenominacion(String codigo) throws Exception {
 
         Query q = em.createQuery("select unidad.denominacion from Unidad as unidad where unidad.codigo=:codigo").setParameter("codigo", codigo);
@@ -312,6 +321,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
      * @throws Exception
      */
     @Override
+    @SuppressWarnings(value = "unchecked")
     public Paginacion busqueda(Integer pageNumber, String codigo, String denominacion, Long codigoNivelAdministracion, String codAmbitoTerritorial, Long codComunidad, Long codigoProvincia, Boolean unidadRaiz, String codigoEstado) throws Exception {
 
         Query q;
@@ -319,7 +329,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         Map<String, Object> parametros = new HashMap<String, Object>();
         List<String> where = new ArrayList<String>();
 
-        StringBuffer query = new StringBuffer("Select unidad from Unidad as unidad ");
+        StringBuilder query = new StringBuilder("Select unidad from Unidad as unidad ");
 
         // Parametros de busqueda
         if (codigo != null && codigo.length() > 0) {
@@ -407,6 +417,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
      * @throws Exception
      */
     @Override
+    @SuppressWarnings(value = "unchecked")
     public List<Unidad> findByDenominacion(String denominacion) throws Exception {
 
         Query q = em.createQuery("select unidad from Unidad as unidad where upper(unidad.denominacion) like upper(:denominacion)");
@@ -447,6 +458,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
      * @throws Exception
      */
     @Override
+    @SuppressWarnings(value = "unchecked")
     public Boolean tieneHijos(String codigo) throws Exception {
 
         Query q = em.createQuery("Select unidad.id from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo order by unidad.codigo");
@@ -467,6 +479,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
      * @return  {@link es.caib.dir3caib.persistence.utils.Nodo}
      */
     @Override
+    @SuppressWarnings(value = "unchecked")
     public List<Nodo> hijos(String codigo, String estado) throws Exception {
 
         Query q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.estado.codigoEstadoEntidad,unidad.codUnidadRaiz.codigo, unidad.codUnidadRaiz.denominacion, unidad.codUnidadSuperior.codigo, unidad.codUnidadSuperior.denominacion from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:estado order by unidad.codigo");
@@ -513,6 +526,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
      * @return  {@link es.caib.dir3caib.persistence.model.Unidad}
      */
     @Override
+    @SuppressWarnings(value = "unchecked")
     public void arbolHijos(Set<Unidad> unidadesPadres, String estado, Set<Unidad> hijosTotales) throws Exception {
         for (Unidad unidad : unidadesPadres) {
 
@@ -549,6 +563,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
      * @throws Exception
      */
     @Override
+    @SuppressWarnings(value = "unchecked")
     public List<Unidad> obtenerArbolUnidadesUnidadNoRaiz(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
         //log.info("obtenerArbolUnidades del código: " + codigo);
 
@@ -622,6 +637,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
      * @throws Exception
      */
     @Override
+    @SuppressWarnings(value = "unchecked")
     public List<Unidad> obtenerArbolUnidadesUnidadRaiz(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
 
         String denominacion = unidadDenominacion(codigo);
@@ -683,6 +699,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
      * @throws Exception
      */
     @Override
+    @SuppressWarnings(value = "unchecked")
     public List<Unidad> obtenerArbolUnidadesDestinatarias(String codigo) throws Exception {
 
         Query q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.codUnidadRaiz.codigo, unidad.codUnidadSuperior.codigo, unidad.esEdp from Unidad as unidad where unidad.codigo =:codigo and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.codigo");
@@ -769,7 +786,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     public boolean unidadValida(Unidad unidad, Date fechaSincro) throws Exception {
 
         SimpleDateFormat fechaFormat = new SimpleDateFormat("dd/MM/yyyy");
-        String sSincro = new String();
+        String sSincro = "";
         if (fechaSincro != null) {
             sSincro = fechaFormat.format(fechaSincro);
         }
@@ -802,10 +819,11 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
      * @return
      */
     @Override
+    @SuppressWarnings(value = "unchecked")
     public List<String> getAllCodigos() {
         Query q = em.createQuery("Select unidad.codigo from Unidad as unidad order by unidad.codigo");
-        List<String> codigos = q.getResultList();
-        return codigos;
+
+        return (List<String>) q.getResultList();
     }
 
     @Override

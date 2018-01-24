@@ -49,8 +49,8 @@ public class ConfigurationJPA {
 
   @Bean
   public DataSource dataSource() {
-    DataSource ds = (DataSource) getFromInitialContext("java:/es.caib.dir3caib.db");
-    return ds;
+
+    return (DataSource) getFromInitialContext("java:/es.caib.dir3caib.db");
   }
 
   private Properties additionalProperties() {

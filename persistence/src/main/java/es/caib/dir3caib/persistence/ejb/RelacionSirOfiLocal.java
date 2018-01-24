@@ -1,10 +1,9 @@
 package es.caib.dir3caib.persistence.ejb;
 
-import java.util.List;
-
 import es.caib.dir3caib.persistence.model.RelacionSirOfi;
 
 import javax.ejb.Local;
+import java.util.List;
 
 /**
  * Created by Fundació BIT.
@@ -16,10 +15,10 @@ import javax.ejb.Local;
 @Local
 public interface RelacionSirOfiLocal extends BaseEjb<RelacionSirOfi, Long> {
   
-  public void deleteAll() throws Exception;
+  void deleteAll() throws Exception;
   
-  public RelacionSirOfi findByPKs(String codigoUnidad, String codigoOficina) throws Exception;
+  RelacionSirOfi findByPKs(String codigoUnidad, String codigoOficina) throws Exception;
   
-  public List<String> getUnidadesOficinas() throws Exception;
+  List<String> getUnidadesOficinas() throws Exception;
 
 }

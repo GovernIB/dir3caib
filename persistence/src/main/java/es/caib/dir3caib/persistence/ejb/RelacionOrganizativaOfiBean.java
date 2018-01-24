@@ -60,6 +60,7 @@ public class RelacionOrganizativaOfiBean extends BaseEjbJPA<RelacionOrganizativa
     }
     
     @Override
+    @SuppressWarnings("unchecked")
     public List<String> getUnidadesOficinas() throws Exception  {
       //select concat(c.firstname, ' ', c.lastname) as fullname from Contact c
       
@@ -90,6 +91,7 @@ public class RelacionOrganizativaOfiBean extends BaseEjbJPA<RelacionOrganizativa
         return (Long) q.getSingleResult();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<RelacionOrganizativaOfi> getPagination(int inicio) throws Exception {
 
@@ -100,7 +102,8 @@ public class RelacionOrganizativaOfiBean extends BaseEjbJPA<RelacionOrganizativa
         return q.getResultList();
     }
 
-
+    @SuppressWarnings("unchecked")
+    @Override
     public List<Nodo> getOrganizativasByUnidadEstado(String codigo, String estado) throws Exception {
         Query q = em.createQuery("Select relacionOrganizativaOfi.oficina.codigo, relacionOrganizativaOfi.oficina.denominacion  from RelacionOrganizativaOfi as relacionOrganizativaOfi where " +
                 "relacionOrganizativaOfi.unidad.codigo =:codigo and relacionOrganizativaOfi.estado.codigoEstadoEntidad =:estado order by relacionOrganizativaOfi.oficina.codigo");

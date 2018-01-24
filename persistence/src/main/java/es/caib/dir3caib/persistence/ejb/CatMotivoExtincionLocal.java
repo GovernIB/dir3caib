@@ -13,5 +13,5 @@ import javax.ejb.Local;
 @Local
 public interface CatMotivoExtincionLocal extends BaseEjb<CatMotivoExtincion, String> {
   
-  public void deleteAll() throws Exception;
+  void deleteAll() throws Exception;
 }

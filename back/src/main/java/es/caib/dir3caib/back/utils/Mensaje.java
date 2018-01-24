@@ -6,10 +6,10 @@
 
 package es.caib.dir3caib.back.utils;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Fundació Bit
@@ -17,7 +17,8 @@ import javax.servlet.http.HttpSession;
  * Date: 04-nov-2013
  */
 public class Mensaje {
-    
+
+    @SuppressWarnings(value = "unchecked")
     public static void saveMessageInfo(HttpServletRequest request, String mensaje) {
         HttpSession session = request.getSession();
 
@@ -32,6 +33,7 @@ public class Mensaje {
         session.setAttribute("infos", mensajes);
     }
 
+    @SuppressWarnings(value = "unchecked")
     public static void saveMessageError(HttpServletRequest request, String mensaje) {
         HttpSession session = request.getSession();
         

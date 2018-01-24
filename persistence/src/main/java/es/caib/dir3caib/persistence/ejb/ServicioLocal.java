@@ -13,5 +13,5 @@ import javax.ejb.Local;
 @Local
 public interface ServicioLocal extends BaseEjb<Servicio, Long> {
   
-  public void deleteAll() throws Exception;
+  void deleteAll() throws Exception;
 }

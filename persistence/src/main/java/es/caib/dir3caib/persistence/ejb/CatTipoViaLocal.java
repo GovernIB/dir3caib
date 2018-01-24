@@ -13,5 +13,5 @@ import javax.ejb.Local;
 @Local
 public interface CatTipoViaLocal extends BaseEjb<CatTipoVia, Long> {
   
-  public void deleteAll() throws Exception;
+  void deleteAll() throws Exception;
 }

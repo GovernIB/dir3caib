@@ -13,5 +13,5 @@ import javax.ejb.Local;
 @Local
 public interface CatIslaLocal extends BaseEjb<CatIsla, Long> {
   
-  public void deleteAll() throws Exception;
+  void deleteAll() throws Exception;
 }

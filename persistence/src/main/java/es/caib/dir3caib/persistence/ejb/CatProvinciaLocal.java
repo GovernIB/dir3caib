@@ -14,6 +14,6 @@ import java.util.List;
 @Local
 public interface CatProvinciaLocal extends BaseEjb<CatProvincia, Long> {
 
-  public List<CatProvincia> getByComunidadAutonoma(Long idComunidadAutonoma) throws Exception;
-  public void deleteAll() throws Exception;
+  List<CatProvincia> getByComunidadAutonoma(Long idComunidadAutonoma) throws Exception;
+  void deleteAll() throws Exception;
 }

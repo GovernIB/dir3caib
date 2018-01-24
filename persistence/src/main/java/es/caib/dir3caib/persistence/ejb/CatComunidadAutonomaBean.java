@@ -55,6 +55,7 @@ public class CatComunidadAutonomaBean extends BaseEjbJPA<CatComunidadAutonoma, L
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<CatComunidadAutonoma> getPagination(int inicio) throws Exception {
 
         Query q = em.createQuery("Select catComunidadAutonoma from CatComunidadAutonoma as catComunidadAutonoma order by catComunidadAutonoma.codigoComunidad");

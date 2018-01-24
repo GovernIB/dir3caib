@@ -60,6 +60,7 @@ public class RelacionSirOfiBean extends BaseEjbJPA<RelacionSirOfi, Long>
     }
 
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<String> getUnidadesOficinas() throws Exception  {
       //select concat(c.firstname, ' ', c.lastname) as fullname from Contact c
@@ -90,6 +91,7 @@ public class RelacionSirOfiBean extends BaseEjbJPA<RelacionSirOfi, Long>
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<RelacionSirOfi> getPagination(int inicio) throws Exception {
 
         Query q = em.createQuery("Select relacionSirOfi from RelacionSirOfi as relacionSirOfi ");

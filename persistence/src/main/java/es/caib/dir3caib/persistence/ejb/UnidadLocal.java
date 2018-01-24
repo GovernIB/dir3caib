@@ -22,14 +22,14 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      *
      * @throws Exception
      */
-    public void deleteAll() throws Exception;
+    void deleteAll() throws Exception;
 
     /**
      * Borra todos los historicos de las unidades
      *
      * @throws Exception
      */
-    public void deleteHistoricosUnidad() throws Exception;
+    void deleteHistoricosUnidad() throws Exception;
 
 
     /**
@@ -44,7 +44,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @return
      * @throws Exception
      */
-    public Unidad findUnidadActualizada(String id, Date fechaActualizacion) throws Exception;
+    Unidad findUnidadActualizada(String id, Date fechaActualizacion) throws Exception;
 
 
     /**
@@ -54,7 +54,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @return
      * @throws Exception
      */
-    public Unidad findConHistoricosVigente(String id) throws Exception;
+    Unidad findConHistoricosVigente(String id) throws Exception;
 
     /**
      * Método que busca la unidad con id indicado y estado indicado
@@ -64,7 +64,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @return
      * @throws Exception
      */
-    public Unidad findUnidadEstado(String id, String estado) throws Exception;
+    Unidad findUnidadEstado(String id, String estado) throws Exception;
 
 
     /**
@@ -82,8 +82,8 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @return
      * @throws Exception
      */
-    public Paginacion busqueda(Integer pageNumber, String codigo, String denominacion, Long codigoNivelAdministracion,
-                               String codAmbitoTerritorial, Long codComunidad, Long codigoProvincia, Boolean unidadRaiz, String codigoEstado) throws Exception;
+    Paginacion busqueda(Integer pageNumber, String codigo, String denominacion, Long codigoNivelAdministracion,
+                        String codAmbitoTerritorial, Long codComunidad, Long codigoProvincia, Boolean unidadRaiz, String codigoEstado) throws Exception;
 
     /**
      * Método recursivo que devuelve el árbol de unidades de la unidad indicada por código,
@@ -96,7 +96,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @return
      * @throws Exception
      */
-    public List<Unidad> obtenerArbolUnidadesUnidadNoRaiz(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception;
+    List<Unidad> obtenerArbolUnidadesUnidadNoRaiz(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception;
 
 
     /**
@@ -110,7 +110,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @return
      * @throws Exception
      */
-    public List<Unidad> obtenerArbolUnidadesUnidadRaiz(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception;
+    List<Unidad> obtenerArbolUnidadesUnidadRaiz(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception;
 
     /**
      * Método que devuelve la unidad indicada por código siempre que esté vigente y tenga oficinas donde registrar.
@@ -121,7 +121,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @return
      * @throws Exception
      */
-    public List<Unidad> obtenerArbolUnidadesDestinatarias(String codigo) throws Exception;
+    List<Unidad> obtenerArbolUnidadesDestinatarias(String codigo) throws Exception;
 
     /**
      * Metodo que comprueba si una unidad tiene más unidades hijas
@@ -130,7 +130,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @return
      * @throws Exception
      */
-    public Boolean tieneHijos(String codigo) throws Exception;
+    Boolean tieneHijos(String codigo) throws Exception;
 
     /**
      * Método que obtiene los hijos de primer nivel de una unidad en función del estado de la unidad padre
@@ -139,7 +139,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @param estado estado de la unidad padre.
      * @return {@link es.caib.dir3caib.persistence.utils.Nodo}
      */
-    public List<Nodo> hijos(String codigo, String estado) throws Exception;
+    List<Nodo> hijos(String codigo, String estado) throws Exception;
 
     /**
      * Método que obtiene los hijos vigentes de primer nivel de una unidad
@@ -147,7 +147,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @param codigo identificador de la unidad padre.
      * @return {@link es.caib.dir3caib.persistence.model.Unidad}
      */
-    public List<Unidad> hijosPrimerNivel(String codigo) throws Exception;
+    List<Unidad> hijosPrimerNivel(String codigo) throws Exception;
 
     /**
      * Metodo que obtiene los hijos de una unidad en función del estado de la unidad padre
@@ -157,7 +157,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @param hijosTotales   lista con todos los hijos encontrados de manera recursiva.
      * @return {@link es.caib.dir3caib.persistence.model.Unidad}
      */
-    public void arbolHijos(Set<Unidad> unidadesPadres, String estado, Set<Unidad> hijosTotales) throws Exception;
+    void arbolHijos(Set<Unidad> unidadesPadres, String estado, Set<Unidad> hijosTotales) throws Exception;
 
     /**
      * Obtiene una unidad por su denominación
@@ -166,7 +166,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @return
      * @throws Exception
      */
-    public List<Unidad> findByDenominacion(String denominacion) throws Exception;
+    List<Unidad> findByDenominacion(String denominacion) throws Exception;
 
     /**
      * Obtiene el arbol de una Unidad, pero solo los códigos
@@ -176,7 +176,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @return
      * @throws Exception
      */
-    public List<Unidad> obtenerArbol(String codigo) throws Exception;
+    List<Unidad> obtenerArbol(String codigo) throws Exception;
 
     /**
      * Obtiene una lista de unidades páginada
@@ -186,7 +186,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @return
      * @throws Exception
      */
-    public List<Unidad> getPagination(int startItem, int numberOfItems) throws Exception;
+    List<Unidad> getPagination(int startItem, int numberOfItems) throws Exception;
 
     /**
      * Obtiene la Denominacion de una Unidad
@@ -195,14 +195,14 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @return
      * @throws Exception
      */
-    public String unidadDenominacion(String codigo) throws Exception;
+    String unidadDenominacion(String codigo) throws Exception;
 
     /**
      * Obtiene todos los códigos de las unidades. Se emplea para la importación de las unidades desde Madrid.
      *
      * @return
      */
-    public List<String> getAllCodigos();
+    List<String> getAllCodigos();
 
 
     /**
@@ -213,7 +213,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @return
      * @throws Exception
      */
-    public List<Unidad> getListByIds(List<String> ids) throws Exception;
+    List<Unidad> getListByIds(List<String> ids) throws Exception;
 
 
     /**
@@ -224,7 +224,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @param estado estado de la unidad
      * @return {@link es.caib.dir3caib.persistence.utils.Nodo}
      */
-    public Nodo findUnidad(String id, String estado) throws Exception;
+    Nodo findUnidad(String id, String estado) throws Exception;
 
     /**
      * OObtiene el código, denominación y estado de la unidad indicada
@@ -233,7 +233,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @return
      * @throws Exception
      */
-    public Unidad findByCodigoLigero(String codigo) throws Exception;
+    Unidad findByCodigoLigero(String codigo) throws Exception;
 
     /**
      * Obtiene el código de todas las Unidades hijas de la unidad raiz indicada por código
@@ -243,7 +243,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @return
      * @throws Exception
      */
-    public List<Unidad> obtenerUnidadesConOficina(String codigo) throws Exception;
+    List<Unidad> obtenerUnidadesConOficina(String codigo) throws Exception;
 
     /**
      * Se mira que si la unidad,  su fecha de extinción y anulacion son posteriores
@@ -255,14 +255,14 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @return
      * @throws Exception
      */
-    public boolean unidadValida(Unidad unidad, Date fechaSincro) throws Exception;
+    boolean unidadValida(Unidad unidad, Date fechaSincro) throws Exception;
 
     /**
      *
      * @param codigoUnidad
      * @throws Exception
      */
-    public void crearUnidad(String codigoUnidad) throws Exception;
+    void crearUnidad(String codigoUnidad) throws Exception;
 
     /**
      *
@@ -271,21 +271,21 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @param codigoUnidadSuperior
      * @throws Exception
      */
-    public void actualizarUnidad(String codigoUnidad, String codigoUnidadRaiz, String codigoUnidadSuperior) throws Exception;
+    void actualizarUnidad(String codigoUnidad, String codigoUnidadRaiz, String codigoUnidadSuperior) throws Exception;
 
     /**
      * @param codigoAnterior
      * @param codigoUltima
      * @throws Exception
      */
-    public void crearHistoricoUnidad(String codigoAnterior, String codigoUltima) throws Exception;
+    void crearHistoricoUnidad(String codigoAnterior, String codigoUltima) throws Exception;
 
     /**
      *
      * @param idUnidad
      * @throws Exception
      */
-    public void eliminarHistoricosUnidad(String idUnidad) throws Exception;
+    void eliminarHistoricosUnidad(String idUnidad) throws Exception;
 
     /**
      * Comprueba la existencia de un HistoriooUnidad en concreto
@@ -294,7 +294,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @return
      * @throws Exception
      */
-    public Boolean existeHistoricoUnidad(String codigoAnterior, String codigoUltima) throws Exception;
+    Boolean existeHistoricoUnidad(String codigoAnterior, String codigoUltima) throws Exception;
 
 
 }

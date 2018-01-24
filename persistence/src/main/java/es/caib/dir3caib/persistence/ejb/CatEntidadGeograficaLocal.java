@@ -13,6 +13,6 @@ import javax.ejb.Local;
 @Local
 public interface CatEntidadGeograficaLocal extends BaseEjb<CatEntidadGeografica, String> {
   
-  public void deleteAll() throws Exception;
+  void deleteAll() throws Exception;
   
 }

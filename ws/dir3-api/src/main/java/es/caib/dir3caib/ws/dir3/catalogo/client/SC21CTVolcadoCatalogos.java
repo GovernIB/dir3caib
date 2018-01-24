@@ -21,14 +21,14 @@ public interface SC21CTVolcadoCatalogos {
 
     @WebResult(name = "exportarReturn", targetNamespace = "http://impl.manager.directorio.map.es", partName = "exportarReturn")
     @WebMethod
-    public RespuestaWS exportar(
-        @WebParam(partName = "login", name = "login")
-        java.lang.String login,
-        @WebParam(partName = "password", name = "password")
-        java.lang.String password,
-        @WebParam(partName = "formatoFichero", name = "formatoFichero")
-        java.lang.String formatoFichero,
-        @WebParam(partName = "catalogo", name = "catalogo")
-        java.lang.String catalogo
+    RespuestaWS exportar(
+            @WebParam(partName = "login", name = "login")
+                    java.lang.String login,
+            @WebParam(partName = "password", name = "password")
+                    java.lang.String password,
+            @WebParam(partName = "formatoFichero", name = "formatoFichero")
+                    java.lang.String formatoFichero,
+            @WebParam(partName = "catalogo", name = "catalogo")
+                    java.lang.String catalogo
     );
 }

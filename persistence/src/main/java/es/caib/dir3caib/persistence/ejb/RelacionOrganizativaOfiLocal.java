@@ -15,11 +15,11 @@ import java.util.List;
 @Local
 public interface RelacionOrganizativaOfiLocal extends BaseEjb<RelacionOrganizativaOfi, Long> {
 
-  public void deleteAll() throws Exception;
+  void deleteAll() throws Exception;
 
-  public RelacionOrganizativaOfi findByPKs(String codigoUnidad, String codigoOficina) throws Exception;
+  RelacionOrganizativaOfi findByPKs(String codigoUnidad, String codigoOficina) throws Exception;
 
-  public List<String> getUnidadesOficinas() throws Exception;
+  List<String> getUnidadesOficinas() throws Exception;
 
   /**
    * Obtiene las relaciones organizativas de la unidad indicada y en función del estado indicado
@@ -28,6 +28,6 @@ public interface RelacionOrganizativaOfiLocal extends BaseEjb<RelacionOrganizati
    * @return
    * @throws Exception
    */
-  public List<Nodo> getOrganizativasByUnidadEstado(String codigo, String estado) throws Exception;
+  List<Nodo> getOrganizativasByUnidadEstado(String codigo, String estado) throws Exception;
 
 }

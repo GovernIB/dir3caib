@@ -14,8 +14,8 @@ import javax.ejb.Local;
 @Local
 public interface CatAmbitoTerritorialLocal extends BaseEjb<CatAmbitoTerritorial, Long> {
   
-  public void deleteAll() throws Exception;
+  void deleteAll() throws Exception;
 
   
-  public CatAmbitoTerritorial findByPKs(String codigoAmbito, Long codigoNivelAdministracion) throws Exception;
+  CatAmbitoTerritorial findByPKs(String codigoAmbito, Long codigoNivelAdministracion) throws Exception;
 }

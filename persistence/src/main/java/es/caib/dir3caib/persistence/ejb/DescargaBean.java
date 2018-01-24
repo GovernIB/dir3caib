@@ -63,6 +63,7 @@ public class DescargaBean extends BaseEjbJPA<Descarga, Long> implements Descarga
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Descarga ultimaDescarga(String tipo) throws Exception {
         
         Query query = em.createQuery( "select descarga from Descarga as descarga where descarga.tipo= :tipo order by descarga.codigo desc");
@@ -85,6 +86,8 @@ public class DescargaBean extends BaseEjbJPA<Descarga, Long> implements Descarga
 
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
     public Descarga ultimaDescargaSincronizada(String tipo) throws Exception {
 
         Query query = em.createQuery( "select descarga from Descarga as descarga where descarga.tipo = :tipo and descarga.estado = :correcto " +
@@ -125,7 +128,7 @@ public class DescargaBean extends BaseEjbJPA<Descarga, Long> implements Descarga
         return (Long) q.getSingleResult();
     }
 
-
+    @Override
     public Long getTotalByTipo(String tipo) throws Exception {
 
         Query q = em.createQuery("Select count(descarga.codigo) from Descarga as descarga where descarga.tipo=:tipo");
@@ -135,6 +138,7 @@ public class DescargaBean extends BaseEjbJPA<Descarga, Long> implements Descarga
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<Descarga> getPagination(int inicio) throws Exception {
 
         Query q = em.createQuery("Select descarga from Descarga as descarga order by descarga.codigo desc");
@@ -145,6 +149,7 @@ public class DescargaBean extends BaseEjbJPA<Descarga, Long> implements Descarga
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<Descarga> getPaginationByTipo(int inicio, String tipo) throws Exception {
 
         Query q = em.createQuery("Select descarga from Descarga as descarga where descarga.tipo=:tipo order by descarga.codigo desc");
