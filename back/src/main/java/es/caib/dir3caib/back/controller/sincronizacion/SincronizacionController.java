@@ -219,7 +219,7 @@ public class SincronizacionController extends BaseController {
      * Eliminar una {@link es.caib.dir3caib.persistence.model.Sincronizacion}
      */
     @RequestMapping(value = "/{idSincronizacion}/delete")
-    public String eliminarTipoDocumental(@PathVariable Long idSincronizacion, HttpServletRequest request) {
+    public String eliminarSincronizacion(@PathVariable Long idSincronizacion, HttpServletRequest request) {
 
         try {
 
