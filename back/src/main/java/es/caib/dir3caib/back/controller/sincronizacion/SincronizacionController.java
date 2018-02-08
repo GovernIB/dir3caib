@@ -107,7 +107,13 @@ public class SincronizacionController extends BaseController {
 
             // Obtenemos la fecha de la ultima descarga/sincronizacion
             Sincronizacion ultimaSincro = sincronizacionEjb.ultimaSincronizacionCompletada(Dir3caibConstantes.DIRECTORIO);
+            Sincronizacion ultimaSincroCatalogo = sincronizacionEjb.ultimaSincronizacionCompletada(Dir3caibConstantes.CATALOGO);
 
+
+            if (ultimaSincroCatalogo == null) {
+                Mensaje.saveMessageError(request, getMessage("sincronizacion.catalogo.obligatorio"));
+                return new ModelAndView("redirect:/sincronizacion/list");
+            }
             // Descarga de directorio DIR3
             if(ultimaSincro != null){
                 Date fechaFin = ultimaSincro.getFechaFin();
