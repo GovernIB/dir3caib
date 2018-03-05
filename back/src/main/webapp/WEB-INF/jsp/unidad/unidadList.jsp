@@ -177,6 +177,7 @@
                     <th><fmt:message key="unidad.denominacion"/></th>
                     <th><fmt:message key="unidad.superior"/></th>
                     <th><fmt:message key="unidad.raiz"/></th>
+                    <th><fmt:message key="unidad.edp"/></th>
                     <th><fmt:message key="unidad.estado"/></th>
                 </tr>
                 </thead>
@@ -189,8 +190,15 @@
                         <td><a href="<c:url value="/unidad/${unidad.codigo}/arbol"/>">${unidad.denominacion}</a></td>
                         <td>${unidad.codUnidadSuperior.codigo} - ${unidad.codUnidadSuperior.denominacion}</td>
                         <td>${unidad.codUnidadRaiz.codigo} - ${unidad.codUnidadRaiz.denominacion}</td>
+                        <td>
+                            <c:if test="${unidad.esEdp}">
+                                <p rel="edp" data-content="<c:if test="${not empty unidad.codEdpPrincipal}">Edp Principal: <c:out value="${unidad.codEdpPrincipal.codigo} -  ${unidad.codEdpPrincipal.denominacion}" escapeXml="true"/></c:if>" data-toggle="popover"><span class="label label-success">Sí</span></p>
+                            </c:if>
+                            <c:if test="${!unidad.esEdp}">
+                                <span class="label label-danger">No</span>
+                            </c:if>
+                        </td>
                         <td>${unidad.estado.descripcionEstadoEntidad}</td>
-
                     </tr>
                 </c:forEach>
                 </tbody>
@@ -220,6 +228,8 @@
 
 
     <script type="text/javascript">
+
+        $("[rel='edp']").popover({ trigger: 'hover',placement: 'top',container:"body", html:true});
 
         <c:url var="ambitosTerritoriales" value="/rest/catalogo/ambitosTerritoriales" />
         <c:url var="provincias" value="/rest/catalogo/provincias/comunidadAutonoma" />
