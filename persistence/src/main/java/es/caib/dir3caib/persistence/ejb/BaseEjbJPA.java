@@ -17,7 +17,7 @@ public abstract class BaseEjbJPA<T extends Serializable, E> implements BaseEjb<T
     public final Logger log = Logger.getLogger(this.getClass());
     public static final int RESULTADOS_PAGINACION = 10;
 
-    @PersistenceContext
+    @PersistenceContext(unitName="dir3caib")
     private EntityManager em;
 
     @RolesAllowed("DIR_ADMIN")

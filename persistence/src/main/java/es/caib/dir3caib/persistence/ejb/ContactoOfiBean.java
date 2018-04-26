@@ -26,7 +26,7 @@ public class ContactoOfiBean extends BaseEjbJPA<ContactoOfi, Long> implements Co
 
     protected final Logger log = Logger.getLogger(getClass());
 
-    @PersistenceContext
+    @PersistenceContext(unitName="dir3caib")
     private EntityManager em;
 
     @Override
@@ -71,7 +71,7 @@ public class ContactoOfiBean extends BaseEjbJPA<ContactoOfi, Long> implements Co
     public void deleteAll() throws Exception {
 
         em.createQuery("delete from ContactoOfi").executeUpdate();
-        
+        em.flush();
     }
 
     public void deleteByOficina(String idOficina) throws Exception {

@@ -24,7 +24,7 @@ public class CatTipoViaBean extends BaseEjbJPA<CatTipoVia, Long> implements CatT
 
     protected final Logger log = Logger.getLogger(getClass());
 
-    @PersistenceContext
+    @PersistenceContext(unitName="dir3caib")
     private EntityManager em;
 
     @Override

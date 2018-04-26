@@ -26,7 +26,7 @@ public class RelacionSirOfiBean extends BaseEjbJPA<RelacionSirOfi, Long>
 
     protected final Logger log = Logger.getLogger(getClass());
 
-    @PersistenceContext
+    @PersistenceContext(unitName="dir3caib")
     private EntityManager em;
 
     @Override
@@ -104,6 +104,6 @@ public class RelacionSirOfiBean extends BaseEjbJPA<RelacionSirOfi, Long>
     public void deleteAll() throws Exception {
 
         em.createQuery("delete from RelacionSirOfi").executeUpdate();
-        
+        em.flush();
     }
 }

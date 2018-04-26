@@ -24,7 +24,7 @@ public class CatTipoContactoBean extends BaseEjbJPA<CatTipoContacto, String> imp
 
     protected final Logger log = Logger.getLogger(getClass());
 
-    @PersistenceContext
+    @PersistenceContext(unitName="dir3caib")
     private EntityManager em;
 
     @Override

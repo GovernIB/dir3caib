@@ -27,7 +27,7 @@ public class RelacionOrganizativaOfiBean extends BaseEjbJPA<RelacionOrganizativa
 
     protected final Logger log = Logger.getLogger(getClass());
 
-    @PersistenceContext
+    @PersistenceContext(unitName="dir3caib")
     private EntityManager em;
 
     @Override
@@ -118,7 +118,7 @@ public class RelacionOrganizativaOfiBean extends BaseEjbJPA<RelacionOrganizativa
     public void deleteAll() throws Exception {
 
         em.createQuery("delete from RelacionOrganizativaOfi").executeUpdate();
-
+        em.flush();
     }
 
 }

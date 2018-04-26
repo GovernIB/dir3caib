@@ -33,7 +33,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
     protected final Logger log = Logger.getLogger(getClass());
     protected SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
 
-    @PersistenceContext
+    @PersistenceContext(unitName="dir3caib")
     private EntityManager em;
 
 
@@ -204,7 +204,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
     @Override
     public void deleteAll() throws Exception {
 
-        em.createQuery("delete from Oficina ").executeUpdate();
+        log.info("Oficinas eliminadas: " + em.createQuery("delete from Oficina ").executeUpdate());
     }
 
 

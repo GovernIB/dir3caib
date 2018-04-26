@@ -24,7 +24,7 @@ public class CatEntidadGeograficaBean extends BaseEjbJPA<CatEntidadGeografica, S
 
     protected final Logger log = Logger.getLogger(getClass());
 
-    @PersistenceContext
+    @PersistenceContext(unitName="dir3caib")
     private EntityManager em;
 
     @Override

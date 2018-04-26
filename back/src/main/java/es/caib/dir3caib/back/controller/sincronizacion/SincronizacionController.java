@@ -19,7 +19,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
 import java.util.List;
 
 
@@ -101,65 +100,43 @@ public class SincronizacionController extends BaseController {
     @RequestMapping(value = "/sincronizar", method = RequestMethod.GET)
     public ModelAndView sincronizarDirectorio(HttpServletRequest request) {
 
-        Sincronizacion sincronizacion = null;
-
         try {
 
-            // Obtenemos la fecha de la ultima descarga/sincronizacion
-            Sincronizacion ultimaSincro = sincronizacionEjb.ultimaSincronizacionCompletada(Dir3caibConstantes.DIRECTORIO);
-            Sincronizacion ultimaSincroCatalogo = sincronizacionEjb.ultimaSincronizacionCompletada(Dir3caibConstantes.CATALOGO);
+            long start = System.currentTimeMillis();
+            List<Sincronizacion> sincros = sincronizacionEjb.sincronizarDirectorio();
+            log.info("Sincronizacion del Directoro completada en " + Utils.formatElapsedTime(System.currentTimeMillis() - start));
 
+            // Mensajes al usuario
+            for (Sincronizacion sincro : sincros) {
 
-            if (ultimaSincroCatalogo == null) {
-                Mensaje.saveMessageError(request, getMessage("sincronizacion.catalogo.obligatorio"));
-                return new ModelAndView("redirect:/sincronizacion/list");
-            }
-            // Descarga de directorio DIR3
-            if(ultimaSincro != null){
-                Date fechaFin = ultimaSincro.getFechaFin();
-                sincronizacion = sincronizacionEjb.descargarDirectorioWS(Dir3caibConstantes.DIRECTORIO, fechaFin, new Date());
-            } else {//Es una descarga inicial
-                sincronizacion = sincronizacionEjb.descargarDirectorioWS(Dir3caibConstantes.DIRECTORIO, null, null);
-            }
+                if(sincro != null){
+                    if(sincro.getTipo().equals(Dir3caibConstantes.DIRECTORIO)){
 
-            //Mostramos los mensajes en función de la respuesta del WS de Madrid
-            if(sincronizacion != null){
+                        if(sincro.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_CORRECTA)){
+                            Mensaje.saveMessageInfo(request, getMessage("directorio.sincronizacion.ok"));
+                        }else if(sincro.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_VACIA)){
+                            Mensaje.saveMessageInfo(request, getMessage("directorio.sincronizacion.vacia"));
+                        }
 
-                // Si la descarga de datos es correcta, procedemos a realizar la sincronización de datos
-                if (sincronizacion.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
+                    }else if(sincro.getTipo().equals(Dir3caibConstantes.CATALOGO)){
 
-                    long start = System.currentTimeMillis();
+                        if(sincro.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_CORRECTA)){
+                            Mensaje.saveMessageInfo(request, getMessage("catalogo.sincronizacion.ok"));
+                        }else if(sincro.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_VACIA)){
+                            Mensaje.saveMessageInfo(request, getMessage("catalogo.sincronizacion.vacia"));
+                        }
 
-                    sincronizacionEjb.importarDirectorio(sincronizacion);
+                    }
+                }else {
 
-                    log.info("Sincronizacion del Directorio completada en " + Utils.formatElapsedTime(System.currentTimeMillis() - start));
-
-                    Mensaje.saveMessageInfo(request, getMessage("directorio.sincronizacion.ok"));
-
-                }else if (sincronizacion.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_VACIA)) { // No ha devuelto datos
-                    Mensaje.saveMessageInfo(request, getMessage("directorio.sincronizacion.vacia"));
+                    Mensaje.saveMessageError(request, getMessage("directorio.descarga.error"));
                 }
-
-            }else{
-                Mensaje.saveMessageError(request, getMessage("directorio.descarga.error"));
-                return new ModelAndView("redirect:/sincronizacion/list");
 
             }
 
         } catch (Exception ex) {
-            // Si ha habido un Error en la sincronización, modificamos el estado de la descarga
-            if(sincronizacion != null){
-                try {
-                    sincronizacionEjb.actualizarEstado(sincronizacion.getCodigo(), Dir3caibConstantes.SINCRONIZACION_ERRONEA);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
             Mensaje.saveMessageError(request, getMessage("directorio.sincronizacion.error"));
             ex.printStackTrace();
-
-            return new ModelAndView("redirect:/sincronizacion/list");
         }
 
         return new ModelAndView("redirect:/sincronizacion/list");
@@ -178,7 +155,7 @@ public class SincronizacionController extends BaseController {
 
         try {
 
-            sincronizacion = sincronizacionEjb.descargarDirectorioWS(Dir3caibConstantes.CATALOGO, null, null);
+            sincronizacion = sincronizacionEjb.descargarCatalogoWS( null);
 
             //Mostramos los mensajes en función de la respuesta del WS de Madrid
             if(sincronizacion != null){

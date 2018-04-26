@@ -93,7 +93,8 @@ public class ImportadorBase {
     public Map<String, CatTipoContacto> cacheTipoContacto = new TreeMap<String, CatTipoContacto>();
     public Map<Long, Servicio> cacheServicioOfi = new TreeMap<Long, Servicio>();
     public Map<Long, CatJerarquiaOficina> cacheJerarquiaOficina = new TreeMap<Long, CatJerarquiaOficina>();
-    public Set<String> existInBBDD = new TreeSet<String>();
+    public Set<String> unidadesExistInBBDD = new TreeSet<String>();
+    public Set<String> oficinasExistInBBDD = new TreeSet<String>();
     public UnidadesCacheManager cacheUnidad;
 
 
@@ -191,7 +192,7 @@ public class ImportadorBase {
         start = end;
 
         // Obtenemos todos los códigos de las Unidades que existen en bbdd
-        existInBBDD.addAll(unidadEjb.getAllCodigos());
+        unidadesExistInBBDD.addAll(unidadEjb.getAllCodigos());
 
         end = System.currentTimeMillis();
         log.debug("Inicialitzada Cache Unidades existents en " + Utils.formatElapsedTime(end - start));
@@ -294,7 +295,7 @@ public class ImportadorBase {
         log.info("Inicialitzades Varies Caches per Importar Oficinas en " + Utils.formatElapsedTime(end - start));
 
         // Obtenemos todos los códigos de las Oficinas que existen en bbdd
-        existInBBDD.addAll(oficinaEjb.getAllCodigos());
+        oficinasExistInBBDD.addAll(oficinaEjb.getAllCodigos());
 
     }
 

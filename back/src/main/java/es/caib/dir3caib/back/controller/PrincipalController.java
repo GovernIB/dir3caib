@@ -61,10 +61,6 @@ public class PrincipalController extends BaseController {
 
             mav.addObject("sincronizaciones", sincronizaciones);
 
-            //mav.addObject("ultimaDescargaCatalogo",descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.CATALOGO));
-            //mav.addObject("ultimaDescargaUnidad",descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.UNIDAD));
-            //mav.addObject("ultimaDescargaOficina",descargaEjb.ultimaDescargaSincronizada(Dir3caibConstantes.OFICINA));
-
         }else if(request.isUserInRole(Dir3caibConstantes.ROL_TOTHOM)){
             mav = new ModelAndView("redirect:/unidad/list");
         }

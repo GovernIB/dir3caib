@@ -28,6 +28,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -58,7 +59,7 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
     @EJB(mappedName = "dir3caib/ImportadorCatalogoEJB/local")
     private ImportadorCatalogoLocal importadorCatalogo;
 
-    @PersistenceContext
+    @PersistenceContext(unitName="dir3caib")
     private EntityManager em;
 
     @Override
@@ -170,25 +171,24 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
     }
 
     @Override
-    public Sincronizacion descargarDirectorioWS(String tipo, Date fechaInicio, Date fechaFin) throws Exception{
+    public Sincronizacion descargarDirectorioWS(Date fechaInicio, Date fechaFin) throws Exception{
 
-        Sincronizacion sincronizacion = new Sincronizacion(tipo);
+        log.info("Iniciamos la descarga de las Unidades y Oficinas");
+
+        Sincronizacion sincronizacion = new Sincronizacion(Dir3caibConstantes.DIRECTORIO);
 
         // Datos comunes para invocar el WS del Directorio Común
         String usuario = Configuracio.getDir3WsUser();
         String password = Configuracio.getDir3WsPassword();
         String codigoUnidades = "";
         String codigoOficinas = "";
-        String codigoCatalogos = "";
         String ficheroUnidades = "";
         String ficheroOficinas = "";
-        String ficheroCatalogos = "";
 
         // Directorios
         String sincronizacionPath = "";
         String unidadesZip = "";
         String oficinasZip = "";
-        String catalogosZip = "";
 
         // Establecemos las fechas para la sincronizacion incremental o inicial
         if (fechaInicio != null) {
@@ -214,159 +214,195 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
 
         try {
 
-            if(Dir3caibConstantes.DIRECTORIO.equals(tipo)){ // Descarga de directório (Unidades y Oficinas)
+            // Definimos el nombre del archivo zip a guardar y el directorio donde se descomprimirá
+            sincronizacionPath = Configuracio.getSincronizacionPath(sincronizacion.getCodigo());
+            String directorioPath = sincronizacionPath +"directorio/";
 
-                // Definimos el nombre del archivo zip a guardar y el directorio donde se descomprimirá
-                sincronizacionPath = Configuracio.getSincronizacionPath(sincronizacion.getCodigo());
-                String directorioPath = sincronizacionPath +"directorio/";
+            unidadesZip = sincronizacionPath + Dir3caibConstantes.UNIDADES_ARCHIVO_ZIP + sincronizacion.getCodigo() + ".zip";
+            oficinasZip = sincronizacionPath + Dir3caibConstantes.OFICINAS_ARCHIVO_ZIP + sincronizacion.getCodigo() + ".zip";
 
-                unidadesZip = sincronizacionPath + Dir3caibConstantes.UNIDADES_ARCHIVO_ZIP + sincronizacion.getCodigo() + ".zip";
-                oficinasZip = sincronizacionPath + Dir3caibConstantes.OFICINAS_ARCHIVO_ZIP + sincronizacion.getCodigo() + ".zip";
+            // Obtenemos el EndPoint del WS
+            String endPointUnidades = Configuracio.getUnidadEndPoint();
+            String endPointOficinas = Configuracio.getOficinaEndPoint();
 
-                // Obtenemos el EndPoint del WS
-                String endPointUnidades = Configuracio.getUnidadEndPoint();
-                String endPointOficinas = Configuracio.getOficinaEndPoint();
+            // Service Unidades
+            SD01UNDescargaUnidades serviceUnidades = new SD01UNDescargaUnidadesService(new URL(endPointUnidades + "?wsdl")).getSD01UNDescargaUnidades();
+            Map<String, Object> reqContextUnidades = ((BindingProvider) serviceUnidades).getRequestContext();
+            reqContextUnidades.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endPointUnidades);
 
-                // Service Unidades
-                SD01UNDescargaUnidades serviceUnidades = new SD01UNDescargaUnidadesService(new URL(endPointUnidades + "?wsdl")).getSD01UNDescargaUnidades();
-                Map<String, Object> reqContextUnidades = ((BindingProvider) serviceUnidades).getRequestContext();
-                reqContextUnidades.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endPointUnidades);
+            // Service Oficinas
+            SD02OFDescargaOficinas serviceOficinas = new SD02OFDescargaOficinasService(new URL(endPointOficinas + "?wsdl")).getSD02OFDescargaOficinas();
+            Map<String, Object> reqContextOficinas = ((BindingProvider) serviceOficinas).getRequestContext();
+            reqContextOficinas.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endPointOficinas);
 
-                // Service Oficinas
-                SD02OFDescargaOficinas serviceOficinas = new SD02OFDescargaOficinasService(new URL(endPointOficinas + "?wsdl")).getSD02OFDescargaOficinas();
-                Map<String, Object> reqContextOficinas = ((BindingProvider) serviceOficinas).getRequestContext();
-                reqContextOficinas.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endPointOficinas);
+            // Establecemos parametros de serviceUnidades
+            UnidadesWs parametrosUnidades = new UnidadesWs();
+            parametrosUnidades.setUsuario(usuario);
+            parametrosUnidades.setClave(password);
+            parametrosUnidades.setFormatoFichero(FormatoFichero.CSV);
+            parametrosUnidades.setTipoConsulta(TipoConsultaUO.COMPLETO);
 
-                // Establecemos parametros de serviceUnidades
-                UnidadesWs parametrosUnidades = new UnidadesWs();
-                parametrosUnidades.setUsuario(usuario);
-                parametrosUnidades.setClave(password);
-                parametrosUnidades.setFormatoFichero(FormatoFichero.CSV);
-                parametrosUnidades.setTipoConsulta(TipoConsultaUO.COMPLETO);
+            // Establecemos parametros de serviceOficinas
+            OficinasWs parametrosOficinas = new OficinasWs();
+            parametrosOficinas.setUsuario(usuario);
+            parametrosOficinas.setClave(password);
+            parametrosOficinas.setFormatoFichero(es.caib.dir3caib.ws.dir3.oficina.client.FormatoFichero.CSV);
+            parametrosOficinas.setTipoConsulta(TipoConsultaOF.COMPLETO);
 
-                // Establecemos parametros de serviceOficinas
-                OficinasWs parametrosOficinas = new OficinasWs();
-                parametrosOficinas.setUsuario(usuario);
-                parametrosOficinas.setClave(password);
-                parametrosOficinas.setFormatoFichero(es.caib.dir3caib.ws.dir3.oficina.client.FormatoFichero.CSV);
-                parametrosOficinas.setTipoConsulta(TipoConsultaOF.COMPLETO);
-
-                // Establecemos parametros comunes
-                if (fechaInicio != null) {
-                    parametrosUnidades.setFechaInicio(formatoFecha.format(fechaInicio));
-                    parametrosOficinas.setFechaInicio(formatoFecha.format(fechaInicio));
-                }
-                if (fechaFin != null) {
-                    parametrosUnidades.setFechaFin(formatoFecha.format(fechaFin));
-                    parametrosOficinas.setFechaFin(formatoFecha.format(fechaFin));
-                }
-
-                // Invocamos el WS de Unidades
-                RespuestaWS respuestaUnidades = serviceUnidades.exportar(parametrosUnidades);
-
-                log.info("Respuesta WS unidades DIR3: " + respuestaUnidades.getCodigo() + " - " + respuestaUnidades.getDescripcion());
-
-                codigoUnidades = respuestaUnidades.getCodigo().trim();
-                ficheroUnidades = respuestaUnidades.getFichero();
-
-                // Invocamos el WS
-                es.caib.dir3caib.ws.dir3.oficina.client.RespuestaWS respuestaOficinas = serviceOficinas.exportar(parametrosOficinas);
-
-                log.info("Respuesta WS oficinas DIR3: " + respuestaOficinas.getCodigo() + " - " + respuestaOficinas.getDescripcion());
-
-                codigoOficinas = respuestaOficinas.getCodigo().trim();
-                ficheroOficinas = respuestaOficinas.getFichero();
-
-                // Procesamos los Archivos zip recibidos
-                if(codigoUnidades.equals(Dir3caibConstantes.CODIGO_VACIO) && codigoOficinas.equals(Dir3caibConstantes.CODIGO_VACIO)){
-
-                    // Actualizamos el estado de la Sincronizacion
-                    sincronizacion.setEstado(Dir3caibConstantes.SINCRONIZACION_VACIA);
-                    sincronizacion.setFechaImportacion(new Date());
-                    merge(sincronizacion);
-
-                }else if( (codigoUnidades.equals(Dir3caibConstantes.CODIGO_CORRECTO) || codigoUnidades.equals(Dir3caibConstantes.CODIGO_VACIO)) &&
-                    (codigoOficinas.equals(Dir3caibConstantes.CODIGO_CORRECTO) || codigoOficinas.equals(Dir3caibConstantes.CODIGO_VACIO))){
-
-                    // Actualizamos el estado de la Sincronizacion
-                    sincronizacion.setEstado(Dir3caibConstantes.SINCRONIZACION_DESCARGADA);
-                    merge(sincronizacion);
-
-                    try{
-
-                        descomprimirZip(unidadesZip, ficheroUnidades, directorioPath);
-                        descomprimirZip(oficinasZip, ficheroOficinas, directorioPath);
-
-                    }catch (Exception e){
-                        log.info("Ha ocurrido un error descomprimiendo los archivos de las unidades/oficinas obtenidos del WS");
-                        //Borramos la sincronizacion creada previamente.
-                        remove(sincronizacion);
-                    }
-
-                }else{
-                    // La sincronizacion ha ido mal, la eliminamos
-                    remove(sincronizacion);
-                    return null;
-                }
-
-
-            }else if(Dir3caibConstantes.CATALOGO.equals(tipo)){ // Descarga de catálogo
-
-                // Definimos el nombre del archivo zip a guardar y el directorio donde se descomprimirá
-                sincronizacionPath = Configuracio.getSincronizacionPath(sincronizacion.getCodigo());
-                String catalogoPath = sincronizacionPath +"catalogos/";
-                catalogosZip = sincronizacionPath + Dir3caibConstantes.CATALOGOS_ARCHIVO_ZIP + sincronizacion.getCodigo() + ".zip";
-
-                // Obtenemos el EndPoint del WS
-                String endPointCatalogos = Configuracio.getCatalogoEndPoint();
-
-                // Service
-                SC21CTVolcadoCatalogos catalogoService = new SC21CTVolcadoCatalogosService(new URL(endPointCatalogos + "?wsdl")).getSC21CTVolcadoCatalogos();
-                Map<String, Object> reqContextCatalogos = ((BindingProvider) catalogoService).getRequestContext();
-                reqContextCatalogos.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endPointCatalogos);
-
-                // Invocamos al WS
-                es.caib.dir3caib.ws.dir3.catalogo.client.RespuestaWS respuesta = catalogoService.exportar(usuario, password, "csv", "COMPLETO");
-
-                log.info("Respuesta Ws catalogo: " + respuesta.getCodigo() + " - " + respuesta.getDescripcion());
-
-                codigoCatalogos = respuesta.getCodigo().trim();
-                ficheroCatalogos = respuesta.getFichero();
-
-                // Procesamos los Archivoz zip recibidos
-                if(codigoCatalogos.equals(Dir3caibConstantes.CODIGO_CORRECTO)){
-
-                    // Actualizamos el estado de la Sincronizacion
-                    sincronizacion.setEstado(Dir3caibConstantes.SINCRONIZACION_DESCARGADA);
-                    merge(sincronizacion);
-
-                    try{
-
-                        descomprimirZip(catalogosZip, ficheroCatalogos, catalogoPath);
-
-                    }catch (Exception e){
-                        log.info("Ha ocurrido un error descomprimiendo los archivos del catalogo obtenidos del WS");
-                        //Borramos la sincronizacion creada previamente.
-                        remove(sincronizacion);
-                    }
-
-
-                }else if(codigoCatalogos.equals(Dir3caibConstantes.CODIGO_VACIO)){
-
-                    // Actualizamos el estado de la Sincronizacion
-                    sincronizacion.setEstado(Dir3caibConstantes.SINCRONIZACION_VACIA);
-                    merge(sincronizacion);
-
-                }else{
-                    // La sincronizacion ha ido mal, la eliminamos
-                    remove(sincronizacion);
-                    return null;
-                }
+            // Establecemos parametros comunes
+            if (fechaInicio != null) {
+                parametrosUnidades.setFechaInicio(formatoFecha.format(fechaInicio));
+                parametrosOficinas.setFechaInicio(formatoFecha.format(fechaInicio));
             }
+            if (fechaFin != null) {
+                parametrosUnidades.setFechaFin(formatoFecha.format(fechaFin));
+                parametrosOficinas.setFechaFin(formatoFecha.format(fechaFin));
+            }
+
+            // Invocamos el WS de Unidades
+            RespuestaWS respuestaUnidades = serviceUnidades.exportar(parametrosUnidades);
+
+            log.info("Respuesta WS unidades DIR3: " + respuestaUnidades.getCodigo() + " - " + respuestaUnidades.getDescripcion());
+
+            codigoUnidades = respuestaUnidades.getCodigo().trim();
+            ficheroUnidades = respuestaUnidades.getFichero();
+
+            // Invocamos el WS de Oficinas
+            es.caib.dir3caib.ws.dir3.oficina.client.RespuestaWS respuestaOficinas = serviceOficinas.exportar(parametrosOficinas);
+
+            log.info("Respuesta WS oficinas DIR3: " + respuestaOficinas.getCodigo() + " - " + respuestaOficinas.getDescripcion());
+
+            codigoOficinas = respuestaOficinas.getCodigo().trim();
+            ficheroOficinas = respuestaOficinas.getFichero();
+
+            // Procesamos los Archivos zip recibidos
+            if(codigoUnidades.equals(Dir3caibConstantes.CODIGO_VACIO) && codigoOficinas.equals(Dir3caibConstantes.CODIGO_VACIO)){
+
+                // Actualizamos el estado de la Sincronizacion
+                sincronizacion.setEstado(Dir3caibConstantes.SINCRONIZACION_VACIA);
+                sincronizacion.setFechaImportacion(new Date());
+                merge(sincronizacion);
+
+            }else if( (codigoUnidades.equals(Dir3caibConstantes.CODIGO_CORRECTO) || codigoUnidades.equals(Dir3caibConstantes.CODIGO_VACIO)) &&
+                (codigoOficinas.equals(Dir3caibConstantes.CODIGO_CORRECTO) || codigoOficinas.equals(Dir3caibConstantes.CODIGO_VACIO))){
+
+                // Actualizamos el estado de la Sincronizacion
+                sincronizacion.setEstado(Dir3caibConstantes.SINCRONIZACION_DESCARGADA);
+                merge(sincronizacion);
+
+                try{
+
+                    descomprimirZip(unidadesZip, ficheroUnidades, directorioPath);
+                    descomprimirZip(oficinasZip, ficheroOficinas, directorioPath);
+
+                }catch (Exception e){
+                    log.info("Ha ocurrido un error descomprimiendo los archivos de las unidades/oficinas obtenidos del WS");
+                    //Borramos la sincronizacion creada previamente.
+                    remove(sincronizacion);
+                }
+
+            }else{
+                // La sincronizacion ha ido mal, la eliminamos
+                remove(sincronizacion);
+                return null;
+            }
+
+            log.info("Fin de la descarga de las Unidades y Oficinas");
 
             return sincronizacion;
 
         } catch (Exception e) { //si hay algun problema, eliminamos la sincronizacion
+            remove(sincronizacion);
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    @Override
+    public Sincronizacion descargarCatalogoWS(Date fechaInicio) throws Exception{
+
+        log.info("Iniciamos la descarga del catalogo");
+
+        Sincronizacion sincronizacion = new Sincronizacion(Dir3caibConstantes.CATALOGO);
+
+        // Datos comunes para invocar el WS del Directorio Común
+        String usuario = Configuracio.getDir3WsUser();
+        String password = Configuracio.getDir3WsPassword();
+
+        String codigoCatalogos = "";
+        String ficheroCatalogos = "";
+
+        // Directorios
+        String sincronizacionPath = "";
+        String catalogosZip = "";
+
+        // Establecemos las fechas para la sincronizacion
+        if (fechaInicio != null) {
+            sincronizacion.setFechaInicio(fechaInicio);
+        }
+
+        sincronizacion.setFechaFin(new Date());
+
+        // Guardamos la sincronizacion porque emplearemos el identificador para el nombre del directorio y el archivo.
+        sincronizacion = persist(sincronizacion);
+
+        try {
+
+            // Definimos el nombre del archivo zip a guardar y el directorio donde se descomprimirá
+            sincronizacionPath = Configuracio.getSincronizacionPath(sincronizacion.getCodigo());
+            String catalogoPath = sincronizacionPath +"catalogos/";
+            catalogosZip = sincronizacionPath + Dir3caibConstantes.CATALOGOS_ARCHIVO_ZIP + sincronizacion.getCodigo() + ".zip";
+
+            // Obtenemos el EndPoint del WS
+            String endPointCatalogos = Configuracio.getCatalogoEndPoint();
+
+            // Service
+            SC21CTVolcadoCatalogos catalogoService = new SC21CTVolcadoCatalogosService(new URL(endPointCatalogos + "?wsdl")).getSC21CTVolcadoCatalogos();
+            Map<String, Object> reqContextCatalogos = ((BindingProvider) catalogoService).getRequestContext();
+            reqContextCatalogos.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endPointCatalogos);
+
+            // Invocamos al WS
+            es.caib.dir3caib.ws.dir3.catalogo.client.RespuestaWS respuesta = catalogoService.exportar(usuario, password, "csv", "COMPLETO");
+
+            log.info("Respuesta Ws catalogo: " + respuesta.getCodigo() + " - " + respuesta.getDescripcion());
+
+            codigoCatalogos = respuesta.getCodigo().trim();
+            ficheroCatalogos = respuesta.getFichero();
+
+            // Procesamos los Archivoz zip recibidos
+            if(codigoCatalogos.equals(Dir3caibConstantes.CODIGO_CORRECTO)){
+
+                // Actualizamos el estado de la Sincronizacion
+                sincronizacion.setEstado(Dir3caibConstantes.SINCRONIZACION_DESCARGADA);
+                merge(sincronizacion);
+
+                try{
+
+                    descomprimirZip(catalogosZip, ficheroCatalogos, catalogoPath);
+
+                }catch (Exception e){
+                    log.info("Ha ocurrido un error descomprimiendo los archivos del catalogo obtenidos del WS");
+                    //Borramos la sincronizacion creada previamente.
+                    remove(sincronizacion);
+                }
+
+            }else if(codigoCatalogos.equals(Dir3caibConstantes.CODIGO_VACIO)){
+
+                // Actualizamos el estado de la Sincronizacion
+                sincronizacion.setEstado(Dir3caibConstantes.SINCRONIZACION_VACIA);
+                merge(sincronizacion);
+
+            }else{
+                // La sincronizacion ha ido mal, la eliminamos
+                remove(sincronizacion);
+                return null;
+            }
+
+            log.info("Fin de la descarga del catalogo");
+
+            return sincronizacion;
+
+        } catch (Exception e) { //si hay algun problema, eliminamos la sincronizacion
+            log.info("Excepcion en la descarga del catalogo");
             remove(sincronizacion);
             throw new Exception(e.getMessage());
         }
@@ -393,7 +429,7 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
      */
     @Override
     @TransactionTimeout(value = 40000)
-    public void importarDirectorio(Sincronizacion sincronizacion) throws Exception{
+    public Sincronizacion importarDirectorio(Sincronizacion sincronizacion) throws Exception{
 
         // Importamos las Unidades y Oficinas
         importadorUnidades.importarUnidades(sincronizacion);
@@ -402,7 +438,8 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
         // Si el proceso ha sido correcto, actualizamos el estado
         sincronizacion.setFechaImportacion(new Date());
         sincronizacion.setEstado(Dir3caibConstantes.SINCRONIZACION_CORRECTA);
-        merge(sincronizacion);
+
+        return merge(sincronizacion);
     }
 
     /**
@@ -412,7 +449,7 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
      */
     @Override
     @TransactionTimeout(value = 3600)
-    public void importarCatalogo(Sincronizacion sincronizacion) throws Exception{
+    public Sincronizacion importarCatalogo(Sincronizacion sincronizacion) throws Exception{
 
         // Importamos el Catalogo
         importadorCatalogo.importarCatalogo(sincronizacion);
@@ -420,31 +457,81 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
         // Si el proceso ha sido correcto, actualizamos el estado
         sincronizacion.setFechaImportacion(new Date());
         sincronizacion.setEstado(Dir3caibConstantes.SINCRONIZACION_CORRECTA);
-        merge(sincronizacion);
+
+        return merge(sincronizacion);
+    }
+
+    @Override
+    public List<Sincronizacion> sincronizarDirectorio() throws Exception{
+
+        Sincronizacion sincroDirectorio = null;
+        Sincronizacion sincroCatalogo = null;
+
+        try{
+
+            // Obtenemos la fecha de la ultima descarga/sincronizacion
+            Sincronizacion ultimaDirectorio = ultimaSincronizacionCompletada(Dir3caibConstantes.DIRECTORIO);
+            Sincronizacion ultimaCatalogo = ultimaSincronizacionCompletada(Dir3caibConstantes.CATALOGO);
+
+            // Descarga del catálogo DIR3
+            if(ultimaCatalogo != null){
+                sincroCatalogo = descargarCatalogoWS(ultimaCatalogo.getFechaFin());
+            } else {//Es una descarga inicial
+                sincroCatalogo = descargarCatalogoWS(null);
+            }
+
+            // Descarga de directorio DIR3
+            if(ultimaDirectorio != null){
+                sincroDirectorio = descargarDirectorioWS(ultimaDirectorio.getFechaFin(), new Date());
+            } else {//Es una descarga inicial
+                sincroDirectorio = descargarDirectorioWS(null, null);
+            }
+
+            // Importamos Catálogo
+            if (sincroCatalogo != null && sincroCatalogo.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
+
+                sincroCatalogo = importarCatalogo(sincroCatalogo);
+            }
+
+            // Importamos Directorio
+            if (sincroDirectorio != null && sincroDirectorio.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
+
+                sincroDirectorio = importarDirectorio(sincroDirectorio);
+            }
+
+        }catch (Exception e){
+
+            // Si ha habido un Error en la sincronización, modificamos el estado de la descarga
+            if(sincroDirectorio != null && sincroDirectorio.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)){
+                try {
+                    actualizarEstado(sincroDirectorio.getCodigo(), Dir3caibConstantes.SINCRONIZACION_ERRONEA);
+                } catch (Exception ex1) {
+                    ex1.printStackTrace();
+                }
+            }
+
+            // Si ha habido un Error en la sincronización, modificamos el estado de la descarga
+            if(sincroCatalogo != null && sincroCatalogo.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)){
+                try {
+                    actualizarEstado(sincroCatalogo.getCodigo(), Dir3caibConstantes.SINCRONIZACION_ERRONEA);
+                } catch (Exception ex2) {
+                    ex2.printStackTrace();
+                }
+            }
+
+            e.printStackTrace();
+
+        }
+
+        return Arrays.asList(sincroCatalogo,sincroDirectorio);
+
     }
 
     @Override
     @TransactionTimeout(value = 30000)
     public void sincronizarDirectorioTask() throws Exception{
 
-
-        // Obtenemos la fecha de la ultima descarga/sincronizacion
-        Sincronizacion ultimaSincro = ultimaSincronizacionCompletada(Dir3caibConstantes.DIRECTORIO);
-        Sincronizacion sincronizacion = null;
-
-        // Descarga de directorio DIR3
-        if(ultimaSincro != null){
-            Date fechaFin = ultimaSincro.getFechaFin();
-            sincronizacion = descargarDirectorioWS(Dir3caibConstantes.DIRECTORIO, fechaFin, new Date());
-        } else {//Es una descarga inicial
-            sincronizacion = descargarDirectorioWS(Dir3caibConstantes.DIRECTORIO, null, null);
-        }
-
-        // Si la descarga de datos es correcta, procedemos a realizar la sincronización de datos
-        if (sincronizacion != null && sincronizacion.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
-
-            importarDirectorio(sincronizacion);
-        }
+        sincronizarDirectorio();
     }
 
 

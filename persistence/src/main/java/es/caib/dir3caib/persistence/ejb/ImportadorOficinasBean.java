@@ -118,7 +118,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                                 boolean existeix;
 
                                 //  Miramos si existe ya en la BD
-                                if (existInBBDD.contains(codigoOficina)) {
+                                if (oficinasExistInBBDD.contains(codigoOficina)) {
 
                                     // Eliminamos sus contactos y servicios en la actualizacion
                                     contactoOfiEjb.deleteByOficina(codigoOficina);
@@ -141,7 +141,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                                     oficina = oficinaEjb.merge(oficina);
                                 } else {
                                     oficina = oficinaEjb.persistReal(oficina);
-                                    existInBBDD.add(codigoOficina);
+                                    oficinasExistInBBDD.add(codigoOficina);
                                 }
 
                                 // guardamos la oficina procesada enla cache
@@ -356,7 +356,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
         Oficina ofiResponsable = null;
         if (!codigoOfiResponsable.isEmpty()) {
 
-            if (existInBBDD.contains(codigoOfiResponsable)) { // si existe, la obtenemos
+            if (oficinasExistInBBDD.contains(codigoOfiResponsable)) { // si existe, la obtenemos
                 ofiResponsable = oficinaEjb.getReference(codigoOfiResponsable);
             }
             if (ofiResponsable == null) { //Si no existe la creamos
@@ -364,7 +364,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                 ofiResponsable.setCodigo(codigoOfiResponsable);
 
                 ofiResponsable = oficinaEjb.persistReal(ofiResponsable);
-                existInBBDD.add(codigoOfiResponsable);
+                oficinasExistInBBDD.add(codigoOfiResponsable);
 
             }
             oficina.setCodOfiResponsable(ofiResponsable);
@@ -405,7 +405,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
 
                 try {
 
-                    if (!codigoOficinaUltima.isEmpty() && !codigoOficinaAnterior.isEmpty() && existInBBDD.contains(codigoOficinaUltima)) {// Si no están vacios
+                    if (!codigoOficinaUltima.isEmpty() && !codigoOficinaAnterior.isEmpty() && oficinasExistInBBDD.contains(codigoOficinaUltima)) {// Si no están vacios
 
                         // Creamos el HO mediante una NativeQuery muy eficiente
                         oficinaEjb.crearHistoricoOficina(codigoOficinaAnterior, codigoOficinaUltima);
@@ -696,7 +696,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                     String codigoOficina = fila[0].trim();
                     String codigoServicio = fila[1].trim();
 
-                    if (!codigoOficina.isEmpty() && !codigoServicio.isEmpty() && existInBBDD.contains(codigoOficina)) { // Si no están vacios
+                    if (!codigoOficina.isEmpty() && !codigoServicio.isEmpty() && oficinasExistInBBDD.contains(codigoOficina)) { // Si no están vacios
 
                         // Creamos el Servicio mediante una NativeQuery muy eficiente
                         oficinaEjb.crearServicioOficina(codigoOficina, Long.valueOf(codigoServicio));

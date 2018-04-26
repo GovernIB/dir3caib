@@ -39,7 +39,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     protected final Logger log = Logger.getLogger(getClass());
     protected SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
 
-    @PersistenceContext
+    @PersistenceContext(unitName="dir3caib")
     private EntityManager em;
 
 

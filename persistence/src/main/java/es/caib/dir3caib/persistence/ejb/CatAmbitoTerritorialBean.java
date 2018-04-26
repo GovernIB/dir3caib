@@ -25,7 +25,7 @@ public class CatAmbitoTerritorialBean extends BaseEjbJPA<CatAmbitoTerritorial, L
 
     protected final Logger log = Logger.getLogger(getClass());
 
-    @PersistenceContext
+    @PersistenceContext(unitName="dir3caib")
     private EntityManager em;
 
     @Override

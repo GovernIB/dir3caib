@@ -24,7 +24,7 @@ public class CatIslaBean extends BaseEjbJPA<CatIsla, Long> implements CatIslaLoc
 
     protected final Logger log = Logger.getLogger(getClass());
 
-    @PersistenceContext
+    @PersistenceContext(unitName="dir3caib")
     private EntityManager em;
 
     @Override

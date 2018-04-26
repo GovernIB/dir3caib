@@ -106,7 +106,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                                 Unidad unidad = null;
 
                                 // Comprobamos si existe ya en la BD
-                                if (existInBBDD.contains(codigoUnidad)) {
+                                if (unidadesExistInBBDD.contains(codigoUnidad)) {
 
                                     // Si es una actualización: Eliminamos los contactos e historicos de la Unidad
                                     contactoUOEjb.deleteByUnidad(codigoUnidad);
@@ -145,7 +145,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                                     unidad = unidadEjb.persistReal(unidad);
                                 }
                                 //la añadimos a la lista de los existentes en BD
-                                existInBBDD.add(codigoUnidad);
+                                unidadesExistInBBDD.add(codigoUnidad);
                                 persist = persist + (System.currentTimeMillis() - s);
 
                                 s = System.currentTimeMillis();
@@ -154,7 +154,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                                 String codigoUnidadRaiz = fila[9].trim();
                                 if (!codigoUnidadRaiz.isEmpty()) {
                                     Unidad unidadRaiz = null;
-                                    if (existInBBDD.contains(codigoUnidadRaiz)) { //Si existe la obtenemos
+                                    if (unidadesExistInBBDD.contains(codigoUnidadRaiz)) { //Si existe la obtenemos
                                         unidadRaiz = unidadEjb.findById(codigoUnidadRaiz);
                                     } else { // Si no la creamos y la guardamos
                                         unidadRaiz = unidadVacia();
@@ -162,7 +162,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                                         unidadRaiz = unidadEjb.persistReal(unidadRaiz);
                                     }
                                     //añadimos la unidad raiz a los existentes en BD
-                                    existInBBDD.add(codigoUnidadRaiz);
+                                    unidadesExistInBBDD.add(codigoUnidadRaiz);
                                     //le asignamos la unidad raiz
                                     unidad.setCodUnidadRaiz(unidadRaiz);
 
@@ -175,7 +175,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                                 String codigoUnidadSuperior = fila[7].trim();
                                 if (!codigoUnidadSuperior.isEmpty()) {
                                     Unidad unidadSuperior = null;
-                                    if (existInBBDD.contains(codigoUnidadSuperior)) {//Si existe la obtenemos
+                                    if (unidadesExistInBBDD.contains(codigoUnidadSuperior)) {//Si existe la obtenemos
                                         unidadSuperior = unidadEjb.findById(codigoUnidadSuperior);
                                     } else {// Si no la creamos y la guardamos
                                         unidadSuperior = unidadVacia();
@@ -183,7 +183,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                                         unidadSuperior = unidadEjb.persistReal(unidadSuperior);
                                     }
                                     //añadimos la unidad superior a los existentes en BD
-                                    existInBBDD.add(codigoUnidadSuperior);
+                                    unidadesExistInBBDD.add(codigoUnidadSuperior);
                                     //le asignamos la unidad superior
                                     unidad.setCodUnidadSuperior(unidadSuperior);
                                 } else {//actualizamos a sin superior
@@ -390,7 +390,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
         String codigoEdpPrincipal = fila[12].trim();
         if (!codigoEdpPrincipal.isEmpty()) {
             Unidad unidadEdpPrincipal;
-            if (existInBBDD.contains(codigoEdpPrincipal)) {
+            if (unidadesExistInBBDD.contains(codigoEdpPrincipal)) {
                 unidadEdpPrincipal = unidadEjb.findById(codigoEdpPrincipal);
             } else {
                 unidadEdpPrincipal = null;
@@ -548,7 +548,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
                 try {
 
-                    if (!codigoUnidadUltima.isEmpty() && !codigoUnidadAnterior.isEmpty() && existInBBDD.contains(codigoUnidadUltima)) { // Si no están vacios
+                    if (!codigoUnidadUltima.isEmpty() && !codigoUnidadAnterior.isEmpty() && unidadesExistInBBDD.contains(codigoUnidadUltima)) { // Si no están vacios
 
                         // Creamos el HU mediante una NativeQuery muy eficiente
                         unidadEjb.crearHistoricoUnidad(codigoUnidadAnterior, codigoUnidadUltima);

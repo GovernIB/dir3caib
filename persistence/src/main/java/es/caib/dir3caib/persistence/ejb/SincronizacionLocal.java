@@ -4,6 +4,7 @@ import es.caib.dir3caib.persistence.model.Sincronizacion;
 
 import javax.ejb.Local;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Fundació BIT.
@@ -54,14 +55,21 @@ public interface SincronizacionLocal extends BaseEjb<Sincronizacion, Long> {
   void actualizarEstado(Long codigo, Long estado) throws Exception;
 
   /**
-   * Descarga los ficheros del WS de DIR3 con los datos de las Unidades y Oficinas
-   * @param tipo
+   * Descarga los ficheros del WS de DIR3 con los datos de Unidades y Oficinas
    * @param fechaInicio
    * @param fechaFin
    * @return
    * @throws Exception
    */
-  Sincronizacion descargarDirectorioWS(String tipo, Date fechaInicio, Date fechaFin) throws Exception;
+  Sincronizacion descargarDirectorioWS(Date fechaInicio, Date fechaFin) throws Exception;
+
+  /**
+   * Descarga los ficheros del WS de DIR3 con los datos del catálogo
+   * @param fechaInicio
+   * @return
+   * @throws Exception
+   */
+  Sincronizacion descargarCatalogoWS(Date fechaInicio) throws Exception;
 
   /**
    * Elimina una sincronización y sus ficheros correspondientes
@@ -75,14 +83,21 @@ public interface SincronizacionLocal extends BaseEjb<Sincronizacion, Long> {
    * @param sincronizacion
    * @throws Exception
    */
-  void importarDirectorio(Sincronizacion sincronizacion) throws Exception;
+  Sincronizacion importarDirectorio(Sincronizacion sincronizacion) throws Exception;
 
   /**
    * Realiza la importación del catálogo
    * @param sincronizacion
    * @throws Exception
    */
-  void importarCatalogo(Sincronizacion sincronizacion) throws Exception;
+  Sincronizacion importarCatalogo(Sincronizacion sincronizacion) throws Exception;
+
+  /**
+   * Realiza la descarga y sincronización del Catálogo, las Unidades y las Ofiinas
+   * @return
+   * @throws Exception
+   */
+  List<Sincronizacion> sincronizarDirectorio() throws Exception;
 
   /**
    * Tarea programada que realiza la descarga e importación del directório (Unidades y Oficinas)

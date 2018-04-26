@@ -25,7 +25,7 @@ public class CatLocalidadBean extends BaseEjbJPA<CatLocalidad, Long> implements 
 
     protected final Logger log = Logger.getLogger(getClass());
 
-    @PersistenceContext
+    @PersistenceContext(unitName="dir3caib")
     private EntityManager em;
 
     @Override

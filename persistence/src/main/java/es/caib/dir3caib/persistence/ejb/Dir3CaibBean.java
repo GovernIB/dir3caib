@@ -9,6 +9,8 @@ import org.jboss.ejb3.annotation.TransactionTimeout;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  * Created by Fundació BIT.
@@ -22,6 +24,9 @@ import javax.ejb.Stateless;
 public class Dir3CaibBean implements Dir3CaibLocal{
 
     protected final Logger log = Logger.getLogger(getClass());
+
+    @PersistenceContext(unitName="dir3caib")
+    private EntityManager em;
 
     @EJB private SincronizacionLocal sincronizacionEjb;
     @EJB private OficinaLocal oficinaEjb;
@@ -53,6 +58,8 @@ public class Dir3CaibBean implements Dir3CaibLocal{
         eliminarOficinas();
         eliminarUnidades();
         eliminarCatalogo();
+        sincronizacionEjb.deleteAllByTipo(Dir3caibConstantes.DIRECTORIO);
+        sincronizacionEjb.deleteAllByTipo(Dir3caibConstantes.CATALOGO);
     }
 
     @Override
@@ -86,15 +93,17 @@ public class Dir3CaibBean implements Dir3CaibLocal{
             catEntidadGeograficaEjb.deleteAll();
             servicioEjb.deleteAll();
             sincronizacionEjb.deleteAllByTipo(Dir3caibConstantes.CATALOGO);
-        }
 
-        log.info("Eliminar Catalogo completo");
+            em.flush();
+
+            log.info("Eliminar Catalogo completo");
+        }
     }
 
     @Override
     public void eliminarUnidades() throws Exception {
 
-        Sincronizacion sincronizacion = sincronizacionEjb.ultimaSincronizacionByTipo(Dir3caibConstantes.UNIDAD);
+        Sincronizacion sincronizacion = sincronizacionEjb.ultimaSincronizacionByTipo(Dir3caibConstantes.DIRECTORIO);
 
         if (sincronizacion != null) {
             // Contactos
@@ -102,15 +111,17 @@ public class Dir3CaibBean implements Dir3CaibLocal{
             //Unidades
             unidadEjb.deleteHistoricosUnidad();
             unidadEjb.deleteAll();
-        }
 
-        log.info("Eliminar Unidades completo");
+            em.flush();
+
+            log.info("Eliminar Unidades completo");
+        }
     }
 
     @Override
     public void eliminarOficinas() throws Exception {
 
-        Sincronizacion sincronizacion = sincronizacionEjb.ultimaSincronizacionByTipo(Dir3caibConstantes.OFICINA);
+        Sincronizacion sincronizacion = sincronizacionEjb.ultimaSincronizacionByTipo(Dir3caibConstantes.DIRECTORIO);
 
         if (sincronizacion != null) {
             relSirOfiEjb.deleteAll();
@@ -119,9 +130,11 @@ public class Dir3CaibBean implements Dir3CaibLocal{
             oficinaEjb.deleteHistoricosOficina();
             oficinaEjb.deleteServiciosOficina();
             oficinaEjb.deleteAll();
-        }
 
-        log.info("Eliminar Oficinas completo");
+            em.flush();
+
+            log.info("Eliminar Oficinas completo");
+        }
     }
 
     @Override
@@ -132,7 +145,7 @@ public class Dir3CaibBean implements Dir3CaibLocal{
         eliminarDirectorio();
 
         // Realizamos una descarga inicial
-        Sincronizacion sincronizacion = sincronizacionEjb.descargarDirectorioWS(Dir3caibConstantes.DIRECTORIO, null, null);
+        Sincronizacion sincronizacion = sincronizacionEjb.descargarDirectorioWS(null, null);
 
         // Si la descarga de datos es correcta, procedemos a realizar la sincronización de datos
         if (sincronizacion != null && sincronizacion.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {

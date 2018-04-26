@@ -24,7 +24,7 @@ public class CatJerarquiaOficinaBean extends BaseEjbJPA<CatJerarquiaOficina, Lon
 
     protected final Logger log = Logger.getLogger(getClass());
 
-    @PersistenceContext
+    @PersistenceContext(unitName="dir3caib")
     private EntityManager em;
 
     @Override
