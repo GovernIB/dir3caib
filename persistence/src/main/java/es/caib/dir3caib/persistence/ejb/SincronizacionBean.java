@@ -462,6 +462,7 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
     }
 
     @Override
+    @TransactionTimeout(value = 50000)
     public List<Sincronizacion> sincronizarDirectorio() throws Exception{
 
         Sincronizacion sincroDirectorio = null;
@@ -528,7 +529,7 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
     }
 
     @Override
-    @TransactionTimeout(value = 30000)
+    @TransactionTimeout(value = 50000)
     public void sincronizarDirectorioTask() throws Exception{
 
         sincronizarDirectorio();
