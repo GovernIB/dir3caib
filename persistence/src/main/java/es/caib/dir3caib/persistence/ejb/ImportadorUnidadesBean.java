@@ -52,7 +52,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
     public void importarUnidades(Sincronizacion sincronizacion) throws Exception {
 
         log.info("");
-        log.info("Inicio importación Unidades");
+        log.info("Inicio importacion Unidades");
 
         System.gc();
 

@@ -97,7 +97,7 @@ public class SincronizacionController extends BaseController {
      *
      * @param request
      */
-    @RequestMapping(value = "/sincronizar", method = RequestMethod.GET)
+    @RequestMapping(value = "/directorio", method = RequestMethod.GET)
     public ModelAndView sincronizarDirectorio(HttpServletRequest request) {
 
         try {
@@ -122,8 +122,6 @@ public class SincronizacionController extends BaseController {
 
                         if(sincro.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_CORRECTA)){
                             Mensaje.saveMessageInfo(request, getMessage("catalogo.sincronizacion.ok"));
-                        }else if(sincro.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_VACIA)){
-                            Mensaje.saveMessageInfo(request, getMessage("catalogo.sincronizacion.vacia"));
                         }
 
                     }
@@ -131,8 +129,44 @@ public class SincronizacionController extends BaseController {
 
                     Mensaje.saveMessageError(request, getMessage("directorio.descarga.error"));
                 }
-
             }
+
+        } catch (Exception ex) {
+            Mensaje.saveMessageError(request, getMessage("directorio.sincronizacion.error"));
+            ex.printStackTrace();
+        }
+
+        return new ModelAndView("redirect:/sincronizacion/list");
+    }
+
+    /**
+     * Sincroniza el Directorio
+     * Obtiene todos los datos del Catálogo, las Unidades y Oficinas para importarlos.
+     *
+     * @param request
+     */
+    @RequestMapping(value = "/oficinasUnidades", method = RequestMethod.GET)
+    public ModelAndView sincronizaroficinasUnidades(HttpServletRequest request) {
+
+        try {
+
+            long start = System.currentTimeMillis();
+            Sincronizacion sincronizacion = sincronizacionEjb.sincronizarOficinasUnidades();
+            log.info("Sincronizacion de las Oficinas y Unidades completada en " + Utils.formatElapsedTime(System.currentTimeMillis() - start));
+
+            // Mensajes al usuario
+            if(sincronizacion != null){
+
+                if(sincronizacion.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_CORRECTA)){
+                    Mensaje.saveMessageInfo(request, getMessage("directorio.sincronizacion.ok"));
+                }else if(sincronizacion.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_VACIA)){
+                    Mensaje.saveMessageInfo(request, getMessage("directorio.sincronizacion.vacia"));
+                }
+
+            }else {
+                Mensaje.saveMessageError(request, getMessage("directorio.descarga.error"));
+            }
+
 
         } catch (Exception ex) {
             Mensaje.saveMessageError(request, getMessage("directorio.sincronizacion.error"));
@@ -228,27 +262,27 @@ public class SincronizacionController extends BaseController {
 
 
     /**
-     * Elimina el Directório de la bbdd y las sincroniza con al información actual
+     * Elimina todas las Oficinas y Unidades de la bbdd y las sincroniza con la información actual
      */
-    @RequestMapping(value = "/restaurarDirectorio", method = RequestMethod.GET)
-    public String restaurarDirectorio(Model model) throws Exception {
+    @RequestMapping(value = "/restaurarOficinasUnidades", method = RequestMethod.GET)
+    public String restaurarOficinasUnidades(Model model) throws Exception {
 
         return "sincronizacion/restaurarDirectorio";
     }
 
 
     /**
-     * Elimina todas las Unidades de la bbdd y las sincroniza con al información actual
+     * Elimina todas las Oficinas y Unidades de la bbdd y las sincroniza con la información actual
      * @param request
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/restaurarDirectorio", method = RequestMethod.POST)
-    public ModelAndView restaurarDirectorio(HttpServletRequest request) throws Exception {
+    @RequestMapping(value = "/restaurarOficinasUnidades", method = RequestMethod.POST)
+    public ModelAndView restaurarOficinasUnidades(HttpServletRequest request) throws Exception {
 
         try{
-            // Restaurar el Directório
-            dir3CaibEjb.restaurarDirectorio();
+            // Elimina las Oficinas y Unidades, realiza una descarga inicia e importa los datos
+            dir3CaibEjb.restaurarOficinasUnidades();
 
             Mensaje.saveMessageInfo(request, getMessage("directorio.sincronizacion.ok"));
 

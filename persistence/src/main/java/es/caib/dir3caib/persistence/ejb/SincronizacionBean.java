@@ -532,6 +532,49 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
 
     @Override
     @TransactionTimeout(value = 50000)
+    public Sincronizacion sincronizarOficinasUnidades() throws Exception{
+
+        Sincronizacion sincroDirectorio = null;
+
+        try{
+
+            // Obtenemos la fecha de la ultima descarga/sincronizacion
+            Sincronizacion ultimaDirectorio = ultimaSincronizacionCompletada(Dir3caibConstantes.DIRECTORIO);
+
+            // Descarga de directorio DIR3
+            if(ultimaDirectorio != null){
+                sincroDirectorio = descargarDirectorioWS(ultimaDirectorio.getFechaFin(), new Date());
+            } else {//Es una descarga inicial
+                sincroDirectorio = descargarDirectorioWS(null, null);
+            }
+
+            // Importamos Directorio
+            if (sincroDirectorio != null && sincroDirectorio.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
+
+                sincroDirectorio = importarDirectorio(sincroDirectorio);
+            }
+
+        }catch (Exception e){
+
+            // Si ha habido un Error en la sincronización, modificamos el estado de la descarga
+            if(sincroDirectorio != null && sincroDirectorio.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)){
+                try {
+                    actualizarEstado(sincroDirectorio.getCodigo(), Dir3caibConstantes.SINCRONIZACION_ERRONEA);
+                } catch (Exception ex1) {
+                    ex1.printStackTrace();
+                }
+            }
+
+            e.printStackTrace();
+
+            throw e;
+        }
+
+        return sincroDirectorio;
+    }
+
+    @Override
+    @TransactionTimeout(value = 50000)
     public void sincronizarDirectorioTask() throws Exception{
 
         sincronizarDirectorio();

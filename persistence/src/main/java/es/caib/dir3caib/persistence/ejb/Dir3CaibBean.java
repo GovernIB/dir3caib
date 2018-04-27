@@ -63,7 +63,7 @@ public class Dir3CaibBean implements Dir3CaibLocal{
     }
 
     @Override
-    public void eliminarDirectorio() throws Exception{
+    public void eliminarOficinasUnidades() throws Exception{
 
         eliminarOficinas();
         eliminarUnidades();
@@ -139,10 +139,10 @@ public class Dir3CaibBean implements Dir3CaibLocal{
 
     @Override
     @TransactionTimeout(value = 40000)
-    public void restaurarDirectorio() throws Exception{
+    public void restaurarOficinasUnidades() throws Exception{
 
         // Eliminamos las Unidades y Oficinas
-        eliminarDirectorio();
+        eliminarOficinasUnidades();
 
         // Realizamos una descarga inicial
         Sincronizacion sincronizacion = sincronizacionEjb.descargarDirectorioWS(null, null);

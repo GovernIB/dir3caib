@@ -99,6 +99,13 @@ public interface SincronizacionLocal extends BaseEjb<Sincronizacion, Long> {
   List<Sincronizacion> sincronizarDirectorio() throws Exception;
 
   /**
+   * Realiza la descarga y sincronización de las Oficinas y Unidades
+   * @return
+   * @throws Exception
+   */
+  Sincronizacion sincronizarOficinasUnidades() throws Exception;
+
+  /**
    * Tarea programada que realiza la descarga e importación del directório (Unidades y Oficinas)
    * @throws Exception
    */

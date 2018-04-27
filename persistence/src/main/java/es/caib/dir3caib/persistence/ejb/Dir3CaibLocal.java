@@ -20,7 +20,7 @@ public interface Dir3CaibLocal {
      * Elimina las Oficinas y Unidades y sus datos relacionados
      * @throws Exception
      */
-    void eliminarDirectorio() throws Exception;
+    void eliminarOficinasUnidades() throws Exception;
 
     /**
      * Elimina el Catálogo
@@ -44,6 +44,6 @@ public interface Dir3CaibLocal {
      * Elimina las Oficinas y Unidades, realiza una descarga inicia e importa los datos
      * @throws Exception
      */
-    void restaurarDirectorio() throws Exception;
+    void restaurarOficinasUnidades() throws Exception;
 
 }

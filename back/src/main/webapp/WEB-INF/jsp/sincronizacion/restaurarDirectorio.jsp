@@ -19,7 +19,7 @@
                     <div class="box span12">
 
                         <div class="box-header well">
-                            <h2><fmt:message key="sincronizacion.restaurarDirectorio"/></h2>
+                            <h2><fmt:message key="sincronizacion.restaurar.OficinasUnidades"/></h2>
                         </div>
 
                         <c:import url="../modulos/mensajes.jsp"/>
@@ -27,15 +27,15 @@
                         <div class="box-content">
                             <div class="well formbox">
 
-                                <div class="page-header"><fmt:message key="sincronizacion.restaurarDirectorio"/></div>
-                                <div class="row-fluid"><fmt:message key="sincronizacion.restaurarDirectorio.info"/></div>
+                                <div class="page-header"><fmt:message key="sincronizacion.restaurar.OficinasUnidades"/></div>
+                                <div class="row-fluid"><fmt:message key="sincronizacion.restaurar.OficinasUnidades.info"/></div>
 
                                 <form:form method="post" cssClass="form-horizontal">
                                     <fieldset>
 
                                         <div class="form-actions">
 
-                                            <input type="submit" value="<fmt:message key="sincronizacion.restaurarDirectorio"/>" class="btn btn-primary">
+                                            <input type="submit" value="<fmt:message key="sincronizacion.restaurar.OficinasUnidades"/>" class="btn btn-primary">
 
                                         </div>
 
