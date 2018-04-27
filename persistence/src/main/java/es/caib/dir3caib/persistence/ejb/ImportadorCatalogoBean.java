@@ -92,7 +92,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
      */
     @Override
     @TransactionTimeout(value = 3600)
-    public void importarCatalogo(Sincronizacion sincronizacion) throws Exception {
+    public void importarCatalogo(Sincronizacion sincronizacion, Boolean localidades) throws Exception {
 
         // caches
         Map<String, CatEntidadGeografica> cacheEntidadGeografica = new TreeMap<String, CatEntidadGeografica>();
@@ -571,8 +571,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                     }
 
                     //CATLOCALIDAD
-                    if (Dir3caibConstantes.CAT_LOCALIDAD.equals(fichero)) {
-
+                    if (Dir3caibConstantes.CAT_LOCALIDAD.equals(fichero) && localidades) {
 
                         reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
                         while ((fila = reader.readNext()) != null) {
@@ -609,7 +608,6 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                                     existe = true;
                                 }
 
-
                                 //Controlamos que no sea null o cadena vacía, ya que en bd no puede serlo.
                                 if (fila[1] == null || fila[1].length() == 0) {
                                     localidad.setDescripcionLocalidad("-");
@@ -623,11 +621,9 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                                     catLocalidadEjb.persistReal(localidad);
                                 }
 
-
                             } catch (Exception e) {
                                 log.error(" Error important Localidad " + e.getMessage());
                             }
-
                         }
 
                         // Ja podem borrar la cache de Entidad
@@ -641,7 +637,6 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                 }
 
                 reader.close();
-
 
             } catch (FileNotFoundException ex) {
                 log.warn("Fichero no encontrado " + fichero);

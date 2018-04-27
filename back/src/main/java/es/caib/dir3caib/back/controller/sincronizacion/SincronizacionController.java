@@ -93,7 +93,7 @@ public class SincronizacionController extends BaseController {
 
     /**
      * Sincroniza el Directorio
-     * Obtiene todos los datos de las Unidades y Oficinas para importarlos.
+     * Obtiene todos los datos del Catálogo, las Unidades y Oficinas para importarlos.
      *
      * @param request
      */
@@ -155,7 +155,7 @@ public class SincronizacionController extends BaseController {
 
         try {
 
-            sincronizacion = sincronizacionEjb.descargarCatalogoWS( null);
+            sincronizacion = sincronizacionEjb.descargarCatalogoWS();
 
             //Mostramos los mensajes en función de la respuesta del WS de Madrid
             if(sincronizacion != null){
@@ -165,20 +165,15 @@ public class SincronizacionController extends BaseController {
 
                     long start = System.currentTimeMillis();
 
-                    sincronizacionEjb.importarCatalogo(sincronizacion);
+                    sincronizacionEjb.importarCatalogo(sincronizacion, true);
 
                     log.info("Sincronizacion del catalogo completada en " + Utils.formatElapsedTime(System.currentTimeMillis() - start));
 
-                    Mensaje.saveMessageInfo(request, getMessage("directorio.sincronizacion.ok"));
-
-                }else if (sincronizacion.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_VACIA)) { // No ha devuelto datos
-                    Mensaje.saveMessageInfo(request, getMessage("directorio.sincronizacion.vacia"));
+                    Mensaje.saveMessageInfo(request, getMessage("catalogo.sincronizacion.ok"));
                 }
 
             }else{
-                Mensaje.saveMessageError(request, getMessage("directorio.descarga.error"));
-                return new ModelAndView("redirect:/sincronizacion/list");
-
+                Mensaje.saveMessageError(request, getMessage("catalogo.descarga.error"));
             }
 
         } catch (Exception ex) {
@@ -191,10 +186,8 @@ public class SincronizacionController extends BaseController {
                 }
             }
 
-            Mensaje.saveMessageError(request, getMessage("directorio.sincronizacion.error"));
+            Mensaje.saveMessageError(request, getMessage("catalogo.sincronizacion.error"));
             ex.printStackTrace();
-
-            return new ModelAndView("redirect:/sincronizacion/list");
         }
 
         return new ModelAndView("redirect:/sincronizacion/list");

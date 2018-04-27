@@ -90,7 +90,7 @@ public class Dir3caibConstantes {
     // Estados Sincronización
     public static final Long SINCRONIZACION_DESCARGADA = 1L;
     public static final Long SINCRONIZACION_VACIA = 2L;
-    public static final Long SINCRONIZACION_EN_CURSO = 3L;
+    public static final Long SINCRONIZACION_ERROR_DESCARGA = 3L;
     public static final Long SINCRONIZACION_ERRONEA = 4L;
     public static final Long SINCRONIZACION_CORRECTA = 5L;
 

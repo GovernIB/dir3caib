@@ -60,14 +60,21 @@
                                 <c:forEach var="sincronizacion" items="${listado}" varStatus="status">
                                     <tr>
                                         <td>
-                                            <c:if test="${sincronizacion.tipo == 1}">
+                                            <c:if test="${sincronizacion.tipo == 1}"> <%--Catálogo--%>
                                                 <span class="label label-info"><spring:message code="sincronizacion.tipo.${sincronizacion.tipo}"/></span>
                                             </c:if>
-                                            <c:if test="${sincronizacion.tipo == 2}">
+                                            <c:if test="${sincronizacion.tipo == 2}"> <%--Directorio--%>
                                                 <span class="label label-success"><spring:message code="sincronizacion.tipo.${sincronizacion.tipo}"/></span>
                                             </c:if>
                                         </td>
-                                        <td>(<c:if test="${empty sincronizacion.fechaInicio}"> ******* </c:if><fmt:formatDate pattern="dd/MM/yyyy" value="${sincronizacion.fechaInicio}" />  -  <c:if test="${empty sincronizacion.fechaFin}"> ******* </c:if><fmt:formatDate pattern="dd/MM/yyyy" value="${sincronizacion.fechaFin}" />)</td>
+                                        <td>
+                                            <c:if test="${sincronizacion.tipo == 1}"> <%--Catálogo--%>
+                                                <fmt:formatDate pattern="dd/MM/yyyy HH:mm:ss" value="${sincronizacion.fechaFin}" />
+                                            </c:if>
+                                            <c:if test="${sincronizacion.tipo == 2}"> <%--Directorio--%>
+                                                (<c:if test="${empty sincronizacion.fechaInicio}"> ******* </c:if><fmt:formatDate pattern="dd/MM/yyyy" value="${sincronizacion.fechaInicio}" />  -  <c:if test="${empty sincronizacion.fechaFin}"> ******* </c:if><fmt:formatDate pattern="dd/MM/yyyy" value="${sincronizacion.fechaFin}" />)
+                                            </c:if>
+                                        </td>
                                         <td>
                                             <fmt:formatDate pattern="dd/MM/yyyy HH:mm:ss" value="${sincronizacion.fechaImportacion}" />
                                         </td>
@@ -81,7 +88,7 @@
                                                     <span class="label label-warning"><spring:message code="sincronizacion.estado.${sincronizacion.estado}"/></span>
                                                 </c:when>
                                                 <c:when test="${sincronizacion.estado == 3}">
-                                                    <span class="label label-warning"><spring:message code="sincronizacion.estado.${sincronizacion.estado}"/></span>
+                                                    <span class="label label-important"><spring:message code="sincronizacion.estado.${sincronizacion.estado}"/></span>
                                                 </c:when>
                                                 <c:when test="${sincronizacion.estado == 4}">
                                                     <span class="label label-important"><spring:message code="sincronizacion.estado.${sincronizacion.estado}"/></span>

@@ -318,7 +318,7 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
     }
 
     @Override
-    public Sincronizacion descargarCatalogoWS(Date fechaInicio) throws Exception{
+    public Sincronizacion descargarCatalogoWS() throws Exception{
 
         log.info("Iniciamos la descarga del catalogo");
 
@@ -336,10 +336,7 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
         String catalogosZip = "";
 
         // Establecemos las fechas para la sincronizacion
-        if (fechaInicio != null) {
-            sincronizacion.setFechaInicio(fechaInicio);
-        }
-
+        sincronizacion.setFechaInicio(new Date());
         sincronizacion.setFechaFin(new Date());
 
         // Guardamos la sincronizacion porque emplearemos el identificador para el nombre del directorio y el archivo.
@@ -392,18 +389,21 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
                 merge(sincronizacion);
 
             }else{
-                // La sincronizacion ha ido mal, la eliminamos
-                remove(sincronizacion);
-                return null;
+                // La sincronizacion ha ido mal, lo informamos mediante el estado
+                sincronizacion.setEstado(Dir3caibConstantes.SINCRONIZACION_ERROR_DESCARGA);
+                merge(sincronizacion);
+
+                return sincronizacion;
             }
 
             log.info("Fin de la descarga del catalogo");
 
             return sincronizacion;
 
-        } catch (Exception e) { //si hay algun problema, eliminamos la sincronizacion
+        } catch (Exception e) { //si hay algun problema, modificamos el estadod e la descarga
             log.info("Excepcion en la descarga del catalogo");
-            remove(sincronizacion);
+            sincronizacion.setEstado(Dir3caibConstantes.SINCRONIZACION_ERROR_DESCARGA);
+            merge(sincronizacion);
             throw new Exception(e.getMessage());
         }
     }
@@ -413,10 +413,15 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
 
         String sincronizacionPath = Configuracio.getSincronizacionPath(sincronizacion.getCodigo());
 
-        // Eliminamos todas las descargas realizadas
-        File directorio = new File(sincronizacionPath);
-        FileUtils.cleanDirectory(directorio);
-        FileUtils.deleteDirectory(directorio);
+        try{
+            // Eliminamos todas las descargas realizadas
+            File directorio = new File(sincronizacionPath);
+            FileUtils.cleanDirectory(directorio);
+            FileUtils.deleteDirectory(directorio);
+        }catch (Exception e){
+            log.info("El directorio no existe: " + sincronizacionPath);
+            e.printStackTrace();
+        }
 
         remove(sincronizacion);
 
@@ -449,10 +454,10 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
      */
     @Override
     @TransactionTimeout(value = 3600)
-    public Sincronizacion importarCatalogo(Sincronizacion sincronizacion) throws Exception{
+    public Sincronizacion importarCatalogo(Sincronizacion sincronizacion, Boolean localidades) throws Exception{
 
         // Importamos el Catalogo
-        importadorCatalogo.importarCatalogo(sincronizacion);
+        importadorCatalogo.importarCatalogo(sincronizacion, localidades);
 
         // Si el proceso ha sido correcto, actualizamos el estado
         sincronizacion.setFechaImportacion(new Date());
@@ -472,14 +477,9 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
 
             // Obtenemos la fecha de la ultima descarga/sincronizacion
             Sincronizacion ultimaDirectorio = ultimaSincronizacionCompletada(Dir3caibConstantes.DIRECTORIO);
-            Sincronizacion ultimaCatalogo = ultimaSincronizacionCompletada(Dir3caibConstantes.CATALOGO);
 
             // Descarga del catálogo DIR3
-            if(ultimaCatalogo != null){
-                sincroCatalogo = descargarCatalogoWS(ultimaCatalogo.getFechaFin());
-            } else {//Es una descarga inicial
-                sincroCatalogo = descargarCatalogoWS(null);
-            }
+            sincroCatalogo = descargarCatalogoWS();
 
             // Descarga de directorio DIR3
             if(ultimaDirectorio != null){
@@ -491,7 +491,7 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
             // Importamos Catálogo
             if (sincroCatalogo != null && sincroCatalogo.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
 
-                sincroCatalogo = importarCatalogo(sincroCatalogo);
+                sincroCatalogo = importarCatalogo(sincroCatalogo, false);
             }
 
             // Importamos Directorio
@@ -521,6 +521,8 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
             }
 
             e.printStackTrace();
+
+            throw e;
 
         }
 

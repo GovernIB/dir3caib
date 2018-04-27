@@ -65,11 +65,10 @@ public interface SincronizacionLocal extends BaseEjb<Sincronizacion, Long> {
 
   /**
    * Descarga los ficheros del WS de DIR3 con los datos del catálogo
-   * @param fechaInicio
    * @return
    * @throws Exception
    */
-  Sincronizacion descargarCatalogoWS(Date fechaInicio) throws Exception;
+  Sincronizacion descargarCatalogoWS() throws Exception;
 
   /**
    * Elimina una sincronización y sus ficheros correspondientes
@@ -90,7 +89,7 @@ public interface SincronizacionLocal extends BaseEjb<Sincronizacion, Long> {
    * @param sincronizacion
    * @throws Exception
    */
-  Sincronizacion importarCatalogo(Sincronizacion sincronizacion) throws Exception;
+  Sincronizacion importarCatalogo(Sincronizacion sincronizacion, Boolean localidades) throws Exception;
 
   /**
    * Realiza la descarga y sincronización del Catálogo, las Unidades y las Ofiinas

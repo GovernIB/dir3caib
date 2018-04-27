@@ -14,6 +14,6 @@ public interface ImportadorCatalogoLocal {
      * @return
      * @throws Exception
      */
-    void importarCatalogo(Sincronizacion sincronizacion) throws Exception;
+    void importarCatalogo(Sincronizacion sincronizacion, Boolean localidades) throws Exception;
 
 }
