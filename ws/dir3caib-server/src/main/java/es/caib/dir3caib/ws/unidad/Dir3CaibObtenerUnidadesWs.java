@@ -37,6 +37,10 @@ public interface Dir3CaibObtenerUnidadesWs {
 
   @WebMethod
   @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
+  UnidadTF buscarUnidad(String codigo) throws Exception;
+
+  @WebMethod
+  @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
   List<UnidadTF> obtenerArbolUnidades(String codigo, Date fechaActualizacion, Date fechaSincronizacion)
       throws Exception;
 

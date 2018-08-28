@@ -51,6 +51,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
      *          código de la unidad a transferir
      * @param fechaActualizacion
      *          fecha en la que se realiza la actualización
+     * @return null si la unidad no está vigente
      */
     @Override
     public UnidadTF obtenerUnidad(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
@@ -82,6 +83,35 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
             return unidadTF;
         } else {
             log.info("WS: la Unidad cuyo codigoDir3 es " + codigo + " está extinguida");
+            return null;
+        }
+
+    }
+
+    /**
+     * Método que devuelve una {@link es.caib.dir3caib.persistence.model.ws.UnidadTF} a partir del código indicado
+     *
+     * @param codigo código de la unidad a transferir
+     */
+    @Override
+    public UnidadTF buscarUnidad(String codigo) throws Exception {
+
+        Unidad unidad = unidadEjb.findById(codigo);
+
+        if (unidad != null) {
+            List<ContactoUnidadOrganica> contactosVisibles = new ArrayList<ContactoUnidadOrganica>();
+            for (ContactoUnidadOrganica contactoUO : unidad.getContactos()) {
+                if (contactoUO.isVisibilidad()) {
+                    contactosVisibles.add(contactoUO);
+
+                }
+            }
+            unidad.setContactos(contactosVisibles);
+
+            return UnidadTF.generar(unidad);
+
+        } else {
+            log.info("WS: la Unidad cuyo codigo Dir3 es " + codigo + " no existe");
             return null;
         }
 

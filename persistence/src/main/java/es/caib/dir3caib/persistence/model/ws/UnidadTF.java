@@ -2,8 +2,8 @@ package es.caib.dir3caib.persistence.model.ws;
 
 import es.caib.dir3caib.persistence.model.ContactoUnidadOrganica;
 import es.caib.dir3caib.persistence.model.Unidad;
-import org.apache.log4j.Logger;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -12,33 +12,32 @@ import java.util.*;
  * @author earrivi
  * Date: 12/02/14
  */
-public class UnidadTF {
-  protected final Logger log = Logger.getLogger(getClass());
+public class UnidadTF implements Serializable {
 
-   private String codigo;
-   private String denominacion;
-   private String codigoEstadoEntidad;
-   private Long nivelJerarquico;
-   private String codUnidadSuperior;
-   private String codUnidadRaiz;
+    private String codigo;
+    private String denominacion;
+    private String codigoEstadoEntidad;
+    private Long nivelJerarquico;
+    private String codUnidadSuperior;
+    private String codUnidadRaiz;
     private boolean esEdp;
     private String codEdpPrincipal;
-   private String competencias;
-   private Date fechaAltaOficial;
-   private Date fechaBajaOficial;
-   private Date fechaExtincion;
-   private Date fechaAnulacion;
-   private Long nivelAdministracion;
-   private String codigoAmbitoTerritorial;
-   private Long codigoAmbPais;
-   private Long codAmbProvincia;
-   private Long codAmbComunidad;
-   private String descripcionLocalidad;
-   private String nombreVia;
-   private String numVia;
-   private Long codigoTipoVia;
-   private String codPostal;
-   private Set<String> historicosUO;
+    private String competencias;
+    private Date fechaAltaOficial;
+    private Date fechaBajaOficial;
+    private Date fechaExtincion;
+    private Date fechaAnulacion;
+    private Long nivelAdministracion;
+    private String codigoAmbitoTerritorial;
+    private Long codigoAmbPais;
+    private Long codAmbProvincia;
+    private Long codAmbComunidad;
+    private String descripcionLocalidad;
+    private String nombreVia;
+    private String numVia;
+    private Long codigoTipoVia;
+    private String codPostal;
+    private Set<String> historicosUO;
     private List<ContactoTF> contactos;
 
 
@@ -70,27 +69,27 @@ public class UnidadTF {
     }
 
     public Long getNivelJerarquico() {
-      return nivelJerarquico;
+        return nivelJerarquico;
     }
 
     public void setNivelJerarquico(Long nivelJerarquico) {
-      this.nivelJerarquico = nivelJerarquico;
+        this.nivelJerarquico = nivelJerarquico;
     }
 
     public String getCodUnidadSuperior() {
-      return codUnidadSuperior;
+        return codUnidadSuperior;
     }
 
     public void setCodUnidadSuperior(String codUnidadSuperior) {
-      this.codUnidadSuperior = codUnidadSuperior;
+        this.codUnidadSuperior = codUnidadSuperior;
     }
 
     public String getCodUnidadRaiz() {
-      return codUnidadRaiz;
+        return codUnidadRaiz;
     }
 
     public void setCodUnidadRaiz(String codUnidadRaiz) {
-      this.codUnidadRaiz = codUnidadRaiz;
+        this.codUnidadRaiz = codUnidadRaiz;
     }
 
     public boolean isEsEdp() {
@@ -114,47 +113,47 @@ public class UnidadTF {
     }
 
     public void setCompetencias(String competencias) {
-      this.competencias = competencias;
+        this.competencias = competencias;
     }
 
     public Date getFechaAltaOficial() {
-      return fechaAltaOficial;
+        return fechaAltaOficial;
     }
 
     public void setFechaAltaOficial(Date fechaAltaOficial) {
-      this.fechaAltaOficial = fechaAltaOficial;
+        this.fechaAltaOficial = fechaAltaOficial;
     }
 
     public Date getFechaBajaOficial() {
-      return fechaBajaOficial;
+        return fechaBajaOficial;
     }
 
     public void setFechaBajaOficial(Date fechaBajaOficial) {
-      this.fechaBajaOficial = fechaBajaOficial;
+        this.fechaBajaOficial = fechaBajaOficial;
     }
 
     public Date getFechaExtincion() {
-      return fechaExtincion;
+        return fechaExtincion;
     }
 
     public void setFechaExtincion(Date fechaExtincion) {
-      this.fechaExtincion = fechaExtincion;
+        this.fechaExtincion = fechaExtincion;
     }
 
     public Date getFechaAnulacion() {
-      return fechaAnulacion;
+        return fechaAnulacion;
     }
 
     public void setFechaAnulacion(Date fechaAnulacion) {
-      this.fechaAnulacion = fechaAnulacion;
+        this.fechaAnulacion = fechaAnulacion;
     }
 
     public Long getNivelAdministracion() {
-      return nivelAdministracion;
+        return nivelAdministracion;
     }
 
     public void setNivelAdministracion(Long nivelAdministracion) {
-      this.nivelAdministracion = nivelAdministracion;
+        this.nivelAdministracion = nivelAdministracion;
     }
 
     public String getCodigoAmbitoTerritorial() {
@@ -174,19 +173,19 @@ public class UnidadTF {
     }
 
     public Long getCodAmbProvincia() {
-      return codAmbProvincia;
+        return codAmbProvincia;
     }
 
     public void setCodAmbProvincia(Long codAmbProvincia) {
-      this.codAmbProvincia = codAmbProvincia;
+        this.codAmbProvincia = codAmbProvincia;
     }
 
     public Long getCodAmbComunidad() {
-      return codAmbComunidad;
+        return codAmbComunidad;
     }
 
     public void setCodAmbComunidad(Long codAmbComunidad) {
-      this.codAmbComunidad = codAmbComunidad;
+        this.codAmbComunidad = codAmbComunidad;
     }
 
     public String getDescripcionLocalidad() {
@@ -230,11 +229,11 @@ public class UnidadTF {
     }
 
     public Set<String> getHistoricosUO() {
-      return historicosUO;
+        return historicosUO;
     }
 
     public void setHistoricosUO(Set<String> historicosUO) {
-      this.historicosUO = historicosUO;
+        this.historicosUO = historicosUO;
     }
 
 
@@ -257,7 +256,7 @@ public class UnidadTF {
         this.contactos = contactoTFList;
     }
 
-    public void rellenar(Unidad unidad){
+    public void rellenar(Unidad unidad) {
         this.setCodigo(unidad.getCodigo());
         this.setCodUnidadRaiz(unidad.getCodUnidadRaiz().getCodigo());
         this.setCodUnidadSuperior(unidad.getCodUnidadSuperior().getCodigo());
@@ -276,34 +275,34 @@ public class UnidadTF {
         this.setFechaExtincion(unidad.getFechaExtincion());
         this.setNivelJerarquico(unidad.getNivelJerarquico());
         this.setNivelAdministracion(unidad.getNivelAdministracion().getCodigoNivelAdministracion());
-        if(unidad.getCodAmbitoTerritorial()!=null){
+        if (unidad.getCodAmbitoTerritorial() != null) {
             this.setCodigoAmbitoTerritorial(unidad.getCodAmbitoTerritorial().getCodigoAmbito());
         } else {
             this.setCodigoAmbitoTerritorial(null);
         }
-        if(unidad.getCodAmbPais()!=null){
+        if (unidad.getCodAmbPais() != null) {
             this.setCodigoAmbPais(unidad.getCodAmbPais().getCodigoPais());
         } else {
             this.setCodigoAmbPais(null);
         }
-        if(unidad.getCodAmbProvincia() != null){
-          this.setCodAmbProvincia(unidad.getCodAmbProvincia().getCodigoProvincia());
+        if (unidad.getCodAmbProvincia() != null) {
+            this.setCodAmbProvincia(unidad.getCodAmbProvincia().getCodigoProvincia());
         } else {
             this.setCodAmbProvincia(null);
         }
-        if(unidad.getCodAmbComunidad() != null){
-          this.setCodAmbComunidad(unidad.getCodAmbComunidad().getCodigoComunidad());
+        if (unidad.getCodAmbComunidad() != null) {
+            this.setCodAmbComunidad(unidad.getCodAmbComunidad().getCodigoComunidad());
         } else {
             this.setCodAmbComunidad(null);
         }
-        if(unidad.getCodLocalidad()!=null) {
+        if (unidad.getCodLocalidad() != null) {
             this.setDescripcionLocalidad(unidad.getCodLocalidad().getDescripcionLocalidad());
         } else {
             this.setDescripcionLocalidad(null);
         }
         this.setNombreVia(unidad.getNombreVia());
         this.setNumVia(unidad.getNumVia());
-        if(unidad.getTipoVia()!=null) {
+        if (unidad.getTipoVia() != null) {
             this.setCodigoTipoVia(unidad.getTipoVia().getCodigoTipoVia());
         } else {
             this.setCodigoTipoVia(null);
@@ -311,8 +310,8 @@ public class UnidadTF {
         this.setCodPostal(unidad.getCodPostal());
         // Enviamos los historicos a regweb para la gestión del organigrama
         Set<String> sHistoricosUO = new HashSet<String>();
-        for(Unidad historico : unidad.getHistoricoUO() ){
-          sHistoricosUO.add(historico.getCodigo());
+        for (Unidad historico : unidad.getHistoricoUO()) {
+            sHistoricosUO.add(historico.getCodigo());
         }
         this.setHistoricosUO(sHistoricosUO);
 
@@ -330,9 +329,9 @@ public class UnidadTF {
     }
 
 
-    public static UnidadTF generar(Unidad unidad){
+    public static UnidadTF generar(Unidad unidad) {
         UnidadTF unidadTF = null;
-        if(unidad!=null){
+        if (unidad != null) {
             unidadTF = new UnidadTF();
             unidadTF.rellenar(unidad);
         }

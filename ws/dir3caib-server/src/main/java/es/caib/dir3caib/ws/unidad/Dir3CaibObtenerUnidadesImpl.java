@@ -53,18 +53,30 @@ public class Dir3CaibObtenerUnidadesImpl implements Dir3CaibObtenerUnidadesWs {
   }
 
   /**
-   * Método que devuelve una {@link es.caib.dir3caib.persistence.model.ws.UnidadTF} a partir del código
+   * Método que devuelve una {@link es.caib.dir3caib.persistence.model.ws.UnidadTF}  a partir del código
    * indicado y en función de la fecha de actualización
    * 
    * @param codigo
    *          código de la unidad a transferir
    * @param fechaActualizacion
    *          fecha en la que se realiza la actualización
+   * @return null si la unidad no está vigente
    */
   @Override
   public UnidadTF obtenerUnidad(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
 
     return obtenerUnidadesEjb.obtenerUnidad(codigo, fechaActualizacion, fechaSincronizacion);
+  }
+
+  /**
+   * Método que devuelve una {@link es.caib.dir3caib.persistence.model.ws.UnidadTF} a partir del código indicado
+   *
+   * @param codigo código de la unidad a transferir
+   */
+  @Override
+  public UnidadTF buscarUnidad(String codigo) throws Exception {
+
+    return obtenerUnidadesEjb.buscarUnidad(codigo);
   }
 
   /**
