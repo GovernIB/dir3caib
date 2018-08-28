@@ -43,6 +43,7 @@
       <xs:element minOccurs="0" name="codigoComunidad" type="xs:long"/>
       <xs:element minOccurs="0" name="codigoPais" type="xs:long"/>
       <xs:element minOccurs="0" name="codigoTipoVia" type="xs:long"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="contactos" nillable="true" type="tns:contactoTF"/>
       <xs:element minOccurs="0" name="denominacion" type="xs:string"/>
       <xs:element minOccurs="0" name="descripcionLocalidad" type="xs:string"/>
       <xs:element minOccurs="0" name="estado" type="xs:string"/>
@@ -53,6 +54,12 @@
       <xs:element maxOccurs="unbounded" minOccurs="0" name="servicios" nillable="true" type="xs:long"/>
       <xs:element maxOccurs="unbounded" minOccurs="0" name="sirOfi" nillable="true" type="tns:relacionSirOfiTF"/>
       <xs:element minOccurs="0" name="tipoOficina" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="contactoTF">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="tipoContacto" type="xs:string"/>
+      <xs:element minOccurs="0" name="valorContacto" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
 <xs:complexType name="relacionOrganizativaOfiTF">
@@ -89,6 +96,14 @@
       <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:oficinaTF"/>
     </xs:sequence>
   </xs:complexType>
+<xs:complexType name="obtenerFechaUltimaActualizacion">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="obtenerFechaUltimaActualizacionResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:dateTime"/>
+    </xs:sequence>
+  </xs:complexType>
 <xs:complexType name="obtenerOficina">
     <xs:sequence>
       <xs:element minOccurs="0" name="arg0" type="xs:string"/>
@@ -99,14 +114,6 @@
 <xs:complexType name="obtenerOficinaResponse">
     <xs:sequence>
       <xs:element minOccurs="0" name="return" type="tns:oficinaTF"/>
-    </xs:sequence>
-  </xs:complexType>
-<xs:complexType name="obtenerFechaUltimaActualizacion">
-    <xs:sequence/>
-  </xs:complexType>
-<xs:complexType name="obtenerFechaUltimaActualizacionResponse">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="return" type="xs:dateTime"/>
     </xs:sequence>
   </xs:complexType>
 </xs:schema>
@@ -139,12 +146,12 @@
     <wsdl:part name="parameters" element="tns:getVersionWsResponse">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="obtenerFechaUltimaActualizacionResponse">
-    <wsdl:part name="parameters" element="tns:obtenerFechaUltimaActualizacionResponse">
-    </wsdl:part>
-  </wsdl:message>
   <wsdl:message name="obtenerOficinaResponse">
     <wsdl:part name="parameters" element="tns:obtenerOficinaResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerFechaUltimaActualizacionResponse">
+    <wsdl:part name="parameters" element="tns:obtenerFechaUltimaActualizacionResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="obtenerOficinasSIRUnidadResponse">
@@ -184,16 +191,16 @@
       <wsdl:output name="obtenerArbolOficinasResponse" message="tns:obtenerArbolOficinasResponse">
     </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="obtenerOficina">
-      <wsdl:input name="obtenerOficina" message="tns:obtenerOficina">
-    </wsdl:input>
-      <wsdl:output name="obtenerOficinaResponse" message="tns:obtenerOficinaResponse">
-    </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="obtenerFechaUltimaActualizacion">
       <wsdl:input name="obtenerFechaUltimaActualizacion" message="tns:obtenerFechaUltimaActualizacion">
     </wsdl:input>
       <wsdl:output name="obtenerFechaUltimaActualizacionResponse" message="tns:obtenerFechaUltimaActualizacionResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerOficina">
+      <wsdl:input name="obtenerOficina" message="tns:obtenerOficina">
+    </wsdl:input>
+      <wsdl:output name="obtenerOficinaResponse" message="tns:obtenerOficinaResponse">
     </wsdl:output>
     </wsdl:operation>
   </wsdl:portType>

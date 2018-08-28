@@ -7,10 +7,10 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for contactoTF complex type.
- * <p>
- * <p>The following schema fragment specifies the expected content contained within this class.
- * <p>
+ * <p>Clase Java para contactoTF complex type.
+ * 
+ * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
+ * 
  * <pre>
  * &lt;complexType name="contactoTF">
  *   &lt;complexContent>
@@ -23,11 +23,13 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "contactoTF", propOrder = {
-        "tipoContacto",
-        "valorContacto"
+    "tipoContacto",
+    "valorContacto"
 })
 public class ContactoTF {
 
@@ -35,40 +37,48 @@ public class ContactoTF {
     protected String valorContacto;
 
     /**
-     * Gets the value of the tipoContacto property.
-     *
-     * @return possible object is
-     * {@link String }
+     * Obtiene el valor de la propiedad tipoContacto.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getTipoContacto() {
         return tipoContacto;
     }
 
     /**
-     * Sets the value of the tipoContacto property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * Define el valor de la propiedad tipoContacto.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setTipoContacto(String value) {
         this.tipoContacto = value;
     }
 
     /**
-     * Gets the value of the valorContacto property.
-     *
-     * @return possible object is
-     * {@link String }
+     * Obtiene el valor de la propiedad valorContacto.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getValorContacto() {
         return valorContacto;
     }
 
     /**
-     * Sets the value of the valorContacto property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * Define el valor de la propiedad valorContacto.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setValorContacto(String value) {
         this.valorContacto = value;

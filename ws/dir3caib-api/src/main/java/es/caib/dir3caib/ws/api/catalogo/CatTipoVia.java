@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for catTipoVia complex type.
+ * <p>Clase Java para catTipoVia complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
  * 
  * <pre>
  * &lt;complexType name="catTipoVia">
@@ -37,7 +37,7 @@ public class CatTipoVia {
     protected String descripcionTipoVia;
 
     /**
-     * Gets the value of the codigoTipoVia property.
+     * Obtiene el valor de la propiedad codigoTipoVia.
      * 
      * @return
      *     possible object is
@@ -49,7 +49,7 @@ public class CatTipoVia {
     }
 
     /**
-     * Sets the value of the codigoTipoVia property.
+     * Define el valor de la propiedad codigoTipoVia.
      * 
      * @param value
      *     allowed object is
@@ -61,7 +61,7 @@ public class CatTipoVia {
     }
 
     /**
-     * Gets the value of the descripcionTipoVia property.
+     * Obtiene el valor de la propiedad descripcionTipoVia.
      * 
      * @return
      *     possible object is
@@ -73,7 +73,7 @@ public class CatTipoVia {
     }
 
     /**
-     * Sets the value of the descripcionTipoVia property.
+     * Define el valor de la propiedad descripcionTipoVia.
      * 
      * @param value
      *     allowed object is

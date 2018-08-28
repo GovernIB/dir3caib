@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for catEstadoEntidad complex type.
+ * <p>Clase Java para catEstadoEntidad complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
  * 
  * <pre>
  * &lt;complexType name="catEstadoEntidad">
@@ -37,7 +37,7 @@ public class CatEstadoEntidad {
     protected String descripcionEstadoEntidad;
 
     /**
-     * Gets the value of the codigoEstadoEntidad property.
+     * Obtiene el valor de la propiedad codigoEstadoEntidad.
      * 
      * @return
      *     possible object is
@@ -49,7 +49,7 @@ public class CatEstadoEntidad {
     }
 
     /**
-     * Sets the value of the codigoEstadoEntidad property.
+     * Define el valor de la propiedad codigoEstadoEntidad.
      * 
      * @param value
      *     allowed object is
@@ -61,7 +61,7 @@ public class CatEstadoEntidad {
     }
 
     /**
-     * Gets the value of the descripcionEstadoEntidad property.
+     * Obtiene el valor de la propiedad descripcionEstadoEntidad.
      * 
      * @return
      *     possible object is
@@ -73,7 +73,7 @@ public class CatEstadoEntidad {
     }
 
     /**
-     * Sets the value of the descripcionEstadoEntidad property.
+     * Define el valor de la propiedad descripcionEstadoEntidad.
      * 
      * @param value
      *     allowed object is

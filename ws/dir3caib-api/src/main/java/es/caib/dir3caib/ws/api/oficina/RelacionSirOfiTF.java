@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for relacionSirOfiTF complex type.
+ * <p>Clase Java para relacionSirOfiTF complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
  * 
  * <pre>
  * &lt;complexType name="relacionSirOfiTF">
@@ -40,7 +40,7 @@ public class RelacionSirOfiTF {
     protected String unidad;
 
     /**
-     * Gets the value of the estado property.
+     * Obtiene el valor de la propiedad estado.
      * 
      * @return
      *     possible object is
@@ -52,7 +52,7 @@ public class RelacionSirOfiTF {
     }
 
     /**
-     * Sets the value of the estado property.
+     * Define el valor de la propiedad estado.
      * 
      * @param value
      *     allowed object is
@@ -64,7 +64,7 @@ public class RelacionSirOfiTF {
     }
 
     /**
-     * Gets the value of the oficina property.
+     * Obtiene el valor de la propiedad oficina.
      * 
      * @return
      *     possible object is
@@ -76,7 +76,7 @@ public class RelacionSirOfiTF {
     }
 
     /**
-     * Sets the value of the oficina property.
+     * Define el valor de la propiedad oficina.
      * 
      * @param value
      *     allowed object is
@@ -88,7 +88,7 @@ public class RelacionSirOfiTF {
     }
 
     /**
-     * Gets the value of the unidad property.
+     * Obtiene el valor de la propiedad unidad.
      * 
      * @return
      *     possible object is
@@ -100,7 +100,7 @@ public class RelacionSirOfiTF {
     }
 
     /**
-     * Sets the value of the unidad property.
+     * Define el valor de la propiedad unidad.
      * 
      * @param value
      *     allowed object is

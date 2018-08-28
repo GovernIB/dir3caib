@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for servicio complex type.
+ * <p>Clase Java para servicio complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
  * 
  * <pre>
  * &lt;complexType name="servicio">
@@ -37,7 +37,7 @@ public class Servicio {
     protected String descServicio;
 
     /**
-     * Gets the value of the codServicio property.
+     * Obtiene el valor de la propiedad codServicio.
      * 
      * @return
      *     possible object is
@@ -49,7 +49,7 @@ public class Servicio {
     }
 
     /**
-     * Sets the value of the codServicio property.
+     * Define el valor de la propiedad codServicio.
      * 
      * @param value
      *     allowed object is
@@ -61,7 +61,7 @@ public class Servicio {
     }
 
     /**
-     * Gets the value of the descServicio property.
+     * Obtiene el valor de la propiedad descServicio.
      * 
      * @return
      *     possible object is
@@ -73,7 +73,7 @@ public class Servicio {
     }
 
     /**
-     * Sets the value of the descServicio property.
+     * Define el valor de la propiedad descServicio.
      * 
      * @param value
      *     allowed object is

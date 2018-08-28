@@ -9,10 +9,10 @@ import java.util.List;
 
 
 /**
- * <p>Java class for unidadTF complex type.
- *
- * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * <p>Clase Java para unidadTF complex type.
+ * 
+ * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
+ * 
  * <pre>
  * &lt;complexType name="unidadTF">
  *   &lt;complexContent>
@@ -48,14 +48,14 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "unidadTF", propOrder = {
     "codAmbComunidad",
     "codAmbProvincia",
-        "codEdpPrincipal",
+    "codEdpPrincipal",
     "codPostal",
     "codUnidadRaiz",
     "codUnidadSuperior",
@@ -65,10 +65,10 @@ import java.util.List;
     "codigoEstadoEntidad",
     "codigoTipoVia",
     "competencias",
-        "contactos",
+    "contactos",
     "denominacion",
     "descripcionLocalidad",
-        "esEdp",
+    "esEdp",
     "fechaAltaOficial",
     "fechaAnulacion",
     "fechaBajaOficial",
@@ -122,7 +122,7 @@ public class UnidadTF {
     protected String numVia;
 
     /**
-     * Gets the value of the codAmbComunidad property.
+     * Obtiene el valor de la propiedad codAmbComunidad.
      * 
      * @return
      *     possible object is
@@ -134,7 +134,7 @@ public class UnidadTF {
     }
 
     /**
-     * Sets the value of the codAmbComunidad property.
+     * Define el valor de la propiedad codAmbComunidad.
      * 
      * @param value
      *     allowed object is
@@ -146,7 +146,7 @@ public class UnidadTF {
     }
 
     /**
-     * Gets the value of the codAmbProvincia property.
+     * Obtiene el valor de la propiedad codAmbProvincia.
      * 
      * @return
      *     possible object is
@@ -158,7 +158,7 @@ public class UnidadTF {
     }
 
     /**
-     * Sets the value of the codAmbProvincia property.
+     * Define el valor de la propiedad codAmbProvincia.
      * 
      * @param value
      *     allowed object is
@@ -170,7 +170,7 @@ public class UnidadTF {
     }
 
     /**
-     * Gets the value of the codEdpPrincipal property.
+     * Obtiene el valor de la propiedad codEdpPrincipal.
      * 
      * @return
      *     possible object is
@@ -182,7 +182,7 @@ public class UnidadTF {
     }
 
     /**
-     * Sets the value of the codEdpPrincipal property.
+     * Define el valor de la propiedad codEdpPrincipal.
      * 
      * @param value
      *     allowed object is
@@ -194,7 +194,7 @@ public class UnidadTF {
     }
 
     /**
-     * Gets the value of the codPostal property.
+     * Obtiene el valor de la propiedad codPostal.
      * 
      * @return
      *     possible object is
@@ -206,7 +206,7 @@ public class UnidadTF {
     }
 
     /**
-     * Sets the value of the codPostal property.
+     * Define el valor de la propiedad codPostal.
      * 
      * @param value
      *     allowed object is
@@ -218,7 +218,7 @@ public class UnidadTF {
     }
 
     /**
-     * Gets the value of the codUnidadRaiz property.
+     * Obtiene el valor de la propiedad codUnidadRaiz.
      * 
      * @return
      *     possible object is
@@ -230,7 +230,7 @@ public class UnidadTF {
     }
 
     /**
-     * Sets the value of the codUnidadRaiz property.
+     * Define el valor de la propiedad codUnidadRaiz.
      * 
      * @param value
      *     allowed object is
@@ -242,7 +242,7 @@ public class UnidadTF {
     }
 
     /**
-     * Gets the value of the codUnidadSuperior property.
+     * Obtiene el valor de la propiedad codUnidadSuperior.
      * 
      * @return
      *     possible object is
@@ -254,7 +254,7 @@ public class UnidadTF {
     }
 
     /**
-     * Sets the value of the codUnidadSuperior property.
+     * Define el valor de la propiedad codUnidadSuperior.
      * 
      * @param value
      *     allowed object is
@@ -266,7 +266,7 @@ public class UnidadTF {
     }
 
     /**
-     * Gets the value of the codigo property.
+     * Obtiene el valor de la propiedad codigo.
      * 
      * @return
      *     possible object is
@@ -278,7 +278,7 @@ public class UnidadTF {
     }
 
     /**
-     * Sets the value of the codigo property.
+     * Define el valor de la propiedad codigo.
      * 
      * @param value
      *     allowed object is
@@ -290,7 +290,7 @@ public class UnidadTF {
     }
 
     /**
-     * Gets the value of the codigoAmbPais property.
+     * Obtiene el valor de la propiedad codigoAmbPais.
      * 
      * @return
      *     possible object is
@@ -302,7 +302,7 @@ public class UnidadTF {
     }
 
     /**
-     * Sets the value of the codigoAmbPais property.
+     * Define el valor de la propiedad codigoAmbPais.
      * 
      * @param value
      *     allowed object is
@@ -314,7 +314,7 @@ public class UnidadTF {
     }
 
     /**
-     * Gets the value of the codigoAmbitoTerritorial property.
+     * Obtiene el valor de la propiedad codigoAmbitoTerritorial.
      * 
      * @return
      *     possible object is
@@ -326,7 +326,7 @@ public class UnidadTF {
     }
 
     /**
-     * Sets the value of the codigoAmbitoTerritorial property.
+     * Define el valor de la propiedad codigoAmbitoTerritorial.
      * 
      * @param value
      *     allowed object is
@@ -338,7 +338,7 @@ public class UnidadTF {
     }
 
     /**
-     * Gets the value of the codigoEstadoEntidad property.
+     * Obtiene el valor de la propiedad codigoEstadoEntidad.
      * 
      * @return
      *     possible object is
@@ -350,7 +350,7 @@ public class UnidadTF {
     }
 
     /**
-     * Sets the value of the codigoEstadoEntidad property.
+     * Define el valor de la propiedad codigoEstadoEntidad.
      * 
      * @param value
      *     allowed object is
@@ -362,7 +362,7 @@ public class UnidadTF {
     }
 
     /**
-     * Gets the value of the codigoTipoVia property.
+     * Obtiene el valor de la propiedad codigoTipoVia.
      * 
      * @return
      *     possible object is
@@ -374,7 +374,7 @@ public class UnidadTF {
     }
 
     /**
-     * Sets the value of the codigoTipoVia property.
+     * Define el valor de la propiedad codigoTipoVia.
      * 
      * @param value
      *     allowed object is
@@ -386,7 +386,7 @@ public class UnidadTF {
     }
 
     /**
-     * Gets the value of the competencias property.
+     * Obtiene el valor de la propiedad competencias.
      * 
      * @return
      *     possible object is
@@ -398,7 +398,7 @@ public class UnidadTF {
     }
 
     /**
-     * Sets the value of the competencias property.
+     * Define el valor de la propiedad competencias.
      * 
      * @param value
      *     allowed object is
@@ -411,23 +411,25 @@ public class UnidadTF {
 
     /**
      * Gets the value of the contactos property.
-     * <p>
+     * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the contactos property.
-     * <p>
+     * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getContactos().add(newItem);
      * </pre>
-     * <p>
-     * <p>
+     * 
+     * 
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link ContactoTF }
+     * 
+     * 
      */
     public List<ContactoTF> getContactos() {
         if (contactos == null) {
@@ -437,7 +439,7 @@ public class UnidadTF {
     }
 
     /**
-     * Gets the value of the denominacion property.
+     * Obtiene el valor de la propiedad denominacion.
      * 
      * @return
      *     possible object is
@@ -449,7 +451,7 @@ public class UnidadTF {
     }
 
     /**
-     * Sets the value of the denominacion property.
+     * Define el valor de la propiedad denominacion.
      * 
      * @param value
      *     allowed object is
@@ -461,7 +463,7 @@ public class UnidadTF {
     }
 
     /**
-     * Gets the value of the descripcionLocalidad property.
+     * Obtiene el valor de la propiedad descripcionLocalidad.
      * 
      * @return
      *     possible object is
@@ -473,7 +475,7 @@ public class UnidadTF {
     }
 
     /**
-     * Sets the value of the descripcionLocalidad property.
+     * Define el valor de la propiedad descripcionLocalidad.
      * 
      * @param value
      *     allowed object is
@@ -485,7 +487,7 @@ public class UnidadTF {
     }
 
     /**
-     * Gets the value of the esEdp property.
+     * Obtiene el valor de la propiedad esEdp.
      * 
      */
     public boolean isEsEdp() {
@@ -493,7 +495,7 @@ public class UnidadTF {
     }
 
     /**
-     * Sets the value of the esEdp property.
+     * Define el valor de la propiedad esEdp.
      * 
      */
     public void setEsEdp(boolean value) {
@@ -501,7 +503,7 @@ public class UnidadTF {
     }
 
     /**
-     * Gets the value of the fechaAltaOficial property.
+     * Obtiene el valor de la propiedad fechaAltaOficial.
      * 
      * @return
      *     possible object is
@@ -513,7 +515,7 @@ public class UnidadTF {
     }
 
     /**
-     * Sets the value of the fechaAltaOficial property.
+     * Define el valor de la propiedad fechaAltaOficial.
      * 
      * @param value
      *     allowed object is
@@ -525,7 +527,7 @@ public class UnidadTF {
     }
 
     /**
-     * Gets the value of the fechaAnulacion property.
+     * Obtiene el valor de la propiedad fechaAnulacion.
      * 
      * @return
      *     possible object is
@@ -537,7 +539,7 @@ public class UnidadTF {
     }
 
     /**
-     * Sets the value of the fechaAnulacion property.
+     * Define el valor de la propiedad fechaAnulacion.
      * 
      * @param value
      *     allowed object is
@@ -549,7 +551,7 @@ public class UnidadTF {
     }
 
     /**
-     * Gets the value of the fechaBajaOficial property.
+     * Obtiene el valor de la propiedad fechaBajaOficial.
      * 
      * @return
      *     possible object is
@@ -561,7 +563,7 @@ public class UnidadTF {
     }
 
     /**
-     * Sets the value of the fechaBajaOficial property.
+     * Define el valor de la propiedad fechaBajaOficial.
      * 
      * @param value
      *     allowed object is
@@ -573,7 +575,7 @@ public class UnidadTF {
     }
 
     /**
-     * Gets the value of the fechaExtincion property.
+     * Obtiene el valor de la propiedad fechaExtincion.
      * 
      * @return
      *     possible object is
@@ -585,7 +587,7 @@ public class UnidadTF {
     }
 
     /**
-     * Sets the value of the fechaExtincion property.
+     * Define el valor de la propiedad fechaExtincion.
      * 
      * @param value
      *     allowed object is
@@ -626,7 +628,7 @@ public class UnidadTF {
     }
 
     /**
-     * Gets the value of the nivelAdministracion property.
+     * Obtiene el valor de la propiedad nivelAdministracion.
      * 
      * @return
      *     possible object is
@@ -638,7 +640,7 @@ public class UnidadTF {
     }
 
     /**
-     * Sets the value of the nivelAdministracion property.
+     * Define el valor de la propiedad nivelAdministracion.
      * 
      * @param value
      *     allowed object is
@@ -650,7 +652,7 @@ public class UnidadTF {
     }
 
     /**
-     * Gets the value of the nivelJerarquico property.
+     * Obtiene el valor de la propiedad nivelJerarquico.
      * 
      * @return
      *     possible object is
@@ -662,7 +664,7 @@ public class UnidadTF {
     }
 
     /**
-     * Sets the value of the nivelJerarquico property.
+     * Define el valor de la propiedad nivelJerarquico.
      * 
      * @param value
      *     allowed object is
@@ -674,7 +676,7 @@ public class UnidadTF {
     }
 
     /**
-     * Gets the value of the nombreVia property.
+     * Obtiene el valor de la propiedad nombreVia.
      * 
      * @return
      *     possible object is
@@ -686,7 +688,7 @@ public class UnidadTF {
     }
 
     /**
-     * Sets the value of the nombreVia property.
+     * Define el valor de la propiedad nombreVia.
      * 
      * @param value
      *     allowed object is
@@ -698,7 +700,7 @@ public class UnidadTF {
     }
 
     /**
-     * Gets the value of the numVia property.
+     * Obtiene el valor de la propiedad numVia.
      * 
      * @return
      *     possible object is
@@ -710,7 +712,7 @@ public class UnidadTF {
     }
 
     /**
-     * Sets the value of the numVia property.
+     * Define el valor de la propiedad numVia.
      * 
      * @param value
      *     allowed object is

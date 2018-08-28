@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for catProvinciaTF complex type.
+ * <p>Clase Java para catProvinciaTF complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
  * 
  * <pre>
  * &lt;complexType name="catProvinciaTF">
@@ -40,7 +40,7 @@ public class CatProvinciaTF {
     protected String descripcionProvincia;
 
     /**
-     * Gets the value of the codigoComunidadAutonoma property.
+     * Obtiene el valor de la propiedad codigoComunidadAutonoma.
      * 
      * @return
      *     possible object is
@@ -52,7 +52,7 @@ public class CatProvinciaTF {
     }
 
     /**
-     * Sets the value of the codigoComunidadAutonoma property.
+     * Define el valor de la propiedad codigoComunidadAutonoma.
      * 
      * @param value
      *     allowed object is
@@ -64,7 +64,7 @@ public class CatProvinciaTF {
     }
 
     /**
-     * Gets the value of the codigoProvincia property.
+     * Obtiene el valor de la propiedad codigoProvincia.
      * 
      * @return
      *     possible object is
@@ -76,7 +76,7 @@ public class CatProvinciaTF {
     }
 
     /**
-     * Sets the value of the codigoProvincia property.
+     * Define el valor de la propiedad codigoProvincia.
      * 
      * @param value
      *     allowed object is
@@ -88,7 +88,7 @@ public class CatProvinciaTF {
     }
 
     /**
-     * Gets the value of the descripcionProvincia property.
+     * Obtiene el valor de la propiedad descripcionProvincia.
      * 
      * @return
      *     possible object is
@@ -100,7 +100,7 @@ public class CatProvinciaTF {
     }
 
     /**
-     * Sets the value of the descripcionProvincia property.
+     * Define el valor de la propiedad descripcionProvincia.
      * 
      * @param value
      *     allowed object is

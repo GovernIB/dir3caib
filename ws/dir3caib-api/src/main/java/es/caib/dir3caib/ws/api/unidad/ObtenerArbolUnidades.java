@@ -1,19 +1,15 @@
 
 package es.caib.dir3caib.ws.api.unidad;
 
-import java.sql.Timestamp;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.sql.Timestamp;
 
 
 /**
- * <p>Java class for obtenerArbolUnidades complex type.
+ * <p>Clase Java para obtenerArbolUnidades complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
  * 
  * <pre>
  * &lt;complexType name="obtenerArbolUnidades">
@@ -50,7 +46,7 @@ public class ObtenerArbolUnidades {
     protected Timestamp arg2;
 
     /**
-     * Gets the value of the arg0 property.
+     * Obtiene el valor de la propiedad arg0.
      * 
      * @return
      *     possible object is
@@ -62,7 +58,7 @@ public class ObtenerArbolUnidades {
     }
 
     /**
-     * Sets the value of the arg0 property.
+     * Define el valor de la propiedad arg0.
      * 
      * @param value
      *     allowed object is
@@ -74,7 +70,7 @@ public class ObtenerArbolUnidades {
     }
 
     /**
-     * Gets the value of the arg1 property.
+     * Obtiene el valor de la propiedad arg1.
      * 
      * @return
      *     possible object is
@@ -86,7 +82,7 @@ public class ObtenerArbolUnidades {
     }
 
     /**
-     * Sets the value of the arg1 property.
+     * Define el valor de la propiedad arg1.
      * 
      * @param value
      *     allowed object is
@@ -98,7 +94,7 @@ public class ObtenerArbolUnidades {
     }
 
     /**
-     * Gets the value of the arg2 property.
+     * Obtiene el valor de la propiedad arg2.
      * 
      * @return
      *     possible object is
@@ -110,7 +106,7 @@ public class ObtenerArbolUnidades {
     }
 
     /**
-     * Sets the value of the arg2 property.
+     * Define el valor de la propiedad arg2.
      * 
      * @param value
      *     allowed object is

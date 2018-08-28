@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for catPais complex type.
+ * <p>Clase Java para catPais complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
  * 
  * <pre>
  * &lt;complexType name="catPais">
@@ -43,7 +43,7 @@ public class CatPais {
     protected String descripcionPais;
 
     /**
-     * Gets the value of the alfa2Pais property.
+     * Obtiene el valor de la propiedad alfa2Pais.
      * 
      * @return
      *     possible object is
@@ -55,7 +55,7 @@ public class CatPais {
     }
 
     /**
-     * Sets the value of the alfa2Pais property.
+     * Define el valor de la propiedad alfa2Pais.
      * 
      * @param value
      *     allowed object is
@@ -67,7 +67,7 @@ public class CatPais {
     }
 
     /**
-     * Gets the value of the alfa3Pais property.
+     * Obtiene el valor de la propiedad alfa3Pais.
      * 
      * @return
      *     possible object is
@@ -79,7 +79,7 @@ public class CatPais {
     }
 
     /**
-     * Sets the value of the alfa3Pais property.
+     * Define el valor de la propiedad alfa3Pais.
      * 
      * @param value
      *     allowed object is
@@ -91,7 +91,7 @@ public class CatPais {
     }
 
     /**
-     * Gets the value of the codigoPais property.
+     * Obtiene el valor de la propiedad codigoPais.
      * 
      * @return
      *     possible object is
@@ -103,7 +103,7 @@ public class CatPais {
     }
 
     /**
-     * Sets the value of the codigoPais property.
+     * Define el valor de la propiedad codigoPais.
      * 
      * @param value
      *     allowed object is
@@ -115,7 +115,7 @@ public class CatPais {
     }
 
     /**
-     * Gets the value of the descripcionPais property.
+     * Obtiene el valor de la propiedad descripcionPais.
      * 
      * @return
      *     possible object is
@@ -127,7 +127,7 @@ public class CatPais {
     }
 
     /**
-     * Sets the value of the descripcionPais property.
+     * Define el valor de la propiedad descripcionPais.
      * 
      * @param value
      *     allowed object is

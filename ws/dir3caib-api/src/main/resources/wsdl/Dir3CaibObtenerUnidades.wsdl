@@ -4,6 +4,8 @@
                   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
   <wsdl:types>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://unidad.ws.dir3caib.caib.es/" elementFormDefault="unqualified" targetNamespace="http://unidad.ws.dir3caib.caib.es/" version="1.0">
+<xs:element name="buscarUnidad" type="tns:buscarUnidad"/>
+<xs:element name="buscarUnidadResponse" type="tns:buscarUnidadResponse"/>
 <xs:element name="getVersion" type="tns:getVersion"/>
 <xs:element name="getVersionResponse" type="tns:getVersionResponse"/>
 <xs:element name="getVersionWs" type="tns:getVersionWs"/>
@@ -16,6 +18,51 @@
 <xs:element name="obtenerFechaUltimaActualizacionResponse" type="tns:obtenerFechaUltimaActualizacionResponse"/>
 <xs:element name="obtenerUnidad" type="tns:obtenerUnidad"/>
 <xs:element name="obtenerUnidadResponse" type="tns:obtenerUnidadResponse"/>
+<xs:complexType name="buscarUnidad">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="buscarUnidadResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:unidadTF"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="unidadTF">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codAmbComunidad" type="xs:long"/>
+      <xs:element minOccurs="0" name="codAmbProvincia" type="xs:long"/>
+      <xs:element minOccurs="0" name="codEdpPrincipal" type="xs:string"/>
+      <xs:element minOccurs="0" name="codPostal" type="xs:string"/>
+      <xs:element minOccurs="0" name="codUnidadRaiz" type="xs:string"/>
+      <xs:element minOccurs="0" name="codUnidadSuperior" type="xs:string"/>
+      <xs:element minOccurs="0" name="codigo" type="xs:string"/>
+      <xs:element minOccurs="0" name="codigoAmbPais" type="xs:long"/>
+      <xs:element minOccurs="0" name="codigoAmbitoTerritorial" type="xs:string"/>
+      <xs:element minOccurs="0" name="codigoEstadoEntidad" type="xs:string"/>
+      <xs:element minOccurs="0" name="codigoTipoVia" type="xs:long"/>
+      <xs:element minOccurs="0" name="competencias" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="contactos" nillable="true" type="tns:contactoTF"/>
+      <xs:element minOccurs="0" name="denominacion" type="xs:string"/>
+      <xs:element minOccurs="0" name="descripcionLocalidad" type="xs:string"/>
+      <xs:element name="esEdp" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="fechaAltaOficial" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="fechaAnulacion" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="fechaBajaOficial" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="fechaExtincion" type="xs:dateTime"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="historicosUO" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="nivelAdministracion" type="xs:long"/>
+      <xs:element minOccurs="0" name="nivelJerarquico" type="xs:long"/>
+      <xs:element minOccurs="0" name="nombreVia" type="xs:string"/>
+      <xs:element minOccurs="0" name="numVia" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="contactoTF">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="tipoContacto" type="xs:string"/>
+      <xs:element minOccurs="0" name="valorContacto" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
 <xs:complexType name="obtenerFechaUltimaActualizacion">
     <xs:sequence/>
   </xs:complexType>
@@ -42,34 +89,6 @@
 <xs:complexType name="obtenerUnidadResponse">
     <xs:sequence>
       <xs:element minOccurs="0" name="return" type="tns:unidadTF"/>
-    </xs:sequence>
-  </xs:complexType>
-<xs:complexType name="unidadTF">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="codAmbComunidad" type="xs:long"/>
-      <xs:element minOccurs="0" name="codAmbProvincia" type="xs:long"/>
-      <xs:element minOccurs="0" name="codEdpPrincipal" type="xs:string"/>
-      <xs:element minOccurs="0" name="codPostal" type="xs:string"/>
-      <xs:element minOccurs="0" name="codUnidadRaiz" type="xs:string"/>
-      <xs:element minOccurs="0" name="codUnidadSuperior" type="xs:string"/>
-      <xs:element minOccurs="0" name="codigo" type="xs:string"/>
-      <xs:element minOccurs="0" name="codigoAmbPais" type="xs:long"/>
-      <xs:element minOccurs="0" name="codigoAmbitoTerritorial" type="xs:string"/>
-      <xs:element minOccurs="0" name="codigoEstadoEntidad" type="xs:string"/>
-      <xs:element minOccurs="0" name="codigoTipoVia" type="xs:long"/>
-      <xs:element minOccurs="0" name="competencias" type="xs:string"/>
-      <xs:element minOccurs="0" name="denominacion" type="xs:string"/>
-      <xs:element minOccurs="0" name="descripcionLocalidad" type="xs:string"/>
-      <xs:element name="esEdp" type="xs:boolean"/>
-      <xs:element minOccurs="0" name="fechaAltaOficial" type="xs:dateTime"/>
-      <xs:element minOccurs="0" name="fechaAnulacion" type="xs:dateTime"/>
-      <xs:element minOccurs="0" name="fechaBajaOficial" type="xs:dateTime"/>
-      <xs:element minOccurs="0" name="fechaExtincion" type="xs:dateTime"/>
-      <xs:element maxOccurs="unbounded" minOccurs="0" name="historicosUO" nillable="true" type="xs:string"/>
-      <xs:element minOccurs="0" name="nivelAdministracion" type="xs:long"/>
-      <xs:element minOccurs="0" name="nivelJerarquico" type="xs:long"/>
-      <xs:element minOccurs="0" name="nombreVia" type="xs:string"/>
-      <xs:element minOccurs="0" name="numVia" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
 <xs:complexType name="getVersion">
@@ -108,6 +127,10 @@
     <wsdl:part name="parameters" element="tns:obtenerArbolUnidadesDestinatarias">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="buscarUnidadResponse">
+    <wsdl:part name="parameters" element="tns:buscarUnidadResponse">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="obtenerFechaUltimaActualizacion">
     <wsdl:part name="parameters" element="tns:obtenerFechaUltimaActualizacion">
     </wsdl:part>
@@ -116,24 +139,16 @@
     <wsdl:part name="parameters" element="tns:obtenerArbolUnidadesDestinatariasResponse">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="obtenerArbolUnidades">
-    <wsdl:part name="parameters" element="tns:obtenerArbolUnidades">
-    </wsdl:part>
-  </wsdl:message>
   <wsdl:message name="getVersionResponse">
     <wsdl:part name="parameters" element="tns:getVersionResponse">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="getVersionWs">
-    <wsdl:part name="parameters" element="tns:getVersionWs">
+  <wsdl:message name="obtenerArbolUnidades">
+    <wsdl:part name="parameters" element="tns:obtenerArbolUnidades">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="obtenerUnidadResponse">
     <wsdl:part name="parameters" element="tns:obtenerUnidadResponse">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="getVersion">
-    <wsdl:part name="parameters" element="tns:getVersion">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="obtenerUnidad">
@@ -142,6 +157,18 @@
   </wsdl:message>
   <wsdl:message name="obtenerArbolUnidadesResponse">
     <wsdl:part name="parameters" element="tns:obtenerArbolUnidadesResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="buscarUnidad">
+    <wsdl:part name="parameters" element="tns:buscarUnidad">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getVersionWs">
+    <wsdl:part name="parameters" element="tns:getVersionWs">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getVersion">
+    <wsdl:part name="parameters" element="tns:getVersion">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="obtenerFechaUltimaActualizacionResponse">
@@ -153,6 +180,12 @@
     </wsdl:part>
   </wsdl:message>
   <wsdl:portType name="Dir3CaibObtenerUnidadesWs">
+    <wsdl:operation name="buscarUnidad">
+      <wsdl:input name="buscarUnidad" message="tns:buscarUnidad">
+    </wsdl:input>
+      <wsdl:output name="buscarUnidadResponse" message="tns:buscarUnidadResponse">
+    </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="obtenerFechaUltimaActualizacion">
       <wsdl:input name="obtenerFechaUltimaActualizacion" message="tns:obtenerFechaUltimaActualizacion">
     </wsdl:input>
@@ -192,6 +225,15 @@
   </wsdl:portType>
   <wsdl:binding name="Dir3CaibObtenerUnidadesWsServiceSoapBinding" type="tns:Dir3CaibObtenerUnidadesWs">
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="buscarUnidad">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="buscarUnidad">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="buscarUnidadResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="obtenerFechaUltimaActualizacion">
       <soap:operation soapAction="" style="document"/>
       <wsdl:input name="obtenerFechaUltimaActualizacion">

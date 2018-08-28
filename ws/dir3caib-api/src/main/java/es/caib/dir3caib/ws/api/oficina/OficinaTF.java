@@ -1,19 +1,19 @@
 
 package es.caib.dir3caib.ws.api.oficina;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
- * <p>Java class for oficinaTF complex type.
- *
- * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * <p>Clase Java para oficinaTF complex type.
+ * 
+ * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
+ * 
  * <pre>
  * &lt;complexType name="oficinaTF">
  *   &lt;complexContent>
@@ -42,8 +42,8 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "oficinaTF", propOrder = {
@@ -54,7 +54,7 @@ import java.util.List;
     "codigoComunidad",
     "codigoPais",
     "codigoTipoVia",
-        "contactos",
+    "contactos",
     "denominacion",
     "descripcionLocalidad",
     "estado",
@@ -92,7 +92,7 @@ public class OficinaTF {
     protected Long tipoOficina;
 
     /**
-     * Gets the value of the codOfiResponsable property.
+     * Obtiene el valor de la propiedad codOfiResponsable.
      * 
      * @return
      *     possible object is
@@ -104,7 +104,7 @@ public class OficinaTF {
     }
 
     /**
-     * Sets the value of the codOfiResponsable property.
+     * Define el valor de la propiedad codOfiResponsable.
      * 
      * @param value
      *     allowed object is
@@ -116,7 +116,7 @@ public class OficinaTF {
     }
 
     /**
-     * Gets the value of the codPostal property.
+     * Obtiene el valor de la propiedad codPostal.
      * 
      * @return
      *     possible object is
@@ -128,7 +128,7 @@ public class OficinaTF {
     }
 
     /**
-     * Sets the value of the codPostal property.
+     * Define el valor de la propiedad codPostal.
      * 
      * @param value
      *     allowed object is
@@ -140,7 +140,7 @@ public class OficinaTF {
     }
 
     /**
-     * Gets the value of the codUoResponsable property.
+     * Obtiene el valor de la propiedad codUoResponsable.
      * 
      * @return
      *     possible object is
@@ -152,7 +152,7 @@ public class OficinaTF {
     }
 
     /**
-     * Sets the value of the codUoResponsable property.
+     * Define el valor de la propiedad codUoResponsable.
      * 
      * @param value
      *     allowed object is
@@ -164,7 +164,7 @@ public class OficinaTF {
     }
 
     /**
-     * Gets the value of the codigo property.
+     * Obtiene el valor de la propiedad codigo.
      * 
      * @return
      *     possible object is
@@ -176,7 +176,7 @@ public class OficinaTF {
     }
 
     /**
-     * Sets the value of the codigo property.
+     * Define el valor de la propiedad codigo.
      * 
      * @param value
      *     allowed object is
@@ -188,7 +188,7 @@ public class OficinaTF {
     }
 
     /**
-     * Gets the value of the codigoComunidad property.
+     * Obtiene el valor de la propiedad codigoComunidad.
      * 
      * @return
      *     possible object is
@@ -200,7 +200,7 @@ public class OficinaTF {
     }
 
     /**
-     * Sets the value of the codigoComunidad property.
+     * Define el valor de la propiedad codigoComunidad.
      * 
      * @param value
      *     allowed object is
@@ -212,7 +212,7 @@ public class OficinaTF {
     }
 
     /**
-     * Gets the value of the codigoPais property.
+     * Obtiene el valor de la propiedad codigoPais.
      * 
      * @return
      *     possible object is
@@ -224,7 +224,7 @@ public class OficinaTF {
     }
 
     /**
-     * Sets the value of the codigoPais property.
+     * Define el valor de la propiedad codigoPais.
      * 
      * @param value
      *     allowed object is
@@ -236,7 +236,7 @@ public class OficinaTF {
     }
 
     /**
-     * Gets the value of the codigoTipoVia property.
+     * Obtiene el valor de la propiedad codigoTipoVia.
      * 
      * @return
      *     possible object is
@@ -248,7 +248,7 @@ public class OficinaTF {
     }
 
     /**
-     * Sets the value of the codigoTipoVia property.
+     * Define el valor de la propiedad codigoTipoVia.
      * 
      * @param value
      *     allowed object is
@@ -261,23 +261,25 @@ public class OficinaTF {
 
     /**
      * Gets the value of the contactos property.
-     * <p>
+     * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the contactos property.
-     * <p>
+     * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getContactos().add(newItem);
      * </pre>
-     * <p>
-     * <p>
+     * 
+     * 
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link ContactoTF }
+     * 
+     * 
      */
     public List<ContactoTF> getContactos() {
         if (contactos == null) {
@@ -287,7 +289,7 @@ public class OficinaTF {
     }
 
     /**
-     * Gets the value of the denominacion property.
+     * Obtiene el valor de la propiedad denominacion.
      * 
      * @return
      *     possible object is
@@ -299,7 +301,7 @@ public class OficinaTF {
     }
 
     /**
-     * Sets the value of the denominacion property.
+     * Define el valor de la propiedad denominacion.
      * 
      * @param value
      *     allowed object is
@@ -311,7 +313,7 @@ public class OficinaTF {
     }
 
     /**
-     * Gets the value of the descripcionLocalidad property.
+     * Obtiene el valor de la propiedad descripcionLocalidad.
      * 
      * @return
      *     possible object is
@@ -323,7 +325,7 @@ public class OficinaTF {
     }
 
     /**
-     * Sets the value of the descripcionLocalidad property.
+     * Define el valor de la propiedad descripcionLocalidad.
      * 
      * @param value
      *     allowed object is
@@ -335,7 +337,7 @@ public class OficinaTF {
     }
 
     /**
-     * Gets the value of the estado property.
+     * Obtiene el valor de la propiedad estado.
      * 
      * @return
      *     possible object is
@@ -347,7 +349,7 @@ public class OficinaTF {
     }
 
     /**
-     * Sets the value of the estado property.
+     * Define el valor de la propiedad estado.
      * 
      * @param value
      *     allowed object is
@@ -359,7 +361,7 @@ public class OficinaTF {
     }
 
     /**
-     * Gets the value of the nivelAdministracion property.
+     * Obtiene el valor de la propiedad nivelAdministracion.
      * 
      * @return
      *     possible object is
@@ -371,7 +373,7 @@ public class OficinaTF {
     }
 
     /**
-     * Sets the value of the nivelAdministracion property.
+     * Define el valor de la propiedad nivelAdministracion.
      * 
      * @param value
      *     allowed object is
@@ -383,7 +385,7 @@ public class OficinaTF {
     }
 
     /**
-     * Gets the value of the nombreVia property.
+     * Obtiene el valor de la propiedad nombreVia.
      * 
      * @return
      *     possible object is
@@ -395,7 +397,7 @@ public class OficinaTF {
     }
 
     /**
-     * Sets the value of the nombreVia property.
+     * Define el valor de la propiedad nombreVia.
      * 
      * @param value
      *     allowed object is
@@ -407,7 +409,7 @@ public class OficinaTF {
     }
 
     /**
-     * Gets the value of the numVia property.
+     * Obtiene el valor de la propiedad numVia.
      * 
      * @return
      *     possible object is
@@ -419,7 +421,7 @@ public class OficinaTF {
     }
 
     /**
-     * Sets the value of the numVia property.
+     * Define el valor de la propiedad numVia.
      * 
      * @param value
      *     allowed object is
@@ -518,7 +520,7 @@ public class OficinaTF {
     }
 
     /**
-     * Gets the value of the tipoOficina property.
+     * Obtiene el valor de la propiedad tipoOficina.
      * 
      * @return
      *     possible object is
@@ -530,7 +532,7 @@ public class OficinaTF {
     }
 
     /**
-     * Sets the value of the tipoOficina property.
+     * Define el valor de la propiedad tipoOficina.
      * 
      * @param value
      *     allowed object is

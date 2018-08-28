@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for catLocalidadTF complex type.
+ * <p>Clase Java para catLocalidadTF complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
  * 
  * <pre>
  * &lt;complexType name="catLocalidadTF">
@@ -43,7 +43,7 @@ public class CatLocalidadTF {
     protected String descripcionLocalidad;
 
     /**
-     * Gets the value of the codigoEntidadGeografica property.
+     * Obtiene el valor de la propiedad codigoEntidadGeografica.
      * 
      * @return
      *     possible object is
@@ -55,7 +55,7 @@ public class CatLocalidadTF {
     }
 
     /**
-     * Sets the value of the codigoEntidadGeografica property.
+     * Define el valor de la propiedad codigoEntidadGeografica.
      * 
      * @param value
      *     allowed object is
@@ -67,7 +67,7 @@ public class CatLocalidadTF {
     }
 
     /**
-     * Gets the value of the codigoLocalidad property.
+     * Obtiene el valor de la propiedad codigoLocalidad.
      * 
      * @return
      *     possible object is
@@ -79,7 +79,7 @@ public class CatLocalidadTF {
     }
 
     /**
-     * Sets the value of the codigoLocalidad property.
+     * Define el valor de la propiedad codigoLocalidad.
      * 
      * @param value
      *     allowed object is
@@ -91,7 +91,7 @@ public class CatLocalidadTF {
     }
 
     /**
-     * Gets the value of the codigoProvincia property.
+     * Obtiene el valor de la propiedad codigoProvincia.
      * 
      * @return
      *     possible object is
@@ -103,7 +103,7 @@ public class CatLocalidadTF {
     }
 
     /**
-     * Sets the value of the codigoProvincia property.
+     * Define el valor de la propiedad codigoProvincia.
      * 
      * @param value
      *     allowed object is
@@ -115,7 +115,7 @@ public class CatLocalidadTF {
     }
 
     /**
-     * Gets the value of the descripcionLocalidad property.
+     * Obtiene el valor de la propiedad descripcionLocalidad.
      * 
      * @return
      *     possible object is
@@ -127,7 +127,7 @@ public class CatLocalidadTF {
     }
 
     /**
-     * Sets the value of the descripcionLocalidad property.
+     * Define el valor de la propiedad descripcionLocalidad.
      * 
      * @param value
      *     allowed object is

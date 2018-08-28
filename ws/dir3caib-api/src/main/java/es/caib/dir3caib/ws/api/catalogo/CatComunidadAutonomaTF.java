@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for catComunidadAutonomaTF complex type.
+ * <p>Clase Java para catComunidadAutonomaTF complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
  * 
  * <pre>
  * &lt;complexType name="catComunidadAutonomaTF">
@@ -40,7 +40,7 @@ public class CatComunidadAutonomaTF {
     protected String descripcionComunidad;
 
     /**
-     * Gets the value of the codigoComunidad property.
+     * Obtiene el valor de la propiedad codigoComunidad.
      * 
      * @return
      *     possible object is
@@ -52,7 +52,7 @@ public class CatComunidadAutonomaTF {
     }
 
     /**
-     * Sets the value of the codigoComunidad property.
+     * Define el valor de la propiedad codigoComunidad.
      * 
      * @param value
      *     allowed object is
@@ -64,7 +64,7 @@ public class CatComunidadAutonomaTF {
     }
 
     /**
-     * Gets the value of the codigoPais property.
+     * Obtiene el valor de la propiedad codigoPais.
      * 
      * @return
      *     possible object is
@@ -76,7 +76,7 @@ public class CatComunidadAutonomaTF {
     }
 
     /**
-     * Sets the value of the codigoPais property.
+     * Define el valor de la propiedad codigoPais.
      * 
      * @param value
      *     allowed object is
@@ -88,7 +88,7 @@ public class CatComunidadAutonomaTF {
     }
 
     /**
-     * Gets the value of the descripcionComunidad property.
+     * Obtiene el valor de la propiedad descripcionComunidad.
      * 
      * @return
      *     possible object is
@@ -100,7 +100,7 @@ public class CatComunidadAutonomaTF {
     }
 
     /**
-     * Sets the value of the descripcionComunidad property.
+     * Define el valor de la propiedad descripcionComunidad.
      * 
      * @param value
      *     allowed object is
