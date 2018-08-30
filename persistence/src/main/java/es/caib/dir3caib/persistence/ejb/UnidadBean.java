@@ -720,7 +720,6 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         List<Unidad> unidadesDestConOficinas = new ArrayList<Unidad>();
         if (unidades.size() > 0) {
             unidadRaiz = unidades.get(0);
-            log.info("UNIDAD ENCONTRADA " + unidadRaiz.getCodigo());
 
             //Miramos si la unidad que nos pasan tiene oficina
             Boolean tiene = oficinaEjb.tieneOficinasArbol(unidadRaiz.getCodigo());

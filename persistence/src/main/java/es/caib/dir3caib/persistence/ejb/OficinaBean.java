@@ -584,7 +584,6 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
             oficinas.add(new Oficina((String) object));
         }
 
-        log.info("OFICINAS" + oficinas.size() + " DE " + codigo);
         if (oficinas.size() > 0) {
             return true;
         } else {
@@ -608,7 +607,6 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
                     hijos.add(new Unidad((String) object));
                 }
 
-                log.info("HIJOS  " + hijos.size());
                 for (Unidad hijo : hijos) {
                     boolean tiene = tieneOficinasArbol(hijo.getCodigo());
                     if (tiene) {
