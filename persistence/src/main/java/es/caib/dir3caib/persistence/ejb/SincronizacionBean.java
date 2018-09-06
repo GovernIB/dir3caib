@@ -632,4 +632,15 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
         zis.closeEntry();
         zis.close();
     }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public Long contarSincronizaciones(String tipo) throws Exception {
+
+        Query query = em.createQuery( "select count(sincronizacion.codigo) from Sincronizacion as sincronizacion where sincronizacion.tipo = :tipo");
+
+        query.setParameter("tipo", tipo);
+
+        return (Long) query.getSingleResult();
+    }
 }

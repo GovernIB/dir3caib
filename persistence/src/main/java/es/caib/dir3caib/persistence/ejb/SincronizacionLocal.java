@@ -111,4 +111,11 @@ public interface SincronizacionLocal extends BaseEjb<Sincronizacion, Long> {
    */
   void sincronizarDirectorioTask() throws Exception;
 
+  /**
+   * Cuenta el número de sincronizaciones según el tipo
+   * @param tipo de la sincronizacion (Directorio || Catalogo)
+   * @throws Exception
+   */
+  Long contarSincronizaciones(String tipo) throws Exception;
+
 }

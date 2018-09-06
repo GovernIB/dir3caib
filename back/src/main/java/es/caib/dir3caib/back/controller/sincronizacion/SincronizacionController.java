@@ -88,6 +88,12 @@ public class SincronizacionController extends BaseController {
         mav.addObject("ultimaSincroDirectorio", ultimaSincroDirectorio);
         mav.addObject("ultimaSincroCatalogo", ultimaSincroCatalogo);
 
+        // Obtenemos el número de descargas de Directorio y Catálogo
+        Long sincronizacionesDirectorio = sincronizacionEjb.contarSincronizaciones(Dir3caibConstantes.DIRECTORIO);
+        Long sincronizacionesCatalogo = sincronizacionEjb.contarSincronizaciones(Dir3caibConstantes.CATALOGO);
+        mav.addObject("sincronizacionesCatalogo", sincronizacionesCatalogo);
+        mav.addObject("sincronizacionesDirectorio", sincronizacionesDirectorio);
+
         return mav;
     }
 
@@ -251,6 +257,58 @@ public class SincronizacionController extends BaseController {
             sincronizacionEjb.eliminarSincronizacion(sincronizacion);
 
             Mensaje.saveMessageInfo(request, getMessage("dir3caib.eliminar.registro"));
+
+        } catch (Exception e) {
+            Mensaje.saveMessageError(request, getMessage("sincronizacion.eliminar.error"));
+            e.printStackTrace();
+        }
+
+        return "redirect:/sincronizacion/list/1";
+    }
+
+    /**
+     * Eliminar todas las {@link es.caib.dir3caib.persistence.model.Sincronizacion} excepto las últimas correctas
+     */
+    @RequestMapping(value = "/deleteAll")
+    public String eliminarTodasSincronizacion(HttpServletRequest request) {
+
+        try {
+
+            // Obtenemos todas las sincronizaciones menos las últimas correctas
+            Sincronizacion ultimaSincroDirectorio = sincronizacionEjb.ultimaSincronizacionCompletada(Dir3caibConstantes.DIRECTORIO);
+            Sincronizacion ultimaSincroCatalogo = sincronizacionEjb.ultimaSincronizacionCompletada(Dir3caibConstantes.CATALOGO);
+            // Obtenemos todas las sincronizaciones
+            List<Sincronizacion> sincronizacionesTodas = sincronizacionEjb.getAll();
+            // Obtenemos el número de descargas de Directorio y Catálogo
+            Long sincronizacionesDirectorio = sincronizacionEjb.contarSincronizaciones(Dir3caibConstantes.DIRECTORIO);
+            Long sincronizacionesCatalogo = sincronizacionEjb.contarSincronizaciones(Dir3caibConstantes.CATALOGO);
+
+
+            if (ultimaSincroDirectorio != null && ultimaSincroCatalogo != null) {
+
+                if (sincronizacionesCatalogo > 1 || sincronizacionesDirectorio > 1) {
+
+                    for (Sincronizacion sincro : sincronizacionesTodas){
+
+                        // Comprobamos que no se trate de las últimas sincronizaciones correctas
+                        if(!sincro.getCodigo().equals(ultimaSincroDirectorio.getCodigo()) && !sincro.getCodigo().equals(ultimaSincroCatalogo.getCodigo())){
+                            // Eliminamos la sincronización y sus ficheros asociados
+                            sincronizacionEjb.eliminarSincronizacion(sincro);
+                        }
+
+                    }
+                } else{
+                    Mensaje.saveMessageError(request, getMessage("sincronizacion.eliminar.imposible"));
+                    return "redirect:/sincronizacion/list/1";
+                }
+            }else{
+                Mensaje.saveMessageError(request, getMessage("sincronizacion.eliminar.imposible"));
+                return "redirect:/sincronizacion/list/1";
+            }
+
+            Mensaje.saveMessageInfo(request, getMessage("dir3caib.eliminar.registros"));
+            return "redirect:/sincronizacion/list/1";
+
 
         } catch (Exception e) {
             Mensaje.saveMessageError(request, getMessage("sincronizacion.eliminar.error"));

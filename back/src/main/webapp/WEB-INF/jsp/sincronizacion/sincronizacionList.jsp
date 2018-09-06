@@ -161,11 +161,20 @@
                                 </tbody>
                             </table>
 
+                            <c:if test="${ultimaSincroDirectorio != null && ultimaSincroCatalogo != null}">
+                                <c:if test="${sincronizacionesCatalogo > 1 || sincronizacionesDirectorio > 1}">
+                                    <div class="span2">
+                                        <a class="btn btn-danger" onclick='javascript:confirm("<c:url value="/sincronizacion/deleteAll"/>","<spring:message code="dir3caib.confirmar.eliminar.sincronizaciones" htmlEscape="true"/>")' href="javascript:void(0);" title="<spring:message code="sincronizacion.eliminar.todos"/>"><spring:message code="sincronizacion.eliminar.todos"/></a>
+                                    </div>
+                                </c:if>
+                            </c:if>
+
                             <!-- Paginacion -->
-                            <c:import url="../modulos/paginacion.jsp">
-                                <c:param name="entidad" value="sincronizacion"/>
-                                
-                            </c:import>
+                            <div class="span9 dreta">
+                                <c:import url="../modulos/paginacion.jsp">
+                                    <c:param name="entidad" value="sincronizacion"/>
+                                </c:import>
+                            </div>
                         </c:if>
                 </div>
 
