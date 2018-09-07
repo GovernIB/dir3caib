@@ -651,4 +651,8 @@ a.text-gris:focus {
 
 .dreta{
     float: right !important;
+    margin-bottom: 20px;
+}
+.margin0{
+    margin: 0px;
 }

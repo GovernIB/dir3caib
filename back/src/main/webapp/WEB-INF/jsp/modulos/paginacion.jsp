@@ -4,7 +4,7 @@
 
 
 <c:if test="${paginacion.totalPages > 1}">
-    <div class="pagination pagination-right">
+    <div class="pagination pagination-right margin0">
 
         <c:url var="firstUrl" value="/${param.elemento}/${param.entidad}/list/1" />
         <c:url var="lastUrl" value="/${param.elemento}/${param.entidad}/list/${paginacion.totalPages}" />
