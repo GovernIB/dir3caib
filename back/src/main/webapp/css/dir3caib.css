@@ -514,6 +514,62 @@ table th {
     background-color: #73e136;
     border-color: #7af736;
 }
+.btn-edp {
+    color: #999999;
+    background-color: #6FF6F5;
+    border-color: #55CECD;
+}
+.btn-edp:hover,
+.btn-edp:focus,
+.btn-edp:active,
+.btn-edp.active{
+    color: #999999;
+    background-color: #27F6F7;
+    border-color: #55CECD;
+}
+.btn-ofsir {
+    color: #fff;
+    background-color: #FF99FF;
+    border-color: #FD61FD;
+}
+.btn-ofsir:hover,
+.btn-ofsir:focus,
+.btn-ofsir:active,
+.btn-ofsir.active{
+    color: #fff;
+    background-color: #FD61FD;
+    border-color: #E541E5;
+}
+.btn-primary-llegenda {
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+    cursor: default;
+    width: 100%;
+}
+.btn-primary-llegenda:hover,
+.btn-primary-llegenda:focus,
+.btn-primary-llegenda:active,
+.btn-primary-llegenda.active{
+    color: #fff;
+    background-color: #286090;
+    border-color: #122b40;
+}
+.btn-warning-llegenda {
+    color: #fff;
+    background-color: #f0ad4e;
+    border-color: #eea236;
+    cursor: default;
+    width: 100%;
+}
+.btn-warning-llegenda:hover,
+.btn-warning-llegenda:focus,
+.btn-warning-llegenda:active,
+.btn-warning-llegenda.active{
+    color: #fff;
+    background-color: #ec971f;
+    border-color: #985f0d;
+}
 .text-gris{
     color: #333;
 }
@@ -521,11 +577,6 @@ a.text-gris:hover,
 a.text-gris:focus {
     color: #333;
     text-decoration: none;
-}
-.llegenda{
-    float: right;
-    width: 14.52991452991453%;
-    margin-right: 30px;
 }
 .pad-bottom5 {
     padding-bottom: 5px;
@@ -568,4 +619,40 @@ a.text-gris:focus {
     position: absolute;
     margin-left: 30px;
     padding: 0px;
+}
+
+/* Leyenda */
+.llegenda{
+    float: right;
+    width: 155px;
+    margin-right: 30px;
+    position: fixed;
+    margin-left: -180px;
+}
+.button-right {
+    float: right !important;
+    margin-top: 5px;
+}
+.llegendaCapsa{
+    width: 120px;
+    line-height: 1.5;
+    border-radius: 4px;
+    white-space: normal;
+}
+.vuitanta-percent {
+    max-width: 80%;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 1;
+    white-space: normal;
+    text-align: -webkit-match-parent;
+}
+/* Fin Leyenda */
+
+.dreta{
+    float: right !important;
+    margin-bottom: 20px;
+}
+.margin0{
+    margin: 0px;
 }
