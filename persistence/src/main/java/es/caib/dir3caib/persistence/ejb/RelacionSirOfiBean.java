@@ -106,4 +106,16 @@ public class RelacionSirOfiBean extends BaseEjbJPA<RelacionSirOfi, Long>
         em.createQuery("delete from RelacionSirOfi").executeUpdate();
         em.flush();
     }
+
+   public List<RelacionSirOfi> relacionesSirOfiByUnidaddEstado(String codigo, String estado) throws Exception {
+      Query q = em.createQuery("Select relacionSirOfi from RelacionSirOfi as relacionSirOfi where " +
+         "relacionSirOfi.unidad.codigo =:codigo and relacionSirOfi.estado.codigoEstadoEntidad =:estado order by relacionSirOfi.oficina.codigo");
+
+      q.setParameter("codigo", codigo);
+      q.setParameter("estado", estado);
+
+
+      return q.getResultList();
+
+   }
 }

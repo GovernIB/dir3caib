@@ -3,8 +3,9 @@ package es.caib.dir3caib.back.controller.unidad;
 import es.caib.dir3caib.back.controller.BaseController;
 import es.caib.dir3caib.back.form.UnidadBusquedaForm;
 import es.caib.dir3caib.persistence.ejb.ArbolLocal;
+import es.caib.dir3caib.persistence.ejb.RelacionOrganizativaOfiLocal;
+import es.caib.dir3caib.persistence.ejb.RelacionSirOfiLocal;
 import es.caib.dir3caib.persistence.model.*;
-import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.Paginacion;
 import es.caib.dir3caib.utils.Configuracio;
 import es.caib.dir3caib.utils.Utils;
@@ -38,6 +39,12 @@ public class UnidadController extends BaseController {
 
     @EJB(mappedName = "dir3caib/ArbolEJB/local")
     private ArbolLocal arbolEjb;
+
+    @EJB(mappedName = "dir3caib/RelacionOrganizativaOfiEJB/local")
+    private RelacionOrganizativaOfiLocal relacionOrganizativaOfiEjb;
+
+    @EJB(mappedName = "dir3caib/RelacionSirOfiEJB/local")
+    private RelacionSirOfiLocal relacionSirOfiEjb;
 
 
     /**
@@ -143,14 +150,103 @@ public class UnidadController extends BaseController {
         //Obtenemos los datos básicos de la unidad que nos indican(suele ser la raíz del árbol)
         Unidad unidad = unidadEjb.findByCodigoLigero(idUnidad);
 
-        Nodo nodo = new Nodo(); //Representa el nodo raiz del árbol que se quiere mostrar.
+        //Nodo nodo = new Nodo(); //Representa el nodo raiz del árbol que se quiere mostrar.
         //Obtenemos el árbol de unidades
-        arbolEjb.arbolUnidades(idUnidad, nodo, unidad.getEstado().getCodigoEstadoEntidad(), true);
+        //  arbolEjb.arbolUnidades(idUnidad, nodo, unidad.getEstado().getCodigoEstadoEntidad(), true);
+
+
+        List<Unidad> unidadesPrimerNivel = unidadEjb.getUnidadesByNivel((long) 1, unidad.getCodUnidadRaiz().getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+        List<Unidad> unidadesSegundoNivel = unidadEjb.getUnidadesByNivel((long) 2, unidad.getCodUnidadRaiz().getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+        List<Unidad> unidadesTercerNivel = unidadEjb.getUnidadesByNivel((long) 3, unidad.getCodUnidadRaiz().getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+        List<Unidad> unidadesCuartoNivel = unidadEjb.getUnidadesByNivel((long) 4, unidad.getCodUnidadRaiz().getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+        List<Unidad> unidadesQuintoNivel = unidadEjb.getUnidadesByNivel((long) 5, unidad.getCodUnidadRaiz().getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+        List<Unidad> unidadesSextoNivel = unidadEjb.getUnidadesByNivel((long) 6, unidad.getCodUnidadRaiz().getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+        List<Unidad> unidadesSeptimoNivel = unidadEjb.getUnidadesByNivel((long) 7, unidad.getCodUnidadRaiz().getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+
+
+        // Subimos los niveles de los unidades para empezar desde la raiz
+        if (unidadesPrimerNivel.size() == 0) {
+            if (unidadesSegundoNivel.size() == 0) {
+                if (unidadesTercerNivel.size() == 0) {
+                    if (unidadesCuartoNivel.size() == 0) {
+                        if (unidadesQuintoNivel.size() == 0) {
+                            if (unidadesSextoNivel.size() == 0) {
+                                if (unidadesSeptimoNivel.size() > 0) {
+                                    unidadesPrimerNivel.addAll(unidadesSeptimoNivel);
+                                    unidadesSeptimoNivel.clear();
+                                }
+                            } else {
+                                unidadesPrimerNivel.addAll(unidadesSextoNivel);
+                                unidadesSegundoNivel.addAll(unidadesSeptimoNivel);
+                                unidadesSextoNivel.clear();
+                                unidadesSeptimoNivel.clear();
+                            }
+                        } else {
+                            unidadesPrimerNivel.addAll(unidadesQuintoNivel);
+                            unidadesSegundoNivel.addAll(unidadesSextoNivel);
+                            unidadesTercerNivel.addAll(unidadesSeptimoNivel);
+                            unidadesQuintoNivel.clear();
+                            unidadesSextoNivel.clear();
+                            unidadesSeptimoNivel.clear();
+                        }
+                    } else {
+                        unidadesPrimerNivel.addAll(unidadesCuartoNivel);
+                        unidadesSegundoNivel.addAll(unidadesQuintoNivel);
+                        unidadesTercerNivel.addAll(unidadesSextoNivel);
+                        unidadesCuartoNivel.addAll(unidadesSeptimoNivel);
+                        unidadesQuintoNivel.clear();
+                        unidadesSextoNivel.clear();
+                        unidadesSeptimoNivel.clear();
+                    }
+                } else {
+                    unidadesPrimerNivel.addAll(unidadesTercerNivel);
+                    unidadesSegundoNivel.addAll(unidadesCuartoNivel);
+                    unidadesTercerNivel.addAll(unidadesQuintoNivel);
+                    unidadesCuartoNivel.addAll(unidadesSextoNivel);
+                    unidadesQuintoNivel.addAll(unidadesSeptimoNivel);
+                    unidadesSextoNivel.clear();
+                    unidadesSeptimoNivel.clear();
+                }
+            } else {
+                unidadesPrimerNivel.addAll(unidadesSegundoNivel);
+                unidadesSegundoNivel.addAll(unidadesTercerNivel);
+                unidadesTercerNivel.addAll(unidadesCuartoNivel);
+                unidadesCuartoNivel.addAll(unidadesQuintoNivel);
+                unidadesQuintoNivel.addAll(unidadesSextoNivel);
+                unidadesSextoNivel.addAll(unidadesSeptimoNivel);
+                unidadesSeptimoNivel.clear();
+            }
+        }
+
+
+        // Lista las Oficinas según si son Responsables, Dependientes o Funcionales
+        List<Oficina> oficinasPrincipales = oficinaEjb.responsableByUnidadEstado(unidad.getCodUnidadRaiz().getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+        List<Oficina> oficinasAuxiliares = oficinaEjb.dependienteByUnidadEstado(unidad.getCodUnidadRaiz().getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+
+        // Lista las Oficinas Organizativas
+        List<RelacionOrganizativaOfi> relacionesOrganizativaOfi = relacionOrganizativaOfiEjb.getOrganizativasCompletoByUnidadEstado(unidad.getCodUnidadRaiz().getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+
+        // Lista las Relaciones SirOfi
+        List<RelacionSirOfi> relacionesSirOfi = relacionSirOfiEjb.relacionesSirOfiByUnidaddEstado(unidad.getCodUnidadRaiz().getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+
+
         Long end = System.currentTimeMillis();
 
         log.info("TIEMPO CARGA ARBOLarbol: " + Utils.formatElapsedTime(end - start));
 
-        mav.addObject("nodo", nodo);
+        //mav.addObject("nodo", nodo);
+        mav.addObject("unidadesPrimerNivel", unidadesPrimerNivel);
+        mav.addObject("unidadesSegundoNivel", unidadesSegundoNivel);
+        mav.addObject("unidadesTercerNivel", unidadesTercerNivel);
+        mav.addObject("unidadesCuartoNivel", unidadesCuartoNivel);
+        mav.addObject("unidadesQuintoNivel", unidadesQuintoNivel);
+        mav.addObject("unidadesSextoNivel", unidadesSextoNivel);
+        mav.addObject("unidadesSeptimoNivel", unidadesSeptimoNivel);
+        mav.addObject("oficinasPrincipales", oficinasPrincipales);
+        mav.addObject("oficinasAuxiliares", oficinasAuxiliares);
+        mav.addObject("relacionesOrganizativaOfi", relacionesOrganizativaOfi);
+        mav.addObject("relacionesSirOfi", relacionesSirOfi);
+        mav.addObject("unidadRaiz", unidad);
         return mav;
 
     }

@@ -296,5 +296,9 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      */
     Boolean existeHistoricoUnidad(String codigoAnterior, String codigoUltima) throws Exception;
 
+    /* Obtiene las unidades del nivel indicado */
+    public List<Unidad> getUnidadesByNivel(long nivel, String codigoUnidadPadre, String estado) throws Exception;
+
+
 
 }

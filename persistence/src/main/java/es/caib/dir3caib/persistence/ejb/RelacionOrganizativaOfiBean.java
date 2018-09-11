@@ -114,6 +114,18 @@ public class RelacionOrganizativaOfiBean extends BaseEjbJPA<RelacionOrganizativa
 
         return NodoUtils.getNodoListMinimo(q.getResultList());
     }
+
+    @Override
+    public List<RelacionOrganizativaOfi> getOrganizativasCompletoByUnidadEstado(String codigo, String estado) throws Exception {
+        Query q = em.createQuery("Select relacionOrganizativaOfi from RelacionOrganizativaOfi as relacionOrganizativaOfi where " +
+           "relacionOrganizativaOfi.unidad.codigo =:codigo and relacionOrganizativaOfi.estado.codigoEstadoEntidad =:estado order by relacionOrganizativaOfi.oficina.codigo");
+
+        q.setParameter("codigo", codigo);
+        q.setParameter("estado", estado);
+
+
+        return q.getResultList();
+    }
     @Override
     public void deleteAll() throws Exception {
 

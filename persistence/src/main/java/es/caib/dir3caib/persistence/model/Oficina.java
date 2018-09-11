@@ -70,6 +70,14 @@ public class Oficina implements Serializable {
     this.codigo = codigo;
   }
 
+  public Oficina(String codigo, String denominacion, String codUoResponsable, String codOfiResponsable) {
+
+    this.codigo = codigo;
+    this.denominacion = denominacion;
+    this.codUoResponsable = new Unidad(codUoResponsable);
+    this.codOfiResponsable = new Oficina(codOfiResponsable);
+  }
+
   public void finalize() throws Throwable {
 
 	}

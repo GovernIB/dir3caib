@@ -121,6 +121,7 @@ public class RestController {
     /**
      * Obtiene las {@link es.caib.dir3caib.persistence.model.Unidad} en función de los criterios de busqueda
      */
+    /* @RequestParam(value="vigentes", required=false) boolean vigentes ----- Esto es para definir parametros opcionales*/
     @RequestMapping(value = "/busqueda/organismos", method = RequestMethod.GET)
     public
     @ResponseBody

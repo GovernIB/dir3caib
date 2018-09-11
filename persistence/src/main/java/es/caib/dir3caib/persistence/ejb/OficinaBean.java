@@ -769,5 +769,45 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
         q.executeUpdate();
 
     }
+
+    public List<Oficina> responsableByUnidadEstado(String codigoUnidadResponsable, String estado) throws Exception {
+        Query q = em.createQuery("Select  oficina.codigo, oficina.denominacion, oficina.codUoResponsable.codigo from Oficina as oficina where " +
+           "oficina.codUoResponsable.codigo =:codigoUnidadResponsable and oficina.estado.codigoEstadoEntidad =:estado and " +
+           "oficina.codOfiResponsable is null order by oficina.codigo");
+
+        q.setParameter("codigoUnidadResponsable", codigoUnidadResponsable);
+        q.setParameter("estado", estado);
+
+        List<Object[]> result = q.getResultList();
+        List<Oficina> oficinas = new ArrayList<Oficina>();
+
+        for (Object[] object : result) {
+            Oficina oficina = new Oficina((String) object[0], (String) object[1], (String) object[2], null);
+
+            oficinas.add(oficina);
+        }
+
+        return oficinas;
+    }
+
+    public List<Oficina> dependienteByUnidadEstado(String codigoUnidadDependiente, String estado) throws Exception {
+        Query q = em.createQuery("Select  oficina.codigo, oficina.denominacion, oficina.codUoResponsable.codigo, oficina.codOfiResponsable.codigo from Oficina as oficina where " +
+           "oficina.organismoResponsable.entidad.id =:idEntidad and oficina.estado.codigoEstadoEntidad =:estado and " +
+           "oficina.codOfiResponsable.codigo != null order by oficina.codigo");
+
+        q.setParameter("codigoUnidadDependiente", codigoUnidadDependiente);
+        q.setParameter("estado", estado);
+
+        List<Object[]> result = q.getResultList();
+        List<Oficina> oficinas = new ArrayList<Oficina>();
+
+        for (Object[] object : result) {
+            Oficina oficina = new Oficina((String) object[0], (String) object[1], (String) object[2], (String) object[3]);
+            oficinas.add(oficina);
+        }
+
+        return oficinas;
+
+    }
 }
 

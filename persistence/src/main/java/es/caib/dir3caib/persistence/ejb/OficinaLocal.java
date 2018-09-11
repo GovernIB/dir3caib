@@ -215,4 +215,24 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      * @throws Exception
      */
     void eliminarHistoricosOficina(String idOficina) throws Exception;
+
+    /**
+     * Obtiene las Oficinas responsables cuya Unidad responsable es la indicada
+     *
+     * @param codigoUnidadResponsable
+     * @param estado
+     * @return
+     * @throws Exception
+     */
+    List<Oficina> responsableByUnidadEstado(String codigoUnidadResponsable, String estado) throws Exception;
+
+    /**
+     * Obtiene las Oficinas dependientes cuya unidad dependiente es la indicada
+     *
+     * @param codigoUnidadDependiente
+     * @param estado
+     * @return
+     * @throws Exception
+     */
+    List<Oficina> dependienteByUnidadEstado(String codigoUnidadDependiente, String estado) throws Exception;
 }

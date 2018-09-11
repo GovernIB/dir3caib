@@ -69,8 +69,8 @@ public class Unidad implements Serializable {
 	private Date fechaBajaOficial;
 	private Date fechaExtincion;
 	private Date fechaAnulacion;
-    private Date fechaImportacion;
-	private String codExterno;
+   private Date fechaImportacion;
+   private String codExterno;
 	private String observGenerales;
 	private String observBaja;
 	private CatTipoVia tipoVia;
@@ -80,8 +80,8 @@ public class Unidad implements Serializable {
 	private String codPostal;
 	private CatPais codPais;
 	private CatComunidadAutonoma codComunidad;
-    private CatLocalidad codLocalidad;
-	private String dirExtranjera;
+   private CatLocalidad codLocalidad;
+   private String dirExtranjera;
 	private String locExtranjera;
 	private String observaciones;
 	private List<ContactoUnidadOrganica> contactos;
@@ -106,6 +106,14 @@ public class Unidad implements Serializable {
     this.codUnidadRaiz = codUnidadRaiz;
     this.esEdp = esEdp;
   }
+
+   public Unidad(String codigo, String denominacion, String codUnidadRaiz, String codUnidadSuperior, boolean esEdp) {
+      this.codigo = codigo;
+      this.denominacion = denominacion;
+      this.codUnidadSuperior.codigo = codUnidadSuperior;
+      this.codUnidadRaiz.codigo = codUnidadRaiz;
+      this.esEdp = esEdp;
+   }
 
   public Unidad(String codigo) {
     this.codigo = codigo;
