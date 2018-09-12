@@ -158,21 +158,15 @@ public class UnidadController extends BaseController {
         List<Unidad> unidadesPrimerNivel;
         List<Unidad> unidadesSegundoNivel = new ArrayList<Unidad>();
         List<Unidad> unidadesTercerNivel = new ArrayList<Unidad>();
-        ;
         List<Unidad> unidadesCuartoNivel = new ArrayList<Unidad>();
-        ;
         List<Unidad> unidadesQuintoNivel = new ArrayList<Unidad>();
-        ;
         List<Unidad> unidadesSextoNivel = new ArrayList<Unidad>();
-        ;
         List<Unidad> unidadesSeptimoNivel = new ArrayList<Unidad>();
-        ;
 
         if (unidad.getCodUnidadRaiz() != null && !unidad.getCodUnidadRaiz().getCodigo().equals(unidad.getCodigo())) {
             //si no es raiz.
             unidadesPrimerNivel = unidadEjb.getUnidadesByNivelByUnidadSuperior((long) 1, unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
             for (Unidad unidad1 : unidadesPrimerNivel) {
-
                 unidadesSegundoNivel.addAll(unidadEjb.getUnidadesByNivelByUnidadSuperior((long) 2, unidad1.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
             }
             for (Unidad unidad2 : unidadesSegundoNivel) {
@@ -191,7 +185,7 @@ public class UnidadController extends BaseController {
                 unidadesSeptimoNivel = unidadEjb.getUnidadesByNivelByUnidadSuperior((long) 7, unidad6.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
             }
         } else {
-
+            //si es raiz
             unidadesPrimerNivel = unidadEjb.getUnidadesByNivel((long) 1, unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
             unidadesSegundoNivel = unidadEjb.getUnidadesByNivel((long) 2, unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
             unidadesTercerNivel = unidadEjb.getUnidadesByNivel((long) 3, unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
