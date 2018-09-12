@@ -171,7 +171,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     @Override
     @SuppressWarnings("unchecked")
     public Unidad findByCodigoLigero(String codigo) throws Exception {
-        Query q = em.createQuery("select unidad.codigo, unidad.denominacion, unidad.estado.codigoEstadoEntidad from Unidad as unidad where unidad.codigo=:codigo ");
+        Query q = em.createQuery("select unidad.codigo, unidad.denominacion, unidad.estado.codigoEstadoEntidad, unidad.codUnidadRaiz.codigo, unidad.codUnidadSuperior.codigo from Unidad as unidad where unidad.codigo=:codigo ");
         q.setParameter("codigo", codigo);
 
         List<Object[]> result = q.getResultList();
@@ -181,6 +181,10 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
             unidad.setCodigo((String) result.get(0)[0]);
             unidad.setDenominacion((String) result.get(0)[1]);
             unidad.setEstado(new CatEstadoEntidad((String)result.get(0)[2]));
+            Unidad unidadRaiz = new Unidad((String) result.get(0)[3]);
+            unidad.setCodUnidadRaiz(unidadRaiz);
+            Unidad unidadSuperior = new Unidad((String) result.get(0)[4]);
+            unidad.setCodUnidadSuperior(unidadSuperior);
 
             return  unidad;
         }else {
@@ -883,12 +887,12 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         return historicos.size() > 0;
     }
 
-    public List<Unidad> getUnidadesByNivel(long nivel, String codigoUnidadPadre, String estado) throws Exception {
+    public List<Unidad> getUnidadesByNivel(long nivel, String codigo, String estado) throws Exception {
 
         Query q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.codUnidadRaiz.codigo, unidad.codUnidadSuperior.codigo, unidad.esEdp from Unidad as unidad where " +
-           "unidad.nivelJerarquico = :nivel and unidad.codUnidadSuperior.codigo = :codigoUnidadPadre and unidad.estado.codigoEstadoEntidad = :estado order by unidad.codigo");
+           "unidad.nivelJerarquico = :nivel and unidad.codUnidadRaiz.codigo = :codigo and unidad.estado.codigoEstadoEntidad = :estado order by unidad.codigo");
         q.setParameter("nivel", nivel);
-        q.setParameter("codigoUnidadPadre", codigoUnidadPadre);
+        q.setParameter("codigo", codigo);
         q.setParameter("estado", estado);
 
         List<Unidad> organismos = new ArrayList<Unidad>();
@@ -903,5 +907,24 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         return organismos;
     }
 
+    public List<Unidad> getUnidadesByNivelByUnidadSuperior(long nivel, String codigo, String estado) throws Exception {
+
+        Query q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.codUnidadRaiz.codigo, unidad.codUnidadSuperior.codigo, unidad.esEdp from Unidad as unidad where " +
+           "unidad.nivelJerarquico = :nivel and unidad.codUnidadSuperior.codigo = :codigo and unidad.estado.codigoEstadoEntidad = :estado order by unidad.codigo");
+        q.setParameter("nivel", nivel);
+        q.setParameter("codigo", codigo);
+        q.setParameter("estado", estado);
+
+        List<Unidad> organismos = new ArrayList<Unidad>();
+        List<Object[]> result = q.getResultList();
+
+        for (Object[] object : result) {
+            Unidad organismo = new Unidad((String) object[0], (String) object[1], (String) object[2], (String) object[3], (Boolean) object[4]);
+
+            organismos.add(organismo);
+        }
+
+        return organismos;
+    }
 
 }
