@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -154,14 +155,51 @@ public class UnidadController extends BaseController {
         //Obtenemos el árbol de unidades
         //  arbolEjb.arbolUnidades(idUnidad, nodo, unidad.getEstado().getCodigoEstadoEntidad(), true);
 
+        List<Unidad> unidadesPrimerNivel;
+        List<Unidad> unidadesSegundoNivel = new ArrayList<Unidad>();
+        List<Unidad> unidadesTercerNivel = new ArrayList<Unidad>();
+        ;
+        List<Unidad> unidadesCuartoNivel = new ArrayList<Unidad>();
+        ;
+        List<Unidad> unidadesQuintoNivel = new ArrayList<Unidad>();
+        ;
+        List<Unidad> unidadesSextoNivel = new ArrayList<Unidad>();
+        ;
+        List<Unidad> unidadesSeptimoNivel = new ArrayList<Unidad>();
+        ;
 
-        List<Unidad> unidadesPrimerNivel = unidadEjb.getUnidadesByNivel((long) 1, unidad.getCodUnidadRaiz().getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-        List<Unidad> unidadesSegundoNivel = unidadEjb.getUnidadesByNivel((long) 2, unidad.getCodUnidadRaiz().getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-        List<Unidad> unidadesTercerNivel = unidadEjb.getUnidadesByNivel((long) 3, unidad.getCodUnidadRaiz().getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-        List<Unidad> unidadesCuartoNivel = unidadEjb.getUnidadesByNivel((long) 4, unidad.getCodUnidadRaiz().getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-        List<Unidad> unidadesQuintoNivel = unidadEjb.getUnidadesByNivel((long) 5, unidad.getCodUnidadRaiz().getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-        List<Unidad> unidadesSextoNivel = unidadEjb.getUnidadesByNivel((long) 6, unidad.getCodUnidadRaiz().getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-        List<Unidad> unidadesSeptimoNivel = unidadEjb.getUnidadesByNivel((long) 7, unidad.getCodUnidadRaiz().getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+        if (unidad.getCodUnidadRaiz() != null && !unidad.getCodUnidadRaiz().getCodigo().equals(unidad.getCodigo())) {
+            //si no es raiz.
+            unidadesPrimerNivel = unidadEjb.getUnidadesByNivelByUnidadSuperior((long) 1, unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+            for (Unidad unidad1 : unidadesPrimerNivel) {
+
+                unidadesSegundoNivel.addAll(unidadEjb.getUnidadesByNivelByUnidadSuperior((long) 2, unidad1.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
+            }
+            for (Unidad unidad2 : unidadesSegundoNivel) {
+                unidadesTercerNivel.addAll(unidadEjb.getUnidadesByNivelByUnidadSuperior((long) 3, unidad2.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
+            }
+            for (Unidad unidad3 : unidadesTercerNivel) {
+                unidadesCuartoNivel.addAll(unidadEjb.getUnidadesByNivelByUnidadSuperior((long) 4, unidad3.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
+            }
+            for (Unidad unidad4 : unidadesCuartoNivel) {
+                unidadesQuintoNivel.addAll(unidadEjb.getUnidadesByNivelByUnidadSuperior((long) 5, unidad4.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
+            }
+            for (Unidad unidad5 : unidadesQuintoNivel) {
+                unidadesSextoNivel.addAll(unidadEjb.getUnidadesByNivelByUnidadSuperior((long) 6, unidad5.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
+            }
+            for (Unidad unidad6 : unidadesSextoNivel) {
+                unidadesSeptimoNivel = unidadEjb.getUnidadesByNivelByUnidadSuperior((long) 7, unidad6.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+            }
+        } else {
+
+            unidadesPrimerNivel = unidadEjb.getUnidadesByNivel((long) 1, unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+            unidadesSegundoNivel = unidadEjb.getUnidadesByNivel((long) 2, unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+            unidadesTercerNivel = unidadEjb.getUnidadesByNivel((long) 3, unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+            unidadesCuartoNivel = unidadEjb.getUnidadesByNivel((long) 4, unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+            unidadesQuintoNivel = unidadEjb.getUnidadesByNivel((long) 5, unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+            unidadesSextoNivel = unidadEjb.getUnidadesByNivel((long) 6, unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+            unidadesSeptimoNivel = unidadEjb.getUnidadesByNivel((long) 7, unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+        }
 
 
         // Subimos los niveles de los unidades para empezar desde la raiz
@@ -220,14 +258,14 @@ public class UnidadController extends BaseController {
 
 
         // Lista las Oficinas según si son Responsables, Dependientes o Funcionales
-        List<Oficina> oficinasPrincipales = oficinaEjb.responsableByUnidadEstado(unidad.getCodUnidadRaiz().getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-        List<Oficina> oficinasAuxiliares = oficinaEjb.dependienteByUnidadEstado(unidad.getCodUnidadRaiz().getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+        List<Oficina> oficinasPrincipales = oficinaEjb.responsableByUnidadEstado(unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+        List<Oficina> oficinasAuxiliares = oficinaEjb.dependienteByUnidadEstado(unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
         // Lista las Oficinas Organizativas
-        List<RelacionOrganizativaOfi> relacionesOrganizativaOfi = relacionOrganizativaOfiEjb.getOrganizativasCompletoByUnidadEstado(unidad.getCodUnidadRaiz().getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+        List<RelacionOrganizativaOfi> relacionesOrganizativaOfi = relacionOrganizativaOfiEjb.getOrganizativasCompletoByUnidadEstado(unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
         // Lista las Relaciones SirOfi
-        List<RelacionSirOfi> relacionesSirOfi = relacionSirOfiEjb.relacionesSirOfiByUnidaddEstado(unidad.getCodUnidadRaiz().getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+        List<RelacionSirOfi> relacionesSirOfi = relacionSirOfiEjb.relacionesSirOfiByUnidaddEstado(unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
 
         Long end = System.currentTimeMillis();
