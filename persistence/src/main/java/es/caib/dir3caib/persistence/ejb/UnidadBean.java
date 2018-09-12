@@ -886,7 +886,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     public List<Unidad> getUnidadesByNivel(long nivel, String codigoUnidadPadre, String estado) throws Exception {
 
         Query q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.codUnidadSuperior.codigo, unidad.edp from Unidad as unidad where " +
-           "unidad.nivelJerarquico = :nivel and unidad.codigo = :codigoUnidadPadre and unidad.estado.codigoEstadoEntidad = :estado order by unidad.codigo");
+           "unidad.nivelJerarquico = :nivel and unidad.codUnidadRaiz.codigo = :codigoUnidadPadre and unidad.estado.codigoEstadoEntidad = :estado order by unidad.codigo");
         q.setParameter("nivel", nivel);
         q.setParameter("codigoUnidadPadre", codigoUnidadPadre);
         q.setParameter("estado", estado);
