@@ -151,11 +151,8 @@ public class UnidadController extends BaseController {
         //Obtenemos los datos básicos de la unidad que nos indican(suele ser la raíz del árbol)
         Unidad unidad = unidadEjb.findByCodigoLigero(idUnidad);
 
-        //Nodo nodo = new Nodo(); //Representa el nodo raiz del árbol que se quiere mostrar.
-        //Obtenemos el árbol de unidades
-       //arbolEjb.arbolUnidades(idUnidad, nodo, unidad.getEstado().getCodigoEstadoEntidad(), true);
 
-       List<Unidad> unidadesPrimerNivel;
+        List<Unidad> unidadesPrimerNivel;
         List<Unidad> unidadesSegundoNivel = new ArrayList<Unidad>();
         List<Unidad> unidadesTercerNivel = new ArrayList<Unidad>();
         List<Unidad> unidadesCuartoNivel = new ArrayList<Unidad>();
@@ -252,55 +249,54 @@ public class UnidadController extends BaseController {
 
 
         // Lista las Oficinas según si son Responsables, Dependientes o Funcionales
+        List<Oficina> oficinasPrincipales = new ArrayList<Oficina>();
+        List<Oficina> oficinasAuxiliares = new ArrayList<Oficina>();
+        List<RelacionOrganizativaOfi> relacionesOrganizativaOfi = new ArrayList<RelacionOrganizativaOfi>();
+        List<RelacionSirOfi> relacionesSirOfi = new ArrayList<RelacionSirOfi>();
 
-        List<Oficina> oficinasPrincipales = oficinaEjb.responsableByUnidadEstado(unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-       List<Oficina> oficinasAuxiliares = oficinaEjb.dependienteByUnidadEstado(unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-       List<RelacionOrganizativaOfi> relacionesOrganizativaOfi = relacionOrganizativaOfiEjb.getOrganizativasCompletoByUnidadEstado(unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-       List<RelacionSirOfi> relacionesSirOfi = relacionSirOfiEjb.relacionesSirOfiByUnidaddEstado(unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+        // El nivel inicial del Govern es el nivel 1
         for (Unidad unidad1 : unidadesPrimerNivel) {
-            oficinasPrincipales.addAll(oficinaEjb.responsableByUnidadEstado(unidad1.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
+           oficinasPrincipales.addAll(oficinaEjb.responsableByUnidadEstado(unidad1.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
            oficinasAuxiliares.addAll(oficinaEjb.dependienteByUnidadEstado(unidad1.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
            relacionesOrganizativaOfi.addAll(relacionOrganizativaOfiEjb.getOrganizativasCompletoByUnidadEstado(unidad1.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
            relacionesSirOfi.addAll(relacionSirOfiEjb.relacionesSirOfiByUnidaddEstado(unidad1.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
         }
         for (Unidad unidad2 : unidadesSegundoNivel) {
-            oficinasPrincipales.addAll(oficinaEjb.responsableByUnidadEstado(unidad2.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
+           oficinasPrincipales.addAll(oficinaEjb.responsableByUnidadEstado(unidad2.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
            oficinasAuxiliares.addAll(oficinaEjb.dependienteByUnidadEstado(unidad2.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
            relacionesOrganizativaOfi.addAll(relacionOrganizativaOfiEjb.getOrganizativasCompletoByUnidadEstado(unidad2.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
            relacionesSirOfi.addAll(relacionSirOfiEjb.relacionesSirOfiByUnidaddEstado(unidad2.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
         }
         for (Unidad unidad3 : unidadesTercerNivel) {
-            oficinasPrincipales.addAll(oficinaEjb.responsableByUnidadEstado(unidad3.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
+           oficinasPrincipales.addAll(oficinaEjb.responsableByUnidadEstado(unidad3.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
            oficinasAuxiliares.addAll(oficinaEjb.dependienteByUnidadEstado(unidad3.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
            relacionesOrganizativaOfi.addAll(relacionOrganizativaOfiEjb.getOrganizativasCompletoByUnidadEstado(unidad3.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
            relacionesSirOfi.addAll(relacionSirOfiEjb.relacionesSirOfiByUnidaddEstado(unidad3.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
         }
         for (Unidad unidad4 : unidadesCuartoNivel) {
-            oficinasPrincipales.addAll(oficinaEjb.responsableByUnidadEstado(unidad4.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
+           oficinasPrincipales.addAll(oficinaEjb.responsableByUnidadEstado(unidad4.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
            oficinasAuxiliares.addAll(oficinaEjb.dependienteByUnidadEstado(unidad4.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
            relacionesOrganizativaOfi.addAll(relacionOrganizativaOfiEjb.getOrganizativasCompletoByUnidadEstado(unidad4.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
            relacionesSirOfi.addAll(relacionSirOfiEjb.relacionesSirOfiByUnidaddEstado(unidad4.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
         }
         for (Unidad unidad5 : unidadesQuintoNivel) {
-            oficinasPrincipales.addAll(oficinaEjb.responsableByUnidadEstado(unidad5.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
+           oficinasPrincipales.addAll(oficinaEjb.responsableByUnidadEstado(unidad5.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
            oficinasAuxiliares.addAll(oficinaEjb.dependienteByUnidadEstado(unidad5.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
            relacionesOrganizativaOfi.addAll(relacionOrganizativaOfiEjb.getOrganizativasCompletoByUnidadEstado(unidad5.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
            relacionesSirOfi.addAll(relacionSirOfiEjb.relacionesSirOfiByUnidaddEstado(unidad5.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
         }
         for (Unidad unidad6 : unidadesSextoNivel) {
-            oficinasPrincipales.addAll(oficinaEjb.responsableByUnidadEstado(unidad6.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
+           oficinasPrincipales.addAll(oficinaEjb.responsableByUnidadEstado(unidad6.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
            oficinasAuxiliares.addAll(oficinaEjb.dependienteByUnidadEstado(unidad6.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
            relacionesOrganizativaOfi.addAll(relacionOrganizativaOfiEjb.getOrganizativasCompletoByUnidadEstado(unidad6.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
            relacionesSirOfi.addAll(relacionSirOfiEjb.relacionesSirOfiByUnidaddEstado(unidad6.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
         }
         for (Unidad unidad7 : unidadesSeptimoNivel) {
-            oficinasPrincipales.addAll(oficinaEjb.responsableByUnidadEstado(unidad7.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
+           oficinasPrincipales.addAll(oficinaEjb.responsableByUnidadEstado(unidad7.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
            oficinasAuxiliares.addAll(oficinaEjb.dependienteByUnidadEstado(unidad7.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
            relacionesOrganizativaOfi.addAll(relacionOrganizativaOfiEjb.getOrganizativasCompletoByUnidadEstado(unidad7.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
            relacionesSirOfi.addAll(relacionSirOfiEjb.relacionesSirOfiByUnidaddEstado(unidad7.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
         }
-
-
 
         Long end = System.currentTimeMillis();
 
