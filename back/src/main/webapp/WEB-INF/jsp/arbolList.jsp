@@ -15,7 +15,8 @@
         <div class="row-fluid">
             <div class="box span12">
                 <div class="box-header well">
-                    <h2><fmt:message key="unidad.organigrama"/>&nbsp;<i> ${nodo.codigo} - ${nodo.denominacion}</i></h2>
+                    <h2><fmt:message key="unidad.organigrama"/>&nbsp;<i> ${unidadRaiz.codigo}
+                        - ${unidadRaiz.denominacion}</i></h2>
                 </div>
 
                     <!-- LEYENDA -->
