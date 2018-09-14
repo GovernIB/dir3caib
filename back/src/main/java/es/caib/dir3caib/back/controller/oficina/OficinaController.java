@@ -4,7 +4,6 @@ import es.caib.dir3caib.back.controller.BaseController;
 import es.caib.dir3caib.back.form.OficinaBusquedaForm;
 import es.caib.dir3caib.persistence.ejb.ArbolLocal;
 import es.caib.dir3caib.persistence.model.*;
-import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.Paginacion;
 import es.caib.dir3caib.utils.Configuracio;
 import org.apache.log4j.Logger;
@@ -134,18 +133,15 @@ public class OficinaController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/{idOficina}/arbol", method = RequestMethod.GET)
-    public ModelAndView mostrarArbolOficinas(HttpServletRequest request, @PathVariable String idOficina) throws Exception {
+    public String mostrarArbolOficinas(HttpServletRequest request, @PathVariable String idOficina) throws Exception {
 
-        ModelAndView mav = new ModelAndView("/arbolList");
-        Nodo nodo = new Nodo();
         //Obtenemos los datos básicos de la oficina que nos indican(suele ser la raíz del árbol)
         Oficina oficina = oficinaEjb.findByCodigoLigero(idOficina);
-        //Obtenemos el árbol de oficinas
-        arbolEjb.arbolOficinas(idOficina, nodo, oficina.getEstado().getCodigoEstadoEntidad());
-        mav.addObject("nodo", nodo);
-        mav.addObject("oficinas", "oficinas");
 
-        return mav;
+        String unidadResponsable = oficina.getCodUoResponsable().getCodigo();
+
+        return "redirect:/unidad/" + unidadResponsable + "/arbol";
+
 
     }
 

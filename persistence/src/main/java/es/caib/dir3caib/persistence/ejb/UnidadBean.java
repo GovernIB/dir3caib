@@ -171,7 +171,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     @Override
     @SuppressWarnings("unchecked")
     public Unidad findByCodigoLigero(String codigo) throws Exception {
-        Query q = em.createQuery("select unidad.codigo, unidad.denominacion, unidad.estado.codigoEstadoEntidad, unidad.codUnidadRaiz.codigo, unidad.codUnidadSuperior.codigo from Unidad as unidad where unidad.codigo=:codigo ");
+        Query q = em.createQuery("select unidad.codigo, unidad.denominacion, unidad.estado.codigoEstadoEntidad, unidad.codUnidadRaiz.codigo, unidad.codUnidadSuperior.codigo, unidad.nivelJerarquico from Unidad as unidad where unidad.codigo=:codigo ");
         q.setParameter("codigo", codigo);
 
         List<Object[]> result = q.getResultList();
@@ -185,6 +185,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
             unidad.setCodUnidadRaiz(unidadRaiz);
             Unidad unidadSuperior = new Unidad((String) result.get(0)[4]);
             unidad.setCodUnidadSuperior(unidadSuperior);
+            unidad.setNivelJerarquico((Long) result.get(0)[5]);
 
             return  unidad;
         }else {

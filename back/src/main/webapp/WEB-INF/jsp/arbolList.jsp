@@ -118,7 +118,7 @@
 
                                                         <ul>
                                                             <c:forEach var="oficinaAuxiliar" items="${oficinasAuxiliares}">
-                                                                <c:if test="${oficinaAuxiliar.codUoResponsable.codigo == oficinaPrincipal.codigo}">
+                                                                <c:if test="${oficinaAuxiliar.codOfiResponsable.codigo == oficinaPrincipal.codigo}">
                                                                     <li>
                                                                         <a href="javascript:void(0);"><span
                                                                                 class="panel-heading btn-ofaux vuitanta-percent"

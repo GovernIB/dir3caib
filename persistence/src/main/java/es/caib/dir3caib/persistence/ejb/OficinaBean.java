@@ -77,7 +77,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
     @Override
     @SuppressWarnings("unchecked")
     public Oficina findByCodigoLigero(String codigo) throws Exception {
-        Query q = em.createQuery("select oficina.codigo, oficina.denominacion, oficina.estado.codigoEstadoEntidad from Oficina as oficina where oficina.codigo=:codigo ");
+        Query q = em.createQuery("select oficina.codigo, oficina.denominacion, oficina.estado.codigoEstadoEntidad, oficina.codUoResponsable.codigo from Oficina as oficina where oficina.codigo=:codigo ");
         q.setParameter("codigo", codigo);
 
         List<Object[]> result = q.getResultList();
@@ -87,6 +87,8 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
             oficina.setCodigo((String) result.get(0)[0]);
             oficina.setDenominacion((String) result.get(0)[1]);
             oficina.setEstado(new CatEstadoEntidad((String)result.get(0)[2]));
+            Unidad unidadResponsable = new Unidad((String) result.get(0)[3]);
+            oficina.setCodUoResponsable(unidadResponsable);
 
             return  oficina;
         }else {
@@ -772,8 +774,8 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
     public List<Oficina> responsableByUnidadEstado(String codigoUnidadResponsable, String estado) throws Exception {
         Query q = em.createQuery("Select oficina.codigo, oficina.denominacion, oficina.codUoResponsable.codigo from Oficina as oficina where " +
-           "oficina.codUoResponsable.codigo =:codigoUnidadResponsable and oficina.estado.codigoEstadoEntidad =:estado and " +
-           "oficina.codOfiResponsable is null order by oficina.codigo");
+           " oficina.codOfiResponsable is null and oficina.codUoResponsable.codigo =:codigoUnidadResponsable and oficina.estado.codigoEstadoEntidad =:estado " +
+           " order by oficina.codigo");
 
         q.setParameter("codigoUnidadResponsable", codigoUnidadResponsable);
         q.setParameter("estado", estado);
@@ -793,7 +795,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
     public List<Oficina> dependienteByUnidadEstado(String codigoUnidadResponsable, String estado) throws Exception {
         Query q = em.createQuery("Select  oficina.codigo, oficina.denominacion, oficina.codUoResponsable.codigo, oficina.codOfiResponsable.codigo from Oficina as oficina where " +
            "oficina.codUoResponsable.codigo =:codigoUnidadResponsable and oficina.estado.codigoEstadoEntidad =:estado and " +
-           "oficina.codOfiResponsable.codigo != null order by oficina.codigo");
+           "oficina.codOfiResponsable is not null order by oficina.codigo");
 
         q.setParameter("codigoUnidadResponsable", codigoUnidadResponsable);
         q.setParameter("estado", estado);
