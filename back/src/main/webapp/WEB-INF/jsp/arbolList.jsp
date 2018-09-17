@@ -138,13 +138,13 @@
                                                                         </c:forEach>
 
                                                                         <ul>
-                                                                            <c:forEach var="oficinasAuxiliar2" items="${oficinasAuxiliares}">
-                                                                                <c:if test="${oficinasAuxiliar2.codUoResponsable.codigo == oficinaAuxiliar.codigo}">
+                                                                            <c:forEach var="oficinaAuxiliar2" items="${oficinasAuxiliares}">
+                                                                                <c:if test="${oficinaAuxiliar2.codOfiResponsable.codigo == oficinaAuxiliar.codigo}">
                                                                                     <li>
                                                                                         <a href="javascript:void(0);"><span
                                                                                                 class="panel-heading btn-ofaux vuitanta-percent"
                                                                                                 style="cursor:copy" onclick="copyToClipboard(this)"><i
-                                                                                                class="fa fa-home"></i> ${oficinasAuxiliar2.codigo} - ${oficinasAuxiliar2.denominacion}</span></a>
+                                                                                                class="fa fa-home"></i> ${oficinaAuxiliar2.codigo} - ${oficinaAuxiliar2.denominacion}</span></a>
                                                                                     </li>
                                                                                 </c:if>
                                                                             </c:forEach>
@@ -547,7 +547,7 @@
                                                                                                                                                 class="fa fa-home"></i> ${oficinaAuxiliar.codigo} - ${oficinaAuxiliar.denominacion}</span></a>
 
                                                                                                                                         <c:forEach var="relacionOrganizativaOfi" items="${relacionesOrganizativaOfi}">
-                                                                                                                                            <c:if test="${relacionOrganizativaOfi.unidad.id == organismo5.codigo}">
+                                                                                                                                            <c:if test="${relacionOrganizativaOfi.unidad.codigo == organismo5.codigo}">
                                                                                                                                                 <c:if test="${oficinaAuxiliar.codigo == relacionOrganizativaOfi.oficina.codigo}">
                                                                                                                                                     <a href="javascript:void(0);"><span
                                                                                                                                                             class="panel-heading btn-success vuitanta-percent"
