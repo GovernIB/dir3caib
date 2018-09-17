@@ -126,7 +126,8 @@ public class OficinaController extends BaseController {
 
 
     /**
-     * Método que obtiene el árbol de oficinas de una oficina
+     * Método que redirige al arbol de la unidad responsable de la oficina que nos indican.
+     * Sólo se muestra el suborganigrama de la oficina a partir de su unidad responsable hacia abajo.
      *
      * @param request
      * @param idOficina
@@ -135,9 +136,10 @@ public class OficinaController extends BaseController {
     @RequestMapping(value = "/{idOficina}/arbol", method = RequestMethod.GET)
     public String mostrarArbolOficinas(HttpServletRequest request, @PathVariable String idOficina) throws Exception {
 
-        //Obtenemos los datos básicos de la oficina que nos indican(suele ser la raíz del árbol)
+        //Obtenemos los datos básicos de la oficina que nos indican
         Oficina oficina = oficinaEjb.findByCodigoLigero(idOficina);
 
+        //Redirigimos al arbol de la unidad padre de la oficina.
         String unidadResponsable = oficina.getCodUoResponsable().getCodigo();
 
         return "redirect:/unidad/" + unidadResponsable + "/arbol";
