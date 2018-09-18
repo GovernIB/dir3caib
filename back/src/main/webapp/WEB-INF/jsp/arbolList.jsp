@@ -13,7 +13,7 @@
 <div class="row-fluid container main">
     <div class="well well-dir3caib">
         <div class="row-fluid">
-            <div class="box span12">
+            <div class="box span12 minAlt">
                 <div class="box-header well">
                     <h2><fmt:message key="unidad.organigrama"/>&nbsp;<i> ${unidadRaiz.codigo}
                         - ${unidadRaiz.denominacion}</i></h2>

@@ -187,7 +187,7 @@
                     <tr>
 
                         <td>${unidad.codigo}</td>
-                        <td><a href="<c:url value="/unidad/${unidad.codigo}/arbol"/>">${unidad.denominacion}</a></td>
+                        <td><a onclick="verArbol('<c:url value="/unidad/${unidad.codigo}/arbol"/>')" onmouseover="this.style.cursor='pointer';">${unidad.denominacion}</a></td>
                         <td>${unidad.codUnidadSuperior.codigo} - ${unidad.codUnidadSuperior.denominacion}</td>
                         <td>${unidad.codUnidadRaiz.codigo} - ${unidad.codUnidadRaiz.denominacion}</td>
                         <td>
@@ -252,6 +252,20 @@
             actualizarSelect('${provincias}', '#unidad\\.codAmbProvincia\\.codigoProvincia', $('#unidad\\.codComunidad\\.codigoComunidad option:selected').val(), '${unidadBusqueda.unidad.codAmbProvincia.codigoProvincia}', true);
         }
 
+    </script>
+
+    <script type="text/javascript">
+        function verArbol(url) {
+                $.ajax({
+                    type:'GET',
+                    beforeSend: function(objeto){
+                        waitingDialog.show('<spring:message code="dir3caib.organismo.arbol.generar" javaScriptEscape='true'/>', {dialogSize: 'm', progressType: 'warning'});
+                    },
+                    success:function(respuesta){
+                        goTo(url);
+                    }
+                });
+        }
     </script>
 
 </body>

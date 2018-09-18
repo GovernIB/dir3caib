@@ -162,12 +162,14 @@
                     <tr>
 
                         <td>${oficina.codigo}</td>
-                        <td><a href="<c:url value="/oficina/${oficina.codigo}/arbol"/>">${oficina.denominacion}</a></td>
+                        <td><a onclick="verArbol('<c:url value="/oficina/${oficina.codigo}/arbol"/>')" onmouseover="this.style.cursor='pointer';">${oficina.denominacion}</a></td>
+                        <%--<td><a href="<c:url value="/oficina/${oficina.codigo}/arbol"/>">${oficina.denominacion}</a></td>--%>
                         <td><c:if
                                 test="${not empty oficina.codOfiResponsable.codigo}">${oficina.codOfiResponsable.codigo} - ${oficina.codOfiResponsable.denominacion}</c:if><c:if
                                 test="${empty oficina.codOfiResponsable.codigo}"><fmt:message
                                 key="oficina.no.responsable"/></c:if></td>
                         <td>${oficina.codUoResponsable.codigo} - ${oficina.codUoResponsable.denominacion}</td>
+
                         <td>${oficina.estado.descripcionEstadoEntidad}</td>
 
 
@@ -215,6 +217,20 @@
             actualizarSelect('${provincias}', '#oficina\\.localidad\\.provincia\\.codigoProvincia', $('#oficina\\.codComunidad\\.codigoComunidad option:selected').val(), '${oficinaBusqueda.oficina.localidad.provincia.codigoProvincia}', true);
         }
 
+    </script>
+
+    <script type="text/javascript">
+        function verArbol(url) {
+            $.ajax({
+                type:'GET',
+                beforeSend: function(objeto){
+                    waitingDialog.show('<spring:message code="dir3caib.organismo.arbol.generar" javaScriptEscape='true'/>', {dialogSize: 'm', progressType: 'warning'});
+                },
+                success:function(respuesta){
+                    goTo(url);
+                }
+            });
+        }
     </script>
 
 
