@@ -24,4 +24,5 @@ TRUNCATE TABLE dir_catisla  CASCADE;
 TRUNCATE TABLE dir_catlocalidad  CASCADE;
 TRUNCATE TABLE dir_cattipounidadorganica  CASCADE;
 TRUNCATE TABLE dir_catestadoentidad  CASCADE;
+TRUNCATE TABLE dir_sincronizacion  CASCADE;
 ALTER SEQUENCE DIR_SEQ_ALL RESTART WITH 1;
