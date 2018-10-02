@@ -190,6 +190,13 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                                     unidad.setCodUnidadSuperior(null);
                                 }
 
+                                // Gestionamos EdpPrincipales cuando son así mismas
+                                String codigoEdpPrincipal = fila[12].trim();
+                                if (!codigoEdpPrincipal.isEmpty() && codigoEdpPrincipal.equals(unidad.getCodigo())) {
+                                    unidad.setCodEdpPrincipal(unidad);
+                                }
+
+
                                 //Actualizamos la Unidad
                                 unidadEjb.merge(unidad);
 
