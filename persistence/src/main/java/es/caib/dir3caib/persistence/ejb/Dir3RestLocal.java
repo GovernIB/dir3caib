@@ -35,18 +35,20 @@ public interface Dir3RestLocal  {
 
   List<Nodo> busquedaDenominacionComunidad(String denominacion, Long codComunidad) throws Exception;
 
-    List<CodigoValor> getLocalidadByProvinciaEntidadGeografica(Long codigoProvincia, String codigoEntidadGeografica) throws Exception;
+  List<CodigoValor> getLocalidadByProvinciaEntidadGeografica(Long codigoProvincia, String codigoEntidadGeografica) throws Exception;
 
-    List<CodigoValor> getComunidadesAutonomas() throws Exception;
+  List<CodigoValor> getComunidadesAutonomas() throws Exception;
 
-    List<CodigoValor> getEntidadesGeograficas() throws Exception;
+  List<CodigoValor> getEntidadesGeograficas() throws Exception;
 
-    List<CodigoValor> getProvincias() throws Exception;
+  List<CodigoValor> getProvincias() throws Exception;
 
-    List<CodigoValor> getProvinciasByComunidad(Long codComunidad) throws Exception;
+  List<CodigoValor> getProvinciasByComunidad(Long codComunidad) throws Exception;
 
-    List<CodigoValor> getNivelesAdministracion() throws Exception;
+  List<CodigoValor> getNivelesAdministracion() throws Exception;
 
   List<CodigoValor> getAmbitoTerritorialByAdministracion(Long nivelAdministracion) throws Exception;
+
+  List<Oficina> obtenerOficinasSIRUnidad(String codigoUnidad) throws Exception;
 
 }

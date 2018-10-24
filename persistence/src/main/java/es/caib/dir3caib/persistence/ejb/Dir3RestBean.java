@@ -553,7 +553,8 @@ public class Dir3RestBean implements Dir3RestLocal {
 
 
     @SuppressWarnings(value = "unchecked")
-    private List<Oficina> obtenerOficinasSIRUnidad(String codigoUnidad) throws Exception {
+    @Override
+    public List<Oficina> obtenerOficinasSIRUnidad(String codigoUnidad) throws Exception {
 
         Query q = em.createQuery("select relacionSirOfi.oficina from RelacionSirOfi as relacionSirOfi where relacionSirOfi.unidad.codigo =:codigoUnidad " +
                 "and :SERVICIO_SIR_RECEPCION in elements(relacionSirOfi.oficina.servicios) " +
