@@ -20,6 +20,7 @@ public class Nodo extends ObjetoBasico {
     private List<Nodo> oficinasAuxiliares;
     private List<Nodo> oficinasFuncionales; //relacionesOrganizativasOfi
     private boolean tieneOficinaSir = false;
+    private boolean esEdp = false;
 
 
     public Nodo() {
@@ -33,6 +34,14 @@ public class Nodo extends ObjetoBasico {
         super(codigo, denominacion, descripcionEstado, raiz, superior, localidad);
         this.tieneOficinaSir = tieneOficinaSir;
     }
+
+    public Nodo(String codigo, String denominacion, String descripcionEstado, String raiz, String superior, String localidad, boolean tieneOficinaSir, boolean esEdp, String edpPrincipal) {
+        super(codigo, denominacion, descripcionEstado, raiz, superior, localidad, edpPrincipal);
+        this.tieneOficinaSir = tieneOficinaSir;
+        this.esEdp = esEdp;
+    }
+
+
 
 
     public String getIdPadre() {
@@ -85,5 +94,13 @@ public class Nodo extends ObjetoBasico {
 
     public void setTieneOficinaSir(boolean tieneOficinaSir) {
         this.tieneOficinaSir = tieneOficinaSir;
+    }
+
+    public boolean isEsEdp() {
+        return esEdp;
+    }
+
+    public void setEsEdp(boolean esEdp) {
+        this.esEdp = esEdp;
     }
 }

@@ -178,27 +178,39 @@
                     <th><fmt:message key="unidad.superior"/></th>
                     <th><fmt:message key="unidad.raiz"/></th>
                     <th><fmt:message key="unidad.edp"/></th>
+                    <th><fmt:message key="dir3caib.sir"/></th>
                     <th><fmt:message key="unidad.estado"/></th>
                 </tr>
                 </thead>
 
                 <tbody>
-                <c:forEach var="unidad" items="${paginacion.listado}">
+                <c:forEach var="nodo" items="${paginacion.listado}">
                     <tr>
 
-                        <td>${unidad.codigo}</td>
-                        <td><a onclick="verArbol('<c:url value="/unidad/${unidad.codigo}/arbol"/>')" onmouseover="this.style.cursor='pointer';">${unidad.denominacion}</a></td>
-                        <td>${unidad.codUnidadSuperior.codigo} - ${unidad.codUnidadSuperior.denominacion}</td>
-                        <td>${unidad.codUnidadRaiz.codigo} - ${unidad.codUnidadRaiz.denominacion}</td>
+                        <td>${nodo.codigo}</td>
+                        <td><a onclick="verArbol('<c:url value="/unidad/${nodo.codigo}/arbol"/>')"
+                               onmouseover="this.style.cursor='pointer';">${nodo.denominacion}</a></td>
+                        <td>${nodo.superior}</td>
+                        <td>${nodo.raiz}</td>
                         <td>
-                            <c:if test="${unidad.esEdp}">
-                                <p rel="edp" data-content="<c:if test="${not empty unidad.codEdpPrincipal}">Edp Principal: <c:out value="${unidad.codEdpPrincipal.codigo} -  ${unidad.codEdpPrincipal.denominacion}" escapeXml="true"/></c:if>" data-toggle="popover"><span class="label label-success">Sí</span></p>
+                            <c:if test="${nodo.esEdp}">
+                                <p rel="edp"
+                                   data-content="<c:if test="${not empty nodo.edpPrincipal}">Edp Principal: <c:out value="${nodo.edpPrincipal}" escapeXml="true"/></c:if>"
+                                   data-toggle="popover"><span class="label label-success">Sí</span></p>
                             </c:if>
-                            <c:if test="${!unidad.esEdp}">
+                            <c:if test="${!nodo.esEdp}">
                                 <span class="label label-danger">No</span>
                             </c:if>
                         </td>
-                        <td>${unidad.estado.descripcionEstadoEntidad}</td>
+                        <td>
+                            <c:if test="${nodo.tieneOficinaSir}">
+                                <span class="label label-success">Sí</span>
+                            </c:if>
+                            <c:if test="${!nodo.tieneOficinaSir}">
+                                <span class="label label-danger">No</span>
+                            </c:if>
+                        </td>
+                        <td>${nodo.descripcionEstado}</td>
                     </tr>
                 </c:forEach>
                 </tbody>

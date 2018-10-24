@@ -17,6 +17,7 @@ public class ObjetoBasico {
   private String raiz;
   private String superior;
   private String localidad;
+   private String edpPrincipal;
 
   public ObjetoBasico() {
   }
@@ -29,6 +30,17 @@ public class ObjetoBasico {
     this.superior = superior;
     this.localidad = localidad;
   }
+
+   public ObjetoBasico(String codigo, String denominacion, String descripcionEstado, String raiz, String superior, String localidad, String edpPrincipal) {
+      this.codigo = codigo;
+      this.denominacion = denominacion;
+      this.descripcionEstado = descripcionEstado;
+      this.raiz = raiz;
+      this.superior = superior;
+      this.localidad = localidad;
+      this.edpPrincipal = edpPrincipal;
+   }
+
 
   public String getCodigo() {
     return codigo;
@@ -77,4 +89,12 @@ public class ObjetoBasico {
   public void setLocalidad(String localidad) {
     this.localidad = localidad;
   }
+
+   public String getEdpPrincipal() {
+      return edpPrincipal;
+   }
+
+   public void setEdpPrincipal(String edpPrincipal) {
+      this.edpPrincipal = edpPrincipal;
+   }
 }

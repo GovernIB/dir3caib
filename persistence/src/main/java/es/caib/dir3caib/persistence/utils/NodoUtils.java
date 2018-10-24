@@ -1,5 +1,8 @@
 package es.caib.dir3caib.persistence.utils;
 
+import es.caib.dir3caib.persistence.model.Oficina;
+import es.caib.dir3caib.persistence.model.Unidad;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -137,6 +140,39 @@ public class NodoUtils {
 
         for (Object[] object : result) {
             Nodo nodo = new Nodo((String) object[0], (String) object[1], "", (String) object[2], (String) object[3], "");
+
+            nodos.add(nodo);
+        }
+
+        return nodos;
+    }
+
+
+    public static List<Nodo> getNodoListUnidad(List<Unidad> result) throws Exception {
+
+        List<Nodo> nodos = new ArrayList<Nodo>();
+        String edpPrincipal = "";
+        for (Unidad unidad : result) {
+            if (unidad.getCodEdpPrincipal() != null) {
+                edpPrincipal = unidad.getCodEdpPrincipal().getCodigo() + " - " + unidad.getCodEdpPrincipal().getDenominacion();
+            }
+            Nodo nodo = new Nodo(unidad.getCodigo(), unidad.getDenominacion(), unidad.getEstado().getDescripcionEstadoEntidad(), unidad.getCodUnidadRaiz().getCodigo() + " - " + unidad.getCodUnidadRaiz().getDenominacion(), unidad.getCodUnidadSuperior().getCodigo() + " - " + unidad.getCodUnidadSuperior().getDenominacion(), "", false, unidad.isEsEdp(), edpPrincipal);
+
+            nodos.add(nodo);
+        }
+
+        return nodos;
+    }
+
+    public static List<Nodo> getNodoListOficina(List<Oficina> result) throws Exception {
+
+        List<Nodo> nodos = new ArrayList<Nodo>();
+        String ofiResponsable = "";
+        for (Oficina oficina : result) {
+            if (oficina.getCodOfiResponsable() != null) {
+                ofiResponsable = oficina.getCodOfiResponsable().getCodigo() + " - " + oficina.getCodOfiResponsable().getDenominacion();
+            }
+            Nodo nodo = new Nodo(oficina.getCodigo(), oficina.getDenominacion(), oficina.getEstado().getDescripcionEstadoEntidad(), ofiResponsable, oficina.getCodUoResponsable().getCodigo() + " - " + oficina.getCodUoResponsable().getDenominacion(), "");
 
             nodos.add(nodo);
         }

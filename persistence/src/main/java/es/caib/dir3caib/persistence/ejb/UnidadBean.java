@@ -36,6 +36,9 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     @EJB(mappedName = "dir3caib/OficinaEJB/local")
     private OficinaLocal oficinaEjb;
 
+    @EJB(mappedName = "dir3caib/Dir3RestEJB/local")
+    private Dir3RestLocal dir3RestEjb;
+
     protected final Logger log = Logger.getLogger(getClass());
     protected SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
 
@@ -407,7 +410,15 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         } else {
             paginacion = new Paginacion(0, 0);
         }
-        paginacion.setListado(q.getResultList());
+
+        List<Nodo> nodos = NodoUtils.getNodoListUnidad(q.getResultList());
+
+        for (Nodo nodo : nodos) {
+            if (dir3RestEjb.obtenerOficinasSIRUnidad(nodo.getCodigo()).size() > 0) {
+                nodo.setTieneOficinaSir(true);
+            }
+        }
+        paginacion.setListado(new ArrayList<Object>(nodos));
 
         return paginacion;
 

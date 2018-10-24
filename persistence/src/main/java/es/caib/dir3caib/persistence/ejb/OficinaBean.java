@@ -295,7 +295,17 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
         } else {
             paginacion = new Paginacion(0, 0);
         }
-        paginacion.setListado(q.getResultList());
+
+        List<Nodo> nodos = NodoUtils.getNodoListOficina(q.getResultList());
+
+        for (Nodo nodo : nodos) {
+            if (esOficinaSir(nodo.getCodigo())) {
+                nodo.setTieneOficinaSir(true);
+            }
+        }
+
+
+        paginacion.setListado(new ArrayList<Object>(nodos));
 
         return paginacion;
 
@@ -560,6 +570,28 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
             }
         }
         return false;
+    }
+
+    /**
+     * Determina si una oficina es SIR
+     *
+     * @param codigoOficina
+     * @return
+     * @throws Exception
+     */
+    private boolean esOficinaSir(String codigoOficina) throws Exception {
+
+        Query q = em.createQuery("select relacionSirOfi.oficina from RelacionSirOfi as relacionSirOfi where relacionSirOfi.oficina.codigo =:codigoOficina " +
+           "and :SERVICIO_SIR_RECEPCION in elements(relacionSirOfi.oficina.servicios) " +
+           "and relacionSirOfi.estado.codigoEstadoEntidad='V' ");
+
+
+        q.setParameter("codigoOficina", codigoOficina);
+        q.setParameter("SERVICIO_SIR_RECEPCION", new Servicio(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
+
+
+        return q.getResultList() != null ? q.getResultList().size() > 0 : false;
+
     }
 
     /**
