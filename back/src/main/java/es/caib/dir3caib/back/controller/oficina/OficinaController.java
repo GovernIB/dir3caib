@@ -69,11 +69,11 @@ public class OficinaController extends BaseController {
         String comunidadAutonoma = Configuracio.getBusquedaComunidad();
 
         //Asignamos los valores por defecto a la búsqueda
-        if(administracion != null){
+        if (administracion != null) {
             oficinaBusqueda.getOficina().setNivelAdministracion(new CatNivelAdministracion(Long.valueOf(administracion.trim())));
         }
 
-        if(comunidadAutonoma != null){
+        if (comunidadAutonoma != null) {
             oficinaBusqueda.getOficina().setCodComunidad(new CatComunidadAutonoma(Long.valueOf(comunidadAutonoma.trim())));
         }
 
@@ -105,11 +105,11 @@ public class OficinaController extends BaseController {
 
         //Realizamos la búsqueda paginada
         Paginacion paginacion = oficinaEjb.busqueda(busqueda.getPageNumber(),
-                oficina.getCodigo(),
-                oficina.getDenominacion(),
-                codNivelAdministracion,
-                codComunidad,
-                codAmbProvincia, codEstado);
+           oficina.getCodigo(),
+           oficina.getDenominacion(),
+           codNivelAdministracion,
+           codComunidad,
+           codAmbProvincia, codEstado);
 
         busqueda.setPageNumber(1);
 
