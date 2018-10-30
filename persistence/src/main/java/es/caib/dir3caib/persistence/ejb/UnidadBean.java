@@ -939,4 +939,25 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         return organismos;
     }
 
+
+    /**
+     * Obtiene una unidad con sus contactos y sus relaciones
+     *
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    public Unidad findFullById(String id) throws Exception {
+
+        Unidad unidad = em.find(Unidad.class, id);
+
+        if (unidad != null) {
+            Hibernate.initialize(unidad.getOrganizativaOfi());
+//            Hibernate.initialize(unidad.getSirOfi());
+            Hibernate.initialize(unidad.getContactos());
+        }
+
+        return unidad;
+    }
+
 }

@@ -136,20 +136,25 @@ public class UnidadController extends BaseController {
     }
 
     /**
-     * Método que obtiene el árbol de unidades de una unidad.
+     * Método que obtiene el detalle y el árbol de una unidad.
      *
      * @param request
      * @param idUnidad
      * @return
      */
-    @RequestMapping(value = "/{idUnidad}/arbol", method = RequestMethod.GET)
+    @RequestMapping(value = "/{idUnidad}/detalle", method = RequestMethod.GET)
     public ModelAndView mostrarArbolUnidades(HttpServletRequest request, @PathVariable String idUnidad) throws Exception {
 
         Long start = System.currentTimeMillis();
-        ModelAndView mav = new ModelAndView("/arbolList");
+        ModelAndView mav = new ModelAndView("unidad/unidadDetalle");
 
         //Obtenemos los datos básicos de la unidad que nos indican
-        Unidad unidad = unidadEjb.findByCodigoLigero(idUnidad);
+        Unidad unidad = unidadEjb.findFullById(idUnidad);
+        mav.addObject("unidad", unidad);
+
+        //Obtenemos las oficinas que relgistran a la Unidad
+        List<Oficina> oficinasRegistran = oficinaEjb.obtenerOficinasRegistran(unidad.getCodigo());
+        mav.addObject("oficinasRegistran", oficinasRegistran);
 
 
         //Obtenemos en diferentes listas las unidades hasta el septimo nivel

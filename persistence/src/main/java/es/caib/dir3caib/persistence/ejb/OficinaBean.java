@@ -50,7 +50,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
     }
 
     /**
-     * Obtiene una oficina con sus historicos y sus servicios
+     * Obtiene una oficina con sus contactos y sus servicios
      *
      * @param id
      * @return
@@ -61,8 +61,9 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
         Oficina oficina = em.find(Oficina.class, id);
 
         if (oficina != null) {
-            Hibernate.initialize(oficina.getHistoricosOfi());
+//            Hibernate.initialize(oficina.getHistoricosOfi());
             Hibernate.initialize(oficina.getServicios());
+            Hibernate.initialize(oficina.getContactos());
         }
 
         return oficina;
@@ -842,6 +843,24 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
         return oficinas;
 
+    }
+
+    /**
+     * Obtiene las Oficinas que registran a una Unidad
+     *
+     * @param codigoUnidad
+     * @return
+     * @throws Exception
+     */
+    public List<Oficina> obtenerOficinasRegistran(String codigoUnidad) throws Exception {
+
+        Query q = em.createQuery("Select oficina from Oficina as oficina " +
+                "where oficina.codUoResponsable.codigo =:codigoUnidad and oficina.estado.codigoEstadoEntidad = 'V' and " +
+                "oficina.codOfiResponsable is null order by oficina.codigo");
+
+        q.setParameter("codigoUnidad", codigoUnidad);
+
+        return q.getResultList();
     }
 }
 

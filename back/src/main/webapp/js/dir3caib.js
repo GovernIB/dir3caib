@@ -332,6 +332,23 @@ var waitingDialog = waitingDialog || (function ($) {
 })(jQuery);
 
 
+/**
+ * Funció per mostrar la barra el temps que se carrega el Detall
+ */
+function verDetalle(url, mssg) {
+    $.ajax({
+        type:'GET',
+        beforeSend: function(objeto){
+            waitingDialog.show(mssg, {dialogSize: 'm', progressType: 'warning'});
+        },
+        success:function(respuesta){
+            goTo(url);
+        }
+    });
+}
+
+
+
 
 
 

@@ -304,6 +304,12 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      */
     public List<Unidad> getUnidadesByNivelByUnidadSuperior(long nivel, String codigo, String estado) throws Exception;
 
-
+    /**
+     * Obtiene una unidad con sus contactos y sus relaciones
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    Unidad findFullById(String id) throws Exception;
 
 }

@@ -188,13 +188,13 @@
                     <tr>
 
                         <td>${nodo.codigo}</td>
-                        <td><a onclick="verArbol('<c:url value="/unidad/${nodo.codigo}/arbol"/>')"
+                        <td><a onclick="verDetalle('<c:url value="/unidad/${nodo.codigo}/detalle"/>','<spring:message code="dir3caib.organismo.detalle.generar" javaScriptEscape="true"/>')"
                                onmouseover="this.style.cursor='pointer';">${nodo.denominacion}</a></td>
                         <td>${nodo.superior}</td>
                         <td>${nodo.raiz}</td>
                         <td>
                             <c:if test="${nodo.esEdp}">
-                                <p rel="edp"
+                                <p class="centrat" rel="edp"
                                    data-content="<c:if test="${not empty nodo.edpPrincipal}">Edp Principal: <c:out value="${nodo.edpPrincipal}" escapeXml="true"/></c:if>"
                                    data-toggle="popover"><span class="label label-success">Sí</span></p>
                             </c:if>
@@ -266,19 +266,6 @@
 
     </script>
 
-    <script type="text/javascript">
-        function verArbol(url) {
-                $.ajax({
-                    type:'GET',
-                    beforeSend: function(objeto){
-                        waitingDialog.show('<spring:message code="dir3caib.organismo.arbol.generar" javaScriptEscape='true'/>', {dialogSize: 'm', progressType: 'warning'});
-                    },
-                    success:function(respuesta){
-                        goTo(url);
-                    }
-                });
-        }
-    </script>
 
 </body>
 </html>

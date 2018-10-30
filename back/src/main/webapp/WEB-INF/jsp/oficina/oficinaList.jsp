@@ -163,7 +163,7 @@
                     <tr>
 
                         <td>${nodo.codigo}</td>
-                        <td><a onclick="verArbol('<c:url value="/oficina/${nodo.codigo}/arbol"/>')"
+                        <td><a onclick="verDetalle('<c:url value="/oficina/${nodo.codigo}/detalle"/>','<spring:message code="dir3caib.organismo.detalle.generar" javaScriptEscape="true"/>')"
                                onmouseover="this.style.cursor='pointer';">${nodo.denominacion}</a></td>
                             <%--<td><a href="<c:url value="/oficina/${oficina.codigo}/detalle"/>">${oficina.denominacion}</a></td>--%>
                         <td><c:if
@@ -226,20 +226,6 @@
             actualizarSelect('${provincias}', '#oficina\\.localidad\\.provincia\\.codigoProvincia', $('#oficina\\.codComunidad\\.codigoComunidad option:selected').val(), '${oficinaBusqueda.oficina.localidad.provincia.codigoProvincia}', true);
         }
 
-    </script>
-
-    <script type="text/javascript">
-        function verArbol(url) {
-            $.ajax({
-                type:'GET',
-                beforeSend: function(objeto){
-                    waitingDialog.show('<spring:message code="dir3caib.organismo.arbol.generar" javaScriptEscape='true'/>', {dialogSize: 'm', progressType: 'warning'});
-                },
-                success:function(respuesta){
-                    goTo(url);
-                }
-            });
-        }
     </script>
 
 

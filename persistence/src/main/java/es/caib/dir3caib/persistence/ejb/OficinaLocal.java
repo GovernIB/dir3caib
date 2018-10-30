@@ -63,7 +63,7 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
     void deleteServiciosOficina(String idOficina) throws Exception;
 
     /**
-     * Obtiene una oficina con sus historicos y sus servicios
+     * Obtiene una oficina con sus contactos y sus servicios
      * @param id
      * @return
      * @throws Exception
@@ -235,4 +235,13 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      * @throws Exception
      */
     List<Oficina> dependienteByUnidadEstado(String codigoUnidadDependiente, String estado) throws Exception;
+
+    /**
+     * Obtiene las Oficinas que registran a una Unidad
+     *
+     * @param codigoUnidad
+     * @return
+     * @throws Exception
+     */
+    List<Oficina> obtenerOficinasRegistran(String codigoUnidad) throws Exception;
 }
