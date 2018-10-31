@@ -606,7 +606,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
     @Override
     public Boolean tieneOficinasArbol(String codigo) throws Exception {
 
-        Query q = em.createQuery("Select oficina.codigo from Oficina as oficina where oficina.codUoResponsable.codigo =:codigo and oficina.estado.codigoEstadoEntidad=:vigente order by oficina.codigo");
+        Query q = em.createQuery("Select oficina.codigo from Oficina as oficina where oficina.codUoResponsable.codigo =:codigo and oficina.estado.codigoEstadoEntidad=:vigente");
 
         q.setParameter("codigo", codigo);
         q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
@@ -622,15 +622,15 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
         if (oficinas.size() > 0) {
             return true;
         } else {
-            q = em.createQuery("Select relorg from RelacionOrganizativaOfi as relorg where relorg.unidad.codigo=:codigo and relorg.estado.codigoEstadoEntidad=:vigente order by relorg.id ");
+            q = em.createQuery("Select count(relorg.id) from RelacionOrganizativaOfi as relorg where relorg.unidad.codigo=:codigo and relorg.estado.codigoEstadoEntidad=:vigente");
 
             q.setParameter("codigo", codigo);
             q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-            List<RelacionOrganizativaOfi> relorg = q.getResultList();
-            if (relorg.size() > 0) {
+            Long relorg = (Long) q.getSingleResult();
+            if (relorg > 0) {
                 return true;
             } else {// no tiene oficinas, miramos sus hijos
-                Query q2 = em.createQuery("Select unidad.codigo from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:estado order by unidad.codigo");
+                Query q2 = em.createQuery("Select unidad.codigo from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:estado");
 
                 q2.setParameter("codigo", codigo);
                 q2.setParameter("estado", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
@@ -805,6 +805,8 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
     public List<Oficina> responsableByUnidadEstado(String codigoUnidadResponsable, String estado) throws Exception {
         Query q = em.createQuery("Select oficina.codigo, oficina.denominacion, oficina.codUoResponsable.codigo from Oficina as oficina where " +
            " oficina.codOfiResponsable is null and oficina.codUoResponsable.codUnidadRaiz.codigo =:codigoUnidadResponsable and oficina.estado.codigoEstadoEntidad =:estado " +
@@ -825,6 +827,8 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
         return oficinas;
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
     public List<Oficina> dependienteByUnidadEstado(String codigoUnidadResponsable, String estado) throws Exception {
         Query q = em.createQuery("Select  oficina.codigo, oficina.denominacion, oficina.codUoResponsable.codigo, oficina.codOfiResponsable.codigo from Oficina as oficina where " +
            "oficina.codUoResponsable.codUnidadRaiz.codigo =:codigoUnidadResponsable and oficina.estado.codigoEstadoEntidad =:estado and " +

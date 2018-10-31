@@ -718,7 +718,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     @SuppressWarnings(value = "unchecked")
     public List<Unidad> obtenerArbolUnidadesDestinatarias(String codigo) throws Exception {
 
-        Query q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.codUnidadRaiz.codigo, unidad.codUnidadSuperior.codigo, unidad.esEdp from Unidad as unidad where unidad.codigo =:codigo and unidad.estado.codigoEstadoEntidad =:vigente order by unidad.codigo");
+        Query q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.codUnidadRaiz.codigo, unidad.codUnidadSuperior.codigo, unidad.esEdp from Unidad as unidad where unidad.codigo =:codigo and unidad.estado.codigoEstadoEntidad =:vigente");
         q.setParameter("codigo", codigo);
         q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
@@ -737,7 +737,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         if (unidades.size() > 0) {
             unidadRaiz = unidades.get(0);
 
-            //Miramos si la unidad que nos pasan tiene oficina
+            //Miramos si la unidad que nos pasan tiene oficina que le registren
             Boolean tiene = oficinaEjb.tieneOficinasArbol(unidadRaiz.getCodigo());
 
             if (tiene) {
