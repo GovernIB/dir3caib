@@ -11,6 +11,7 @@ import es.caib.dir3caib.persistence.utils.DataBaseUtils;
 import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.NodoUtils;
 import es.caib.dir3caib.persistence.utils.Paginacion;
+import es.caib.dir3caib.utils.Utils;
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.jboss.ejb3.annotation.SecurityDomain;
@@ -718,6 +719,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     @SuppressWarnings(value = "unchecked")
     public List<Unidad> obtenerArbolUnidadesDestinatarias(String codigo) throws Exception {
 
+        Long start = System.currentTimeMillis();
         Query q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.codUnidadRaiz.codigo, unidad.codUnidadSuperior.codigo, unidad.esEdp from Unidad as unidad where unidad.codigo =:codigo and unidad.estado.codigoEstadoEntidad =:vigente");
         q.setParameter("codigo", codigo);
         q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
@@ -749,12 +751,16 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
                 Set<Unidad> unidadesHijasTotales = new HashSet<Unidad>();
                 //Obtenemos de manera recursiva todos los hijos de la unidad que nos indican
                 arbolHijos(unidadesRaices, Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE, unidadesHijasTotales);
-
                 unidadesDestConOficinas.addAll(unidadesHijasTotales);
+
             }
 
         }
 
+        Long end = System.currentTimeMillis();
+
+        log.info("TIEMPO CARGA UNIDADESDESTINATARIAS: " + Utils.formatElapsedTime(end - start));
+        log.info(unidadesDestConOficinas.size());
         return unidadesDestConOficinas;
     }
 
