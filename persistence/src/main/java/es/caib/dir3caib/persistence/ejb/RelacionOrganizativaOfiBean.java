@@ -1,6 +1,8 @@
 package es.caib.dir3caib.persistence.ejb;
 
+import es.caib.dir3caib.persistence.model.Oficina;
 import es.caib.dir3caib.persistence.model.RelacionOrganizativaOfi;
+import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.NodoUtils;
 import org.apache.log4j.Logger;
@@ -11,6 +13,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -117,15 +120,25 @@ public class RelacionOrganizativaOfiBean extends BaseEjbJPA<RelacionOrganizativa
 
     @Override
     public List<RelacionOrganizativaOfi> getOrganizativasCompletoByUnidadEstado(String codigo, String estado) throws Exception {
-        Query q = em.createQuery("Select relacionOrganizativaOfi from RelacionOrganizativaOfi as relacionOrganizativaOfi where " +
+        Query q = em.createQuery("Select relacionOrganizativaOfi.oficina.codigo, relacionOrganizativaOfi.oficina.denominacion, " +
+                "relacionOrganizativaOfi.oficina.codUoResponsable.codigo, relacionOrganizativaOfi.unidad.codigo, " +
+                "relacionOrganizativaOfi.unidad.codUnidadRaiz.codigo from RelacionOrganizativaOfi as relacionOrganizativaOfi where " +
            "relacionOrganizativaOfi.unidad.codUnidadRaiz.codigo =:codigo and relacionOrganizativaOfi.estado.codigoEstadoEntidad =:estado order by relacionOrganizativaOfi.oficina.codigo");
 
         q.setParameter("codigo", codigo);
         q.setParameter("estado", estado);
 
+        List<Object[]> result = q.getResultList();
+        List<RelacionOrganizativaOfi> relacionOrganizativaOfis = new ArrayList<RelacionOrganizativaOfi>();
 
-        return q.getResultList();
+        for (Object[] object : result) {
+            RelacionOrganizativaOfi relacionOrganizativaOfi = new RelacionOrganizativaOfi((String) object[0], (String) object[1], (String) object[2], (String) object[3], (String) object[4]);
+            relacionOrganizativaOfis.add(relacionOrganizativaOfi);
+        }
+
+        return relacionOrganizativaOfis;
     }
+
     @Override
     public void deleteAll() throws Exception {
 

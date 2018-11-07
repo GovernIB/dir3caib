@@ -332,23 +332,40 @@ var waitingDialog = waitingDialog || (function ($) {
 })(jQuery);
 
 
-/**
- * Funció per mostrar la barra el temps que se carrega el Detall
- */
-function verDetalle(url, mssg) {
-    $.ajax({
-        type:'GET',
-        beforeSend: function(objeto){
-            waitingDialog.show(mssg, {dialogSize: 'm', progressType: 'warning'});
-        },
-        success:function(respuesta){
-            goTo(url);
+function amaga(numeroPrimer, numeroSegon, numeroTercer) {
+
+    $('.tree li:has(ul > li)').addClass('parent_li').find(' > span > i').removeClass('fa fa-minus');
+
+    for(var i=0;i<numeroTercer;i++){
+        var variable = $("#tercerNivell" + i).parent('li.parent_li').find(' > ul > li');
+        variable.hide('fast');
+        if($("#tercerNivell" + i).parent('li.parent_li').find(' > ul > li').val() != undefined){
+            $("#tercerNivell" + i).find(' > i').removeClass('fa fa-minus');
+            $("#tercerNivell" + i).attr('title', 'Mostra la branca').find(' > i').addClass('fa fa-plus');
         }
-    });
+    }
+
+    for(var i=0;i<numeroSegon;i++){
+        var variable = $("#segonNivell" + i).parent('li.parent_li').find(' > ul > li');
+        variable.hide('fast');
+        if($("#segonNivell" + i).parent('li.parent_li').find(' > ul > li').val() != undefined){
+            $("#segonNivell" + i).find(' > i').removeClass('fa fa-minus');
+            $("#segonNivell" + i).attr('title', 'Mostra la branca').find(' > i').addClass('fa fa-plus');
+        }
+    }
+
+    for(var i=0;i<numeroPrimer;i++){
+        var variable = $("#primerNivell" + i).parent('li.parent_li').find(' > ul > li');
+        variable.hide('fast');
+        if($("#primerNivell" + i).parent('li.parent_li').find(' > ul > li').val() != undefined){
+            $("#primerNivell" + i).find(' > i').removeClass('fa fa-minus');
+            $("#primerNivell" + i).attr('title', 'Mostra la branca').find(' > i').addClass('fa fa-plus');
+        }
+    }
+
+    $("#zeroNivell").find(' > i').addClass('fa fa-minus');
+    $("#zeroNivell").attr('title', 'Amaga la branca');
+    $("#entidad").find(' > i').addClass('fa fa-minus');
+    $("#entidad").attr('title', 'Amaga la branca');
+
 }
-
-
-
-
-
-

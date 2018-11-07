@@ -21,6 +21,13 @@ public interface RelacionSirOfiLocal extends BaseEjb<RelacionSirOfi, Long> {
   
   List<String> getUnidadesOficinas() throws Exception;
 
+  /**
+   Obtiene las relaciones SIR de la unidad indicada y en función del estado indicado
+   * @param codigo codigo de la unidad
+   * @param estado estado de la relación
+   * @return
+   * @throws Exception
+   */
   List<RelacionSirOfi> relacionesSirOfiByUnidaddEstado(String codigo, String estado) throws Exception;
 
 }

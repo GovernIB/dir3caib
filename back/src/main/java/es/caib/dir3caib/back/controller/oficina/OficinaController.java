@@ -178,9 +178,8 @@ public class OficinaController extends BaseController {
 
 
         // OBTENEMOS EL ÁRBOL DE LA OFICINA
-        //Obtenemos los datos básicos de la unidad que nos indican
-        Unidad unidad = unidadEjb.findByCodigoLigero(oficina.getCodUoResponsable().getCodigo());
-
+        //Obtenemos los datos de la unidad
+        Unidad unidad = unidadEjb.findFullById(oficina.getCodUoResponsable().getCodigo());
 
         //Obtenemos en diferentes listas las unidades hasta el septimo nivel
         List<Unidad> unidadesPrimerNivel = new ArrayList<Unidad>();
@@ -314,7 +313,7 @@ public class OficinaController extends BaseController {
         mav.addObject("oficinasAuxiliares", oficinasAuxiliares);
         mav.addObject("relacionesOrganizativaOfi", relacionesOrganizativaOfi);
         mav.addObject("relacionesSirOfi", relacionesSirOfi);
-        mav.addObject("unidadRaiz", unidad);
+        mav.addObject("unidadRaiz", unidad.getCodUnidadSuperior());
         return mav;
 
     }

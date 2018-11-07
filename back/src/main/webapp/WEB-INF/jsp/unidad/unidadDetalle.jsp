@@ -49,8 +49,8 @@
                                     <c:if test="${not empty unidad.nifcif}"><dt> <spring:message code="unidad.nifcif"/>: </dt> <dd> ${unidad.nifcif}</dd></c:if>
                                     <c:if test="${not empty unidad.nivelAdministracion.descripcionNivelAdministracion}"><dt> <spring:message code="unidad.administracion"/>: </dt> <dd> ${unidad.nivelAdministracion.descripcionNivelAdministracion}</dd></c:if>
                                     <c:if test="${not empty unidad.codTipoUnidad.descripcionTipoUnidadOrganica}"><dt> <spring:message code="unidad.tipo"/>: </dt> <dd> ${unidad.codTipoUnidad.descripcionTipoUnidadOrganica}</dd></c:if>
-                                    <c:if test="${not empty unidad.codUnidadRaiz.codigo}"><dt> <spring:message code="unidad.unidadraiz"/>: </dt> <dd> <a onclick="verDetalle('<c:url value="/unidad/${unidad.codUnidadRaiz.codigo}/detalle"/>','<spring:message code="dir3caib.organismo.detalle.generar" javaScriptEscape="true"/>')" onmouseover="this.style.cursor='pointer';">${unidad.codUnidadRaiz.codigo} - ${unidad.codUnidadRaiz.denominacion}</a></dd></c:if>
-                                    <c:if test="${not empty unidad.codUnidadSuperior.codigo}"><dt> <spring:message code="unidad.unidadsuperior"/>: </dt> <dd> <a onclick="verDetalle('<c:url value="/unidad/${unidad.codUnidadSuperior.codigo}/detalle"/>','<spring:message code="dir3caib.organismo.detalle.generar" javaScriptEscape="true"/>')" onmouseover="this.style.cursor='pointer';">${unidad.codUnidadSuperior.codigo} - ${unidad.codUnidadSuperior.denominacion}</a></dd></c:if>
+                                    <c:if test="${not empty unidad.codUnidadRaiz.codigo}"><dt> <spring:message code="unidad.unidadraiz"/>: </dt> <dd> <a onclick="goTo('<c:url value="/unidad/${unidad.codUnidadRaiz.codigo}/detalle"/>','<spring:message code="dir3caib.organismo.detalle.generar" javaScriptEscape="true"/>')" onmouseover="this.style.cursor='pointer';">${unidad.codUnidadRaiz.codigo} - ${unidad.codUnidadRaiz.denominacion}</a></dd></c:if>
+                                    <c:if test="${not empty unidad.codUnidadSuperior.codigo}"><dt> <spring:message code="unidad.unidadsuperior"/>: </dt> <dd> <a onclick="goTo('<c:url value="/unidad/${unidad.codUnidadSuperior.codigo}/detalle"/>','<spring:message code="dir3caib.organismo.detalle.generar" javaScriptEscape="true"/>')" onmouseover="this.style.cursor='pointer';">${unidad.codUnidadSuperior.codigo} - ${unidad.codUnidadSuperior.denominacion}</a></dd></c:if>
 
                                     <hr class="divider">
                                     <div class="box-header well cabeceraDetalle">
@@ -181,8 +181,14 @@
                             </div>
                         </div>
 
+                        <div class="btn-group infoBranca opcionArbol">
+                            <button type="button" class="btn btn-primary infoBranca tamany12" onclick="amaga(${fn:length(unidadesSegundoNivel)},${fn:length(unidadesTercerNivel)},${fn:length(unidadesCuartoNivel)})"><i class="fa fa-sitemap fa-rotate-180"></i> <spring:message code="dir3caib.arbol.cierra"/></button>
+                        </div>
+                        <div class="btn-group infoBranca opcionArbol">
+                            <button type="button" class="btn btn-info infoBranca tamany12" onclick="goTo('<c:url value="/unidad/${unidad.codigo}/detalle"/>')"><i class="fa fa-sitemap"></i> <spring:message code="dir3caib.arbol.abre"/></button>
+                        </div>
                         <div class="btn-group infoBranca">
-                            <button type="button" id="infoCopy" class="btn infoBranca" disabled style="cursor:default"><i class="fa fa-info-circle colophon">  <spring:message code="dir3caib.organismo.arbol.copiar"/></i></button>
+                            <button type="button" id="infoCopy" class="btn infoBranca tamany12" disabled style="cursor:default"><i class="fa fa-info-circle colophon">  <spring:message code="dir3caib.organismo.arbol.copiar"/></i></button>
                         </div>
 
                         <div class="tree">
@@ -202,12 +208,12 @@
                                         <c:forEach var="organismo1" items="${unidadesPrimerNivel}">
                                             <li>
                                                 <c:if test="${organismo1.esEdp == false}">
-                                                        <span class="panel-heading btn-primary vuitanta-percent" id="govern"
+                                                        <span class="panel-heading btn-primary vuitanta-percent" id="zeroNivell"
                                                               style="cursor:copy" onclick="copyToClipboard(this)"><i
                                                                 class=""></i> ${organismo1.codigo} - ${organismo1.denominacion}</span>
                                                 </c:if>
                                                 <c:if test="${organismo1.esEdp == true}">
-                                                        <span class="panel-heading btn-edp vuitanta-percent" id="govern"
+                                                        <span class="panel-heading btn-edp vuitanta-percent" id="zeroNivell"
                                                               style="cursor:copy" onclick="copyToClipboard(this)"><i
                                                                 class=""></i> ${organismo1.codigo} - ${organismo1.denominacion}</span>
                                                 </c:if>

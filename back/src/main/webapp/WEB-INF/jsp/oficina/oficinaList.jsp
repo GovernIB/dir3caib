@@ -163,7 +163,7 @@
                     <tr>
 
                         <td>${nodo.codigo}</td>
-                        <td><a onclick="verDetalle('<c:url value="/oficina/${nodo.codigo}/detalle"/>','<spring:message code="dir3caib.organismo.detalle.generar" javaScriptEscape="true"/>')"
+                        <td><a onclick="goTo('<c:url value="/oficina/${nodo.codigo}/detalle"/>','<spring:message code="dir3caib.organismo.detalle.generar" javaScriptEscape="true"/>')"
                                onmouseover="this.style.cursor='pointer';">${nodo.denominacion}</a></td>
                             <%--<td><a href="<c:url value="/oficina/${oficina.codigo}/detalle"/>">${oficina.denominacion}</a></td>--%>
                         <td><c:if

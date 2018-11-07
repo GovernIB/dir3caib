@@ -188,7 +188,7 @@
                     <tr>
 
                         <td>${nodo.codigo}</td>
-                        <td><a onclick="verDetalle('<c:url value="/unidad/${nodo.codigo}/detalle"/>','<spring:message code="dir3caib.organismo.detalle.generar" javaScriptEscape="true"/>')"
+                        <td><a onclick="goTo('<c:url value="/unidad/${nodo.codigo}/detalle"/>','<spring:message code="dir3caib.organismo.detalle.generar" javaScriptEscape="true"/>')"
                                onmouseover="this.style.cursor='pointer';">${nodo.denominacion}</a></td>
                         <td>${nodo.superior}</td>
                         <td>${nodo.raiz}</td>

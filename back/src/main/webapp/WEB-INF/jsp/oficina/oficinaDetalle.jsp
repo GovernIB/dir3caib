@@ -44,8 +44,8 @@
                                         <c:if test="${oficina.estado.codigoEstadoEntidad == 'T'}"><dd><span class="label label-info">${oficina.estado.descripcionEstadoEntidad}</span></dd></c:if>
                                     <c:if test="${not empty oficina.nivelAdministracion.descripcionNivelAdministracion}"><dt> <spring:message code="oficina.administracion"/>: </dt> <dd> ${oficina.nivelAdministracion.descripcionNivelAdministracion}</dd></c:if>
                                     <c:if test="${not empty oficina.tipoOficina.descripcionJerarquiaOficina}"><dt> <spring:message code="oficina.tipo"/>: </dt> <dd> ${oficina.tipoOficina.descripcionJerarquiaOficina}</dd></c:if>
-                                    <c:if test="${not empty oficina.codUoResponsable.codigo}"><dt> <spring:message code="oficina.unidadresponsable"/>: </dt> <dd> <a onclick="verDetalle('<c:url value="/unidad/${oficina.codUoResponsable.codigo}/detalle"/>','<spring:message code="dir3caib.organismo.detalle.generar" javaScriptEscape="true"/>')" onmouseover="this.style.cursor='pointer';">${oficina.codUoResponsable.codigo} - ${oficina.codUoResponsable.denominacion}</a></dd></c:if>
-                                    <c:if test="${not empty oficina.codOfiResponsable.codigo}"><dt> <spring:message code="oficina.oficinaresponsable"/>: </dt> <dd> <a onclick="verDetalle('<c:url value="/oficina/${oficina.codOfiResponsable.codigo}/detalle"/>','<spring:message code="dir3caib.organismo.detalle.generar" javaScriptEscape="true"/>')" onmouseover="this.style.cursor='pointer';">${oficina.codOfiResponsable.codigo} - ${oficina.codOfiResponsable.denominacion}</a></dd></c:if>
+                                    <c:if test="${not empty oficina.codUoResponsable.codigo}"><dt> <spring:message code="oficina.unidadresponsable"/>: </dt> <dd> <a onclick="goTo('<c:url value="/unidad/${oficina.codUoResponsable.codigo}/detalle"/>','<spring:message code="dir3caib.organismo.detalle.generar" javaScriptEscape="true"/>')" onmouseover="this.style.cursor='pointer';">${oficina.codUoResponsable.codigo} - ${oficina.codUoResponsable.denominacion}</a></dd></c:if>
+                                    <c:if test="${not empty oficina.codOfiResponsable.codigo}"><dt> <spring:message code="oficina.oficinaresponsable"/>: </dt> <dd> <a onclick="goTo('<c:url value="/oficina/${oficina.codOfiResponsable.codigo}/detalle"/>','<spring:message code="dir3caib.organismo.detalle.generar" javaScriptEscape="true"/>')" onmouseover="this.style.cursor='pointer';">${oficina.codOfiResponsable.codigo} - ${oficina.codOfiResponsable.denominacion}</a></dd></c:if>
                                     <c:if test="${not empty oficina.fechaAltaOficial}"><dt> <spring:message code="oficina.fechaCreacion"/>: </dt> <dd><fmt:formatDate value="${oficina.fechaAltaOficial}" pattern="dd/MM/yyyy"/></dd></c:if>
 
                                     <!-- Muestra la dirección de la oficina-->
@@ -141,8 +141,14 @@
                             </div>
                         </div>
 
+                        <div class="btn-group infoBranca opcionArbol">
+                            <button type="button" class="btn btn-primary infoBranca tamany12" onclick="amaga(${fn:length(unidadesSegundoNivel)},${fn:length(unidadesTercerNivel)},${fn:length(unidadesCuartoNivel)})"><i class="fa fa-sitemap fa-rotate-180"></i> <spring:message code="dir3caib.arbol.cierra"/></button>
+                        </div>
+                        <div class="btn-group infoBranca opcionArbol">
+                            <button type="button" class="btn btn-info infoBranca tamany12" onclick="goTo('<c:url value="/oficina/${oficina.codigo}/detalle"/>')"><i class="fa fa-sitemap"></i> <spring:message code="dir3caib.arbol.abre"/></button>
+                        </div>
                         <div class="btn-group infoBranca">
-                            <button type="button" id="infoCopy" class="btn infoBranca" disabled style="cursor:default"><i class="fa fa-info-circle colophon">  <spring:message code="dir3caib.organismo.arbol.copiar"/></i></button>
+                            <button type="button" id="infoCopy" class="btn infoBranca tamany12" disabled style="cursor:default"><i class="fa fa-info-circle colophon">  <spring:message code="dir3caib.organismo.arbol.copiar"/></i></button>
                         </div>
 
                         <div class="tree">
@@ -162,12 +168,12 @@
                                         <c:forEach var="organismo1" items="${unidadesPrimerNivel}">
                                             <li>
                                                 <c:if test="${organismo1.esEdp == false}">
-                                                        <span class="panel-heading btn-primary vuitanta-percent" id="govern"
+                                                        <span class="panel-heading btn-primary vuitanta-percent" id="zeroNivell"
                                                               style="cursor:copy" onclick="copyToClipboard(this)"><i
                                                                 class=""></i> ${organismo1.codigo} - ${organismo1.denominacion}</span>
                                                 </c:if>
                                                 <c:if test="${organismo1.esEdp == true}">
-                                                        <span class="panel-heading btn-edp vuitanta-percent" id="govern"
+                                                        <span class="panel-heading btn-edp vuitanta-percent" id="zeroNivell"
                                                               style="cursor:copy" onclick="copyToClipboard(this)"><i
                                                                 class=""></i> ${organismo1.codigo} - ${organismo1.denominacion}</span>
                                                 </c:if>

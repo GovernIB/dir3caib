@@ -9,6 +9,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -108,14 +109,23 @@ public class RelacionSirOfiBean extends BaseEjbJPA<RelacionSirOfi, Long>
     }
 
    public List<RelacionSirOfi> relacionesSirOfiByUnidaddEstado(String codigo, String estado) throws Exception {
-      Query q = em.createQuery("Select relacionSirOfi from RelacionSirOfi as relacionSirOfi where " +
-         "relacionSirOfi.unidad.codUnidadRaiz.codigo =:codigo and relacionSirOfi.estado.codigoEstadoEntidad =:estado order by relacionSirOfi.oficina.codigo");
+      Query q = em.createQuery("Select relacionSirOfi.oficina.codigo, relacionSirOfi.oficina.denominacion, " +
+              "relacionSirOfi.oficina.codUoResponsable.codigo, relacionSirOfi.unidad.codigo " +
+              "from RelacionSirOfi as relacionSirOfi where relacionSirOfi.unidad.codUnidadRaiz.codigo =:codigo " +
+              "and relacionSirOfi.estado.codigoEstadoEntidad =:estado order by relacionSirOfi.oficina.codigo");
 
       q.setParameter("codigo", codigo);
       q.setParameter("estado", estado);
 
+       List<Object[]> result = q.getResultList();
+       List<RelacionSirOfi> relacionSirOfis = new ArrayList<RelacionSirOfi>();
 
-      return q.getResultList();
+       for (Object[] object : result) {
+           RelacionSirOfi relacionOrganizativaOfi = new RelacionSirOfi((String) object[0], (String) object[1], (String) object[2], (String) object[3]);
+           relacionSirOfis.add(relacionOrganizativaOfi);
+       }
+
+       return relacionSirOfis;
 
    }
 }

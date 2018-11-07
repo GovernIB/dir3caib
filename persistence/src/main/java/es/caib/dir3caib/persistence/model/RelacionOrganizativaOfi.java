@@ -31,6 +31,11 @@ public class RelacionOrganizativaOfi implements Serializable {
 
     }
 
+    public RelacionOrganizativaOfi(String codOficina, String denOficina, String codUnidadResponsable, String codUnidad, String codUnidadRaiz) {
+        this.oficina = new Oficina(codOficina,denOficina, codUnidadResponsable,null);
+        this.unidad = new Unidad(codUnidad, null, codUnidadRaiz);
+    }
+
     public void finalize() throws Throwable {
 
     }
