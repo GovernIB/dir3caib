@@ -43,6 +43,9 @@
                                         <dd><span class="label label-warning">${unidad.estado.descripcionEstadoEntidad}</span></dd>
                                         <dt> <spring:message code="unidad.baja"/>: </dt><dd>${unidad.observBaja}</dd>
                                     </c:if>
+                                    <dt> <spring:message code="unidad.edp"/>: </dt>
+                                    <c:if test="${unidad.esEdp}"><dd><span class="label label-success">Sí</span></dd></c:if>
+                                    <c:if test="${!unidad.esEdp}"><dd><span class="label label-important">No</span></dd></c:if>
                                     <c:if test="${unidad.estado.codigoEstadoEntidad == 'A'}"><dd><span class="label label-important">${unidad.estado.descripcionEstadoEntidad}</span></dd></c:if>
                                     <c:if test="${unidad.estado.codigoEstadoEntidad == 'T'}"><dd><span class="label label-info">${unidad.estado.descripcionEstadoEntidad}</span></dd></c:if>
                                     <c:if test="${not empty unidad.nivelJerarquico}"><dt> <spring:message code="unidad.nivel"/>: </dt> <dd> ${unidad.nivelJerarquico}</dd></c:if>
