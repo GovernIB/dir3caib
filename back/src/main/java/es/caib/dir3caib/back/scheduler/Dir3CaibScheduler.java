@@ -16,7 +16,7 @@ public class Dir3CaibScheduler {
     private SchedulerLocal schedulerEjb;
 
 
-    @Scheduled(cron = "0 0 4 * * *") // Cada día a las 04:00h
+    @Scheduled(cron = "0 0 4 ? * SUN-THU") // Cada día a las 04:00h
     public void reintentarEnvioSir(){
 
         try {
