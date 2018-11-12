@@ -21,7 +21,7 @@ import java.util.List;
  */
 @Stateless(name = "RelacionSirOfiEJB")
 @SecurityDomain("seycon")
-@RolesAllowed("DIR_ADMIN")
+@RolesAllowed({"DIR_ADMIN", "tothom"})
 public class RelacionSirOfiBean extends BaseEjbJPA<RelacionSirOfi, Long>
    implements RelacionSirOfiLocal{
 
