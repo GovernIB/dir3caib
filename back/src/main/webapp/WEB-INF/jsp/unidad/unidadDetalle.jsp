@@ -44,8 +44,12 @@
                                         <dt> <spring:message code="unidad.baja"/>: </dt><dd>${unidad.observBaja}</dd>
                                     </c:if>
                                     <dt> <spring:message code="unidad.edp"/>: </dt>
-                                    <c:if test="${unidad.esEdp}"><dd><span class="label label-success">Sí</span></dd></c:if>
-                                    <c:if test="${!unidad.esEdp}"><dd><span class="label label-important">No</span></dd></c:if>
+                                    <c:if test="${unidad.esEdp}">
+                                        <dd><p class="centrat ajustarEDP" rel="edp"
+                                           data-content="<c:if test="${not empty unidad.codEdpPrincipal}">Edp Principal: <c:out value="${unidad.codEdpPrincipal.codigo} - ${unidad.codEdpPrincipal.denominacion}" escapeXml="true"/></c:if>"
+                                           data-toggle="popover"><span class="label label-success">Sí</span></p></dd>
+                                    </c:if>
+                                    <c:if test="${!unidad.esEdp}"><dd><span class="label label-danger">No</span></dd></c:if>
                                     <c:if test="${unidad.estado.codigoEstadoEntidad == 'A'}"><dd><span class="label label-important">${unidad.estado.descripcionEstadoEntidad}</span></dd></c:if>
                                     <c:if test="${unidad.estado.codigoEstadoEntidad == 'T'}"><dd><span class="label label-info">${unidad.estado.descripcionEstadoEntidad}</span></dd></c:if>
                                     <c:if test="${not empty unidad.nivelJerarquico}"><dt> <spring:message code="unidad.nivel"/>: </dt> <dd> ${unidad.nivelJerarquico}</dd></c:if>
@@ -1008,6 +1012,10 @@
         document.execCommand('copy',false);
         inp.remove();
     }
+</script>
+
+<script type="text/javascript">
+    $("[rel='edp']").popover({ trigger: 'hover',placement: 'right',container:"body", html:true});
 </script>
 
 </body>
