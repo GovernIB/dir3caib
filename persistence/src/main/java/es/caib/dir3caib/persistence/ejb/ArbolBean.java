@@ -14,7 +14,7 @@ import java.util.StringTokenizer;
  * Created by mgonzalez on 29/03/2016.
  */
 @Stateless(name = "ArbolEJB")
-@RunAs("DIR_ADMIN, tothom")
+@RunAs("DIR_ADMIN")
 public class ArbolBean implements ArbolLocal {
 
     protected final Logger log = Logger.getLogger(getClass());
