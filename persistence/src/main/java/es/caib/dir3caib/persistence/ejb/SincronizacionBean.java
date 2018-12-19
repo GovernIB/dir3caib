@@ -477,6 +477,7 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
 
             // Obtenemos la fecha de la ultima descarga/sincronizacion
             Sincronizacion ultimaDirectorio = ultimaSincronizacionCompletada(Dir3caibConstantes.DIRECTORIO);
+            Sincronizacion ultimaCatalogo = ultimaSincronizacionCompletada(Dir3caibConstantes.CATALOGO);
 
             // Descarga del catálogo DIR3
             sincroCatalogo = descargarCatalogoWS();
@@ -491,7 +492,12 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
             // Importamos Catálogo
             if (sincroCatalogo != null && sincroCatalogo.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
 
-                sincroCatalogo = importarCatalogo(sincroCatalogo, false);
+                if(ultimaCatalogo != null){ // Si ya hay una sincro previa, no sincronizacimos las Localidades
+                    sincroCatalogo = importarCatalogo(sincroCatalogo, false);
+                }else{
+                    sincroCatalogo = importarCatalogo(sincroCatalogo, true);
+                }
+
             }
 
             // Importamos Directorio
