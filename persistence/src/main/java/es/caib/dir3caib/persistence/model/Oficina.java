@@ -41,8 +41,8 @@ public class Oficina implements Serializable {
 	private Date fechaAltaOficial;
 	private Date fechaExtincion;
 	private Date fechaAnulacion;
-    private Date fechaImportacion;
-	private CatTipoVia tipoVia;
+  private Date fechaImportacion;
+  private CatTipoVia tipoVia;
 	private String nombreVia;
 	private String numVia;
 	private String complemento;
@@ -56,11 +56,8 @@ public class Oficina implements Serializable {
 	private List<RelacionSirOfi> sirOfi;
 	private List<RelacionOrganizativaOfi> organizativasOfi;
 	private Set<Servicio> servicios;
-    private List<ContactoOfi> contactos;
-  
-  
-  
-    private Set<Oficina> historicosOfi;
+  private List<ContactoOfi> contactos;
+  private Set<Oficina> historicosOfi;
 
 	public Oficina(){
 

@@ -3,6 +3,7 @@ package es.caib.dir3caib.persistence.ejb;
 import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.utils.*;
 import org.apache.log4j.Logger;
+import org.hibernate.Hibernate;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -188,6 +189,9 @@ public class Dir3RestBean implements Dir3RestLocal {
         List<Oficina> oficinasActualizadas = new ArrayList<Oficina>();
         // Si hay fecha de actualización y es anterior a la fecha de importación se debe
         // incluir en la lista de actualizadas
+        for (Oficina ofi : oficinas) {
+            Hibernate.initialize(ofi.getContactos());
+        }
         if (fechaActualizacion != null) {
             Date fechaAct = formatoFecha.parse(fechaActualizacion);
             for (Oficina oficina : oficinas) {

@@ -2,9 +2,8 @@ package es.caib.dir3caib.back.controller.rest;
 
 import es.caib.dir3caib.persistence.ejb.ArbolLocal;
 import es.caib.dir3caib.persistence.ejb.Dir3RestLocal;
-import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
-import es.caib.dir3caib.persistence.model.Oficina;
-import es.caib.dir3caib.persistence.model.Unidad;
+import es.caib.dir3caib.persistence.model.*;
+import es.caib.dir3caib.persistence.model.json.OficinaJson;
 import es.caib.dir3caib.persistence.utils.CodigoValor;
 import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.ObjetoDirectorio;
@@ -115,6 +114,26 @@ public class RestController {
         //Si hay resultados fijamos el HttpStatus a OK, sino indicamos que no hay resultados.
         HttpStatus status = (resultado.size() > 0) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
         return new ResponseEntity<List<ObjetoDirectorio>>(transformarOficinaAObjetoDirectorio(resultado), headers, status);
+
+    }
+
+
+    /**
+     * Obtiene las {@link es.caib.dir3caib.persistence.model.Oficina} del organismo indicado
+     * //TODO revisar si se emplea. REGWEB no (03/10/2017)
+     */
+    @RequestMapping(value = "/GET/oficinas", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    ResponseEntity<List<OficinaJson>> oficinasOrganismoJS(@RequestParam String codigo) throws Exception {
+
+
+        List<Oficina> resultado = dir3RestEjb.obtenerOficinasOrganismo(codigo, null);
+
+        HttpHeaders headers = addAccessControllAllowOrigin();
+        //Si hay resultados fijamos el HttpStatus a OK, sino indicamos que no hay resultados.
+        HttpStatus status = (resultado.size() > 0) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
+        return new ResponseEntity<List<OficinaJson>>(transformarAOficinaJson(resultado), headers, status);
 
     }
 
@@ -401,6 +420,75 @@ public class RestController {
         }
 
         return objetoDirectorios;
+
+    }
+
+    /*
+      Método que transforma los resultados de una lista de Oficina en una lista de OficinaJson
+     */
+    private List<OficinaJson> transformarAOficinaJson(List<Oficina> resultados) {
+        List<OficinaJson> oficinaJsons = new ArrayList<OficinaJson>();
+        for (Oficina ofi : resultados) {
+            OficinaJson oficinaJson = new OficinaJson();
+            oficinaJson.setCodigo(ofi.getCodigo());
+            oficinaJson.setDenominacion(ofi.getDenominacion());
+            oficinaJson.setEstado(ofi.getEstado().getDescripcionEstadoEntidad());
+            oficinaJson.setNivelAdministracion(ofi.getNivelAdministracion().getDescripcionNivelAdministracion());
+
+
+            oficinaJson.setTipoOficina(ofi.getCodigo());  //CatJerarquiaOficina
+            oficinaJson.setCodUoResponsable(ofi.getDenominacion());//Unidad
+            if (ofi.getCodOfiResponsable() != null) {
+                oficinaJson.setCodOfiResponsable(ofi.getCodOfiResponsable().getDenominacion());   //Oficina
+            }
+            oficinaJson.setHorarioAtencion(ofi.getHorarioAtencion());
+            oficinaJson.setDiasSinHabiles(ofi.getDiasSinHabiles());
+            oficinaJson.setObservaciones(ofi.getObservaciones());
+            if (ofi.getFechaAltaOficial() != null) {
+                oficinaJson.setFechaAltaOficial(ofi.getFechaAltaOficial().toString());
+            }
+            if (ofi.getFechaAnulacion() != null) {
+                oficinaJson.setFechaAnulacion(ofi.getFechaAnulacion().toString());
+            }
+            if (ofi.getFechaExtincion() != null) {
+                oficinaJson.setFechaExtincion(ofi.getFechaExtincion().toString());
+            }
+            if (ofi.getCodPais() != null) {
+                oficinaJson.setPais(ofi.getCodPais().getDescripcionPais());
+            }
+            if (ofi.getCodComunidad() != null) {
+                oficinaJson.setComunidad(ofi.getCodComunidad().getDescripcionComunidad());
+            }
+            if (ofi.getLocalidad() != null) {
+                oficinaJson.setDescripcionLocalidad(ofi.getLocalidad().getDescripcionLocalidad()); //LOCALIDAD
+            }
+
+            oficinaJson.setNombreVia(ofi.getNombreVia());
+            oficinaJson.setNumVia(ofi.getNumVia());
+            if (ofi.getTipoVia() != null) {
+                oficinaJson.setTipoVia(ofi.getTipoVia().getDescripcionTipoVia());
+            }
+            oficinaJson.setCodPostal(ofi.getCodPostal());
+
+            //Montamos los servicios como una lista de strings
+            List<String> servicios = new ArrayList<String>();
+            for (Servicio serv : ofi.getServicios()) {
+                servicios.add(serv.getDescServicio());
+            }
+
+            List<String> contactos = new ArrayList<String>();
+            for (ContactoOfi contactoOfi : ofi.getContactos()) {
+                contactos.add(contactoOfi.getTipoContacto().getDescripcionTipoContacto() + " : " + contactoOfi.getValorContacto());
+            }
+
+            oficinaJson.setServicios(servicios);
+            oficinaJson.setContactos(contactos);
+
+
+            oficinaJsons.add(oficinaJson);
+        }
+
+        return oficinaJsons;
 
     }
 }
