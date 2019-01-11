@@ -120,7 +120,7 @@ public class RestController {
 
     /**
      * Obtiene las {@link es.caib.dir3caib.persistence.model.Oficina} del organismo indicado
-     * //TODO revisar si se emplea. REGWEB no (03/10/2017)
+     *
      */
     @RequestMapping(value = "/GET/oficinas", method = RequestMethod.GET)
     public

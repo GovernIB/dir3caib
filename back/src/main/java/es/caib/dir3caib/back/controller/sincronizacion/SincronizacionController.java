@@ -248,7 +248,7 @@ public class SincronizacionController extends BaseController {
             Sincronizacion sincronizacion = sincronizacionEjb.findById(idSincronizacion);
 
             // Comprobamos que no se trate de la última sincronización correcta
-            if(sincronizacion.getCodigo().equals(ultimaSincroDirectorio.getCodigo()) || sincronizacion.getCodigo().equals(ultimaSincroCatalogo.getCodigo())){
+            if (sincronizacion != null && sincronizacion.getCodigo().equals(ultimaSincroDirectorio.getCodigo()) || sincronizacion.getCodigo().equals(ultimaSincroCatalogo.getCodigo())) {
                 Mensaje.saveMessageError(request, getMessage("sincronizacion.eliminar.correcta"));
                 return "redirect:/sincronizacion/list/1";
             }
