@@ -436,7 +436,7 @@ public class RestController {
             oficinaJson.setNivelAdministracion(ofi.getNivelAdministracion().getDescripcionNivelAdministracion());
 
 
-            oficinaJson.setTipoOficina(ofi.getCodigo());  //CatJerarquiaOficina
+            oficinaJson.setTipoOficina(ofi.getTipoOficina().getDescripcionJerarquiaOficina());  //CatJerarquiaOficina
             oficinaJson.setCodUoResponsable(ofi.getDenominacion());//Unidad
             if (ofi.getCodOfiResponsable() != null) {
                 oficinaJson.setCodOfiResponsable(ofi.getCodOfiResponsable().getDenominacion());   //Oficina
