@@ -4,6 +4,7 @@ import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.model.ws.OficinaTF;
 import es.caib.dir3caib.utils.Utils;
 import org.apache.log4j.Logger;
+import org.hibernate.Hibernate;
 
 import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
@@ -161,6 +162,52 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
         Long end = System.currentTimeMillis();
         log.info("tiempo obtenerArbolOficinas: " + Utils.formatElapsedTime(end - start));
         return arbolTF;
+    }
+
+
+    /**
+     * Obtiene todas las {@link es.caib.dir3caib.persistence.model.ws.OficinaTF} cuyo organismo responsable es el indicado por código(son todas padres e hijas).Solo se envian aquellas
+     * que han sido actualizadas controlando que la unidad del código que nos pasan se haya podido actualizar también.
+     * Esto es debido a que cuando en Madrid actualizan una unidad la tendencia es extinguirla y crear una nueva con código diferente.
+     * Esto hace que se tengan que traer las oficinas de la vieja y de la nueva.
+     *
+     * @param codigo Código del organismo
+     */
+    @Override
+    public List<Oficina> obtenerArbolOficinasOpenData(String codigo) throws Exception {
+
+        log.info("WS: Inicio obtener Oficinas");
+        // Obtenemos todos las unidades vigentes de la unidad Raiz
+
+        Long start = System.currentTimeMillis();
+
+        List<Unidad> unidades = new ArrayList<Unidad>();
+
+        Unidad unidad = unidadEjb.findUnidadEstado(codigo, Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+        if (unidad != null) {
+            //Añadimos la unidad para que se obtengan sus oficinas
+            unidades.add(unidad);
+        }
+
+
+        unidades.addAll(unidadEjb.obtenerArbol(codigo));
+        log.info("Total arbol: " + unidades.size());
+
+        List<Oficina> oficinasCompleto = new ArrayList<Oficina>();
+
+        // Por cada Unidad, obtenemos sus Oficinas
+        for (Unidad uni : unidades) {
+            List<Oficina> oficinas = oficinaEjb.obtenerOficinasOrganismo(uni.getCodigo(), null, null);
+            for (Oficina oficina : oficinas) {
+                Hibernate.initialize(oficina.getContactos());
+                Hibernate.initialize(oficina.getServicios());
+            }
+            oficinasCompleto.addAll(oficinas);
+        }
+
+        Long end = System.currentTimeMillis();
+        log.info("tiempo obtenerArbolOficinas: " + Utils.formatElapsedTime(end - start));
+        return oficinasCompleto;
     }
 
     /**

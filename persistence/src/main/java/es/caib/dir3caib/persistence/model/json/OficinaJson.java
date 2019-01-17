@@ -6,13 +6,13 @@ import java.util.List;
  * Created by mgonzalez on 19/12/2018.
  */
 public class OficinaJson {
-   private String codigo;
+   private String codigoDir3;
    private String denominacion;
    private String estado;    //CatEstadoEntidad
    private String nivelAdministracion;  //CatNivelAdministracion
    private String tipoOficina;  //CatJerarquiaOficina
-   private String codUoResponsable;      //Unidad
-   private String codOfiResponsable;   //Oficina
+   private String unidadResponsable;      //Unidad
+   private String oficinaResponsable;   //Oficina
    private String horarioAtencion;
    private String diasSinHabiles;
    private String observaciones;
@@ -21,22 +21,21 @@ public class OficinaJson {
    private String fechaAnulacion;
    private String pais;
    private String comunidad;
-   private String descripcionLocalidad; //LOCALIDAD
+   private String municipio; //LOCALIDAD
    private String nombreVia;
-   private String numVia;
+   private String numeroVia;
    private String tipoVia;
-   private String codPostal;
+   private String codigoPostal;
 
    private List<String> servicios;
    private List<String> contactos;
 
-
-   public String getCodigo() {
-      return codigo;
+   public String getCodigoDir3() {
+      return codigoDir3;
    }
 
-   public void setCodigo(String codigo) {
-      this.codigo = codigo;
+   public void setCodigoDir3(String codigoDir3) {
+      this.codigoDir3 = codigoDir3;
    }
 
    public String getDenominacion() {
@@ -71,20 +70,20 @@ public class OficinaJson {
       this.tipoOficina = tipoOficina;
    }
 
-   public String getCodUoResponsable() {
-      return codUoResponsable;
+   public String getUnidadResponsable() {
+      return unidadResponsable;
    }
 
-   public void setCodUoResponsable(String codUoResponsable) {
-      this.codUoResponsable = codUoResponsable;
+   public void setUnidadResponsable(String unidadResponsable) {
+      this.unidadResponsable = unidadResponsable;
    }
 
-   public String getCodOfiResponsable() {
-      return codOfiResponsable;
+   public String getOficinaResponsable() {
+      return oficinaResponsable;
    }
 
-   public void setCodOfiResponsable(String codOfiResponsable) {
-      this.codOfiResponsable = codOfiResponsable;
+   public void setOficinaResponsable(String oficinaResponsable) {
+      this.oficinaResponsable = oficinaResponsable;
    }
 
    public String getHorarioAtencion() {
@@ -151,12 +150,12 @@ public class OficinaJson {
       this.comunidad = comunidad;
    }
 
-   public String getDescripcionLocalidad() {
-      return descripcionLocalidad;
+   public String getMunicipio() {
+      return municipio;
    }
 
-   public void setDescripcionLocalidad(String descripcionLocalidad) {
-      this.descripcionLocalidad = descripcionLocalidad;
+   public void setMunicipio(String municipio) {
+      this.municipio = municipio;
    }
 
    public String getNombreVia() {
@@ -167,12 +166,12 @@ public class OficinaJson {
       this.nombreVia = nombreVia;
    }
 
-   public String getNumVia() {
-      return numVia;
+   public String getNumeroVia() {
+      return numeroVia;
    }
 
-   public void setNumVia(String numVia) {
-      this.numVia = numVia;
+   public void setNumeroVia(String numeroVia) {
+      this.numeroVia = numeroVia;
    }
 
    public String getTipoVia() {
@@ -183,12 +182,12 @@ public class OficinaJson {
       this.tipoVia = tipoVia;
    }
 
-   public String getCodPostal() {
-      return codPostal;
+   public String getCodigoPostal() {
+      return codigoPostal;
    }
 
-   public void setCodPostal(String codPostal) {
-      this.codPostal = codPostal;
+   public void setCodigoPostal(String codigoPostal) {
+      this.codigoPostal = codigoPostal;
    }
 
    public List<String> getServicios() {

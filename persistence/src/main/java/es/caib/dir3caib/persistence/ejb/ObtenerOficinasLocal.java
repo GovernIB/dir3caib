@@ -1,5 +1,6 @@
 package es.caib.dir3caib.persistence.ejb;
 
+import es.caib.dir3caib.persistence.model.Oficina;
 import es.caib.dir3caib.persistence.model.ws.OficinaTF;
 
 import javax.ejb.Local;
@@ -19,6 +20,8 @@ public interface ObtenerOficinasLocal {
     OficinaTF obtenerOficina(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception;
 
     List<OficinaTF> obtenerArbolOficinas(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception;
+
+   List<Oficina> obtenerArbolOficinasOpenData(String codigo) throws Exception;
 
     List<OficinaTF> obtenerOficinasSIRUnidad(String codigoUnidad) throws Exception;
 

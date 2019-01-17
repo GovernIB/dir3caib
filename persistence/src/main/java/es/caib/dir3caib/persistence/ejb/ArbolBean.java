@@ -29,8 +29,6 @@ public class ArbolBean implements ArbolLocal {
     @EJB(mappedName = "dir3caib/RelacionOrganizativaOfiEJB/local")
     private RelacionOrganizativaOfiLocal relacionOrganizativaOfiEjb;
 
-    @EJB(mappedName = "dir3caib/Dir3RestEJB/local")
-    private Dir3RestLocal dir3RestEjb;
 
 
     /**
@@ -139,7 +137,7 @@ public class ArbolBean implements ArbolLocal {
             nodoInicial.setDescripcionEstado(unidad.getDescripcionEstado());
 
             //Averiguamos si tiene oficinas SIR y lo indicamos
-            boolean tieneOficinasSir = dir3RestEjb.obtenerOficinasSIRUnidad(unidad.getCodigo()).size() > 0;
+           boolean tieneOficinasSir = oficinaEjb.obtenerOficinasSIRUnidad(unidad.getCodigo()).size() > 0;
             nodoInicial.setTieneOficinaSir(tieneOficinasSir);
 
 
@@ -156,7 +154,7 @@ public class ArbolBean implements ArbolLocal {
                 hijo.setRaiz(unidadHija.getRaiz());
                 hijo.setDescripcionEstado(unidadHija.getDescripcionEstado());
                 //Averiguamos si tiene oficinas SIR y lo indicamos
-                tieneOficinasSir = dir3RestEjb.obtenerOficinasSIRUnidad(unidadHija.getCodigo()).size() > 0;
+               tieneOficinasSir = oficinaEjb.obtenerOficinasSIRUnidad(unidadHija.getCodigo()).size() > 0;
                 hijo.setTieneOficinaSir(tieneOficinasSir);
                 hijos.add(hijo);
 
@@ -172,7 +170,7 @@ public class ArbolBean implements ArbolLocal {
                 Nodo nodoSuperior;
                 codigoSuperior = new StringTokenizer(nodoActual.getSuperior(), " - ").nextToken();//Obtenemos el código de la Unidad Superior
                 nodoSuperior = unidadEjb.findUnidad(codigoSuperior, estado); // Obtenemos la unidad que nos han indicado(solo se obtienen parte de los datos del nodo)
-                tieneOficinasSir = dir3RestEjb.obtenerOficinasSIRUnidad(codigoSuperior).size() > 0;
+               tieneOficinasSir = oficinaEjb.obtenerOficinasSIRUnidad(codigoSuperior).size() > 0;
                 nodoSuperior.setTieneOficinaSir(tieneOficinasSir);
                 List<Nodo> hijosS = new ArrayList<Nodo>();
                 hijosS.add(nodoActual);
@@ -185,7 +183,7 @@ public class ArbolBean implements ArbolLocal {
             Nodo nodoSuperior;
             codigoSuperior = new StringTokenizer(nodoActual.getSuperior(), " - ").nextToken();//Obtenemos el código de la Unidad Superior
             nodoSuperior = unidadEjb.findUnidad(codigoSuperior, estado); // Obtenemos la unidad que nos han indicado(solo se obtienen parte de los datos del nodo)
-            tieneOficinasSir = dir3RestEjb.obtenerOficinasSIRUnidad(codigoSuperior).size() > 0;
+           tieneOficinasSir = oficinaEjb.obtenerOficinasSIRUnidad(codigoSuperior).size() > 0;
             nodoSuperior.setTieneOficinaSir(tieneOficinasSir);
             List<Nodo> hijosS = new ArrayList<Nodo>();
             hijosS.add(nodoActual);

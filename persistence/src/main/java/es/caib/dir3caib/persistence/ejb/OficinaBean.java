@@ -596,65 +596,6 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
     }
 
     /**
-     * Este método mira si la unidad del código especificado tiene oficinas donde registrar.
-     * Para ello comprueba si es unidadResponsable de alguna oficina y después mira si tiene relacionesOrganizativas con oficinas.
-     * Es además recursivo, así que lo mira hasta el último nivel del organigrama.
-     * @param codigo de la unidad
-     * @return
-     * @throws Exception
-     */
-    @Override
-    public Boolean tieneOficinasArbol(String codigo) throws Exception {
-
-        Query q = em.createQuery("Select oficina.codigo from Oficina as oficina where oficina.codUoResponsable.codigo =:codigo and oficina.estado.codigoEstadoEntidad=:vigente");
-
-        q.setParameter("codigo", codigo);
-        q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-
-        //transformamos los resultados de la query en Oficinas
-        List<Oficina> oficinas = new ArrayList<Oficina>();
-        List<?> result = q.getResultList();
-
-        for (Object object : result) {
-            oficinas.add(new Oficina((String) object));
-        }
-
-        if (oficinas.size() > 0) {
-            return true;
-        } else {
-            q = em.createQuery("Select count(relorg.id) from RelacionOrganizativaOfi as relorg where relorg.unidad.codigo=:codigo and relorg.estado.codigoEstadoEntidad=:vigente");
-
-            q.setParameter("codigo", codigo);
-            q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-            Long relorg = (Long) q.getSingleResult();
-            if (relorg > 0) {
-                return true;
-            } else {// no tiene oficinas, miramos sus hijos
-                Query q2 = em.createQuery("Select unidad.codigo from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:estado");
-
-                q2.setParameter("codigo", codigo);
-                q2.setParameter("estado", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-
-                //Transformamos el resultado de la query en Unidades
-                List<Unidad> hijos = new ArrayList<Unidad>();
-                List<?> resulthijos = q2.getResultList();
-                for (Object object : resulthijos) {
-                    hijos.add(new Unidad((String) object));
-                }
-
-                for (Unidad hijo : hijos) {
-                    boolean tiene = tieneOficinasArbol(hijo.getCodigo());
-                    if (tiene) {
-                        return true;
-                    }
-                    break;
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
      * Método que obtiene todos los códigos de las oficinas que hay en dir3caib.
      * @return
      * @throws Exception

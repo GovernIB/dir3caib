@@ -25,6 +25,10 @@ public interface Dir3RestLocal  {
 
   List<Nodo> obtenerArbolUnidades(String codigo) throws Exception;
   List<Oficina> obtenerOficinasOrganismo(String codigo, String fechaActualizacion) throws Exception;
+
+  List<Oficina> obtenerArbolOficinasOpenData(String codigo) throws Exception;
+
+  List<Oficina> getOficinasBalearesOpenData() throws Exception;
   Boolean tieneOficinasOrganismo(String codigo) throws Exception;
 
   List<Nodo> busquedaOrganismos(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, boolean conOficinas, boolean unidadRaiz, Long provincia, String localidad, boolean vigentes) throws Exception;

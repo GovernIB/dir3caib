@@ -1,5 +1,6 @@
 package es.caib.dir3caib.persistence.ejb;
 
+import es.caib.dir3caib.persistence.model.Oficina;
 import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.Paginacion;
@@ -122,6 +123,8 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @throws Exception
      */
     List<Unidad> obtenerArbolUnidadesDestinatarias(String codigo) throws Exception;
+
+   List<Oficina> obtenerArbolOficinasOpenData(String codigo) throws Exception;
 
     /**
      * Metodo que comprueba si una unidad tiene más unidades hijas
@@ -311,5 +314,16 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @throws Exception
      */
     Unidad findFullById(String id) throws Exception;
+
+   /**
+    * Este método mira si la unidad del código especificado tiene oficinas donde registrar.
+    * Para ello comprueba si es unidadResponsable de alguna oficina y después mira si tiene relacionesOrganizativas con oficinas.
+    * Es además recursivo, así que lo mira hasta el último nivel del organigrama.
+    *
+    * @param codigo de la unidad
+    * @return
+    * @throws Exception
+    */
+   Boolean tieneOficinasArbol(String codigo) throws Exception;
 
 }

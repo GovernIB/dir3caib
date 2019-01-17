@@ -125,10 +125,28 @@ public class RestController {
     @RequestMapping(value = "/GET/oficinas", method = RequestMethod.GET)
     public
     @ResponseBody
-    ResponseEntity<List<OficinaJson>> oficinasOrganismoJS(@RequestParam String codigo) throws Exception {
+    ResponseEntity<List<OficinaJson>> getArbolOficinasOrganismoOpenData(@RequestParam String codigo) throws Exception {
 
 
-        List<Oficina> resultado = dir3RestEjb.obtenerOficinasOrganismo(codigo, null);
+        List<Oficina> resultado = dir3RestEjb.obtenerArbolOficinasOpenData(codigo);
+
+        HttpHeaders headers = addAccessControllAllowOrigin();
+        //Si hay resultados fijamos el HttpStatus a OK, sino indicamos que no hay resultados.
+        HttpStatus status = (resultado.size() > 0) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
+        return new ResponseEntity<List<OficinaJson>>(transformarAOficinaJson(resultado), headers, status);
+
+    }
+
+    /**
+     * Obtiene las {@link es.caib.dir3caib.persistence.model.Oficina} del organismo indicado
+     */
+    @RequestMapping(value = "/GET/oficinas/baleares", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    ResponseEntity<List<OficinaJson>> getOficinasBalearesOpenData() throws Exception {
+
+
+        List<Oficina> resultado = dir3RestEjb.getOficinasBalearesOpenData();
 
         HttpHeaders headers = addAccessControllAllowOrigin();
         //Si hay resultados fijamos el HttpStatus a OK, sino indicamos que no hay resultados.
@@ -430,16 +448,16 @@ public class RestController {
         List<OficinaJson> oficinaJsons = new ArrayList<OficinaJson>();
         for (Oficina ofi : resultados) {
             OficinaJson oficinaJson = new OficinaJson();
-            oficinaJson.setCodigo(ofi.getCodigo());
+            oficinaJson.setCodigoDir3(ofi.getCodigo());
             oficinaJson.setDenominacion(ofi.getDenominacion());
             oficinaJson.setEstado(ofi.getEstado().getDescripcionEstadoEntidad());
             oficinaJson.setNivelAdministracion(ofi.getNivelAdministracion().getDescripcionNivelAdministracion());
 
 
             oficinaJson.setTipoOficina(ofi.getTipoOficina().getDescripcionJerarquiaOficina());  //CatJerarquiaOficina
-            oficinaJson.setCodUoResponsable(ofi.getDenominacion());//Unidad
+            oficinaJson.setUnidadResponsable(ofi.getDenominacion());//Unidad
             if (ofi.getCodOfiResponsable() != null) {
-                oficinaJson.setCodOfiResponsable(ofi.getCodOfiResponsable().getDenominacion());   //Oficina
+                oficinaJson.setOficinaResponsable(ofi.getCodOfiResponsable().getDenominacion());   //Oficina
             }
             oficinaJson.setHorarioAtencion(ofi.getHorarioAtencion());
             oficinaJson.setDiasSinHabiles(ofi.getDiasSinHabiles());
@@ -460,15 +478,15 @@ public class RestController {
                 oficinaJson.setComunidad(ofi.getCodComunidad().getDescripcionComunidad());
             }
             if (ofi.getLocalidad() != null) {
-                oficinaJson.setDescripcionLocalidad(ofi.getLocalidad().getDescripcionLocalidad()); //LOCALIDAD
+                oficinaJson.setMunicipio(ofi.getLocalidad().getDescripcionLocalidad()); //LOCALIDAD
             }
 
             oficinaJson.setNombreVia(ofi.getNombreVia());
-            oficinaJson.setNumVia(ofi.getNumVia());
+            oficinaJson.setNumeroVia(ofi.getNumVia());
             if (ofi.getTipoVia() != null) {
                 oficinaJson.setTipoVia(ofi.getTipoVia().getDescripcionTipoVia());
             }
-            oficinaJson.setCodPostal(ofi.getCodPostal());
+            oficinaJson.setCodigoPostal(ofi.getCodPostal());
 
             //Montamos los servicios como una lista de strings
             List<String> servicios = new ArrayList<String>();

@@ -5,6 +5,7 @@ import es.caib.dir3caib.persistence.utils.*;
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -26,6 +27,11 @@ public class Dir3RestBean implements Dir3RestLocal {
 
     @PersistenceContext(unitName="dir3caib")
     private EntityManager em;
+
+
+    @EJB(mappedName = "dir3caib/ObtenerOficinasEJB/local")
+    private ObtenerOficinasLocal obtenerOficinasEjb;
+
 
 
     /**
@@ -206,6 +212,44 @@ public class Dir3RestBean implements Dir3RestLocal {
 
         return oficinasCompletas;
 
+    }
+
+
+    /**
+     * Obtiene todas las {@link es.caib.dir3caib.persistence.model.Oficina} cuyo organismo responsable es el indicado por código(son todas padres e hijas).Solo se envian aquellas
+     * que han sido actualizadas controlando que la unidad del código que nos pasan se haya podido actualizar también.
+     * Esto es debido a que cuando en Madrid actualizan una unidad la tendencia es extinguirla y crear una nueva con código diferente.
+     * Esto hace que se tengan que traer las oficinas de la vieja y de la nueva.
+     *
+     * @param codigo Código del organismo
+     */
+    @Override
+    public List<Oficina> obtenerArbolOficinasOpenData(String codigo) throws Exception {
+
+        return obtenerOficinasEjb.obtenerArbolOficinasOpenData(codigo);
+    }
+
+
+    /**
+     * Obtiene las oficinas de registro de baleares
+     *
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public List<Oficina> getOficinasBalearesOpenData() throws Exception {
+        Query q = em.createQuery("Select oficina from Oficina as oficina where oficina.codComunidad.codigoComunidad =:comunidad and oficina.estado.codigoEstadoEntidad=:vigente and oficina.tipoOficina.codigoJerarquiaOficina=:tipoOficina order by oficina.localidad");
+        q.setParameter("comunidad", new Long(4)); //BALEARES
+        q.setParameter("tipoOficina", new Long(1)); //GENERAL
+        q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE); //GENERAL
+
+        List<Oficina> oficinas = q.getResultList();
+        for (Oficina oficina : oficinas) {
+            Hibernate.initialize(oficina.getContactos());
+            Hibernate.initialize(oficina.getServicios());
+        }
+        log.info("OFICINAS BALEARES " + oficinas.size());
+        return oficinas;
     }
 
     /**

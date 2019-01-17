@@ -137,17 +137,8 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      */
     List<Oficina> obtenerOficinasSIRUnidad(String codigo) throws Exception;
 
-    /**
-     * Este método mira si la unidad del código especificado tiene oficinas donde registrar.
-     * Para ello comprueba si es unidadResponsable de alguna oficina y después mira si tiene relacionesOrganizativas con oficinas.
-     * Es además recursivo, así que lo mira hasta el último nivel del organigrama.
-     * @param codigo de la unidad
-     * @return
-     * @throws Exception
-     */
-    Boolean tieneOficinasArbol(String codigo) throws Exception;
 
-    /**
+   /**
      * Obtiene todos los código de las oficinas. Se emplea en la importación de oficinas desde Madrid.
      * @return
      * @throws Exception

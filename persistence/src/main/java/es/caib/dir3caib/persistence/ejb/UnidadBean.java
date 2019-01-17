@@ -6,6 +6,7 @@ package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.CatEstadoEntidad;
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
+import es.caib.dir3caib.persistence.model.Oficina;
 import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.persistence.utils.DataBaseUtils;
 import es.caib.dir3caib.persistence.utils.Nodo;
@@ -36,9 +37,6 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
     @EJB(mappedName = "dir3caib/OficinaEJB/local")
     private OficinaLocal oficinaEjb;
-
-    @EJB(mappedName = "dir3caib/Dir3RestEJB/local")
-    private Dir3RestLocal dir3RestEjb;
 
     protected final Logger log = Logger.getLogger(getClass());
     protected SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
@@ -151,7 +149,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     @SuppressWarnings("unchecked")
     public Unidad findUnidadActualizada(String id, Date fechaActualizacion) throws Exception {
         Query q = em.createQuery("Select unidad from Unidad as unidad where unidad.codigo =:id " +
-                " and :fechaActualizacion < unidad.fechaImportacion ");
+           " and :fechaActualizacion < unidad.fechaImportacion ");
 
         q.setParameter("id", id);
         q.setParameter("fechaActualizacion", fechaActualizacion);
@@ -286,7 +284,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
 
         Query q = em.createQuery("Select unidad.codigo from Unidad as unidad "
-                + " where unidad.codigo in (:theids) order by unidad.codigo");
+           + " where unidad.codigo in (:theids) order by unidad.codigo");
 
         q.setParameter("theids", ids);
 
@@ -415,7 +413,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         List<Nodo> nodos = NodoUtils.getNodoListUnidad(q.getResultList());
 
         for (Nodo nodo : nodos) {
-            if (dir3RestEjb.obtenerOficinasSIRUnidad(nodo.getCodigo()).size() > 0) {
+            if (oficinaEjb.obtenerOficinasSIRUnidad(nodo.getCodigo()).size() > 0) {
                 nodo.setTieneOficinaSir(true);
             }
         }
@@ -596,8 +594,8 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         } else {// es una actualizacion, traemos todo lo actualizado
 
             q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo  " +
-                    "and :fechaActualizacion < unidad.fechaImportacion " +
-                    "order by unidad.nivelJerarquico");
+               "and :fechaActualizacion < unidad.fechaImportacion " +
+               "order by unidad.nivelJerarquico");
             q.setParameter("fechaActualizacion", fechaActualizacion);
 
         }
@@ -606,7 +604,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
         //Obtenemos todos los hijos del organismo con código indicado para poder obtener todos los cambios en niveles inferiores de forma recursiva
         qHijos = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo  " +
-                "order by unidad.nivelJerarquico");
+           "order by unidad.nivelJerarquico");
 
         qHijos.setParameter("codigo", codigo);
         List<Unidad> todosHijos = qHijos.getResultList(); // todos los hijos de la unidad padre, para poder recorrer el árbol en su totalidad
@@ -668,8 +666,8 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
             } else {
                 // es una actualizacion, traemos aquellas unidades que tienen fechaactualizacion anterior a la fecha de importacion de las unidades
                 q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadRaiz.codigo =:codigo " +
-                        "and :fechaActualizacion < unidad.fechaImportacion " +
-                        "order by unidad.nivelJerarquico");
+                   "and :fechaActualizacion < unidad.fechaImportacion " +
+                   "order by unidad.nivelJerarquico");
                 q.setParameter("fechaActualizacion", fechaActualizacion);
             }
             q.setParameter("codigo", codigo);
@@ -740,7 +738,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
             unidadRaiz = unidades.get(0);
 
             //Miramos si la unidad que nos pasan tiene oficina que le registren
-            Boolean tiene = oficinaEjb.tieneOficinasArbol(unidadRaiz.getCodigo());
+            Boolean tiene = tieneOficinasArbol(unidadRaiz.getCodigo());
 
             if (tiene) {
                 unidadesDestConOficinas.add(unidadRaiz);
@@ -775,8 +773,8 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     public List<Unidad> obtenerUnidadesConOficina(String codigo) throws Exception {
 
         Query q = em.createQuery("Select unidad.codigo from Unidad as unidad, Oficina as oficina " +
-                "inner join oficina.codUoResponsable as unidadResponsable " +
-                "where unidadResponsable.codigo = unidad.codigo and unidad.codUnidadRaiz.codigo =:codigo and unidad.estado.codigoEstadoEntidad =:estado order by unidad.codigo");
+           "inner join oficina.codUoResponsable as unidadResponsable " +
+           "where unidadResponsable.codigo = unidad.codigo and unidad.codUnidadRaiz.codigo =:codigo and unidad.estado.codigoEstadoEntidad =:estado order by unidad.codigo");
 
         q.setParameter("codigo", codigo);
         q.setParameter("estado", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
@@ -791,6 +789,70 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         }
 
         return unidades;
+    }
+
+
+    /**
+     * Obtiene todas las {@link es.caib.dir3caib.persistence.model.Oficina} cuyo organismo responsable es el indicado por código(son todas padres e hijas).Solo se envian aquellas
+     * que han sido actualizadas controlando que la unidad del código que nos pasan se haya podido actualizar también.
+     * Esto es debido a que cuando en Madrid actualizan una unidad la tendencia es extinguirla y crear una nueva con código diferente.
+     * Esto hace que se tengan que traer las oficinas de la vieja y de la nueva.
+     *
+     * @param codigo Código del organismo
+     */
+    @Override
+    public List<Oficina> obtenerArbolOficinasOpenData(String codigo) throws Exception {
+
+        log.info("WS: Inicio obtener Oficinas");
+        // Obtenemos todos las unidades vigentes de la unidad Raiz
+
+        Long start = System.currentTimeMillis();
+
+        List<Unidad> unidades = new ArrayList<Unidad>();
+        Unidad unidad = null;
+        //unidades.add(unidadEjb.obtenerUnidad(codigo)); // Añadimos la raiz
+        /*if (fechaActualizacion != null) { // ES actualizacion, miramos si la raiz se ha actualizado
+            log.info("ACTUALIZACION OFICINAS");
+            //Obtenemos la raiz en funcion de la fecha de actualización
+            unidad = unidadEjb.findUnidadActualizada(codigo, fechaActualizacion);
+            if (unidad != null) { //Han actualizado la raiz
+                // miramos que no esté extinguida o anulada antes de la primera sincro.
+                if (unidadEjb.unidadValida(unidad, fechaSincronizacion)) {
+                    unidades.add(unidad);
+                    Set<Unidad> historicosRaiz = unidad.getHistoricoUO();
+                    if (historicosRaiz != null) {
+                        for (Unidad historico : historicosRaiz) {
+                            unidades.add(historico);
+                        }
+                    }
+                }
+            }
+        }*/
+
+
+        // if (unidad == null) { // O es Sincro o es actualizacion pero con la raiz sin actualizar.
+        unidad = findUnidadEstado(codigo, Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+        if (unidad != null) {
+            //Añadimos la unidad para que se obtengan sus oficinas
+            unidades.add(unidad);
+        }
+        //}
+
+        unidades.addAll(obtenerArbol(codigo));
+        log.info("Total arbol: " + unidades.size());
+
+        List<Oficina> oficinasCompleto = new ArrayList<Oficina>();
+
+        // Por cada Unidad, obtenemos sus Oficinas
+        for (Unidad uni : unidades) {
+            List<Oficina> oficinas = oficinaEjb.obtenerOficinasOrganismo(uni.getCodigo(), null, null);
+            oficinasCompleto.addAll(oficinas);
+        }
+
+
+        Long end = System.currentTimeMillis();
+        log.info("tiempo obtenerArbolOficinas: " + Utils.formatElapsedTime(end - start));
+        return oficinasCompleto;
     }
 
 
@@ -964,6 +1026,66 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         }
 
         return unidad;
+    }
+
+
+    /**
+     * Este método mira si la unidad del código especificado tiene oficinas donde registrar.
+     * Para ello comprueba si es unidadResponsable de alguna oficina y después mira si tiene relacionesOrganizativas con oficinas.
+     * Es además recursivo, así que lo mira hasta el último nivel del organigrama.
+     * @param codigo de la unidad
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public Boolean tieneOficinasArbol(String codigo) throws Exception {
+
+        Query q = em.createQuery("Select oficina.codigo from Oficina as oficina where oficina.codUoResponsable.codigo =:codigo and oficina.estado.codigoEstadoEntidad=:vigente");
+
+        q.setParameter("codigo", codigo);
+        q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+
+        //transformamos los resultados de la query en Oficinas
+        List<Oficina> oficinas = new ArrayList<Oficina>();
+        List<?> result = q.getResultList();
+
+        for (Object object : result) {
+            oficinas.add(new Oficina((String) object));
+        }
+
+        if (oficinas.size() > 0) {
+            return true;
+        } else {
+            q = em.createQuery("Select count(relorg.id) from RelacionOrganizativaOfi as relorg where relorg.unidad.codigo=:codigo and relorg.estado.codigoEstadoEntidad=:vigente");
+
+            q.setParameter("codigo", codigo);
+            q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+            Long relorg = (Long) q.getSingleResult();
+            if (relorg > 0) {
+                return true;
+            } else {// no tiene oficinas, miramos sus hijos
+                Query q2 = em.createQuery("Select unidad.codigo from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:estado");
+
+                q2.setParameter("codigo", codigo);
+                q2.setParameter("estado", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+
+                //Transformamos el resultado de la query en Unidades
+                List<Unidad> hijos = new ArrayList<Unidad>();
+                List<?> resulthijos = q2.getResultList();
+                for (Object object : resulthijos) {
+                    hijos.add(new Unidad((String) object));
+                }
+
+                for (Unidad hijo : hijos) {
+                    boolean tiene = tieneOficinasArbol(hijo.getCodigo());
+                    if (tiene) {
+                        return true;
+                    }
+                    break;
+                }
+            }
+        }
+        return false;
     }
 
 }
