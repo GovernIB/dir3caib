@@ -28,6 +28,10 @@ public class Servicio implements Serializable {
     this.codServicio = codServicio;
   }
 
+  public Servicio(int codServicio) {
+    this.codServicio = new Long(codServicio);
+  }
+
   public void finalize() throws Throwable {
 
 	}

@@ -27,7 +27,8 @@ public class OficinaJson {
    private String tipoVia;
    private String codigoPostal;
 
-   private List<String> servicios;
+   //private List<String> servicios;
+   private String servicios;
    private List<String> contactos;
 
    public String getCodigoDir3() {
@@ -190,11 +191,11 @@ public class OficinaJson {
       this.codigoPostal = codigoPostal;
    }
 
-   public List<String> getServicios() {
+   public String getServicios() {
       return servicios;
    }
 
-   public void setServicios(List<String> servicios) {
+   public void setServicios(String servicios) {
       this.servicios = servicios;
    }
 

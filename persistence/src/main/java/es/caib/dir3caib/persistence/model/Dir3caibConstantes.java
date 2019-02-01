@@ -11,6 +11,7 @@ public class Dir3caibConstantes {
 
      /* -------------- ROLES --------------*/
     public static final String DIR_ADMIN = "DIR_ADMIN";  // Administrador
+    public static final String DIR_WS = "DIR_WS";  // Web Services
     public static final String ROL_TOTHOM = "tothom";  // tothom
 
     public static final String DIR3CAIB_PROPERTY_BASE = "es.caib.dir3caib.";
@@ -83,9 +84,21 @@ public class Dir3caibConstantes {
     public static final String CODIGO_VACIO = "14";
 
     //servicios SIR
-    public static final long SERVICIO_SIR = 5;
-    public static final long SERVICIO_SIR_ENVIO = 6;
-    public static final long SERVICIO_SIR_RECEPCION = 7;
+    public static final int SERVICIO_OFI_REGISTRO = 1;
+    public static final int SERVICIO_OFI_INFORMACION = 2;
+    public static final int SERVICIO_OFI_TRAMITACION = 3;
+    public static final int SERVICIO_REG_VIRTUAL = 4;
+    public static final int SERVICIO_SIR = 5;
+    public static final int SERVICIO_SIR_ENVIO = 6;
+    public static final int SERVICIO_SIR_RECEPCION = 7;
+    public static final int SERVICIO_060 = 8;
+    public static final int SERVICIO_OFI_CORREOS = 9;
+    public static final int SERVICIO_OFI_EXTRANJERIA = 10;
+    public static final int SERVICIO_OFI_VIOLGENERO = 11;
+    public static final int SERVICIO_OFI_ACCESIBLE = 12;
+    public static final int SERVICIO_CLAVE = 13;
+    public static final int SERVICIO_REA = 14;
+    public static final int SERVICIO_OFI_ORD = 15;
 
     // Estados Sincronización
     public static final Long SINCRONIZACION_DESCARGADA = 1L;
