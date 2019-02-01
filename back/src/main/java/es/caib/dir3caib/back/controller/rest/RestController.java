@@ -609,7 +609,7 @@ public class RestController {
 
             List<String> contactos = new ArrayList<String>();
             for (ContactoOfi contactoOfi : ofi.getContactos()) {
-                contactos.add(contactoOfi.getTipoContacto().getDescripcionTipoContacto() + " : " + contactoOfi.getValorContacto() + " ");
+                contactos.add(contactoOfi.getTipoContacto().getDescripcionTipoContacto() + " : " + contactoOfi.getValorContacto());
             }
 
             oficinaJson.setServicios(servicios);
