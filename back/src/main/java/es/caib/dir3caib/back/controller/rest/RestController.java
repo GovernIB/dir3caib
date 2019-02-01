@@ -19,9 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.ejb.EJB;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created 25/03/14 13:32
@@ -491,8 +489,14 @@ public class RestController {
             oficinaJson.setCodigoPostal(ofi.getCodPostal());
 
             //Montamos los servicios como una lista de strings
-            //   List<String> servicios = new ArrayList<String>();
-            Map<Integer, String> serviciosMap = new HashMap<Integer, String>() {
+            List<String> servicios = new ArrayList<String>();
+
+            for (Servicio serv : ofi.getServicios()) {
+                servicios.add(serv.getDescServicio());
+            }
+
+            //Version Map
+            /*Map<Integer, String> serviciosMap = new HashMap<Integer, String>() {
                 {
                     put(1, " ");
                     put(2, " ");
@@ -593,7 +597,7 @@ public class RestController {
                     }
                 }
 
-                //   servicios.add(serv.getDescServicio());
+
             }
 
             StringBuffer serviciosBuffer = new StringBuffer();
@@ -601,14 +605,14 @@ public class RestController {
                 serviciosBuffer.append(entry.getValue() + ";");
             }
 
-            oficinaJson.setServicios(serviciosBuffer.toString());
+            oficinaJson.setServicios(serviciosBuffer.toString());*/
 
             List<String> contactos = new ArrayList<String>();
             for (ContactoOfi contactoOfi : ofi.getContactos()) {
-                contactos.add(contactoOfi.getTipoContacto().getDescripcionTipoContacto() + " : " + contactoOfi.getValorContacto());
+                contactos.add(contactoOfi.getTipoContacto().getDescripcionTipoContacto() + " : " + contactoOfi.getValorContacto() + " ");
             }
 
-            // oficinaJson.setServicios(servicios);
+            oficinaJson.setServicios(servicios);
             oficinaJson.setContactos(contactos);
 
 
