@@ -4,14 +4,14 @@
 
   <artifactId>dir3caib-sqlgenerator</artifactId>
   <packaging>jar</packaging>
-    <version>1.0.8</version>
+    <version>1.0.9</version>
 
   <name>Dir3Caib - Scripts - SQL Generator</name>
   
   <parent>
 		<groupId>es.caib.dir3caib</groupId>
 		<artifactId>dir3caib-scripts</artifactId>
-      <version>1.0.8</version>
+      <version>1.0.9</version>
   </parent>
   
 
@@ -24,7 +24,7 @@
 		<dependency>
 			 <groupId>es.caib.dir3caib</groupId>
 			 <artifactId>dir3caib-persistence</artifactId>
-            <version>1.0.8</version>
+            <version>1.0.9</version>
 		</dependency>
 
         <dependency>
