@@ -1,8 +1,15 @@
 # ![Logo](https://github.com/GovernIB/maven/blob/binaris/dir3caib/projectinfo_Attachments/icon.jpg) Dir3CAIB
-Servidor Local de Dir3 per les aplicacions de la CAIB
+*Servidor Local de Dir3 per les aplicacions de la CAIB*
 
 
-**Descripció**
+***Versions***
+
+> - Versió Estable: Tag [__dir3caib-1.0.8__](../../tree/cd12603c538bbc0d8175eb90f8d35d68485b67d2) (branca [portafib-1.1](../../tree/1.0.6))<br/>
+> - Versió en Desenvolupament: --
+
+
+
+***Descripció***
 
 Implementació del Dir3 (Directorio Común de Unidades Orgánicas y Oficinas desenvolupant pel MINISTERIO DE HACIENDA Y ADMINISTRACIONES PUBLICAS del Govern Espanyol) per l'ús en les aplicacions desenvolupades per l'entorn del Govern de les Illes Balears (CAIB)
 
@@ -10,7 +17,7 @@ Dir3 es defineix de la següent forma:
 "El Directorio Común proporciona un Inventario unificado y común a toda la Administración de las unidades orgánicas / organismos públicos, sus oficinas asociadas y unidades de gestión económica - presupuestaria, facilitando el mantenimiento distribuido y corresponsable de la información."
 
 
-**Característiques**
+***Característiques***
 
 * Registered: 2015-01-15 
 * Project Labels: DIR3
