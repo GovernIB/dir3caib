@@ -10,6 +10,12 @@ Dir3 es defineix de la següent forma:
 "El Directorio Común proporciona un Inventario unificado y común a toda la Administración de las unidades orgánicas / organismos públicos, sus oficinas asociadas y unidades de gestión económica - presupuestaria, facilitando el mantenimiento distribuido y corresponsable de la información."
 
 
+#### ***Documentació***
+
+Nom | Descripció | Enllaç
+------------ | ------------- | -------------
+-- | -- | [Document]()
+
 **Característiques**
 
 * Registered: 2015-01-15 
