@@ -4,7 +4,7 @@
 
 ***Versions***
 
-> - Versió Estable: Tag [__dir3caib-1.0.8__](../../tree/cd12603c538bbc0d8175eb90f8d35d68485b67d2) (branca [dir3caib-1.0.6](../../tree/1.0.6))<br/>
+> - Versió Estable: Tag [__dir3caib-1.0.8__](../../tree/cd12603c538bbc0d8175eb90f8d35d68485b67d2) (branca [1.0.6](../../tree/1.0.6))<br/>
 > - Versió en Desenvolupament: --
 
 ***Descripció***
