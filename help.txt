@@ -1,2 +1,0 @@
-Parametres Opcionals:
-         clean : neteja el projecte abans de recompilar
