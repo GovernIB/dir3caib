@@ -1,4 +1,4 @@
-# ![Logo](https://raw.githubusercontent.com/GovernIB/dir3caib/binaris/projectinfo_Attachments/icon.jpg) Dir3CAIB
+# ![Logo](https://github.com/GovernIB/maven/blob/binaris/dir3caib/projectinfo_Attachments/icon.jpg) Dir3CAIB
 Servidor Local de Dir3 per les aplicacions de la CAIB
 
 
