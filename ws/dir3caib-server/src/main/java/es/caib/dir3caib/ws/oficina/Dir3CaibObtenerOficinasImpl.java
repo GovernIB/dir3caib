@@ -27,7 +27,7 @@ import java.util.List;
 @SecurityDomain(Dir3caibConstantes.SECURITY_DOMAIN)
 @Stateless(name = Dir3CaibObtenerOficinasImpl.NAME + "Ejb")
 @SOAPBinding(style = SOAPBinding.Style.RPC)
-@RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
+@RolesAllowed({Dir3caibConstantes.DIR_WS})
 @WebService(name = Dir3CaibObtenerOficinasImpl.NAME_WS, portName = Dir3CaibObtenerOficinasImpl.NAME_WS, serviceName = Dir3CaibObtenerOficinasImpl.NAME_WS
     + "Service", endpointInterface = "es.caib.dir3caib.ws.oficina.Dir3CaibObtenerOficinasWs")
 @WebContext(contextRoot = "/dir3caib/ws", urlPattern = "/" + Dir3CaibObtenerOficinasImpl.NAME, transportGuarantee = TransportGuarantee.NONE, secureWSDLAccess = false, authMethod = "WSBASIC")
