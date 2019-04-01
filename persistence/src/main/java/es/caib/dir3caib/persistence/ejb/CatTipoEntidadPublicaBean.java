@@ -19,7 +19,7 @@ import java.util.List;
  */
 @Stateless(name = "CatTipoEntidadPublicaEJB")
 @SecurityDomain("seycon")
-@RolesAllowed("DIR_ADMIN")
+@RolesAllowed({"DIR_ADMIN", "DIR_WS"})
 public class CatTipoEntidadPublicaBean extends BaseEjbJPA<CatTipoEntidadPublica, String> implements CatTipoEntidadPublicaLocal{
 
     protected final Logger log = Logger.getLogger(getClass());

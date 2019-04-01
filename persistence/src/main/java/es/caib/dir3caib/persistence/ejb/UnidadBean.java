@@ -32,7 +32,7 @@ import java.util.*;
  */
 @Stateless(name = "UnidadEJB")
 @SecurityDomain("seycon")
-@RolesAllowed({"DIR_ADMIN","tothom"})
+@RolesAllowed({"DIR_ADMIN", "tothom", "DIR_WS"})
 public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLocal {
 
     @EJB(mappedName = "dir3caib/OficinaEJB/local")

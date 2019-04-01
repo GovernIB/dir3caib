@@ -22,7 +22,7 @@ import java.util.List;
  */
 @Stateless(name = "RelacionOrganizativaOfiEJB")
 @SecurityDomain("seycon")
-@RolesAllowed({"DIR_ADMIN", "tothom"})
+@RolesAllowed({"DIR_ADMIN", "tothom", "DIR_WS"})
 public class RelacionOrganizativaOfiBean extends BaseEjbJPA<RelacionOrganizativaOfi, Long>
     implements RelacionOrganizativaOfiLocal{
 

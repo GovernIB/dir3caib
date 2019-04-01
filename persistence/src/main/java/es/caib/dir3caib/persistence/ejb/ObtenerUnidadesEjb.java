@@ -29,7 +29,7 @@ import java.util.Set;
  * Ejb que proporciona los métodos para los ws para la sincronización/actualización con regweb
  */
 @Stateless(name = "ObtenerUnidadesEJB")
-@RunAs("DIR_ADMIN")  //todo añadir seguridad
+@RunAs("DIR_WS")
 public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
 
     protected final Logger log = Logger.getLogger(getClass());

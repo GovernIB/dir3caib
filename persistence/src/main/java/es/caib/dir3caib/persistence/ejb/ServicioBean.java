@@ -19,7 +19,7 @@ import java.util.List;
  */
 @Stateless(name = "ServicioEJB")
 @SecurityDomain("seycon")
-@RolesAllowed("DIR_ADMIN")
+@RolesAllowed({"DIR_ADMIN", "DIR_WS"})
 public class ServicioBean extends BaseEjbJPA<Servicio, Long> implements ServicioLocal{
 
     protected final Logger log = Logger.getLogger(getClass());

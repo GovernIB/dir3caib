@@ -21,7 +21,7 @@ import java.util.List;
  */
 @Stateless(name = "ContactoOfiEJB")
 @SecurityDomain("seycon")
-@RolesAllowed({"DIR_ADMIN", "tothom"})
+@RolesAllowed({"DIR_ADMIN", "tothom", "DIR_WS"})
 public class ContactoOfiBean extends BaseEjbJPA<ContactoOfi, Long> implements ContactoOfiLocal{
 
     protected final Logger log = Logger.getLogger(getClass());

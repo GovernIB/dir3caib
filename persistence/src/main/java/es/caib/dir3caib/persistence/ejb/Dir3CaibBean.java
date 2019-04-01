@@ -20,7 +20,7 @@ import javax.persistence.PersistenceContext;
  */
 @Stateless(name = "Dir3CaibEJB")
 @SecurityDomain("seycon")
-@RolesAllowed({"DIR_ADMIN","tothom"})
+@RolesAllowed({"DIR_ADMIN", "tothom", "DIR_WS"})
 public class Dir3CaibBean implements Dir3CaibLocal{
 
     protected final Logger log = Logger.getLogger(getClass());

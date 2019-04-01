@@ -19,7 +19,7 @@ import java.util.List;
  */
 @Stateless(name = "CatEntidadGeograficaEJB")
 @SecurityDomain("seycon")
-@RolesAllowed("DIR_ADMIN")
+@RolesAllowed({"DIR_ADMIN", "DIR_WS"})
 public class CatEntidadGeograficaBean extends BaseEjbJPA<CatEntidadGeografica, String> implements CatEntidadGeograficaLocal{
 
     protected final Logger log = Logger.getLogger(getClass());

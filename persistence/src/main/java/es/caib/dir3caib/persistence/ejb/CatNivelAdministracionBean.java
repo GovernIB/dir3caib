@@ -19,7 +19,7 @@ import java.util.List;
  */
 @Stateless(name = "CatNivelAdministracionEJB")
 @SecurityDomain("seycon")
-@RolesAllowed({"DIR_ADMIN","tothom"})
+@RolesAllowed({"DIR_ADMIN", "tothom", "DIR_WS"})
 public class CatNivelAdministracionBean extends BaseEjbJPA<CatNivelAdministracion, Long> implements CatNivelAdministracionLocal{
 
     protected final Logger log = Logger.getLogger(getClass());
