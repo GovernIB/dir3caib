@@ -1,5 +1,6 @@
 package es.caib.dir3caib.ws.api.test;
 
+import es.caib.dir3caib.utils.Utils;
 import es.caib.dir3caib.ws.api.unidad.Dir3CaibObtenerUnidadesWs;
 import es.caib.dir3caib.ws.api.unidad.UnidadTF;
 import org.junit.Test;
@@ -12,15 +13,21 @@ import java.util.List;
 public class TestUnidadesWs extends Dir3CaibTestUtils{
 
 
-    // @Test
+   @Test
     public void obtenerArbolUnidadesDestinatarias() {
       try{
           Dir3CaibObtenerUnidadesWs apiUnidades = getObtenerUnidadesApi(true);
-          List<UnidadTF> destinatarias = apiUnidades.obtenerArbolUnidadesDestinatarias("U00300001");
+         for (int i = 0; i < 20; i++) {
+            Long start = System.currentTimeMillis();
+            List<UnidadTF> destinatarias = apiUnidades.obtenerArbolUnidadesDestinatarias("A04003003");
+            Long end = System.currentTimeMillis();
+
+            System.out.println("TIEMPO CARGA UNIDADESDESTINATARIAS: " + Utils.formatElapsedTime(end - start));
             System.out.println("DESTINATRIAS " + destinatarias.size());
-          for (UnidadTF unidadTF : destinatarias) {
-            System.out.println(unidadTF.getCodigo() + "\t\t"
-                    + unidadTF.getDenominacion());
+            /* for (UnidadTF unidadTF : destinatarias) {
+                System.out.println(unidadTF.getCodigo() + "\t\t"
+                   + unidadTF.getDenominacion());
+             }*/
           }
         } catch (Exception e) {
             e.printStackTrace();
