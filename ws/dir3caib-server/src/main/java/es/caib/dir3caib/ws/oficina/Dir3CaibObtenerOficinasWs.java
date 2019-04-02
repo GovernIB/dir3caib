@@ -32,21 +32,21 @@ public interface Dir3CaibObtenerOficinasWs /* extends CommonMethods */{
   String getVersionWs();
 
   @WebMethod
-  @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
+  @RolesAllowed({Dir3caibConstantes.DIR_WS})
   OficinaTF obtenerOficina(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception;
 
   @WebMethod
-  @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
+  @RolesAllowed({Dir3caibConstantes.DIR_WS})
   List<OficinaTF> obtenerArbolOficinas(String codigo, Date fechaActualizacion, Date fechaSincronizacion)
       throws Exception;
 
   @WebMethod
-  @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
+  @RolesAllowed({Dir3caibConstantes.DIR_WS})
   List<OficinaTF> obtenerOficinasSIRUnidad(String codigoUnidad)
       throws Exception;
 
   @WebMethod
-  @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
+  @RolesAllowed({Dir3caibConstantes.DIR_WS})
   Date obtenerFechaUltimaActualizacion()
           throws Exception;
 }

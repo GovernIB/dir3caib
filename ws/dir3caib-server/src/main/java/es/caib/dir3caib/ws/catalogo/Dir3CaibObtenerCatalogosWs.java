@@ -35,38 +35,38 @@ public interface Dir3CaibObtenerCatalogosWs {
 
 
   @WebMethod
-  @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
+  @RolesAllowed({Dir3caibConstantes.DIR_WS})
   List<CatEstadoEntidad> obtenerCatEstadoEntidad() throws Exception;
 
   @WebMethod
-  @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
+  @RolesAllowed({Dir3caibConstantes.DIR_WS})
   List<CatNivelAdministracion> obtenerCatNivelAdministracion() throws Exception;
 
   @WebMethod
-  @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
+  @RolesAllowed({Dir3caibConstantes.DIR_WS})
   List<CatPais> obtenerCatPais() throws Exception;
 
   @WebMethod
-  @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
+  @RolesAllowed({Dir3caibConstantes.DIR_WS})
   List<CatComunidadAutonomaTF> obtenerCatComunidadAutonoma() throws Exception;
 
   @WebMethod
-  @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
+  @RolesAllowed({Dir3caibConstantes.DIR_WS})
   List<CatProvinciaTF> obtenerCatProvincia() throws Exception;
 
   @WebMethod
-  @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
+  @RolesAllowed({Dir3caibConstantes.DIR_WS})
   List<CatLocalidadTF> obtenerCatLocalidad() throws Exception;
 
   @WebMethod
-  @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
+  @RolesAllowed({Dir3caibConstantes.DIR_WS})
   List<CatEntidadGeograficaTF> obtenerCatEntidadGeografica() throws Exception;
 
   @WebMethod
-  @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
+  @RolesAllowed({Dir3caibConstantes.DIR_WS})
   List<Servicio> obtenerCatServicio() throws Exception;
 
   @WebMethod
-  @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
+  @RolesAllowed({Dir3caibConstantes.DIR_WS})
   List<CatTipoVia> obtenerCatTipoVia() throws Exception;
 }

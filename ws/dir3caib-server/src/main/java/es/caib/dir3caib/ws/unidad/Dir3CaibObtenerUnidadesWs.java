@@ -32,25 +32,25 @@ public interface Dir3CaibObtenerUnidadesWs {
   String getVersionWs();
 
   @WebMethod
-  @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
+  @RolesAllowed({Dir3caibConstantes.DIR_WS})
   UnidadTF obtenerUnidad(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception;
 
   @WebMethod
-  @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
+  @RolesAllowed({Dir3caibConstantes.DIR_WS})
   UnidadTF buscarUnidad(String codigo) throws Exception;
 
   @WebMethod
-  @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
+  @RolesAllowed({Dir3caibConstantes.DIR_WS})
   List<UnidadTF> obtenerArbolUnidades(String codigo, Date fechaActualizacion, Date fechaSincronizacion)
       throws Exception;
 
   @WebMethod
-  @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
+  @RolesAllowed({Dir3caibConstantes.DIR_WS})
   List<UnidadTF> obtenerArbolUnidadesDestinatarias(String codigo)
       throws Exception;
 
   @WebMethod
-  @RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
+  @RolesAllowed({Dir3caibConstantes.DIR_WS})
   Date obtenerFechaUltimaActualizacion()
           throws Exception;
 
