@@ -17,7 +17,7 @@ public class Dir3CaibScheduler {
 
 
     @Scheduled(cron = "0 0 4 ? * SUN-THU") // Cada día a las 04:00h
-    public void reintentarEnvioSir(){
+    public void sincronizarDirectorio() {
 
         try {
             schedulerEjb.sincronizarDirectorio();
