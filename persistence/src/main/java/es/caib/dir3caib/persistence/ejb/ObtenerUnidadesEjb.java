@@ -7,15 +7,13 @@ import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.persistence.model.ws.UnidadTF;
 import es.caib.dir3caib.utils.Utils;
 import org.apache.log4j.Logger;
+import org.hibernate.Hibernate;
 
 import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Fundació BIT.
@@ -64,7 +62,6 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
             for (ContactoUnidadOrganica contactoUO : unidad.getContactos()) {
                 if (contactoUO.isVisibilidad()) {
                     contactosVisibles.add(contactoUO);
-
                 }
             }
             unidad.setContactos(contactosVisibles);
@@ -106,7 +103,11 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
 
                 }
             }
+            //Obtenemos los historicos finales
             unidad.setContactos(contactosVisibles);
+            Set<Unidad> historicosFinales = new HashSet<Unidad>();
+            obtenerHistoricosFinales(unidad, historicosFinales);
+            unidad.setHistoricoUO(historicosFinales);
 
             return UnidadTF.generar(unidad);
 
@@ -257,5 +258,22 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
 
         return sincronizacion.getFechaImportacion();
     }
+
+    private void obtenerHistoricosFinales(Unidad unidad, Set<Unidad> historicosFinales) throws Exception {
+
+        Hibernate.initialize(unidad.getHistoricoUO());
+        Set<Unidad> parciales = unidad.getHistoricoUO();
+        for (Unidad parcial : parciales) {
+            Hibernate.initialize(parcial.getHistoricoUO());
+            if (parcial.getHistoricoUO().size() == 0) {
+                historicosFinales.add(parcial);
+            } else {
+                obtenerHistoricosFinales(parcial, historicosFinales);
+            }
+        }
+
+
+    }
+
 
 }
