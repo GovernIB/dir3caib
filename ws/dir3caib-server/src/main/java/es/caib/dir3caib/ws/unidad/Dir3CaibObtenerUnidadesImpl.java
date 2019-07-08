@@ -53,7 +53,7 @@ public class Dir3CaibObtenerUnidadesImpl implements Dir3CaibObtenerUnidadesWs {
   }
 
   /**
-   * Método que devuelve una {@link es.caib.dir3caib.persistence.model.ws.UnidadTF}  a partir del código
+   * Método que devuelve una {@link es.caib.dir3caib.persistence.model.ws.UnidadTF} vigente  a partir del código
    * indicado y en función de la fecha de actualización
    * 
    * @param codigo
@@ -70,6 +70,7 @@ public class Dir3CaibObtenerUnidadesImpl implements Dir3CaibObtenerUnidadesWs {
 
   /**
    * Método que devuelve una {@link es.caib.dir3caib.persistence.model.ws.UnidadTF} a partir del código indicado
+   * independientemente de su estado
    *
    * @param codigo código de la unidad a transferir
    */
