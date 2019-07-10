@@ -7,7 +7,6 @@ import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.persistence.model.ws.UnidadTF;
 import es.caib.dir3caib.utils.Utils;
 import org.apache.log4j.Logger;
-import org.hibernate.Hibernate;
 
 import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
@@ -261,10 +260,8 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
 
     private void obtenerHistoricosFinales(Unidad unidad, Set<Unidad> historicosFinales) throws Exception {
 
-        Hibernate.initialize(unidad.getHistoricoUO());
         Set<Unidad> parciales = unidad.getHistoricoUO();
         for (Unidad parcial : parciales) {
-            Hibernate.initialize(parcial.getHistoricoUO());
             if (parcial.getHistoricoUO().size() == 0) {
                 historicosFinales.add(parcial);
             } else {
