@@ -84,21 +84,21 @@ public class Dir3caibConstantes {
     public static final String CODIGO_VACIO = "14";
 
     //servicios SIR
-    public static final int SERVICIO_OFI_REGISTRO = 1;
-    public static final int SERVICIO_OFI_INFORMACION = 2;
-    public static final int SERVICIO_OFI_TRAMITACION = 3;
-    public static final int SERVICIO_REG_VIRTUAL = 4;
-    public static final int SERVICIO_SIR = 5;
-    public static final int SERVICIO_SIR_ENVIO = 6;
-    public static final int SERVICIO_SIR_RECEPCION = 7;
-    public static final int SERVICIO_060 = 8;
-    public static final int SERVICIO_OFI_CORREOS = 9;
-    public static final int SERVICIO_OFI_EXTRANJERIA = 10;
-    public static final int SERVICIO_OFI_VIOLGENERO = 11;
-    public static final int SERVICIO_OFI_ACCESIBLE = 12;
-    public static final int SERVICIO_CLAVE = 13;
-    public static final int SERVICIO_REA = 14;
-    public static final int SERVICIO_OFI_ORD = 15;
+    public static final Long SERVICIO_OFI_REGISTRO = 1L;
+    public static final Long SERVICIO_OFI_INFORMACION = 2L;
+    public static final Long SERVICIO_OFI_TRAMITACION = 3L;
+    public static final Long SERVICIO_REG_VIRTUAL = 4L;
+    public static final Long SERVICIO_SIR = 5L;
+    public static final Long SERVICIO_SIR_ENVIO = 6L;
+    public static final Long SERVICIO_SIR_RECEPCION = 7L;
+    public static final Long SERVICIO_060 = 8L;
+    public static final Long SERVICIO_OFI_CORREOS = 9L;
+    public static final Long SERVICIO_OFI_EXTRANJERIA = 10L;
+    public static final Long SERVICIO_OFI_VIOLGENERO = 11L;
+    public static final Long SERVICIO_OFI_ACCESIBLE = 12L;
+    public static final Long SERVICIO_CLAVE = 13L;
+    public static final Long SERVICIO_REA = 14L;
+    public static final Long SERVICIO_OFI_ORD = 15L;
 
     // Estados Sincronización
     public static final Long SINCRONIZACION_DESCARGADA = 1L;

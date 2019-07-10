@@ -14,6 +14,7 @@ import org.hibernate.Hibernate;
 import org.jboss.ejb3.annotation.SecurityDomain;
 
 import javax.annotation.security.RolesAllowed;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -36,6 +37,8 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
     @PersistenceContext(unitName="dir3caib")
     private EntityManager em;
 
+    @EJB(mappedName = "dir3caib/ServicioEJB/local")
+    private ServicioLocal servicioEjb;
 
     @Override
     public Oficina getReference(String id) throws Exception {
@@ -587,13 +590,13 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
            "and relacionSirOfi.estado.codigoEstadoEntidad='V' ");*/
 
         Query q = em.createQuery("select oficina.id from Oficina as oficina where oficina.codigo =:codigoOficina " +
-                "and :SIR in elements(oficina.servicios) or :SIR_RECEPCION in elements(oficina.servicios) or :SIR_ENVIO in elements(oficina.servicios) " +
+                "and :SIR in elements(oficina.servicios)  " +
                 "and estado.codigoEstadoEntidad='V' ");
 
         q.setParameter("codigoOficina", codigoOficina);
-        q.setParameter("SIR", new Servicio(Dir3caibConstantes.SERVICIO_SIR));
-        q.setParameter("SIR_RECEPCION", new Servicio(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
-        q.setParameter("SIR_ENVIO", new Servicio(Dir3caibConstantes.SERVICIO_SIR_ENVIO));;
+        q.setParameter("SIR", servicioEjb.findById(Dir3caibConstantes.SERVICIO_SIR));
+        //q.setParameter("SIR_RECEPCION", new Servicio(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
+        //q.setParameter("SIR_ENVIO", new Servicio(Dir3caibConstantes.SERVICIO_SIR_ENVIO));;
 
 
         return q.getResultList() != null && q.getResultList().size() > 0;
