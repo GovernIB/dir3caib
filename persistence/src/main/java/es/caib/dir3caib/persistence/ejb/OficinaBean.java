@@ -582,16 +582,21 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
      */
     private boolean esOficinaSir(String codigoOficina) throws Exception {
 
-        Query q = em.createQuery("select relacionSirOfi.oficina from RelacionSirOfi as relacionSirOfi where relacionSirOfi.oficina.codigo =:codigoOficina " +
+        /*Query q = em.createQuery("select relacionSirOfi.oficina from RelacionSirOfi as relacionSirOfi where relacionSirOfi.oficina.codigo =:codigoOficina " +
            "and :SERVICIO_SIR_RECEPCION in elements(relacionSirOfi.oficina.servicios) " +
-           "and relacionSirOfi.estado.codigoEstadoEntidad='V' ");
+           "and relacionSirOfi.estado.codigoEstadoEntidad='V' ");*/
 
+        Query q = em.createQuery("select oficina.id from Oficina as oficina where oficina.codigo =:codigoOficina " +
+                "and :SIR in elements(oficina.servicios) or :SIR_RECEPCION in elements(oficina.servicios) or :SIR_ENVIO in elements(oficina.servicios) " +
+                "and estado.codigoEstadoEntidad='V' ");
 
         q.setParameter("codigoOficina", codigoOficina);
-        q.setParameter("SERVICIO_SIR_RECEPCION", new Servicio(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
+        q.setParameter("SIR", new Servicio(Dir3caibConstantes.SERVICIO_SIR));
+        q.setParameter("SIR_RECEPCION", new Servicio(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
+        q.setParameter("SIR_ENVIO", new Servicio(Dir3caibConstantes.SERVICIO_SIR_ENVIO));;
 
 
-        return q.getResultList() != null ? q.getResultList().size() > 0 : false;
+        return q.getResultList() != null && q.getResultList().size() > 0;
 
     }
 
