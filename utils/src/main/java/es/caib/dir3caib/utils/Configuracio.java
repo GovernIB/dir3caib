@@ -112,4 +112,9 @@ public class Configuracio {
     public static String getBusquedaComunidad() {
         return System.getProperty(DIR3CAIB_PROPERTY_BASE + "busqueda.comunidad");
     }
+
+    public static boolean isSincronizar() {
+        return Boolean.getBoolean(DIR3CAIB_PROPERTY_BASE + "sincronizar");
+    }
+
 }

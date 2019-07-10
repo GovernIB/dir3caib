@@ -38,8 +38,8 @@
 			es.caib.dir3caib.dir3ws.user=regwebCAIB
             es.caib.dir3caib.dir3ws.pass=password
 
-			<!-- Expresión Cron de la Hora a la que se debe realizar la Sincronización DIR3. El ejemplo corresponde a una sincronización a las 3:00 de la madrugada -->
-			es.caib.dir3caib.cronExpression=0 0 3 1/1 * ? *
+			<!-- Propiedad que indica si se sincronitza amb Madrid amb l'scheduler o no -->
+			es.caib.dir3caib.sincronizar=true
 
 			<!--Valores por defecto para el formulario de la búsqueda de Unidades y Oficinas-->
 			es.caib.dir3caib.busqueda.administracion=2

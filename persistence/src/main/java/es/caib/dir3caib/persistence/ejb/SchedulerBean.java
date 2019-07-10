@@ -1,5 +1,6 @@
 package es.caib.dir3caib.persistence.ejb;
 
+import es.caib.dir3caib.utils.Configuracio;
 import org.apache.log4j.Logger;
 
 import javax.annotation.security.RunAs;
@@ -17,21 +18,22 @@ public class SchedulerBean implements SchedulerLocal{
 
     @Override
     public void sincronizarDirectorio() throws Exception {
-
-        log.info("-------------------------------------------");
-        log.info("INICIO ACTUALIZACION PROGRAMADA DE UNIDADES Y OFICINAS");
-        log.info("");
-        try {
-
-            sincronizacionEjb.sincronizarDirectorioTask();
-
-
+        if (Configuracio.isSincronizar()) {
             log.info("-------------------------------------------");
-            log.info("FIN ACTUALIZACION PROGRAMADA DE UNIDADES Y OFICINAS");
+            log.info("INICIO ACTUALIZACION PROGRAMADA DE UNIDADES Y OFICINAS");
             log.info("");
+            try {
 
-        } catch (Throwable e) {
-            log.error("Error Sincronitzant ...", e);
+                sincronizacionEjb.sincronizarDirectorioTask();
+
+
+                log.info("-------------------------------------------");
+                log.info("FIN ACTUALIZACION PROGRAMADA DE UNIDADES Y OFICINAS");
+                log.info("");
+
+            } catch (Throwable e) {
+                log.error("Error Sincronitzant ...", e);
+            }
         }
     }
 }
