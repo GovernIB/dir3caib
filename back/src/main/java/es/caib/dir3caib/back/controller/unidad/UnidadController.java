@@ -2,10 +2,11 @@ package es.caib.dir3caib.back.controller.unidad;
 
 import es.caib.dir3caib.back.controller.BaseController;
 import es.caib.dir3caib.back.form.UnidadBusquedaForm;
-import es.caib.dir3caib.persistence.ejb.ArbolLocal;
+import es.caib.dir3caib.persistence.ejb.ObtenerUnidadesLocal;
 import es.caib.dir3caib.persistence.ejb.RelacionOrganizativaOfiLocal;
 import es.caib.dir3caib.persistence.ejb.RelacionSirOfiLocal;
 import es.caib.dir3caib.persistence.model.*;
+import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.Paginacion;
 import es.caib.dir3caib.utils.Configuracio;
 import es.caib.dir3caib.utils.Utils;
@@ -38,14 +39,15 @@ public class UnidadController extends BaseController {
 
     protected final Logger log = Logger.getLogger(getClass());
 
-    @EJB(mappedName = "dir3caib/ArbolEJB/local")
-    private ArbolLocal arbolEjb;
 
     @EJB(mappedName = "dir3caib/RelacionOrganizativaOfiEJB/local")
     private RelacionOrganizativaOfiLocal relacionOrganizativaOfiEjb;
 
     @EJB(mappedName = "dir3caib/RelacionSirOfiEJB/local")
     private RelacionSirOfiLocal relacionSirOfiEjb;
+
+    @EJB(mappedName = "dir3caib/ObtenerUnidadesEJB/local")
+    private ObtenerUnidadesLocal obtenerUnidadesEjb;
 
 
     /**
@@ -284,7 +286,10 @@ public class UnidadController extends BaseController {
         Long end = System.currentTimeMillis();
         log.info("TIEMPO CARGA ARBOL: " + Utils.formatElapsedTime(end - start));
 
-        //mav.addObject("nodo", nodo);
+        //Calculamos los históricos hasta el final
+        Nodo nodo = new Nodo();
+        obtenerUnidadesEjb.montarHistoricosFinales(unidad, nodo, 1);
+
         mav.addObject("unidadesPrimerNivel", unidadesPrimerNivel);
         mav.addObject("unidadesSegundoNivel", unidadesSegundoNivel);
         mav.addObject("unidadesTercerNivel", unidadesTercerNivel);
@@ -297,6 +302,7 @@ public class UnidadController extends BaseController {
         mav.addObject("relacionesOrganizativaOfi", relacionesOrganizativaOfi);
         mav.addObject("relacionesSirOfi", relacionesSirOfi);
         mav.addObject("unidadRaiz", unidad.getCodUnidadSuperior());
+        mav.addObject("nodo", nodo);
         return mav;
 
     }

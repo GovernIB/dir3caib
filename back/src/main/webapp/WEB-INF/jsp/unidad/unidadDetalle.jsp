@@ -975,6 +975,18 @@
                         </div>
                         </div>
                     </div>
+
+                <!-- Box con la trazabilidad de los sustitutos-->
+                <div class="box span9 minAlt">
+                    <div class="box-header well cabeceraDetalle">
+                        <h2><fmt:message key="dir3caib.sustitutos"/></h2>
+                    </div>
+                    <%-- Mostramos los históricos de una unidad de manera recursiva--%>
+                    <c:if test="${not empty nodo.historicos}">
+                        <c:set var="nodo" value="${nodo}" scope="request"/>
+                        <jsp:include page="../nodohistorico.jsp" flush="true"/>
+                    </c:if>
+                </div>
           </div>
         </div>
     </div>

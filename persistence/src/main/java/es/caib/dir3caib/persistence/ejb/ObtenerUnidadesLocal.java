@@ -1,6 +1,8 @@
 package es.caib.dir3caib.persistence.ejb;
 
+import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.persistence.model.ws.UnidadTF;
+import es.caib.dir3caib.persistence.utils.Nodo;
 
 import javax.ejb.Local;
 import java.util.Date;
@@ -24,5 +26,7 @@ public interface ObtenerUnidadesLocal {
     List<UnidadTF> obtenerArbolUnidadesDestinatarias(String codigo) throws Exception;
 
     Date obtenerFechaUltimaActualizacion() throws Exception;
+
+   void montarHistoricosFinales(Unidad unidad, Nodo nodo, int nivel) throws Exception;
 
 }

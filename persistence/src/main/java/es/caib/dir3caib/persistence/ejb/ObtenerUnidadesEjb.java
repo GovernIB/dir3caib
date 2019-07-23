@@ -5,6 +5,7 @@ import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.model.Sincronizacion;
 import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.persistence.model.ws.UnidadTF;
+import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.utils.Utils;
 import org.apache.log4j.Logger;
 
@@ -268,6 +269,36 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
                 obtenerHistoricosFinales(parcial, historicosFinales);
             }
         }
+
+
+    }
+
+    /**
+     * Método que calcula los históricos de una unidad hasta el final y los devuelve en el objeto Nodo
+     *
+     * @param unidad
+     * @param nodo
+     * @param nivel
+     * @throws Exception
+     */
+    @Override
+    public void montarHistoricosFinales(Unidad unidad, Nodo nodo, int nivel) throws Exception {
+
+        //Asignamos los valores de la unidad que nos pasan
+        nodo.setCodigo(unidad.getCodigo());
+        nodo.setDenominacion(unidad.getDenominacion());
+        nodo.setNivel(nivel);
+        //Obtenemos los históricos de primer nivel de la unidad indicada
+        Set<Unidad> parciales = unidad.getHistoricoUO();
+        List<Nodo> historicosParciales = new ArrayList<Nodo>();
+        //Para cada uno de los históricos obtenemos de manera recursiva sus históricos
+        for (Unidad parcial : parciales) {
+            Nodo nodoParcial = new Nodo();
+            historicosParciales.add(nodoParcial);
+            montarHistoricosFinales(parcial, nodoParcial, nivel + 1);
+        }
+        //Asignamos los históricos al nodo principal
+        nodo.setHistoricos(historicosParciales);
 
 
     }

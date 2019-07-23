@@ -19,8 +19,10 @@ public class Nodo extends ObjetoBasico {
     private List<Nodo> oficinasDependientes;
     private List<Nodo> oficinasAuxiliares;
     private List<Nodo> oficinasFuncionales; //relacionesOrganizativasOfi
+   private List<Nodo> historicos; // guarda los históricos del nodo
     private boolean tieneOficinaSir = false;
     private boolean esEdp = false;
+   private int nivel;
 
 
     public Nodo() {
@@ -88,6 +90,14 @@ public class Nodo extends ObjetoBasico {
         this.oficinasFuncionales = oficinasFuncionales;
     }
 
+   public List<Nodo> getHistoricos() {
+      return historicos;
+   }
+
+   public void setHistoricos(List<Nodo> historicos) {
+      this.historicos = historicos;
+   }
+
     public boolean getTieneOficinaSir() {
         return tieneOficinaSir;
     }
@@ -103,4 +113,12 @@ public class Nodo extends ObjetoBasico {
     public void setEsEdp(boolean esEdp) {
         this.esEdp = esEdp;
     }
+
+   public int getNivel() {
+      return nivel;
+   }
+
+   public void setNivel(int nivel) {
+      this.nivel = nivel;
+   }
 }
