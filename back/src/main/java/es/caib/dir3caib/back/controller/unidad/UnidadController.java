@@ -286,9 +286,13 @@ public class UnidadController extends BaseController {
         Long end = System.currentTimeMillis();
         log.info("TIEMPO CARGA ARBOL: " + Utils.formatElapsedTime(end - start));
 
-        //Calculamos los históricos hasta el final
-        Nodo nodo = new Nodo();
-        obtenerUnidadesEjb.montarHistoricosFinales(unidad, nodo, 1);
+        //Calculamos los históricos hasta el final, si la unidad no es vigente
+        if (!Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE.equals(unidad.getEstado().getCodigoEstadoEntidad())) {
+            Nodo nodo = new Nodo();
+            obtenerUnidadesEjb.montarHistoricosFinales(unidad, nodo, 1);
+            mav.addObject("nodo", nodo);
+        }
+
 
         mav.addObject("unidadesPrimerNivel", unidadesPrimerNivel);
         mav.addObject("unidadesSegundoNivel", unidadesSegundoNivel);
@@ -302,7 +306,6 @@ public class UnidadController extends BaseController {
         mav.addObject("relacionesOrganizativaOfi", relacionesOrganizativaOfi);
         mav.addObject("relacionesSirOfi", relacionesSirOfi);
         mav.addObject("unidadRaiz", unidad.getCodUnidadSuperior());
-        mav.addObject("nodo", nodo);
         return mav;
 
     }
