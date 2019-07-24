@@ -3,11 +3,11 @@
 
 <c:if test="${not empty nodo.historicos}">
     <li><span class="panel-heading btn-danger vuitanta-percent" onclick="copyToClipboard(this)" style="cursor:copy"><i
-                class=""></i>${nodo.codigo} - ${nodo.denominacion}</span>
+                class="">&nbsp;</i>${nodo.codigo} - ${nodo.denominacion}</span>
 </c:if>
 <c:if test="${empty nodo.historicos}">
     <li><span class="panel-heading btn-success vuitanta-percent" onclick="copyToClipboard(this)" style="cursor:copy"><i
-                    class=""></i>${nodo.codigo} - ${nodo.denominacion}</b></span>
+                    class="">&nbsp;</i>${nodo.codigo} - ${nodo.denominacion}</b></span>
 </c:if>
 <%-- Mostramos los historicos de manera recursiva--%>
 <c:forEach items="${nodo.historicos}" var="historico2" varStatus="loop">
