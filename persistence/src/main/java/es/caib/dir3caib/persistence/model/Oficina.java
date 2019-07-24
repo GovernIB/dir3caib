@@ -75,6 +75,14 @@ public class Oficina implements Serializable {
     this.codOfiResponsable = new Oficina(codOfiResponsable);
   }
 
+  public Oficina(String codigo, String denominacion, String codUoResponsable, String codOfiResponsable, Set<Servicio> servicios) {
+    this.codigo = codigo;
+    this.denominacion = denominacion;
+    this.codUoResponsable = new Unidad(codUoResponsable);
+    this.codOfiResponsable = new Oficina(codOfiResponsable);
+    this.servicios = servicios;
+  }
+
   public void finalize() throws Throwable {
 
 	}

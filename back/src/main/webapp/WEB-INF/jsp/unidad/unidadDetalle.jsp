@@ -236,13 +236,11 @@
                                                                         style="cursor:copy" onclick="copyToClipboard(this)"><i
                                                                         class="fa fa-home"></i> ${oficinaPrincipal.codigo} - ${oficinaPrincipal.denominacion}</span></a>
 
-                                                                <c:forEach var="relacionSirOfi" items="${relacionesSirOfi}">
-                                                                    <c:if test="${relacionSirOfi.unidad.codigo == organismo1.codigo}">
-                                                                        <c:if test="${oficinaPrincipal.codigo == relacionSirOfi.oficina.codigo}">
-                                                                            <a href="javascript:void(0);"><span
-                                                                                    class="panel-heading btn-ofsir vuitanta-percent"
-                                                                                    style="cursor:copy"><img src="<c:url value="/img/logo-SIR.png"/>" width="20" alt="SIR" title="SIR"/></span></a>
-                                                                        </c:if>
+                                                                <c:forEach var="servicio" items="${oficinaPrincipal.servicios}">
+                                                                    <c:if test="${servicio.codServicio == 5}">
+                                                                        <a href="javascript:void(0);"><span
+                                                                                class="panel-heading btn-ofsir vuitanta-percent"
+                                                                                style="cursor:copy"><img src="<c:url value="/img/logo-SIR.png"/>" width="20" alt="SIR" title="SIR"/></span></a>
                                                                     </c:if>
                                                                 </c:forEach>
 
@@ -254,6 +252,14 @@
                                                                                         class="panel-heading btn-ofaux vuitanta-percent"
                                                                                         style="cursor:copy" onclick="copyToClipboard(this)"><i
                                                                                         class="fa fa-home"></i> ${oficinaAuxiliar.codigo} - ${oficinaAuxiliar.denominacion}</span></a>
+
+                                                                                <c:forEach var="servicio" items="${oficinaAuxiliar.servicios}">
+                                                                                    <c:if test="${servicio.codServicio == 5}">
+                                                                                        <a href="javascript:void(0);"><span
+                                                                                                class="panel-heading btn-ofsir vuitanta-percent"
+                                                                                                style="cursor:copy"><img src="<c:url value="/img/logo-SIR.png"/>" width="20" alt="SIR" title="SIR"/></span></a>
+                                                                                    </c:if>
+                                                                                </c:forEach>
 
                                                                                 <c:forEach var="relacionOrganizativaOfi" items="${relacionesOrganizativaOfi}">
                                                                                     <c:if test="${relacionOrganizativaOfi.unidad.codigo == organismo1.codigo}">
@@ -298,19 +304,6 @@
                                                             </c:if>
                                                         </c:if>
                                                     </c:forEach>
-                                                    <!-- **** Oficinas Sir ***-->
-                                                    <c:forEach var="relacionSirOfi" items="${relacionesSirOfi}">
-                                                        <c:if test="${relacionSirOfi.unidad.codigo == organismo1.codigo}">
-                                                            <c:if test="${relacionSirOfi.oficina.codUoResponsable.codigo != organismo1.codigo}">
-                                                                <li>
-                                                                    <a href="javascript:void(0);"><span
-                                                                            class="panel-heading btn-ofsir vuitanta-percent"
-                                                                            style="cursor:copy" onclick="copyToClipboard(this)"><i
-                                                                            class="fa fa-exchange"></i> ${relacionSirOfi.oficina.codigo} - ${relacionSirOfi.oficina.denominacion} <img src="<c:url value="/img/logo-SIR.png"/>" width="20" alt="SIR" title="SIR"/></span></a>
-                                                                </li>
-                                                            </c:if>
-                                                        </c:if>
-                                                    </c:forEach>
 
                                                     <c:forEach var="organismo2" items="${unidadesSegundoNivel}">
                                                         <c:if test="${organismo2.codUnidadSuperior.codigo == organismo1.codigo}">
@@ -341,13 +334,11 @@
                                                                                         style="cursor:copy" onclick="copyToClipboard(this)"><i
                                                                                         class="fa fa-home"></i> ${oficinaPrincipal.codigo} - ${oficinaPrincipal.denominacion}</span></a>
 
-                                                                                <c:forEach var="relacionSirOfi" items="${relacionesSirOfi}">
-                                                                                    <c:if test="${relacionSirOfi.unidad.codigo == organismo2.codigo}">
-                                                                                        <c:if test="${oficinaPrincipal.codigo == relacionSirOfi.oficina.codigo}">
-                                                                                            <a href="javascript:void(0);"><span
-                                                                                                    class="panel-heading btn-ofsir vuitanta-percent"
-                                                                                                    style="cursor:copy"><img src="<c:url value="/img/logo-SIR.png"/>" width="20" alt="SIR" title="SIR"/></span></a>
-                                                                                        </c:if>
+                                                                                <c:forEach var="servicio" items="${oficinaPrincipal.servicios}">
+                                                                                    <c:if test="${servicio.codServicio == 5}">
+                                                                                        <a href="javascript:void(0);"><span
+                                                                                                class="panel-heading btn-ofsir vuitanta-percent"
+                                                                                                style="cursor:copy"><img src="<c:url value="/img/logo-SIR.png"/>" width="20" alt="SIR" title="SIR"/></span></a>
                                                                                     </c:if>
                                                                                 </c:forEach>
 
@@ -359,6 +350,14 @@
                                                                                                         class="panel-heading btn-ofaux vuitanta-percent"
                                                                                                         style="cursor:copy" onclick="copyToClipboard(this)"><i
                                                                                                         class="fa fa-home"></i> ${oficinaAuxiliar.codigo} - ${oficinaAuxiliar.denominacion}</span></a>
+
+                                                                                                <c:forEach var="servicio" items="${oficinaAuxiliar.servicios}">
+                                                                                                    <c:if test="${servicio.codServicio == 5}">
+                                                                                                        <a href="javascript:void(0);"><span
+                                                                                                                class="panel-heading btn-ofsir vuitanta-percent"
+                                                                                                                style="cursor:copy"><img src="<c:url value="/img/logo-SIR.png"/>" width="20" alt="SIR" title="SIR"/></span></a>
+                                                                                                    </c:if>
+                                                                                                </c:forEach>
 
                                                                                                 <c:forEach var="relacionOrganizativaOfi" items="${relacionesOrganizativaOfi}">
                                                                                                     <c:if test="${relacionOrganizativaOfi.unidad.codigo == organismo2.codigo}">
@@ -403,19 +402,6 @@
                                                                             </c:if>
                                                                         </c:if>
                                                                     </c:forEach>
-                                                                    <!-- **** Oficinas Sir ***-->
-                                                                    <c:forEach var="relacionSirOfi" items="${relacionesSirOfi}">
-                                                                        <c:if test="${relacionSirOfi.unidad.codigo == organismo2.codigo}">
-                                                                            <c:if test="${relacionSirOfi.oficina.codUoResponsable.codigo != organismo2.codigo}">
-                                                                                <li>
-                                                                                    <a href="javascript:void(0);"><span
-                                                                                            class="panel-heading btn-ofsir vuitanta-percent"
-                                                                                            style="cursor:copy" onclick="copyToClipboard(this)"><i
-                                                                                            class="fa fa-exchange"></i> ${relacionSirOfi.oficina.codigo} - ${relacionSirOfi.oficina.denominacion} <img src="<c:url value="/img/logo-SIR.png"/>" width="20" alt="SIR" title="SIR"/></span></a>
-                                                                                </li>
-                                                                            </c:if>
-                                                                        </c:if>
-                                                                    </c:forEach>
 
                                                                     <c:forEach var="organismo3" items="${unidadesTercerNivel}">
                                                                         <c:if test="${organismo3.codUnidadSuperior.codigo == organismo2.codigo}">
@@ -446,13 +432,11 @@
                                                                                                         style="cursor:copy" onclick="copyToClipboard(this)"><i
                                                                                                         class="fa fa-home"></i> ${oficinaPrincipal.codigo} - ${oficinaPrincipal.denominacion}</span></a>
 
-                                                                                                <c:forEach var="relacionSirOfi" items="${relacionesSirOfi}">
-                                                                                                    <c:if test="${relacionSirOfi.unidad.codigo == organismo3.codigo}">
-                                                                                                        <c:if test="${oficinaPrincipal.codigo == relacionSirOfi.oficina.codigo}">
-                                                                                                            <a href="javascript:void(0);"><span
-                                                                                                                    class="panel-heading btn-ofsir vuitanta-percent"
-                                                                                                                    style="cursor:copy"><img src="<c:url value="/img/logo-SIR.png"/>" width="20" alt="SIR" title="SIR"/></span></a>
-                                                                                                        </c:if>
+                                                                                                <c:forEach var="servicio" items="${oficinaPrincipal.servicios}">
+                                                                                                    <c:if test="${servicio.codServicio == 5}">
+                                                                                                        <a href="javascript:void(0);"><span
+                                                                                                                class="panel-heading btn-ofsir vuitanta-percent"
+                                                                                                                style="cursor:copy"><img src="<c:url value="/img/logo-SIR.png"/>" width="20" alt="SIR" title="SIR"/></span></a>
                                                                                                     </c:if>
                                                                                                 </c:forEach>
 
@@ -464,6 +448,14 @@
                                                                                                                         class="panel-heading btn-ofaux vuitanta-percent"
                                                                                                                         style="cursor:copy" onclick="copyToClipboard(this)"><i
                                                                                                                         class="fa fa-home"></i> ${oficinaAuxiliar.codigo} - ${oficinaAuxiliar.denominacion}</span></a>
+
+                                                                                                                <c:forEach var="servicio" items="${oficinaAuxiliar.servicios}">
+                                                                                                                    <c:if test="${servicio.codServicio == 5}">
+                                                                                                                        <a href="javascript:void(0);"><span
+                                                                                                                                class="panel-heading btn-ofsir vuitanta-percent"
+                                                                                                                                style="cursor:copy"><img src="<c:url value="/img/logo-SIR.png"/>" width="20" alt="SIR" title="SIR"/></span></a>
+                                                                                                                    </c:if>
+                                                                                                                </c:forEach>
 
                                                                                                                 <c:forEach var="relacionOrganizativaOfi" items="${relacionesOrganizativaOfi}">
                                                                                                                     <c:if test="${relacionOrganizativaOfi.unidad.codigo == organismo3.codigo}">
@@ -508,19 +500,6 @@
                                                                                             </c:if>
                                                                                         </c:if>
                                                                                     </c:forEach>
-                                                                                    <!-- **** Oficinas Sir ***-->
-                                                                                    <c:forEach var="relacionSirOfi" items="${relacionesSirOfi}">
-                                                                                        <c:if test="${relacionSirOfi.unidad.codigo == organismo3.codigo}">
-                                                                                            <c:if test="${relacionSirOfi.oficina.codUoResponsable.codigo != organismo3.codigo}">
-                                                                                                <li>
-                                                                                                    <a href="javascript:void(0);"><span
-                                                                                                            class="panel-heading btn-ofsir vuitanta-percent"
-                                                                                                            style="cursor:copy" onclick="copyToClipboard(this)"><i
-                                                                                                            class="fa fa-exchange"></i> ${relacionSirOfi.oficina.codigo} - ${relacionSirOfi.oficina.denominacion} <img src="<c:url value="/img/logo-SIR.png"/>" width="20" alt="SIR" title="SIR"/></span></a>
-                                                                                                </li>
-                                                                                            </c:if>
-                                                                                        </c:if>
-                                                                                    </c:forEach>
 
                                                                                     <c:forEach var="organismo4" items="${unidadesCuartoNivel}">
                                                                                         <c:if test="${organismo4.codUnidadSuperior.codigo == organismo3.codigo}">
@@ -551,13 +530,11 @@
                                                                                                                         style="cursor:copy" onclick="copyToClipboard(this)"><i
                                                                                                                         class="fa fa-home"></i> ${oficinaPrincipal.codigo} - ${oficinaPrincipal.denominacion}</span></a>
 
-                                                                                                                <c:forEach var="relacionSirOfi" items="${relacionesSirOfi}">
-                                                                                                                    <c:if test="${relacionSirOfi.unidad.codigo == organismo4.codigo}">
-                                                                                                                        <c:if test="${oficinaPrincipal.codigo == relacionSirOfi.oficina.codigo}">
-                                                                                                                            <a href="javascript:void(0);"><span
-                                                                                                                                    class="panel-heading btn-ofsir vuitanta-percent"
-                                                                                                                                    style="cursor:copy"><img src="<c:url value="/img/logo-SIR.png"/>" width="20" alt="SIR" title="SIR"/></span></a>
-                                                                                                                        </c:if>
+                                                                                                                <c:forEach var="servicio" items="${oficinaPrincipal.servicios}">
+                                                                                                                    <c:if test="${servicio.codServicio == 5}">
+                                                                                                                        <a href="javascript:void(0);"><span
+                                                                                                                                class="panel-heading btn-ofsir vuitanta-percent"
+                                                                                                                                style="cursor:copy"><img src="<c:url value="/img/logo-SIR.png"/>" width="20" alt="SIR" title="SIR"/></span></a>
                                                                                                                     </c:if>
                                                                                                                 </c:forEach>
 
@@ -569,6 +546,14 @@
                                                                                                                                         class="panel-heading btn-ofaux vuitanta-percent"
                                                                                                                                         style="cursor:copy" onclick="copyToClipboard(this)"><i
                                                                                                                                         class="fa fa-home"></i> ${oficinaAuxiliar.codigo} - ${oficinaAuxiliar.denominacion}</span></a>
+
+                                                                                                                                <c:forEach var="servicio" items="${oficinaAuxiliar.servicios}">
+                                                                                                                                    <c:if test="${servicio.codServicio == 5}">
+                                                                                                                                        <a href="javascript:void(0);"><span
+                                                                                                                                                class="panel-heading btn-ofsir vuitanta-percent"
+                                                                                                                                                style="cursor:copy"><img src="<c:url value="/img/logo-SIR.png"/>" width="20" alt="SIR" title="SIR"/></span></a>
+                                                                                                                                    </c:if>
+                                                                                                                                </c:forEach>
 
                                                                                                                                 <c:forEach var="relacionOrganizativaOfi" items="${relacionesOrganizativaOfi}">
                                                                                                                                     <c:if test="${relacionOrganizativaOfi.unidad.codigo == organismo4.codigo}">
@@ -613,19 +598,6 @@
                                                                                                             </c:if>
                                                                                                         </c:if>
                                                                                                     </c:forEach>
-                                                                                                    <!-- **** Oficinas Sir ***-->
-                                                                                                    <c:forEach var="relacionSirOfi" items="${relacionesSirOfi}">
-                                                                                                        <c:if test="${relacionSirOfi.unidad.codigo == organismo4.codigo}">
-                                                                                                            <c:if test="${relacionSirOfi.oficina.codUoResponsable.codigo != organismo4.codigo}">
-                                                                                                                <li>
-                                                                                                                    <a href="javascript:void(0);"><span
-                                                                                                                            class="panel-heading btn-ofsir vuitanta-percent"
-                                                                                                                            style="cursor:copy" onclick="copyToClipboard(this)"><i
-                                                                                                                            class="fa fa-exchange"></i> ${relacionSirOfi.oficina.codigo} - ${relacionSirOfi.oficina.denominacion} <img src="<c:url value="/img/logo-SIR.png"/>" width="20" alt="SIR" title="SIR"/></span></a>
-                                                                                                                </li>
-                                                                                                            </c:if>
-                                                                                                        </c:if>
-                                                                                                    </c:forEach>
 
                                                                                                     <c:forEach var="organismo5" items="${unidadesQuintoNivel}">
                                                                                                         <c:if test="${organismo5.codUnidadSuperior.codigo == organismo4.codigo}">
@@ -656,13 +628,11 @@
                                                                                                                                         style="cursor:copy" onclick="copyToClipboard(this)"><i
                                                                                                                                         class="fa fa-home"></i> ${oficinaPrincipal.codigo} - ${oficinaPrincipal.denominacion}</span></a>
 
-                                                                                                                                <c:forEach var="relacionSirOfi" items="${relacionesSirOfi}">
-                                                                                                                                    <c:if test="${relacionSirOfi.unidad.codigo == organismo5.codigo}">
-                                                                                                                                        <c:if test="${oficinaPrincipal.codigo == relacionSirOfi.oficina.codigo}">
-                                                                                                                                            <a href="javascript:void(0);"><span
-                                                                                                                                                    class="panel-heading btn-ofsir vuitanta-percent"
-                                                                                                                                                    style="cursor:copy"><img src="<c:url value="/img/logo-SIR.png"/>" width="20" alt="SIR" title="SIR"/></span></a>
-                                                                                                                                        </c:if>
+                                                                                                                                <c:forEach var="servicio" items="${oficinaPrincipal.servicios}">
+                                                                                                                                    <c:if test="${servicio.codServicio == 5}">
+                                                                                                                                        <a href="javascript:void(0);"><span
+                                                                                                                                                class="panel-heading btn-ofsir vuitanta-percent"
+                                                                                                                                                style="cursor:copy"><img src="<c:url value="/img/logo-SIR.png"/>" width="20" alt="SIR" title="SIR"/></span></a>
                                                                                                                                     </c:if>
                                                                                                                                 </c:forEach>
 
@@ -674,6 +644,14 @@
                                                                                                                                                         class="panel-heading btn-ofaux vuitanta-percent"
                                                                                                                                                         style="cursor:copy" onclick="copyToClipboard(this)"><i
                                                                                                                                                         class="fa fa-home"></i> ${oficinaAuxiliar.codigo} - ${oficinaAuxiliar.denominacion}</span></a>
+
+                                                                                                                                                <c:forEach var="servicio" items="${oficinaAuxiliar.servicios}">
+                                                                                                                                                    <c:if test="${servicio.codServicio == 5}">
+                                                                                                                                                        <a href="javascript:void(0);"><span
+                                                                                                                                                                class="panel-heading btn-ofsir vuitanta-percent"
+                                                                                                                                                                style="cursor:copy"><img src="<c:url value="/img/logo-SIR.png"/>" width="20" alt="SIR" title="SIR"/></span></a>
+                                                                                                                                                    </c:if>
+                                                                                                                                                </c:forEach>
 
                                                                                                                                                 <c:forEach var="relacionOrganizativaOfi" items="${relacionesOrganizativaOfi}">
                                                                                                                                                     <c:if test="${relacionOrganizativaOfi.unidad.codigo == organismo5.codigo}">
@@ -718,19 +696,6 @@
                                                                                                                             </c:if>
                                                                                                                         </c:if>
                                                                                                                     </c:forEach>
-                                                                                                                    <!-- **** Oficinas Sir ***-->
-                                                                                                                    <c:forEach var="relacionSirOfi" items="${relacionesSirOfi}">
-                                                                                                                        <c:if test="${relacionSirOfi.unidad.codigo == organismo5.codigo}">
-                                                                                                                            <c:if test="${relacionSirOfi.oficina.codUoResponsable.codigo != organismo5.codigo}">
-                                                                                                                                <li>
-                                                                                                                                    <a href="javascript:void(0);"><span
-                                                                                                                                            class="panel-heading btn-ofsir vuitanta-percent"
-                                                                                                                                            style="cursor:copy" onclick="copyToClipboard(this)"><i
-                                                                                                                                            class="fa fa-exchange"></i> ${relacionSirOfi.oficina.codigo} - ${relacionSirOfi.oficina.denominacion} <img src="<c:url value="/img/logo-SIR.png"/>" width="20" alt="SIR" title="SIR"/></span></a>
-                                                                                                                                </li>
-                                                                                                                            </c:if>
-                                                                                                                        </c:if>
-                                                                                                                    </c:forEach>
 
                                                                                                                     <c:forEach var="organismo6" items="${unidadesSextoNivel}">
                                                                                                                         <c:if test="${organismo6.codUnidadSuperior.codigo == organismo5.codigo}">
@@ -761,13 +726,11 @@
                                                                                                                                                         style="cursor:copy" onclick="copyToClipboard(this)"><i
                                                                                                                                                         class="fa fa-home"></i> ${oficinaPrincipal.codigo} - ${oficinaPrincipal.denominacion}</span></a>
 
-                                                                                                                                                <c:forEach var="relacionSirOfi" items="${relacionesSirOfi}">
-                                                                                                                                                    <c:if test="${relacionSirOfi.unidad.codigo == organismo6.codigo}">
-                                                                                                                                                        <c:if test="${oficinaPrincipal.codigo == relacionSirOfi.oficina.codigo}">
-                                                                                                                                                            <a href="javascript:void(0);"><span
-                                                                                                                                                                    class="panel-heading btn-ofsir vuitanta-percent"
-                                                                                                                                                                    style="cursor:copy"><img src="<c:url value="/img/logo-SIR.png"/>" width="20" alt="SIR" title="SIR"/></span></a>
-                                                                                                                                                        </c:if>
+                                                                                                                                                <c:forEach var="servicio" items="${oficinaPrincipal.servicios}">
+                                                                                                                                                    <c:if test="${servicio.codServicio == 5}">
+                                                                                                                                                        <a href="javascript:void(0);"><span
+                                                                                                                                                                class="panel-heading btn-ofsir vuitanta-percent"
+                                                                                                                                                                style="cursor:copy"><img src="<c:url value="/img/logo-SIR.png"/>" width="20" alt="SIR" title="SIR"/></span></a>
                                                                                                                                                     </c:if>
                                                                                                                                                 </c:forEach>
 
@@ -779,6 +742,14 @@
                                                                                                                                                                         class="panel-heading btn-ofaux vuitanta-percent"
                                                                                                                                                                         style="cursor:copy" onclick="copyToClipboard(this)"><i
                                                                                                                                                                         class="fa fa-home"></i> ${oficinaAuxiliar.codigo} - ${oficinaAuxiliar.denominacion}</span></a>
+
+                                                                                                                                                                <c:forEach var="servicio" items="${oficinaAuxiliar.servicios}">
+                                                                                                                                                                    <c:if test="${servicio.codServicio == 5}">
+                                                                                                                                                                        <a href="javascript:void(0);"><span
+                                                                                                                                                                                class="panel-heading btn-ofsir vuitanta-percent"
+                                                                                                                                                                                style="cursor:copy"><img src="<c:url value="/img/logo-SIR.png"/>" width="20" alt="SIR" title="SIR"/></span></a>
+                                                                                                                                                                    </c:if>
+                                                                                                                                                                </c:forEach>
 
                                                                                                                                                                 <c:forEach var="relacionOrganizativaOfi" items="${relacionesOrganizativaOfi}">
                                                                                                                                                                     <c:if test="${relacionOrganizativaOfi.unidad.codigo == organismo6.codigo}">
@@ -823,19 +794,6 @@
                                                                                                                                             </c:if>
                                                                                                                                         </c:if>
                                                                                                                                     </c:forEach>
-                                                                                                                                    <!-- **** Oficinas Sir ***-->
-                                                                                                                                    <c:forEach var="relacionSirOfi" items="${relacionesSirOfi}">
-                                                                                                                                        <c:if test="${relacionSirOfi.unidad.codigo == organismo6.codigo}">
-                                                                                                                                            <c:if test="${relacionSirOfi.oficina.codUoResponsable.codigo != organismo6.codigo}">
-                                                                                                                                                <li>
-                                                                                                                                                    <a href="javascript:void(0);"><span
-                                                                                                                                                            class="panel-heading btn-ofsir vuitanta-percent"
-                                                                                                                                                            style="cursor:copy" onclick="copyToClipboard(this)"><i
-                                                                                                                                                            class="fa fa-exchange"></i> ${relacionSirOfi.oficina.codigo} - ${relacionSirOfi.oficina.denominacion} <img src="<c:url value="/img/logo-SIR.png"/>" width="20" alt="SIR" title="SIR"/></span></a>
-                                                                                                                                                </li>
-                                                                                                                                            </c:if>
-                                                                                                                                        </c:if>
-                                                                                                                                    </c:forEach>
 
                                                                                                                                     <c:forEach var="organismo7" items="${unidadesSeptimoNivel}">
                                                                                                                                         <c:if test="${organismo7.codUnidadSuperior.codigo == organismo6.codigo}">
@@ -866,13 +824,11 @@
                                                                                                                                                                         style="cursor:copy" onclick="copyToClipboard(this)"><i
                                                                                                                                                                         class="fa fa-home"></i> ${oficinaPrincipal.codigo} - ${oficinaPrincipal.denominacion}</span></a>
 
-                                                                                                                                                                <c:forEach var="relacionSirOfi" items="${relacionesSirOfi}">
-                                                                                                                                                                    <c:if test="${relacionSirOfi.unidad.codigo == organismo7.codigo}">
-                                                                                                                                                                        <c:if test="${oficinaPrincipal.codigo == relacionSirOfi.oficina.codigo}">
-                                                                                                                                                                            <a href="javascript:void(0);"><span
-                                                                                                                                                                                    class="panel-heading btn-ofsir vuitanta-percent"
-                                                                                                                                                                                    style="cursor:copy"><img src="<c:url value="/img/logo-SIR.png"/>" width="20" alt="SIR" title="SIR"/></span></a>
-                                                                                                                                                                        </c:if>
+                                                                                                                                                                <c:forEach var="servicio" items="${oficinaPrincipal.servicios}">
+                                                                                                                                                                    <c:if test="${servicio.codServicio == 5}">
+                                                                                                                                                                        <a href="javascript:void(0);"><span
+                                                                                                                                                                                class="panel-heading btn-ofsir vuitanta-percent"
+                                                                                                                                                                                style="cursor:copy"><img src="<c:url value="/img/logo-SIR.png"/>" width="20" alt="SIR" title="SIR"/></span></a>
                                                                                                                                                                     </c:if>
                                                                                                                                                                 </c:forEach>
 
@@ -884,6 +840,14 @@
                                                                                                                                                                                         class="panel-heading btn-ofaux vuitanta-percent"
                                                                                                                                                                                         style="cursor:copy" onclick="copyToClipboard(this)"><i
                                                                                                                                                                                         class="fa fa-home"></i> ${oficinaAuxiliar.codigo} - ${oficinaAuxiliar.denominacion}</span></a>
+
+                                                                                                                                                                                <c:forEach var="servicio" items="${oficinaAuxiliar.servicios}">
+                                                                                                                                                                                    <c:if test="${servicio.codServicio == 5}">
+                                                                                                                                                                                        <a href="javascript:void(0);"><span
+                                                                                                                                                                                                class="panel-heading btn-ofsir vuitanta-percent"
+                                                                                                                                                                                                style="cursor:copy"><img src="<c:url value="/img/logo-SIR.png"/>" width="20" alt="SIR" title="SIR"/></span></a>
+                                                                                                                                                                                    </c:if>
+                                                                                                                                                                                </c:forEach>
 
                                                                                                                                                                                 <c:forEach var="relacionOrganizativaOfi" items="${relacionesOrganizativaOfi}">
                                                                                                                                                                                     <c:if test="${relacionOrganizativaOfi.unidad.codigo == organismo7.codigo}">
@@ -928,19 +892,6 @@
                                                                                                                                                             </c:if>
                                                                                                                                                         </c:if>
                                                                                                                                                     </c:forEach>
-                                                                                                                                                    <!-- **** Oficinas Sir ***-->
-                                                                                                                                                    <c:forEach var="relacionSirOfi" items="${relacionesSirOfi}">
-                                                                                                                                                        <c:if test="${relacionSirOfi.unidad.codigo == organismo7.codigo}">
-                                                                                                                                                            <c:if test="${relacionSirOfi.oficina.codUoResponsable.codigo != organismo7.codigo}">
-                                                                                                                                                                <li>
-                                                                                                                                                                    <a href="javascript:void(0);"><span
-                                                                                                                                                                            class="panel-heading btn-ofsir vuitanta-percent"
-                                                                                                                                                                            style="cursor:copy" onclick="copyToClipboard(this)"><i
-                                                                                                                                                                            class="fa fa-exchange"></i> ${relacionSirOfi.oficina.codigo} - ${relacionSirOfi.oficina.denominacion} <img src="<c:url value="/img/logo-SIR.png"/>" width="20" alt="SIR" title="SIR"/></span></a>
-                                                                                                                                                                </li>
-                                                                                                                                                            </c:if>
-                                                                                                                                                        </c:if>
-                                                                                                                                                    </c:forEach>
                                                                                                                                                 </ul>
                                                                                                                                             </li>
                                                                                                                                         </c:if>
@@ -968,27 +919,30 @@
                                                 </ul>
                                             </li>
                                         </c:forEach>
-
                                     </ul>
                                 </li>
                             </ul>
                         </div>
-                        </div>
                     </div>
 
-                <!-- Box con la trazabilidad de los sustitutos-->
-                <c:if test="${not empty nodo}">
-                    <div class="box span9 minAlt">
-                        <div class="box-header well cabeceraDetalle">
-                            <h2><fmt:message key="dir3caib.sustitutos"/></h2>
+                    <!-- Box con la trazabilidad de los sustitutos-->
+                    <c:if test="${not empty nodo}">
+                        <div class="box span9 minAlt">
+                            <div class="box-header well cabeceraDetalle">
+                                <h2><fmt:message key="dir3caib.sustitutos"/></h2>
+                            </div>
+                            <div class="tree">
+                                <ul>
+                                    <%-- Mostramos los históricos de una unidad de manera recursiva--%>
+                                    <c:if test="${not empty nodo.historicos}">
+                                        <c:set var="nodo" value="${nodo}" scope="request"/>
+                                        <jsp:include page="../nodohistorico.jsp" flush="true"/>
+                                    </c:if>
+                                </ul>
+                            </div>
                         </div>
-                            <%-- Mostramos los históricos de una unidad de manera recursiva--%>
-                        <c:if test="${not empty nodo.historicos}">
-                            <c:set var="nodo" value="${nodo}" scope="request"/>
-                            <jsp:include page="../nodohistorico.jsp" flush="true"/>
-                        </c:if>
-                    </div>
-                </c:if>
+                    </c:if>
+                  </div>
           </div>
         </div>
     </div>

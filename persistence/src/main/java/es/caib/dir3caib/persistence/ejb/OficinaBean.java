@@ -19,6 +19,8 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -768,7 +770,22 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
         List<Oficina> oficinas = new ArrayList<Oficina>();
 
         for (Object[] object : result) {
-            Oficina oficina = new Oficina((String) object[0], (String) object[1], (String) object[2], null);
+
+            Query q2 = em.createNativeQuery("select codservicio from DIR_SERVICIOOFI where codoficina=?");
+            q2.setParameter(1, object[0]);
+
+            List<BigInteger> result2 = (List<BigInteger>) q2.getResultList();
+
+            Set<Servicio> servicios = new HashSet<Servicio>();
+            int i = 0;
+            while (i < result2.size()) {
+                Long codServ = result2.get(i).longValue();
+                Servicio servicio = new Servicio(codServ);
+                servicios.add(servicio);
+                i++;
+            }
+
+            Oficina oficina = new Oficina((String) object[0], (String) object[1], (String) object[2], null, servicios);
 
             oficinas.add(oficina);
         }
@@ -790,7 +807,23 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
         List<Oficina> oficinas = new ArrayList<Oficina>();
 
         for (Object[] object : result) {
-            Oficina oficina = new Oficina((String) object[0], (String) object[1], (String) object[2], (String) object[3]);
+
+            Query q2 = em.createNativeQuery("select codservicio from DIR_SERVICIOOFI where codoficina=?");
+            q2.setParameter(1, object[0]);
+
+            List<BigInteger> result2 = (List<BigInteger>) q2.getResultList();
+
+            Set<Servicio> servicios = new HashSet<Servicio>();
+            int i = 0;
+            while (i < result2.size()) {
+                Long codServ = result2.get(i).longValue();
+                Servicio servicio = new Servicio(codServ);
+                servicios.add(servicio);
+                i++;
+            }
+
+            Oficina oficina = new Oficina((String) object[0], (String) object[1], (String) object[2], (String) object[3], servicios);
+
             oficinas.add(oficina);
         }
 
