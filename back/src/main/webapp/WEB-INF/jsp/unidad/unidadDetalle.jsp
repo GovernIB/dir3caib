@@ -41,6 +41,7 @@
                                     <c:if test="${unidad.estado.codigoEstadoEntidad == 'V'}"><dd><span class="label label-success">${unidad.estado.descripcionEstadoEntidad}</span></dd></c:if>
                                     <c:if test="${unidad.estado.codigoEstadoEntidad == 'E'}">
                                         <dd><span class="label btn-danger">${unidad.estado.descripcionEstadoEntidad}</span></dd>
+                                        <dt> <spring:message code="unidad.fechaExtincion"/>: </dt><dd><fmt:formatDate pattern="dd/MM/yyyy" value="${unidad.fechaExtincion}"/></dd>
                                         <dt> <spring:message code="unidad.baja"/>: </dt><dd>${unidad.observBaja}</dd>
                                     </c:if>
                                     <dt> <spring:message code="unidad.edp"/>: </dt>
