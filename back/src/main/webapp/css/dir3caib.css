@@ -666,6 +666,10 @@ padding-bottom: 5px;
     min-height: 350px !important;
 }
 
+.maxAlt {
+    min-height: 650px !important;
+}
+
 /*  WaitingDialog */
 .progress {
     height: 20px;

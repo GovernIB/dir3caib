@@ -931,7 +931,7 @@
                       <c:if test="${unidadExtinguida}">
                             <!-- Box con la trazabilidad de los sustitutos-->
                             <c:if test="${not empty nodo}">
-                                <div class="box span9 minAlt">
+                                <div class="box span9 maxAlt pre-scrollable">
                                     <div class="box-header well cabeceraDetalle">
                                         <h2><fmt:message key="dir3caib.sustitutos"/></h2>
                                     </div>
