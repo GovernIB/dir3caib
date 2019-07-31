@@ -955,6 +955,7 @@
                                         </div>
                                     </div>
 
+                                        <%-- Árbol de trazabilidad de sustitutos --%>
                                     <div class="tree">
                                         <ul>
                                             <%-- Mostramos los históricos de una unidad de manera recursiva--%>
