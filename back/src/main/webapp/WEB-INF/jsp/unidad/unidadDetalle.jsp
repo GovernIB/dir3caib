@@ -932,13 +932,13 @@
                             <!-- Box con la trazabilidad de los sustitutos-->
                             <c:if test="${not empty nodo}">
                                 <div class="box span9 maxAlt pre-scrollable">
-                                    <div class="box-header well cabeceraDetalle">
+                                    <div class="box-header well cabeceraDetalle ampleComplet">
                                         <h2><fmt:message key="dir3caib.sustitutos"/></h2>
                                     </div>
 
                                     <!-- LEYENDA -->
                                     <div class="button-right">
-                                        <div class="box llegenda">
+                                        <div class="box llegenda-extingit">
                                             <div class="box-header well">
                                                 <div class="col-xs-12">
                                                     <i class="fa fa-comment-o"></i> <strong><spring:message code="dir3caib.leyenda"/></strong>
@@ -957,7 +957,7 @@
 
                                         <%-- Árbol de trazabilidad de sustitutos --%>
                                     <div class="tree">
-                                        <ul>
+                                        <ul class="ampleComplet">
                                             <%-- Mostramos los históricos de una unidad de manera recursiva--%>
                                             <c:if test="${not empty nodo.historicos}">
                                                 <c:set var="nodo" value="${nodo}" scope="request"/>
