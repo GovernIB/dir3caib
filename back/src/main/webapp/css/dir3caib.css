@@ -383,7 +383,7 @@ width:1px;
 border-top:1px solid #999;
 height:20px;
 top:25px;
-width:10px;
+    width: 25px;
 }
 .tree li span {
 -moz-border-radius:5px;
