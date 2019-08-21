@@ -67,8 +67,8 @@
                                                         value="/unidad/${historico.codigo}/detalle"/>','<spring:message
                                                         code="dir3caib.organismo.detalle.generar"
                                                         javaScriptEscape="true"/>')"
-                                                       onmouseover="this.style.cursor='pointer';">${historico.codigo}
-                                                    - ${historico.denominacion}</a></li>
+                                                       onmouseover="this.style.cursor='pointer';">${historico.codigo}- ${historico.denominacion}</a>
+                                                </li>
                                             </c:forEach>
                                         </ul>
                                     </c:if>
