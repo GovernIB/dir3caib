@@ -967,6 +967,24 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         return historicos.size() > 0;
     }
 
+    @Override
+    @SuppressWarnings(value = "unchecked")
+    public Set<Unidad> historicosAnteriores(String codigoUnidad) throws Exception {
+
+        Query q = em.createNativeQuery("select codanterior from dir_historicouo where codultima = ? ");
+
+        q.setParameter(1, codigoUnidad);
+        Set<Unidad> unidadesHistoricasAnteriores = new HashSet<Unidad>();
+
+        List<String> historicos = q.getResultList();
+        for (String historico : historicos) {
+            Unidad unidad = findByCodigoLigero(historico);
+            unidadesHistoricasAnteriores.add(unidad);
+        }
+
+        return unidadesHistoricasAnteriores;
+    }
+
     public List<Unidad> getUnidadesByNivel(long nivel, String codigo, String estado) throws Exception {
 
         Query q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.codUnidadRaiz.codigo, unidad.codUnidadSuperior.codigo, unidad.esEdp from Unidad as unidad where " +

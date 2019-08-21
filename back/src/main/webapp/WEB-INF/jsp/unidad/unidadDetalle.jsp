@@ -59,6 +59,19 @@
                                     <c:if test="${not empty unidad.codTipoUnidad.descripcionTipoUnidadOrganica}"><dt> <spring:message code="unidad.tipo"/>: </dt> <dd> ${unidad.codTipoUnidad.descripcionTipoUnidadOrganica}</dd></c:if>
                                     <c:if test="${not empty unidad.codUnidadRaiz.codigo}"><dt> <spring:message code="unidad.unidadraiz"/>: </dt> <dd> <a onclick="goTo('<c:url value="/unidad/${unidad.codUnidadRaiz.codigo}/detalle"/>','<spring:message code="dir3caib.organismo.detalle.generar" javaScriptEscape="true"/>')" onmouseover="this.style.cursor='pointer';">${unidad.codUnidadRaiz.codigo} - ${unidad.codUnidadRaiz.denominacion}</a></dd></c:if>
                                     <c:if test="${not empty unidad.codUnidadSuperior.codigo}"><dt> <spring:message code="unidad.unidadsuperior"/>: </dt> <dd> <a onclick="goTo('<c:url value="/unidad/${unidad.codUnidadSuperior.codigo}/detalle"/>','<spring:message code="dir3caib.organismo.detalle.generar" javaScriptEscape="true"/>')" onmouseover="this.style.cursor='pointer';">${unidad.codUnidadSuperior.codigo} - ${unidad.codUnidadSuperior.denominacion}</a></dd></c:if>
+                                    <c:if test="${not empty historicosAnteriores}"> <b><spring:message
+                                            code="unidad.historicos"/>: </b>
+                                        <ul>
+                                            <c:forEach items="${historicosAnteriores}" var="historico">
+                                                <li><a onclick="goTo('<c:url
+                                                        value="/unidad/${historico.codigo}/detalle"/>','<spring:message
+                                                        code="dir3caib.organismo.detalle.generar"
+                                                        javaScriptEscape="true"/>')"
+                                                       onmouseover="this.style.cursor='pointer';">${historico.codigo}
+                                                    - ${historico.denominacion}</a></li>
+                                            </c:forEach>
+                                        </ul>
+                                    </c:if>
 
                                     <hr class="divider">
                                     <div class="box-header well cabeceraDetalle">

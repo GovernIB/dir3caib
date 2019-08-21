@@ -23,6 +23,7 @@ import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -154,7 +155,11 @@ public class UnidadController extends BaseController {
         Unidad unidad = unidadEjb.findFullById(codUnidad);
         mav.addObject("unidad", unidad);
 
-        //Obtenemos las oficinas que relgistran a la Unidad
+        //Obtenemos los historicos anteriores de la unidad indicada
+        Set<Unidad> unidadesHistoricasAnteriores = unidadEjb.historicosAnteriores(codUnidad);
+        mav.addObject("historicosAnteriores", unidadesHistoricasAnteriores);
+
+        //Obtenemos las oficinas que registran a la Unidad
         List<Oficina> oficinasRegistran = oficinaEjb.obtenerOficinasRegistran(unidad.getCodigo());
         mav.addObject("oficinasRegistran", oficinasRegistran);
 
