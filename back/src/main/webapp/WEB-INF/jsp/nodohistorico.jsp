@@ -1,12 +1,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <c:if test="${not empty nodo.historicos}">
-    <li class="ampleComplet"><span class="panel-heading btn-danger vuitanta-percent" onclick="copyToClipboard(this)" style="cursor:copy"><i
+    <li class="ampleComplet"><span class="panel-heading btn-danger vuitanta-percent" onclick="goTo('<c:url value="/unidad/${nodo.codigo}/detalle"/>','<spring:message code="dir3caib.organismo.detalle.generar" javaScriptEscape="true"/>')" style="cursor:pointer"><i
                 class="">&nbsp;</i>${nodo.codigo} - ${nodo.denominacion}</span>
 </c:if>
 <c:if test="${empty nodo.historicos}">
-    <li class="ampleComplet"><span class="panel-heading btn-success vuitanta-percent" onclick="copyToClipboard(this)" style="cursor:copy"><i
+    <li class="ampleComplet"><span class="panel-heading btn-success vuitanta-percent" onclick="goTo('<c:url value="/unidad/${nodo.codigo}/detalle"/>','<spring:message code="dir3caib.organismo.detalle.generar" javaScriptEscape="true"/>')" style="cursor:pointer"><i
                     class="">&nbsp;</i>${nodo.codigo} - ${nodo.denominacion}</b></span>
 </c:if>
 <%-- Mostramos los historicos de manera recursiva--%>

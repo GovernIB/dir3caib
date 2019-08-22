@@ -636,10 +636,10 @@ padding-bottom: 5px;
     margin-left: -165px;
 }
 .llegenda-extingit{
-    float: right;
+    /*float: right;*/
     width: 155px;
-    margin-right: 30px;
-    margin-left: -165px;
+    /*margin-right: 30px;*/
+    margin-left: 30px;
 }
 .button-right {
     float: right !important;

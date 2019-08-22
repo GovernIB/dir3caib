@@ -150,6 +150,8 @@
 
                     </div>
 
+                    <c:set var="extinguida" value="false"/>
+
                     <!-- Box con el árbol de la Oficina  -->
                       <c:if test="${!unidadExtinguida}">
                             <div class="box span9 minAlt">
@@ -942,7 +944,8 @@
                       </c:if>
 
                       <c:if test="${unidadExtinguida}">
-                            <!-- Box con la trazabilidad de los sustitutos-->
+                          <c:set var="extinguida" value="true"/>
+                          <!-- Box con la trazabilidad de los sustitutos-->
                             <c:if test="${not empty nodo}">
                                 <div class="box span9 maxAlt pre-scrollable">
                                     <div class="box-header well cabeceraDetalle ampleComplet">
@@ -950,25 +953,23 @@
                                     </div>
 
                                     <!-- LEYENDA -->
-                                    <div class="button-right">
-                                        <div class="box llegenda-extingit">
-                                            <div class="box-header well">
-                                                <div class="col-xs-12">
-                                                    <i class="fa fa-comment-o"></i> <strong><spring:message code="dir3caib.leyenda"/></strong>
-                                                </div>
+                                    <div class="box llegenda-extingit">
+                                        <div class="box-header well">
+                                            <div class="col-xs-12">
+                                                <i class="fa fa-comment-o"></i> <strong><spring:message code="dir3caib.leyenda"/></strong>
                                             </div>
-                                            <div class="box-content">
-                                                <div class="pad-bottom5">
-                                                    <span class="badge-arbre btn-danger llegendaCapsa"> <spring:message code="dir3caib.unidadOrganica.extinguida"/></span>
+                                        </div>
+                                        <div class="box-content">
+                                            <div class="pad-bottom5">
+                                                <span class="badge-arbre btn-danger llegendaCapsa"> <spring:message code="dir3caib.unidadOrganica.extinguida"/></span>
                                                 </div>
                                                 <div class="pad-bottom5">
-                                                    <span class="badge-arbre btn-success llegendaCapsa"> <spring:message code="dir3caib.unidadOrganica.vigente"/></span>
-                                                </div>
+                                                <span class="badge-arbre btn-success llegendaCapsa"> <spring:message code="dir3caib.unidadOrganica.vigente"/></span>
                                             </div>
                                         </div>
                                     </div>
 
-                                        <%-- Árbol de trazabilidad de sustitutos --%>
+                                    <%-- Árbol de trazabilidad de sustitutos --%>
                                     <div class="tree">
                                         <ul class="ampleComplet">
                                             <%-- Mostramos los históricos de una unidad de manera recursiva--%>
@@ -991,21 +992,24 @@
 
 <script type="text/javascript">
     $(function () {
-        $('.tree li:has(ul > li)').addClass('parent_li').find(' > span').attr('title', 'Amaga la branca');
-        $('.tree li:has(ul > li)').addClass('parent_li').find(' > span > i').addClass('fa fa-minus');
-        $('.tree li.parent_li > span').on('click', function (e) {
-            var children = $(this).parent('li.parent_li').find(' > ul > li');
-            if (children.is(":visible")) {
-                children.hide('fast');
-                $(this).find(' > i').removeClass('fa fa-minus');
-                $(this).attr('title', 'Mostra la branca').find(' > i').addClass('fa fa-plus');
-            } else {
-                children.show('fast');
-                $(this).find(' > i').removeClass('fa fa-plus');
-                $(this).attr('title', 'Amaga la branca').find(' > i').addClass('fa fa-minus');
-            }
-            e.stopPropagation();
-        });
+        var extinguida = '<c:out value="${unidadExtinguida}"/>';
+        if (!extinguida) {
+            $('.tree li:has(ul > li)').addClass('parent_li').find(' > span').attr('title', 'Amaga la branca');
+            $('.tree li:has(ul > li)').addClass('parent_li').find(' > span > i').addClass('fa fa-minus');
+            $('.tree li.parent_li > span').on('click', function (e) {
+                var children = $(this).parent('li.parent_li').find(' > ul > li');
+                if (children.is(":visible")) {
+                    children.hide('fast');
+                    $(this).find(' > i').removeClass('fa fa-minus');
+                    $(this).attr('title', 'Mostra la branca').find(' > i').addClass('fa fa-plus');
+                } else {
+                    children.show('fast');
+                    $(this).find(' > i').removeClass('fa fa-plus');
+                    $(this).attr('title', 'Amaga la branca').find(' > i').addClass('fa fa-minus');
+                }
+                e.stopPropagation();
+            });
+        }
     });
 </script>
 
