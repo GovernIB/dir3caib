@@ -967,23 +967,17 @@
 
                                     <!-- LEYENDA -->
                                     <div class="box llegenda-extingit">
-                                        <div class="box-header well">
+                                        <div class="box-header well llegendaVert">
                                             <div class="col-xs-12">
                                                 <i class="fa fa-comment-o"></i> <strong><spring:message code="dir3caib.leyenda"/></strong>
-                                            </div>
-                                        </div>
-                                        <div class="box-content">
-                                            <div class="pad-bottom5">
                                                 <span class="badge-arbre btn-danger llegendaCapsa"> <spring:message code="dir3caib.unidadOrganica.extinguida"/></span>
-                                                </div>
-                                                <div class="pad-bottom5">
                                                 <span class="badge-arbre btn-success llegendaCapsa"> <spring:message code="dir3caib.unidadOrganica.vigente"/></span>
                                             </div>
                                         </div>
                                     </div>
 
                                     <%-- Árbol de trazabilidad de sustitutos --%>
-                                    <div class="tree">
+                                    <div class="tree pad-top20">
                                         <ul class="ampleComplet">
                                             <%-- Mostramos los históricos de una unidad de manera recursiva--%>
                                             <c:if test="${not empty nodo.historicos}">
