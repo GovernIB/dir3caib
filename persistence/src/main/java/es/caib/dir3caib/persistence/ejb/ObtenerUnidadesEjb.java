@@ -259,7 +259,15 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
         return sincronizacion.getFechaImportacion();
     }
 
-    private void obtenerHistoricosFinales(Unidad unidad, Set<Unidad> historicosFinales) throws Exception {
+    /**
+     * Función que obtiene los históricos finales vigentes de la unidad indicada
+     *
+     * @param unidad
+     * @param historicosFinales históricos finales vigentes encontrados.
+     * @throws Exception
+     */
+    @Override
+    public void obtenerHistoricosFinales(Unidad unidad, Set<Unidad> historicosFinales) throws Exception {
 
         Set<Unidad> parciales = unidad.getHistoricoUO();
         for (Unidad parcial : parciales) {

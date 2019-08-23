@@ -72,10 +72,10 @@
                                             </c:forEach>
                                         </ul>
                                     </c:if>
-                                    <c:if test="${not empty unidad.historicoUO}"> <b><spring:message
+                                    <c:if test="${not empty historicosFinales}"> <b><spring:message
                                             code="unidad.sustitutos"/>: </b>
                                         <ul>
-                                            <c:forEach items="${unidad.historicoUO}" var="sustituto">
+                                            <c:forEach items="${historicosFinales}" var="sustituto">
                                                 <li><a onclick="goTo('<c:url
                                                         value="/unidad/${sustituto.codigo}/detalle"/>','<spring:message
                                                         code="dir3caib.organismo.detalle.generar"

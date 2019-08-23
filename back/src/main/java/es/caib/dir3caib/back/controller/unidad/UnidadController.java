@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -158,6 +159,11 @@ public class UnidadController extends BaseController {
         //Obtenemos los historicos anteriores de la unidad indicada
         Set<Unidad> unidadesHistoricasAnteriores = unidadEjb.historicosAnteriores(codUnidad);
         mav.addObject("historicosAnteriores", unidadesHistoricasAnteriores);
+
+        //Obtenemos los históricos finales hacia delante.
+        Set<Unidad> unidadesHistoricasFinales = new HashSet<Unidad>();
+        obtenerUnidadesEjb.obtenerHistoricosFinales(unidad, unidadesHistoricasFinales);
+        mav.addObject("historicosFinales", unidadesHistoricasFinales);
 
         //Obtenemos las oficinas que registran a la Unidad
         List<Oficina> oficinasRegistran = oficinaEjb.obtenerOficinasRegistran(unidad.getCodigo());
