@@ -7,7 +7,6 @@ import es.caib.dir3caib.persistence.utils.Nodo;
 import javax.ejb.Local;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Fundació BIT.
@@ -30,6 +29,6 @@ public interface ObtenerUnidadesLocal {
 
     void montarHistoricosFinales(Unidad unidad, Nodo nodo, int nivel) throws Exception;
 
-    void obtenerHistoricosFinales(Unidad unidad, Set<Unidad> historicosFinales) throws Exception;
+    List<UnidadTF> obtenerHistoricosFinales(String codigo) throws Exception;
 
 }

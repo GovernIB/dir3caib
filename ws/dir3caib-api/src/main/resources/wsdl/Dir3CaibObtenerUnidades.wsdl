@@ -16,6 +16,8 @@
 <xs:element name="obtenerArbolUnidadesResponse" type="tns:obtenerArbolUnidadesResponse"/>
 <xs:element name="obtenerFechaUltimaActualizacion" type="tns:obtenerFechaUltimaActualizacion"/>
 <xs:element name="obtenerFechaUltimaActualizacionResponse" type="tns:obtenerFechaUltimaActualizacionResponse"/>
+    <xs:element name="obtenerHistoricosFinales" type="tns:obtenerHistoricosFinales"/>
+    <xs:element name="obtenerHistoricosFinalesResponse" type="tns:obtenerHistoricosFinalesResponse"/>
 <xs:element name="obtenerUnidad" type="tns:obtenerUnidad"/>
 <xs:element name="obtenerUnidadResponse" type="tns:obtenerUnidadResponse"/>
 <xs:complexType name="buscarUnidad">
@@ -111,6 +113,16 @@
       <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:unidadTF"/>
     </xs:sequence>
   </xs:complexType>
+    <xs:complexType name="obtenerHistoricosFinales">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="obtenerHistoricosFinalesResponse">
+        <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:unidadTF"/>
+        </xs:sequence>
+    </xs:complexType>
 <xs:complexType name="obtenerArbolUnidadesDestinatarias">
     <xs:sequence>
       <xs:element minOccurs="0" name="arg0" type="xs:string"/>
@@ -155,6 +167,14 @@
     <wsdl:part name="parameters" element="tns:obtenerUnidad">
     </wsdl:part>
   </wsdl:message>
+    <wsdl:message name="obtenerHistoricosFinales">
+        <wsdl:part name="parameters" element="tns:obtenerHistoricosFinales">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="obtenerHistoricosFinalesResponse">
+        <wsdl:part name="parameters" element="tns:obtenerHistoricosFinalesResponse">
+        </wsdl:part>
+    </wsdl:message>
   <wsdl:message name="obtenerArbolUnidadesResponse">
     <wsdl:part name="parameters" element="tns:obtenerArbolUnidadesResponse">
     </wsdl:part>
@@ -216,6 +236,12 @@
       <wsdl:output name="obtenerArbolUnidadesResponse" message="tns:obtenerArbolUnidadesResponse">
     </wsdl:output>
     </wsdl:operation>
+      <wsdl:operation name="obtenerHistoricosFinales">
+          <wsdl:input name="obtenerHistoricosFinales" message="tns:obtenerHistoricosFinales">
+          </wsdl:input>
+          <wsdl:output name="obtenerHistoricosFinalesResponse" message="tns:obtenerHistoricosFinalesResponse">
+          </wsdl:output>
+      </wsdl:operation>
     <wsdl:operation name="obtenerArbolUnidadesDestinatarias">
       <wsdl:input name="obtenerArbolUnidadesDestinatarias" message="tns:obtenerArbolUnidadesDestinatarias">
     </wsdl:input>
@@ -276,9 +302,18 @@
         <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output name="obtenerArbolUnidadesResponse">
-        <soap:body use="literal"/>
+          <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
+      <wsdl:operation name="obtenerHistoricosFinales">
+          <soap:operation soapAction="" style="document"/>
+          <wsdl:input name="obtenerHistoricosFinales">
+              <soap:body use="literal"/>
+          </wsdl:input>
+          <wsdl:output name="obtenerHistoricosFinalesResponse">
+              <soap:body use="literal"/>
+          </wsdl:output>
+      </wsdl:operation>
     <wsdl:operation name="obtenerArbolUnidadesDestinatarias">
       <soap:operation soapAction="" style="document"/>
       <wsdl:input name="obtenerArbolUnidadesDestinatarias">

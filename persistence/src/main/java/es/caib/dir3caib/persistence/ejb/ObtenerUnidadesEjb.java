@@ -106,7 +106,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
             //Obtenemos los historicos finales
             unidad.setContactos(contactosVisibles);
             Set<Unidad> historicosFinales = new HashSet<Unidad>();
-            obtenerHistoricosFinales(unidad, historicosFinales);
+            unidadEjb.historicosFinales(unidad, historicosFinales);
             unidad.setHistoricoUO(historicosFinales);
 
             return UnidadTF.generar(unidad);
@@ -262,22 +262,21 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
     /**
      * Función que obtiene los históricos finales vigentes de la unidad indicada
      *
-     * @param unidad
-     * @param historicosFinales históricos finales vigentes encontrados.
+     * @param codigo codigo de la unidad
      * @throws Exception
      */
     @Override
-    public void obtenerHistoricosFinales(Unidad unidad, Set<Unidad> historicosFinales) throws Exception {
+    public List<UnidadTF> obtenerHistoricosFinales(String codigo) throws Exception {
 
-        Set<Unidad> parciales = unidad.getHistoricoUO();
-        for (Unidad parcial : parciales) {
-            if (parcial.getHistoricoUO().size() == 0) {
-                historicosFinales.add(parcial);
-            } else {
-                obtenerHistoricosFinales(parcial, historicosFinales);
-            }
+        Unidad unidad = unidadEjb.findFullById(codigo);
+        Set<Unidad> historicosFinales = new HashSet<Unidad>();
+        List<UnidadTF> historicosFinalesList = new ArrayList<UnidadTF>();
+        unidadEjb.historicosFinales(unidad, historicosFinales);
+
+        for (Unidad uni : historicosFinales) {
+            historicosFinalesList.add(UnidadTF.generar(uni));
         }
-
+        return historicosFinalesList;
 
     }
 

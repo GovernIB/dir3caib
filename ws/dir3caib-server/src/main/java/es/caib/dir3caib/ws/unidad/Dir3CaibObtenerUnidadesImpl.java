@@ -124,10 +124,21 @@ public class Dir3CaibObtenerUnidadesImpl implements Dir3CaibObtenerUnidadesWs {
   @Override
   public Date obtenerFechaUltimaActualizacion()
           throws Exception {
-
     return obtenerUnidadesEjb.obtenerFechaUltimaActualizacion();
   }
 
+
+  /**
+   * Obtiene los históricos finales de una unidad
+   *
+   * @return
+   * @throws Exception
+   */
+  @Override
+  public List<UnidadTF> obtenerHistoricosFinales(String codigo) throws Exception {
+
+    return obtenerUnidadesEjb.obtenerHistoricosFinales(codigo);
+  }
 
 
 

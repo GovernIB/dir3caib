@@ -308,6 +308,15 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
     */
    Set<Unidad> historicosAnteriores(String codigoUnidad) throws Exception;
 
+   /**
+    * Obtiene los sustitutos de una unidad
+    *
+    * @param unidad
+    * @param historicosFinales
+    * @throws Exception
+    */
+   void historicosFinales(Unidad unidad, Set<Unidad> historicosFinales) throws Exception;
+
     /* Obtiene las unidades del nivel indicado cuya unidad Raiz es la indicada por codigo */
     public List<Unidad> getUnidadesByNivel(long nivel, String codigo, String estado) throws Exception;
 

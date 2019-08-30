@@ -985,6 +985,28 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         return unidadesHistoricasAnteriores;
     }
 
+
+    /**
+     * Función que obtiene los históricos finales vigentes de la unidad indicada
+     *
+     * @param unidad
+     * @param historicosFinales históricos finales vigentes encontrados.
+     * @throws Exception
+     */
+    @Override
+    public void historicosFinales(Unidad unidad, Set<Unidad> historicosFinales) throws Exception {
+
+        Set<Unidad> parciales = unidad.getHistoricoUO();
+        for (Unidad parcial : parciales) {
+            if (parcial.getHistoricoUO().size() == 0) {
+                historicosFinales.add(parcial);
+            } else {
+                historicosFinales(parcial, historicosFinales);
+            }
+        }
+
+    }
+
     public List<Unidad> getUnidadesByNivel(long nivel, String codigo, String estado) throws Exception {
 
         Query q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.codUnidadRaiz.codigo, unidad.codUnidadSuperior.codigo, unidad.esEdp from Unidad as unidad where " +

@@ -32,6 +32,8 @@ public class ObjectFactory {
     private final static QName _ObtenerArbolUnidadesDestinatariasResponse_QNAME = new QName("http://unidad.ws.dir3caib.caib.es/", "obtenerArbolUnidadesDestinatariasResponse");
     private final static QName _ObtenerUnidadResponse_QNAME = new QName("http://unidad.ws.dir3caib.caib.es/", "obtenerUnidadResponse");
     private final static QName _ObtenerUnidad_QNAME = new QName("http://unidad.ws.dir3caib.caib.es/", "obtenerUnidad");
+   private final static QName _ObtenerHistoricosFinales_QNAME = new QName("http://unidad.ws.dir3caib.caib.es/", "obtenerHistoricosFinales");
+   private final static QName _ObtenerHistoricosFinalesResponse_QNAME = new QName("http://unidad.ws.dir3caib.caib.es/", "obtenerHistoricosFinalesResponse");
     private final static QName _ObtenerArbolUnidadesResponse_QNAME = new QName("http://unidad.ws.dir3caib.caib.es/", "obtenerArbolUnidadesResponse");
     private final static QName _BuscarUnidad_QNAME = new QName("http://unidad.ws.dir3caib.caib.es/", "buscarUnidad");
     private final static QName _GetVersionWs_QNAME = new QName("http://unidad.ws.dir3caib.caib.es/", "getVersionWs");
@@ -62,6 +64,13 @@ public class ObjectFactory {
         return new ObtenerUnidad();
     }
 
+   /**
+    * Create an instance of {@link ObtenerHistoricosFinalesResponse }
+    */
+   public ObtenerHistoricosFinalesResponse createObtenerHistoricosFinalesResponse() {
+      return new ObtenerHistoricosFinalesResponse();
+   }
+
     /**
      * Create an instance of {@link ObtenerArbolUnidadesResponse }
      * 
@@ -71,12 +80,20 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link BuscarUnidadResponse }
-     * 
+     * Create an instance of {@link ObtenerHistoricosFinales }
+     *
      */
-    public BuscarUnidadResponse createBuscarUnidadResponse() {
-        return new BuscarUnidadResponse();
+    public ObtenerHistoricosFinales createObtenerHistoricosFinales() {
+       return new ObtenerHistoricosFinales();
     }
+
+   /**
+    * Create an instance of {@link BuscarUnidadResponse }
+    *
+    */
+   public BuscarUnidadResponse createBuscarUnidadResponse() {
+      return new BuscarUnidadResponse();
+   }
 
     /**
      * Create an instance of {@link ObtenerArbolUnidadesDestinatarias }
@@ -246,14 +263,31 @@ public class ObjectFactory {
         return new JAXBElement<ObtenerUnidad>(_ObtenerUnidad_QNAME, ObtenerUnidad.class, null, value);
     }
 
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link ObtenerArbolUnidadesResponse }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://unidad.ws.dir3caib.caib.es/", name = "obtenerArbolUnidadesResponse")
-    public JAXBElement<ObtenerArbolUnidadesResponse> createObtenerArbolUnidadesResponse(ObtenerArbolUnidadesResponse value) {
-        return new JAXBElement<ObtenerArbolUnidadesResponse>(_ObtenerArbolUnidadesResponse_QNAME, ObtenerArbolUnidadesResponse.class, null, value);
-    }
+   /**
+    * Create an instance of {@link JAXBElement }{@code <}{@link ObtenerHistoricosFinales }{@code >}}
+    *
+    */
+   @XmlElementDecl(namespace = "http://unidad.ws.dir3caib.caib.es/", name = "obtenerHistoricosFinales")
+   public JAXBElement<ObtenerHistoricosFinales> createObtenerHistoricosFinales(ObtenerHistoricosFinales value) {
+      return new JAXBElement<ObtenerHistoricosFinales>(_ObtenerHistoricosFinales_QNAME, ObtenerHistoricosFinales.class, null, value);
+   }
+
+   /**
+    * Create an instance of {@link JAXBElement }{@code <}{@link ObtenerHistoricosFinalesResponse }{@code >}}
+    */
+   @XmlElementDecl(namespace = "http://unidad.ws.dir3caib.caib.es/", name = "obtenerHistoricosFinalesResponse")
+   public JAXBElement<ObtenerHistoricosFinalesResponse> createObtenerHistoricosFinalesResponse(ObtenerHistoricosFinalesResponse value) {
+      return new JAXBElement<ObtenerHistoricosFinalesResponse>(_ObtenerHistoricosFinalesResponse_QNAME, ObtenerHistoricosFinalesResponse.class, null, value);
+   }
+
+   /**
+    * Create an instance of {@link JAXBElement }{@code <}{@link ObtenerArbolUnidadesResponse }{@code >}}
+    *
+    */
+   @XmlElementDecl(namespace = "http://unidad.ws.dir3caib.caib.es/", name = "obtenerArbolUnidadesResponse")
+   public JAXBElement<ObtenerArbolUnidadesResponse> createObtenerArbolUnidadesResponse(ObtenerArbolUnidadesResponse value) {
+      return new JAXBElement<ObtenerArbolUnidadesResponse>(_ObtenerArbolUnidadesResponse_QNAME, ObtenerArbolUnidadesResponse.class, null, value);
+   }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link BuscarUnidad }{@code >}}
