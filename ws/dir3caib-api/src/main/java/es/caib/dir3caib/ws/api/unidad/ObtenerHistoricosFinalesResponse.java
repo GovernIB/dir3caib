@@ -11,9 +11,9 @@ import java.util.List;
 
 /**
  * <p>Clase Java para obtenerHistoricosFinalesResponse complex type.
- * <p>
+ * 
  * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
- * <p>
+ * 
  * <pre>
  * &lt;complexType name="obtenerHistoricosFinalesResponse">
  *   &lt;complexContent>
@@ -25,6 +25,8 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ *
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "obtenerHistoricosFinalesResponse", propOrder = {
