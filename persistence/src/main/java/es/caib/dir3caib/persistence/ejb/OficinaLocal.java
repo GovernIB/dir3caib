@@ -137,6 +137,15 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      */
     List<Oficina> obtenerOficinasSIRUnidad(String codigo) throws Exception;
 
+   /**
+    * Nos dice si una unidad tiene oficinas SIR
+    *
+    * @param codigoUnidad
+    * @return
+    * @throws Exception
+    */
+   Boolean tieneOficinasSIR(String codigoUnidad) throws Exception;
+
 
    /**
      * Obtiene todos los código de las oficinas. Se emplea en la importación de oficinas desde Madrid.

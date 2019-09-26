@@ -38,6 +38,9 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
     @EJB(mappedName = "dir3caib/SincronizacionEJB/local")
     private SincronizacionLocal sincronizacionEjb;
 
+    @EJB(mappedName = "dir3caib/OficinaEJB/local")
+    private OficinaLocal oficinaEjb;
+
 
     protected SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
 
@@ -275,6 +278,31 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
 
         for (Unidad uni : historicosFinales) {
             historicosFinalesList.add(UnidadTF.generar(uni));
+        }
+        return historicosFinalesList;
+
+    }
+
+
+    /**
+     * Función que obtiene los históricos finales vigentes de la unidad indicada que son SIR
+     *
+     * @param codigo codigo de la unidad
+     * @throws Exception
+     */
+    @Override
+    public List<UnidadTF> obtenerHistoricosFinalesSIR(String codigo) throws Exception {
+        log.info("HISTORICOS FINALES SIR ");
+
+        Unidad unidad = unidadEjb.findFullById(codigo);
+        Set<Unidad> historicosFinales = new HashSet<Unidad>();
+        List<UnidadTF> historicosFinalesList = new ArrayList<UnidadTF>();
+        unidadEjb.historicosFinales(unidad, historicosFinales);
+
+        for (Unidad uni : historicosFinales) {
+            if (oficinaEjb.tieneOficinasSIR(uni.getCodigo())) {
+                historicosFinalesList.add(UnidadTF.generar(uni));
+            }
         }
         return historicosFinalesList;
 

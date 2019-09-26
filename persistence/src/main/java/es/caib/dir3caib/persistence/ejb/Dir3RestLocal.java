@@ -35,6 +35,8 @@ public interface Dir3RestLocal  {
 
   List<Nodo> busquedaOficinas(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, Long provincia, String localidad, boolean oficinasSir, boolean vigentes) throws Exception;
   String unidadDenominacion(String codigo) throws Exception;
+
+  String unidadEstado(String codigo) throws Exception;
   String oficinaDenominacion(String codigo) throws Exception;
 
   List<Nodo> busquedaDenominacionComunidad(String denominacion, Long codComunidad) throws Exception;

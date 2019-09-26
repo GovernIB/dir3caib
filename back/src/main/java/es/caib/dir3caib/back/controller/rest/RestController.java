@@ -207,6 +207,23 @@ public class RestController {
 
     }
 
+
+    /**
+     * Obtiene el estado de una Unidad (Empleado por REGWEB3)
+     */
+    @RequestMapping(value = "/GET/unidad/estado", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    ResponseEntity<String> unidadEstado(@RequestParam String codigo) throws Exception {
+
+        String estado = dir3RestEjb.unidadEstado(codigo);
+        HttpHeaders headers = addAccessControllAllowOrigin();
+        //Si hay resultados fijamos el HttpStatus a OK, sino indicamos que no hay resultados.
+        HttpStatus status = (!estado.isEmpty()) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
+        return new ResponseEntity<String>(estado, headers, status);
+
+    }
+
     /**
      * Obtiene la denominacion de una Unidad (Empleado por REGWEB3)
      */

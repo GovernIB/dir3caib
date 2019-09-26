@@ -18,6 +18,8 @@
 <xs:element name="obtenerFechaUltimaActualizacionResponse" type="tns:obtenerFechaUltimaActualizacionResponse"/>
     <xs:element name="obtenerHistoricosFinales" type="tns:obtenerHistoricosFinales"/>
     <xs:element name="obtenerHistoricosFinalesResponse" type="tns:obtenerHistoricosFinalesResponse"/>
+    <xs:element name="obtenerHistoricosFinalesSIR" type="tns:obtenerHistoricosFinalesSIR"/>
+    <xs:element name="obtenerHistoricosFinalesSIRResponse" type="tns:obtenerHistoricosFinalesSIRResponse"/>
 <xs:element name="obtenerUnidad" type="tns:obtenerUnidad"/>
 <xs:element name="obtenerUnidadResponse" type="tns:obtenerUnidadResponse"/>
 <xs:complexType name="buscarUnidad">
@@ -113,6 +115,16 @@
       <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:unidadTF"/>
     </xs:sequence>
   </xs:complexType>
+    <xs:complexType name="obtenerHistoricosFinalesSIR">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="obtenerHistoricosFinalesSIRResponse">
+        <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:unidadTF"/>
+        </xs:sequence>
+    </xs:complexType>
     <xs:complexType name="obtenerHistoricosFinales">
         <xs:sequence>
             <xs:element minOccurs="0" name="arg0" type="xs:string"/>
@@ -187,10 +199,18 @@
     <wsdl:part name="parameters" element="tns:getVersionWs">
     </wsdl:part>
   </wsdl:message>
+    <wsdl:message name="obtenerHistoricosFinalesSIR">
+        <wsdl:part name="parameters" element="tns:obtenerHistoricosFinalesSIR">
+        </wsdl:part>
+    </wsdl:message>
   <wsdl:message name="getVersion">
     <wsdl:part name="parameters" element="tns:getVersion">
     </wsdl:part>
   </wsdl:message>
+    <wsdl:message name="obtenerHistoricosFinalesSIRResponse">
+        <wsdl:part name="parameters" element="tns:obtenerHistoricosFinalesSIRResponse">
+        </wsdl:part>
+    </wsdl:message>
   <wsdl:message name="obtenerFechaUltimaActualizacionResponse">
     <wsdl:part name="parameters" element="tns:obtenerFechaUltimaActualizacionResponse">
     </wsdl:part>
@@ -236,6 +256,12 @@
       <wsdl:output name="obtenerArbolUnidadesResponse" message="tns:obtenerArbolUnidadesResponse">
     </wsdl:output>
     </wsdl:operation>
+      <wsdl:operation name="obtenerHistoricosFinalesSIR">
+          <wsdl:input name="obtenerHistoricosFinalesSIR" message="tns:obtenerHistoricosFinalesSIR">
+          </wsdl:input>
+          <wsdl:output name="obtenerHistoricosFinalesSIRResponse" message="tns:obtenerHistoricosFinalesSIRResponse">
+          </wsdl:output>
+      </wsdl:operation>
       <wsdl:operation name="obtenerHistoricosFinales">
           <wsdl:input name="obtenerHistoricosFinales" message="tns:obtenerHistoricosFinales">
           </wsdl:input>
@@ -303,6 +329,15 @@
       </wsdl:input>
       <wsdl:output name="obtenerArbolUnidadesResponse">
           <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+      <wsdl:operation name="obtenerHistoricosFinalesSIR">
+          <soap:operation soapAction="" style="document"/>
+          <wsdl:input name="obtenerHistoricosFinalesSIR">
+              <soap:body use="literal"/>
+          </wsdl:input>
+          <wsdl:output name="obtenerHistoricosFinalesSIRResponse">
+              <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
       <wsdl:operation name="obtenerHistoricosFinales">

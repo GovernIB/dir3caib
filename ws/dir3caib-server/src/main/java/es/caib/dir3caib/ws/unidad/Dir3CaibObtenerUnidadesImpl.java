@@ -140,6 +140,18 @@ public class Dir3CaibObtenerUnidadesImpl implements Dir3CaibObtenerUnidadesWs {
     return obtenerUnidadesEjb.obtenerHistoricosFinales(codigo);
   }
 
+   /**
+    * Obtiene los históricos finales de una unidad
+    *
+    * @return
+    * @throws Exception
+    */
+   @Override
+   public List<UnidadTF> obtenerHistoricosFinalesSIR(String codigo) throws Exception {
+
+      return obtenerUnidadesEjb.obtenerHistoricosFinalesSIR(codigo);
+   }
+
 
 
 }

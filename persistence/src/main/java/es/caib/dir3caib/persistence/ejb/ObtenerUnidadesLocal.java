@@ -31,4 +31,6 @@ public interface ObtenerUnidadesLocal {
 
     List<UnidadTF> obtenerHistoricosFinales(String codigo) throws Exception;
 
+    List<UnidadTF> obtenerHistoricosFinalesSIR(String codigo) throws Exception;
+
 }

@@ -513,6 +513,29 @@ public class Dir3RestBean implements Dir3RestLocal {
         }
     }
 
+
+    /**
+     * Devuelve el estado de la unidad especificada por codigo
+     *
+     * @param codigo
+     * @return
+     * @throws Exception
+     */
+    @Override
+    @SuppressWarnings(value = "unchecked")
+    public String unidadEstado(String codigo) throws Exception {
+
+        Query q = em.createQuery("select unidad.estado.codigoEstadoEntidad from Unidad as unidad where unidad.codigo=:codigo").setParameter("codigo", codigo);
+
+        List<String> unidades = q.getResultList();
+
+        if (unidades.size() > 0) {
+            return unidades.get(0);
+        } else {
+            return "";
+        }
+    }
+
     /**
      * Devuelve la denominación de la oficina especificada por codigo
      *

@@ -51,12 +51,15 @@ public interface Dir3CaibObtenerUnidadesWs {
 
   @WebMethod
   @RolesAllowed({Dir3caibConstantes.DIR_WS})
-  Date obtenerFechaUltimaActualizacion()
-          throws Exception;
+  Date obtenerFechaUltimaActualizacion() throws Exception;
 
   @WebMethod
   @RolesAllowed({Dir3caibConstantes.DIR_WS})
-  List<UnidadTF> obtenerHistoricosFinales(String codigo)
-     throws Exception;
+  List<UnidadTF> obtenerHistoricosFinales(String codigo) throws Exception;
+
+
+   @WebMethod
+   @RolesAllowed({Dir3caibConstantes.DIR_WS})
+   List<UnidadTF> obtenerHistoricosFinalesSIR(String codigo) throws Exception;
 
 }

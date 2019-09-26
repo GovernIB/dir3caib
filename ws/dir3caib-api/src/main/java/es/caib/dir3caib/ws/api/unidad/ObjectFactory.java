@@ -32,12 +32,14 @@ public class ObjectFactory {
     private final static QName _ObtenerArbolUnidadesDestinatariasResponse_QNAME = new QName("http://unidad.ws.dir3caib.caib.es/", "obtenerArbolUnidadesDestinatariasResponse");
     private final static QName _ObtenerUnidadResponse_QNAME = new QName("http://unidad.ws.dir3caib.caib.es/", "obtenerUnidadResponse");
     private final static QName _ObtenerUnidad_QNAME = new QName("http://unidad.ws.dir3caib.caib.es/", "obtenerUnidad");
-   private final static QName _ObtenerHistoricosFinales_QNAME = new QName("http://unidad.ws.dir3caib.caib.es/", "obtenerHistoricosFinales");
-   private final static QName _ObtenerHistoricosFinalesResponse_QNAME = new QName("http://unidad.ws.dir3caib.caib.es/", "obtenerHistoricosFinalesResponse");
+    private final static QName _ObtenerHistoricosFinales_QNAME = new QName("http://unidad.ws.dir3caib.caib.es/", "obtenerHistoricosFinales");
+    private final static QName _ObtenerHistoricosFinalesResponse_QNAME = new QName("http://unidad.ws.dir3caib.caib.es/", "obtenerHistoricosFinalesResponse");
     private final static QName _ObtenerArbolUnidadesResponse_QNAME = new QName("http://unidad.ws.dir3caib.caib.es/", "obtenerArbolUnidadesResponse");
     private final static QName _BuscarUnidad_QNAME = new QName("http://unidad.ws.dir3caib.caib.es/", "buscarUnidad");
     private final static QName _GetVersionWs_QNAME = new QName("http://unidad.ws.dir3caib.caib.es/", "getVersionWs");
+    private final static QName _ObtenerHistoricosFinalesSIR_QNAME = new QName("http://unidad.ws.dir3caib.caib.es/", "obtenerHistoricosFinalesSIR");
     private final static QName _GetVersion_QNAME = new QName("http://unidad.ws.dir3caib.caib.es/", "getVersion");
+    private final static QName _ObtenerHistoricosFinalesSIRResponse_QNAME = new QName("http://unidad.ws.dir3caib.caib.es/", "obtenerHistoricosFinalesSIRResponse");
     private final static QName _ObtenerFechaUltimaActualizacionResponse_QNAME = new QName("http://unidad.ws.dir3caib.caib.es/", "obtenerFechaUltimaActualizacionResponse");
     private final static QName _GetVersionWsResponse_QNAME = new QName("http://unidad.ws.dir3caib.caib.es/", "getVersionWsResponse");
 
@@ -64,12 +66,12 @@ public class ObjectFactory {
         return new ObtenerUnidad();
     }
 
-   /**
-    * Create an instance of {@link ObtenerHistoricosFinalesResponse }
-    */
-   public ObtenerHistoricosFinalesResponse createObtenerHistoricosFinalesResponse() {
-      return new ObtenerHistoricosFinalesResponse();
-   }
+    /**
+     * Create an instance of {@link ObtenerHistoricosFinalesResponse }
+     */
+    public ObtenerHistoricosFinalesResponse createObtenerHistoricosFinalesResponse() {
+        return new ObtenerHistoricosFinalesResponse();
+    }
 
     /**
      * Create an instance of {@link ObtenerArbolUnidadesResponse }
@@ -87,17 +89,17 @@ public class ObjectFactory {
         return new ObtenerHistoricosFinales();
     }
 
-   /**
-    * Create an instance of {@link BuscarUnidadResponse }
-    *
-    */
-   public BuscarUnidadResponse createBuscarUnidadResponse() {
-      return new BuscarUnidadResponse();
-   }
+    /**
+     * Create an instance of {@link BuscarUnidadResponse }
+     *
+     */
+    public BuscarUnidadResponse createBuscarUnidadResponse() {
+        return new BuscarUnidadResponse();
+    }
 
-   /**
-    * Create an instance of {@link ObtenerArbolUnidadesDestinatarias }
-     * 
+    /**
+     * Create an instance of {@link ObtenerArbolUnidadesDestinatarias }
+     *
      */
     public ObtenerArbolUnidadesDestinatarias createObtenerArbolUnidadesDestinatarias() {
         return new ObtenerArbolUnidadesDestinatarias();
@@ -144,8 +146,16 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ObtenerHistoricosFinalesSIRResponse }
+     *
+     */
+    public ObtenerHistoricosFinalesSIRResponse createObtenerHistoricosFinalesSIRResponse() {
+        return new ObtenerHistoricosFinalesSIRResponse();
+    }
+
+    /**
      * Create an instance of {@link GetVersionWsResponse }
-     * 
+     *
      */
     public GetVersionWsResponse createGetVersionWsResponse() {
         return new GetVersionWsResponse();
@@ -176,8 +186,16 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ObtenerHistoricosFinalesSIR }
+     *
+     */
+    public ObtenerHistoricosFinalesSIR createObtenerHistoricosFinalesSIR() {
+        return new ObtenerHistoricosFinalesSIR();
+    }
+
+    /**
      * Create an instance of {@link UnidadTF }
-     * 
+     *
      */
     public UnidadTF createUnidadTF() {
         return new UnidadTF();
@@ -269,30 +287,30 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "http://unidad.ws.dir3caib.caib.es/", name = "obtenerHistoricosFinales")
     public JAXBElement<ObtenerHistoricosFinales> createObtenerHistoricosFinales(ObtenerHistoricosFinales value) {
-       return new JAXBElement<ObtenerHistoricosFinales>(_ObtenerHistoricosFinales_QNAME, ObtenerHistoricosFinales.class, null, value);
+        return new JAXBElement<ObtenerHistoricosFinales>(_ObtenerHistoricosFinales_QNAME, ObtenerHistoricosFinales.class, null, value);
     }
 
-   /**
-    * Create an instance of {@link JAXBElement }{@code <}{@link ObtenerHistoricosFinalesResponse }{@code >}}
-    *
-    */
-   @XmlElementDecl(namespace = "http://unidad.ws.dir3caib.caib.es/", name = "obtenerHistoricosFinalesResponse")
-   public JAXBElement<ObtenerHistoricosFinalesResponse> createObtenerHistoricosFinalesResponse(ObtenerHistoricosFinalesResponse value) {
-      return new JAXBElement<ObtenerHistoricosFinalesResponse>(_ObtenerHistoricosFinalesResponse_QNAME, ObtenerHistoricosFinalesResponse.class, null, value);
-   }
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ObtenerHistoricosFinalesResponse }{@code >}}
+     *
+     */
+    @XmlElementDecl(namespace = "http://unidad.ws.dir3caib.caib.es/", name = "obtenerHistoricosFinalesResponse")
+    public JAXBElement<ObtenerHistoricosFinalesResponse> createObtenerHistoricosFinalesResponse(ObtenerHistoricosFinalesResponse value) {
+        return new JAXBElement<ObtenerHistoricosFinalesResponse>(_ObtenerHistoricosFinalesResponse_QNAME, ObtenerHistoricosFinalesResponse.class, null, value);
+    }
 
-   /**
-    * Create an instance of {@link JAXBElement }{@code <}{@link ObtenerArbolUnidadesResponse }{@code >}}
-    *
-    */
-   @XmlElementDecl(namespace = "http://unidad.ws.dir3caib.caib.es/", name = "obtenerArbolUnidadesResponse")
-   public JAXBElement<ObtenerArbolUnidadesResponse> createObtenerArbolUnidadesResponse(ObtenerArbolUnidadesResponse value) {
-      return new JAXBElement<ObtenerArbolUnidadesResponse>(_ObtenerArbolUnidadesResponse_QNAME, ObtenerArbolUnidadesResponse.class, null, value);
-   }
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ObtenerArbolUnidadesResponse }{@code >}}
+     *
+     */
+    @XmlElementDecl(namespace = "http://unidad.ws.dir3caib.caib.es/", name = "obtenerArbolUnidadesResponse")
+    public JAXBElement<ObtenerArbolUnidadesResponse> createObtenerArbolUnidadesResponse(ObtenerArbolUnidadesResponse value) {
+        return new JAXBElement<ObtenerArbolUnidadesResponse>(_ObtenerArbolUnidadesResponse_QNAME, ObtenerArbolUnidadesResponse.class, null, value);
+    }
 
-   /**
-    * Create an instance of {@link JAXBElement }{@code <}{@link BuscarUnidad }{@code >}}
-     * 
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link BuscarUnidad }{@code >}}
+     *
      */
     @XmlElementDecl(namespace = "http://unidad.ws.dir3caib.caib.es/", name = "buscarUnidad")
     public JAXBElement<BuscarUnidad> createBuscarUnidad(BuscarUnidad value) {
@@ -309,8 +327,17 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ObtenerHistoricosFinalesSIR }{@code >}}
+     *
+     */
+    @XmlElementDecl(namespace = "http://unidad.ws.dir3caib.caib.es/", name = "obtenerHistoricosFinalesSIR")
+    public JAXBElement<ObtenerHistoricosFinalesSIR> createObtenerHistoricosFinalesSIR(ObtenerHistoricosFinalesSIR value) {
+        return new JAXBElement<ObtenerHistoricosFinalesSIR>(_ObtenerHistoricosFinalesSIR_QNAME, ObtenerHistoricosFinalesSIR.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link GetVersion }{@code >}}
-     * 
+     *
      */
     @XmlElementDecl(namespace = "http://unidad.ws.dir3caib.caib.es/", name = "getVersion")
     public JAXBElement<GetVersion> createGetVersion(GetVersion value) {
@@ -318,8 +345,17 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ObtenerHistoricosFinalesSIRResponse }{@code >}}
+     *
+     */
+    @XmlElementDecl(namespace = "http://unidad.ws.dir3caib.caib.es/", name = "obtenerHistoricosFinalesSIRResponse")
+    public JAXBElement<ObtenerHistoricosFinalesSIRResponse> createObtenerHistoricosFinalesSIRResponse(ObtenerHistoricosFinalesSIRResponse value) {
+        return new JAXBElement<ObtenerHistoricosFinalesSIRResponse>(_ObtenerHistoricosFinalesSIRResponse_QNAME, ObtenerHistoricosFinalesSIRResponse.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ObtenerFechaUltimaActualizacionResponse }{@code >}}
-     * 
+     *
      */
     @XmlElementDecl(namespace = "http://unidad.ws.dir3caib.caib.es/", name = "obtenerFechaUltimaActualizacionResponse")
     public JAXBElement<ObtenerFechaUltimaActualizacionResponse> createObtenerFechaUltimaActualizacionResponse(ObtenerFechaUltimaActualizacionResponse value) {

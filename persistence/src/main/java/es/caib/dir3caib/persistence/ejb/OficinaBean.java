@@ -498,6 +498,24 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
     }
 
+
+    @Override
+    @SuppressWarnings(value = "unchecked")
+    public Boolean tieneOficinasSIR(String codigoUnidad) throws Exception {
+
+        Query q = em.createQuery("select count(relacionSirOfi.oficina.id) from RelacionSirOfi as relacionSirOfi where relacionSirOfi.unidad.codigo =:codigoUnidad " +
+           "and :SERVICIO_SIR_RECEPCION in elements(relacionSirOfi.oficina.servicios) " +
+           "and relacionSirOfi.estado.codigoEstadoEntidad='V' ");
+
+        q.setParameter("codigoUnidad", codigoUnidad);
+        //q.setParameter("SERVICIO_SIR", new Servicio(Dir3caibConstantes.SERVICIO_SIR));
+        q.setParameter("SERVICIO_SIR_RECEPCION", new Servicio(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
+
+        Long count = (Long) q.getSingleResult();
+        return count > 0;
+
+    }
+
     /**
      * Nos dice si la relacion organizativa es valida para enviar en la actualización de regweb.
      * Se mira que si la unidad con la que esta relacionada su fecha de extinción y anulacion son posteriores

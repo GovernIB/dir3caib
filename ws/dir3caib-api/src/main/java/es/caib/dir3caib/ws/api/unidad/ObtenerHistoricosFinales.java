@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
+ * 
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -45,14 +45,14 @@ public class ObtenerHistoricosFinales {
 
     /**
      * Define el valor de la propiedad arg0.
-     *
+     * 
      * @param value
      *     allowed object is
      *     {@link String }
-     *
+     *     
      */
     public void setArg0(String value) {
-       this.arg0 = value;
+        this.arg0 = value;
     }
 
 }
