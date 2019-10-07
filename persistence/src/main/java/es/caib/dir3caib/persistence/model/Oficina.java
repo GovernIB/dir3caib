@@ -622,4 +622,31 @@ public class Oficina implements Serializable {
     int result = codigo != null ? codigo.hashCode() : 0;
     return result;
   }
+
+
+  @Transient
+  public Boolean getOficinaSir() {
+
+    for (Servicio servicio : servicios) {
+      if (servicio.getCodServicio().equals(Dir3caibConstantes.SERVICIO_SIR) ||
+         servicio.getCodServicio().equals(Dir3caibConstantes.SERVICIO_SIR_ENVIO) ||
+         servicio.getCodServicio().equals(Dir3caibConstantes.SERVICIO_SIR_RECEPCION)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @Transient
+  public Boolean getOficinaInformacion() {
+
+    for (Servicio servicio : servicios) {
+      if (servicio.getCodServicio().equals(Dir3caibConstantes.SERVICIO_OFI_INFORMACION)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+
 }
