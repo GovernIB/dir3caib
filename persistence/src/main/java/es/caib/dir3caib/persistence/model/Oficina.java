@@ -44,7 +44,7 @@ public class Oficina implements Serializable {
   private Date fechaImportacion;
   private CatTipoVia tipoVia;
   private String nombreVia;
-	private String numVia;
+  private String numVia;
 	private String complemento;
 	private String codPostal;
 	private CatPais codPais;

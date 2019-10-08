@@ -244,4 +244,6 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      * @throws Exception
      */
     List<Oficina> obtenerOficinasRegistran(String codigoUnidad) throws Exception;
+
+   Boolean isSIRCompleto(String codigoOficina) throws Exception;
 }

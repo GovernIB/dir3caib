@@ -172,7 +172,7 @@ public class NodoUtils {
             if (oficina.getCodOfiResponsable() != null) {
                 ofiResponsable = oficina.getCodOfiResponsable().getCodigo() + " - " + oficina.getCodOfiResponsable().getDenominacion();
             }
-            Nodo nodo = new Nodo(oficina.getCodigo(), oficina.getDenominacion(), oficina.getEstado().getDescripcionEstadoEntidad(), ofiResponsable, oficina.getCodUoResponsable().getCodigo() + " - " + oficina.getCodUoResponsable().getDenominacion(), "");
+            Nodo nodo = new Nodo(oficina.getCodigo(), oficina.getDenominacion(), oficina.getEstado().getDescripcionEstadoEntidad(), ofiResponsable, oficina.getCodUoResponsable().getCodigo() + " - " + oficina.getCodUoResponsable().getDenominacion(), "", oficina.getOficinaSir());
 
             nodos.add(nodo);
         }
