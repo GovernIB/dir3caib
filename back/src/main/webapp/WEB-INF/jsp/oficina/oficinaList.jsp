@@ -142,20 +142,16 @@
                 <p class="pull-right">Página <strong>${paginacion.currentIndex}</strong> de ${paginacion.totalPages}</p>
             </div>
             <table class="table table-bordered">
-                <colgroup>
-                    <col>
-                    <col>
-                    <col>
-                </colgroup>
                 <thead>
-                <tr>
-                    <th><fmt:message key="oficina.codigo"/></th>
-                    <th><fmt:message key="oficina.denominacion"/></th>
-                    <th><fmt:message key="oficina.responsable"/></th>
-                    <th><fmt:message key="oficina.unidadresponsable"/></th>
-                    <th><fmt:message key="dir3caib.sir"/></th>
-                    <th><fmt:message key="oficina.estado"/></th>
-                </tr>
+                    <tr>
+                        <th><fmt:message key="oficina.codigo"/></th>
+                        <th><fmt:message key="oficina.denominacion"/></th>
+                        <th><fmt:message key="oficina.responsable"/></th>
+                        <th><fmt:message key="oficina.unidadresponsable"/></th>
+                        <th><fmt:message key="dir3caib.sir"/></th>
+                        <th><fmt:message key="oficina.estado"/></th>
+                        <th class="center"><spring:message code="dir3caib.acciones"/></th>
+                    </tr>
                 </thead>
 
                 <tbody>
@@ -163,13 +159,11 @@
                     <tr>
 
                         <td>${nodo.codigo}</td>
-                        <td><a onclick="goTo('<c:url value="/oficina/${nodo.codigo}/detalle"/>','<spring:message code="dir3caib.organismo.detalle.generar" javaScriptEscape="true"/>')"
-                               onmouseover="this.style.cursor='pointer';">${nodo.denominacion}</a></td>
-                            <%--<td><a href="<c:url value="/oficina/${oficina.codigo}/detalle"/>">${oficina.denominacion}</a></td>--%>
-                        <td><c:if
-                                test="${not empty nodo.raiz}">${nodo.raiz}</c:if><c:if
-                                test="${empty nodo.superior}"><fmt:message
-                                key="oficina.no.responsable"/></c:if></td>
+                        <td>${nodo.denominacion}</td>
+                        <td>
+                            <c:if test="${not empty nodo.raiz}">${nodo.raiz}</c:if>
+                            <c:if test="${empty nodo.superior}"><fmt:message key="oficina.no.responsable"/></c:if>
+                        </td>
                         <td>${nodo.superior}</td>
                         <td>
                             <c:if test="${nodo.tieneOficinaSir}">
@@ -180,7 +174,9 @@
                             </c:if>
                         </td>
                         <td>${nodo.descripcionEstado}</td>
-
+                        <td class="center">
+                            <a class="btn btn-primary btn-sm" href="<c:url value="/oficina/${nodo.codigo}/detalle"/>" title="<spring:message code="dir3caib.detalle"/>"><span class="fa fa-eye"></span></a>
+                        </td>
 
                     </tr>
                 </c:forEach>

@@ -166,21 +166,18 @@
                 <p class="pull-right">Página <strong>${paginacion.currentIndex}</strong> de ${paginacion.totalPages}</p>
             </div>
             <table class="table table-bordered">
-                <colgroup>
-                    <col>
-                    <col>
-                    <col>
-                </colgroup>
+
                 <thead>
-                <tr>
-                    <th><fmt:message key="unidad.codigo"/></th>
-                    <th><fmt:message key="unidad.denominacion"/></th>
-                    <th><fmt:message key="unidad.superior"/></th>
-                    <th><fmt:message key="unidad.raiz"/></th>
-                    <th><fmt:message key="unidad.edp"/></th>
-                    <th><fmt:message key="dir3caib.sir"/></th>
-                    <th><fmt:message key="unidad.estado"/></th>
-                </tr>
+                    <tr>
+                        <th><fmt:message key="unidad.codigo"/></th>
+                        <th><fmt:message key="unidad.denominacion"/></th>
+                        <th><fmt:message key="unidad.superior"/></th>
+                        <th><fmt:message key="unidad.raiz"/></th>
+                        <th><fmt:message key="unidad.edp"/></th>
+                        <th><fmt:message key="dir3caib.sir"/></th>
+                        <th><fmt:message key="unidad.estado"/></th>
+                        <th class="center"><spring:message code="dir3caib.acciones"/></th>
+                    </tr>
                 </thead>
 
                 <tbody>
@@ -188,8 +185,7 @@
                     <tr>
 
                         <td>${nodo.codigo}</td>
-                        <td><a onclick="goTo('<c:url value="/unidad/${nodo.codigo}/detalle"/>','<spring:message code="dir3caib.organismo.detalle.generar" javaScriptEscape="true"/>')"
-                               onmouseover="this.style.cursor='pointer';">${nodo.denominacion}</a></td>
+                        <td>${nodo.denominacion}</td>
                         <td>${nodo.superior}</td>
                         <td>${nodo.raiz}</td>
                         <td>
@@ -211,6 +207,9 @@
                             </c:if>
                         </td>
                         <td>${nodo.descripcionEstado}</td>
+                        <td class="center">
+                            <a class="btn btn-primary btn-sm" href="<c:url value="/unidad/${nodo.codigo}/detalle"/>" title="<spring:message code="dir3caib.detalle"/>"><span class="fa fa-eye"></span></a>
+                        </td>
                     </tr>
                 </c:forEach>
                 </tbody>

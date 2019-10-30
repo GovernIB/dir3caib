@@ -8,7 +8,6 @@ import es.caib.dir3caib.persistence.ejb.RelacionSirOfiLocal;
 import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.utils.Paginacion;
 import es.caib.dir3caib.utils.Configuracio;
-import es.caib.dir3caib.utils.Utils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -299,7 +298,7 @@ public class OficinaController extends BaseController {
 
         Long end = System.currentTimeMillis();
 
-        log.info("TIEMPO CARGA ARBOL: " + Utils.formatElapsedTime(end - start));
+        //log.info("TIEMPO CARGA ARBOL: " + Utils.formatElapsedTime(end - start));
 
         //mav.addObject("nodo", nodo);
         mav.addObject("unidadesPrimerNivel", unidadesPrimerNivel);

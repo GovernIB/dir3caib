@@ -60,23 +60,19 @@
 
                     <%--MENÚ UNIDADES--%>
                     <li class="dropdown">
-                        <a id="drop2" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"><fmt:message
-                                key="menu.unidad"/><b class="caret"></b></a>
+                        <a id="drop2" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"><fmt:message key="menu.unidad"/><b class="caret"></b></a>
+
                         <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
-
                             <li><a href="<c:url value="/unidad/list"/>"><fmt:message key="menu.buscar.unidad"/></a></li>
-
                         </ul>
                     </li>
 
                     <%--Menú Oficinas--%>
                     <li class="dropdown">
-                        <a id="drop1" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">
-                            <fmt:message key="menu.oficina"/><b class="caret"></b></a>
+                        <a id="drop1" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"><fmt:message key="menu.oficina"/><b class="caret"></b></a>
+
                         <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
-
                             <li><a href="<c:url value="/oficina/list"/>"><fmt:message key="menu.buscar.oficina"/></a></li>
-
                         </ul>
                     </li>
 
