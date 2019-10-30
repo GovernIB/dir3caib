@@ -64,7 +64,7 @@ public class Dir3caibConstantes {
     
     //Descarga tipos
     public static final String CATALOGO = "1";
-    public static final String DIRECTORIO = "2";
+    public static final String UNIDADES_OFICINAS = "2";
     public static final String UNIDAD = "unidad";
     public static final String OFICINA = "oficina";
 

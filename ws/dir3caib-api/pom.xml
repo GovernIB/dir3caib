@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>dir3caib-ws-api</artifactId>
-	<version>1.0.9</version>
+	<version>1.0.10</version>
     <packaging>jar</packaging>
 	
 	<name>Dir3Caib - WS - Dir3Caib WS API</name>
@@ -13,7 +13,7 @@
     <parent>
         <groupId>es.caib.dir3caib</groupId>
         <artifactId>dir3caib-ws</artifactId>
-		<version>1.0.9</version>
+		<version>1.0.10</version>
     </parent>	
 
 	<properties>
@@ -124,14 +124,14 @@
 					<dependency>
 						<groupId>es.caib.dir3caib</groupId>
 						<artifactId>dir3caib-ws-server</artifactId>
-						<version>1.0.9</version>
+						<version>1.0.10</version>
 					   <scope>compile</scope>
 				   </dependency>
 
 					<dependency>
 						<groupId>es.caib.dir3caib</groupId>
 						<artifactId>dir3caib-persistence</artifactId>
-						<version>1.0.9</version>
+						<version>1.0.10</version>
 						<scope>compile</scope>
 					</dependency>
 
@@ -281,7 +281,7 @@
 		<dependency>
 			<groupId>es.caib.dir3caib</groupId>
 			<artifactId>dir3caib-utils</artifactId>
-			<version>1.0.9</version>
+			<version>1.0.10</version>
 		</dependency>
 
     </dependencies>

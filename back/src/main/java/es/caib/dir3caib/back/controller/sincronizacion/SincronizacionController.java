@@ -65,7 +65,7 @@ public class SincronizacionController extends BaseController {
         ModelAndView mav = new ModelAndView("/sincronizacion/sincronizacionList");
 
         // Obtenemos descarga correcta de Directorio y Catálogo
-        Sincronizacion ultimaSincroDirectorio = sincronizacionEjb.ultimaSincronizacionCompletada(Dir3caibConstantes.DIRECTORIO);
+        Sincronizacion ultimaSincroDirectorio = sincronizacionEjb.ultimaSincronizacionCompletada(Dir3caibConstantes.UNIDADES_OFICINAS);
         Sincronizacion ultimaSincroCatalogo = sincronizacionEjb.ultimaSincronizacionCompletada(Dir3caibConstantes.CATALOGO);
 
         //Obtenemos el listado paginado de las sincronizaciones
@@ -89,7 +89,7 @@ public class SincronizacionController extends BaseController {
         mav.addObject("ultimaSincroCatalogo", ultimaSincroCatalogo);
 
         // Obtenemos el número de descargas de Directorio y Catálogo
-        Long sincronizacionesDirectorio = sincronizacionEjb.contarSincronizaciones(Dir3caibConstantes.DIRECTORIO);
+        Long sincronizacionesDirectorio = sincronizacionEjb.contarSincronizaciones(Dir3caibConstantes.UNIDADES_OFICINAS);
         Long sincronizacionesCatalogo = sincronizacionEjb.contarSincronizaciones(Dir3caibConstantes.CATALOGO);
         mav.addObject("sincronizacionesCatalogo", sincronizacionesCatalogo);
         mav.addObject("sincronizacionesDirectorio", sincronizacionesDirectorio);
@@ -116,7 +116,7 @@ public class SincronizacionController extends BaseController {
             for (Sincronizacion sincro : sincros) {
 
                 if(sincro != null){
-                    if(sincro.getTipo().equals(Dir3caibConstantes.DIRECTORIO)){
+                    if(sincro.getTipo().equals(Dir3caibConstantes.UNIDADES_OFICINAS)){
 
                         if(sincro.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_CORRECTA)){
                             Mensaje.saveMessageInfo(request, getMessage("directorio.sincronizacion.ok"));
@@ -146,8 +146,8 @@ public class SincronizacionController extends BaseController {
     }
 
     /**
-     * Sincroniza el Directorio
-     * Obtiene todos los datos del Catálogo, las Unidades y Oficinas para importarlos.
+     * Sincroniza las unidades y oficinas
+     * Obtiene las Unidades y Oficinas para importarlos.
      *
      * @param request
      */
@@ -157,7 +157,7 @@ public class SincronizacionController extends BaseController {
         try {
 
             long start = System.currentTimeMillis();
-            Sincronizacion sincronizacion = sincronizacionEjb.sincronizarOficinasUnidades();
+            Sincronizacion sincronizacion = sincronizacionEjb.sincronizarUnidadesOficinas();
             log.info("Sincronizacion de las Oficinas y Unidades completada en " + Utils.formatElapsedTime(System.currentTimeMillis() - start));
 
             // Mensajes al usuario
@@ -183,49 +183,37 @@ public class SincronizacionController extends BaseController {
     }
 
     /**
-     * Sincroniza el Catálofo
-     * Obtiene todos los datos del Catálogo para importarlos.
+     * Sincroniza el Catalogo
+     * Obtiene el catalogo para importarlo.
      *
      * @param request
      */
     @RequestMapping(value = "/catalogo", method = RequestMethod.GET)
     public ModelAndView sincronizarCatalogo(HttpServletRequest request) {
 
-        Sincronizacion sincronizacion = null;
-
         try {
 
-            sincronizacion = sincronizacionEjb.descargarCatalogoWS();
+            long start = System.currentTimeMillis();
+            Sincronizacion sincronizacion = sincronizacionEjb.sincronizarCatalogo();
+            log.info("Sincronizacion del Catalogo completado en " + Utils.formatElapsedTime(System.currentTimeMillis() - start));
 
-            //Mostramos los mensajes en función de la respuesta del WS de Madrid
+            // Mensajes al usuario
             if(sincronizacion != null){
 
-                // Si la descarga de datos es correcta, procedemos a realizar la sincronización de datos
-                if (sincronizacion.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
-
-                    long start = System.currentTimeMillis();
-
-                    sincronizacionEjb.importarCatalogo(sincronizacion, true);
-
-                    log.info("Sincronizacion del catalogo completada en " + Utils.formatElapsedTime(System.currentTimeMillis() - start));
-
+                if(sincronizacion.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_CORRECTA)){
                     Mensaje.saveMessageInfo(request, getMessage("catalogo.sincronizacion.ok"));
+                }else if(sincronizacion.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_VACIA)){
+                    Mensaje.saveMessageInfo(request, getMessage("catalogo.sincronizacion.vacia"));
+                }else if(sincronizacion.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_ERROR_DESCARGA)){
+                    Mensaje.saveMessageInfo(request, getMessage("catalogo.descarga.error"));
                 }
 
-            }else{
+            }else {
                 Mensaje.saveMessageError(request, getMessage("catalogo.descarga.error"));
             }
 
-        } catch (Exception ex) {
-            // Si ha habido un Error en la sincronización, modificamos el estado de la descarga
-            if(sincronizacion != null){
-                try {
-                    sincronizacionEjb.actualizarEstado(sincronizacion.getCodigo(), Dir3caibConstantes.SINCRONIZACION_ERRONEA);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
 
+        } catch (Exception ex) {
             Mensaje.saveMessageError(request, getMessage("catalogo.sincronizacion.error"));
             ex.printStackTrace();
         }
@@ -242,7 +230,7 @@ public class SincronizacionController extends BaseController {
         try {
 
             // Obtenemos la última sincronizacion correcta
-            Sincronizacion ultimaSincroDirectorio = sincronizacionEjb.ultimaSincronizacionCompletada(Dir3caibConstantes.DIRECTORIO);
+            Sincronizacion ultimaSincroDirectorio = sincronizacionEjb.ultimaSincronizacionCompletada(Dir3caibConstantes.UNIDADES_OFICINAS);
             Sincronizacion ultimaSincroCatalogo = sincronizacionEjb.ultimaSincronizacionCompletada(Dir3caibConstantes.CATALOGO);
 
             Sincronizacion sincronizacion = sincronizacionEjb.findById(idSincronizacion);
@@ -278,12 +266,12 @@ public class SincronizacionController extends BaseController {
         try {
 
             // Obtenemos todas las sincronizaciones menos las últimas correctas
-            Sincronizacion ultimaSincroDirectorio = sincronizacionEjb.ultimaSincronizacionCompletada(Dir3caibConstantes.DIRECTORIO);
+            Sincronizacion ultimaSincroDirectorio = sincronizacionEjb.ultimaSincronizacionCompletada(Dir3caibConstantes.UNIDADES_OFICINAS);
             Sincronizacion ultimaSincroCatalogo = sincronizacionEjb.ultimaSincronizacionCompletada(Dir3caibConstantes.CATALOGO);
             // Obtenemos todas las sincronizaciones
             List<Sincronizacion> sincronizacionesTodas = sincronizacionEjb.getAll();
             // Obtenemos el número de descargas de Directorio y Catálogo
-            Long sincronizacionesDirectorio = sincronizacionEjb.contarSincronizaciones(Dir3caibConstantes.DIRECTORIO);
+            Long sincronizacionesDirectorio = sincronizacionEjb.contarSincronizaciones(Dir3caibConstantes.UNIDADES_OFICINAS);
             Long sincronizacionesCatalogo = sincronizacionEjb.contarSincronizaciones(Dir3caibConstantes.CATALOGO);
 
 
@@ -343,7 +331,7 @@ public class SincronizacionController extends BaseController {
 
         try{
             // Elimina las Oficinas y Unidades, realiza una descarga inicia e importa los datos
-            dir3CaibEjb.restaurarOficinasUnidades();
+            dir3CaibEjb.restaurarUnidadesOficinas();
 
             Mensaje.saveMessageInfo(request, getMessage("directorio.sincronizacion.ok"));
 

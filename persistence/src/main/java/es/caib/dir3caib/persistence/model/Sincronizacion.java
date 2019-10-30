@@ -116,7 +116,7 @@ public class Sincronizacion implements Serializable {
     @Transient
     public void obtenerFicheros(){
 
-        if(getTipo().equals(Dir3caibConstantes.DIRECTORIO)){
+        if(getTipo().equals(Dir3caibConstantes.UNIDADES_OFICINAS)){
             File directorio = new File(Configuracio.getDirectorioPath(getCodigo()));
 
             if (directorio.exists()) {

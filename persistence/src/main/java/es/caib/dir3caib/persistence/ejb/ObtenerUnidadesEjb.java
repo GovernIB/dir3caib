@@ -257,7 +257,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
     @Override
     public Date obtenerFechaUltimaActualizacion() throws Exception {
 
-        Sincronizacion sincronizacion = sincronizacionEjb.ultimaSincronizacionCompletada(Dir3caibConstantes.DIRECTORIO);
+        Sincronizacion sincronizacion = sincronizacionEjb.ultimaSincronizacionCompletada(Dir3caibConstantes.UNIDADES_OFICINAS);
 
         return sincronizacion.getFechaImportacion();
     }

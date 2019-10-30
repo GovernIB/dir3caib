@@ -44,6 +44,6 @@ public interface Dir3CaibLocal {
      * Elimina las Oficinas y Unidades, realiza una descarga inicia e importa los datos
      * @throws Exception
      */
-    void restaurarOficinasUnidades() throws Exception;
+    void restaurarUnidadesOficinas() throws Exception;
 
 }

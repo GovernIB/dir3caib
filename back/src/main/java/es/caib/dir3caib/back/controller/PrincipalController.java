@@ -48,7 +48,7 @@ public class PrincipalController extends BaseController {
             ArrayList<Sincronizacion> sincronizaciones = new ArrayList<Sincronizacion>();
 
             Sincronizacion catalogo = sincronizacionEjb.ultimaSincronizacionCompletada(Dir3caibConstantes.CATALOGO);
-            Sincronizacion directorio = sincronizacionEjb.ultimaSincronizacionCompletada(Dir3caibConstantes.DIRECTORIO);
+            Sincronizacion directorio = sincronizacionEjb.ultimaSincronizacionCompletada(Dir3caibConstantes.UNIDADES_OFICINAS);
 
             if(directorio != null){
                 directorio.obtenerFicheros();

@@ -23,7 +23,7 @@ public class SchedulerBean implements SchedulerLocal{
             log.info("INICIO ACTUALIZACION PROGRAMADA DE UNIDADES Y OFICINAS");
             log.info("");
             try {
-                sincronizacionEjb.sincronizarDirectorioTask();
+                sincronizacionEjb.sincronizarUnidadesOficinas();
                 log.info("-------------------------------------------");
                 log.info("FIN ACTUALIZACION PROGRAMADA DE UNIDADES Y OFICINAS");
                 log.info("");

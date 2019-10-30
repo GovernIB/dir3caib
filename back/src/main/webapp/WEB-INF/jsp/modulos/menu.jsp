@@ -45,10 +45,10 @@
                             <ul class="dropdown-menu" role="menu" aria-labelledby="drop4">
                                 <li><a href="<c:url value="/sincronizacion/list"/>"><fmt:message key="menu.listado.sincronizacion"/></a></li>
                                 <li class="divider"></li>
-                                <li><a href="javascript:void(0);" onclick="if (! confirmDescarga('<c:url value="/sincronizacion/directorio"/>','<fmt:message key="menu.sincronizar.confirm"/>')) { return false; }"><fmt:message key="menu.sincronizar.directorio"/></a></li>
+                                <li><a href="javascript:void(0);" onclick="if (! confirmDescarga('<c:url value="/sincronizacion/oficinasUnidades"/>','<fmt:message key="menu.sincronizar.confirm"/>')) { return false; }"><fmt:message key="menu.sincronizar.oficinasUnidades"/></a></li>
                                 <li><a href="javascript:void(0);" onclick="if (! confirmDescarga('<c:url value="/sincronizacion/catalogo"/>','<fmt:message key="menu.sincronizar.confirm"/>')) { return false; }"><fmt:message key="menu.sincronizar.catalogo"/></a></li>
                                 <li class="divider"></li>
-                                <li><a href="javascript:void(0);" onclick="if (! confirmDescarga('<c:url value="/sincronizacion/oficinasUnidades"/>','<fmt:message key="menu.sincronizar.confirm"/>')) { return false; }"><fmt:message key="menu.sincronizar.oficinasUnidades"/></a></li>
+                                <li><a href="javascript:void(0);" onclick="if (! confirmDescarga('<c:url value="/sincronizacion/directorio"/>','<fmt:message key="menu.sincronizar.confirm"/>')) { return false; }"><fmt:message key="menu.sincronizar.directorio"/></a></li>
                                 <c:if test="${loginInfo.development == true}">
                                     <li class="divider"></li>
                                     <li><a href="<c:url value="/sincronizacion/restaurarOficinasUnidades"/>"><fmt:message key="sincronizacion.restaurar.OficinasUnidades"/></a></li>

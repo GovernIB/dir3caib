@@ -58,7 +58,7 @@ public class Dir3CaibBean implements Dir3CaibLocal{
         eliminarOficinas();
         eliminarUnidades();
         eliminarCatalogo();
-        sincronizacionEjb.deleteAllByTipo(Dir3caibConstantes.DIRECTORIO);
+        sincronizacionEjb.deleteAllByTipo(Dir3caibConstantes.UNIDADES_OFICINAS);
         sincronizacionEjb.deleteAllByTipo(Dir3caibConstantes.CATALOGO);
     }
 
@@ -67,7 +67,7 @@ public class Dir3CaibBean implements Dir3CaibLocal{
 
         eliminarOficinas();
         eliminarUnidades();
-        sincronizacionEjb.deleteAllByTipo(Dir3caibConstantes.DIRECTORIO);
+        sincronizacionEjb.deleteAllByTipo(Dir3caibConstantes.UNIDADES_OFICINAS);
     }
 
     @Override
@@ -103,7 +103,7 @@ public class Dir3CaibBean implements Dir3CaibLocal{
     @Override
     public void eliminarUnidades() throws Exception {
 
-        Sincronizacion sincronizacion = sincronizacionEjb.ultimaSincronizacionByTipo(Dir3caibConstantes.DIRECTORIO);
+        Sincronizacion sincronizacion = sincronizacionEjb.ultimaSincronizacionByTipo(Dir3caibConstantes.UNIDADES_OFICINAS);
 
         if (sincronizacion != null) {
             // Contactos
@@ -121,7 +121,7 @@ public class Dir3CaibBean implements Dir3CaibLocal{
     @Override
     public void eliminarOficinas() throws Exception {
 
-        Sincronizacion sincronizacion = sincronizacionEjb.ultimaSincronizacionByTipo(Dir3caibConstantes.DIRECTORIO);
+        Sincronizacion sincronizacion = sincronizacionEjb.ultimaSincronizacionByTipo(Dir3caibConstantes.UNIDADES_OFICINAS);
 
         if (sincronizacion != null) {
             relSirOfiEjb.deleteAll();
@@ -139,7 +139,7 @@ public class Dir3CaibBean implements Dir3CaibLocal{
 
     @Override
     @TransactionTimeout(value = 40000)
-    public void restaurarOficinasUnidades() throws Exception{
+    public void restaurarUnidadesOficinas() throws Exception{
 
         // Eliminamos las Unidades y Oficinas
         eliminarOficinasUnidades();
@@ -150,7 +150,7 @@ public class Dir3CaibBean implements Dir3CaibLocal{
         // Si la descarga de datos es correcta, procedemos a realizar la sincronización de datos
         if (sincronizacion != null && sincronizacion.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
 
-            sincronizacionEjb.importarDirectorio(sincronizacion);
+            sincronizacionEjb.importarUnidadesOficinas(sincronizacion);
         }
     }
 }

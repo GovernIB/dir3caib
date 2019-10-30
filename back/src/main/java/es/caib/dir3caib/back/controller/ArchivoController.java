@@ -58,7 +58,7 @@ public class ArchivoController extends BaseController{
                   file = new File(Configuracio.getCatalogosPath(sincronizacion.getCodigo()), nombre);
                 }
 
-                if(Dir3caibConstantes.DIRECTORIO.equals(sincronizacion.getTipo())){
+                if(Dir3caibConstantes.UNIDADES_OFICINAS.equals(sincronizacion.getTipo())){
                   file = new File(Configuracio.getDirectorioPath(sincronizacion.getCodigo()), nombre);
                 }
 

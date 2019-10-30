@@ -39,39 +39,6 @@ public class InitServlet extends HttpServlet {
       log.error("Error inicialitzant el sistema de traduccions web: " + th.getMessage(), th);
     }
 
-
-
-    /*// Sincronitzador amb Dir3
-    try {
-      TimerDir3Local sinc = (TimerDir3Local) new InitialContext().lookup("dir3caib/TimerDir3EJB/local");
-      
-      sinc.clearTimers();
-      
-      sinc.createTimer();
-    } catch (Throwable th) {
-      log.error("Error desconegut inicialitzant sincronitzador amb DIR3: " + th.getMessage(), th);
-    }
-
-    // Inicialitzar Like de BBDD
-    try {
-      String dialect = Configuracio.getHibernateDialect();
-      if (dialect.indexOf("Oracle") != -1) {
-        log.info("Setting Oracle Like Manager.");
-        DataBaseUtils.setLikeManager(new DataBaseUtils.OracleLike());
-      } else {
-
-        if (dialect.indexOf("PostgreSQL") != -1) {
-          log.info("Setting PostgreSQL Like Manager.");
-          DataBaseUtils.setLikeManager(new DataBaseUtils.PostgreSQLLike());
-        } else {
-          log.info("Setting Default Like Manager.");
-          DataBaseUtils.setLikeManager(new DataBaseUtils.DefaultLike());
-        }
-      }
-    } catch (Throwable th) {
-      log.error("Error desconegut establint LikeManager " + th.getMessage(), th);
-    }*/
-
     // Mostrar Versió
     String ver = Versio.VERSIO + (Configuracio.isCAIB() ? "-caib" : "");
     try {
