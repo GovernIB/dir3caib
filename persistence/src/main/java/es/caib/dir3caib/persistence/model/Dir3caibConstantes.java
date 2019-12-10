@@ -110,4 +110,8 @@ public class Dir3caibConstantes {
     // Expresión CRON por defecto para actualizar DIR3
     public static final String CRON_SINCRONIZAR_DIR3 = "0 0 1 1/1 * ? *"; // Sincronización diaria a las 01:00 am
 
+    // Textos para envio Mail error en Sincronización
+    public static final String ASUNTO_MAIL = "S'ha produit un error a la sincronització";
+    public static final String CUERPO_MAIL = "S'ha produït un error a la sincronització. S'ha de revisar perquè la no actualització de les dades diàries pot afectar a les aplicacions connectades amb DIR3CAIB.";
+
 }

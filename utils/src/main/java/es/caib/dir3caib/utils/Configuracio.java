@@ -117,4 +117,16 @@ public class Configuracio {
         return Boolean.getBoolean(DIR3CAIB_PROPERTY_BASE + "sincronizar");
     }
 
+    public static String getRemitenteEmail() {
+        return System.getProperty(DIR3CAIB_PROPERTY_BASE + "remitente.email");
+    }
+
+    public static String getRemitenteNombre() {
+        return System.getProperty(DIR3CAIB_PROPERTY_BASE + "remitente.nombre");
+    }
+
+    public static String getAdministradorEmail() {
+        return System.getProperty(DIR3CAIB_PROPERTY_BASE + "administrador.email");
+    }
+
 }

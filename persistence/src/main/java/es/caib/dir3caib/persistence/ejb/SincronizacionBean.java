@@ -2,6 +2,7 @@ package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.model.Sincronizacion;
+import es.caib.dir3caib.persistence.utils.MailUtils;
 import es.caib.dir3caib.utils.Configuracio;
 import es.caib.dir3caib.ws.dir3.catalogo.client.SC21CTVolcadoCatalogos;
 import es.caib.dir3caib.ws.dir3.catalogo.client.SC21CTVolcadoCatalogosService;
@@ -312,6 +313,7 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
             return sincronizacion;
 
         } catch (Exception e) { //si hay algun problema, eliminamos la sincronizacion
+            MailUtils.envioEmailErrorSincronizacion();
             remove(sincronizacion);
             throw new Exception(e.getMessage());
         }
@@ -402,6 +404,7 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
 
         } catch (Exception e) { //si hay algun problema, modificamos el estadod e la descarga
             log.info("Excepcion en la descarga del catalogo");
+            MailUtils.envioEmailErrorSincronizacion();
             sincronizacion.setEstado(Dir3caibConstantes.SINCRONIZACION_ERROR_DESCARGA);
             merge(sincronizacion);
             throw new Exception(e.getMessage());
@@ -495,11 +498,12 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
             if(sincroCatalogo != null && sincroCatalogo.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)){
                 try {
                     actualizarEstado(sincroCatalogo.getCodigo(), Dir3caibConstantes.SINCRONIZACION_ERRONEA);
+                    MailUtils.envioEmailErrorSincronizacion();
                 } catch (Exception ex2) {
                     ex2.printStackTrace();
                 }
             }
-
+            MailUtils.envioEmailErrorSincronizacion();
             e.printStackTrace();
             throw e;
         }
@@ -548,11 +552,13 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
             if(sincroUnidadesOficinas != null && sincroUnidadesOficinas.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)){
                 try {
                     actualizarEstado(sincroUnidadesOficinas.getCodigo(), Dir3caibConstantes.SINCRONIZACION_ERRONEA);
+
                 } catch (Exception ex1) {
+                    MailUtils.envioEmailErrorSincronizacion();
                     ex1.printStackTrace();
                 }
             }
-
+            MailUtils.envioEmailErrorSincronizacion();
             e.printStackTrace();
             throw e;
         }

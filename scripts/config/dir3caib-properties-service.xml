@@ -45,6 +45,11 @@
 			es.caib.dir3caib.busqueda.administracion=2
 			es.caib.dir3caib.busqueda.comunidad=4
 
+			<!--Configuración email -->
+			es.caib.dir3caib.remitente.email=
+			es.caib.dir3caib.remitente.nombre=
+			es.caib.dir3caib.administrador.email=
+
         </attribute>
     </mbean>
 </server>
