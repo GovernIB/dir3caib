@@ -112,6 +112,6 @@ public class Dir3caibConstantes {
 
     // Textos para envio Mail error en Sincronización
     public static final String ASUNTO_MAIL = "S'ha produit un error a la sincronització";
-    public static final String CUERPO_MAIL = "S'ha produït un error a la sincronització. S'ha de revisar perquè la no actualització de les dades diàries pot afectar a les aplicacions connectades amb DIR3CAIB.";
+    public static final String CUERPO_MAIL = "S'ha produït un error a la sincronització. S'ha de revisar perquè si no s'actualitzen les dades diàriament pot afectar a les aplicacions connectades amb DIR3CAIB.";
 
 }

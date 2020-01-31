@@ -305,6 +305,7 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
             }else{
                 // La sincronizacion ha ido mal, la eliminamos
                 remove(sincronizacion);
+                MailUtils.envioEmailErrorSincronizacion();
                 return null;
             }
 
