@@ -717,7 +717,6 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     @SuppressWarnings(value = "unchecked")
     public List<Unidad> obtenerArbolUnidadesDestinatarias(String codigo) throws Exception {
 
-        Long start = System.currentTimeMillis();
         Query q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.codUnidadRaiz.codigo, unidad.codUnidadSuperior.codigo, unidad.esEdp from Unidad as unidad where unidad.codigo =:codigo and unidad.estado.codigoEstadoEntidad =:vigente");
         q.setParameter("codigo", codigo);
         q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
@@ -755,10 +754,6 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
         }
 
-        Long end = System.currentTimeMillis();
-
-        log.info("TIEMPO CARGA UNIDADESDESTINATARIAS: " + Utils.formatElapsedTime(end - start));
-        log.info(unidadesDestConOficinas.size());
         return unidadesDestConOficinas;
     }
 
