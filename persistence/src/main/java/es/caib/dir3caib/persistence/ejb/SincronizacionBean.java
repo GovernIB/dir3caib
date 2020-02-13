@@ -395,7 +395,7 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
                 // La sincronizacion ha ido mal, lo informamos mediante el estado
                 sincronizacion.setEstado(Dir3caibConstantes.SINCRONIZACION_ERROR_DESCARGA);
                 merge(sincronizacion);
-
+                MailUtils.envioEmailErrorSincronizacion();
                 return sincronizacion;
             }
 
@@ -499,8 +499,8 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
             if(sincroCatalogo != null && sincroCatalogo.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)){
                 try {
                     actualizarEstado(sincroCatalogo.getCodigo(), Dir3caibConstantes.SINCRONIZACION_ERRONEA);
-                    MailUtils.envioEmailErrorSincronizacion();
                 } catch (Exception ex2) {
+                    MailUtils.envioEmailErrorSincronizacion();
                     ex2.printStackTrace();
                 }
             }
