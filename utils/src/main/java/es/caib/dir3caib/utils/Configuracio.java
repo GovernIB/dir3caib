@@ -52,26 +52,6 @@ public class Configuracio {
     }
 
 
-    /**
-     * Obtiene el nombre del directorio donde estan guardados los archivos de la descarga de las unidades
-     *
-     * @param idDescarga
-     * @return
-     */
-    public static String getUnidadesPath(Long idDescarga) {
-        //EL nombre del directorio es "unidad"+idDescarga
-        return getArchivosPath() + "unidad" + idDescarga + "/";
-    }
-
-    /**
-     * Obtiene el nombre del directorio donde estan guardados los archivos de la descarga de las oficinas
-     * @param idDescarga
-     * @return
-     */
-    public static String getOficinasPath(Long idDescarga) {
-        //EL nombre del directorio es "oficina"+idDescarga
-        return getArchivosPath() + "oficina" + idDescarga + "/";
-    }
 
     public static String getCatalogoEndPoint() {
         return System.getProperty(DIR3CAIB_PROPERTY_BASE + "catalogo.endpoint");
@@ -93,13 +73,6 @@ public class Configuracio {
         return System.getProperty(DIR3CAIB_PROPERTY_BASE + "dir3ws.pass");
     }
 
-    public static String getHibernateDialect() {
-        return System.getProperty(DIR3CAIB_PROPERTY_BASE + "hibernate.dialect");
-    }
-
-    public static String getCronExpression() {
-        return System.getProperty(DIR3CAIB_PROPERTY_BASE + "cronExpression");
-    }
 
     public static boolean showTimeStamp() {
         return Boolean.getBoolean(DIR3CAIB_PROPERTY_BASE + "showtimestamp");

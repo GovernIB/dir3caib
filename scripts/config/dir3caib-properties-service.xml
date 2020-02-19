@@ -14,13 +14,7 @@
 			<!-- Se indica si se quiere que se muestre la hora en el pie de página de la aplicación -->
             es.caib.dir3caib.showtimestamp=false
 
-			<!-- Configuración del Dialecto de la BBDD -->
-		    # es.caib.dir3caib.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
-		    # es.caib.dir3caib.hibernate.dialect=org.hibernate.dialect.MySQLDialect      
-		    # es.caib.dir3caib.hibernate.dialect=org.hibernate.dialect.DB2Dialect
-		    # es.caib.dir3caib.hibernate.dialect=org.hibernate.dialect.SQLServerDialect
-		    # es.caib.dir3caib.hibernate.dialect=net.sf.hibernate.dialect.Oracle9Dialect
-		    es.caib.dir3caib.hibernate.dialect=org.hibernate.dialect.Oracle10gDialect
+
 		    es.caib.dir3caib.hibernate.query.substitutions=true 1, false 0
 
 			<!-- Directorio base para los archivos generales
