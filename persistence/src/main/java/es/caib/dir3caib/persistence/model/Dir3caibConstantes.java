@@ -107,11 +107,17 @@ public class Dir3caibConstantes {
     public static final Long SINCRONIZACION_ERRONEA = 4L;
     public static final Long SINCRONIZACION_CORRECTA = 5L;
 
+    //Tipos de Sincronización
+    public static final String SINCRONIZACION_CATALOGO = "Catàleg";
+    public static final String SINCRONIZACION_DIRECTORIO = "Directori";
+
     // Expresión CRON por defecto para actualizar DIR3
     public static final String CRON_SINCRONIZAR_DIR3 = "0 0 1 1/1 * ? *"; // Sincronización diaria a las 01:00 am
 
     // Textos para envio Mail error en Sincronización
-    public static final String ASUNTO_MAIL = "S'ha produit un error a la sincronització";
+    public static final String ASUNTO_MAIL = "S'ha produit un error a la sincronització de ";
     public static final String CUERPO_MAIL = "S'ha produït un error a la sincronització. S'ha de revisar perquè si no s'actualitzen les dades diàriament pot afectar a les aplicacions connectades amb DIR3CAIB.";
+    public static final String APLICACION_NOMBRE = "DIR3CAIB";
+    public static final String APLICACION_EMAIL = "no_responder@dir3caib.com";
 
 }

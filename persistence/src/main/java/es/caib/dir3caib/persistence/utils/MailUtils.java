@@ -40,7 +40,7 @@ public class MailUtils {
 
         Context ctx = new InitialContext();
 
-        Session session = (javax.mail.Session) ctx.lookup("java:/es.caib.dir3caib.mail");
+        Session session = (javax.mail.Session) ctx.lookup("java:/es.caib.regweb3.mail");
 
         // Creamos el mensaje
         MimeMessage msg = new MimeMessage(session);
@@ -73,10 +73,14 @@ public class MailUtils {
 
     }
 
-    public static void envioEmailErrorSincronizacion() throws Exception{
+    public static void envioEmailErrorSincronizacion(String tipoSincronizacion) throws Exception{
 
-        InternetAddress addressFrom = new InternetAddress(Configuracio.getRemitenteEmail(), Configuracio.getRemitenteNombre());
-        enviaMail(Dir3caibConstantes.ASUNTO_MAIL, Dir3caibConstantes.CUERPO_MAIL, addressFrom, Message.RecipientType.TO, Configuracio.getAdministradorEmail());
+        String asunto = Dir3caibConstantes.ASUNTO_MAIL + tipoSincronizacion;
+
+        //InternetAddress addressFrom = new InternetAddress(Configuracio.getRemitenteEmail(), Configuracio.getRemitenteNombre());
+        InternetAddress addressFrom = new InternetAddress(Dir3caibConstantes.APLICACION_EMAIL, Dir3caibConstantes.APLICACION_NOMBRE);
+
+        enviaMail(asunto, Dir3caibConstantes.CUERPO_MAIL, addressFrom, Message.RecipientType.TO, Configuracio.getAdministradorEmail());
 
     }
 
