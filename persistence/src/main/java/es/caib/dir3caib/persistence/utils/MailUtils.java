@@ -77,7 +77,6 @@ public class MailUtils {
 
         String asunto = Dir3caibConstantes.ASUNTO_MAIL + tipoSincronizacion;
 
-        //InternetAddress addressFrom = new InternetAddress(Configuracio.getRemitenteEmail(), Configuracio.getRemitenteNombre());
         InternetAddress addressFrom = new InternetAddress(Dir3caibConstantes.APLICACION_EMAIL, Dir3caibConstantes.APLICACION_NOMBRE);
 
         enviaMail(asunto, Dir3caibConstantes.CUERPO_MAIL, addressFrom, Message.RecipientType.TO, Configuracio.getAdministradorEmail());
