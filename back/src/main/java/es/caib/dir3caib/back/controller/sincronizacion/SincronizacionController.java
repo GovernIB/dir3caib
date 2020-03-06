@@ -205,7 +205,7 @@ public class SincronizacionController extends BaseController {
                 }else if(sincronizacion.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_VACIA)){
                     Mensaje.saveMessageInfo(request, getMessage("catalogo.sincronizacion.vacia"));
                 }else if(sincronizacion.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_ERROR_DESCARGA)){
-                    Mensaje.saveMessageInfo(request, getMessage("catalogo.descarga.error"));
+                    Mensaje.saveMessageError(request, getMessage("catalogo.descarga.error"));
                 }
 
             }else {
