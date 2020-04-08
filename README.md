@@ -4,8 +4,8 @@
 
 ***Versions***
 
-> - Versió Estable: Tag [__dir3caib-1.0.8__](../../tree/cd12603c538bbc0d8175eb90f8d35d68485b67d2) (branca [1.0](../../tree/dir3caib-1.0))<br/>
-> - Versió en Desenvolupament: --
+> - Versió Estable: Tag [__dir3caib-1.0.11__](../../tree/dir3caib-1.0.11) (branca [1.0](../../tree/dir3caib-1.0))<br/>
+> - Versió en Desenvolupament: (branca [1.0](../../tree/dir3caib-1.0))
 
 ***Descripció***
 
