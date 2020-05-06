@@ -203,7 +203,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                                 merge = merge + (System.currentTimeMillis() - s);
 
                             } catch (Exception e) {
-                                log.error(e.getMessage());
+                                log.error("Error important unitats: " + e.getMessage());
                             }
 
                             count++;
@@ -556,7 +556,6 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                 try {
 
                     if (!codigoUnidadUltima.isEmpty() && !codigoUnidadAnterior.isEmpty() && unidadesExistInBBDD.contains(codigoUnidadUltima)) { // Si no están vacios
-
                         // Creamos el HU mediante una NativeQuery muy eficiente
                         unidadEjb.crearHistoricoUnidad(codigoUnidadAnterior, codigoUnidadUltima);
 

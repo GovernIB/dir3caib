@@ -103,9 +103,8 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                 if (reader != null) {
 
                     // Leemos el contenido y lo guardamos en un List
-                    String nombreFichero = fichero;
                     String[] fila;
-                    if (Dir3caibConstantes.OFI_OFICINAS.equals(nombreFichero)) { //Procesamos el fichero Oficinas.csv
+                    if (Dir3caibConstantes.OFI_OFICINAS.equals(fichero)) { //Procesamos el fichero Oficinas.csv
                         reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
                         int count = 1;
                         while ((fila = reader.readNext()) != null) {
@@ -177,21 +176,21 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                     oficinaEjb.clear();
 
                     // CONTACTOS
-                    importarContactos(nombreFichero, reader);
+                    importarContactos(fichero, reader);
 
                     //HISTORICOS OFI
-                    importarHistoricos(nombreFichero, reader, actualizacion);
+                    importarHistoricos(fichero, reader, actualizacion);
 
                     // Relaciones organizativas
-                    importarRelacionesOrganizativas(nombreFichero, reader);
+                    importarRelacionesOrganizativas(fichero, reader);
 
                     // Relaciones SIR Oficina
-                    importarRelacionesSir(nombreFichero, reader);
+                    importarRelacionesSir(fichero, reader);
 
                     //Servicios
-                    importarServicios(nombreFichero, reader, actualizacion);
+                    importarServicios(fichero, reader, actualizacion);
 
-                    log.info("Fin importar fichero: " + nombreFichero);
+                    log.info("Fin importar fichero: " + fichero);
                 }
 
                 reader.close();
