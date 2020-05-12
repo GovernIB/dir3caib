@@ -99,7 +99,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
                         while ((fila = reader.readNext()) != null) { //mientras haya filas
 
-                            try {
+                           // try {
                                 //Obtenemos codigo de la unidad del fichero
                                 String codigoUnidad = fila[0];
 
@@ -202,9 +202,9 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
                                 merge = merge + (System.currentTimeMillis() - s);
 
-                            } catch (Exception e) {
+                           /* } catch (Exception e) {
                                 log.error("Error important unitats: " + e.getMessage());
-                            }
+                            }*/
 
                             count++;
                             //cada 500 realizamos flush y clear para evitar problemas de Outofmemory, reseteamos contadores
@@ -255,8 +255,12 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                 log.warn("Fichero no encontrado " + fichero);
             } catch (IOException io) {
                 io.printStackTrace();
+                throw new IOException(io.getMessage());
+
             } catch (Exception e) {
                 e.printStackTrace();
+                throw new Exception(e.getMessage());
+
             } finally {
                 if (reader != null) {
                     try {
@@ -553,7 +557,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                 String codigoUnidadAnterior = fila[0]; //Unidad que es sustituida
                 String codigoUnidadUltima = fila[2]; //unidad que la sustituye
 
-                try {
+                //try {
 
                     if (!codigoUnidadUltima.isEmpty() && !codigoUnidadAnterior.isEmpty() && unidadesExistInBBDD.contains(codigoUnidadUltima)) { // Si no están vacios
                         // Creamos el HU mediante una NativeQuery muy eficiente
@@ -574,7 +578,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
                     }
 
-                } catch (Exception e) {
+                /*} catch (Exception e) {
                     log.error(" --------------------------------------------------");
                     log.error(" codigoUnidadAnterior = " + codigoUnidadAnterior);
                     log.error(" codigoUnidadUltima = " + codigoUnidadUltima);
@@ -586,7 +590,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                     for (int n = 0; n < maxLines; n++) {
                         log.error(stack[n].toString());
                     }
-                }
+                }*/
             }
         }
     }
@@ -602,7 +606,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
         if (Dir3caibConstantes.UO_CONTACTO_UO.equals(nombreFichero)) {
 
-            try {
+            //try {
                 String[] fila;
                 reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
                 int count = 1;
@@ -649,9 +653,9 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                     }
 
                 }
-            } catch (Exception e) {
+           /* } catch (Exception e) {
                 log.error("Error important Contacto: " + e.getMessage(), e);
-            }
+            }*/
         }
     }
 

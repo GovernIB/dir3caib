@@ -125,7 +125,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                         while ((fila = reader.readNext()) != null) {
                             // Obtenemos codigo y miramos si ya existe en la BD
                             // Creamos la clave compuesta primero.
-                            try {
+                            //try {
                                 // Miramos si existe ya en la BD
                                 String codigoEntidadGeografica = fila[0];
                                 CatEntidadGeografica entidadGeografica = cacheEntidadGeografica.get(codigoEntidadGeografica);
@@ -145,9 +145,9 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
                                 cacheEntidadGeografica.put(codigoEntidadGeografica, entidadGeografica);
 
-                            } catch (Exception e) {
+                            /*} catch (Exception e) {
                                 log.info(e.getMessage());
-                            }
+                            }*/
                         }
 
                     }
@@ -159,7 +159,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                         while ((fila = reader.readNext()) != null) {
                             // Obtenemos codigo y miramos si ya existe en la BD
                             // Creamos la clave compuesta primero.
-                            try {
+                            //try {
                                 // Miramos si existe ya en la BD
                                 String codigoEstadoEntidad = fila[0];
                                 CatEstadoEntidad estadoEntidad = catEstadoEntidadEjb.findById(codigoEstadoEntidad);
@@ -172,9 +172,9 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
                                 catEstadoEntidadEjb.persist(estadoEntidad);
 
-                            } catch (Exception e) {
+                            /*} catch (Exception e) {
                                 log.info(e.getMessage());
-                            }
+                            }*/
                         }
 
                     }
@@ -186,7 +186,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
                             // Obtenemos codigo y miramos si ya existe en la BD
                             // Creamos la clave compuesta primero.
-                            try {
+                            //try {
                                 // Miramos si existe ya en la BD
                                 String sCodigoJerarquiaOficina = fila[0].trim();
                                 if (!sCodigoJerarquiaOficina.isEmpty()) {
@@ -203,9 +203,9 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                                     catJerarquiaOficinaEjb.persist(jerarquiaOficina);
 
                                 }
-                            } catch (Exception e) {
+                            /*} catch (Exception e) {
                                 log.info(e.getMessage());
-                            }
+                            }*/
                         }
                     }
 
@@ -217,7 +217,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
                             // Obtenemos codigo y miramos si ya existe en la BD
                             // Creamos la clave compuesta primero.
-                            try {
+                            //try {
                                 // Miramos si existe ya en la BD
                                 String codigoMotivoExtincion = fila[0];
 
@@ -231,9 +231,9 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
                                 catMotivoExtincionEjb.persist(motivoExtincion);
 
-                            } catch (Exception e) {
+                           /* } catch (Exception e) {
                                 log.info(e.getMessage());
-                            }
+                            }*/
                         }
 
                     }
@@ -244,7 +244,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                         while ((fila = reader.readNext()) != null) {
                             // Obtenemos codigo y miramos si ya existe en la BD
                             // Creamos la clave compuesta primero.
-                            try {
+                            //try {
                                 // Miramos si existe ya en la BD
                                 String sCodigoNivelAdministracion = fila[0].trim();
                                 if (!sCodigoNivelAdministracion.isEmpty()) {
@@ -263,9 +263,9 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                                     cacheNivelAdministracion.put(codigoNivelAdministracion, nivelAdministracion);
 
                                 }
-                            } catch (Exception e) {
+                            /*} catch (Exception e) {
                                 log.info(e.getMessage());
-                            }
+                            }*/
                         }
                     }
 
@@ -276,7 +276,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                         while ((fila = reader.readNext()) != null) {
                             // Obtenemos codigo y miramos si ya existe en la BD
                             // Creamos la clave compuesta primero.
-                            try {
+                            //try {
                                 // Miramos si existe ya en la BD
                                 Long codigoPais = new Long(fila[0].trim());
                                 CatPais pais = catPaisEjb.findById(codigoPais);
@@ -292,10 +292,10 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                                 catPaisEjb.persist(pais);
 
                                 cachePais.put(codigoPais, pais);
-                            } catch (Exception e) {
+                           /* } catch (Exception e) {
                                 log.info(e.getMessage());
                             }
-                        }
+*/                        }
                     }
 
 
@@ -306,7 +306,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
                             // Obtenemos codigo y miramos si ya existe en la BD
                             // Creamos la clave compuesta primero.
-                            try {
+                         //   try {
                                 Long codigoComunidad = new Long(fila[0].trim());
                                 // cargamos el nivel de Administracion correspondiente.
                                 CatPais catPais;
@@ -327,9 +327,9 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
 
                                 cacheComunidadAutonoma.put(codigoComunidad, comunidadAutonoma);
-                            } catch (Exception e) {
+                           /* } catch (Exception e) {
                                 log.info(e.getMessage());
-                            }
+                            }*/
                         }
 
                         cachePais.clear();
@@ -346,7 +346,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
                             // Obtenemos codigo y miramos si ya existe en la BD
                             // Creamos la clave compuesta primero.
-                            try {
+                            //  try {
                                 Long codigoProvincia = new Long(fila[0]);
                                 // cargamos el nivel de Administracion correspondiente.
                                 CatComunidadAutonoma catComunidadAutonoma = cacheComunidadAutonoma.get(new Long(fila[2]));
@@ -366,9 +366,9 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
 
                                 cacheProvincia.put(codigoProvincia, provincia);
-                            } catch (Exception e) {
+                           /* } catch (Exception e) {
                                 log.info(e.getMessage());
-                            }
+                            }*/
                         }
 
                         cacheComunidadAutonoma.clear();
@@ -383,7 +383,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                         while ((fila = reader.readNext()) != null) {
                             // Obtenemos codigo y miramos si ya existe en la BD
                             // Creamos la clave compuesta primero.
-                            try {
+                          //  try {
                                 // Miramos si existe ya en la BD
                                 Long codigoIsla = new Long(fila[0]);
                                 CatIsla isla = catIslaEjb.findById(codigoIsla);
@@ -400,9 +400,9 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
                                 catIslaEjb.persist(isla);
 
-                            } catch (Exception e) {
+                            /*} catch (Exception e) {
                                 log.info(e.getMessage());
-                            }
+                            }*/
                         }
 
                     }
@@ -414,7 +414,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
                             // Obtenemos codigo y miramos si ya existe en la BD
                             // Creamos la clave compuesta primero.
-                            try {
+                          //  try {
                                 // Miramos si existe ya en la BD
                                 String codigoTipoContacto = fila[0];
                                 CatTipoContacto tipoContacto = catTipoContactoEjb.findById(codigoTipoContacto);
@@ -427,9 +427,9 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
                                 catTipoContactoEjb.persist(tipoContacto);
 
-                            } catch (Exception e) {
+                            /*} catch (Exception e) {
                                 log.info(e.getMessage());
-                            }
+                            }*/
                         }
 
                     }
@@ -441,7 +441,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                         while ((fila = reader.readNext()) != null) {
                             // Obtenemos codigo y miramos si ya existe en la BD
                             // Creamos la clave compuesta primero.
-                            try {
+                           // try {
                                 // Miramos si existe ya en la BD
                                 String codigoTipoEntidadPublica = fila[0];
                                 CatTipoEntidadPublica tipoEntidadPublica = catTipoEntidadPublicaEjb.findById(codigoTipoEntidadPublica);
@@ -454,9 +454,9 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
                                 catTipoEntidadPublicaEjb.persist(tipoEntidadPublica);
 
-                            } catch (Exception e) {
+                            /*} catch (Exception e) {
                                 log.info(e.getMessage());
-                            }
+                            }*/
                         }
 
                     }
@@ -468,7 +468,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                         while ((fila = reader.readNext()) != null) {
                             // Obtenemos codigo y miramos si ya existe en la BD
                             // Creamos la clave compuesta primero.
-                            try {
+                        //    try {
                                 // Miramos si existe ya en la BD
                                 String codigoTipoUnidadOrganica = fila[0];
                                 CatTipoUnidadOrganica tipoUnidadOrganica = catTipoUnidadOrganicaEjb.findById(codigoTipoUnidadOrganica);
@@ -481,9 +481,9 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
                                 catTipoUnidadOrganicaEjb.persist(tipoUnidadOrganica);
 
-                            } catch (Exception e) {
-                                log.info(e.getMessage());
-                            }
+//                            } catch (Exception e) {
+//                                log.info(e.getMessage());
+//                            }
                         }
 
                     }
@@ -495,7 +495,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                         while ((fila = reader.readNext()) != null) {
                             // Obtenemos codigo y miramos si ya existe en la BD
                             // Creamos la clave compuesta primero.
-                            try {
+                       //     try {
                                 // Miramos si existe ya en la BD
                                 Long codigoTipoVia = new Long(fila[0]);
                                 CatTipoVia tipoVia = catTipoViaEjb.findById(codigoTipoVia);
@@ -505,9 +505,9 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                                 }
                                 tipoVia.setDescripcionTipoVia(fila[1].toLowerCase());
                                 catTipoViaEjb.persist(tipoVia);
-                            } catch (Exception e) {
+                         /*   } catch (Exception e) {
                                 log.info(e.getMessage());
-                            }
+                            }*/
                         }
 
                     }
@@ -521,7 +521,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
                             // Obtenemos codigo y miramos si ya existe en la BD
                             // Creamos la clave compuesta primero.
-                            try {
+                         //   try {
                                 String codigoAmbito = fila[0];
                                 // cargamos el nivel de Administracion correspondiente.
                                 CatNivelAdministracion catNivelAdministracion = cacheNivelAdministracion.get(Long.parseLong(fila[2]));
@@ -536,10 +536,10 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                                 }
                                 ambitoTerritorial.setDescripcionAmbito(fila[1]);
                                 catAmbitoTerritorialEjb.persist(ambitoTerritorial);
-                            } catch (Exception e) {
+                           /* } catch (Exception e) {
                                 log.info(e.getMessage());
                             }
-                        }
+*/                        }
 
                     }
 
@@ -551,7 +551,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
                             // Obtenemos codigo y miramos si ya existe en la BD
                             // Creamos la clave compuesta primero.
-                            try {
+                            //try {
                                 String codigoServicio = fila[0];
                                 // cargamos el Servicio
                                 Servicio servicio = servicioEjb.findById(Long.parseLong(codigoServicio));
@@ -563,9 +563,9 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                                 servicio.setDescServicio(fila[1]);
                                 servicioEjb.persist(servicio);
 
-                            } catch (Exception e) {
+                            /*} catch (Exception e) {
                                 log.info(e.getMessage());
-                            }
+                            }*/
                         }
 
                     }
@@ -577,7 +577,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                         while ((fila = reader.readNext()) != null) {
                             // Obtenemos codigo y miramos si ya existe en la BD
                             // Creamos la clave compuesta primero.
-                            try {
+                           // try {
                                 Boolean existe;
                                 final Long codigoLocalidad = new Long(fila[0]);
                                 // cargamos el nivel de Administracion correspondiente.
@@ -621,9 +621,9 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                                     catLocalidadEjb.persistReal(localidad);
                                 }
 
-                            } catch (Exception e) {
+                            /*} catch (Exception e) {
                                 log.error(" Error important Localidad " + e.getMessage());
-                            }
+                            }*/
                         }
 
                         // Ja podem borrar la cache de Entidad
@@ -642,8 +642,10 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                 log.warn("Fichero no encontrado " + fichero);
             } catch (IOException io) {
                 io.printStackTrace();
+                throw new IOException(io.getMessage());
             } catch (Exception e) {
                 e.printStackTrace();
+                throw new Exception(e.getMessage());
             } finally {
                 if (reader != null) {
                     try {

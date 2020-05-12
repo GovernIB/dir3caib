@@ -109,7 +109,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                         int count = 1;
                         while ((fila = reader.readNext()) != null) {
                             //Obtenemos codigo y miramos si ya existe en la BD
-                            try {
+                           // try {
 
                                 String codigoOficina = fila[0];
 
@@ -146,9 +146,10 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                                 // guardamos la oficina procesada enla cache
                                 oficinesCache.put(oficina.getCodigo(), oficina);
 
-                            } catch (Exception e) {
-                                log.error("Error  important oficines  " + e.getMessage(), e);
-                            }
+                            //} catch (Exception e) {
+
+                             //log.error("Error  important oficines  " + e.getMessage(), e);
+                            //}
                             count++;
                             //cada 500 realizamos flush y clear para evitar problemas de outofmemory
                             if (count % 5000 == 0) {
@@ -198,9 +199,11 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
             } catch (FileNotFoundException ex) {
                 log.warn("Fichero no encontrado " + fichero);
             } catch (IOException io) {
-                io.printStackTrace();
+               io.printStackTrace();
+                throw new IOException(io.getMessage());
             } catch (Exception e) {
                 e.printStackTrace();
+                throw new Exception(e.getMessage());
             } finally {
                 if (reader != null) {
                     try {
@@ -402,7 +405,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                 String codigoOficinaAnterior = fila[0]; //codigo de la oficina que es sustituida
                 String codigoOficinaUltima = fila[2]; // código de la oficina que sustituye
 
-                try {
+              //  try {
 
                     if (!codigoOficinaUltima.isEmpty() && !codigoOficinaAnterior.isEmpty() && oficinasExistInBBDD.contains(codigoOficinaUltima)) {// Si no están vacios
 
@@ -423,7 +426,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
 
                     }
 
-                } catch (Exception e) {
+                /*} catch (Exception e) {
                     log.error("=======================================");
                     log.error("codigoOficinaAnterior: " + codigoOficinaAnterior);
                     log.error("codigoOficinaUltima: " + codigoOficinaUltima);
@@ -433,7 +436,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                     for (int n = 0; n < maxLines; n++) {
                         log.error(stack[n].toString());
                     }
-                }
+                }*/
             }
         }
     }
@@ -453,7 +456,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
             int count = 1;
             long start = System.currentTimeMillis();
             while ((fila = reader.readNext()) != null) {
-                try {
+               // try {
 
                     String sOficina = fila[0].trim();
                     String stipoContacto = fila[1].trim();
@@ -492,9 +495,9 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                         start = end;
                     }
 
-                } catch (Exception e) {
-                    log.error("Error important contactos: " + e.getMessage(), e);
-                }
+               // } catch (Exception e) {
+                   // log.error("Error important contactos: " + e.getMessage(), e);
+               // }
             }
         }
 
@@ -520,7 +523,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
             CacheUnidadOficina cache = new CacheUnidadOficina(relOrgOfiEjb.getUnidadesOficinas());
             while ((fila = reader.readNext()) != null) {
                 //Obtenemos codigo y miramos si ya existe en la BD
-                try {
+                //try {
                     String sOficina = fila[0].trim();
                     String sUnidad = fila[2].trim();
 
@@ -580,9 +583,9 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
 
                     }
 
-                } catch (Exception e) {
+               /* } catch (Exception e) {
                     log.error("Error important relaciones organizativas " + e.getMessage(), e);
-                }
+                }*/
             }
         }
 
@@ -607,7 +610,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
             reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
             while ((fila = reader.readNext()) != null) {
                 //Obtenemos codigo y miramos si ya existe en la BD
-                try {
+                //try {
                     String sOficina = fila[0].trim();
                     String sUnidad = fila[2].trim();
 
@@ -663,9 +666,9 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                         }
 
                     }
-                } catch (Exception e) {
+                /*} catch (Exception e) {
                     log.error("Error important RELACIONES_SIROFI: " + e.getMessage(), e);
-                }
+                }*/
             }
         }
     }
@@ -690,7 +693,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
 
             while ((fila = reader.readNext()) != null) {
 
-                try {
+             //   try {
                     // Obtenemos los códigos
                     String codigoOficina = fila[0].trim();
                     String codigoServicio = fila[1].trim();
@@ -711,9 +714,9 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                         }
                     }
 
-                } catch (Exception e) {
+               /* } catch (Exception e) {
                     log.error(" Error en OFI_SERVICIOS_OFI " + e.getMessage(), e);
-                }
+                }*/
             }
         }
     }
