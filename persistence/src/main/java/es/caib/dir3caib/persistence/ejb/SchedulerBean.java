@@ -2,6 +2,7 @@ package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.utils.Configuracio;
 import org.apache.log4j.Logger;
+import org.jboss.ejb3.annotation.TransactionTimeout;
 
 import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
@@ -17,6 +18,7 @@ public class SchedulerBean implements SchedulerLocal{
     private SincronizacionLocal sincronizacionEjb;
 
     @Override
+    @TransactionTimeout(value = 50000)
     public void sincronizarDirectorio() throws Exception {
         if (Configuracio.isSincronizar()) {
             log.info("-------------------------------------------");
