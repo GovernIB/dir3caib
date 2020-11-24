@@ -330,8 +330,6 @@ public class Dir3RestBean implements Dir3RestLocal {
         List<String> where = new ArrayList<String>();
 
 
-        log.info("XXXXXXXXX Entramos aqui en busqueda Organismos");
-
         //Los left outer joins son para las FK
         StringBuilder query = new StringBuilder("Select distinct(unidad.codigo), unidad.denominacion, unidad.estado.codigoEstadoEntidad, unidad.codUnidadRaiz.codigo, unidad.codUnidadRaiz.denominacion, unidad.codUnidadSuperior.codigo, "+
            " unidad.codUnidadSuperior.denominacion, uniLocalidad.descripcionLocalidad, unidad.esEdp, unidad.nivelJerarquico, unidad.nifcif, unidad.nivelAdministracion.descripcionNivelAdministracion, unidad.codTipoUnidad.descripcionTipoUnidadOrganica, " +
