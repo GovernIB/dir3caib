@@ -4,6 +4,7 @@
  */
 package es.caib.dir3caib.persistence.ejb;
 
+import es.caib.dir3caib.persistence.model.CatTipoContacto;
 import es.caib.dir3caib.persistence.model.ContactoUnidadOrganica;
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.SecurityDomain;
@@ -13,6 +14,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -82,5 +84,29 @@ public class ContactoUOBean extends BaseEjbJPA<ContactoUnidadOrganica, Long> imp
 
         q.executeUpdate();
 
+    }
+
+
+    /**
+     * Obtiene los contactos de una unidad. Los contactos son los datos de contacto(email, url,teléfono)
+     * @param codigoUnidad
+     * @return
+     * @throws Exception
+     */
+    public List<ContactoUnidadOrganica> getContactosByUnidad(String codigoUnidad) throws Exception {
+
+        Query q = em.createQuery("Select contacto.tipoContacto, contacto.valorContacto from ContactoUnidadOrganica as contacto where contacto.unidad.codigo=:codigoUnidad order by contacto.codContacto");
+
+        q.setParameter("codigoUnidad", codigoUnidad);
+
+
+        List<ContactoUnidadOrganica> contactos = new ArrayList<ContactoUnidadOrganica>();
+        List<Object[]> result = q.getResultList();
+
+        for (Object[] object : result) {
+            contactos.add(new ContactoUnidadOrganica((CatTipoContacto)object[0],(String)object[1]));
+        }
+
+        return contactos;
     }
 }

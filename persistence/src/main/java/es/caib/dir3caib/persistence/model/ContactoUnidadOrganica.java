@@ -1,5 +1,7 @@
 package es.caib.dir3caib.persistence.model;
-import java.io.Serializable;
+import org.hibernate.annotations.ForeignKey;
+import org.hibernate.annotations.Index;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,8 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import org.hibernate.annotations.ForeignKey;
-import org.hibernate.annotations.Index;
+import java.io.Serializable;
 
 /**
  * @version 1.0
@@ -35,7 +36,13 @@ public class ContactoUnidadOrganica implements Serializable {
 
 	}
 
-	public void finalize() throws Throwable {
+
+  public ContactoUnidadOrganica(CatTipoContacto tipoContacto, String valorContacto) {
+    this.tipoContacto = tipoContacto;
+    this.valorContacto = valorContacto;
+  }
+
+  public void finalize() throws Throwable {
 
 	}
   

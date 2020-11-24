@@ -19,10 +19,22 @@ public class Nodo extends ObjetoBasico {
     private List<Nodo> oficinasDependientes;
     private List<Nodo> oficinasAuxiliares;
     private List<Nodo> oficinasFuncionales; //relacionesOrganizativasOfi
-   private List<Nodo> historicos; // guarda los históricos del nodo
+    private List<Nodo> historicos; // guarda los históricos del nodo
     private boolean tieneOficinaSir = false;
     private boolean esEdp = false;
-   private int nivel;
+    private Long nivel; //Nivel Jerarquico
+
+    //Campos añadadidos para Dades obertes CAIB
+    private String cif;
+    private String nivelAdministracion;
+    private String tipoUnidad;
+    private String direccion;
+    private List<String> contactos; //tel, url, email
+    private String ambitoTerritorial;
+    private String ambitoPais;
+    private String ambitoComunAutonoma;
+    private String ambitoProvincia;
+    private String ambitoIsla;
 
 
     public Nodo() {
@@ -42,6 +54,22 @@ public class Nodo extends ObjetoBasico {
         this.tieneOficinaSir = tieneOficinaSir;
         this.esEdp = esEdp;
     }
+
+
+   public Nodo(String codigo, String denominacion, String descripcionEstado, String raiz, String superior, String localidad, Boolean esEdp,Long nivel,String cif, String nivelAdministracion, String tipoUnidad, String direccion, String ambitoTerritorial, String ambitoPais, String ambitoComunAutonoma, String ambitoProvincia, String ambitoIsla) {
+      super(codigo, denominacion, descripcionEstado, raiz, superior, localidad);
+      this.esEdp= esEdp;
+      this.nivel= nivel;
+      this.cif = cif;
+      this.nivelAdministracion = nivelAdministracion;
+      this.tipoUnidad = tipoUnidad;
+      this.direccion = direccion;
+      this.ambitoTerritorial = ambitoTerritorial;
+      this.ambitoPais = ambitoPais;
+      this.ambitoComunAutonoma = ambitoComunAutonoma;
+      this.ambitoProvincia = ambitoProvincia;
+      this.ambitoIsla = ambitoIsla;
+   }
 
 
 
@@ -114,11 +142,91 @@ public class Nodo extends ObjetoBasico {
         this.esEdp = esEdp;
     }
 
-   public int getNivel() {
+   public Long getNivel() {
       return nivel;
    }
 
-   public void setNivel(int nivel) {
+   public void setNivel(Long nivel) {
       this.nivel = nivel;
+   }
+
+   public String getCif() {
+      return cif;
+   }
+
+   public void setCif(String cif) {
+      this.cif = cif;
+   }
+
+   public String getNivelAdministracion() {
+      return nivelAdministracion;
+   }
+
+   public void setNivelAdministracion(String nivelAdministracion) {
+      this.nivelAdministracion = nivelAdministracion;
+   }
+
+   public String getTipoUnidad() {
+      return tipoUnidad;
+   }
+
+   public void setTipoUnidad(String tipoUnidad) {
+      this.tipoUnidad = tipoUnidad;
+   }
+
+   public String getDireccion() {
+      return direccion;
+   }
+
+   public void setDireccion(String direccion) {
+      this.direccion = direccion;
+   }
+
+   public List<String> getContactos() {
+      return contactos;
+   }
+
+   public void setContactos(List<String> contactos) {
+      this.contactos = contactos;
+   }
+
+   public String getAmbitoTerritorial() {
+      return ambitoTerritorial;
+   }
+
+   public void setAmbitoTerritorial(String ambitoTerritorial) {
+      this.ambitoTerritorial = ambitoTerritorial;
+   }
+
+   public String getAmbitoPais() {
+      return ambitoPais;
+   }
+
+   public void setAmbitoPais(String ambitoPais) {
+      this.ambitoPais = ambitoPais;
+   }
+
+   public String getAmbitoComunAutonoma() {
+      return ambitoComunAutonoma;
+   }
+
+   public void setAmbitoComunAutonoma(String ambitoComunAutonoma) {
+      this.ambitoComunAutonoma = ambitoComunAutonoma;
+   }
+
+   public String getAmbitoProvincia() {
+      return ambitoProvincia;
+   }
+
+   public void setAmbitoProvincia(String ambitoProvincia) {
+      this.ambitoProvincia = ambitoProvincia;
+   }
+
+   public String getAmbitoIsla() {
+      return ambitoIsla;
+   }
+
+   public void setAmbitoIsla(String ambitoIsla) {
+      this.ambitoIsla = ambitoIsla;
    }
 }

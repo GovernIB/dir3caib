@@ -76,48 +76,14 @@ public class NodoUtils {
             //object[6] --> superior.denominacion
             //object[7] --> localidad
 
-            String obj0 = "";
-            String obj1 = "";
-            String obj2 = "";
-            String obj3 = "";
-            String obj4 = "";
-            String obj5 = "";
-            String obj6 = "";
-            String obj7 = "";
-            if (object[0] != null) {
-                obj0 = (String) object[0];
-            }
+            String[] obj = new String[object.length];
 
-            if (object[1] != null) {
-                obj1 = (String) object[1];
-            }
-
-            if (object[2] != null) {
-                obj2 = (String) object[2];
-            }
-
-            if (object[3] != null) {
-                obj3 = (String) object[3];
-            }
-
-            if (object[4] != null) {
-                obj4 = (String) object[4];
-            }
-
-            if (object[5] != null) {
-                obj5 = (String) object[5];
-            }
-
-            if (object[6] != null) {
-                obj6 = (String) object[6];
-            }
-
-            if (object[7] != null) {
-                obj7 = (String) object[7];
-            }
+            // copy elements from object array to string array
+            for (int i = 0; i < object.length; i++)
+                obj[i] = String.valueOf(object[i]);
 
 
-            Nodo nodo = new Nodo(obj0, obj1, obj2, obj4 + " - " + obj3, obj6 + " - " + obj5, obj7);
+            Nodo nodo = new Nodo(obj[0], obj[1], obj[2], obj[4] + " - " + obj[3], obj[6] + " - " + obj[5], obj[7]);
 
 
             nodos.add(nodo);
@@ -179,4 +145,55 @@ public class NodoUtils {
 
         return nodos;
     }
+
+
+
+    public static List<Nodo> getNodoListOpenData(List<Object[]> result) throws Exception {
+
+        List<Nodo> nodos = new ArrayList<Nodo>();
+
+        for (Object[] object : result) {
+            // UNIDADES
+            //object[0] --> codigo
+            //object[1] --> denominacion
+            //object[2] --> descripcionEstado
+            //object[3] --> raiz.codigo
+            //object[4] --> raiz.denominacion
+            //object[5] --> superior.codigo
+            //object[6] --> superior.denominacion
+            //object[7] --> localidad
+            //object[8] --> esEdp
+            //object[9] --> nivelJerarquico
+            //object[10] --> nifcif
+            //object[11] --> nivelAdministracion.descripcionNivelAdministracion
+            //object[12] --> descripcionTipoUnidadOrganica
+            //object[13] --> descripcionTipoVia
+            //object[14] --> nombreVia
+            //object[15] --> numVia
+            //object[16] --> complemento
+            //object[17] --> codAmbitoTerritorial.descripcionAmbito
+            //object[18] --> codAmbPais.descripcionPais
+            //object[19] --> codAmbComunidad.descripcionComunidad
+            //object[20] --> codAmbProvincia.descripcionProvincia
+            //object[21] --> codAmbIsla.descripcionIsla
+
+
+
+            String[] obj = new String[object.length];
+
+            // copy elements from object array to string array
+            for (int i = 0; i < object.length; i++) {
+                obj[i] = String.valueOf(object[i]);
+            }
+            Nodo nodo = new Nodo(obj[0], obj[1], obj[2], obj[4] + " - " + obj[3], obj[6] + " - " + obj[5], obj[7],Boolean.parseBoolean(obj[8]),Long.parseLong(obj[9]), obj[10],obj[11], obj[12],obj[13] + " " + obj[14]+ ", " + obj[15]+ ", "+ obj[16]+ ", " + obj[17],obj[18],obj[19],obj[20],obj[21],obj[22]);
+
+
+            nodos.add(nodo);
+        }
+
+        return nodos;
+    }
+
+
+
 }

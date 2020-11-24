@@ -1,6 +1,11 @@
 package es.caib.dir3caib.persistence.ejb;
 
-import es.caib.dir3caib.persistence.model.*;
+import es.caib.dir3caib.persistence.model.ContactoOfi;
+import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
+import es.caib.dir3caib.persistence.model.Oficina;
+import es.caib.dir3caib.persistence.model.RelacionOrganizativaOfi;
+import es.caib.dir3caib.persistence.model.Sincronizacion;
+import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.persistence.model.ws.OficinaTF;
 import es.caib.dir3caib.utils.Utils;
 import org.apache.log4j.Logger;
@@ -10,7 +15,11 @@ import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Fundació BIT.
@@ -242,5 +251,10 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
 
         return sincronizacion.getFechaImportacion();
     }
+
+
+
+
+
 
 }

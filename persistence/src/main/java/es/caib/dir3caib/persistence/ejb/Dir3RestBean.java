@@ -1,17 +1,33 @@
 package es.caib.dir3caib.persistence.ejb;
 
-import es.caib.dir3caib.persistence.model.*;
-import es.caib.dir3caib.persistence.utils.*;
+import es.caib.dir3caib.persistence.model.ContactoUnidadOrganica;
+import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
+import es.caib.dir3caib.persistence.model.Oficina;
+import es.caib.dir3caib.persistence.model.RelacionOrganizativaOfi;
+import es.caib.dir3caib.persistence.model.Servicio;
+import es.caib.dir3caib.persistence.model.Unidad;
+import es.caib.dir3caib.persistence.utils.CodigoValor;
+import es.caib.dir3caib.persistence.utils.DataBaseUtils;
+import es.caib.dir3caib.persistence.utils.Nodo;
+import es.caib.dir3caib.persistence.utils.NodoUtils;
+import es.caib.dir3caib.persistence.utils.ObjetoDirectorio;
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 
+import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created 1/04/14 9:50
@@ -20,6 +36,7 @@ import java.util.*;
  * Clase que implementa la funcionalidad de varios servicios rest que pueden ser llamados desde otras aplicaciones.
  */
 @Stateless(name = "Dir3RestEJB")
+@RunAs("DIR_WS")
 public class Dir3RestBean implements Dir3RestLocal {
 
     protected final Logger log = Logger.getLogger(getClass());
@@ -32,6 +49,15 @@ public class Dir3RestBean implements Dir3RestLocal {
     @EJB(mappedName = "dir3caib/ObtenerOficinasEJB/local")
     private ObtenerOficinasLocal obtenerOficinasEjb;
 
+
+    @EJB(mappedName = "dir3caib/ContactoUOEJB/local")
+    private ContactoUOLocal contactoUOEjb;
+
+    @EJB(mappedName = "dir3caib/OficinaEJB/local")
+    private OficinaLocal oficinaEjb;
+
+    @EJB(mappedName = "dir3caib/RelacionOrganizativaOfiEJB/local")
+    private RelacionOrganizativaOfiLocal relacionOrganizativaOfiEjb;
 
 
     /**
@@ -303,8 +329,18 @@ public class Dir3RestBean implements Dir3RestLocal {
         Map<String, Object> parametros = new HashMap<String, Object>();
         List<String> where = new ArrayList<String>();
 
-        StringBuilder query = new StringBuilder("Select distinct(unidad.codigo),unidad.denominacion, unidad.estado.codigoEstadoEntidad, unidad.codUnidadRaiz.codigo, unidad.codUnidadRaiz.denominacion, unidad.codUnidadSuperior.codigo, unidad.codUnidadSuperior.denominacion, unilocalidad.descripcionLocalidad  " +
-                "from Unidad  as unidad left outer join unidad.catLocalidad as unilocalidad  ");
+
+        log.info("XXXXXXXXX Entramos aqui en busqueda Organismos");
+
+        //Los left outer joins son para las FK
+        StringBuilder query = new StringBuilder("Select distinct(unidad.codigo), unidad.denominacion, unidad.estado.codigoEstadoEntidad, unidad.codUnidadRaiz.codigo, unidad.codUnidadRaiz.denominacion, unidad.codUnidadSuperior.codigo, "+
+           " unidad.codUnidadSuperior.denominacion, uniLocalidad.descripcionLocalidad, unidad.esEdp, unidad.nivelJerarquico, unidad.nifcif, unidad.nivelAdministracion.descripcionNivelAdministracion, unidad.codTipoUnidad.descripcionTipoUnidadOrganica, " +
+           " unidad.tipoVia.descripcionTipoVia, unidad.nombreVia, unidad.numVia, unidad.complemento, unidad.codPostal, unidad.codAmbitoTerritorial.descripcionAmbito, unidad.codAmbPais.descripcionPais, unidad.codAmbComunidad.descripcionComunidad, " +
+           " unidad.codAmbProvincia.descripcionProvincia, unidad.codAmbIsla.descripcionIsla " +
+           " from Unidad  as unidad left outer join unidad.catLocalidad as uniLocalidad " +
+           "                        left outer join unidad.codTipoUnidad as tipoUnidad" +
+           "                        left outer join unidad.codAmbProvincia as provincia  " +
+           "                        left outer join unidad.codAmbIsla as isla ");
 
         // Parametros de busqueda
         if (codigo != null && codigo.length() > 0) {
@@ -370,8 +406,22 @@ public class Dir3RestBean implements Dir3RestLocal {
             q = em.createQuery(query.toString());
         }
 
+
         // Generamos el Nodo
-        List<Nodo> unidades = NodoUtils.getNodoListExtendido(q.getResultList());
+        List<Nodo> unidades = NodoUtils.getNodoListOpenData(q.getResultList());
+
+        //Cargamos los contactos de las unidades
+        for (Nodo nodo : unidades) {
+            List<ContactoUnidadOrganica> contactos = contactoUOEjb.getContactosByUnidad(nodo.getCodigo());
+            List<String> contactosStr = new ArrayList<>();
+            for(ContactoUnidadOrganica cont: contactos){
+                contactosStr.add(cont.getTipoContacto().getDescripcionTipoContacto() + ": "+ cont.getValorContacto());
+            }
+            nodo.setContactos(contactosStr);
+            nodo.setOficinasDependientes(oficinaEjb.oficinasDependientes(nodo.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
+            nodo.setOficinasFuncionales(relacionOrganizativaOfiEjb.getOrganizativasByUnidadEstado(nodo.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
+        }
+
 
         //Si nos indican la variable conOficinas a true es que interesa devolver solo aquellos organismos
         // que tienen oficinas en las que registrar

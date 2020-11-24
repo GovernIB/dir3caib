@@ -13,7 +13,11 @@ import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Fundació BIT.
@@ -322,7 +326,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
         //Asignamos los valores de la unidad que nos pasan
         nodo.setCodigo(unidad.getCodigo());
         nodo.setDenominacion(unidad.getDenominacion());
-        nodo.setNivel(nivel);
+        nodo.setNivel((long) nivel);
         //Obtenemos los históricos de primer nivel de la unidad indicada
         Set<Unidad> parciales = unidad.getHistoricoUO();
         List<Nodo> historicosParciales = new ArrayList<Nodo>();
