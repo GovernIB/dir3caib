@@ -147,13 +147,20 @@ public class NodoUtils {
     }
 
 
-
+    /**
+     * Convierte los resultados de una query en una lista de {@link es.caib.dir3caib.persistence.utils.Nodo}
+     * donde se devuelve los datos que estan comentados en el código
+     *
+     * @param result
+     * @return
+     * @throws Exception
+     */
     public static List<Nodo> getNodoListOpenData(List<Object[]> result) throws Exception {
 
         List<Nodo> nodos = new ArrayList<Nodo>();
 
         for (Object[] object : result) {
-            // UNIDADES
+            // CAMPOS DE LA UNIDAD DEVUELTOS POR LA QUERY
             //object[0] --> codigo
             //object[1] --> denominacion
             //object[2] --> descripcionEstado
