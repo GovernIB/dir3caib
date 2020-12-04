@@ -416,8 +416,9 @@ public class Dir3RestBean implements Dir3RestLocal {
                 contactosStr.add(cont.getTipoContacto().getDescripcionTipoContacto() + ": "+ cont.getValorContacto());
             }
             nodo.setContactos(contactosStr);
-            nodo.setOficinasDependientes(oficinaEjb.oficinasDependientes(nodo.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
-            nodo.setOficinasFuncionales(relacionOrganizativaOfiEjb.getOrganizativasByUnidadEstado(nodo.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
+            //Dades obertes ha demanat que no es retornin de moment issue #6
+           // nodo.setOficinasDependientes(oficinaEjb.oficinasDependientes(nodo.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
+           // nodo.setOficinasFuncionales(relacionOrganizativaOfiEjb.getOrganizativasByUnidadEstado(nodo.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
         }
 
 
