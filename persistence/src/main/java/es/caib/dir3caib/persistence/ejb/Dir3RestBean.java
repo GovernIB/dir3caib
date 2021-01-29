@@ -330,15 +330,24 @@ public class Dir3RestBean implements Dir3RestLocal {
         List<String> where = new ArrayList<String>();
 
 
-        //Los left outer joins son para las FK
+        //Los left outer joins son para las FK ( hay que poner todos los que se usan en el select)
         StringBuilder query = new StringBuilder("Select distinct(unidad.codigo), unidad.denominacion, unidad.estado.codigoEstadoEntidad, unidad.codUnidadRaiz.codigo, unidad.codUnidadRaiz.denominacion, unidad.codUnidadSuperior.codigo, "+
-           " unidad.codUnidadSuperior.denominacion, uniLocalidad.descripcionLocalidad, unidad.esEdp, unidad.nivelJerarquico, unidad.nifcif, unidad.nivelAdministracion.descripcionNivelAdministracion, unidad.codTipoUnidad.descripcionTipoUnidadOrganica, " +
+           " unidad.codUnidadSuperior.denominacion, unidad.codLocalidad.descripcionLocalidad, unidad.esEdp, unidad.nivelJerarquico, unidad.nifcif, unidad.nivelAdministracion.descripcionNivelAdministracion, unidad.codTipoUnidad.descripcionTipoUnidadOrganica, " +
            " unidad.tipoVia.descripcionTipoVia, unidad.nombreVia, unidad.numVia, unidad.complemento, unidad.codPostal, unidad.codAmbitoTerritorial.descripcionAmbito, unidad.codAmbPais.descripcionPais, unidad.codAmbComunidad.descripcionComunidad, " +
            " unidad.codAmbProvincia.descripcionProvincia, unidad.codAmbIsla.descripcionIsla " +
-           " from Unidad  as unidad left outer join unidad.catLocalidad as uniLocalidad " +
+           " from Unidad  as unidad left outer join unidad.codLocalidad as uniLocalidad " +
+           "                        left outer join unidad.catLocalidad as catLocalidad" +
            "                        left outer join unidad.codTipoUnidad as tipoUnidad" +
            "                        left outer join unidad.codAmbProvincia as provincia  " +
-           "                        left outer join unidad.codAmbIsla as isla ");
+           "                        left outer join unidad.codAmbIsla as isla " +
+           "                        left outer join unidad.codAmbitoTerritorial as ambTerritorial " +
+           "                        left outer join unidad.nivelAdministracion as nivelAdministracion " +
+           "                        left outer join unidad.codTipoEntPublica as codTipoEntPublica " +
+           "                        left outer join unidad.codAmbEntGeografica as codAmbEntGeografica " +
+           "                        left outer join unidad.codAmbPais as pais " +
+           "                        left outer join unidad.tipoVia as tipoVia " +
+           "                        left outer join unidad.codAmbComunidad as  comunidad ");
+
 
         // Parametros de busqueda
         if (codigo != null && codigo.length() > 0) {
@@ -360,17 +369,22 @@ public class Dir3RestBean implements Dir3RestLocal {
             parametros.put("codProvincia", provincia);
         }
         if (localidad != null && !localidad.equals("-1") && !localidad.isEmpty()) {
+            //Se consideran los dos campos de localidad porque hemos detectado que la localidad viene informada indistintamente en ambas y no sigue un criterio lógico,
             String[] localidadsplit = localidad.split("-");
-            where.add(" unidad.catLocalidad.codigoLocalidad = :localidad ");
+            where.add(" (unidad.catLocalidad.codigoLocalidad = :localidad or unidad.codLocalidad.codigoLocalidad = :codlocalidad) ");
             parametros.put("localidad", new Long(localidadsplit[0]));
+            parametros.put("codlocalidad", new Long(localidadsplit[0]));
             if (provincia != null && provincia != -1) {
-                where.add(" unidad.catLocalidad.provincia.codigoProvincia = :provincia ");
+                where.add(" (unidad.catLocalidad.provincia.codigoProvincia = :provincia  or unidad.codLocalidad.provincia.codigoProvincia = :codprovincia) ");
                 parametros.put("provincia", provincia);
+                parametros.put("codprovincia", provincia);
                 if (localidadsplit[1] != null && localidadsplit[1].length() > 0) {
-                    where.add(" unidad.catLocalidad.entidadGeografica.codigoEntidadGeografica = :entidadGeografica ");
+                    where.add(" (unidad.catLocalidad.entidadGeografica.codigoEntidadGeografica = :entidadGeografica  or unidad.codLocalidad.entidadGeografica.codigoEntidadGeografica = :codentidadGeografica) ");
                     parametros.put("entidadGeografica", localidadsplit[1]);
+                    parametros.put("codentidadGeografica", localidadsplit[1]);
                 }
             }
+
         }
         //Solo se buscaran vigentes cuando lo indiquen
         if (vigentes) {
@@ -403,6 +417,9 @@ public class Dir3RestBean implements Dir3RestLocal {
             query.append("order by unidad.estado.codigoEstadoEntidad desc, unidad.denominacion asc ");
             q = em.createQuery(query.toString());
         }
+
+
+        System.out.println(query.toString());
 
 
         // Generamos el Nodo
