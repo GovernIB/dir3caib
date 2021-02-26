@@ -419,9 +419,6 @@ public class Dir3RestBean implements Dir3RestLocal {
         }
 
 
-        System.out.println(query.toString());
-
-
         // Generamos el Nodo
         List<Nodo> unidades = NodoUtils.getNodoListOpenData(q.getResultList());
 
