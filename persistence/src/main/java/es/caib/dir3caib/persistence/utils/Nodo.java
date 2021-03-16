@@ -44,6 +44,11 @@ public class Nodo extends ObjetoBasico {
         super(codigo, denominacion, descripcionEstado, raiz, superior, localidad);
     }
 
+    public Nodo(String codigo, String denominacion, String descripcionEstado, String raiz, String superior, String codigoSuperior, String localidad) {
+        super(codigo, denominacion, descripcionEstado, raiz, superior, localidad);
+        super.setCodigoSuperior(codigoSuperior);
+    }
+
     public Nodo(String codigo, String denominacion, String descripcionEstado, String raiz, String superior, String localidad, boolean tieneOficinaSir) {
         super(codigo, denominacion, descripcionEstado, raiz, superior, localidad);
         this.tieneOficinaSir = tieneOficinaSir;

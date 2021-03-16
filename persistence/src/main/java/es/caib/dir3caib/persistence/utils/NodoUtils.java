@@ -83,7 +83,7 @@ public class NodoUtils {
                 obj[i] = String.valueOf(object[i]);
 
 
-            Nodo nodo = new Nodo(obj[0], obj[1], obj[2], obj[4] + " - " + obj[3], obj[6] + " - " + obj[5], obj[7]);
+            Nodo nodo = new Nodo(obj[0], obj[1], obj[2], obj[4] + " - " + obj[3], obj[6], obj[5], obj[7]);
 
 
             nodos.add(nodo);

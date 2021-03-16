@@ -15,7 +15,8 @@ public class ObjetoBasico {
   private String denominacion;
   private String descripcionEstado;
   private String raiz;
-  private String superior;
+  private String superior; // denominación
+  private String codigoSuperior; // código
   private String localidad;
    private String edpPrincipal;
 
@@ -81,6 +82,14 @@ public class ObjetoBasico {
   public void setSuperior(String superior) {
     this.superior = superior;
   }
+
+    public String getCodigoSuperior() {
+        return codigoSuperior;
+    }
+
+    public void setCodigoSuperior(String codigoSuperior) {
+        this.codigoSuperior = codigoSuperior;
+    }
 
   public String getLocalidad() {
     return localidad;
