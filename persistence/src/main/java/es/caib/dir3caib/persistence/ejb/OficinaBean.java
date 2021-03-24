@@ -4,7 +4,13 @@
  */
 package es.caib.dir3caib.persistence.ejb;
 
-import es.caib.dir3caib.persistence.model.*;
+import es.caib.dir3caib.persistence.model.CatEstadoEntidad;
+import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
+import es.caib.dir3caib.persistence.model.Oficina;
+import es.caib.dir3caib.persistence.model.RelacionOrganizativaOfi;
+import es.caib.dir3caib.persistence.model.RelacionSirOfi;
+import es.caib.dir3caib.persistence.model.Servicio;
+import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.persistence.utils.DataBaseUtils;
 import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.NodoUtils;
@@ -20,7 +26,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author mgonzalez
@@ -498,11 +510,12 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
     public Boolean tieneOficinasSIR(String codigoUnidad) throws Exception {
 
         Query q = em.createQuery("select count(relacionSirOfi.oficina.id) from RelacionSirOfi as relacionSirOfi where relacionSirOfi.unidad.codigo =:codigoUnidad " +
-           "and :SERVICIO_SIR_RECEPCION in elements(relacionSirOfi.oficina.servicios) " +
+           "and (:SERVICIO_SIR in elements(relacionSirOfi.oficina.servicios) or :SERVICIO_SIR_ENVIO in elements(relacionSirOfi.oficina.servicios) or :SERVICIO_SIR_RECEPCION in elements(relacionSirOfi.oficina.servicios)) " +
            "and relacionSirOfi.estado.codigoEstadoEntidad='V' ");
 
         q.setParameter("codigoUnidad", codigoUnidad);
-        //q.setParameter("SERVICIO_SIR", new Servicio(Dir3caibConstantes.SERVICIO_SIR));
+        q.setParameter("SERVICIO_SIR", new Servicio(Dir3caibConstantes.SERVICIO_SIR));
+        q.setParameter("SERVICIO_SIR_ENVIO", new Servicio(Dir3caibConstantes.SERVICIO_SIR_ENVIO));
         q.setParameter("SERVICIO_SIR_RECEPCION", new Servicio(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
 
         Long count = (Long) q.getSingleResult();

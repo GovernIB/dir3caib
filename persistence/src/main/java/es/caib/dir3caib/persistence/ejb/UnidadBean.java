@@ -24,7 +24,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author mgonzalez
@@ -413,9 +419,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         List<Nodo> nodos = NodoUtils.getNodoListUnidad(q.getResultList());
 
         for (Nodo nodo : nodos) {
-            if (oficinaEjb.obtenerOficinasSIRUnidad(nodo.getCodigo()).size() > 0) {
-                nodo.setTieneOficinaSir(true);
-            }
+            nodo.setTieneOficinaSir(oficinaEjb.tieneOficinasSIR(nodo.getCodigo()));
         }
         paginacion.setListado(new ArrayList<Object>(nodos));
 
