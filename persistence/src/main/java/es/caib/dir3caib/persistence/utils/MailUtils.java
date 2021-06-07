@@ -13,6 +13,8 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Date;
 
 /**
@@ -73,13 +75,28 @@ public class MailUtils {
 
     }
 
-    public static void envioEmailErrorSincronizacion(String tipoSincronizacion) throws Exception{
+    public static void envioEmailErrorSincronizacion(String tipoSincronizacion, Throwable th) throws Exception{
 
         String asunto = Dir3caibConstantes.ASUNTO_MAIL + tipoSincronizacion;
 
         InternetAddress addressFrom = new InternetAddress(Dir3caibConstantes.APLICACION_EMAIL, Dir3caibConstantes.APLICACION_NOMBRE);
 
-        enviaMail(asunto, Dir3caibConstantes.CUERPO_MAIL, addressFrom, Message.RecipientType.TO, Configuracio.getAdministradorEmail());
+        StringBuilder cuerpoMail = new StringBuilder();
+
+        cuerpoMail.append(Dir3caibConstantes.CUERPO_MAIL);
+
+
+        if(th!=null) {
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw, true);
+            th.printStackTrace(pw);
+            String exception = sw.getBuffer().toString();
+            cuerpoMail.append(System.getProperty("line.separator"));
+            cuerpoMail.append(System.getProperty("line.separator"));
+            cuerpoMail.append("Exception: ").append(exception).append(System.getProperty("line.separator"));
+        }
+
+        enviaMail(asunto, cuerpoMail.toString(), addressFrom, Message.RecipientType.TO, Configuracio.getAdministradorEmail());
 
     }
 

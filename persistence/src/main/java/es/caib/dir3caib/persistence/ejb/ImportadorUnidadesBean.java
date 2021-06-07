@@ -1,7 +1,17 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import au.com.bytecode.opencsv.CSVReader;
-import es.caib.dir3caib.persistence.model.*;
+import es.caib.dir3caib.persistence.model.CatAmbitoTerritorial;
+import es.caib.dir3caib.persistence.model.CatAmbitoTerritorialPK;
+import es.caib.dir3caib.persistence.model.CatEntidadGeografica;
+import es.caib.dir3caib.persistence.model.CatLocalidadPK;
+import es.caib.dir3caib.persistence.model.CatNivelAdministracion;
+import es.caib.dir3caib.persistence.model.CatProvincia;
+import es.caib.dir3caib.persistence.model.CatTipoContacto;
+import es.caib.dir3caib.persistence.model.ContactoUnidadOrganica;
+import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
+import es.caib.dir3caib.persistence.model.Sincronizacion;
+import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.persistence.utils.ImportadorBase;
 import es.caib.dir3caib.utils.Configuracio;
 import es.caib.dir3caib.utils.Utils;
@@ -13,7 +23,12 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Date;
 
 /**

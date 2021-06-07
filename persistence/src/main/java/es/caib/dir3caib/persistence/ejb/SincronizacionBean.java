@@ -10,7 +10,12 @@ import es.caib.dir3caib.ws.dir3.oficina.client.OficinasWs;
 import es.caib.dir3caib.ws.dir3.oficina.client.SD02OFDescargaOficinas;
 import es.caib.dir3caib.ws.dir3.oficina.client.SD02OFDescargaOficinasService;
 import es.caib.dir3caib.ws.dir3.oficina.client.TipoConsultaOF;
-import es.caib.dir3caib.ws.dir3.unidad.client.*;
+import es.caib.dir3caib.ws.dir3.unidad.client.FormatoFichero;
+import es.caib.dir3caib.ws.dir3.unidad.client.RespuestaWS;
+import es.caib.dir3caib.ws.dir3.unidad.client.SD01UNDescargaUnidades;
+import es.caib.dir3caib.ws.dir3.unidad.client.SD01UNDescargaUnidadesService;
+import es.caib.dir3caib.ws.dir3.unidad.client.TipoConsultaUO;
+import es.caib.dir3caib.ws.dir3.unidad.client.UnidadesWs;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -393,7 +398,7 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
                 // La descarga ha ido mal, lo informamos mediante el estado
                 sincronizacion.setEstado(Dir3caibConstantes.SINCRONIZACION_ERROR_DESCARGA);
                 merge(sincronizacion);
-                MailUtils.envioEmailErrorSincronizacion(Dir3caibConstantes.SINCRONIZACION_CATALOGO);
+                MailUtils.envioEmailErrorSincronizacion(Dir3caibConstantes.SINCRONIZACION_CATALOGO,null);
                 return sincronizacion;
             }
 
@@ -405,6 +410,7 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
             log.info("Excepcion en la descarga del catalogo");
             sincronizacion.setEstado(Dir3caibConstantes.SINCRONIZACION_ERROR_DESCARGA);
             merge(sincronizacion);
+            MailUtils.envioEmailErrorSincronizacion(Dir3caibConstantes.SINCRONIZACION_CATALOGO,e);
             throw new Exception(e.getMessage());
         }
     }
@@ -497,11 +503,11 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
                 try {
                     actualizarEstado(sincroCatalogo.getCodigo(), Dir3caibConstantes.SINCRONIZACION_ERRONEA);
                 } catch (Exception ex2) {
-                    MailUtils.envioEmailErrorSincronizacion(Dir3caibConstantes.SINCRONIZACION_CATALOGO);
+                    MailUtils.envioEmailErrorSincronizacion(Dir3caibConstantes.SINCRONIZACION_CATALOGO,ex2);
                     ex2.printStackTrace();
                 }
             }
-            MailUtils.envioEmailErrorSincronizacion(Dir3caibConstantes.SINCRONIZACION_CATALOGO);
+            MailUtils.envioEmailErrorSincronizacion(Dir3caibConstantes.SINCRONIZACION_CATALOGO, e);
             e.printStackTrace();
             throw e;
         }
@@ -552,11 +558,11 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
                     actualizarEstado(sincroUnidadesOficinas.getCodigo(), Dir3caibConstantes.SINCRONIZACION_ERRONEA);
 
                 } catch (Exception ex1) {
-                    MailUtils.envioEmailErrorSincronizacion(Dir3caibConstantes.SINCRONIZACION_DIRECTORIO);
+                    MailUtils.envioEmailErrorSincronizacion(Dir3caibConstantes.SINCRONIZACION_DIRECTORIO,ex1);
                     ex1.printStackTrace();
                 }
             }
-            MailUtils.envioEmailErrorSincronizacion(Dir3caibConstantes.SINCRONIZACION_DIRECTORIO);
+            MailUtils.envioEmailErrorSincronizacion(Dir3caibConstantes.SINCRONIZACION_DIRECTORIO, e);
             e.printStackTrace();
             throw e;
         }
