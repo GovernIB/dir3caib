@@ -10,8 +10,6 @@ import es.caib.dir3caib.ws.dir3.oficina.client.OficinasWs;
 import es.caib.dir3caib.ws.dir3.oficina.client.SD02OFDescargaOficinas;
 import es.caib.dir3caib.ws.dir3.oficina.client.SD02OFDescargaOficinasService;
 import es.caib.dir3caib.ws.dir3.oficina.client.TipoConsultaOF;
-import es.caib.dir3caib.ws.dir3.unidad.client.FormatoFichero;
-import es.caib.dir3caib.ws.dir3.unidad.client.RespuestaWS;
 import es.caib.dir3caib.ws.dir3.unidad.client.SD01UNDescargaUnidades;
 import es.caib.dir3caib.ws.dir3.unidad.client.SD01UNDescargaUnidadesService;
 import es.caib.dir3caib.ws.dir3.unidad.client.TipoConsultaUO;
@@ -197,11 +195,7 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
         String oficinasZip = "";
 
         // Establecemos las fechas para la sincronizacion incremental o inicial
-        if (fechaInicio != null) {
-            sincronizacion.setFechaInicio(fechaInicio);
-        }else{
-            sincronizacion.setFechaInicio(null);
-        }
+        sincronizacion.setFechaInicio(fechaInicio);
 
         if (fechaFin != null) {
             sincronizacion.setFechaFin(fechaFin);
@@ -236,16 +230,28 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
             Map<String, Object> reqContextUnidades = ((BindingProvider) serviceUnidades).getRequestContext();
             reqContextUnidades.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endPointUnidades);
 
+            //Set timeout until a connection is established
+            reqContextUnidades.put("javax.xml.ws.client.connectionTimeout", "300000");
+
+            //Set timeout until the response is received
+            reqContextUnidades.put("javax.xml.ws.client.receiveTimeout", "300000");
+
             // Service Oficinas
             SD02OFDescargaOficinas serviceOficinas = new SD02OFDescargaOficinasService(new URL(endPointOficinas + "?wsdl")).getSD02OFDescargaOficinas();
             Map<String, Object> reqContextOficinas = ((BindingProvider) serviceOficinas).getRequestContext();
             reqContextOficinas.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endPointOficinas);
 
+            //Set timeout until a connection is established
+            reqContextOficinas.put("javax.xml.ws.client.connectionTimeout", "300000");
+
+            //Set timeout until the response is received
+            reqContextOficinas.put("javax.xml.ws.client.receiveTimeout", "300000");
+
             // Establecemos parametros de serviceUnidades
             UnidadesWs parametrosUnidades = new UnidadesWs();
             parametrosUnidades.setUsuario(usuario);
             parametrosUnidades.setClave(password);
-            parametrosUnidades.setFormatoFichero(FormatoFichero.CSV);
+            parametrosUnidades.setFormatoFichero(es.caib.dir3caib.ws.dir3.unidad.client.FormatoFichero.CSV);
             parametrosUnidades.setTipoConsulta(TipoConsultaUO.COMPLETO);
 
             // Establecemos parametros de serviceOficinas
@@ -266,7 +272,7 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
             }
 
             // Invocamos el WS de Unidades
-            RespuestaWS respuestaUnidades = serviceUnidades.exportar(parametrosUnidades);
+            es.caib.dir3caib.ws.dir3.unidad.client.RespuestaWS respuestaUnidades = serviceUnidades.exportar(parametrosUnidades);
 
             log.info("Respuesta WS unidades DIR3: " + respuestaUnidades.getCodigo() + " - " + respuestaUnidades.getDescripcion());
 
