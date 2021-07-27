@@ -346,7 +346,8 @@ public class Dir3RestBean implements Dir3RestLocal {
            "                        left outer join unidad.codAmbEntGeografica as codAmbEntGeografica " +
            "                        left outer join unidad.codAmbPais as pais " +
            "                        left outer join unidad.tipoVia as tipoVia " +
-           "                        left outer join unidad.codAmbComunidad as  comunidad ");
+           "                        left outer join unidad.codAmbComunidad as  comunidad " +
+           "                        left outer join unidad.codComunidad as  codcomunidad ");
 
 
         // Parametros de busqueda
@@ -361,8 +362,9 @@ public class Dir3RestBean implements Dir3RestLocal {
             parametros.put("codigoNivelAdministracion", codigoNivelAdministracion);
         }
         if (codComunidad != null && codComunidad != -1) {
-            where.add(" unidad.codAmbComunidad.codigoComunidad = :codComunidad ");
+            where.add(" (unidad.codAmbComunidad.codigoComunidad = :codComunidad or unidad.codComunidad.codigoComunidad = :comunidad) ");
             parametros.put("codComunidad", codComunidad);
+            parametros.put("comunidad", codComunidad);
         }
         if (provincia != null && provincia != -1) {
             where.add(" unidad.codAmbProvincia.codigoProvincia = :codProvincia");
