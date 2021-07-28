@@ -120,4 +120,8 @@ public class Dir3caibConstantes {
     public static final String APLICACION_NOMBRE = "DIR3CAIB";
     public static final String APLICACION_EMAIL = "no_responder@dir3caib.com";
 
+
+    //NIVEL ADMINISTRACION UNIVERSIDADES
+    public static final Long NIVEL_ADMINISTRACION_UNIVERSIDADES=4L;
+
 }
