@@ -361,18 +361,20 @@ public class Dir3RestBean implements Dir3RestLocal {
             where.add(" unidad.nivelAdministracion.codigoNivelAdministracion = :codigoNivelAdministracion ");
             parametros.put("codigoNivelAdministracion", codigoNivelAdministracion);
         }
-        // si nos indican universidades, hay que mirar la comunidad en los datos de contacto, ya que no les aplica el ambito territorial.
-        if(Dir3caibConstantes.NIVEL_ADMINISTRACION_UNIVERSIDADES.equals(codigoNivelAdministracion)){
-            if (codComunidad != null && codComunidad != -1) {
+
+
+        if (codComunidad != null && codComunidad != -1) {
+            //al nivel administración Universidades no les aplica el ámbito territorial, por tanto hay que considerar la comunidad de los datos de contacto
+            if(Dir3caibConstantes.NIVEL_ADMINISTRACION_UNIVERSIDADES.equals(codigoNivelAdministracion)){
                 where.add(" (unidad.codAmbComunidad.codigoComunidad = :codComunidad or unidad.codComunidad.codigoComunidad = :comunidad) ");
                 parametros.put("codComunidad", codComunidad);
                 parametros.put("comunidad", codComunidad);
-            }
-        }else{
-            if (codComunidad != null && codComunidad != -1) {
+
+            }else{
                 where.add(" unidad.codAmbComunidad.codigoComunidad = :codComunidad ");
                 parametros.put("codComunidad", codComunidad);
             }
+
         }
 
         if (provincia != null && provincia != -1) {
