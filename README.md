@@ -1,4 +1,4 @@
-# ![Logo](https://github.com/GovernIB/maven/raw/binaris/dir3caib/projectinfo_Attachments/icon.jpg) Dir3CAIB
+# ![Logo](https://github.com/GovernIB/maven/raw/binaris/dir3caib/projectinfo_Attachments/icon.jpg) Dir3CAIB-1.1
 Servidor Local de Dir3 per les aplicacions de la CAIB
 
 
@@ -22,24 +22,4 @@ Dir3 es defineix de la següent forma:
 * Programming Language: Java & JavaScript & JSP
 * Translations: Catalan & Spanish
 * User Interface: Web-based
-
-
-
-**Captures de pantalla**
-
-![Cerca d'Unitats](https://github.com/GovernIB/maven/raw/binaris/dir3caib/projectinfo_Attachments/screenshots/dir3caib_unitats.png)<br/>
-Cerca d'Unitats
-
-![Catàleg de Fitxers](https://github.com/GovernIB/maven/raw/binaris/dir3caib/projectinfo_Attachments/screenshots/dir3caib_cataleg_fitxers.png)<br/>
-Catàleg de Fitxers
-
-
-![Cerca d'Oficines](https://github.com/GovernIB/maven/raw/binaris/dir3caib/projectinfo_Attachments/screenshots/dir3caib_oficines.png)<br/>
-Cerca d'Oficines
-
-
-![Descarregar Fitxers de Catàleg](https://github.com/GovernIB/maven/raw/binaris/dir3caib/projectinfo_Attachments/screenshots/dir3caib_cataleg_descarregar.png)<br/>
-Descarregar Fitxers de Catàleg
-
-
 
