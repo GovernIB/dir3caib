@@ -6,6 +6,7 @@ import es.caib.dir3caib.persistence.utils.MailUtils;
 import es.caib.dir3caib.utils.Configuracio;
 import es.caib.dir3caib.ws.dir3.catalogo.client.SC21CTVolcadoCatalogos;
 import es.caib.dir3caib.ws.dir3.catalogo.client.SC21CTVolcadoCatalogosService;
+import es.caib.dir3caib.ws.dir3.oficina.client.OficinasVersionWs;
 import es.caib.dir3caib.ws.dir3.oficina.client.OficinasWs;
 import es.caib.dir3caib.ws.dir3.oficina.client.SD02OFDescargaOficinas;
 import es.caib.dir3caib.ws.dir3.oficina.client.SD02OFDescargaOficinasService;
@@ -14,6 +15,8 @@ import es.caib.dir3caib.ws.dir3.unidad.client.SD01UNDescargaUnidades;
 import es.caib.dir3caib.ws.dir3.unidad.client.SD01UNDescargaUnidadesService;
 import es.caib.dir3caib.ws.dir3.unidad.client.TipoConsultaUO;
 import es.caib.dir3caib.ws.dir3.unidad.client.UnidadesWs;
+import es.caib.dir3caib.ws.dir3.unidad.client.UnidadesWsVersion;
+
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -248,14 +251,14 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
             reqContextOficinas.put("javax.xml.ws.client.receiveTimeout", "300000");
 
             // Establecemos parametros de serviceUnidades
-            UnidadesWs parametrosUnidades = new UnidadesWs();
+            UnidadesWsVersion parametrosUnidades = new UnidadesWsVersion();
             parametrosUnidades.setUsuario(usuario);
             parametrosUnidades.setClave(password);
             parametrosUnidades.setFormatoFichero(es.caib.dir3caib.ws.dir3.unidad.client.FormatoFichero.CSV);
             parametrosUnidades.setTipoConsulta(TipoConsultaUO.COMPLETO);
 
             // Establecemos parametros de serviceOficinas
-            OficinasWs parametrosOficinas = new OficinasWs();
+            OficinasVersionWs parametrosOficinas = new OficinasVersionWs();
             parametrosOficinas.setUsuario(usuario);
             parametrosOficinas.setClave(password);
             parametrosOficinas.setFormatoFichero(es.caib.dir3caib.ws.dir3.oficina.client.FormatoFichero.CSV);
@@ -272,7 +275,7 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
             }
 
             // Invocamos el WS de Unidades
-            es.caib.dir3caib.ws.dir3.unidad.client.RespuestaWS respuestaUnidades = serviceUnidades.exportar(parametrosUnidades);
+            es.caib.dir3caib.ws.dir3.unidad.client.RespuestaWS respuestaUnidades = serviceUnidades.exportarV3(parametrosUnidades);
 
             log.info("Respuesta WS unidades DIR3: " + respuestaUnidades.getCodigo() + " - " + respuestaUnidades.getDescripcion());
 
@@ -280,7 +283,7 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
             ficheroUnidades = respuestaUnidades.getFichero();
 
             // Invocamos el WS de Oficinas
-            es.caib.dir3caib.ws.dir3.oficina.client.RespuestaWS respuestaOficinas = serviceOficinas.exportar(parametrosOficinas);
+            es.caib.dir3caib.ws.dir3.oficina.client.RespuestaWS respuestaOficinas = serviceOficinas.exportarV4(parametrosOficinas);
 
             log.info("Respuesta WS oficinas DIR3: " + respuestaOficinas.getCodigo() + " - " + respuestaOficinas.getDescripcion());
 
@@ -370,7 +373,7 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
             reqContextCatalogos.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endPointCatalogos);
 
             // Invocamos al WS
-            es.caib.dir3caib.ws.dir3.catalogo.client.RespuestaWS respuesta = catalogoService.exportar(usuario, password, "csv", "COMPLETO");
+            es.caib.dir3caib.ws.dir3.catalogo.client.RespuestaWS respuesta = catalogoService.exportarV2(usuario, password, "csv", "COMPLETO");
 
             log.info("Respuesta Ws catalogo: " + respuesta.getCodigo() + " - " + respuesta.getDescripcion());
 
