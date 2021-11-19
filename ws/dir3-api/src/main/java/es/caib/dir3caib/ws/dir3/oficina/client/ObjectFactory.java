@@ -30,19 +30,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Excluidos }
+     * Create an instance of {@link OficinasVersionWs }
      * 
      */
-    public Excluidos createExcluidos() {
-        return new Excluidos();
-    }
-
-    /**
-     * Create an instance of {@link Servicios }
-     * 
-     */
-    public Servicios createServicios() {
-        return new Servicios();
+    public OficinasVersionWs createOficinasVersionWs() {
+        return new OficinasVersionWs();
     }
 
     /**
@@ -59,6 +51,22 @@ public class ObjectFactory {
      */
     public RespuestaWS createRespuestaWS() {
         return new RespuestaWS();
+    }
+
+    /**
+     * Create an instance of {@link Excluidos }
+     * 
+     */
+    public Excluidos createExcluidos() {
+        return new Excluidos();
+    }
+
+    /**
+     * Create an instance of {@link Servicios }
+     * 
+     */
+    public Servicios createServicios() {
+        return new Servicios();
     }
 
 }

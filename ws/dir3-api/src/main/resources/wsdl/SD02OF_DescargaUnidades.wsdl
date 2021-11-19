@@ -23,6 +23,12 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
      <element maxOccurs="unbounded" minOccurs="0" name="item" type="xsd:string"/>
     </sequence>
    </complexType>
+   <complexType name="servicios">
+    <sequence>
+     <element maxOccurs="1" minOccurs="0" name="incluidos" type="tns1:estados"/>
+     <element maxOccurs="1" minOccurs="0" name="excluidos" type="tns1:estados"/>
+    </sequence>
+   </complexType>
    <complexType name="UnidadesWs">
     <sequence>
      <element name="usuario" type="xsd:string"/>
@@ -36,6 +42,7 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
      <element maxOccurs="1" minOccurs="0" name="estados" type="tns1:estados"/>
      <element maxOccurs="1" minOccurs="0" name="comunidad" type="xsd:string"/>
      <element maxOccurs="1" minOccurs="0" name="provincia" type="xsd:string"/>
+     <element maxOccurs="1" minOccurs="0" name="servicios" type="tns1:servicios"/>
      <element maxOccurs="1" minOccurs="0" name="fechaInicio" type="xsd:string"/>
      <element maxOccurs="1" minOccurs="0" name="fechaFin" type="xsd:string"/>
     </sequence>
@@ -47,8 +54,39 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
      <element name="fichero" type="xsd:string"/>
     </sequence>
    </complexType>
+   <complexType name="UnidadesWsVersion">
+    <sequence>
+     <element name="usuario" type="xsd:string"/>
+     <element name="clave" type="xsd:string"/>
+     <element name="formatoFichero" type="tns1:formatoFichero"/>
+     <element name="tipoConsulta" type="tns1:tipoConsultaUO"/>
+     <element maxOccurs="1" minOccurs="0" name="codigo" type="xsd:string"/>
+     <element maxOccurs="1" minOccurs="0" name="version" type="xsd:string"/>
+     <element maxOccurs="1" minOccurs="0" name="unidadesDependientes" type="xsd:boolean"/>
+     <element maxOccurs="1" minOccurs="0" name="nivelAdministracion" type="xsd:int"/>
+     <element maxOccurs="1" minOccurs="0" name="nivelJerarquico" type="xsd:int"/>
+     <element maxOccurs="1" minOccurs="0" name="estados" type="tns1:estados"/>
+     <element maxOccurs="1" minOccurs="0" name="comunidad" type="xsd:string"/>
+     <element maxOccurs="1" minOccurs="0" name="provincia" type="xsd:string"/>
+     <element maxOccurs="1" minOccurs="0" name="servicios" type="tns1:servicios"/>
+     <element maxOccurs="1" minOccurs="0" name="fechaInicio" type="xsd:string"/>
+     <element maxOccurs="1" minOccurs="0" name="fechaFin" type="xsd:string"/>
+    </sequence>
+   </complexType>
   </schema>
  </wsdl:types>
+
+   <wsdl:message name="exportarV2Request">
+
+      <wsdl:part name="unidadesRequest" type="tns1:UnidadesWs"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="exportarV3Request">
+
+      <wsdl:part name="unidadesRequest" type="tns1:UnidadesWsVersion"/>
+
+   </wsdl:message>
 
    <wsdl:message name="exportarResponse">
 
@@ -62,6 +100,18 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
    </wsdl:message>
 
+   <wsdl:message name="exportarV2Response">
+
+      <wsdl:part name="exportarReturn" type="tns1:RespuestaWS"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="exportarV3Response">
+
+      <wsdl:part name="exportarReturn" type="tns1:RespuestaWS"/>
+
+   </wsdl:message>
+
    <wsdl:portType name="SD01UN_DescargaUnidades">
 
       <wsdl:operation name="exportar" parameterOrder="unidadesRequest">
@@ -69,6 +119,22 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
          <wsdl:input message="impl:exportarRequest" name="exportarRequest"/>
 
          <wsdl:output message="impl:exportarResponse" name="exportarResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="exportarV2" parameterOrder="unidadesRequest">
+
+         <wsdl:input message="impl:exportarV2Request" name="exportarV2Request"/>
+
+         <wsdl:output message="impl:exportarV2Response" name="exportarV2Response"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="exportarV3" parameterOrder="unidadesRequest">
+
+         <wsdl:input message="impl:exportarV3Request" name="exportarV3Request"/>
+
+         <wsdl:output message="impl:exportarV3Response" name="exportarV3Response"/>
 
       </wsdl:operation>
 
@@ -89,6 +155,42 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
          </wsdl:input>
 
          <wsdl:output name="exportarResponse">
+
+            <wsdlsoap:body namespace="http://impl.manager.directorio.map.es" use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="exportarV2">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="exportarV2Request">
+
+            <wsdlsoap:body namespace="http://impl.manager.directorio.map.es" use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="exportarV2Response">
+
+            <wsdlsoap:body namespace="http://impl.manager.directorio.map.es" use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="exportarV3">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="exportarV3Request">
+
+            <wsdlsoap:body namespace="http://impl.manager.directorio.map.es" use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="exportarV3Response">
 
             <wsdlsoap:body namespace="http://impl.manager.directorio.map.es" use="literal"/>
 

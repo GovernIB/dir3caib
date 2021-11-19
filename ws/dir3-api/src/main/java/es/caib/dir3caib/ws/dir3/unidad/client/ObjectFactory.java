@@ -30,11 +30,27 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link Servicios }
+     * 
+     */
+    public Servicios createServicios() {
+        return new Servicios();
+    }
+
+    /**
      * Create an instance of {@link RespuestaWS }
      * 
      */
     public RespuestaWS createRespuestaWS() {
         return new RespuestaWS();
+    }
+
+    /**
+     * Create an instance of {@link Estados }
+     * 
+     */
+    public Estados createEstados() {
+        return new Estados();
     }
 
     /**
@@ -46,11 +62,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Estados }
+     * Create an instance of {@link UnidadesWsVersion }
      * 
      */
-    public Estados createEstados() {
-        return new Estados();
+    public UnidadesWsVersion createUnidadesWsVersion() {
+        return new UnidadesWsVersion();
     }
 
 }

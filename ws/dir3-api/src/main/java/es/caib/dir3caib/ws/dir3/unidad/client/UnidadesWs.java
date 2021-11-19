@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="estados" type="{http://impl.manager.directorio.map.es/wsExport}estados" minOccurs="0"/>
  *         &lt;element name="comunidad" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="provincia" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="servicios" type="{http://impl.manager.directorio.map.es/wsExport}servicios" minOccurs="0"/>
  *         &lt;element name="fechaInicio" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="fechaFin" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
@@ -51,6 +52,7 @@ import javax.xml.bind.annotation.XmlType;
     "estados",
     "comunidad",
     "provincia",
+    "servicios",
     "fechaInicio",
     "fechaFin"
 })
@@ -71,6 +73,7 @@ public class UnidadesWs {
     protected Estados estados;
     protected String comunidad;
     protected String provincia;
+    protected Servicios servicios;
     protected String fechaInicio;
     protected String fechaFin;
 
@@ -202,7 +205,7 @@ public class UnidadesWs {
      *     {@link Boolean }
      *     
      */
-    public Boolean isUnidadesDependientes() {
+    public Boolean getUnidadesDependientes() {
         return unidadesDependientes;
     }
 
@@ -336,6 +339,30 @@ public class UnidadesWs {
      */
     public void setProvincia(String value) {
         this.provincia = value;
+    }
+
+    /**
+     * Gets the value of the servicios property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Servicios }
+     *     
+     */
+    public Servicios getServicios() {
+        return servicios;
+    }
+
+    /**
+     * Sets the value of the servicios property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Servicios }
+     *     
+     */
+    public void setServicios(Servicios value) {
+        this.servicios = value;
     }
 
     /**
