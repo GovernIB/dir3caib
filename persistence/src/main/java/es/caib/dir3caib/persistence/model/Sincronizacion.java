@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * @version 1.1
  * @author mgonzalez
  */
 @Table(name = "DIR_SINCRONIZACION")
@@ -28,7 +29,6 @@ public class Sincronizacion implements Serializable {
     private Date fechaImportacion;
     private String tipo;
     private Long estado;
-
     private List<String> ficherosDirectorio;
     private List<String> ficherosCatalogo;
 

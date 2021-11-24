@@ -14,7 +14,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
- * @version 1.0
+ * @version 1.1
  * @created 28-oct-2013 14:41:39
  */
 @Table(name = "DIR_CONTACTOUO", schema = "", catalog = "")

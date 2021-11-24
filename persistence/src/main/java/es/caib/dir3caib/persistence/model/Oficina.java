@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 /**
- * @version 1.0
+ * @version 1.1
  * @created 28-oct-2013 14:41:39
  */
 @Table(name = "DIR_OFICINA")

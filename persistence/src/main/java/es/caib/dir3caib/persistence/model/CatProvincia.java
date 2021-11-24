@@ -9,7 +9,7 @@ import org.hibernate.annotations.Index;
 
 
 /**
- * @version 1.0
+ * @version 1.1
  * @created 28-oct-2013 14:41:38
  */
 @Entity

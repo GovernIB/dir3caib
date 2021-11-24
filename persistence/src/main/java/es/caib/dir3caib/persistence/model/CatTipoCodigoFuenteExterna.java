@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
+ * @version 1.1
  * @author mgonzalez
  * 18/11/2021
  */

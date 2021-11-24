@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * @version 1.0
+ * @version 1.1
  * @created 28-oct-2013 14:41:39
  * Esta relación es la referente al intercambio de Registros (SIR). Determina que oficina da servicio a una unidad.
  */

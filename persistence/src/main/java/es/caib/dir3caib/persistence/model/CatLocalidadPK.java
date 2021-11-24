@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * @version 1.0
+ * @version 1.1
  * @created 28-oct-2013 14:41:39
  */
 public class CatLocalidadPK  implements Serializable {
