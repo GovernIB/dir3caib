@@ -41,53 +41,54 @@ import java.util.Set;
 @Entity
 public class Unidad implements Serializable {
 
-	private String codigo;
-	private String denominacion;
-	private CatEstadoEntidad estado;
-	private String nifcif;
-	private String siglas;
-	private CatNivelAdministracion nivelAdministracion;
-	private Long nivelJerarquico;
-	private Unidad codUnidadSuperior;
-	private Unidad codUnidadRaiz;
-	private boolean esEdp;
-	private Unidad codEdpPrincipal;
-	private CatTipoEntidadPublica codTipoEntPublica;
-	private CatTipoUnidadOrganica codTipoUnidad;
-	private CatAmbitoTerritorial codAmbitoTerritorial;
-	private CatEntidadGeografica codAmbEntGeografica;
-	private CatPais codAmbPais;
-	private CatComunidadAutonoma codAmbComunidad;
-	private CatProvincia codAmbProvincia;
-	private CatLocalidad catLocalidad;
-	private CatIsla codAmbIsla;
-	private Long codAmbElm;
-	private String codAmbLocExtranjera;
-	private String competencias;
-	private String disposicionLegal;
-	private Date fechaAltaOficial;
-	private Date fechaBajaOficial;
-	private Date fechaExtincion;
-	private Date fechaAnulacion;
-   private Date fechaImportacion;
-   private String codExterno;
-	private String observGenerales;
-	private String observBaja;
-	private CatTipoVia tipoVia;
-	private String nombreVia;
-	private String numVia;
-	private String complemento;
-	private String codPostal;
-	private CatPais codPais;
-	private CatComunidadAutonoma codComunidad;
-   private CatLocalidad codLocalidad;
-   private String dirExtranjera;
-	private String locExtranjera;
-	private String observaciones;
-	private List<ContactoUnidadOrganica> contactos;
-	private List<RelacionOrganizativaOfi> organizativaOfi;
-	private List<RelacionSirOfi> sirOfi;
-  
+  private String codigo;
+  private String denominacion;
+  private CatEstadoEntidad estado;
+  private String nifcif;
+  private String siglas;
+  private CatNivelAdministracion nivelAdministracion;
+  private Long nivelJerarquico;
+  private Unidad codUnidadSuperior;
+  private Unidad codUnidadRaiz;
+  private boolean esEdp;
+  private Unidad codEdpPrincipal;
+  private CatTipoEntidadPublica codTipoEntPublica;
+  private CatTipoUnidadOrganica codTipoUnidad;
+  private CatAmbitoTerritorial codAmbitoTerritorial;
+  private CatEntidadGeografica codAmbEntGeografica;
+  private CatPais codAmbPais;
+  private CatComunidadAutonoma codAmbComunidad;
+  private CatProvincia codAmbProvincia;
+  private CatLocalidad catLocalidad;
+  private CatIsla codAmbIsla;
+  private Long codAmbElm;
+  private String codAmbLocExtranjera;
+  private String competencias;
+  private String disposicionLegal;
+  private Date fechaAltaOficial;
+  private Date fechaBajaOficial;
+  private Date fechaExtincion;
+  private Date fechaAnulacion;
+  private Date fechaImportacion;
+  private String codExterno;
+  private String observGenerales;
+  private String observBaja;
+  private CatTipoVia tipoVia;
+  private String nombreVia;
+  private String numVia;
+  private String complemento;
+  private String codPostal;
+  private CatPais codPais;
+  private CatComunidadAutonoma codComunidad;
+  private CatLocalidad codLocalidad;
+  private String dirExtranjera;
+  private String locExtranjera;
+  private String observaciones;
+  private List<ContactoUnidadOrganica> contactos;
+  private List<RelacionOrganizativaOfi> organizativaOfi;
+  private List<RelacionSirOfi> sirOfi;
+  private Set<Servicio> servicios;
+
   private Set<Unidad> historicoUO;
 
   public Unidad(){
@@ -717,6 +718,31 @@ public class Unidad implements Serializable {
   public void setSirOfi(List<RelacionSirOfi> sirOfi) {
     this.sirOfi = sirOfi;
   }
+
+
+  /**
+   * @return the servicios
+   */
+  @ManyToMany(cascade=CascadeType.PERSIST, fetch= FetchType.EAGER)
+  @JoinTable(name="DIR_SERVICIOUO",
+          joinColumns=
+          @JoinColumn(name="CODUNIDAD"),
+          inverseJoinColumns=
+          @JoinColumn(name="CODSERVICIO"))
+  @ForeignKey(name="DIR_SER_UNI_FK", inverseName = "DIR_UNI_SERV_FK")
+  @JsonIgnore
+  public Set<Servicio> getServicios() {
+    return servicios;
+  }
+
+  /**
+   * @param servicios the servicios to set
+   */
+  public void setServicios(Set<Servicio> servicios) {
+    this.servicios = servicios;
+  }
+
+
 
   @ManyToMany(cascade=CascadeType.PERSIST, fetch= FetchType.EAGER)
   @JoinTable(name="DIR_HISTORICOUO",

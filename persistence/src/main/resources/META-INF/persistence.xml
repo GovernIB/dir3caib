@@ -21,9 +21,12 @@ http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
         <class>es.caib.dir3caib.persistence.model.CatMotivoExtincion</class>
         <class>es.caib.dir3caib.persistence.model.CatNivelAdministracion</class>
         <class>es.caib.dir3caib.persistence.model.CatPais</class>
+        <class>es.caib.dir3caib.persistence.model.CatPoder</class>
         <class>es.caib.dir3caib.persistence.model.CatProvincia</class>
+        <class>es.caib.dir3caib.persistence.model.CatTipoCodigoFuenteExterna</class>
         <class>es.caib.dir3caib.persistence.model.CatTipoContacto</class>
         <class>es.caib.dir3caib.persistence.model.CatTipoEntidadPublica</class>
+        <class>es.caib.dir3caib.persistence.model.CatTipoServicio</class>
         <class>es.caib.dir3caib.persistence.model.CatTipoUnidadOrganica</class>
         <class>es.caib.dir3caib.persistence.model.CatTipoVia</class>
         <class>es.caib.dir3caib.persistence.model.ContactoOfi</class>

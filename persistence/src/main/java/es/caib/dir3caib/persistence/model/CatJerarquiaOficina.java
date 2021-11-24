@@ -1,22 +1,28 @@
 package es.caib.dir3caib.persistence.model;
 
+import org.hibernate.annotations.ForeignKey;
+import org.hibernate.annotations.Index;
+
 import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.util.Objects;
+import javax.persistence.*;
 
 
 /**
  * @version 1.0
  * @created 28-oct-2013 14:41:38
  */
-@Table(name = "DIR_CATJERARQUIAOFICINA", schema = "", catalog = "")
 @Entity
+@Table(name = "DIR_CATJERARQUIAOFICINA", schema = "", catalog = "")
+@org.hibernate.annotations.Table(appliesTo = "DIR_CATJERARQUIAOFICINA", indexes = {
+        @Index(name="DIR_CJEROFI_CESTENT_FK_I", columnNames = "ESTADO")
+})
+@SequenceGenerator(name="generator",sequenceName = "DIR_CJEROFI_SEQ", allocationSize=1)
 public class CatJerarquiaOficina implements Serializable {
 
 	private Long codigoJerarquiaOficina;
 	private String descripcionJerarquiaOficina;
+    private CatEstadoEntidad estado;
 
 	public CatJerarquiaOficina(){
 
@@ -31,6 +37,7 @@ public class CatJerarquiaOficina implements Serializable {
    */
   @Column(name = "CODIGOJERARQUIAOFICINA", nullable = false, length = 2)
   @Id
+  @GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "generator")
   public Long getCodigoJerarquiaOficina() {
     return codigoJerarquiaOficina;
   }
@@ -57,34 +64,28 @@ public class CatJerarquiaOficina implements Serializable {
     this.descripcionJerarquiaOficina = descripcionJerarquiaOficina;
   }
 
-  @Override
-  public int hashCode() {
-    int hash = 7;
-    hash = 37 * hash + (this.codigoJerarquiaOficina != null ? this.codigoJerarquiaOficina.hashCode() : 0);
-    hash = 37 * hash + (this.descripcionJerarquiaOficina != null ? this.descripcionJerarquiaOficina.hashCode() : 0);
-    return hash;
+  @ManyToOne
+  @JoinColumn(name="ESTADO")
+  @ForeignKey(name="DIR_CJEROFI_CESTENT_FK")
+  public CatEstadoEntidad getEstado() {
+    return estado;
+  }
+
+  public void setEstado(CatEstadoEntidad estado) {
+    this.estado = estado;
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    final CatJerarquiaOficina other = (CatJerarquiaOficina) obj;
-    if (this.codigoJerarquiaOficina != other.codigoJerarquiaOficina && (this.codigoJerarquiaOficina == null || !this.codigoJerarquiaOficina.equals(other.codigoJerarquiaOficina))) {
-      return false;
-    }
-    if ((this.descripcionJerarquiaOficina == null) ? (other.descripcionJerarquiaOficina != null) : !this.descripcionJerarquiaOficina.equals(other.descripcionJerarquiaOficina)) {
-      return false;
-    }
-    return true;
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    CatJerarquiaOficina that = (CatJerarquiaOficina) o;
+    return codigoJerarquiaOficina.equals(that.codigoJerarquiaOficina) && descripcionJerarquiaOficina.equals(that.descripcionJerarquiaOficina) && estado.equals(that.estado);
   }
-  
-  
-  
-  
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(codigoJerarquiaOficina, descripcionJerarquiaOficina, estado);
+  }
 
 }

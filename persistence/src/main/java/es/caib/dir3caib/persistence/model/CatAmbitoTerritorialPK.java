@@ -1,6 +1,6 @@
 package es.caib.dir3caib.persistence.model;
 import java.io.Serializable;
-
+import java.util.Objects;
 
 
 /**
@@ -56,31 +56,17 @@ public class CatAmbitoTerritorialPK implements Serializable {
 	}
 
   @Override
-  public int hashCode() {
-    int hash = 5;
-    hash = 31 * hash + (this.codigoAmbito != null ? this.codigoAmbito.hashCode() : 0);
-    hash = 31 * hash + (this.nivelAdministracion != null ? this.nivelAdministracion.hashCode() : 0);
-    return hash;
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    CatAmbitoTerritorialPK that = (CatAmbitoTerritorialPK) o;
+    return codigoAmbito.equals(that.codigoAmbito) && nivelAdministracion.equals(that.nivelAdministracion);
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    final CatAmbitoTerritorialPK other = (CatAmbitoTerritorialPK) obj;
-    if ((this.codigoAmbito == null) ? (other.codigoAmbito != null) : !this.codigoAmbito.equals(other.codigoAmbito)) {
-      return false;
-    }
-    if (this.nivelAdministracion != other.nivelAdministracion && (this.nivelAdministracion == null || !this.nivelAdministracion.equals(other.nivelAdministracion))) {
-      return false;
-    }
-    return true;
+  public int hashCode() {
+    return Objects.hash(codigoAmbito, nivelAdministracion);
   }
-  
-  
+
 
 }

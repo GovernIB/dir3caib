@@ -1,38 +1,45 @@
 package es.caib.dir3caib.persistence.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import org.hibernate.annotations.ForeignKey;
+import org.hibernate.annotations.Index;
+
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 
 /**
  * @version 1.0
  * @created 28-oct-2013 14:41:38
  */
-@Table(name = "DIR_CATPAIS")
 @Entity
+@Table(name = "DIR_CATPAIS")
+@org.hibernate.annotations.Table(appliesTo = "DIR_CATPAIS", indexes = {
+        @Index(name="DIR_CPAIS_CESTENT_FK_I", columnNames = "ESTADO")
+})
+@SequenceGenerator(name="generator",sequenceName = "DIR_CPAIS_SEQ", allocationSize=1)
 public class CatPais implements Serializable {
 
-	private Long codigoPais;
-	private String descripcionPais;
-	private String alfa3Pais;
-	private String alfa2Pais;
+  private Long codigoPais;
+  private String descripcionPais;
+  private String alfa3Pais;
+  private String alfa2Pais;
+  private CatEstadoEntidad estado;
 
-	public CatPais(){
+  public CatPais(){
 
-	}
+  }
 
-	public void finalize() throws Throwable {
+  public void finalize() throws Throwable {
 
-	}
+  }
 
   /**
    * @return the codigoPais
    */
   @Column(name = "CODIGOPAIS", nullable = false, length = 3)
   @Id
+  @GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "generator")
   public Long getCodigoPais() {
     return codigoPais;
   }
@@ -89,40 +96,28 @@ public class CatPais implements Serializable {
     this.alfa2Pais = alfa2Pais;
   }
 
-  @Override
-  public int hashCode() {
-    int hash = 7;
-    hash = 61 * hash + (this.codigoPais != null ? this.codigoPais.hashCode() : 0);
-    hash = 61 * hash + (this.descripcionPais != null ? this.descripcionPais.hashCode() : 0);
-    hash = 61 * hash + (this.alfa3Pais != null ? this.alfa3Pais.hashCode() : 0);
-    hash = 61 * hash + (this.alfa2Pais != null ? this.alfa2Pais.hashCode() : 0);
-    return hash;
+  @ManyToOne
+  @JoinColumn(name="ESTADO")
+  @ForeignKey(name="DIR_CPAIS_CESTENT_FK")
+  public CatEstadoEntidad getEstado() {
+    return estado;
+  }
+
+  public void setEstado(CatEstadoEntidad estado) {
+    this.estado = estado;
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    final CatPais other = (CatPais) obj;
-    if (this.codigoPais != other.codigoPais && (this.codigoPais == null || !this.codigoPais.equals(other.codigoPais))) {
-      return false;
-    }
-    if ((this.descripcionPais == null) ? (other.descripcionPais != null) : !this.descripcionPais.equals(other.descripcionPais)) {
-      return false;
-    }
-    if ((this.alfa3Pais == null) ? (other.alfa3Pais != null) : !this.alfa3Pais.equals(other.alfa3Pais)) {
-      return false;
-    }
-    if ((this.alfa2Pais == null) ? (other.alfa2Pais != null) : !this.alfa2Pais.equals(other.alfa2Pais)) {
-      return false;
-    }
-    return true;
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    CatPais catPais = (CatPais) o;
+    return codigoPais.equals(catPais.codigoPais) && descripcionPais.equals(catPais.descripcionPais) && alfa3Pais.equals(catPais.alfa3Pais) && alfa2Pais.equals(catPais.alfa2Pais) && estado.equals(catPais.estado);
   }
-  
-  
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(codigoPais, descripcionPais, alfa3Pais, alfa2Pais, estado);
+  }
 
 }

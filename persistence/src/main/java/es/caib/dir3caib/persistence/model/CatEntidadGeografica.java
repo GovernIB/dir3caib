@@ -1,22 +1,28 @@
 package es.caib.dir3caib.persistence.model;
 
+import org.hibernate.annotations.ForeignKey;
+import org.hibernate.annotations.Index;
+
 import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.util.Objects;
+import javax.persistence.*;
 
 
 /**
  * @version 1.0
  * @created 28-oct-2013 14:41:38
  */
-@Table(name = "DIR_CATENTIDADGEOGRAFICA", schema = "", catalog = "")
 @Entity
+@Table(name = "DIR_CATENTIDADGEOGRAFICA", schema = "", catalog = "")
+@org.hibernate.annotations.Table(appliesTo = "DIR_CATENTIDADGEOGRAFICA", indexes = {
+        @Index(name="DIR_CENTGEO_CESTENT_FK_I", columnNames = "ESTADO")
+})
+@SequenceGenerator(name="generator",sequenceName = "DIR_CENTGEO_SEQ", allocationSize=1)
 public class CatEntidadGeografica implements Serializable {
 
 	private String codigoEntidadGeografica;
 	private String descripcionEntidadGeografica;
+    private CatEstadoEntidad estado;
 
 	public CatEntidadGeografica(){
 
@@ -31,6 +37,7 @@ public class CatEntidadGeografica implements Serializable {
    */
   @Column(name = "CODIGOENTIDADGEOGRAFICA", nullable = false, length = 2)
   @Id
+  @GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "generator")
   public String getCodigoEntidadGeografica() {
     return codigoEntidadGeografica;
   }
@@ -57,32 +64,28 @@ public class CatEntidadGeografica implements Serializable {
     this.descripcionEntidadGeografica = descripcionEntidadGeografica;
   }
 
-  @Override
-  public int hashCode() {
-    int hash = 5;
-    hash = 17 * hash + (this.codigoEntidadGeografica != null ? this.codigoEntidadGeografica.hashCode() : 0);
-    hash = 17 * hash + (this.descripcionEntidadGeografica != null ? this.descripcionEntidadGeografica.hashCode() : 0);
-    return hash;
+  @ManyToOne
+  @JoinColumn(name="ESTADO")
+  @ForeignKey(name="DIR_CENTGEO_CESTENT_FK")
+  public CatEstadoEntidad getEstado() {
+    return estado;
+  }
+
+  public void setEstado(CatEstadoEntidad estado) {
+    this.estado = estado;
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    final CatEntidadGeografica other = (CatEntidadGeografica) obj;
-    if (this.codigoEntidadGeografica != other.codigoEntidadGeografica && (this.codigoEntidadGeografica == null || !this.codigoEntidadGeografica.equals(other.codigoEntidadGeografica))) {
-      return false;
-    }
-    if ((this.descripcionEntidadGeografica == null) ? (other.descripcionEntidadGeografica != null) : !this.descripcionEntidadGeografica.equals(other.descripcionEntidadGeografica)) {
-      return false;
-    }
-    return true;
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    CatEntidadGeografica that = (CatEntidadGeografica) o;
+    return codigoEntidadGeografica.equals(that.codigoEntidadGeografica) && descripcionEntidadGeografica.equals(that.descripcionEntidadGeografica) && estado.equals(that.estado);
   }
-  
-  
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(codigoEntidadGeografica, descripcionEntidadGeografica, estado);
+  }
 
 }

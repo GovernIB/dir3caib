@@ -1,8 +1,10 @@
 package es.caib.dir3caib.persistence.model;
 
 import org.hibernate.annotations.ForeignKey;
+import org.hibernate.annotations.Index;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.*;
 
 
@@ -10,27 +12,34 @@ import javax.persistence.*;
  * @version 1.0
  * @created 28-oct-2013 14:41:38
  */
-@Table(name = "DIR_CATISLA", schema = "", catalog = "")
 @Entity
+@Table(name = "DIR_CATISLA", schema = "", catalog = "")
+@org.hibernate.annotations.Table(appliesTo = "DIR_CATISLA", indexes = {
+        @Index(name="DIR_CATISLA_CATPROV_FK_I", columnNames = "PROVINCIA"),
+        @Index(name="DIR_CATISLA_CESTENT_FK_I", columnNames = "ESTADO")
+})
+@SequenceGenerator(name="generator",sequenceName = "DIR_CISLA_SEQ", allocationSize=1)
 public class CatIsla implements Serializable {
 
-	private Long codigoIsla;
-	private String descripcionIsla;
+  private Long codigoIsla;
+  private String descripcionIsla;
   private CatProvincia provincia;
+  private CatEstadoEntidad estado;
 
-	public CatIsla(){
+  public CatIsla(){
 
-	}
+  }
 
-	public void finalize() throws Throwable {
+  public void finalize() throws Throwable {
 
-	}
+  }
 
   /**
    * @return the codigoIsla
    */
   @Column(name = "CODIGOISLA", nullable = false, length = 2)
   @Id
+  @GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "generator")
   public Long getCodigoIsla() {
     return codigoIsla;
   }
@@ -69,32 +78,29 @@ public class CatIsla implements Serializable {
     this.provincia = provincia;
   }
 
-  @Override
-  public int hashCode() {
-    int hash = 5;
-    hash = 59 * hash + (this.codigoIsla != null ? this.codigoIsla.hashCode() : 0);
-    hash = 59 * hash + (this.descripcionIsla != null ? this.descripcionIsla.hashCode() : 0);
-    return hash;
+  @ManyToOne
+  @JoinColumn(name="ESTADO")
+  @ForeignKey(name="DIR_CATISLA_CESTENT_FK")
+  public CatEstadoEntidad getEstado() {
+    return estado;
+  }
+
+  public void setEstado(CatEstadoEntidad estado) {
+    this.estado = estado;
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    final CatIsla other = (CatIsla) obj;
-    if (this.codigoIsla != other.codigoIsla && (this.codigoIsla == null || !this.codigoIsla.equals(other.codigoIsla))) {
-      return false;
-    }
-    if ((this.descripcionIsla == null) ? (other.descripcionIsla != null) : !this.descripcionIsla.equals(other.descripcionIsla)) {
-      return false;
-    }
-    return true;
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    CatIsla catIsla = (CatIsla) o;
+    return codigoIsla.equals(catIsla.codigoIsla) && descripcionIsla.equals(catIsla.descripcionIsla) && provincia.equals(catIsla.provincia) && estado.equals(catIsla.estado);
   }
-  
-  
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(codigoIsla, descripcionIsla, provincia, estado);
+  }
+
 
 }

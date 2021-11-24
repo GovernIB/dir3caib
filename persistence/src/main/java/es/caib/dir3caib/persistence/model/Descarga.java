@@ -16,6 +16,7 @@ import java.util.List;
 @Table(name = "DIR_DESCARGA", schema = "", catalog = "")
 @Entity
 @SequenceGenerator(name="generator",sequenceName = "DIR_SEQ_ALL", allocationSize=1)
+@Deprecated
 public class Descarga implements Serializable {
   
   private Long codigo;

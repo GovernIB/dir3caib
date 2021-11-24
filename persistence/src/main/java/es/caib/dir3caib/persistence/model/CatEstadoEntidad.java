@@ -1,22 +1,28 @@
 package es.caib.dir3caib.persistence.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import org.hibernate.annotations.ForeignKey;
+import org.hibernate.annotations.Index;
+
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 
 /**
  * @version 1.0
  * @created 28-oct-2013 14:41:38
  */
-@Table(name = "DIR_CATESTADOENTIDAD", schema = "", catalog = "")
 @Entity
+@Table(name = "DIR_CATESTADOENTIDAD", schema = "", catalog = "")
+@org.hibernate.annotations.Table(appliesTo = "DIR_CATESTADOENTIDAD", indexes = {
+        @Index(name="DIR_CESTENT_CESTENT_FK_I", columnNames = "ESTADO")
+})
+@SequenceGenerator(name="generator",sequenceName = "DIR_CESTENT_SEQ", allocationSize=1)
 public class CatEstadoEntidad implements Serializable {
 
 	private String codigoEstadoEntidad;
 	private String descripcionEstadoEntidad;
+    private CatEstadoEntidad estado;
 
 	public CatEstadoEntidad(){
 
@@ -35,6 +41,7 @@ public class CatEstadoEntidad implements Serializable {
    */
   @Column(name = "CODIGOESTADOENTIDAD", nullable = false, length = 2)
   @Id
+  @GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "generator")
   public String getCodigoEstadoEntidad() {
     return codigoEstadoEntidad;
   }
@@ -61,30 +68,29 @@ public class CatEstadoEntidad implements Serializable {
     this.descripcionEstadoEntidad = descripcionEstadoEntidad;
   }
 
-  @Override
-  public int hashCode() {
-    int hash = 7;
-    hash = 89 * hash + (this.codigoEstadoEntidad != null ? this.codigoEstadoEntidad.hashCode() : 0);
-    hash = 89 * hash + (this.descripcionEstadoEntidad != null ? this.descripcionEstadoEntidad.hashCode() : 0);
-    return hash;
+  @ManyToOne
+  @JoinColumn(name="ESTADO")
+  @ForeignKey(name="DIR_CESTENT_CESTENT_FK")
+  public CatEstadoEntidad getEstado() {
+    return estado;
+  }
+
+  public void setEstado(CatEstadoEntidad estado) {
+    this.estado = estado;
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    final CatEstadoEntidad other = (CatEstadoEntidad) obj;
-    if ((this.codigoEstadoEntidad == null) ? (other.codigoEstadoEntidad != null) : !this.codigoEstadoEntidad.equals(other.codigoEstadoEntidad)) {
-      return false;
-    }
-    if ((this.descripcionEstadoEntidad == null) ? (other.descripcionEstadoEntidad != null) : !this.descripcionEstadoEntidad.equals(other.descripcionEstadoEntidad)) {
-      return false;
-    }
-    return true;
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    CatEstadoEntidad that = (CatEstadoEntidad) o;
+    return codigoEstadoEntidad.equals(that.codigoEstadoEntidad) && descripcionEstadoEntidad.equals(that.descripcionEstadoEntidad) && estado.equals(that.estado);
   }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(codigoEstadoEntidad, descripcionEstadoEntidad, estado);
+  }
+
 
 }

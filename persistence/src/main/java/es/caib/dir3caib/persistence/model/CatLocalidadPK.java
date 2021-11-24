@@ -2,6 +2,7 @@ package es.caib.dir3caib.persistence.model;
 import es.caib.dir3caib.persistence.model.CatProvincia;
 import es.caib.dir3caib.persistence.model.CatEntidadGeografica;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * @version 1.0
@@ -76,33 +77,17 @@ public class CatLocalidadPK  implements Serializable {
   }
 
   @Override
-  public int hashCode() {
-    int hash = 3;
-    hash = 67 * hash + (this.codigoLocalidad != null ? this.codigoLocalidad.hashCode() : 0);
-    hash = 67 * hash + (this.provincia != null ? this.provincia.hashCode() : 0);
-    hash = 67 * hash + (this.entidadGeografica != null ? this.entidadGeografica.hashCode() : 0);
-    return hash;
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    CatLocalidadPK that = (CatLocalidadPK) o;
+    return codigoLocalidad.equals(that.codigoLocalidad) && provincia.equals(that.provincia) && entidadGeografica.equals(that.entidadGeografica);
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    final CatLocalidadPK other = (CatLocalidadPK) obj;
-    if (this.codigoLocalidad != other.codigoLocalidad && (this.codigoLocalidad == null || !this.codigoLocalidad.equals(other.codigoLocalidad))) {
-      return false;
-    }
-    if (this.provincia != other.provincia && (this.provincia == null || !this.provincia.equals(other.provincia))) {
-      return false;
-    }
-    if (this.entidadGeografica != other.entidadGeografica && (this.entidadGeografica == null || !this.entidadGeografica.equals(other.entidadGeografica))) {
-      return false;
-    }
-    return true;
+  public int hashCode() {
+    return Objects.hash(codigoLocalidad, provincia, entidadGeografica);
   }
+
 
 }

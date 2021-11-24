@@ -1,22 +1,28 @@
 package es.caib.dir3caib.persistence.model;
 
+import org.hibernate.annotations.ForeignKey;
+import org.hibernate.annotations.Index;
+
 import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.util.Objects;
+import javax.persistence.*;
 
 
 /**
  * @version 1.0
  * @created 28-oct-2013 14:41:38
  */
-@Table(name = "DIR_CATTIPOCONTACTO", schema = "", catalog = "")
 @Entity
+@Table(name = "DIR_CATTIPOCONTACTO", schema = "", catalog = "")
+@org.hibernate.annotations.Table(appliesTo = "DIR_CATTIPOCONTACTO", indexes = {
+        @Index(name="DIR_CTIPCON_CESTENT_FK_I", columnNames = "ESTADO")
+})
+@SequenceGenerator(name="generator",sequenceName = "DIR_CTIPCON_SEQ", allocationSize=1)
 public class CatTipoContacto implements Serializable {
 
 	private String codigoTipoContacto;
 	private String descripcionTipoContacto;
+    private CatEstadoEntidad estado;
 
 	public CatTipoContacto(){
 
@@ -31,6 +37,7 @@ public class CatTipoContacto implements Serializable {
    */
   @Column(name = "CODIGOTIPOCONTACTO", nullable = false, length = 2)
   @Id
+  @GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "generator")
   public String getCodigoTipoContacto() {
     return codigoTipoContacto;
   }
@@ -57,32 +64,28 @@ public class CatTipoContacto implements Serializable {
     this.descripcionTipoContacto = descripcionTipoContacto;
   }
 
-  @Override
-  public int hashCode() {
-    int hash = 3;
-    hash = 17 * hash + (this.codigoTipoContacto != null ? this.codigoTipoContacto.hashCode() : 0);
-    hash = 17 * hash + (this.descripcionTipoContacto != null ? this.descripcionTipoContacto.hashCode() : 0);
-    return hash;
+  @ManyToOne
+  @JoinColumn(name="ESTADO")
+  @ForeignKey(name="DIR_CATTIPCON_CATESTENTIDAD_FK")
+  public CatEstadoEntidad getEstado() {
+    return estado;
+  }
+
+  public void setEstado(CatEstadoEntidad estado) {
+    this.estado = estado;
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    final CatTipoContacto other = (CatTipoContacto) obj;
-    if ((this.codigoTipoContacto == null) ? (other.codigoTipoContacto != null) : !this.codigoTipoContacto.equals(other.codigoTipoContacto)) {
-      return false;
-    }
-    if ((this.descripcionTipoContacto == null) ? (other.descripcionTipoContacto != null) : !this.descripcionTipoContacto.equals(other.descripcionTipoContacto)) {
-      return false;
-    }
-    return true;
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    CatTipoContacto that = (CatTipoContacto) o;
+    return codigoTipoContacto.equals(that.codigoTipoContacto) && descripcionTipoContacto.equals(that.descripcionTipoContacto) && estado.equals(that.estado);
   }
-  
-  
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(codigoTipoContacto, descripcionTipoContacto, estado);
+  }
 
 }

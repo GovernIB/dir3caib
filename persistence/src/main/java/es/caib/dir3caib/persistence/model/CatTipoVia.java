@@ -1,37 +1,44 @@
 package es.caib.dir3caib.persistence.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import org.hibernate.annotations.ForeignKey;
+import org.hibernate.annotations.Index;
+
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 
 /**
  * @version 1.0
  * @created 28-oct-2013 14:41:38
  */
-@Table(name = "DIR_CATTIPOVIA")
 @Entity
+@Table(name = "DIR_CATTIPOVIA")
+@org.hibernate.annotations.Table(appliesTo = "DIR_CATTIPOVIA", indexes = {
+        @Index(name="DIR_CTIPVIA_CESTENT_FK_I", columnNames = "ESTADO")
+})
+@SequenceGenerator(name="generator",sequenceName = "DIR_CTIPVIA_SEQ", allocationSize=1)
 public class CatTipoVia implements Serializable {
 
-	private Long codigoTipoVia;
-	private String descripcionTipoVia;
+  private Long codigoTipoVia;
+  private String descripcionTipoVia;
+  private CatEstadoEntidad estado;
 
 
-	public CatTipoVia(){
+  public CatTipoVia(){
 
-	}
+  }
 
-	public void finalize() throws Throwable {
+  public void finalize() throws Throwable {
 
-	}
+  }
 
   /**
    * @return the codigoTipoVia
    */
   @Column(name = "CODIGOTIPOVIA", nullable = false, length = 2)
   @Id
+  @GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "generator")
   public Long getCodigoTipoVia() {
     return codigoTipoVia;
   }
@@ -58,34 +65,27 @@ public class CatTipoVia implements Serializable {
     this.descripcionTipoVia = descripcionTipoVia;
   }
 
+  @ManyToOne
+  @JoinColumn(name="ESTADO")
+  @ForeignKey(name="DIR_CTIPVIA_CESTENT_FK")
+  public CatEstadoEntidad getEstado() {
+    return estado;
+  }
+
+  public void setEstado(CatEstadoEntidad estado) {
+    this.estado = estado;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    CatTipoVia that = (CatTipoVia) o;
+    return codigoTipoVia.equals(that.codigoTipoVia) && descripcionTipoVia.equals(that.descripcionTipoVia) && estado.equals(that.estado);
+  }
+
   @Override
   public int hashCode() {
-    int hash = 5;
-    hash = 67 * hash + (this.codigoTipoVia != null ? this.codigoTipoVia.hashCode() : 0);
-    hash = 67 * hash + (this.descripcionTipoVia != null ? this.descripcionTipoVia.hashCode() : 0);
-    return hash;
+    return Objects.hash(codigoTipoVia, descripcionTipoVia, estado);
   }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    final CatTipoVia other = (CatTipoVia) obj;
-    if (this.codigoTipoVia != other.codigoTipoVia && (this.codigoTipoVia == null || !this.codigoTipoVia.equals(other.codigoTipoVia))) {
-      return false;
-    }
-    if ((this.descripcionTipoVia == null) ? (other.descripcionTipoVia != null) : !this.descripcionTipoVia.equals(other.descripcionTipoVia)) {
-      return false;
-    }
-    return true;
-  }
-
-  
-  
-  
-
 }

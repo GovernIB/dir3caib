@@ -1,10 +1,11 @@
 package es.caib.dir3caib.persistence.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import org.hibernate.annotations.ForeignKey;
+import org.hibernate.annotations.Index;
+
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 
 /**
@@ -13,14 +14,19 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "DIR_CATNIVELADMINISTRACION")
+@org.hibernate.annotations.Table(appliesTo = "DIR_CATNIVELADMINISTRACION", indexes = {
+        @Index(name="DIR_CNIVADM_CESTENT_FK_I", columnNames = "ESTADO")
+})
+@SequenceGenerator(name="generator",sequenceName = "DIR_CNIVADM_SEQ", allocationSize=1)
 public class CatNivelAdministracion implements Serializable {
 
-	private Long codigoNivelAdministracion;
-	private String descripcionNivelAdministracion;
+  private Long codigoNivelAdministracion;
+  private String descripcionNivelAdministracion;
+  private CatEstadoEntidad estado;
 
-	public CatNivelAdministracion(){
+  public CatNivelAdministracion(){
 
-	}
+  }
 
   public CatNivelAdministracion(Long codigoNivelAdministracion) {
     this.codigoNivelAdministracion = codigoNivelAdministracion;
@@ -35,6 +41,7 @@ public class CatNivelAdministracion implements Serializable {
    */
   @Id
   @Column(name = "CODIGONIVELADMINISTRACION", nullable = false, length = 2)
+  @GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "generator")
   public Long getCodigoNivelAdministracion() {
     return codigoNivelAdministracion;
   }
@@ -61,36 +68,28 @@ public class CatNivelAdministracion implements Serializable {
     this.descripcionNivelAdministracion = descripcionNivelAdministracion;
   }
 
+  @ManyToOne
+  @JoinColumn(name="ESTADO")
+  @ForeignKey(name="DIR_CNIVADM_CESTENT_FK")
+  public CatEstadoEntidad getEstado() {
+    return estado;
+  }
+
+  public void setEstado(CatEstadoEntidad estado) {
+    this.estado = estado;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    CatNivelAdministracion that = (CatNivelAdministracion) o;
+    return codigoNivelAdministracion.equals(that.codigoNivelAdministracion) && descripcionNivelAdministracion.equals(that.descripcionNivelAdministracion) && estado.equals(that.estado);
+  }
+
   @Override
   public int hashCode() {
-    int hash = 7;
-    hash = 29 * hash + (this.codigoNivelAdministracion != null ? this.codigoNivelAdministracion.hashCode() : 0);
-    hash = 29 * hash + (this.descripcionNivelAdministracion != null ? this.descripcionNivelAdministracion.hashCode() : 0);
-    return hash;
+    return Objects.hash(codigoNivelAdministracion, descripcionNivelAdministracion, estado);
   }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    final CatNivelAdministracion other = (CatNivelAdministracion) obj;
-    if (this.codigoNivelAdministracion != other.codigoNivelAdministracion && (this.codigoNivelAdministracion == null || !this.codigoNivelAdministracion.equals(other.codigoNivelAdministracion))) {
-      return false;
-    }
-    if ((this.descripcionNivelAdministracion == null) ? (other.descripcionNivelAdministracion != null) : !this.descripcionNivelAdministracion.equals(other.descripcionNivelAdministracion)) {
-      return false;
-    }
-    return true;
-  }
-
- 
-
- 
-  
- 
 
 }

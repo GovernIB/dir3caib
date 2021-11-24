@@ -1,28 +1,34 @@
 package es.caib.dir3caib.persistence.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import org.hibernate.annotations.ForeignKey;
+import org.hibernate.annotations.Index;
+
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 
 /**
  * @version 1.0
  * @created 28-oct-2013 14:41:39
  */
-@Table(name = "DIR_CATSERVICIO", schema = "", catalog = "")
 @Entity
+@Table(name = "DIR_CATSERVICIO", schema = "", catalog = "")
+@org.hibernate.annotations.Table(appliesTo = "DIR_CATSERVICIO", indexes = {
+        @Index(name="DIR_CSERVIC_CTIPSERV_FK_I", columnNames = "TIPO")
+})
+@SequenceGenerator(name="generator",sequenceName = "DIR_CSERV_SEQ", allocationSize=1)
 public class Servicio implements Serializable {
 
-	private Long codServicio;
-	private String descServicio;
-  // Borrado por problemas de rendimiento, en principio no se necesita.
- // private Set<Oficina> oficinas;
+  private Long codServicio;
+  private String descServicio;
+  private CatTipoServicio tipo;
 
-	public Servicio(){
 
-	}
+
+  public Servicio(){
+
+  }
 
   public Servicio(Long codServicio) {
     this.codServicio = codServicio;
@@ -36,8 +42,9 @@ public class Servicio implements Serializable {
   /**
    * @return the codServicio
    */
-  @Column(name = "CODSERVICIO", nullable = false, length = 3)
+  @Column(name = "CODSERVICIO", nullable = false, length = 6)
   @Id
+  @GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "generator")
   public Long getCodServicio() {
     return codServicio;
   }
@@ -64,37 +71,30 @@ public class Servicio implements Serializable {
     this.descServicio = descServicio;
   }
 
-  /**
-   * @return the oficinas
-   */
-  //@ManyToMany(mappedBy="servicios", cascade=CascadeType.PERSIST, fetch= FetchType.EAGER)
-//  public Set<Oficina> getOficinas() {
-//    return oficinas;
-//  }
-//
-//  /**
-//   * @param oficinas the oficinas to set
-//   */
-//  public void setOficinas(Set<Oficina> oficinas) {
-//    this.oficinas = oficinas;
-//  }
+  @ManyToOne
+  @JoinColumn(name="TIPO")
+  @ForeignKey(name="DIR_CSERVIC_CTIPSERV_FK")
+  public CatTipoServicio getTipo() {
+    return tipo;
+  }
 
+  public void setTipo(CatTipoServicio tipo) {
+    this.tipo = tipo;
+  }
 
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-
     Servicio servicio = (Servicio) o;
-
-    return codServicio != null ? codServicio.equals(servicio.codServicio) : servicio.codServicio == null;
-
+    return codServicio.equals(servicio.codServicio) && descServicio.equals(servicio.descServicio);
   }
 
   @Override
   public int hashCode() {
-    return codServicio != null ? codServicio.hashCode() : 0;
+    return Objects.hash(codServicio, descServicio);
   }
+
 
 
 }

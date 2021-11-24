@@ -1,5 +1,6 @@
 package es.caib.dir3caib.persistence.model;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.Index;
 
@@ -7,6 +8,7 @@ import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
+import java.util.Objects;
 
 
 /**
@@ -17,32 +19,47 @@ import java.io.Serializable;
 @Table(name = "DIR_CATAMBITOTERRITORIAL",
   uniqueConstraints= @UniqueConstraint(columnNames={"CODIGOAMBITO", "NIVELADMINISTRACION"}))
 @org.hibernate.annotations.Table(appliesTo = "DIR_CATAMBITOTERRITORIAL", indexes = {
-    @Index(name="DIR_CATAMBITOTERRITORIAL_PK_I", columnNames = {"CODIGOAMBITO", "NIVELADMINISTRACION" })
-    ,@Index(name="DIR_CATAMBTERR_CATNIVADM_FK_I", columnNames = "NIVELADMINISTRACION")
+    @Index(name="DIR_CATAMBITOTERRITORIAL_PK_I", columnNames = {"CODIGOAMBITO", "NIVELADMINISTRACION" }),
+    @Index(name="DIR_CATAMBTERR_CATNIVADM_FK_I", columnNames = "NIVELADMINISTRACION"),
+    @Index(name="DIR_CAMBTER_CESTENT_FK_I", columnNames = "ESTADO")
  })
-@SequenceGenerator(name="generator",sequenceName = "DIR_SEQ_ALL", allocationSize=1)
+@SequenceGenerator(name="generator",sequenceName = "DIR_CAMBTER_SEQ", allocationSize=1)
 public class CatAmbitoTerritorial implements Serializable {
 
-    @XmlTransient
-    private Long id;
-     
-    @XmlAttribute(name = "id")
-    private String codigoAmbito;
-    @XmlAttribute(name = "nombre")
-    private String descripcionAmbito;
-    @XmlTransient
-    private CatNivelAdministracion nivelAdministracion;
-  
+  @XmlTransient
+  private Long id;
 
-	public CatAmbitoTerritorial(){
+  @XmlAttribute(name = "id")
+  private String codigoAmbito;
+  @XmlAttribute(name = "nombre")
+  private String descripcionAmbito;
+  @XmlTransient
+  private CatNivelAdministracion nivelAdministracion;
+  private CatEstadoEntidad estado;
 
-	}
-  
-  
 
-	public void finalize() throws Throwable {
+  public CatAmbitoTerritorial(){
 
-	}
+  }
+
+
+
+  public void finalize() throws Throwable {
+
+  }
+
+  @Id
+  @Column (name = "ID")
+  @GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "generator")
+  public Long getId() {
+    return id;
+  }
+
+
+
+  public void setId(Long id) {
+    this.id = id;
+  }
 
   /**
    * @return the codigoAmbito
@@ -93,57 +110,31 @@ public class CatAmbitoTerritorial implements Serializable {
   public void setNivelAdministracion(CatNivelAdministracion nivelAdministracion) {
     this.nivelAdministracion = nivelAdministracion;
   }
-  
-  
-  
-  
-  @Id
-  @Column (name = "ID")
-  @GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "generator")
-  public Long getId() {
-    return id;
+
+  @ManyToOne
+  @JoinColumn(name="ESTADO")
+  @ForeignKey(name="DIR_CAMBTER_CESTENT_FK")
+  public CatEstadoEntidad getEstado() {
+    return estado;
+  }
+
+  public void setEstado(CatEstadoEntidad estado) {
+    this.estado = estado;
   }
 
 
-
-  public void setId(Long id) {
-    this.id = id;
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    CatAmbitoTerritorial that = (CatAmbitoTerritorial) o;
+    return codigoAmbito.equals(that.codigoAmbito) && descripcionAmbito.equals(that.descripcionAmbito)
+            && nivelAdministracion.equals(that.nivelAdministracion)
+            && estado.equals(that.estado);
   }
-
-
 
   @Override
   public int hashCode() {
-    int hash = 5;
-    hash = 83 * hash + (this.codigoAmbito != null ? this.codigoAmbito.hashCode() : 0);
-    hash = 83 * hash + (this.descripcionAmbito != null ? this.descripcionAmbito.hashCode() : 0);
-    hash = 83 * hash + (this.nivelAdministracion != null ? this.nivelAdministracion.hashCode() : 0);
-    return hash;
+    return Objects.hash(codigoAmbito, descripcionAmbito, nivelAdministracion, estado);
   }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    final CatAmbitoTerritorial other = (CatAmbitoTerritorial) obj;
-    if ((this.codigoAmbito == null) ? (other.codigoAmbito != null) : !this.codigoAmbito.equals(other.codigoAmbito)) {
-      return false;
-    }
-    if ((this.descripcionAmbito == null) ? (other.descripcionAmbito != null) : !this.descripcionAmbito.equals(other.descripcionAmbito)) {
-      return false;
-    }
-    if (this.nivelAdministracion != other.nivelAdministracion && (this.nivelAdministracion == null || !this.nivelAdministracion.equals(other.nivelAdministracion))) {
-      return false;
-    }
-    return true;
-  }
-
- 
-
-  
-
 }

@@ -1,20 +1,24 @@
 package es.caib.dir3caib.persistence.model;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.Index;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * @version 1.0
  * @created 28-oct-2013 14:41:38
  */
+@Entity
 @Table(name = "DIR_CATCOMUNIDADAUTONOMA", schema = "", catalog = "")
 @org.hibernate.annotations.Table(appliesTo = "DIR_CATCOMUNIDADAUTONOMA", indexes = {
-    @Index(name="DIR_CATCOMUNAUT_CATPAIS_FK_I", columnNames = {"PAIS"})
+    @Index(name="DIR_CATCOMUNAUT_CATPAIS_FK_I", columnNames = {"PAIS"}),
+    @Index(name="DIR_CCOMAUT_CESTENT_FK_I", columnNames = "ESTADO")
 })
-@Entity
+@SequenceGenerator(name="generator",sequenceName = "DIR_CCOMAUT_SEQ", allocationSize=1)
 public class CatComunidadAutonoma  implements Serializable {
 
 	private Long codigoComunidad;
@@ -22,6 +26,7 @@ public class CatComunidadAutonoma  implements Serializable {
 	private CatPais pais;
 	private String c_comunidad_rpc;
 	private Long c_codigo_dir2;
+    private CatEstadoEntidad estado;
 
 	public CatComunidadAutonoma(){
 
@@ -40,6 +45,7 @@ public class CatComunidadAutonoma  implements Serializable {
    */
   @Column(name = "CODIGOCOMUNIDAD", nullable = false, length = 2)
   @Id
+  @GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "generator")
   public Long getCodigoComunidad() {
     return codigoComunidad;
   }
@@ -113,45 +119,31 @@ public class CatComunidadAutonoma  implements Serializable {
     this.c_codigo_dir2 = c_codigo_dir2;
   }
 
-  @Override
-  public int hashCode() {
-    int hash = 7;
-    hash = 37 * hash + (this.codigoComunidad != null ? this.codigoComunidad.hashCode() : 0);
-    hash = 37 * hash + (this.descripcionComunidad != null ? this.descripcionComunidad.hashCode() : 0);
-    hash = 37 * hash + (this.pais != null ? this.pais.hashCode() : 0);
-    hash = 37 * hash + (this.c_comunidad_rpc != null ? this.c_comunidad_rpc.hashCode() : 0);
-    hash = 37 * hash + (this.c_codigo_dir2 != null ? this.c_codigo_dir2.hashCode() : 0);
-    return hash;
+
+  @ManyToOne
+  @JoinColumn(name="ESTADO")
+  @ForeignKey(name="DIR_CCOMAUT_CESTENT_FK")
+  public CatEstadoEntidad getEstado() {
+    return estado;
+  }
+
+  public void setEstado(CatEstadoEntidad estado) {
+    this.estado = estado;
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    final CatComunidadAutonoma other = (CatComunidadAutonoma) obj;
-    if (this.codigoComunidad != other.codigoComunidad && (this.codigoComunidad == null || !this.codigoComunidad.equals(other.codigoComunidad))) {
-      return false;
-    }
-    if ((this.descripcionComunidad == null) ? (other.descripcionComunidad != null) : !this.descripcionComunidad.equals(other.descripcionComunidad)) {
-      return false;
-    }
-    if (this.pais != other.pais && (this.pais == null || !this.pais.equals(other.pais))) {
-      return false;
-    }
-    if ((this.c_comunidad_rpc == null) ? (other.c_comunidad_rpc != null) : !this.c_comunidad_rpc.equals(other.c_comunidad_rpc)) {
-      return false;
-    }
-    if (this.c_codigo_dir2 != other.c_codigo_dir2 && (this.c_codigo_dir2 == null || !this.c_codigo_dir2.equals(other.c_codigo_dir2))) {
-      return false;
-    }
-    return true;
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    CatComunidadAutonoma that = (CatComunidadAutonoma) o;
+    return codigoComunidad.equals(that.codigoComunidad) && descripcionComunidad.equals(that.descripcionComunidad)
+            && pais.equals(that.pais) && c_comunidad_rpc.equals(that.c_comunidad_rpc) && c_codigo_dir2.equals(that.c_codigo_dir2)
+            && estado.equals(that.estado);
   }
-  
-  
-  
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(codigoComunidad, descripcionComunidad, pais, c_comunidad_rpc, c_codigo_dir2, estado);
+  }
 
 }
