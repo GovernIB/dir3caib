@@ -86,6 +86,7 @@
     create table DIR_CATSERVICIO (
         CODSERVICIO number(19,0) not null,
         DESCSERVICIO varchar2(300 char) not null,
+        ESTADO varchar2(2 char),
         TIPO number(19,0)
     );
 
@@ -124,10 +125,19 @@
         ESTADO varchar2(2 char)
     );
 
+    create table DIR_CODIGOUO (
+        CODUNIDADORGANICA number(19,0) not null,
+        CODIGOEXTERNO varchar2(255 char),
+        ESTADO varchar2(2 char),
+        TIPOCODIGO number(19,0),
+        CODUNIDAD number(19,0)
+    );
+
     create table DIR_CONTACTOOFI (
         CODCONTACTO number(19,0) not null,
         VALORCONTACTO varchar2(100 char) not null,
         VISIBILIDAD number(1,0),
+        ESTADO varchar2(2 char),
         CODOFICINA varchar2(9 char),
         TIPOCONTACTO varchar2(2 char)
     );
@@ -136,27 +146,33 @@
         CODCONTACTO number(19,0) not null,
         VALORCONTACTO varchar2(100 char) not null,
         VISIBILIDAD number(1,0),
-        TIPOCONTACTO varchar2(2 char),
-        CODUNIDAD varchar2(9 char)
-    );
-
-    create table DIR_DESCARGA (
-        CODIGO number(19,0) not null,
         ESTADO varchar2(2 char),
-        FECHAFIN timestamp,
-        FECHAIMPORTACION timestamp,
-        FECHAINICIO timestamp,
-        TIPO varchar2(255 char)
+        TIPOCONTACTO varchar2(2 char),
+        CODUNIDAD number(19,0)
     );
 
     create table DIR_HISTORICOOFI (
-        CODANTERIOR varchar2(9 char) not null,
-        CODULTIMA varchar2(9 char) not null
+        ID number(19,0) not null,
+        MOTIVORELACION varchar2(255 char),
+        ESTADO varchar2(2 char),
+        CODANTERIOR varchar2(9 char),
+        CODULTIMA varchar2(9 char)
     );
 
     create table DIR_HISTORICOUO (
-        CODANTERIOR varchar2(9 char) not null,
-        CODULTIMA varchar2(9 char) not null
+        ID number(19,0) not null,
+        MOTIVORELACION varchar2(255 char),
+        OBSERVEXTINCION varchar2(255 char),
+        ESTADO varchar2(2 char),
+        CODANTERIOR number(19,0),
+        CODULTIMA number(19,0)
+    );
+
+    create table DIR_NIFCIFUO (
+        CODNIFCIF number(19,0) not null,
+        NIFPRINCIPAL number(1,0),
+        ESTADO varchar2(2 char),
+        CODUNIDAD number(19,0)
     );
 
     create table DIR_OFICINA (
@@ -164,6 +180,7 @@
         CODPOSTAL varchar2(14 char),
         COMPLEMENTO varchar2(300 char),
         DENOMINACION varchar2(300 char),
+        DENOMCOOFICIAL varchar2(300 char),
         DIASSINHABILES varchar2(400 char),
         DIREXTRANJERA varchar2(200 char),
         DIRECCIONOBSERVACIONES varchar2(400 char),
@@ -171,7 +188,9 @@
         FECHAANULACION timestamp,
         FECHAEXTINCION timestamp,
         FECHAIMPORTACION timestamp,
+        FECHULTACTUALI timestamp,
         HORARIOANTENCION varchar2(400 char),
+        IDIOMALENGUA number(10,0),
         LOCEXTRANJERA varchar2(40 char),
         NOMBREVIA varchar2(300 char),
         NUMVIA varchar2(20 char),
@@ -179,8 +198,9 @@
         CODCOMUNIDAD number(19,0),
         CODOFIRESPONSABLE varchar2(9 char),
         CODPAIS number(19,0),
-        CODUORESPONSABLE varchar2(9 char),
+        CODUORESPONSABLE number(19,0),
         ESTADO varchar2(2 char),
+        FUENTEEXTERNA number(19,0),
         LOCALIDADID number(19,0),
         NIVELADMINISTRACION number(19,0),
         TIPOOFICINA number(19,0),
@@ -191,14 +211,14 @@
         id number(19,0) not null,
         ESTADO varchar2(2 char),
         CODOFICINA varchar2(9 char) not null,
-        CODUNIDAD varchar2(9 char) not null
+        CODUNIDAD number(19,0) not null
     );
 
     create table DIR_RELACIONSIROFI (
         ID number(19,0) not null,
         ESTADO varchar2(2 char),
         CODOFICINA varchar2(9 char) not null,
-        CODUNIDAD varchar2(9 char) not null
+        CODUNIDAD number(19,0) not null
     );
 
     create table DIR_SERVICIOOFI (
@@ -207,7 +227,7 @@
     );
 
     create table DIR_SERVICIOUO (
-        CODUNIDAD varchar2(9 char) not null,
+        CODUNIDAD number(19,0) not null,
         CODSERVICIO number(19,0) not null
     );
 
@@ -221,14 +241,17 @@
     );
 
     create table DIR_UNIDAD (
-        CODIGO varchar2(9 char) not null,
+        ID number(19,0) not null,
         CODAMBELM number(19,0),
         CODAMBLOCEXTRANJERA varchar2(50 char),
         CODEXTERNO varchar2(40 char),
         CODPOSTAL varchar2(14 char),
+        CODIGO varchar2(9 char) not null,
+        COMPARTENIF number(1,0),
         COMPETENCIAS varchar2(400 char),
         COMPLEMENTO varchar2(300 char),
         DENOMINACION varchar2(300 char),
+        DENOMCOOFICIAL varchar2(300 char),
         DIREXTRANJERA varchar2(200 char),
         DISPOSICIONLEGAL varchar2(400 char),
         ESEDP number(1,0),
@@ -237,6 +260,8 @@
         FECHABAJAOFICIAL timestamp,
         FECHAEXTINCION timestamp,
         FECHAIMPORTACION timestamp,
+        FECHULTACTUALI timestamp,
+        IDIOMALENGUA number(10,0),
         LOCEXTRANJERA varchar2(40 char),
         NIFCIF varchar2(9 char),
         NIVELJERARQUICO number(19,0),
@@ -246,6 +271,7 @@
         OBSERVGENERALES varchar2(400 char),
         OBSERVACIONES varchar2(400 char),
         SIGLAS varchar2(10 char),
+        VERSION number(19,0) not null,
         CODAMBLOCALIDADID number(19,0),
         CODAMBCOMUNIDAD number(19,0),
         CODAMBENTGEOGRAFICA varchar2(2 char),
@@ -254,15 +280,16 @@
         CODAMBPROVINCIA number(19,0),
         CODAMBITOTERRITORIALID number(19,0),
         CODCOMUNIDAD number(19,0),
-        CODEDPPRINCIPAL varchar2(9 char),
+        CODEDPPRINCIPAL number(19,0),
         CODLOCALIDADID number(19,0),
         CODPAIS number(19,0),
         CODTIPOENTPUBLICA varchar2(2 char),
         CODTIPOUNIDAD varchar2(3 char),
-        CODUNIDADRAIZ varchar2(9 char),
-        CODUNIDADSUPERIOR varchar2(9 char),
+        CODUNIDADRAIZ number(19,0),
+        CODUNIDADSUPERIOR number(19,0),
         ESTADO varchar2(2 char),
         NIVELADMINISTRACION number(19,0),
+        PODER number(19,0),
         TIPOVIA number(19,0)
     );
 
@@ -284,6 +311,12 @@
 
     create sequence DIR_CNIVADM_SEQ;
 
+    create sequence DIR_CODUO_SEQ;
+
+    create sequence DIR_CONOF_SEQ;
+
+    create sequence DIR_CONTUO_SEQ;
+
     create sequence DIR_CPAIS_SEQ;
 
     create sequence DIR_CPODER_SEQ;
@@ -304,22 +337,34 @@
 
     create sequence DIR_CTUNIORG_SEQ;
 
-    create sequence DIR_SEQ_ALL;
+    create sequence DIR_HISOFI_SEQ;
+
+    create sequence DIR_HISTUO_SEQ;
+
+    create sequence DIR_NIFCIF_SEQ;
+
+    create sequence DIR_RELOFI_SEQ;
+
+    create sequence DIR_RELSIR_SEQ;
+
+    create sequence DIR_SINC_SEQ;
+
+    create sequence DIR_UNI_SEQ;
 
 
  -- INICI Indexes
-    create index DIR_CAMBTER_CESTENT_FK_I on DIR_CATAMBITOTERRITORIAL (ESTADO);
     create index DIR_CATAMBTERR_CATNIVADM_FK_I on DIR_CATAMBITOTERRITORIAL (NIVELADMINISTRACION);
+    create index DIR_CAMBTER_CESTENT_FK_I on DIR_CATAMBITOTERRITORIAL (ESTADO);
     create index DIR_CATAMBITOTERRITORIAL_PK_I on DIR_CATAMBITOTERRITORIAL (CODIGOAMBITO, NIVELADMINISTRACION);
     create index DIR_CCOMAUT_CESTENT_FK_I on DIR_CATCOMUNIDADAUTONOMA (ESTADO);
     create index DIR_CATCOMUNAUT_CATPAIS_FK_I on DIR_CATCOMUNIDADAUTONOMA (PAIS);
     create index DIR_CENTGEO_CESTENT_FK_I on DIR_CATENTIDADGEOGRAFICA (ESTADO);
     create index DIR_CESTENT_CESTENT_FK_I on DIR_CATESTADOENTIDAD (ESTADO);
-    create index DIR_CATISLA_CATPROV_FK_I on DIR_CATISLA (PROVINCIA);
     create index DIR_CATISLA_CESTENT_FK_I on DIR_CATISLA (ESTADO);
+    create index DIR_CATISLA_CATPROV_FK_I on DIR_CATISLA (PROVINCIA);
     create index DIR_CJEROFI_CESTENT_FK_I on DIR_CATJERARQUIAOFICINA (ESTADO);
-    create index DIR_CLOCAL_CESTENT_FK_I on DIR_CATLOCALIDAD (ESTADO);
     create index DIR_CATLOCAL_CATPROVIN_FK_I on DIR_CATLOCALIDAD (PROVINCIA);
+    create index DIR_CLOCAL_CESTENT_FK_I on DIR_CATLOCALIDAD (ESTADO);
     create index DIR_CATLOCAL_CATENTGEOGR_FK_I on DIR_CATLOCALIDAD (ENTIDADGEOGRAFICA);
     create index DIR_CMOTEXT_CESTENT_FK_I on DIR_CATMOTIVOEXTINCION (ESTADO);
     create index DIR_CNIVADM_CESTENT_FK_I on DIR_CATNIVELADMINISTRACION (ESTADO);
@@ -329,49 +374,60 @@
     create index DIR_CATPROV_CATCOMUNAUT_FK_I on DIR_CATPROVINCIA (COMUNIDADAUTONOMA);
     create index DIR_CPROVIN_CESTENT_FK_I on DIR_CATPROVINCIA (ESTADO);
     create index DIR_CSERVIC_CTIPSERV_FK_I on DIR_CATSERVICIO (TIPO);
+    create index DIR_CSERVIC_CESTENT_FK_I on DIR_CATSERVICIO (ESTADO);
     create index DIR_CFUEEXT_CESTENT_FK_I on DIR_CATTIPOCODFUENTEEXTERNA (ESTADO);
     create index DIR_CTIPCON_CESTENT_FK_I on DIR_CATTIPOCONTACTO (ESTADO);
     create index DIR_CTIENPU_CESTENT_FK_I on DIR_CATTIPOENTIDADPUBLICA (ESTADO);
     create index DIR_CTIUNOR_CESTENT_FK_I on DIR_CATTIPOUNIDADORGANICA (ESTADO);
     create index DIR_CTIPVIA_CESTENT_FK_I on DIR_CATTIPOVIA (ESTADO);
-    create index DIR_CONTOFI_CATTIPCONT_FK_I on DIR_CONTACTOOFI (TIPOCONTACTO);
+    create index DIR_CODUO_UNIDAD_FK_I on DIR_CODIGOUO (CODUNIDAD);
+    create index DIR_CODUO_CFUEEXT_FK on DIR_CODIGOUO (TIPOCODIGO);
+    create index DIR_CODUO_CESTENT_FK_I on DIR_CODIGOUO (ESTADO);
     create index DIR_OFICINA_CONTACTOSOFI_FK_I on DIR_CONTACTOOFI (CODOFICINA);
-    create index DIR_UNIDAD_CONTACTOSUO_FK_I on DIR_CONTACTOUO (CODUNIDAD);
+    create index DIR_CONOFI_CESTENT_FK_I on DIR_CONTACTOOFI (ESTADO);
+    create index DIR_CONTOFI_CATTIPCONT_FK_I on DIR_CONTACTOOFI (TIPOCONTACTO);
     create index DIR_CONTACUO_CATTIPOCONT_FK_I on DIR_CONTACTOUO (TIPOCONTACTO);
+    create index DIR_CONTUO_CESTENT_FK_I on DIR_CONTACTOUO (ESTADO);
+    create index DIR_UNIDAD_CONTACTOSUO_FK_I on DIR_CONTACTOUO (CODUNIDAD);
+    create index DIR_HISOF_CESTENT_FK_I on DIR_HISTORICOOFI (ESTADO);
+    create index DIR_HISTO_CESTENT_FK_I on DIR_HISTORICOUO (ESTADO);
+    create index DIR_NIFCIF_CESTENT_FK_I on DIR_NIFCIFUO (ESTADO);
+    create index DIR_NIFCIF_UNIDAD_FK_I on DIR_NIFCIFUO (CODUNIDAD);
+    create index DIR_OFICINA_CATLOCAL_FK_I on DIR_OFICINA (LOCALIDADID);
     create index DIR_OFICINA_OFICINA_FK_I on DIR_OFICINA (CODOFIRESPONSABLE);
+    create index DIR_OFICINA_CFUEXT_FK_I on DIR_OFICINA (FUENTEEXTERNA);
+    create index DIR_OFICINA_CATJERAROFI_FK_I on DIR_OFICINA (TIPOOFICINA);
+    create index DIR_OFICINA_CATCOMUNIAUT_FK_I on DIR_OFICINA (CODCOMUNIDAD);
+    create index DIR_OFICINA_UNIDAD_FK_I on DIR_OFICINA (CODUORESPONSABLE);
     create index DIR_OFICINA_CATTIPOVIA_FK_I on DIR_OFICINA (TIPOVIA);
     create index DIR_OFICINA_CATESTADENTI_FK_I on DIR_OFICINA (ESTADO);
-    create index DIR_OFICINA_CATPAIS_FK_I on DIR_OFICINA (CODPAIS);
-    create index DIR_OFICINA_CATLOCAL_FK_I on DIR_OFICINA (LOCALIDADID);
     create index DIR_OFICINA_CATNIVELADMIN_FK_I on DIR_OFICINA (NIVELADMINISTRACION);
-    create index DIR_OFICINA_UNIDAD_FK_I on DIR_OFICINA (CODUORESPONSABLE);
-    create index DIR_OFICINA_CATCOMUNIAUT_FK_I on DIR_OFICINA (CODCOMUNIDAD);
-    create index DIR_OFICINA_CATJERAROFI_FK_I on DIR_OFICINA (TIPOOFICINA);
-    create index DIR_RELORGANOFI_CATESTENT_FK_I on DIR_RELACIONORGANIZATIVAOFI (ESTADO);
+    create index DIR_OFICINA_CATPAIS_FK_I on DIR_OFICINA (CODPAIS);
     create index DIR_OFICINA_RELORGOFI_FK_I on DIR_RELACIONORGANIZATIVAOFI (CODOFICINA);
+    create index DIR_RELORGANOFI_CATESTENT_FK_I on DIR_RELACIONORGANIZATIVAOFI (ESTADO);
     create index DIR_UNIDAD_RELORGOFI_FK_I on DIR_RELACIONORGANIZATIVAOFI (CODUNIDAD);
     create index DIR_OFICINA_RELSIROFI_FK_I on DIR_RELACIONSIROFI (CODOFICINA);
-    create index DIR_UNIDAD_RELSIROFI_FK_I on DIR_RELACIONSIROFI (CODUNIDAD);
     create index DIR_RELSIROFI_CATESTENTI_FK_I on DIR_RELACIONSIROFI (ESTADO);
-    create index DIR_UNIDAD_CATAMBITTERR_FK_I on DIR_UNIDAD (CODAMBITOTERRITORIALID);
-    create index DIR_UNIDAD_CATTIPOVIA_FK_I on DIR_UNIDAD (TIPOVIA);
-    create index DIR_UNIDAD_UNIDADRAIZ_FK_I on DIR_UNIDAD (CODUNIDADRAIZ);
+    create index DIR_UNIDAD_RELSIROFI_FK_I on DIR_RELACIONSIROFI (CODUNIDAD);
     create index DIR_UNIDAD_CATAMBPAIS_FK_I on DIR_UNIDAD (CODAMBPAIS);
+    create index DIR_UNIDAD_CATCOMUNIAUTO_FK_I on DIR_UNIDAD (CODCOMUNIDAD);
+    create index DIR_UNIDAD_UNIDADSUPERIOR_FK_I on DIR_UNIDAD (CODUNIDADSUPERIOR);
+    create index DIR_UNIDAD_CATENTGEOGRAF_FK_I on DIR_UNIDAD (CODAMBENTGEOGRAFICA);
+    create index DIR_UNIDAD_CATNIVELADMIN_FK_I on DIR_UNIDAD (NIVELADMINISTRACION);
+    create index DIR_UNIDAD_CATTIPOVIA_FK_I on DIR_UNIDAD (TIPOVIA);
     create index DIR_UNIDAD_MUNICIPIO_FK_I on DIR_UNIDAD (CODAMBLOCALIDADID);
-    create index DIR_UNIDAD_CATAMBCOMAUTO_FK_I on DIR_UNIDAD (CODAMBCOMUNIDAD);
     create index DIR_UNIDAD_CATTIPENTPUBL_FK_I on DIR_UNIDAD (CODTIPOENTPUBLICA);
     create index DIR_UNIDAD_CATISLA_FK_I on DIR_UNIDAD (CODAMBISLA);
-    create index DIR_UNIDAD_CATCOMUNIAUTO_FK_I on DIR_UNIDAD (CODCOMUNIDAD);
+    create index DIR_UNIDAD_CATESTENTIDAD_FK_I on DIR_UNIDAD (ESTADO);
+    create index DIR_UNIDAD_CATAMBITTERR_FK_I on DIR_UNIDAD (CODAMBITOTERRITORIALID);
+    create index DIR_UNIDAD_CATLOCAL_FK_I on DIR_UNIDAD (CODLOCALIDADID);
+    create index DIR_UNIDAD_PK_I on DIR_UNIDAD (CODIGO, VERSION);
+    create index DIR_UNIDAD_UNIDADRAIZ_FK_I on DIR_UNIDAD (CODUNIDADRAIZ);
+    create index DIR_UNIDAD_CATAMBCOMAUTO_FK_I on DIR_UNIDAD (CODAMBCOMUNIDAD);
+    create index DIR_UNIDAD_CATTIPUNIORG_FK_I on DIR_UNIDAD (CODTIPOUNIDAD);
     create index DIR_UNIDAD_CATPROVINCIA_FK_I on DIR_UNIDAD (CODAMBPROVINCIA);
     create index DIR_UNIDAD_CATPAIS_FK_I on DIR_UNIDAD (CODPAIS);
-    create index DIR_UNIDAD_PK_I on DIR_UNIDAD (CODIGO);
     create index DIR_UNIDAD_UNIDADEDPPRINC_FK_I on DIR_UNIDAD (CODEDPPRINCIPAL);
-    create index DIR_UNIDAD_CATNIVELADMIN_FK_I on DIR_UNIDAD (NIVELADMINISTRACION);
-    create index DIR_UNIDAD_CATTIPUNIORG_FK_I on DIR_UNIDAD (CODTIPOUNIDAD);
-    create index DIR_UNIDAD_CATENTGEOGRAF_FK_I on DIR_UNIDAD (CODAMBENTGEOGRAFICA);
-    create index DIR_UNIDAD_CATLOCAL_FK_I on DIR_UNIDAD (CODLOCALIDADID);
-    create index DIR_UNIDAD_UNIDADSUPERIOR_FK_I on DIR_UNIDAD (CODUNIDADSUPERIOR);
-    create index DIR_UNIDAD_CATESTENTIDAD_FK_I on DIR_UNIDAD (ESTADO);
  -- FINAL Indexes
 
  -- INICI PK's
@@ -413,15 +469,17 @@
 
     alter table DIR_CATTIPOVIA add constraint DIR_CATTIPOVIA_pk primary key (CODIGOTIPOVIA);
 
+    alter table DIR_CODIGOUO add constraint DIR_CODIGOUO_pk primary key (CODUNIDADORGANICA);
+
     alter table DIR_CONTACTOOFI add constraint DIR_CONTACTOOFI_pk primary key (CODCONTACTO);
 
     alter table DIR_CONTACTOUO add constraint DIR_CONTACTOUO_pk primary key (CODCONTACTO);
 
-    alter table DIR_DESCARGA add constraint DIR_DESCARGA_pk primary key (CODIGO);
-
     alter table DIR_HISTORICOOFI add constraint DIR_HISTORICOOFI_pk primary key (CODANTERIOR, CODULTIMA);
 
-    alter table DIR_HISTORICOUO add constraint DIR_HISTORICOUO_pk primary key (CODANTERIOR, CODULTIMA);
+    alter table DIR_HISTORICOUO add constraint DIR_HISTORICOUO_pk primary key (ID);
+
+    alter table DIR_NIFCIFUO add constraint DIR_NIFCIFUO_pk primary key (CODNIFCIF);
 
     alter table DIR_OFICINA add constraint DIR_OFICINA_pk primary key (CODIGO);
 
@@ -435,19 +493,24 @@
 
     alter table DIR_SINCRONIZACION add constraint DIR_SINCRONIZACION_pk primary key (CODIGO);
 
-    alter table DIR_UNIDAD add constraint DIR_UNIDAD_pk primary key (CODIGO);
+    alter table DIR_UNIDAD add constraint DIR_UNIDAD_pk primary key (ID);
 
  -- FINAL PK's
 
  -- INICI FK's
 
     alter table DIR_CATAMBITOTERRITORIAL 
+        add constraint DIR_CAMBTER_CESTENT_FK 
+        foreign key (ESTADO) 
+        references DIR_CATESTADOENTIDAD;
+
+    alter table DIR_CATAMBITOTERRITORIAL 
         add constraint DIR_CATAMBTERR_CATNIVADM_FK 
         foreign key (NIVELADMINISTRACION) 
         references DIR_CATNIVELADMINISTRACION;
 
-    alter table DIR_CATAMBITOTERRITORIAL 
-        add constraint DIR_CAMBTER_CESTENT_FK 
+    alter table DIR_CATCOMUNIDADAUTONOMA 
+        add constraint DIR_CCOMAUT_CESTENT_FK 
         foreign key (ESTADO) 
         references DIR_CATESTADOENTIDAD;
 
@@ -455,11 +518,6 @@
         add constraint DIR_CATCOMUNAUT_CATPAIS_FK 
         foreign key (PAIS) 
         references DIR_CATPAIS;
-
-    alter table DIR_CATCOMUNIDADAUTONOMA 
-        add constraint DIR_CCOMAUT_CESTENT_FK 
-        foreign key (ESTADO) 
-        references DIR_CATESTADOENTIDAD;
 
     alter table DIR_CATENTIDADGEOGRAFICA 
         add constraint DIR_CENTGEO_CESTENT_FK 
@@ -472,14 +530,14 @@
         references DIR_CATESTADOENTIDAD;
 
     alter table DIR_CATISLA 
-        add constraint DIR_CATISLA_CATPROV_FK 
-        foreign key (PROVINCIA) 
-        references DIR_CATPROVINCIA;
-
-    alter table DIR_CATISLA 
         add constraint DIR_CATISLA_CESTENT_FK 
         foreign key (ESTADO) 
         references DIR_CATESTADOENTIDAD;
+
+    alter table DIR_CATISLA 
+        add constraint DIR_CATISLA_CATPROV_FK 
+        foreign key (PROVINCIA) 
+        references DIR_CATPROVINCIA;
 
     alter table DIR_CATJERARQUIAOFICINA 
         add constraint DIR_CJEROFI_CESTENT_FK 
@@ -487,9 +545,9 @@
         references DIR_CATESTADOENTIDAD;
 
     alter table DIR_CATLOCALIDAD 
-        add constraint DIR_CATLOCAL_CATPROVIN_FK 
-        foreign key (PROVINCIA) 
-        references DIR_CATPROVINCIA;
+        add constraint DIR_CLOCAL_CESTENT_FK 
+        foreign key (ESTADO) 
+        references DIR_CATESTADOENTIDAD;
 
     alter table DIR_CATLOCALIDAD 
         add constraint DIR_CATLOCAL_CATENTGEOGR_FK 
@@ -497,9 +555,9 @@
         references DIR_CATENTIDADGEOGRAFICA;
 
     alter table DIR_CATLOCALIDAD 
-        add constraint DIR_CLOCAL_CESTENT_FK 
-        foreign key (ESTADO) 
-        references DIR_CATESTADOENTIDAD;
+        add constraint DIR_CATLOCAL_CATPROVIN_FK 
+        foreign key (PROVINCIA) 
+        references DIR_CATPROVINCIA;
 
     alter table DIR_CATMOTIVOEXTINCION 
         add constraint DIR_CMOTEXT_CESTENT_FK 
@@ -522,12 +580,17 @@
         references DIR_CATESTADOENTIDAD;
 
     alter table DIR_CATPROVINCIA 
+        add constraint DIR_CPROVIN_CESTENT_FK 
+        foreign key (ESTADO) 
+        references DIR_CATESTADOENTIDAD;
+
+    alter table DIR_CATPROVINCIA 
         add constraint DIR_CATPROVINC_CATCOMUNAUTO_FK 
         foreign key (COMUNIDADAUTONOMA) 
         references DIR_CATCOMUNIDADAUTONOMA;
 
-    alter table DIR_CATPROVINCIA 
-        add constraint DIR_CPROVIN_CESTENT_FK 
+    alter table DIR_CATSERVICIO 
+        add constraint DIR_CSERVIC_CESTENT_FK 
         foreign key (ESTADO) 
         references DIR_CATESTADOENTIDAD;
 
@@ -561,18 +624,33 @@
         foreign key (ESTADO) 
         references DIR_CATESTADOENTIDAD;
 
+    alter table DIR_CODIGOUO 
+        add constraint DIR_UNIDAD_CODUO_FK 
+        foreign key (CODUNIDAD) 
+        references DIR_UNIDAD;
+
+    alter table DIR_CODIGOUO 
+        add constraint DIR_CODUO_CESTENT_FK 
+        foreign key (ESTADO) 
+        references DIR_CATESTADOENTIDAD;
+
+    alter table DIR_CODIGOUO 
+        add constraint DIR_CODUO_CFUEEXT_FK 
+        foreign key (TIPOCODIGO) 
+        references DIR_CATTIPOCODFUENTEEXTERNA;
+
     alter table DIR_CONTACTOOFI 
-        add constraint DIR_CONTACOFI_CATTIPCONTAC_FK 
-        foreign key (TIPOCONTACTO) 
-        references DIR_CATTIPOCONTACTO;
+        add constraint DIR_CONOFI_CESTENT_FK 
+        foreign key (ESTADO) 
+        references DIR_CATESTADOENTIDAD;
 
     alter table DIR_CONTACTOOFI 
         add constraint DIR_OFICINA_CONTACTOSOFI_FK 
         foreign key (CODOFICINA) 
         references DIR_OFICINA;
 
-    alter table DIR_CONTACTOUO 
-        add constraint DIR_CONTACTOUO_CATTIPOCONT_FK 
+    alter table DIR_CONTACTOOFI 
+        add constraint DIR_CONTACOFI_CATTIPCONTAC_FK 
         foreign key (TIPOCONTACTO) 
         references DIR_CATTIPOCONTACTO;
 
@@ -580,6 +658,21 @@
         add constraint DIR_UNIDAD_CONTACTOSUO_FK 
         foreign key (CODUNIDAD) 
         references DIR_UNIDAD;
+
+    alter table DIR_CONTACTOUO 
+        add constraint DIR_CONTUO_CESTENT_FK 
+        foreign key (ESTADO) 
+        references DIR_CATESTADOENTIDAD;
+
+    alter table DIR_CONTACTOUO 
+        add constraint DIR_CONTACTOUO_CATTIPOCONT_FK 
+        foreign key (TIPOCONTACTO) 
+        references DIR_CATTIPOCONTACTO;
+
+    alter table DIR_HISTORICOOFI 
+        add constraint DIR_HISOF_CESTENT_FK 
+        foreign key (ESTADO) 
+        references DIR_CATESTADOENTIDAD;
 
     alter table DIR_HISTORICOOFI 
         add constraint DIR_OFI_OFI_HISTANTE_FK 
@@ -592,49 +685,29 @@
         references DIR_OFICINA;
 
     alter table DIR_HISTORICOUO 
-        add constraint DIR_UNI_UNI_HISTANTE_FK 
+        add constraint DIR_HISTO_CESTENT_FK 
+        foreign key (ESTADO) 
+        references DIR_CATESTADOENTIDAD;
+
+    alter table DIR_HISTORICOUO 
+        add constraint DIR_HISTO_UNIANT_FK 
         foreign key (CODANTERIOR) 
         references DIR_UNIDAD;
 
     alter table DIR_HISTORICOUO 
-        add constraint DIR_UNI_UNI_HISTULTI_FK 
+        add constraint DIR_HISTO_UNIULT_FK 
         foreign key (CODULTIMA) 
         references DIR_UNIDAD;
 
-    alter table DIR_OFICINA 
-        add constraint DIR_OFICINA_CATTIPOVIA_FK 
-        foreign key (TIPOVIA) 
-        references DIR_CATTIPOVIA;
+    alter table DIR_NIFCIFUO 
+        add constraint DIR_UNIDAD_NIFCIF_FK 
+        foreign key (CODUNIDAD) 
+        references DIR_UNIDAD;
 
-    alter table DIR_OFICINA 
-        add constraint DIR_OFICINA_CATLOCAL_FK 
-        foreign key (LOCALIDADID) 
-        references DIR_CATLOCALIDAD;
-
-    alter table DIR_OFICINA 
-        add constraint DIR_OFICINA_CATPAIS_FK 
-        foreign key (CODPAIS) 
-        references DIR_CATPAIS;
-
-    alter table DIR_OFICINA 
-        add constraint DIR_OFICINA_OFICINA_FK 
-        foreign key (CODOFIRESPONSABLE) 
-        references DIR_OFICINA;
-
-    alter table DIR_OFICINA 
-        add constraint DIR_OFICINA_CATJERARQUIAOFI_FK 
-        foreign key (TIPOOFICINA) 
-        references DIR_CATJERARQUIAOFICINA;
-
-    alter table DIR_OFICINA 
-        add constraint DIR_OFICINA_CATCOMUNIAUT_FK 
-        foreign key (CODCOMUNIDAD) 
-        references DIR_CATCOMUNIDADAUTONOMA;
-
-    alter table DIR_OFICINA 
-        add constraint DIR_OFICINA_CATNIVELADMIN_FK 
-        foreign key (NIVELADMINISTRACION) 
-        references DIR_CATNIVELADMINISTRACION;
+    alter table DIR_NIFCIFUO 
+        add constraint DIR_NIFCIF_CESTENT_FK 
+        foreign key (ESTADO) 
+        references DIR_CATESTADOENTIDAD;
 
     alter table DIR_OFICINA 
         add constraint DIR_OFICINA_CATESTADENTIDAD_FK 
@@ -642,8 +715,53 @@
         references DIR_CATESTADOENTIDAD;
 
     alter table DIR_OFICINA 
+        add constraint DIR_OFICINA_CATCOMUNIAUT_FK 
+        foreign key (CODCOMUNIDAD) 
+        references DIR_CATCOMUNIDADAUTONOMA;
+
+    alter table DIR_OFICINA 
+        add constraint DIR_OFICINA_CATTIPOVIA_FK 
+        foreign key (TIPOVIA) 
+        references DIR_CATTIPOVIA;
+
+    alter table DIR_OFICINA 
+        add constraint DIR_OFICINA_CATNIVELADMIN_FK 
+        foreign key (NIVELADMINISTRACION) 
+        references DIR_CATNIVELADMINISTRACION;
+
+    alter table DIR_OFICINA 
         add constraint DIR_OFICINA_UNIDAD_FK 
         foreign key (CODUORESPONSABLE) 
+        references DIR_UNIDAD;
+
+    alter table DIR_OFICINA 
+        add constraint DIR_OFICINA_OFICINA_FK 
+        foreign key (CODOFIRESPONSABLE) 
+        references DIR_OFICINA;
+
+    alter table DIR_OFICINA 
+        add constraint DIR_OFICINA_CATPAIS_FK 
+        foreign key (CODPAIS) 
+        references DIR_CATPAIS;
+
+    alter table DIR_OFICINA 
+        add constraint DIR_OFICINA_CFUEXT_FK 
+        foreign key (FUENTEEXTERNA) 
+        references DIR_CATTIPOCODFUENTEEXTERNA;
+
+    alter table DIR_OFICINA 
+        add constraint DIR_OFICINA_CATJERARQUIAOFI_FK 
+        foreign key (TIPOOFICINA) 
+        references DIR_CATJERARQUIAOFICINA;
+
+    alter table DIR_OFICINA 
+        add constraint DIR_OFICINA_CATLOCAL_FK 
+        foreign key (LOCALIDADID) 
+        references DIR_CATLOCALIDAD;
+
+    alter table DIR_RELACIONORGANIZATIVAOFI 
+        add constraint DIR_RELORGOFI_CATUNIDAD_FK 
+        foreign key (CODUNIDAD) 
         references DIR_UNIDAD;
 
     alter table DIR_RELACIONORGANIZATIVAOFI 
@@ -652,19 +770,9 @@
         references DIR_CATESTADOENTIDAD;
 
     alter table DIR_RELACIONORGANIZATIVAOFI 
-        add constraint DIR_RELORGOFI_CATUNIDAD_FK 
-        foreign key (CODUNIDAD) 
-        references DIR_UNIDAD;
-
-    alter table DIR_RELACIONORGANIZATIVAOFI 
         add constraint DIR_RELORGOFI_CATOFI_FK 
         foreign key (CODOFICINA) 
         references DIR_OFICINA;
-
-    alter table DIR_RELACIONSIROFI 
-        add constraint DIR_RELSIROFI_CATESTENTI_FK 
-        foreign key (ESTADO) 
-        references DIR_CATESTADOENTIDAD;
 
     alter table DIR_RELACIONSIROFI 
         add constraint DIR_RELSIROFI_CATUNIDAD_FK 
@@ -672,7 +780,17 @@
         references DIR_UNIDAD;
 
     alter table DIR_RELACIONSIROFI 
+        add constraint DIR_RELSIROFI_CATESTENTI_FK 
+        foreign key (ESTADO) 
+        references DIR_CATESTADOENTIDAD;
+
+    alter table DIR_RELACIONSIROFI 
         add constraint DIR_RELSIROFI_CATOFI_FK 
+        foreign key (CODOFICINA) 
+        references DIR_OFICINA;
+
+    alter table DIR_SERVICIOOFI 
+        add constraint DIR_SER_OFI_FK 
         foreign key (CODOFICINA) 
         references DIR_OFICINA;
 
@@ -681,40 +799,15 @@
         foreign key (CODSERVICIO) 
         references DIR_CATSERVICIO;
 
-    alter table DIR_SERVICIOOFI 
-        add constraint DIR_SER_OFI_FK 
-        foreign key (CODOFICINA) 
-        references DIR_OFICINA;
-
-    alter table DIR_SERVICIOUO 
-        add constraint DIR_UNI_SERV_FK 
-        foreign key (CODSERVICIO) 
-        references DIR_CATSERVICIO;
-
     alter table DIR_SERVICIOUO 
         add constraint DIR_SER_UNI_FK 
         foreign key (CODUNIDAD) 
         references DIR_UNIDAD;
 
-    alter table DIR_UNIDAD 
-        add constraint DIR_UNIDAD_CATPROVINCIA_FK 
-        foreign key (CODAMBPROVINCIA) 
-        references DIR_CATPROVINCIA;
-
-    alter table DIR_UNIDAD 
-        add constraint DIR_UNIDAD_UNIDADRAIZ_FK 
-        foreign key (CODUNIDADRAIZ) 
-        references DIR_UNIDAD;
-
-    alter table DIR_UNIDAD 
-        add constraint DIR_UNIDAD_CATAMBCOMAUTO_FK 
-        foreign key (CODAMBCOMUNIDAD) 
-        references DIR_CATCOMUNIDADAUTONOMA;
-
-    alter table DIR_UNIDAD 
-        add constraint DIR_UNIDAD_CATCOMUNIAUTO_FK 
-        foreign key (CODCOMUNIDAD) 
-        references DIR_CATCOMUNIDADAUTONOMA;
+    alter table DIR_SERVICIOUO 
+        add constraint DIR_UNI_SERV_FK 
+        foreign key (CODSERVICIO) 
+        references DIR_CATSERVICIO;
 
     alter table DIR_UNIDAD 
         add constraint DIR_UNIDAD_CATAMBITTERR_FK 
@@ -722,9 +815,9 @@
         references DIR_CATAMBITOTERRITORIAL;
 
     alter table DIR_UNIDAD 
-        add constraint DIR_UNIDAD_UNIDADSUPERIOR_FK 
-        foreign key (CODUNIDADSUPERIOR) 
-        references DIR_UNIDAD;
+        add constraint DIR_UNIDAD_CATESTENTIDAD_FK 
+        foreign key (ESTADO) 
+        references DIR_CATESTADOENTIDAD;
 
     alter table DIR_UNIDAD 
         add constraint DIR_UNIDAD_CATTIPOVIA_FK 
@@ -732,14 +825,9 @@
         references DIR_CATTIPOVIA;
 
     alter table DIR_UNIDAD 
-        add constraint DIR_UNIDAD_CATPAIS_FK 
-        foreign key (CODPAIS) 
-        references DIR_CATPAIS;
-
-    alter table DIR_UNIDAD 
-        add constraint DIR_UNIDAD_CATENTGEOGRAF_FK 
-        foreign key (CODAMBENTGEOGRAFICA) 
-        references DIR_CATENTIDADGEOGRAFICA;
+        add constraint DIR_UNIDAD_CATISLA_FK 
+        foreign key (CODAMBISLA) 
+        references DIR_CATISLA;
 
     alter table DIR_UNIDAD 
         add constraint DIR_UNIDAD_CATAMBPAIS_FK 
@@ -747,9 +835,34 @@
         references DIR_CATPAIS;
 
     alter table DIR_UNIDAD 
-        add constraint DIR_UNIDAD_CATTIPENTPUBLICA_FK 
-        foreign key (CODTIPOENTPUBLICA) 
-        references DIR_CATTIPOENTIDADPUBLICA;
+        add constraint DIR_UNIDAD_UNIDADRAIZ_FK 
+        foreign key (CODUNIDADRAIZ) 
+        references DIR_UNIDAD;
+
+    alter table DIR_UNIDAD 
+        add constraint DIR_UNIDAD_UNIDADEDPPRINC_FK 
+        foreign key (CODEDPPRINCIPAL) 
+        references DIR_UNIDAD;
+
+    alter table DIR_UNIDAD 
+        add constraint DIR_UNIDAD_CATENTGEOGRAF_FK 
+        foreign key (CODAMBENTGEOGRAFICA) 
+        references DIR_CATENTIDADGEOGRAFICA;
+
+    alter table DIR_UNIDAD 
+        add constraint DIR_UNIDAD_CATPODER_FK 
+        foreign key (PODER) 
+        references DIR_CATPODER;
+
+    alter table DIR_UNIDAD 
+        add constraint DIR_UNIDAD_CATPROVINCIA_FK 
+        foreign key (CODAMBPROVINCIA) 
+        references DIR_CATPROVINCIA;
+
+    alter table DIR_UNIDAD 
+        add constraint DIR_UNIDAD_CATCOMUNIAUTO_FK 
+        foreign key (CODCOMUNIDAD) 
+        references DIR_CATCOMUNIDADAUTONOMA;
 
     alter table DIR_UNIDAD 
         add constraint DIR_UNIDAD_MUNICIPIO_FK 
@@ -757,9 +870,24 @@
         references DIR_CATLOCALIDAD;
 
     alter table DIR_UNIDAD 
-        add constraint DIR_UNIDAD_CATISLA_FK 
-        foreign key (CODAMBISLA) 
-        references DIR_CATISLA;
+        add constraint DIR_UNIDAD_UNIDADSUPERIOR_FK 
+        foreign key (CODUNIDADSUPERIOR) 
+        references DIR_UNIDAD;
+
+    alter table DIR_UNIDAD 
+        add constraint DIR_UNIDAD_CATNIVELADMIN_FK 
+        foreign key (NIVELADMINISTRACION) 
+        references DIR_CATNIVELADMINISTRACION;
+
+    alter table DIR_UNIDAD 
+        add constraint DIR_UNIDAD_CATPAIS_FK 
+        foreign key (CODPAIS) 
+        references DIR_CATPAIS;
+
+    alter table DIR_UNIDAD 
+        add constraint DIR_UNIDAD_CATAMBCOMAUTO_FK 
+        foreign key (CODAMBCOMUNIDAD) 
+        references DIR_CATCOMUNIDADAUTONOMA;
 
     alter table DIR_UNIDAD 
         add constraint DIR_UNIDAD_CATTIPUNIDORGAN_FK 
@@ -772,19 +900,9 @@
         references DIR_CATLOCALIDAD;
 
     alter table DIR_UNIDAD 
-        add constraint DIR_UNIDAD_CATNIVELADMIN_FK 
-        foreign key (NIVELADMINISTRACION) 
-        references DIR_CATNIVELADMINISTRACION;
-
-    alter table DIR_UNIDAD 
-        add constraint DIR_UNIDAD_CATESTENTIDAD_FK 
-        foreign key (ESTADO) 
-        references DIR_CATESTADOENTIDAD;
-
-    alter table DIR_UNIDAD 
-        add constraint DIR_UNIDAD_UNIDADEDPPRINC_FK 
-        foreign key (CODEDPPRINCIPAL) 
-        references DIR_UNIDAD;
+        add constraint DIR_UNIDAD_CATTIPENTPUBLICA_FK 
+        foreign key (CODTIPOENTPUBLICA) 
+        references DIR_CATTIPOENTIDADPUBLICA;
  -- FINAL FK's
 
  -- INICI UNIQUES
@@ -792,6 +910,7 @@
     alter table DIR_CATLOCALIDAD add constraint DIR_CATLOC_LOC_PRO_ENTGEO_UK unique (CODIGOLOCALIDAD, PROVINCIA, ENTIDADGEOGRAFICA);
     alter table DIR_RELACIONORGANIZATIVAOFI add constraint DIR_RELORG_CODOFI_CODUNI_UK unique (CODOFICINA, CODUNIDAD);
     alter table DIR_RELACIONSIROFI add constraint DIR_RELSIROFI_OFI_UNI_UK unique (CODOFICINA, CODUNIDAD);
+    alter table DIR_UNIDAD add constraint DIR_UNIDAD_COD_VER_UK unique (CODIGO, VERSION);
  -- FINAL UNIQUES
 
  -- INICI GRANTS
@@ -814,11 +933,12 @@
     grant select,insert,delete,update on DIR_CATTIPOSERVICIO to www_dir3caib;
     grant select,insert,delete,update on DIR_CATTIPOUNIDADORGANICA to www_dir3caib;
     grant select,insert,delete,update on DIR_CATTIPOVIA to www_dir3caib;
+    grant select,insert,delete,update on DIR_CODIGOUO to www_dir3caib;
     grant select,insert,delete,update on DIR_CONTACTOOFI to www_dir3caib;
     grant select,insert,delete,update on DIR_CONTACTOUO to www_dir3caib;
-    grant select,insert,delete,update on DIR_DESCARGA to www_dir3caib;
     grant select,insert,delete,update on DIR_HISTORICOOFI to www_dir3caib;
     grant select,insert,delete,update on DIR_HISTORICOUO to www_dir3caib;
+    grant select,insert,delete,update on DIR_NIFCIFUO to www_dir3caib;
     grant select,insert,delete,update on DIR_OFICINA to www_dir3caib;
     grant select,insert,delete,update on DIR_RELACIONORGANIZATIVAOFI to www_dir3caib;
     grant select,insert,delete,update on DIR_RELACIONSIROFI to www_dir3caib;
@@ -835,6 +955,9 @@
     grant select on DIR_CLOCA_SEQ to www_dir3caib;
     grant select on DIR_CMOTEXT_SEQ to www_dir3caib;
     grant select on DIR_CNIVADM_SEQ to www_dir3caib;
+    grant select on DIR_CODUO_SEQ to www_dir3caib;
+    grant select on DIR_CONOF_SEQ to www_dir3caib;
+    grant select on DIR_CONTUO_SEQ to www_dir3caib;
     grant select on DIR_CPAIS_SEQ to www_dir3caib;
     grant select on DIR_CPODER_SEQ to www_dir3caib;
     grant select on DIR_CPROV_SEQ to www_dir3caib;
@@ -845,6 +968,12 @@
     grant select on DIR_CTIPOSER_SEQ to www_dir3caib;
     grant select on DIR_CTIPVIA_SEQ to www_dir3caib;
     grant select on DIR_CTUNIORG_SEQ to www_dir3caib;
-    grant select on DIR_SEQ_ALL to www_dir3caib;
+    grant select on DIR_HISOFI_SEQ to www_dir3caib;
+    grant select on DIR_HISTUO_SEQ to www_dir3caib;
+    grant select on DIR_NIFCIF_SEQ to www_dir3caib;
+    grant select on DIR_RELOFI_SEQ to www_dir3caib;
+    grant select on DIR_RELSIR_SEQ to www_dir3caib;
+    grant select on DIR_SINC_SEQ to www_dir3caib;
+    grant select on DIR_UNI_SEQ to www_dir3caib;
  -- FINAL GRANTS
 
