@@ -6,18 +6,16 @@ import org.hibernate.annotations.Index;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
+import java.util.*;
 
 
 /**
- * @version 1.0
+ * @version 1.1
  * @created 28-oct-2013 14:41:39
  */
-@Table(name = "DIR_UNIDAD")
+@Entity
+@Table(name = "DIR_UNIDAD" ,
+        uniqueConstraints= @UniqueConstraint(columnNames={"CODIGO", "VERSION"}))
 @org.hibernate.annotations.Table(appliesTo = "DIR_UNIDAD", indexes = {
     @Index(name="DIR_UNIDAD_CATPROVINCIA_FK_I", columnNames = {"CODAMBPROVINCIA"}),
     @Index(name="DIR_UNIDAD_UNIDADRAIZ_FK_I", columnNames = {"CODUNIDADRAIZ"}),
@@ -36,18 +34,24 @@ import java.util.Set;
     @Index(name="DIR_UNIDAD_CATESTENTIDAD_FK_I", columnNames = {"ESTADO"}),
     @Index(name="DIR_UNIDAD_CATAMBITTERR_FK_I", columnNames = {"CODAMBITOTERRITORIALID"}),
     @Index(name="DIR_UNIDAD_CATLOCAL_FK_I", columnNames = {"CODLOCALIDADID"}),
-    @Index(name="DIR_UNIDAD_UNIDADEDPPRINC_FK_I", columnNames = {"CODEDPPRINCIPAL"})
+    @Index(name="DIR_UNIDAD_UNIDADEDPPRINC_FK_I", columnNames = {"CODEDPPRINCIPAL"}),
+    @Index(name="DIR_UNIDAD_PK_I", columnNames = {"CODIGO", "VERSION" }),
 })
-@Entity
+@SequenceGenerator(name="generator",sequenceName = "DIR_UNI_SEQ", allocationSize=1)
 public class Unidad implements Serializable {
 
+  private Long id;
   private String codigo;
+  private Long version;
   private String denominacion;
+  private String denomlenguacooficial;
+  private int idiomalengua;
   private CatEstadoEntidad estado;
   private String nifcif;
   private String siglas;
   private CatNivelAdministracion nivelAdministracion;
   private Long nivelJerarquico;
+  private CatPoder poder;
   private Unidad codUnidadSuperior;
   private Unidad codUnidadRaiz;
   private boolean esEdp;
@@ -69,6 +73,7 @@ public class Unidad implements Serializable {
   private Date fechaBajaOficial;
   private Date fechaExtincion;
   private Date fechaAnulacion;
+  private Date fechaUltimaActualizacion;
   private Date fechaImportacion;
   private String codExterno;
   private String observGenerales;
@@ -84,16 +89,28 @@ public class Unidad implements Serializable {
   private String dirExtranjera;
   private String locExtranjera;
   private String observaciones;
+  private boolean compartenif;
   private List<ContactoUnidadOrganica> contactos;
   private List<RelacionOrganizativaOfi> organizativaOfi;
   private List<RelacionSirOfi> sirOfi;
   private Set<Servicio> servicios;
 
-  private Set<Unidad> historicoUO;
+ // private Set<Unidad> historicoUO;
 
+  private Set<HistoricoUO> historicosAnterior;
+
+  private Set<HistoricoUO> historicosUltima;
+
+  private Set<CodigoUnidadOrganica> codigosExternos;
+  private Set<NifCifUnidadOrganica> nifcifUo;
+
+
+  //TODO ELIMINAR
   public Unidad(){
-    this.historicoUO = new HashSet<Unidad>();
+    //this.historicoUO = new HashSet<Unidad>();
   }
+
+
 
   public Unidad(String codigo, String denominacion) {
     this.codigo = codigo;
@@ -126,9 +143,19 @@ public class Unidad implements Serializable {
     this.codigo = codigo;
   }
 
-  @Index (name="DIR_UNIDAD_PK_I")
-  @Column(name = "CODIGO", nullable = false, length = 9)
+
+  @Column(name = "ID", nullable = false)
   @Id
+  @GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "generator")
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  @Column(name = "CODIGO", nullable = false, length = 9)
   public String getCodigo() {
     return codigo;
   }
@@ -138,6 +165,14 @@ public class Unidad implements Serializable {
     this.codigo = codigo;
   }
 
+  @Column(name = "VERSION", nullable = false)
+  public Long getVersion() {
+    return version;
+  }
+
+  public void setVersion(Long version) {
+    this.version = version;
+  }
 
   @Column(name = "DENOMINACION", length = 300)
   public String getDenominacion() {
@@ -149,6 +184,24 @@ public class Unidad implements Serializable {
     this.denominacion = denominacion;
   }
 
+  @Column(name = "DENOMCOOFICIAL", length = 300)
+  public String getDenomlenguacooficial() {
+    return denomlenguacooficial;
+  }
+
+  public void setDenomlenguacooficial(String denomlenguacooficial) {
+    this.denomlenguacooficial = denomlenguacooficial;
+  }
+
+  @Column(name = "IDIOMALENGUA")
+  @JsonIgnore
+  public int getIdiomalengua() {
+    return idiomalengua;
+  }
+
+  public void setIdiomalengua(int idiomalengua) {
+    this.idiomalengua = idiomalengua;
+  }
 
   @ManyToOne()
   @JoinColumn(name="ESTADO")
@@ -213,6 +266,17 @@ public class Unidad implements Serializable {
     this.nivelJerarquico = nivelJerarquico;
   }
 
+  @ManyToOne
+  @JoinColumn(name="PODER" ,referencedColumnName = "CODIGOPODER")
+  @ForeignKey(name="DIR_UNIDAD_CATPODER_FK")
+  @JsonIgnore
+  public CatPoder getPoder() {
+    return poder;
+  }
+
+  public void setPoder(CatPoder poder) {
+    this.poder = poder;
+  }
 
   @ManyToOne(cascade = CascadeType.PERSIST)
   @JoinColumn(name="CODUNIDADSUPERIOR")
@@ -495,18 +559,27 @@ public class Unidad implements Serializable {
     this.fechaAnulacion = fechaAnulacion;
   }
 
-    @Column(name = "FECHAIMPORTACION")
-   // @Temporal(TemporalType.DATE)
-    @JsonIgnore
-    public Date getFechaImportacion() {
-      return fechaImportacion;
-    }
+  @Column(name = "FECHAIMPORTACION")
+ // @Temporal(TemporalType.DATE)
+  @JsonIgnore
+  public Date getFechaImportacion() {
+    return fechaImportacion;
+  }
 
 
-    public void setFechaImportacion(Date fechaImportacion) {
+  public void setFechaImportacion(Date fechaImportacion) {
       this.fechaImportacion = fechaImportacion;
     }
 
+  @Column(name = "FECHULTACTUALI")
+  @JsonIgnore
+  public Date getFechaUltimaActualizacion() {
+    return fechaUltimaActualizacion;
+  }
+
+  public void setFechaUltimaActualizacion(Date fechaUltimaActualizacion) {
+    this.fechaUltimaActualizacion = fechaUltimaActualizacion;
+  }
 
   @Column(name = "CODEXTERNO", length= 40)
   @JsonIgnore
@@ -682,6 +755,15 @@ public class Unidad implements Serializable {
     this.observaciones = observaciones;
   }
 
+  @Column(name = "COMPARTENIF", length = 1)
+  @JsonIgnore
+  public boolean isCompartenif() {
+    return compartenif;
+  }
+
+  public void setCompartenif(boolean compartenif) {
+    this.compartenif = compartenif;
+  }
 
   @OneToMany (mappedBy = "unidad", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
   @ForeignKey(name="DIR_UNIDAD_CONTACTOSUO_FK")
@@ -742,10 +824,30 @@ public class Unidad implements Serializable {
     this.servicios = servicios;
   }
 
+  @OneToMany(mappedBy = "unidadAnterior")
+  @JsonIgnore
+  public Set<HistoricoUO> getHistoricosAnterior() {
+    return historicosAnterior;
+  }
+
+  public void setHistoricosAnterior(Set<HistoricoUO> historicosAnterior) {
+    this.historicosAnterior = historicosAnterior;
+  }
+
+  @OneToMany(mappedBy = "unidadUltima")
+  @JsonIgnore
+  public Set<HistoricoUO> getHistoricosUltima() {
+    return historicosUltima;
+  }
+
+  public void setHistoricosUltima(Set<HistoricoUO> historicosUltima) {
+    this.historicosUltima = historicosUltima;
+  }
 
 
-  @ManyToMany(cascade=CascadeType.PERSIST, fetch= FetchType.EAGER)
-  @JoinTable(name="DIR_HISTORICOUO",
+  //TODO ELIMINAR
+  /*@ManyToMany(cascade=CascadeType.PERSIST, fetch= FetchType.EAGER)
+  @JoinTable(name="DIR_HISTORICO",
                joinColumns=@JoinColumn(name="CODANTERIOR"),
                inverseJoinColumns=@JoinColumn(name="CODULTIMA"))
   @ForeignKey(name="DIR_UNI_UNI_HISTANTE_FK", inverseName = "DIR_UNI_UNI_HISTULTI_FK")
@@ -757,25 +859,40 @@ public class Unidad implements Serializable {
 
   public void setHistoricoUO(Set<Unidad> historicoUO) {
     this.historicoUO = historicoUO;
+  }*/
+
+  @OneToMany (mappedBy = "unidad", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+  @ForeignKey(name="DIR_UNIDAD_CODUO_FK")
+  @JsonIgnore
+  public Set<CodigoUnidadOrganica> getCodigosExternos() {
+    return codigosExternos;
+  }
+
+  public void setCodigosExternos(Set<CodigoUnidadOrganica> codigosExternos) {
+    this.codigosExternos = codigosExternos;
+  }
+
+  @OneToMany (mappedBy = "unidad", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+  @ForeignKey(name="DIR_UNIDAD_NIFCIF_FK")
+  @JsonIgnore
+  public Set<NifCifUnidadOrganica> getNifcifUo() {
+    return nifcifUo;
+  }
+
+  public void setNifcifUo(Set<NifCifUnidadOrganica> nifcifUo) {
+    this.nifcifUo = nifcifUo;
   }
 
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-
     Unidad unidad = (Unidad) o;
-
-
-    if (codigo != null ? !codigo.equals(unidad.codigo) : unidad.codigo != null)
-      return false;
-
-    return true;
+    return codigo.equals(unidad.codigo) && version.equals(unidad.version);
   }
 
   @Override
   public int hashCode() {
-    int result = codigo != null ? codigo.hashCode() : 0;
-    return result;
+    return Objects.hash(codigo, version);
   }
 }

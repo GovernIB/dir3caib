@@ -8,11 +8,13 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 /**
  * @version 1.1
  * @created 28-oct-2013 14:41:39
  */
+@Entity
 @Table(name = "DIR_OFICINA")
 @org.hibernate.annotations.Table(appliesTo = "DIR_OFICINA", indexes = {
     @Index(name="DIR_OFICINA_CATTIPOVIA_FK_I", columnNames = {"TIPOVIA"}),
@@ -23,28 +25,32 @@ import java.util.Set;
     @Index(name="DIR_OFICINA_CATNIVELADMIN_FK_I", columnNames = {"NIVELADMINISTRACION"}),
     @Index(name="DIR_OFICINA_CATESTADENTI_FK_I", columnNames = {"ESTADO"}),
     @Index(name="DIR_OFICINA_CATLOCAL_FK_I", columnNames = {"LOCALIDADID"}),
-    @Index(name="DIR_OFICINA_UNIDAD_FK_I", columnNames = {"CODUORESPONSABLE"})
+    @Index(name="DIR_OFICINA_UNIDAD_FK_I", columnNames = {"CODUORESPONSABLE"}),
+    @Index(name="DIR_OFICINA_CFUEXT_FK_I", columnNames = {"FUENTEEXTERNA"})
 })
-@Entity
 public class Oficina implements Serializable {
 
 	private String codigo;
 	private String denominacion;
+    private String denomlenguacooficial;
+    private int idiomalengua;
 	private CatEstadoEntidad estado;
 	private CatNivelAdministracion nivelAdministracion;
 	private CatJerarquiaOficina tipoOficina;
 	private Unidad codUoResponsable;
 	private Oficina codOfiResponsable;
+    private CatTipoCodigoFuenteExterna fuenteExterna;
 	private String horarioAtencion;
 	private String diasSinHabiles;
 	private String observaciones;
 	private Date fechaAltaOficial;
 	private Date fechaExtincion;
 	private Date fechaAnulacion;
-  private Date fechaImportacion;
-  private CatTipoVia tipoVia;
-  private String nombreVia;
-  private String numVia;
+    private Date fechaImportacion;
+    private Date fechaUltimaActualizacion;
+    private CatTipoVia tipoVia;
+    private String nombreVia;
+    private String numVia;
 	private String complemento;
 	private String codPostal;
 	private CatPais codPais;
@@ -56,8 +62,12 @@ public class Oficina implements Serializable {
 	private List<RelacionSirOfi> sirOfi;
 	private List<RelacionOrganizativaOfi> organizativasOfi;
 	private Set<Servicio> servicios;
-  private List<ContactoOfi> contactos;
-  private Set<Oficina> historicosOfi;
+    private List<ContactoOfi> contactos;
+    private Set<Oficina> historicosOfi;
+
+    private Set<HistoricoOfi> historicosAnterior;
+
+    private Set<HistoricoOfi> historicosUltima;
 
 	public Oficina(){
 
@@ -116,6 +126,25 @@ public class Oficina implements Serializable {
    */
   public void setDenominacion(String denominacion) {
     this.denominacion = denominacion;
+  }
+
+  @Column(name = "DENOMCOOFICIAL", length = 300)
+  public String getDenomlenguacooficial() {
+    return denomlenguacooficial;
+  }
+
+  public void setDenomlenguacooficial(String denomlenguacooficial) {
+    this.denomlenguacooficial = denomlenguacooficial;
+  }
+
+  @Column(name = "IDIOMALENGUA")
+  @JsonIgnore
+  public int getIdiomalengua() {
+    return idiomalengua;
+  }
+
+  public void setIdiomalengua(int idiomalengua) {
+    this.idiomalengua = idiomalengua;
   }
 
   /**
@@ -206,6 +235,19 @@ public class Oficina implements Serializable {
    */
   public void setCodOfiResponsable(Oficina codOfiResponsable) {
     this.codOfiResponsable = codOfiResponsable;
+  }
+
+
+  @ManyToOne()
+  @JoinColumn(name="FUENTEEXTERNA")
+  @ForeignKey(name="DIR_OFICINA_CFUEXT_FK")
+  @JsonIgnore
+  public CatTipoCodigoFuenteExterna getFuenteExterna() {
+    return fuenteExterna;
+  }
+
+  public void setFuenteExterna(CatTipoCodigoFuenteExterna fuenteExterna) {
+    this.fuenteExterna = fuenteExterna;
   }
 
   /**
@@ -323,6 +365,16 @@ public class Oficina implements Serializable {
    public void setFechaImportacion(Date fechaImportacion) {
      this.fechaImportacion = fechaImportacion;
    }
+
+  @Column(name = "FECHULTACTUALI")
+  @JsonIgnore
+  public Date getFechaUltimaActualizacion() {
+    return fechaUltimaActualizacion;
+  }
+
+  public void setFechaUltimaActualizacion(Date fechaUltimaActualizacion) {
+    this.fechaUltimaActualizacion = fechaUltimaActualizacion;
+  }
 
 
   /**
@@ -585,6 +637,7 @@ public class Oficina implements Serializable {
   /**
    * @return the historicosOfi
    */
+  //TODO ELIMINAR
   @ManyToMany(cascade=CascadeType.PERSIST, fetch= FetchType.EAGER)
   @JoinTable(name="DIR_HISTORICOOFI",
                joinColumns=@JoinColumn(name="CODANTERIOR"),
@@ -602,27 +655,38 @@ public class Oficina implements Serializable {
     this.historicosOfi = historicosOfi;
   }
 
+  @OneToMany(mappedBy = "oficinaAnterior")
+  @JsonIgnore
+  public Set<HistoricoOfi> getHistoricosAnterior() {
+    return historicosAnterior;
+  }
+
+  public void setHistoricosAnterior(Set<HistoricoOfi> historicosAnterior) {
+    this.historicosAnterior = historicosAnterior;
+  }
+
+  @OneToMany(mappedBy = "oficinaUltima")
+  @JsonIgnore
+  public Set<HistoricoOfi> getHistoricosUltima() {
+    return historicosUltima;
+  }
+
+  public void setHistoricosUltima(Set<HistoricoOfi> historicosUltima) {
+    this.historicosUltima = historicosUltima;
+  }
 
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-
     Oficina oficina = (Oficina) o;
-
-    if (codigo != null ? !codigo.equals(oficina.codigo) : oficina.codigo != null)
-      return false;
-
-
-    return true;
+    return codigo.equals(oficina.codigo);
   }
 
   @Override
   public int hashCode() {
-    int result = codigo != null ? codigo.hashCode() : 0;
-    return result;
+    return Objects.hash(codigo);
   }
-
 
   @Transient
   public Boolean getOficinaSir() {

@@ -5,6 +5,7 @@ import org.hibernate.annotations.Index;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * @version 1.1
@@ -19,7 +20,7 @@ import java.io.Serializable;
         @Index(name = "DIR_OFICINA_RELORGOFI_FK_I", columnNames = {"CODOFICINA"})
 })
 @Entity
-@SequenceGenerator(name = "generator", sequenceName = "DIR_SEQ_ALL", allocationSize = 1)
+@SequenceGenerator(name = "generator", sequenceName = "DIR_RELOFI_SEQ", allocationSize = 1)
 public class RelacionOrganizativaOfi implements Serializable {
 
     private Long id;
@@ -109,21 +110,12 @@ public class RelacionOrganizativaOfi implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         RelacionOrganizativaOfi that = (RelacionOrganizativaOfi) o;
-
-        if (!estado.equals(that.estado)) return false;
-        if (!oficina.equals(that.oficina)) return false;
-        if (!unidad.equals(that.unidad)) return false;
-
-        return true;
+        return oficina.equals(that.oficina) && unidad.equals(that.unidad) && estado.equals(that.estado);
     }
 
     @Override
     public int hashCode() {
-        int result = oficina.hashCode();
-        result = 31 * result + unidad.hashCode();
-        result = 31 * result + estado.hashCode();
-        return result;
+        return Objects.hash(oficina, unidad, estado);
     }
 }
