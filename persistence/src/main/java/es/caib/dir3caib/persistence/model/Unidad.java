@@ -95,7 +95,8 @@ public class Unidad implements Serializable {
   private List<RelacionSirOfi> sirOfi;
   private Set<Servicio> servicios;
 
- // private Set<Unidad> historicoUO;
+  // TODO ELIMINAR
+  private Set<Unidad> historicoUO;
 
   private Set<HistoricoUO> historicosAnterior;
 
@@ -846,7 +847,7 @@ public class Unidad implements Serializable {
 
 
   //TODO ELIMINAR
-  /*@ManyToMany(cascade=CascadeType.PERSIST, fetch= FetchType.EAGER)
+  @ManyToMany(cascade=CascadeType.PERSIST, fetch= FetchType.EAGER)
   @JoinTable(name="DIR_HISTORICO",
                joinColumns=@JoinColumn(name="CODANTERIOR"),
                inverseJoinColumns=@JoinColumn(name="CODULTIMA"))
@@ -859,7 +860,7 @@ public class Unidad implements Serializable {
 
   public void setHistoricoUO(Set<Unidad> historicoUO) {
     this.historicoUO = historicoUO;
-  }*/
+  }
 
   @OneToMany (mappedBy = "unidad", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
   @ForeignKey(name="DIR_UNIDAD_CODUO_FK")
