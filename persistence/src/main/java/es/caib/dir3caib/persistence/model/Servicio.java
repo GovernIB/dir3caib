@@ -15,13 +15,15 @@ import java.util.Objects;
 @Entity
 @Table(name = "DIR_CATSERVICIO", schema = "", catalog = "")
 @org.hibernate.annotations.Table(appliesTo = "DIR_CATSERVICIO", indexes = {
-        @Index(name="DIR_CSERVIC_CTIPSERV_FK_I", columnNames = "TIPO")
+        @Index(name="DIR_CSERVIC_CTIPSERV_FK_I", columnNames = "TIPO"),
+        @Index(name="DIR_CSERVIC_CESTENT_FK_I", columnNames = "ESTADO")
 })
 public class Servicio implements Serializable {
 
   private Long codServicio;
   private String descServicio;
   private CatTipoServicio tipo;
+  private CatEstadoEntidad estado;
 
 
 
@@ -78,6 +80,18 @@ public class Servicio implements Serializable {
 
   public void setTipo(CatTipoServicio tipo) {
     this.tipo = tipo;
+  }
+
+
+  @ManyToOne
+  @JoinColumn(name="ESTADO")
+  @ForeignKey(name="DIR_CSERVIC_CESTENT_FK")
+  public CatEstadoEntidad getEstado() {
+    return estado;
+  }
+
+  public void setEstado(CatEstadoEntidad estado) {
+    this.estado = estado;
   }
 
   @Override

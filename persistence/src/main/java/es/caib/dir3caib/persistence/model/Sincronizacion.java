@@ -20,7 +20,7 @@ import java.util.List;
  */
 @Table(name = "DIR_SINCRONIZACION")
 @Entity
-@SequenceGenerator(name = "generator", sequenceName = "DIR_SEQ_ALL", allocationSize = 1)
+@SequenceGenerator(name = "generator", sequenceName = "DIR_SINC_SEQ", allocationSize = 1)
 public class Sincronizacion implements Serializable {
 
     private Long codigo;
