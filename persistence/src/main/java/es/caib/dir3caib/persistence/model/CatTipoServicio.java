@@ -11,7 +11,6 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "DIR_CATTIPOSERVICIO", schema = "", catalog = "")
-@SequenceGenerator(name="generator",sequenceName = "DIR_CTIPOSER_SEQ", allocationSize=1)
 public class CatTipoServicio implements Serializable {
 
     private Long codigoTipoServicio;
@@ -22,7 +21,6 @@ public class CatTipoServicio implements Serializable {
 
     @Column(name = "CODIGOTIPOSERVICIO", nullable = false)
     @Id
-    @GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "generator")
     public Long getCodigoTipoServicio() {
         return codigoTipoServicio;
     }

@@ -158,41 +158,8 @@ alter table DIR_CATSERVICIO
 --Sequences
 create sequence DIR_CAMBTER_SEQ;
 
-create sequence DIR_CCOMAUT_SEQ;
-
-create sequence DIR_CENTGEO_SEQ;
-
-create sequence DIR_CESTENT_SEQ;
-
-create sequence DIR_CISLA_SEQ;
-
-create sequence DIR_CJEROFI_SEQ;
-
 create sequence DIR_CLOCA_SEQ;
 
-create sequence DIR_CMOTEXT_SEQ;
-
-create sequence DIR_CNIVADM_SEQ;
-
-create sequence DIR_CPAIS_SEQ;
-
-create sequence DIR_CPODER_SEQ;
-
-create sequence DIR_CPROV_SEQ;
-
-create sequence DIR_CSERV_SEQ;
-
-create sequence DIR_CTENTPUB_SEQ;
-
-create sequence DIR_CTFUENEXT_SEQ;
-
-create sequence DIR_CTIPCON_SEQ;
-
-create sequence DIR_CTIPOSER_SEQ;
-
-create sequence DIR_CTIPVIA_SEQ;
-
-create sequence DIR_CTUNIORG_SEQ;
 
 --Indices
 create index DIR_CAMBTER_CESTENT_FK_I on DIR_CATAMBITOTERRITORIAL (ESTADO);

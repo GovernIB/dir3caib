@@ -17,7 +17,6 @@ import java.util.Objects;
 @org.hibernate.annotations.Table(appliesTo = "DIR_CATSERVICIO", indexes = {
         @Index(name="DIR_CSERVIC_CTIPSERV_FK_I", columnNames = "TIPO")
 })
-@SequenceGenerator(name="generator",sequenceName = "DIR_CSERV_SEQ", allocationSize=1)
 public class Servicio implements Serializable {
 
   private Long codServicio;
@@ -44,7 +43,6 @@ public class Servicio implements Serializable {
    */
   @Column(name = "CODSERVICIO", nullable = false, length = 6)
   @Id
-  @GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "generator")
   public Long getCodServicio() {
     return codServicio;
   }

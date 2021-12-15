@@ -1,6 +1,5 @@
 package es.caib.dir3caib.persistence.model;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.Index;
 

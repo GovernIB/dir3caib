@@ -17,7 +17,6 @@ import java.util.Objects;
 @org.hibernate.annotations.Table(appliesTo = "DIR_CATTIPOCODFUENTEEXTERNA", indexes = {
         @Index(name="DIR_CFUEEXT_CESTENT_FK_I", columnNames = "ESTADO")
 })
-@SequenceGenerator(name="generator",sequenceName = "DIR_CTFUENEXT_SEQ", allocationSize=1)
 public class CatTipoCodigoFuenteExterna implements Serializable {
 
     private Long codigoTipoCodigoFuenteExterna;
@@ -30,7 +29,6 @@ public class CatTipoCodigoFuenteExterna implements Serializable {
 
     @Column(name = "CODIGOTIPCODFUENTEEXTERNA", nullable = false)
     @Id
-    @GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "generator")
     public Long getCodigoTipoCodigoFuenteExterna() {
         return codigoTipoCodigoFuenteExterna;
     }

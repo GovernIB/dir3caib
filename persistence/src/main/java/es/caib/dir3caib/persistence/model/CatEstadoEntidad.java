@@ -1,5 +1,6 @@
 package es.caib.dir3caib.persistence.model;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.Index;
 
@@ -17,7 +18,6 @@ import java.util.Objects;
 @org.hibernate.annotations.Table(appliesTo = "DIR_CATESTADOENTIDAD", indexes = {
         @Index(name="DIR_CESTENT_CESTENT_FK_I", columnNames = "ESTADO")
 })
-@SequenceGenerator(name="generator",sequenceName = "DIR_CESTENT_SEQ", allocationSize=1)
 public class CatEstadoEntidad implements Serializable {
 
 	private String codigoEstadoEntidad;
@@ -41,7 +41,6 @@ public class CatEstadoEntidad implements Serializable {
    */
   @Column(name = "CODIGOESTADOENTIDAD", nullable = false, length = 2)
   @Id
-  @GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "generator")
   public String getCodigoEstadoEntidad() {
     return codigoEstadoEntidad;
   }
@@ -68,7 +67,7 @@ public class CatEstadoEntidad implements Serializable {
     this.descripcionEstadoEntidad = descripcionEstadoEntidad;
   }
 
-  @ManyToOne
+  @ManyToOne(cascade = {CascadeType.PERSIST},optional = true, fetch = FetchType.EAGER)
   @JoinColumn(name="ESTADO")
   @ForeignKey(name="DIR_CESTENT_CESTENT_FK")
   public CatEstadoEntidad getEstado() {
@@ -90,6 +89,21 @@ public class CatEstadoEntidad implements Serializable {
   @Override
   public int hashCode() {
     return Objects.hash(codigoEstadoEntidad, descripcionEstadoEntidad, estado);
+  }
+  
+  @Override 
+  public String toString() {
+	  String temp = "{Codigo: ";
+	  if (this.getCodigoEstadoEntidad() != null)
+		  temp += this.getCodigoEstadoEntidad();
+	  temp += ",Descripcion: ";
+	  if (this.getDescripcionEstadoEntidad() != null)
+		  temp += this.getDescripcionEstadoEntidad();
+	  temp += " ,Estado:";
+	  if(this.getEstado() != null)
+		  temp += this.getEstado().getCodigoEstadoEntidad();
+	  temp += "}";
+	  return  temp;
   }
 
 

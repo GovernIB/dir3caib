@@ -19,7 +19,6 @@ import java.io.Serializable;
         @Index(name = "DIR_OFICINA_RELSIROFI_FK_I", columnNames = {"CODOFICINA"})
 })
 @Entity
-@SequenceGenerator(name = "generator", sequenceName = "DIR_SEQ_ALL", allocationSize = 1)
 public class RelacionSirOfi implements Serializable {
 
     private Long id;
@@ -43,7 +42,6 @@ public class RelacionSirOfi implements Serializable {
 
     @Id
     @Column(name = "ID", nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "generator")
     public Long getId() {
         return id;
     }

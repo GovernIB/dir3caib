@@ -23,7 +23,6 @@ import org.hibernate.annotations.Index;
     @Index(name="DIR_OFICINA_CONTACTOSOFI_FK_I", columnNames = {"CODOFICINA"})
 })
 @Entity
-@SequenceGenerator(name="generator",sequenceName = "DIR_SEQ_ALL", allocationSize=1)
 public class ContactoOfi implements Serializable {
   
   private Long codContacto;
@@ -41,7 +40,6 @@ public class ContactoOfi implements Serializable {
 	}
   @Column(name = "CODCONTACTO", nullable = false, length = 6)
   @Id
-  @GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "generator")
   public Long getCodContacto() {
     return codContacto;
   }

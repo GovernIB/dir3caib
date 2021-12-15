@@ -18,7 +18,6 @@ import javax.persistence.*;
         @Index(name="DIR_CATISLA_CATPROV_FK_I", columnNames = "PROVINCIA"),
         @Index(name="DIR_CATISLA_CESTENT_FK_I", columnNames = "ESTADO")
 })
-@SequenceGenerator(name="generator",sequenceName = "DIR_CISLA_SEQ", allocationSize=1)
 public class CatIsla implements Serializable {
 
   private Long codigoIsla;
@@ -39,7 +38,6 @@ public class CatIsla implements Serializable {
    */
   @Column(name = "CODIGOISLA", nullable = false, length = 2)
   @Id
-  @GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "generator")
   public Long getCodigoIsla() {
     return codigoIsla;
   }
@@ -67,7 +65,7 @@ public class CatIsla implements Serializable {
   }
 
 
-  @ManyToOne
+  @ManyToOne(cascade= {CascadeType.PERSIST}, fetch=FetchType.LAZY)
   @JoinColumn(name="PROVINCIA")
   @ForeignKey(name="DIR_CATISLA_CATPROV_FK")
   public CatProvincia getProvincia() {

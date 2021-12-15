@@ -268,41 +268,7 @@
 
     create sequence DIR_CAMBTER_SEQ;
 
-    create sequence DIR_CCOMAUT_SEQ;
-
-    create sequence DIR_CENTGEO_SEQ;
-
-    create sequence DIR_CESTENT_SEQ;
-
-    create sequence DIR_CISLA_SEQ;
-
-    create sequence DIR_CJEROFI_SEQ;
-
     create sequence DIR_CLOCA_SEQ;
-
-    create sequence DIR_CMOTEXT_SEQ;
-
-    create sequence DIR_CNIVADM_SEQ;
-
-    create sequence DIR_CPAIS_SEQ;
-
-    create sequence DIR_CPODER_SEQ;
-
-    create sequence DIR_CPROV_SEQ;
-
-    create sequence DIR_CSERV_SEQ;
-
-    create sequence DIR_CTENTPUB_SEQ;
-
-    create sequence DIR_CTFUENEXT_SEQ;
-
-    create sequence DIR_CTIPCON_SEQ;
-
-    create sequence DIR_CTIPOSER_SEQ;
-
-    create sequence DIR_CTIPVIA_SEQ;
-
-    create sequence DIR_CTUNIORG_SEQ;
 
     create sequence DIR_SEQ_ALL;
 
@@ -827,24 +793,7 @@
     grant select,insert,delete,update on DIR_SINCRONIZACION to www_dir3caib;
     grant select,insert,delete,update on DIR_UNIDAD to www_dir3caib;
     grant select on DIR_CAMBTER_SEQ to www_dir3caib;
-    grant select on DIR_CCOMAUT_SEQ to www_dir3caib;
-    grant select on DIR_CENTGEO_SEQ to www_dir3caib;
-    grant select on DIR_CESTENT_SEQ to www_dir3caib;
-    grant select on DIR_CISLA_SEQ to www_dir3caib;
-    grant select on DIR_CJEROFI_SEQ to www_dir3caib;
     grant select on DIR_CLOCA_SEQ to www_dir3caib;
-    grant select on DIR_CMOTEXT_SEQ to www_dir3caib;
-    grant select on DIR_CNIVADM_SEQ to www_dir3caib;
-    grant select on DIR_CPAIS_SEQ to www_dir3caib;
-    grant select on DIR_CPODER_SEQ to www_dir3caib;
-    grant select on DIR_CPROV_SEQ to www_dir3caib;
-    grant select on DIR_CSERV_SEQ to www_dir3caib;
-    grant select on DIR_CTENTPUB_SEQ to www_dir3caib;
-    grant select on DIR_CTFUENEXT_SEQ to www_dir3caib;
-    grant select on DIR_CTIPCON_SEQ to www_dir3caib;
-    grant select on DIR_CTIPOSER_SEQ to www_dir3caib;
-    grant select on DIR_CTIPVIA_SEQ to www_dir3caib;
-    grant select on DIR_CTUNIORG_SEQ to www_dir3caib;
     grant select on DIR_SEQ_ALL to www_dir3caib;
  -- FINAL GRANTS
 

@@ -18,7 +18,6 @@ import org.hibernate.annotations.Index;
     @Index(name="DIR_CATPROV_CATCOMUNAUT_FK_I", columnNames = {"COMUNIDADAUTONOMA"}),
     @Index(name="DIR_CPROVIN_CESTENT_FK_I", columnNames = "ESTADO")
 })
-@SequenceGenerator(name="generator",sequenceName = "DIR_CPROV_SEQ", allocationSize=1)
 public class CatProvincia implements Serializable {
 
   private Long codigoProvincia;
@@ -40,7 +39,6 @@ public class CatProvincia implements Serializable {
   @Id
   @Index(name="DIR_CATPROVINCIA_PK_I")
   @Column(name = "CODIGOPROVINCIA", nullable = false, length = 2)
-  @GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "generator")
   public Long getCodigoProvincia() {
     return codigoProvincia;
   }
@@ -70,7 +68,8 @@ public class CatProvincia implements Serializable {
   /**
    * @return the codigoComunidad
    */
-  @ManyToOne
+  
+  @ManyToOne(cascade= {CascadeType.PERSIST}, fetch=FetchType.LAZY)
   @JoinColumn(name="COMUNIDADAUTONOMA")
   @ForeignKey(name="DIR_CATPROVINC_CATCOMUNAUTO_FK")
   public CatComunidadAutonoma getComunidadAutonoma() {

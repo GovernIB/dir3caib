@@ -23,7 +23,6 @@ import java.io.Serializable;
     @Index(name="DIR_UNIDAD_CONTACTOSUO_FK_I", columnNames = {"CODUNIDAD"})
 })
 @Entity
-@SequenceGenerator(name="generator",sequenceName = "DIR_SEQ_ALL", allocationSize=1)
 public class ContactoUnidadOrganica implements Serializable {
 
   private Long codContacto; 
@@ -48,7 +47,6 @@ public class ContactoUnidadOrganica implements Serializable {
   
   @Column(name = "CODCONTACTO", nullable = false, length = 6)
   @Id
-  @GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "generator")
   public Long getCodContacto() {
     return codContacto;
   }

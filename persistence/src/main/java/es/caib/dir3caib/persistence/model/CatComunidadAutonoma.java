@@ -1,6 +1,5 @@
 package es.caib.dir3caib.persistence.model;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.Index;
 
@@ -18,7 +17,6 @@ import java.util.Objects;
     @Index(name="DIR_CATCOMUNAUT_CATPAIS_FK_I", columnNames = {"PAIS"}),
     @Index(name="DIR_CCOMAUT_CESTENT_FK_I", columnNames = "ESTADO")
 })
-@SequenceGenerator(name="generator",sequenceName = "DIR_CCOMAUT_SEQ", allocationSize=1)
 public class CatComunidadAutonoma  implements Serializable {
 
 	private Long codigoComunidad;
@@ -45,7 +43,6 @@ public class CatComunidadAutonoma  implements Serializable {
    */
   @Column(name = "CODIGOCOMUNIDAD", nullable = false, length = 2)
   @Id
-  @GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "generator")
   public Long getCodigoComunidad() {
     return codigoComunidad;
   }
@@ -75,7 +72,7 @@ public class CatComunidadAutonoma  implements Serializable {
   /**
    * @return the codigoPais
    */
-  @ManyToOne
+  @ManyToOne(cascade= {CascadeType.PERSIST}, fetch = FetchType.LAZY)
   @JoinColumn(name="PAIS")
   @ForeignKey(name="DIR_CATCOMUNAUT_CATPAIS_FK")
   public CatPais getPais() {

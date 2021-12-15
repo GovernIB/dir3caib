@@ -13,6 +13,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.io.*;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -73,6 +74,15 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
     @EJB(mappedName = "dir3caib/CatTipoViaEJB/local")
     private CatTipoViaLocal catTipoViaEjb;
 
+    @EJB(mappedName = "dir3caib/CatTipoServicioEJB/local")
+    private CatTipoServicioLocal catTipoServicioEjb;
+    
+    @EJB(mappedName = "dir3caib/CatPoderEJB/local")
+    private CatPoderLocal catPoderEjb;
+    
+    @EJB(mappedName = "dir3caib/CatTipoCodigoFuenteExternaEJB/local")
+    private CatTipoCodigoFuenteExternaLocal catTipoCodigoFuenteExternaEjb;
+    
     @EJB(mappedName = "dir3caib/CatComunidadAutonomaEJB/local")
     private CatComunidadAutonomaLocal catComunidadAutonomaEjb;
 
@@ -84,6 +94,22 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
     @EJB(mappedName = "dir3caib/ServicioEJB/local")
     private ServicioLocal servicioEjb;
+    
+    private CatEstadoEntidad nuevoEstadoEntidadVacio(String codigo) {
+    	
+    	 CatEstadoEntidad temporalEstadoEntidad = new CatEstadoEntidad();
+    	 temporalEstadoEntidad.setCodigoEstadoEntidad(codigo);
+    	 temporalEstadoEntidad.setDescripcionEstadoEntidad(codigo);
+    	 
+    	 try {
+ 			catEstadoEntidadEjb.persistReal(temporalEstadoEntidad);
+		 }catch(Exception e) {
+			log.error("ImportadorCatalogoBean: error al crear nou estadoEstadoEntidad: " + e.getMessage());
+			return null;
+		 }
+    	 
+    	 return temporalEstadoEntidad;
+    }
 
 
     /**
@@ -97,6 +123,8 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
         // caches
         Map<String, CatEntidadGeografica> cacheEntidadGeografica = new TreeMap<String, CatEntidadGeografica>();
         Map<Long, CatNivelAdministracion> cacheNivelAdministracion = new TreeMap<Long, CatNivelAdministracion>();
+        Map<String, CatEstadoEntidad> cacheEstadoEntidad = new TreeMap<String, CatEstadoEntidad>();
+        Map<Long, CatTipoServicio> cacheTipoServicio = new TreeMap<Long, CatTipoServicio>();
         Map<Long, CatPais> cachePais = new TreeMap<Long, CatPais>();
         Map<Long, CatComunidadAutonoma> cacheComunidadAutonoma = new TreeMap<Long, CatComunidadAutonoma>();
         Map<Long, CatProvincia> cacheProvincia = new TreeMap<Long, CatProvincia>();
@@ -117,7 +145,45 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                 if (reader != null) {
                     
                     // Inicio importación
-               
+                	
+                	//CATESTADOENTIDAD
+                    if (Dir3caibConstantes.CAT_ESTADO_ENTIDAD.equals(fichero)) {
+                    	
+                    	List<CatEstadoEntidad> estadosEntidadBbdd = catEstadoEntidadEjb.getAll();
+                    	for (CatEstadoEntidad entry : estadosEntidadBbdd) {
+                    		cacheEstadoEntidad.put(entry.getCodigoEstadoEntidad(), entry);
+                    	}
+                    	
+                    	reader.readNext();
+                    	
+                    	while ((fila = reader.readNext()) != null) {
+                    		
+                    		String codigoEstado = fila[0];
+                    		String codigoEstadoEstadoEntidad = fila[2];
+                    		
+                    		CatEstadoEntidad estadoEstadoEntidad = cacheEstadoEntidad.get(codigoEstadoEstadoEntidad);
+                    		
+                    		if (estadoEstadoEntidad == null) {
+                    			estadoEstadoEntidad = nuevoEstadoEntidadVacio(codigoEstadoEstadoEntidad);
+                    			cacheEstadoEntidad.put(codigoEstadoEstadoEntidad,estadoEstadoEntidad);
+                    		}
+                    		
+                    		CatEstadoEntidad estadoEntidad = cacheEstadoEntidad.get(codigoEstado);
+                    		
+                    		if (estadoEntidad == null) {
+                    			estadoEntidad = new CatEstadoEntidad();
+                    			estadoEntidad.setCodigoEstadoEntidad(codigoEstado);
+                    		}
+                    		
+                    		estadoEntidad.setDescripcionEstadoEntidad(fila[1]);
+                    		estadoEntidad.setEstado(estadoEstadoEntidad);
+                    		 
+                    		catEstadoEntidadEjb.persist(estadoEntidad);
+                    		
+                    		cacheEstadoEntidad.put(codigoEstado, estadoEntidad);
+                    	}
+                    }
+                	
                     //CATENTIDADGEOGRAFICA
                     if (fichero.equals(Dir3caibConstantes.CAT_ENTIDAD_GEOGRAFICA)) {
 
@@ -125,7 +191,9 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                         while ((fila = reader.readNext()) != null) {
                             // Obtenemos codigo y miramos si ya existe en la BD
                             // Creamos la clave compuesta primero.
-                            //try {
+
+                        		CatEstadoEntidad catEstadoEntidad = cacheEstadoEntidad.get(fila[2]);
+                        	
                                 // Miramos si existe ya en la BD
                                 String codigoEntidadGeografica = fila[0];
                                 CatEntidadGeografica entidadGeografica = cacheEntidadGeografica.get(codigoEntidadGeografica);
@@ -140,43 +208,37 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                                 }
 
                                 entidadGeografica.setDescripcionEntidadGeografica(fila[1]);
+                                entidadGeografica.setEstado(catEstadoEntidad);
+                                
 
                                 catEntidadGeograficaEjb.persist(entidadGeografica);
 
                                 cacheEntidadGeografica.put(codigoEntidadGeografica, entidadGeografica);
 
-                            /*} catch (Exception e) {
-                                log.info(e.getMessage());
-                            }*/
                         }
-
                     }
+                    
+                    //CATTIPOSERVICIO
+                    if (Dir3caibConstantes.CAT_TIPO_SERVICIO.equals(fichero)) {
+                    	reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
+                    	while((fila = reader.readNext()) != null) {
+                    		
+                    		// Miramos si existe ya en la BD
+                            Long codigoTipoServicio = Long.parseLong(fila[0]);
 
-                    //CATESTADOENTIDAD
-                    if (Dir3caibConstantes.CAT_ESTADO_ENTIDAD.equals(fichero)) {
+                            CatTipoServicio catTipoServicio = catTipoServicioEjb.findById(codigoTipoServicio);
 
-                        reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
-                        while ((fila = reader.readNext()) != null) {
-                            // Obtenemos codigo y miramos si ya existe en la BD
-                            // Creamos la clave compuesta primero.
-                            //try {
-                                // Miramos si existe ya en la BD
-                                String codigoEstadoEntidad = fila[0];
-                                CatEstadoEntidad estadoEntidad = catEstadoEntidadEjb.findById(codigoEstadoEntidad);
+                            if (catTipoServicio == null) { // Si es nuevo creamos el objeto a introducir
+                            	catTipoServicio = new CatTipoServicio();
+                            	catTipoServicio.setCodigoTipoServicio(codigoTipoServicio);
+                            }
+                            catTipoServicio.setDescripcionTipoServicio(fila[1]);
 
-                                if (estadoEntidad == null) { // Si es nuevo creamos el objeto a introducir
-                                    estadoEntidad = new CatEstadoEntidad();
-                                    estadoEntidad.setCodigoEstadoEntidad(codigoEstadoEntidad);
-                                }
-                                estadoEntidad.setDescripcionEstadoEntidad(fila[1]);
-
-                                catEstadoEntidadEjb.persist(estadoEntidad);
-
-                            /*} catch (Exception e) {
-                                log.info(e.getMessage());
-                            }*/
-                        }
-
+                            catTipoServicioEjb.persist(catTipoServicio);
+                            
+                            cacheTipoServicio.put(codigoTipoServicio, catTipoServicio);
+                    		
+                    	}
                     }
 
                     //CATJERARQUIAOFICINA
@@ -186,26 +248,24 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
                             // Obtenemos codigo y miramos si ya existe en la BD
                             // Creamos la clave compuesta primero.
-                            //try {
-                                // Miramos si existe ya en la BD
-                                String sCodigoJerarquiaOficina = fila[0].trim();
-                                if (!sCodigoJerarquiaOficina.isEmpty()) {
-                                    Long codigoJerarquiaOficina = new Long(sCodigoJerarquiaOficina);
+                        	
+                            // Miramos si existe ya en la BD
+                            String sCodigoJerarquiaOficina = fila[0].trim();
+                            if (!sCodigoJerarquiaOficina.isEmpty()) {
+                                Long codigoJerarquiaOficina = Long.parseLong(sCodigoJerarquiaOficina);
+                                CatJerarquiaOficina jerarquiaOficina = catJerarquiaOficinaEjb.findById(codigoJerarquiaOficina);
+                                
+                                CatEstadoEntidad catEstadoEntidad = cacheEstadoEntidad.get(fila[2]);
 
-                                    CatJerarquiaOficina jerarquiaOficina = catJerarquiaOficinaEjb.findById(codigoJerarquiaOficina);
-
-                                    if (jerarquiaOficina == null) { // Si es nuevo creamos el objeto a introducir
-                                        jerarquiaOficina = new CatJerarquiaOficina();
-                                        jerarquiaOficina.setCodigoJerarquiaOficina(codigoJerarquiaOficina);
-                                    }
-                                    jerarquiaOficina.setDescripcionJerarquiaOficina(fila[1]);
-
-                                    catJerarquiaOficinaEjb.persist(jerarquiaOficina);
-
+                                if (jerarquiaOficina == null) { // Si es nuevo creamos el objeto a introducir
+                                    jerarquiaOficina = new CatJerarquiaOficina();
+                                    jerarquiaOficina.setCodigoJerarquiaOficina(codigoJerarquiaOficina);
                                 }
-                            /*} catch (Exception e) {
-                                log.info(e.getMessage());
-                            }*/
+                                jerarquiaOficina.setDescripcionJerarquiaOficina(fila[1]);
+                                jerarquiaOficina.setEstado(catEstadoEntidad);
+
+                                catJerarquiaOficinaEjb.persist(jerarquiaOficina);
+                            }
                         }
                     }
 
@@ -217,25 +277,25 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
                             // Obtenemos codigo y miramos si ya existe en la BD
                             // Creamos la clave compuesta primero.
-                            //try {
-                                // Miramos si existe ya en la BD
-                                String codigoMotivoExtincion = fila[0];
+                            
+                        	CatEstadoEntidad catEstadoEntidad = cacheEstadoEntidad.get(fila[3]);
+                        	
+                            // Miramos si existe ya en la BD
+                            String codigoMotivoExtincion = fila[0];
 
-                                CatMotivoExtincion motivoExtincion = catMotivoExtincionEjb.findById(codigoMotivoExtincion);
+                            CatMotivoExtincion motivoExtincion = catMotivoExtincionEjb.findById(codigoMotivoExtincion);
 
-                                if (motivoExtincion == null) { // Si es nuevo creamos el objeto a introducir
-                                    motivoExtincion = new CatMotivoExtincion();
-                                    motivoExtincion.setCodigoMotivoExtincion(codigoMotivoExtincion);
-                                }
-                                motivoExtincion.setDescripcionMotivoExtincion(fila[1]);
+                            if (motivoExtincion == null) { // Si es nuevo creamos el objeto a introducir
+                                motivoExtincion = new CatMotivoExtincion();
+                                motivoExtincion.setCodigoMotivoExtincion(codigoMotivoExtincion);
+                            }
+                            motivoExtincion.setDescripcionMotivoExtincion(fila[1]);
+                            motivoExtincion.setEstado(catEstadoEntidad);
 
-                                catMotivoExtincionEjb.persist(motivoExtincion);
+                            catMotivoExtincionEjb.persist(motivoExtincion);
 
-                           /* } catch (Exception e) {
-                                log.info(e.getMessage());
-                            }*/
+                           
                         }
-
                     }
 
                     // CATNIVELADMINISTRACION
@@ -244,28 +304,29 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                         while ((fila = reader.readNext()) != null) {
                             // Obtenemos codigo y miramos si ya existe en la BD
                             // Creamos la clave compuesta primero.
-                            //try {
-                                // Miramos si existe ya en la BD
-                                String sCodigoNivelAdministracion = fila[0].trim();
-                                if (!sCodigoNivelAdministracion.isEmpty()) {
-                                    Long codigoNivelAdministracion = new Long(sCodigoNivelAdministracion);
+                            
+                        	CatEstadoEntidad catEstadoEntidad = cacheEstadoEntidad.get(fila[2]);
+                        	
+                            // Miramos si existe ya en la BD
+                            String sCodigoNivelAdministracion = fila[0].trim();
+                            if (!sCodigoNivelAdministracion.isEmpty()) {
+                                Long codigoNivelAdministracion = Long.parseLong(sCodigoNivelAdministracion);
 
-                                    CatNivelAdministracion nivelAdministracion = catNivelAdministracionEjb.findById(codigoNivelAdministracion);
+                                CatNivelAdministracion nivelAdministracion = catNivelAdministracionEjb.findById(codigoNivelAdministracion);
 
-                                    if (nivelAdministracion == null) { // Si es nuevo creamos el objeto a introducir
-                                        nivelAdministracion = new CatNivelAdministracion();
-                                        nivelAdministracion.setCodigoNivelAdministracion(codigoNivelAdministracion);
-                                    }
-                                    nivelAdministracion.setDescripcionNivelAdministracion(fila[1]);
-
-                                    catNivelAdministracionEjb.persist(nivelAdministracion);
-
-                                    cacheNivelAdministracion.put(codigoNivelAdministracion, nivelAdministracion);
-
+                                if (nivelAdministracion == null) { // Si es nuevo creamos el objeto a introducir
+                                    nivelAdministracion = new CatNivelAdministracion();
+                                    nivelAdministracion.setCodigoNivelAdministracion(codigoNivelAdministracion);
                                 }
-                            /*} catch (Exception e) {
-                                log.info(e.getMessage());
-                            }*/
+                                nivelAdministracion.setDescripcionNivelAdministracion(fila[1]);
+                                nivelAdministracion.setEstado(catEstadoEntidad);
+
+                                catNivelAdministracionEjb.persist(nivelAdministracion);
+
+                                cacheNivelAdministracion.put(codigoNivelAdministracion, nivelAdministracion);
+
+                            }
+                       
                         }
                     }
 
@@ -276,26 +337,25 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                         while ((fila = reader.readNext()) != null) {
                             // Obtenemos codigo y miramos si ya existe en la BD
                             // Creamos la clave compuesta primero.
-                            //try {
-                                // Miramos si existe ya en la BD
-                                Long codigoPais = new Long(fila[0].trim());
-                                CatPais pais = catPaisEjb.findById(codigoPais);
+               
+                        	CatEstadoEntidad catEstadoEntidad = cacheEstadoEntidad.get(fila[4]);
+                        	
+                            // Miramos si existe ya en la BD
+                            Long codigoPais = Long.parseLong(fila[0].trim());
+                            CatPais pais = catPaisEjb.findById(codigoPais);
 
-                                if (pais == null) { // Si es nuevo creamos el objeto a introducir
-                                    pais = new CatPais();
-                                    pais.setCodigoPais(codigoPais);
-                                }
-                                pais.setDescripcionPais(fila[1].trim());
-                                pais.setAlfa2Pais(fila[2].trim());
-                                pais.setAlfa3Pais(fila[3].trim());
-
-                                catPaisEjb.persist(pais);
-
-                                cachePais.put(codigoPais, pais);
-                           /* } catch (Exception e) {
-                                log.info(e.getMessage());
+                            if (pais == null) { // Si es nuevo creamos el objeto a introducir
+                                pais = new CatPais();
+                                pais.setCodigoPais(codigoPais);
                             }
-*/                        }
+                            pais.setDescripcionPais(fila[1].trim());
+                            pais.setAlfa2Pais(fila[2].trim());
+                            pais.setAlfa3Pais(fila[3].trim());
+                            pais.setEstado(catEstadoEntidad);
+                            catPaisEjb.persist(pais);
+
+                            cachePais.put(codigoPais, pais);
+                      }
                     }
 
 
@@ -306,30 +366,29 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
                             // Obtenemos codigo y miramos si ya existe en la BD
                             // Creamos la clave compuesta primero.
-                         //   try {
-                                Long codigoComunidad = new Long(fila[0].trim());
-                                // cargamos el nivel de Administracion correspondiente.
-                                CatPais catPais;
-                                catPais = cachePais.get(new Long(fila[2].trim()));
-                                // Miramos si ya existe
-                                CatComunidadAutonoma comunidadAutonoma = catComunidadAutonomaEjb.findById(codigoComunidad);
+                            Long codigoComunidad = Long.parseLong(fila[0].trim());
+                            // cargamos el nivel de Administracion correspondiente.
+                            CatPais catPais;
+                            catPais = cachePais.get(Long.parseLong(fila[2].trim()));
 
-                                if (comunidadAutonoma == null) { // Si es nuevo creamos el objeto a introducir
-                                    comunidadAutonoma = new CatComunidadAutonoma();
-                                    comunidadAutonoma.setCodigoComunidad(codigoComunidad);
-                                }
-                                comunidadAutonoma.setPais(catPais);
-                                comunidadAutonoma.setDescripcionComunidad(fila[1]);
-                                comunidadAutonoma.setC_comunidad_rpc(fila[3]);
-                                comunidadAutonoma.setC_codigo_dir2(new Long(fila[4]));
+                            CatEstadoEntidad catEstadoEntidad = cacheEstadoEntidad.get(fila[5]);
+                            
+                            // Miramos si ya existe
+                            CatComunidadAutonoma comunidadAutonoma = catComunidadAutonomaEjb.findById(codigoComunidad);
 
-                                catComunidadAutonomaEjb.persist(comunidadAutonoma);
+                            if (comunidadAutonoma == null) { // Si es nuevo creamos el objeto a introducir
+                                comunidadAutonoma = new CatComunidadAutonoma();
+                                comunidadAutonoma.setCodigoComunidad(codigoComunidad);
+                            }
+                            comunidadAutonoma.setPais(catPais);
+                            comunidadAutonoma.setDescripcionComunidad(fila[1]);
+                            comunidadAutonoma.setC_comunidad_rpc(fila[3]);
+                            comunidadAutonoma.setC_codigo_dir2(Long.parseLong(fila[4]));
+                            comunidadAutonoma.setEstado(catEstadoEntidad);
 
+                            catComunidadAutonomaEjb.persist(comunidadAutonoma);
 
-                                cacheComunidadAutonoma.put(codigoComunidad, comunidadAutonoma);
-                           /* } catch (Exception e) {
-                                log.info(e.getMessage());
-                            }*/
+                            cacheComunidadAutonoma.put(codigoComunidad, comunidadAutonoma);
                         }
 
                         cachePais.clear();
@@ -346,29 +405,26 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
                             // Obtenemos codigo y miramos si ya existe en la BD
                             // Creamos la clave compuesta primero.
-                            //  try {
-                                Long codigoProvincia = new Long(fila[0]);
-                                // cargamos el nivel de Administracion correspondiente.
-                                CatComunidadAutonoma catComunidadAutonoma = cacheComunidadAutonoma.get(new Long(fila[2]));
+                            
+                        	CatEstadoEntidad catEstadoEntidad = cacheEstadoEntidad.get(fila[3]);
+                        	
+                            Long codigoProvincia = Long.parseLong(fila[0]);
+                            // cargamos el nivel de Administracion correspondiente.
+                            CatComunidadAutonoma catComunidadAutonoma = cacheComunidadAutonoma.get(Long.parseLong(fila[2]));
 
-                                // Miramos si ya existe la provincia
-                                CatProvincia provincia = catProvinciaEjb.findById(codigoProvincia);
+                            // Miramos si ya existe la provincia
+                            CatProvincia provincia = catProvinciaEjb.findById(codigoProvincia);
 
-                                if (provincia == null) { // Si es nuevo creamos el objeto a introducir
-                                    provincia = new CatProvincia();
-                                    provincia.setCodigoProvincia(codigoProvincia);
-                                }
-                                provincia.setComunidadAutonoma(catComunidadAutonoma);
-                                provincia.setDescripcionProvincia(fila[1]);
+                            if (provincia == null) { // Si es nuevo creamos el objeto a introducir
+                                provincia = new CatProvincia();
+                                provincia.setCodigoProvincia(codigoProvincia);
+                            }
+                            provincia.setComunidadAutonoma(catComunidadAutonoma);
+                            provincia.setDescripcionProvincia(fila[1]);
+                            provincia.setEstado(catEstadoEntidad);
+                            catProvinciaEjb.persist(provincia);
 
-
-                                catProvinciaEjb.persist(provincia);
-
-
-                                cacheProvincia.put(codigoProvincia, provincia);
-                           /* } catch (Exception e) {
-                                log.info(e.getMessage());
-                            }*/
+                            cacheProvincia.put(codigoProvincia, provincia);
                         }
 
                         cacheComunidadAutonoma.clear();
@@ -383,9 +439,12 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                         while ((fila = reader.readNext()) != null) {
                             // Obtenemos codigo y miramos si ya existe en la BD
                             // Creamos la clave compuesta primero.
-                          //  try {
+
+                        	
+                        		CatEstadoEntidad catEstadoEntidad = cacheEstadoEntidad.get(fila[3]);
+                        	
                                 // Miramos si existe ya en la BD
-                                Long codigoIsla = new Long(fila[0]);
+                                Long codigoIsla = Long.parseLong(fila[0]);
                                 CatIsla isla = catIslaEjb.findById(codigoIsla);
 
                                 if (isla == null) { // Si es nuevo creamos el objeto a introducir
@@ -394,17 +453,14 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                                 }
                                 isla.setDescripcionIsla(fila[1]);
                                 CatProvincia provincia;
-                                provincia = cacheProvincia.get(new Long(fila[2]));
+                                provincia = cacheProvincia.get(Long.parseLong(fila[2]));
 
                                 isla.setProvincia(provincia);
+                                isla.setEstado(catEstadoEntidad);
 
                                 catIslaEjb.persist(isla);
 
-                            /*} catch (Exception e) {
-                                log.info(e.getMessage());
-                            }*/
                         }
-
                     }
 
                     //CATTIPOCONTACTO
@@ -414,24 +470,23 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
                             // Obtenemos codigo y miramos si ya existe en la BD
                             // Creamos la clave compuesta primero.
-                          //  try {
-                                // Miramos si existe ya en la BD
-                                String codigoTipoContacto = fila[0];
-                                CatTipoContacto tipoContacto = catTipoContactoEjb.findById(codigoTipoContacto);
+               
+                        	CatEstadoEntidad catEstadoEntidad = cacheEstadoEntidad.get(fila[2]);
+                        	
+                            // Miramos si existe ya en la BD
+                            String codigoTipoContacto = fila[0];
+                            CatTipoContacto tipoContacto = catTipoContactoEjb.findById(codigoTipoContacto);
 
-                                if (tipoContacto == null) { // Si es nuevo creamos el objeto a introducir
-                                    tipoContacto = new CatTipoContacto();
-                                    tipoContacto.setCodigoTipoContacto(codigoTipoContacto);
-                                }
-                                tipoContacto.setDescripcionTipoContacto(fila[1]);
+                            if (tipoContacto == null) { // Si es nuevo creamos el objeto a introducir
+                                tipoContacto = new CatTipoContacto();
+                                tipoContacto.setCodigoTipoContacto(codigoTipoContacto);
+                            }
+                            tipoContacto.setDescripcionTipoContacto(fila[1]);
+                            tipoContacto.setEstado(catEstadoEntidad);
 
-                                catTipoContactoEjb.persist(tipoContacto);
+                            catTipoContactoEjb.persist(tipoContacto);
 
-                            /*} catch (Exception e) {
-                                log.info(e.getMessage());
-                            }*/
                         }
-
                     }
 
                     //CATTIPOENTIDADPUBLICA
@@ -441,24 +496,23 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                         while ((fila = reader.readNext()) != null) {
                             // Obtenemos codigo y miramos si ya existe en la BD
                             // Creamos la clave compuesta primero.
-                           // try {
-                                // Miramos si existe ya en la BD
-                                String codigoTipoEntidadPublica = fila[0];
-                                CatTipoEntidadPublica tipoEntidadPublica = catTipoEntidadPublicaEjb.findById(codigoTipoEntidadPublica);
+                        	
+                        	CatEstadoEntidad catEstadoEntidad = cacheEstadoEntidad.get(fila[2]);
+                 
+                            // Miramos si existe ya en la BD
+                            String codigoTipoEntidadPublica = fila[0];
+                            CatTipoEntidadPublica tipoEntidadPublica = catTipoEntidadPublicaEjb.findById(codigoTipoEntidadPublica);
 
-                                if (tipoEntidadPublica == null) { // Si es nuevo creamos el objeto a introducir
-                                    tipoEntidadPublica = new CatTipoEntidadPublica();
-                                    tipoEntidadPublica.setCodigoTipoEntidadPublica(codigoTipoEntidadPublica);
-                                }
-                                tipoEntidadPublica.setDescripcionTipoEntidadPublica(fila[1]);
+                            if (tipoEntidadPublica == null) { // Si es nuevo creamos el objeto a introducir
+                                tipoEntidadPublica = new CatTipoEntidadPublica();
+                                tipoEntidadPublica.setCodigoTipoEntidadPublica(codigoTipoEntidadPublica);
+                            }
+                            tipoEntidadPublica.setDescripcionTipoEntidadPublica(fila[1]);
+                            tipoEntidadPublica.setEstado(catEstadoEntidad);
 
-                                catTipoEntidadPublicaEjb.persist(tipoEntidadPublica);
+                            catTipoEntidadPublicaEjb.persist(tipoEntidadPublica);
 
-                            /*} catch (Exception e) {
-                                log.info(e.getMessage());
-                            }*/
                         }
-
                     }
 
                     //CATTIPOUNIDADORGANICA
@@ -468,24 +522,22 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                         while ((fila = reader.readNext()) != null) {
                             // Obtenemos codigo y miramos si ya existe en la BD
                             // Creamos la clave compuesta primero.
-                        //    try {
-                                // Miramos si existe ya en la BD
-                                String codigoTipoUnidadOrganica = fila[0];
-                                CatTipoUnidadOrganica tipoUnidadOrganica = catTipoUnidadOrganicaEjb.findById(codigoTipoUnidadOrganica);
+                        	
+                        	CatEstadoEntidad catEstadoEntidad = cacheEstadoEntidad.get(fila[2]);
+               
+                            // Miramos si existe ya en la BD
+                            String codigoTipoUnidadOrganica = fila[0];
+                            CatTipoUnidadOrganica tipoUnidadOrganica = catTipoUnidadOrganicaEjb.findById(codigoTipoUnidadOrganica);
 
-                                if (tipoUnidadOrganica == null) { // Si es nuevo creamos el objeto a introducir
-                                    tipoUnidadOrganica = new CatTipoUnidadOrganica();
-                                    tipoUnidadOrganica.setCodigoTipoUnidadOrganica(codigoTipoUnidadOrganica);
-                                }
-                                tipoUnidadOrganica.setDescripcionTipoUnidadOrganica(fila[1]);
+                            if (tipoUnidadOrganica == null) { // Si es nuevo creamos el objeto a introducir
+                                tipoUnidadOrganica = new CatTipoUnidadOrganica();
+                                tipoUnidadOrganica.setCodigoTipoUnidadOrganica(codigoTipoUnidadOrganica);
+                            }
+                            tipoUnidadOrganica.setDescripcionTipoUnidadOrganica(fila[1]);
+                            tipoUnidadOrganica.setEstado(catEstadoEntidad);
 
-                                catTipoUnidadOrganicaEjb.persist(tipoUnidadOrganica);
-
-//                            } catch (Exception e) {
-//                                log.info(e.getMessage());
-//                            }
+                            catTipoUnidadOrganicaEjb.persist(tipoUnidadOrganica);
                         }
-
                     }
 
                     //CATTIPOVIA
@@ -495,21 +547,20 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                         while ((fila = reader.readNext()) != null) {
                             // Obtenemos codigo y miramos si ya existe en la BD
                             // Creamos la clave compuesta primero.
-                       //     try {
-                                // Miramos si existe ya en la BD
-                                Long codigoTipoVia = new Long(fila[0]);
-                                CatTipoVia tipoVia = catTipoViaEjb.findById(codigoTipoVia);
-                                if (tipoVia == null) { // Si es nuevo creamos el objeto a introducir
-                                    tipoVia = new CatTipoVia();
-                                    tipoVia.setCodigoTipoVia(codigoTipoVia);
-                                }
-                                tipoVia.setDescripcionTipoVia(fila[1].toLowerCase());
-                                catTipoViaEjb.persist(tipoVia);
-                         /*   } catch (Exception e) {
-                                log.info(e.getMessage());
-                            }*/
+                        	
+                        	CatEstadoEntidad catEstadoEntidad = cacheEstadoEntidad.get(fila[3]);
+                   
+                            // Miramos si existe ya en la BD
+                            Long codigoTipoVia = Long.parseLong(fila[0]);
+                            CatTipoVia tipoVia = catTipoViaEjb.findById(codigoTipoVia);
+                            if (tipoVia == null) { // Si es nuevo creamos el objeto a introducir
+                                tipoVia = new CatTipoVia();
+                                tipoVia.setCodigoTipoVia(codigoTipoVia);
+                            }
+                            tipoVia.setDescripcionTipoVia(fila[1].toLowerCase());
+                            tipoVia.setEstado(catEstadoEntidad);
+                            catTipoViaEjb.persist(tipoVia);
                         }
-
                     }
 
 
@@ -521,10 +572,12 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
 
                             // Obtenemos codigo y miramos si ya existe en la BD
                             // Creamos la clave compuesta primero.
-                         //   try {
                                 String codigoAmbito = fila[0];
                                 // cargamos el nivel de Administracion correspondiente.
                                 CatNivelAdministracion catNivelAdministracion = cacheNivelAdministracion.get(Long.parseLong(fila[2]));
+                                
+                                // cargamos 
+                                CatEstadoEntidad catEstadoEntidad = cacheEstadoEntidad.get(fila[3]);
 
                                 // Miramos si ya existe el ambitoTerritorial
                                 CatAmbitoTerritorial ambitoTerritorial;
@@ -533,41 +586,89 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                                     ambitoTerritorial = new CatAmbitoTerritorial();
                                     ambitoTerritorial.setCodigoAmbito(codigoAmbito);
                                     ambitoTerritorial.setNivelAdministracion(catNivelAdministracion);
+                                    ambitoTerritorial.setEstado(catEstadoEntidad);
                                 }
                                 ambitoTerritorial.setDescripcionAmbito(fila[1]);
                                 catAmbitoTerritorialEjb.persist(ambitoTerritorial);
-                           /* } catch (Exception e) {
-                                log.info(e.getMessage());
-                            }
-*/                        }
-
+                        }
                     }
 
-                    // CAT_SERVICIO
-                    if (Dir3caibConstantes.CAT_SERVICIOS.equals(fichero)) {
+                    // CAT_SERVICIO o CAT_SERVICIOS_UO
+                    if (Dir3caibConstantes.CAT_SERVICIOS.equals(fichero) || Dir3caibConstantes.CAT_TIPO_SERVICIOS_UO.equals(fichero)) {
 
                         reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
                         while ((fila = reader.readNext()) != null) {
 
                             // Obtenemos codigo y miramos si ya existe en la BD
                             // Creamos la clave compuesta primero.
-                            //try {
-                                String codigoServicio = fila[0];
-                                // cargamos el Servicio
-                                Servicio servicio = servicioEjb.findById(Long.parseLong(codigoServicio));
+                        	
+                        	CatTipoServicio catTipoServicio = cacheTipoServicio.get(Long.parseLong(fila[2]));
+                        	
+                        	String codigoServicio = fila[0];
+                            // cargamos el Servicio
+                            Servicio servicio = servicioEjb.findById(Long.parseLong(codigoServicio));
 
-                                if (servicio == null) { // Si es nuevo creamos el objeto a introducir
-                                    servicio = new Servicio();
-                                    servicio.setCodServicio(Long.parseLong(codigoServicio));
-                                }
-                                servicio.setDescServicio(fila[1]);
-                                servicioEjb.persist(servicio);
-
-                            /*} catch (Exception e) {
-                                log.info(e.getMessage());
-                            }*/
+                            if (servicio == null) { // Si es nuevo creamos el objeto a introducir
+                                servicio = new Servicio();
+                                servicio.setCodServicio(Long.parseLong(codigoServicio));
+                            }
+                            servicio.setDescServicio(fila[1]);
+                            servicio.setTipo(catTipoServicio);
+      
+                            servicioEjb.persist(servicio);
                         }
+                    }
+                    
+                    //CATPODER
+                    if(Dir3caibConstantes.CAT_TIPO_PODER.equals(fichero)) {
+                    	
+                    	reader.readNext();
+                    	
+                    	while((fila = reader.readNext()) != null) {
+                    		
+                    		// Obtenemos codigo y miramos si ya existe en la BD
+                            // Creamos la clave compuesta primero.
+                        	
+                        	CatEstadoEntidad catEstadoEntidad = cacheEstadoEntidad.get(fila[2]);
+                        	
+                        	Long codigoPoder = Long.parseLong(fila[0]);
+                            CatPoder catPoder = catPoderEjb.findById(codigoPoder);
 
+                            if (catPoder == null) { // Si es nuevo creamos el objeto a introducir
+                            	catPoder = new CatPoder();
+                            	catPoder.setCodigoPoder(codigoPoder);
+                            }
+                            catPoder.setDescripcionPoder(fila[1]);
+                            catPoder.setEstado(catEstadoEntidad);
+      
+                            catPoderEjb.persist(catPoder);
+                    	}
+                    }
+                    
+                  //CATTIPOCODIGOFUENTEEXTERNA
+                    if(Dir3caibConstantes.CAT_TIPO_CODIGO_FUENTE.equals(fichero)) {
+                    	
+                    	reader.readNext();
+                    	
+                    	while((fila = reader.readNext()) != null) {
+                    		
+                    		// Obtenemos codigo y miramos si ya existe en la BD
+                            // Creamos la clave compuesta primero.
+                        	
+                        	CatEstadoEntidad catEstadoEntidad = cacheEstadoEntidad.get(fila[2]);
+                        	
+                        	String codigoTipoCodigoFuente = fila[0];
+                            CatTipoCodigoFuenteExterna catTipoCodigoFuente = catTipoCodigoFuenteExternaEjb.findById(codigoTipoCodigoFuente);
+
+                            if (catTipoCodigoFuente == null) { // Si es nuevo creamos el objeto a introducir
+                            	catTipoCodigoFuente = new CatTipoCodigoFuenteExterna();
+                            	catTipoCodigoFuente.setCodigoTipoCodigoFuenteExterna(Long.parseLong(codigoTipoCodigoFuente));
+                            }
+                            catTipoCodigoFuente.setDescripcionTipoCodigoFuenteExterna(fila[1]);
+                            catTipoCodigoFuente.setEstado(catEstadoEntidad);
+      
+                            catTipoCodigoFuenteExternaEjb.persist(catTipoCodigoFuente);
+                    	}
                     }
 
                     //CATLOCALIDAD
@@ -577,15 +678,16 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                         while ((fila = reader.readNext()) != null) {
                             // Obtenemos codigo y miramos si ya existe en la BD
                             // Creamos la clave compuesta primero.
-                           // try {
+            
                                 Boolean existe;
-                                final Long codigoLocalidad = new Long(fila[0]);
+                                final Long codigoLocalidad = Long.parseLong(fila[0]);
                                 // cargamos el nivel de Administracion correspondiente.
 
-                                final Long codigoProvincia = new Long(fila[2]);
+                                final Long codigoProvincia = Long.parseLong(fila[2]);
 
                                 final String codigoEntidadGeografica = fila[3];
 
+                                CatEstadoEntidad catEstadoEntidad = cacheEstadoEntidad.get(fila[5]);
 
                                 // Miramos si ya existe el ambitoTerritorial
                                 CatLocalidad localidad;
@@ -614,6 +716,8 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                                 } else {
                                     localidad.setDescripcionLocalidad(fila[1]);
                                 }
+                                
+                                localidad.setEstado(catEstadoEntidad);
 
                                 if(existe){
                                     catLocalidadEjb.merge(localidad);
@@ -621,9 +725,6 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                                     catLocalidadEjb.persistReal(localidad);
                                 }
 
-                            /*} catch (Exception e) {
-                                log.error(" Error important Localidad " + e.getMessage());
-                            }*/
                         }
 
                         // Ja podem borrar la cache de Entidad

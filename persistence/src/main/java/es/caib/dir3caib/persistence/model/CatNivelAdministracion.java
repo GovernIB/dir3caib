@@ -17,7 +17,6 @@ import java.util.Objects;
 @org.hibernate.annotations.Table(appliesTo = "DIR_CATNIVELADMINISTRACION", indexes = {
         @Index(name="DIR_CNIVADM_CESTENT_FK_I", columnNames = "ESTADO")
 })
-@SequenceGenerator(name="generator",sequenceName = "DIR_CNIVADM_SEQ", allocationSize=1)
 public class CatNivelAdministracion implements Serializable {
 
   private Long codigoNivelAdministracion;
@@ -41,7 +40,6 @@ public class CatNivelAdministracion implements Serializable {
    */
   @Id
   @Column(name = "CODIGONIVELADMINISTRACION", nullable = false, length = 2)
-  @GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "generator")
   public Long getCodigoNivelAdministracion() {
     return codigoNivelAdministracion;
   }

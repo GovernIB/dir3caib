@@ -17,7 +17,6 @@ import javax.persistence.*;
 @org.hibernate.annotations.Table(appliesTo = "DIR_CATMOTIVOEXTINCION", indexes = {
         @Index(name="DIR_CMOTEXT_CESTENT_FK_I", columnNames = "ESTADO")
 })
-@SequenceGenerator(name="generator",sequenceName = "DIR_CMOTEXT_SEQ", allocationSize=1)
 public class CatMotivoExtincion implements Serializable {
 
 	private String codigoMotivoExtincion;
@@ -37,7 +36,6 @@ public class CatMotivoExtincion implements Serializable {
    */
   @Column(name = "CODIGOMOTIVOEXTINCION", nullable = false, length = 3)
   @Id
-  @GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "generator")
   public String getCodigoMotivoExtincion() {
     return codigoMotivoExtincion;
   }
