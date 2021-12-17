@@ -13,25 +13,23 @@ import java.util.Objects;
  * @created 28-oct-2013 14:41:39
  */
 @Entity
-@Table(name = "DIR_CATSERVICIO", schema = "", catalog = "")
-@org.hibernate.annotations.Table(appliesTo = "DIR_CATSERVICIO", indexes = {
-        @Index(name="DIR_CSERVIC_CTIPSERV_FK_I", columnNames = "TIPO"),
-        @Index(name="DIR_CSERVIC_CESTENT_FK_I", columnNames = "ESTADO")
+@Table(name = "DIR_CATSERVICIOUO", schema = "", catalog = "")
+@org.hibernate.annotations.Table(appliesTo = "DIR_CATSERVICIOUO", indexes = {
+        @Index(name="DIR_CSERCUO_CTIPSERV_FK_I", columnNames = "TIPO")
 })
-public class Servicio implements Serializable {
+public class CatServicioUO implements Serializable {
 
   private Long codServicio;
   private String descServicio;
   private CatTipoServicio tipo;
-  private CatEstadoEntidad estado;
 
 
 
-  public Servicio(){
+  public CatServicioUO(){
 
   }
 
-  public Servicio(Long codServicio) {
+  public CatServicioUO(Long codServicio) {
     this.codServicio = codServicio;
   }
 
@@ -73,7 +71,7 @@ public class Servicio implements Serializable {
 
   @ManyToOne
   @JoinColumn(name="TIPO")
-  @ForeignKey(name="DIR_CSERVIC_CTIPSERV_FK")
+  @ForeignKey(name="DIR_CSERVUO_CTIPSERV_FK")
   public CatTipoServicio getTipo() {
     return tipo;
   }
@@ -82,10 +80,10 @@ public class Servicio implements Serializable {
     this.tipo = tipo;
   }
 
-
+/*
   @ManyToOne
   @JoinColumn(name="ESTADO")
-  @ForeignKey(name="DIR_CSERVIC_CESTENT_FK")
+  @ForeignKey(name="DIR_CSERVUO_CESTENT_FK")
   public CatEstadoEntidad getEstado() {
     return estado;
   }
@@ -93,12 +91,13 @@ public class Servicio implements Serializable {
   public void setEstado(CatEstadoEntidad estado) {
     this.estado = estado;
   }
-
+*/
+  
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    Servicio servicio = (Servicio) o;
+    CatServicioUO servicio = (CatServicioUO) o;
     return codServicio.equals(servicio.codServicio) && descServicio.equals(servicio.descServicio);
   }
 

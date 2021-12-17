@@ -21,7 +21,7 @@ import java.util.List;
 @Stateless(name = "CatTipoCodigoFuenteExternaEJB")
 @SecurityDomain("seycon")
 @RolesAllowed({"DIR_ADMIN", "DIR_WS"})
-public class CatTipoCodigoFuenteExternaBean extends BaseEjbJPA<CatTipoCodigoFuenteExterna, String> implements CatTipoCodigoFuenteExternaLocal{
+public class CatTipoCodigoFuenteExternaBean extends BaseEjbJPA<CatTipoCodigoFuenteExterna, Long> implements CatTipoCodigoFuenteExternaLocal{
 
     protected final Logger log = Logger.getLogger(getClass());
 
@@ -29,13 +29,13 @@ public class CatTipoCodigoFuenteExternaBean extends BaseEjbJPA<CatTipoCodigoFuen
     private EntityManager em;
 
     @Override
-    public CatTipoCodigoFuenteExterna getReference(String id) throws Exception {
+    public CatTipoCodigoFuenteExterna getReference(Long id) throws Exception {
 
         return em.getReference(CatTipoCodigoFuenteExterna.class, id);
     }
 
     @Override
-    public CatTipoCodigoFuenteExterna findById(String id) throws Exception {
+    public CatTipoCodigoFuenteExterna findById(Long id) throws Exception {
 
         return em.find(CatTipoCodigoFuenteExterna.class, id);
     }

@@ -155,7 +155,7 @@ public class Dir3CaibObtenerCatalogosImpl implements Dir3CaibObtenerCatalogosWs 
     @Override
     @WebMethod
     @RolesAllowed({ /*Dir3caibConstantes.DIR_ADMIN,*/ Dir3caibConstantes.DIR_WS})
-    public List<Servicio> obtenerCatServicio() throws Exception{
+    public List<CatServicio> obtenerCatServicio() throws Exception{
         return  obtenerCatalogosEjb.obtenerCatServicio();
     }
 

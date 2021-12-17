@@ -93,7 +93,10 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
     private CatLocalidadLocal catLocalidadEjb;
 
     @EJB(mappedName = "dir3caib/ServicioEJB/local")
-    private ServicioLocal servicioEjb;
+    private CatServicioLocal servicioEjb;
+    
+    @EJB(mappedName = "dir3caib/ServicioUOEJB/local")
+    private CatServicioUOLocal servicioUOEjb;
     
     private CatEstadoEntidad nuevoEstadoEntidadVacio(String codigo) {
     	
@@ -593,8 +596,8 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                         }
                     }
 
-                    // CAT_SERVICIO o CAT_SERVICIOS_UO
-                    if (Dir3caibConstantes.CAT_SERVICIOS.equals(fichero) || Dir3caibConstantes.CAT_TIPO_SERVICIOS_UO.equals(fichero)) {
+                    // CAT_SERVICIO
+                    if (Dir3caibConstantes.CAT_SERVICIOS.equals(fichero)) {
 
                         reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
                         while ((fila = reader.readNext()) != null) {
@@ -606,10 +609,10 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                         	
                         	String codigoServicio = fila[0];
                             // cargamos el Servicio
-                            Servicio servicio = servicioEjb.findById(Long.parseLong(codigoServicio));
+                            CatServicio servicio = servicioEjb.findById(Long.parseLong(codigoServicio));
 
                             if (servicio == null) { // Si es nuevo creamos el objeto a introducir
-                                servicio = new Servicio();
+                                servicio = new CatServicio();
                                 servicio.setCodServicio(Long.parseLong(codigoServicio));
                             }
                             servicio.setDescServicio(fila[1]);
@@ -618,6 +621,30 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                             servicioEjb.persist(servicio);
                         }
                     }
+                    
+                    // CAT_SERVICIOS_UO
+                    if (Dir3caibConstantes.CAT_SERVICIOS_UO.equals(fichero)) {
+
+                        reader.readNext(); //Leemos primera fila que contiene cabeceras para descartarla
+                        while ((fila = reader.readNext()) != null) {
+                        	
+                        	CatTipoServicio catTipoServicio = cacheTipoServicio.get(Long.parseLong(fila[2]));
+                        	
+                        	String codigoServicio = fila[0];
+                            // cargamos el Servicio
+                            CatServicioUO servicio = servicioUOEjb.findById(Long.parseLong(codigoServicio));
+
+                            if (servicio == null) { // Si es nuevo creamos el objeto a introducir
+                                servicio = new CatServicioUO();
+                                servicio.setCodServicio(Long.parseLong(codigoServicio));
+                            }
+                            servicio.setDescServicio(fila[1]);
+                            servicio.setTipo(catTipoServicio);
+      
+                            servicioUOEjb.persist(servicio);
+                        }
+                    }
+                    
                     
                     //CATPODER
                     if(Dir3caibConstantes.CAT_TIPO_PODER.equals(fichero)) {
@@ -658,7 +685,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                         	CatEstadoEntidad catEstadoEntidad = cacheEstadoEntidad.get(fila[2]);
                         	
                         	String codigoTipoCodigoFuente = fila[0];
-                            CatTipoCodigoFuenteExterna catTipoCodigoFuente = catTipoCodigoFuenteExternaEjb.findById(codigoTipoCodigoFuente);
+                            CatTipoCodigoFuenteExterna catTipoCodigoFuente = catTipoCodigoFuenteExternaEjb.findById(Long.parseLong(codigoTipoCodigoFuente));
 
                             if (catTipoCodigoFuente == null) { // Si es nuevo creamos el objeto a introducir
                             	catTipoCodigoFuente = new CatTipoCodigoFuenteExterna();

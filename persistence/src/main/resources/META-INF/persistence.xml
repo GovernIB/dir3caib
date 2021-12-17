@@ -34,7 +34,7 @@ http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
         <class>es.caib.dir3caib.persistence.model.Oficina</class>
         <class>es.caib.dir3caib.persistence.model.RelacionOrganizativaOfi</class>
         <class>es.caib.dir3caib.persistence.model.RelacionSirOfi</class>
-        <class>es.caib.dir3caib.persistence.model.Servicio</class>
+        <class>es.caib.dir3caib.persistence.model.CatServicio</class>
         <class>es.caib.dir3caib.persistence.model.Unidad</class>
         <class>es.caib.dir3caib.persistence.model.Sincronizacion</class>
 

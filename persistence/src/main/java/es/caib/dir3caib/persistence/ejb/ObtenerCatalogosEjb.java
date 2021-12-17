@@ -47,7 +47,7 @@ public class ObtenerCatalogosEjb implements ObtenerCatalogosLocal {
     private CatEntidadGeograficaLocal catEntidadGeograficaEjb;
 
     @EJB(mappedName = "dir3caib/ServicioEJB/local")
-    private ServicioLocal servicioEjb;
+    private CatServicioLocal servicioEjb;
 
     @EJB(mappedName = "dir3caib/CatTipoViaEJB/local")
     private CatTipoViaLocal catTipoViaEjb;
@@ -162,7 +162,7 @@ public class ObtenerCatalogosEjb implements ObtenerCatalogosLocal {
      * @throws Exception
      */
     @Override
-    public List<Servicio> obtenerCatServicio() throws Exception{
+    public List<CatServicio> obtenerCatServicio() throws Exception{
         return servicioEjb.getAll();
     }
 

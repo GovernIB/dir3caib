@@ -1,6 +1,6 @@
 package es.caib.dir3caib.persistence.ejb;
 
-import es.caib.dir3caib.persistence.model.Servicio;
+import es.caib.dir3caib.persistence.model.CatServicio;
 
 import javax.ejb.Local;
 
@@ -11,7 +11,7 @@ import javax.ejb.Local;
  * Date: 10/10/13
  */
 @Local
-public interface ServicioLocal extends BaseEjb<Servicio, Long> {
+public interface CatServicioLocal extends BaseEjb<CatServicio, Long> {
   
   void deleteAll() throws Exception;
 }

@@ -9,7 +9,7 @@ import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.model.Oficina;
 import es.caib.dir3caib.persistence.model.RelacionOrganizativaOfi;
 import es.caib.dir3caib.persistence.model.RelacionSirOfi;
-import es.caib.dir3caib.persistence.model.Servicio;
+import es.caib.dir3caib.persistence.model.CatServicio;
 import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.persistence.utils.DataBaseUtils;
 import es.caib.dir3caib.persistence.utils.Nodo;
@@ -50,7 +50,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
     private EntityManager em;
 
     @EJB(mappedName = "dir3caib/ServicioEJB/local")
-    private ServicioLocal servicioEjb;
+    private CatServicioLocal servicioEjb;
 
     @Override
     public Oficina getReference(String id) throws Exception {
@@ -497,7 +497,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
         q.setParameter("codigoUnidad", codigoUnidad);
         //q.setParameter("SERVICIO_SIR", new Servicio(Dir3caibConstantes.SERVICIO_SIR));
-        q.setParameter("SERVICIO_SIR_RECEPCION", new Servicio(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
+        q.setParameter("SERVICIO_SIR_RECEPCION", new CatServicio(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
 
 
         return q.getResultList();
@@ -514,9 +514,9 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
            "and relacionSirOfi.estado.codigoEstadoEntidad='V' ");
 
         q.setParameter("codigoUnidad", codigoUnidad);
-        q.setParameter("SERVICIO_SIR", new Servicio(Dir3caibConstantes.SERVICIO_SIR));
-        q.setParameter("SERVICIO_SIR_ENVIO", new Servicio(Dir3caibConstantes.SERVICIO_SIR_ENVIO));
-        q.setParameter("SERVICIO_SIR_RECEPCION", new Servicio(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
+        q.setParameter("SERVICIO_SIR", new CatServicio(Dir3caibConstantes.SERVICIO_SIR));
+        q.setParameter("SERVICIO_SIR_ENVIO", new CatServicio(Dir3caibConstantes.SERVICIO_SIR_ENVIO));
+        q.setParameter("SERVICIO_SIR_RECEPCION", new CatServicio(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
 
         Long count = (Long) q.getSingleResult();
         return count > 0;
@@ -819,9 +819,9 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
             List<Object> result2 = q2.getResultList();
 
-            Set<Servicio> servicios = new HashSet<Servicio>();
+            Set<CatServicio> servicios = new HashSet<CatServicio>();
             for (Object obj : result2) {
-                servicios.add(new Servicio(new Long(obj.toString())));
+                servicios.add(new CatServicio(new Long(obj.toString())));
             }
 
             Oficina oficina = new Oficina((String) object[0], (String) object[1], (String) object[2], null, servicios);
@@ -853,9 +853,9 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
             List<Object> result2 = q2.getResultList();
 
-            Set<Servicio> servicios = new HashSet<Servicio>();
+            Set<CatServicio> servicios = new HashSet<CatServicio>();
             for (Object obj : result2) {
-                servicios.add(new Servicio(new Long(obj.toString())));
+                servicios.add(new CatServicio(new Long(obj.toString())));
             }
 
             Oficina oficina = new Oficina((String) object[0], (String) object[1], (String) object[2], (String) object[3], servicios);

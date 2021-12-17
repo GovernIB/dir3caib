@@ -32,7 +32,7 @@ public interface ObtenerCatalogosLocal {
 
     List<CatEntidadGeograficaTF> obtenerCatEntidadGeografica() throws Exception;
 
-    List<Servicio> obtenerCatServicio() throws Exception;
+    List<CatServicio> obtenerCatServicio() throws Exception;
 
     List<CatTipoVia> obtenerCatTipoVia() throws Exception;
 

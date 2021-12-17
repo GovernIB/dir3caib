@@ -61,7 +61,7 @@ public class Oficina implements Serializable {
 	private String direccionObservaciones;
 	private List<RelacionSirOfi> sirOfi;
 	private List<RelacionOrganizativaOfi> organizativasOfi;
-	private Set<Servicio> servicios;
+	private Set<CatServicio> servicios;
     private List<ContactoOfi> contactos;
     private Set<Oficina> historicosOfi;
 
@@ -85,7 +85,7 @@ public class Oficina implements Serializable {
     this.codOfiResponsable = new Oficina(codOfiResponsable);
   }
 
-  public Oficina(String codigo, String denominacion, String codUoResponsable, String codOfiResponsable, Set<Servicio> servicios) {
+  public Oficina(String codigo, String denominacion, String codUoResponsable, String codOfiResponsable, Set<CatServicio> servicios) {
     this.codigo = codigo;
     this.denominacion = denominacion;
     this.codUoResponsable = new Unidad(codUoResponsable);
@@ -606,14 +606,14 @@ public class Oficina implements Serializable {
             @JoinColumn(name="CODSERVICIO"))
   @ForeignKey(name="DIR_SER_OFI_FK", inverseName = "DIR_OFI_SERV_FK")
   @JsonIgnore
-  public Set<Servicio> getServicios() {
+  public Set<CatServicio> getServicios() {
     return servicios;
   }
 
   /**
    * @param servicios the servicios to set
    */
-  public void setServicios(Set<Servicio> servicios) {
+  public void setServicios(Set<CatServicio> servicios) {
     this.servicios = servicios;
   }
 
@@ -691,7 +691,7 @@ public class Oficina implements Serializable {
   @Transient
   public Boolean getOficinaSir() {
 
-    for (Servicio servicio : servicios) {
+    for (CatServicio servicio : servicios) {
       if (servicio.getCodServicio().equals(Dir3caibConstantes.SERVICIO_SIR) ||
          servicio.getCodServicio().equals(Dir3caibConstantes.SERVICIO_SIR_ENVIO) ||
          servicio.getCodServicio().equals(Dir3caibConstantes.SERVICIO_SIR_RECEPCION)) {
@@ -704,7 +704,7 @@ public class Oficina implements Serializable {
   @Transient
   public Boolean getOficinaInformacion() {
 
-    for (Servicio servicio : servicios) {
+    for (CatServicio servicio : servicios) {
       if (servicio.getCodServicio().equals(Dir3caibConstantes.SERVICIO_OFI_INFORMACION)) {
         return true;
       }

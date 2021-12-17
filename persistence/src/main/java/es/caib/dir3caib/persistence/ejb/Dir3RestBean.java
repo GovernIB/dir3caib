@@ -4,7 +4,7 @@ import es.caib.dir3caib.persistence.model.ContactoUnidadOrganica;
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.model.Oficina;
 import es.caib.dir3caib.persistence.model.RelacionOrganizativaOfi;
-import es.caib.dir3caib.persistence.model.Servicio;
+import es.caib.dir3caib.persistence.model.CatServicio;
 import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.persistence.utils.CodigoValor;
 import es.caib.dir3caib.persistence.utils.DataBaseUtils;
@@ -535,7 +535,7 @@ public class Dir3RestBean implements Dir3RestLocal {
         if (oficinasSir) {
             where.add(" :SERVICIO_SIR_RECEPCION in elements(oficina.servicios) ");
             //parametros.put("SERVICIO_SIR", new Servicio(Dir3caibConstantes.SERVICIO_SIR));
-            parametros.put("SERVICIO_SIR_RECEPCION", new Servicio(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
+            parametros.put("SERVICIO_SIR_RECEPCION", new CatServicio(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
 
         }
 
@@ -709,7 +709,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 
         q.setParameter("codigoUnidad", codigoUnidad);
         //q.setParameter("SERVICIO_SIR", new Servicio(Dir3caibConstantes.SERVICIO_SIR));
-        q.setParameter("SERVICIO_SIR_RECEPCION", new Servicio(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
+        q.setParameter("SERVICIO_SIR_RECEPCION", new CatServicio(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
 
 
         return q.getResultList() != null ? q.getResultList() : new ArrayList<Oficina>();

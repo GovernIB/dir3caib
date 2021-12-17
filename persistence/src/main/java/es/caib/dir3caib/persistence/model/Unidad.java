@@ -93,7 +93,7 @@ public class Unidad implements Serializable {
   private List<ContactoUnidadOrganica> contactos;
   private List<RelacionOrganizativaOfi> organizativaOfi;
   private List<RelacionSirOfi> sirOfi;
-  private Set<Servicio> servicios;
+  private Set<CatServicio> servicios;
 
   // TODO ELIMINAR
   private Set<Unidad> historicoUO;
@@ -814,14 +814,14 @@ public class Unidad implements Serializable {
           @JoinColumn(name="CODSERVICIO"))
   @ForeignKey(name="DIR_SER_UNI_FK", inverseName = "DIR_UNI_SERV_FK")
   @JsonIgnore
-  public Set<Servicio> getServicios() {
+  public Set<CatServicio> getServicios() {
     return servicios;
   }
 
   /**
    * @param servicios the servicios to set
    */
-  public void setServicios(Set<Servicio> servicios) {
+  public void setServicios(Set<CatServicio> servicios) {
     this.servicios = servicios;
   }
 

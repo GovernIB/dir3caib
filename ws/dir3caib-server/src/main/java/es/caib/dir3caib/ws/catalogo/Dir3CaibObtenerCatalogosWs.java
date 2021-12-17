@@ -64,7 +64,7 @@ public interface Dir3CaibObtenerCatalogosWs {
 
   @WebMethod
   @RolesAllowed({Dir3caibConstantes.DIR_WS})
-  List<Servicio> obtenerCatServicio() throws Exception;
+  List<CatServicio> obtenerCatServicio() throws Exception;
 
   @WebMethod
   @RolesAllowed({Dir3caibConstantes.DIR_WS})

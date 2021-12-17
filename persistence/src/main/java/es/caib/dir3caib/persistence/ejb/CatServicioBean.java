@@ -1,6 +1,6 @@
 package es.caib.dir3caib.persistence.ejb;
 
-import es.caib.dir3caib.persistence.model.Servicio;
+import es.caib.dir3caib.persistence.model.CatServicio;
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.SecurityDomain;
 
@@ -20,7 +20,7 @@ import java.util.List;
 @Stateless(name = "ServicioEJB")
 @SecurityDomain("seycon")
 @RolesAllowed({"DIR_ADMIN", "DIR_WS"})
-public class ServicioBean extends BaseEjbJPA<Servicio, Long> implements ServicioLocal{
+public class CatServicioBean extends BaseEjbJPA<CatServicio, Long> implements CatServicioLocal{
 
     protected final Logger log = Logger.getLogger(getClass());
 
@@ -28,20 +28,20 @@ public class ServicioBean extends BaseEjbJPA<Servicio, Long> implements Servicio
     private EntityManager em;
 
     @Override
-    public Servicio getReference(Long id) throws Exception {
+    public CatServicio getReference(Long id) throws Exception {
 
-        return em.getReference(Servicio.class, id);
+        return em.getReference(CatServicio.class, id);
     }
 
     @Override
-    public Servicio findById(Long id) throws Exception {
+    public CatServicio findById(Long id) throws Exception {
 
-        return em.find(Servicio.class, id);
+        return em.find(CatServicio.class, id);
     }
 
     @Override
     @SuppressWarnings(value = "unchecked")
-    public List<Servicio> getAll() throws Exception {
+    public List<CatServicio> getAll() throws Exception {
 
         return  em.createQuery("Select servicio from Servicio as servicio order by servicio.codServicio").getResultList();
     }
@@ -56,7 +56,7 @@ public class ServicioBean extends BaseEjbJPA<Servicio, Long> implements Servicio
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<Servicio> getPagination(int inicio) throws Exception {
+    public List<CatServicio> getPagination(int inicio) throws Exception {
 
         Query q = em.createQuery("Select servicio from Servicio as servicio order by servicio.codServicio");
         q.setFirstResult(inicio);

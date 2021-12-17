@@ -32,7 +32,7 @@ public class Dir3CaibBean implements Dir3CaibLocal{
     @EJB private OficinaLocal oficinaEjb;
     @EJB private ContactoOfiLocal contactoOfiEjb;
     @EJB private RelacionOrganizativaOfiLocal relOrgOfiEjb;
-    @EJB private ServicioLocal servicioEjb;
+    @EJB private CatServicioLocal servicioEjb;
     @EJB private RelacionSirOfiLocal relSirOfiEjb;
     @EJB private UnidadLocal unidadEjb;
     @EJB private ContactoUOLocal contactoUOEjb;

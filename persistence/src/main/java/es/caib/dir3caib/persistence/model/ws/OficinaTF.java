@@ -285,7 +285,7 @@ public class OficinaTF {
 
         if(oficina.getServicios() != null){
             List<Long> serviciosIds= new ArrayList<Long>();
-            for(Servicio servicio: oficina.getServicios()){
+            for(CatServicio servicio: oficina.getServicios()){
                 serviciosIds.add(servicio.getCodServicio());
             }
             this.setServicios(serviciosIds);

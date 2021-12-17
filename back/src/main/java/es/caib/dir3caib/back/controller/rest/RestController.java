@@ -508,7 +508,7 @@ public class RestController {
             //Montamos los servicios como una lista de strings
             List<String> servicios = new ArrayList<String>();
 
-            for (Servicio serv : ofi.getServicios()) {
+            for (CatServicio serv : ofi.getServicios()) {
                 servicios.add(serv.getDescServicio());
             }
 

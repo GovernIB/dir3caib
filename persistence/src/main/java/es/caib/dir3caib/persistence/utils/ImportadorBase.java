@@ -70,7 +70,7 @@ public class ImportadorBase {
     private CatLocalidadLocal catLocalidadEjb;
 
     @EJB(mappedName = "dir3caib/ServicioEJB/local")
-    private ServicioLocal servicioEjb;
+    private CatServicioLocal servicioEjb;
 
     @EJB(mappedName = "dir3caib/CatJerarquiaOficinaEJB/local")
     private CatJerarquiaOficinaLocal catJerarquiaOficinaEjb;
@@ -91,7 +91,7 @@ public class ImportadorBase {
     public Map<CatAmbitoTerritorialPK, CatAmbitoTerritorial> cacheAmbitoTerritorial = new HashMap<CatAmbitoTerritorialPK, CatAmbitoTerritorial>();
     public Map<Long, CatNivelAdministracion> cacheNivelAdministracion = new TreeMap<Long, CatNivelAdministracion>();
     public Map<String, CatTipoContacto> cacheTipoContacto = new TreeMap<String, CatTipoContacto>();
-    public Map<Long, Servicio> cacheServicioOfi = new TreeMap<Long, Servicio>();
+    public Map<Long, CatServicio> cacheServicioOfi = new TreeMap<Long, CatServicio>();
     public Map<Long, CatJerarquiaOficina> cacheJerarquiaOficina = new TreeMap<Long, CatJerarquiaOficina>();
     public Set<String> unidadesExistInBBDD = new TreeSet<String>();
     public Set<String> oficinasExistInBBDD = new TreeSet<String>();
@@ -248,7 +248,7 @@ public class ImportadorBase {
         log.debug(" CatJerarquiaOficina : " + cacheNivelAdministracion.size());
 
         // CatServicio
-        for (Servicio se : servicioEjb.getAll()) {
+        for (CatServicio se : servicioEjb.getAll()) {
             cacheServicioOfi.put(se.getCodServicio(), se);
         }
         log.debug(" ServicioOfi : " + cacheServicioOfi.size());
