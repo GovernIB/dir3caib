@@ -93,10 +93,10 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
     private CatLocalidadLocal catLocalidadEjb;
 
     @EJB(mappedName = "dir3caib/CatServicioEJB/local")
-    private CatServicioLocal servicioEjb;
+    private CatServicioLocal catServicioEjb;
     
-    @EJB(mappedName = "dir3caib/ServicioUOEJB/local")
-    private CatServicioUOLocal servicioUOEjb;
+    @EJB(mappedName = "dir3caib/CatServicioUOEJB/local")
+    private CatServicioUOLocal catServicioUOEjb;
     
     private CatEstadoEntidad nuevoEstadoEntidadVacio(String codigo) {
     	
@@ -609,7 +609,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                         	
                         	String codigoServicio = fila[0];
                             // cargamos el Servicio
-                            CatServicio servicio = servicioEjb.findById(Long.parseLong(codigoServicio));
+                            CatServicio servicio = catServicioEjb.findById(Long.parseLong(codigoServicio));
 
                             if (servicio == null) { // Si es nuevo creamos el objeto a introducir
                                 servicio = new CatServicio();
@@ -618,7 +618,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                             servicio.setDescServicio(fila[1]);
                             servicio.setTipo(catTipoServicio);
       
-                            servicioEjb.persist(servicio);
+                            catServicioEjb.persist(servicio);
                         }
                     }
                     
@@ -632,7 +632,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                         	
                         	String codigoServicio = fila[0];
                             // cargamos el Servicio
-                            CatServicioUO servicio = servicioUOEjb.findById(Long.parseLong(codigoServicio));
+                            CatServicioUO servicio = catServicioUOEjb.findById(Long.parseLong(codigoServicio));
 
                             if (servicio == null) { // Si es nuevo creamos el objeto a introducir
                                 servicio = new CatServicioUO();
@@ -642,7 +642,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                             servicio.setDescServicio(fila[1]);
                             servicio.setTipo(catTipoServicio);
       
-                            servicioUOEjb.persist(servicio);
+                            catServicioUOEjb.persist(servicio);
                         }
                     }
                     
