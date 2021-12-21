@@ -13,7 +13,9 @@ import java.io.Serializable;
 @Entity
 @Table(name = "DIR_HISTORICOUO", schema = "", catalog = "")
 @org.hibernate.annotations.Table(appliesTo = "DIR_HISTORICOUO", indexes = {
-        @Index(name="DIR_HISTO_CESTENT_FK_I", columnNames = "ESTADO")
+        @Index(name="DIR_HISTOUO_CESTENT_FK_I", columnNames = "ESTADO"),
+        @Index(name = "DIR_HISTUO_UNIDAD_FK_I", columnNames = "CODUNIDAD"),
+        @Index(name = "DIR_HISTUO_OFICINA_FK_I", columnNames = "CODOFICINA")
 })
 @SequenceGenerator(name="generator",sequenceName = "DIR_HISTUO_SEQ", allocationSize=1)
 public class HistoricoUO implements Serializable {
@@ -30,6 +32,13 @@ public class HistoricoUO implements Serializable {
     public HistoricoUO() {
     }
 
+    public HistoricoUO(Unidad unidadAnterior, Unidad unidadUltima, CatEstadoEntidad estado, String motivoRelacion, String observacionExtincion) {
+        this.unidadAnterior = unidadAnterior;
+        this.unidadUltima = unidadUltima;
+        this.estado = estado;
+        this.motivoRelacion = motivoRelacion;
+        this.observacionExtincion = observacionExtincion;
+    }
 
     @Column(name = "ID", nullable = false)
     @Id

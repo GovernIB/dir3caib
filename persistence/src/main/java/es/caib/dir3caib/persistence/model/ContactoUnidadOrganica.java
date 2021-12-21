@@ -17,24 +17,27 @@ import java.io.Serializable;
  * @version 1.1
  * @created 28-oct-2013 14:41:39
  */
+@Entity
 @Table(name = "DIR_CONTACTOUO", schema = "", catalog = "")
 @org.hibernate.annotations.Table(appliesTo = "DIR_CONTACTOUO", indexes = {
-    @Index(name="DIR_CONTACUO_CATTIPOCONT_FK_I", columnNames = {"TIPOCONTACTO"}),
-    @Index(name="DIR_UNIDAD_CONTACTOSUO_FK_I", columnNames = {"CODUNIDAD"})
+        @Index(name="DIR_CONTACUO_CATTIPOCONT_FK_I", columnNames = {"TIPOCONTACTO"}),
+        @Index(name="DIR_UNIDAD_CONTACTOSUO_FK_I", columnNames = {"CODUNIDAD"}),
+        @Index(name="DIR_CONTUO_CESTENT_FK_I", columnNames = {"ESTADO"}),
+
 })
-@Entity
+@SequenceGenerator(name="generator",sequenceName = "DIR_CONTUO_SEQ", allocationSize=1)
 public class ContactoUnidadOrganica implements Serializable {
 
-  private Long codContacto; 
-	private CatTipoContacto tipoContacto;
-	private Unidad unidad;
-	private String valorContacto;
-	private boolean visibilidad;
+  private Long codContacto;
+  private CatTipoContacto tipoContacto;
+  private Unidad unidad;
+  private String valorContacto;
+  private boolean visibilidad;
+  private CatEstadoEntidad estado;
 
-	public ContactoUnidadOrganica(){
+  public ContactoUnidadOrganica(){
 
-	}
-
+  }
 
   public ContactoUnidadOrganica(CatTipoContacto tipoContacto, String valorContacto) {
     this.tipoContacto = tipoContacto;
@@ -43,10 +46,11 @@ public class ContactoUnidadOrganica implements Serializable {
 
   public void finalize() throws Throwable {
 
-	}
-  
+  }
+
   @Column(name = "CODCONTACTO", nullable = false, length = 6)
   @Id
+  @GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "generator")
   public Long getCodContacto() {
     return codContacto;
   }
@@ -76,7 +80,7 @@ public class ContactoUnidadOrganica implements Serializable {
    * @return the unidad
    */
   @ManyToOne
-  @JoinColumn(name="CODUNIDAD") 
+  @JoinColumn(name="CODUNIDAD")
   @ForeignKey(name="DIR_CONTACTOUO_UNIDAD_FK")
   public Unidad getUnidad() {
     return unidad;
@@ -118,6 +122,17 @@ public class ContactoUnidadOrganica implements Serializable {
   public void setVisibilidad(boolean visibilidad) {
     this.visibilidad = visibilidad;
   }
-  
 
+
+  @ManyToOne
+  @JoinColumn(name="ESTADO")
+  @ForeignKey(name="DIR_CONTUO_CESTENT_FK")
+  public CatEstadoEntidad getEstado() {
+    return estado;
+  }
+
+  public void setEstado(CatEstadoEntidad estado) {
+    this.estado = estado;
+  }
 }
+

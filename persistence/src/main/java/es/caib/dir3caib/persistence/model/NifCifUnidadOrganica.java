@@ -21,7 +21,8 @@ import java.io.Serializable;
 @SequenceGenerator(name="generator",sequenceName = "DIR_NIFCIF_SEQ", allocationSize=1)
 public class NifCifUnidadOrganica implements Serializable {
 
-    private Long codNifCif;
+    private Long id;
+    private String codNifCif;
     private Unidad unidad;
     private boolean nifPrincipal;
     private CatEstadoEntidad estado;
@@ -31,13 +32,23 @@ public class NifCifUnidadOrganica implements Serializable {
     }
 
     @Id
+    @Column (name = "ID")
+     @GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "generator")
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+
     @Column (name = "CODNIFCIF")
-    @GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "generator")
-    public Long getCodNifCif() {
+    public String getCodNifCif() {
         return codNifCif;
     }
 
-    public void setCodNifCif(Long codNifCif) {
+    public void setCodNifCif(String codNifCif) {
         this.codNifCif = codNifCif;
     }
 

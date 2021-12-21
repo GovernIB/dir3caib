@@ -73,7 +73,7 @@ public class Dir3caibConstantes {
     public static final String OFI_OFICINAS = "Oficinas.csv"; 
     public static final String OFI_RELACIONES_ORGANIZATIVAS_OFI = "RelacionesOrganizativasOFI.csv"; 
     public static final String OFI_RELACIONES_SIROFI = "RelacionesSIROFI.csv"; 
-    public static final String OFI_SERVICIOS_OFI = "ServiciosOFI.csv"; 
+    public static final String OFI_SERVICIOS_OFI = "ServiciosOFI.csv";
     public static final String[] OFI_FICHEROS = {OFI_OFICINAS,OFI_CONTACTO_OFI,OFI_HISTORICOS_OFI,OFI_RELACIONES_ORGANIZATIVAS_OFI,OFI_RELACIONES_SIROFI,OFI_SERVICIOS_OFI};
     
      // Importación UNIDADES
@@ -81,7 +81,10 @@ public class Dir3caibConstantes {
     public static final String UO_CONTACTO_UO = "ContactoUO.csv"; 
     public static final String UO_HISTORICOS_UO = "HistoricosUO.csv"; 
     public static final String UO_UNIDADES = "Unidades.csv"; 
-    public static final String[] UO_FICHEROS = {UO_UNIDADES,UO_HISTORICOS_UO,UO_CONTACTO_UO};
+    public static final String UO_CODIGO_UO = "CodigosUO.csv";
+    public static final String UO_NIFCIF_UO = "NifCifUO.csv";
+    public static final String UO_SERVICIOS_UO = "ServiciosUO.csv";
+    public static final String[] UO_FICHEROS = {UO_UNIDADES,UO_HISTORICOS_UO,UO_CONTACTO_UO, UO_CODIGO_UO};
 
 
     public static final String FORMATO_FECHA = "dd/MM/yyyy";
@@ -148,5 +151,14 @@ public class Dir3caibConstantes {
 
     //NIVEL ADMINISTRACION UNIVERSIDADES
     public static final Long NIVEL_ADMINISTRACION_UNIVERSIDADES=4L;
+
+
+    //IDIOMAS DIR3
+    public static final Long CASTELLANO= 1L;
+    public static final Long CATALA= 2L;
+    public static final Long EUSKERA= 3L;
+    public static final Long GALEGO= 4L;
+    public static final Long VALENCIA= 5L;
+
 
 }

@@ -44,7 +44,7 @@ public class Unidad implements Serializable {
   private String codigo;
   private Long version;
   private String denominacion;
-  private String denomlenguacooficial;
+  private String denomLenguaCooficial;
   private int idiomalengua;
   private CatEstadoEntidad estado;
   private String nifcif;
@@ -89,14 +89,14 @@ public class Unidad implements Serializable {
   private String dirExtranjera;
   private String locExtranjera;
   private String observaciones;
-  private boolean compartenif;
+  private boolean comparteNif;
   private List<ContactoUnidadOrganica> contactos;
   private List<RelacionOrganizativaOfi> organizativaOfi;
   private List<RelacionSirOfi> sirOfi;
-  private Set<CatServicio> servicios;
+  private Set<ServicioUO> servicios;
 
   // TODO ELIMINAR
-  private Set<Unidad> historicoUO;
+//  private Set<Unidad> historicoUO;
 
   private Set<HistoricoUO> historicosAnterior;
 
@@ -106,9 +106,11 @@ public class Unidad implements Serializable {
   private Set<NifCifUnidadOrganica> nifcifUo;
 
 
-  //TODO ELIMINAR
   public Unidad(){
+    //TODO ELIMINAR
     //this.historicoUO = new HashSet<Unidad>();
+    this.historicosAnterior = new HashSet<>();
+    this.historicosUltima = new HashSet<>();
   }
 
 
@@ -186,12 +188,12 @@ public class Unidad implements Serializable {
   }
 
   @Column(name = "DENOMCOOFICIAL", length = 300)
-  public String getDenomlenguacooficial() {
-    return denomlenguacooficial;
+  public String getDenomLenguaCooficial() {
+    return denomLenguaCooficial;
   }
 
-  public void setDenomlenguacooficial(String denomlenguacooficial) {
-    this.denomlenguacooficial = denomlenguacooficial;
+  public void setDenomLenguaCooficial(String denomLenguaCooficial) {
+    this.denomLenguaCooficial = denomLenguaCooficial;
   }
 
   @Column(name = "IDIOMALENGUA")
@@ -758,12 +760,12 @@ public class Unidad implements Serializable {
 
   @Column(name = "COMPARTENIF", length = 1)
   @JsonIgnore
-  public boolean isCompartenif() {
-    return compartenif;
+  public boolean isComparteNif() {
+    return comparteNif;
   }
 
-  public void setCompartenif(boolean compartenif) {
-    this.compartenif = compartenif;
+  public void setComparteNif(boolean compartenif) {
+    this.comparteNif = compartenif;
   }
 
   @OneToMany (mappedBy = "unidad", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
@@ -806,7 +808,7 @@ public class Unidad implements Serializable {
   /**
    * @return the servicios
    */
-  @ManyToMany(cascade=CascadeType.PERSIST, fetch= FetchType.EAGER)
+ /* @ManyToMany(cascade=CascadeType.PERSIST, fetch= FetchType.EAGER)
   @JoinTable(name="DIR_SERVICIOUO",
           joinColumns=
           @JoinColumn(name="CODUNIDAD"),
@@ -814,16 +816,21 @@ public class Unidad implements Serializable {
           @JoinColumn(name="CODSERVICIO"))
   @ForeignKey(name="DIR_SER_UNI_FK", inverseName = "DIR_UNI_SERV_FK")
   @JsonIgnore
-  public Set<CatServicio> getServicios() {
+  public Set<Servicio> getServicios() {
+    return servicios;
+  }*/
+
+  @OneToMany(mappedBy = "unidad")
+  @JsonIgnore
+  public Set<ServicioUO> getServicios() {
     return servicios;
   }
 
-  /**
-   * @param servicios the servicios to set
-   */
-  public void setServicios(Set<CatServicio> servicios) {
+  public void setServicios(Set<ServicioUO> servicios) {
     this.servicios = servicios;
   }
+
+
 
   @OneToMany(mappedBy = "unidadAnterior")
   @JsonIgnore
@@ -847,7 +854,7 @@ public class Unidad implements Serializable {
 
 
   //TODO ELIMINAR
-  @ManyToMany(cascade=CascadeType.PERSIST, fetch= FetchType.EAGER)
+ /* @ManyToMany(cascade=CascadeType.PERSIST, fetch= FetchType.EAGER)
   @JoinTable(name="DIR_HISTORICO",
                joinColumns=@JoinColumn(name="CODANTERIOR"),
                inverseJoinColumns=@JoinColumn(name="CODULTIMA"))
@@ -860,7 +867,7 @@ public class Unidad implements Serializable {
 
   public void setHistoricoUO(Set<Unidad> historicoUO) {
     this.historicoUO = historicoUO;
-  }
+  }*/
 
   @OneToMany (mappedBy = "unidad", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
   @ForeignKey(name="DIR_UNIDAD_CODUO_FK")
