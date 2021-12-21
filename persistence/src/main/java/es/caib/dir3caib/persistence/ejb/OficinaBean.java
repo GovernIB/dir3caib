@@ -43,7 +43,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
     @PersistenceContext(unitName="dir3caib")
     private EntityManager em;
 
-    @EJB(mappedName = "dir3caib/ServicioEJB/local")
+    @EJB(mappedName = "dir3caib/CatServicioEJB/local")
     private CatServicioLocal servicioEjb;
 
     @Override

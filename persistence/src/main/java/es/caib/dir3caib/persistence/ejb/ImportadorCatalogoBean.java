@@ -92,7 +92,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
     @EJB(mappedName = "dir3caib/CatLocalidadEJB/local")
     private CatLocalidadLocal catLocalidadEjb;
 
-    @EJB(mappedName = "dir3caib/ServicioEJB/local")
+    @EJB(mappedName = "dir3caib/CatServicioEJB/local")
     private CatServicioLocal servicioEjb;
     
     @EJB(mappedName = "dir3caib/ServicioUOEJB/local")

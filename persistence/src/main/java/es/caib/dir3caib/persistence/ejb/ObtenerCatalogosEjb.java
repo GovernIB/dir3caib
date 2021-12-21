@@ -46,7 +46,7 @@ public class ObtenerCatalogosEjb implements ObtenerCatalogosLocal {
     @EJB(mappedName = "dir3caib/CatEntidadGeograficaEJB/local")
     private CatEntidadGeograficaLocal catEntidadGeograficaEjb;
 
-    @EJB(mappedName = "dir3caib/ServicioEJB/local")
+    @EJB(mappedName = "dir3caib/CatServicioEJB/local")
     private CatServicioLocal servicioEjb;
 
     @EJB(mappedName = "dir3caib/CatTipoViaEJB/local")

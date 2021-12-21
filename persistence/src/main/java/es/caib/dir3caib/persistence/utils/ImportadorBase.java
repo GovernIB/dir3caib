@@ -75,8 +75,8 @@ public class ImportadorBase {
     @EJB(mappedName = "dir3caib/CatServicioUOEJB/local")
     private CatServicioUOLocal catServicioUOEjb;
 
-    @EJB(mappedName = "dir3caib/CatServicioOfiEJB/local")
-    private CatServicioLocal catServicioOfiEjb;
+    @EJB(mappedName = "dir3caib/CatServicioEJB/local")
+    private CatServicioLocal catServicioEjb;
 
     @EJB(mappedName = "dir3caib/CatJerarquiaOficinaEJB/local")
     private CatJerarquiaOficinaLocal catJerarquiaOficinaEjb;
@@ -286,12 +286,10 @@ public class ImportadorBase {
         log.debug(" CatJerarquiaOficina : " + cacheJerarquiaOficina.size());
 
         // CatServicio
-        for (CatServicio se : catServicioOfiEjb.getAll()) {
+        for (CatServicio se : catServicioEjb.getAll()) {
             cacheServicioOfi.put(se.getCodServicio(), se);
         }
         log.debug(" CatServicioOfi : " + cacheServicioOfi.size());
-
-
 
 
         // CatProvincia
