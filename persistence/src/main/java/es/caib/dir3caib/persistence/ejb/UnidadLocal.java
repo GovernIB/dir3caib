@@ -2,6 +2,7 @@ package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.Oficina;
 import es.caib.dir3caib.persistence.model.Unidad;
+import es.caib.dir3caib.persistence.model.UnidadPK;
 import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.Paginacion;
 
@@ -16,7 +17,25 @@ import java.util.Set;
  */
 
 @Local
-public interface UnidadLocal extends BaseEjb<Unidad, String> {
+public interface UnidadLocal extends BaseEjb<Unidad, Long> {
+
+    /**
+     * Busca una unidad por su pk
+     * @param codigo
+     * @param version
+     * @return
+     * @throws Exception
+     */
+    Unidad findByPKs(String codigo, Long version) throws Exception;
+
+    /**
+     * Busca la unidad por su pk pero solo carga el identificador
+     * @param codigo
+     * @param version
+     * @return
+     * @throws Exception
+     */
+    Unidad findByPKsReduced(String codigo, Long version) throws Exception;
 
     /**
      * Borra todas las unidades
@@ -207,6 +226,13 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      */
     List<String> getAllCodigos();
 
+    /**
+     * Obtiene todos las unidadesPk de las unidades. Se emplea para la importación de las unidades desde Madrid.
+     *
+     * @return
+     */
+    List<UnidadPK> getAllUnidadPK();
+
 
     /**
      * Devuelve todas las unidades de la lista de ids indicados. Se emplea para montar la cache de unidades
@@ -216,7 +242,8 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @return
      * @throws Exception
      */
-    List<Unidad> getListByIds(List<String> ids) throws Exception;
+    //List<Unidad> getListByIds(List<String> ids) throws Exception;
+    List<Unidad> getListByIds(List<UnidadPK> ids) throws Exception;
 
 
     /**
@@ -343,5 +370,13 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
     * @throws Exception
     */
    Boolean tieneOficinasArbol(String codigo) throws Exception;
+
+    /**
+     *
+     * @param codigoUnidad
+     * @param codigoServicio
+     * @throws Exception
+     */
+    void crearServicioUnidad(String codigoUnidad, Long codigoServicio) throws Exception;
 
 }

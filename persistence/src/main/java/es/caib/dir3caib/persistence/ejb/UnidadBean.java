@@ -4,10 +4,7 @@
  */
 package es.caib.dir3caib.persistence.ejb;
 
-import es.caib.dir3caib.persistence.model.CatEstadoEntidad;
-import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
-import es.caib.dir3caib.persistence.model.Oficina;
-import es.caib.dir3caib.persistence.model.Unidad;
+import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.utils.DataBaseUtils;
 import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.NodoUtils;
@@ -39,7 +36,7 @@ import java.util.Set;
 @Stateless(name = "UnidadEJB")
 @SecurityDomain("seycon")
 @RolesAllowed({"DIR_ADMIN", "tothom", "DIR_WS"})
-public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLocal {
+public class UnidadBean extends BaseEjbJPA<Unidad, Long> implements UnidadLocal {
 
     @EJB(mappedName = "dir3caib/OficinaEJB/local")
     private OficinaLocal oficinaEjb;
@@ -52,16 +49,55 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
 
     @Override
-    public Unidad getReference(String id) throws Exception {
+    public Unidad getReference(Long id) throws Exception {
 
         return em.getReference(Unidad.class, id);
     }
 
     @Override
-    public Unidad findById(String id) throws Exception {
+    public Unidad findById(Long id) throws Exception {
 
         return em.find(Unidad.class, id);
     }
+
+
+    @Override
+    public Unidad findByPKs(String codigo, Long version) throws Exception {
+        Query q = em.createQuery("Select unidad from Unidad as unidad "
+                + " where unidad.version = :version "
+                + " AND unidad.codigo = :codigo "
+        );
+
+        q.setParameter("version", version);
+        q.setParameter("codigo", codigo);
+
+        try {
+            return (Unidad) q.getSingleResult();
+        } catch(Throwable th) {
+            return null;
+        }
+    }
+
+    @Override
+    public Unidad findByPKsReduced(String codigo, Long version) throws Exception {
+        Query q = em.createQuery("Select unidad.id from Unidad as unidad "
+                + " where unidad.version = :version "
+                + " AND unidad.codigo = :codigo "
+        );
+
+        q.setParameter("version", version);
+        q.setParameter("codigo", codigo);
+
+        try {
+            Long id = (Long)q.getSingleResult();
+            Unidad unidad = new Unidad();
+            unidad.setId(id);
+            return unidad;
+        } catch(Throwable th) {
+            return null;
+        }
+    }
+
 
     /**
      * Obtiene una unidad que es vigente con sus historicosUO
@@ -84,8 +120,12 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
             unidad = unidades.get(0);
         }
 
-        if (unidad != null) {
-            Hibernate.initialize(unidad.getHistoricoUO());
+
+       if (unidad != null) {
+           //TODO ELIMINAR
+           // Hibernate.initialize(unidad.getHistoricoUO());
+           Hibernate.initialize(unidad.getHistoricosAnterior());
+           Hibernate.initialize(unidad.getHistoricosUltima());
         }
 
         return unidad;
@@ -285,12 +325,43 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
      * @return
      * @throws Exception
      */
-    @Override
-    public List<Unidad> getListByIds(List<String> ids) throws Exception {
+   // @Override
+   /* public List<Unidad> getListByIds(List<String> ids) throws Exception {
 
 
         Query q = em.createQuery("Select unidad.codigo from Unidad as unidad "
            + " where unidad.codigo in (:theids) order by unidad.codigo");
+
+        q.setParameter("theids", ids);
+
+        List<Unidad> unidades = new ArrayList<Unidad>();
+        List<?> result = q.getResultList();
+
+        for (Object object : result) {
+            unidades.add(new Unidad((String) object));
+        }
+
+        return unidades;
+    }*/
+
+    //TODO REVISAR Y PROBAR
+    @Override
+    public List<Unidad> getListByIds(List<UnidadPK> ids) throws Exception {
+
+
+        /*Query q = em.createQuery("Select unidad.codigo, unidad.version from Unidad as unidad "
+                + " where unidad.codigo in (:theids) order by unidad.codigo");*/
+
+
+        Query q = em.createQuery("select new es.caib.dir3caib.persistence.model.UnidadPK(unidad.codigo, unidad.version) as unidadPK from es.caib.dir3caib.persistence.model.Unidad as unidad"
+                + " where unidadPK in (:theids) order by unidad.codigo");
+
+       /* session.createQuery("select new com.baeldung.hibernate.pojo.Result(m.name, m.department.name)"
+                + " from com.baeldung.hibernate.entities.DeptEmployee m");
+
+        session.createQuery("select new es.caib.dir3caib.persistence.model.UnidadPK(unidad.codigo, unidad.version) as unidadPK from es.caib.dir3caib.persistence.model.Unidad as unidad"
+                + " where unidadPK in (:theids) order by unidad.codigo");*/
+
 
         q.setParameter("theids", ids);
 
@@ -908,6 +979,25 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         return (List<String>) q.getResultList();
     }
 
+
+    @Override
+    @SuppressWarnings(value = "unchecked")
+    public List<UnidadPK> getAllUnidadPK() {
+        Query q = em.createQuery("Select unidad.codigo, unidad.version from Unidad as unidad order by unidad.codigo");
+
+        List<UnidadPK> unidadesPK = new ArrayList<UnidadPK>();
+        List<Object[]> result = q.getResultList();
+
+        for (Object[] object : result) {
+            UnidadPK unidadPk = new UnidadPK((String) object[0], (Long) object[1]);
+            unidadesPK.add(unidadPk);
+        }
+        return unidadesPK;
+
+
+    }
+
+
     @Override
     @SuppressWarnings(value = "unchecked")
     public void crearUnidad(String codigoUnidad) throws Exception{
@@ -995,12 +1085,29 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     @Override
     public void historicosFinales(Unidad unidad, Set<Unidad> historicosFinales) throws Exception {
 
-        Set<Unidad> parciales = unidad.getHistoricoUO();
+       //TODO ELIMINAR
+       /* Set<Unidad> parciales = unidad.getHistoricoUO();
         for (Unidad parcial : parciales) {
             if (parcial.getHistoricoUO().size() == 0) {
                 historicosFinales.add(parcial);
             } else {
                 historicosFinales(parcial, historicosFinales);
+            }
+        }*/
+
+    }
+
+   // @Override
+    // TODO PROVAR CON LOS CAMBIOS DEL NUEVO MODELO
+    public void historicosFinales2(Unidad unidad, Set<HistoricoUO> historicosFinales) throws Exception {
+
+
+        Set<HistoricoUO> parciales = unidad.getHistoricosUltima();
+        for (HistoricoUO parcial : parciales) {
+            if (parcial.getUnidadUltima().getHistoricosUltima().size() == 0) {
+                historicosFinales.add(parcial);
+            } else {
+                historicosFinales2(parcial.getUnidadUltima(), historicosFinales);
             }
         }
 
@@ -1125,6 +1232,17 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
             }
         }
         return false;
+    }
+
+    @Override
+    @SuppressWarnings(value = "unchecked")
+    public void crearServicioUnidad(String codigoUnidad, Long codigoServicio) throws Exception{
+
+        Query q = em.createNativeQuery("insert into dir_serviciouo (codunidad, codservicio) values (?,?) ");
+        q.setParameter(1, codigoUnidad);
+        q.setParameter(2, codigoServicio);
+
+        q.executeUpdate();
     }
 
 }

@@ -100,7 +100,9 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
     @Override
     public UnidadTF buscarUnidad(String codigo) throws Exception {
 
-        Unidad unidad = unidadEjb.findById(codigo);
+        //TODO DESCOMENTAR Y ARREGLAR
+       // Unidad unidad = unidadEjb.findById(codigo);
+        Unidad unidad = unidadEjb.findById(Long.valueOf(codigo)); //ESTO es temporal para que compile, hay que revisarlo (20/12/2020)
 
         if (unidad != null) {
             List<ContactoUnidadOrganica> contactosVisibles = new ArrayList<ContactoUnidadOrganica>();
@@ -114,7 +116,8 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
             unidad.setContactos(contactosVisibles);
             Set<Unidad> historicosFinales = new HashSet<Unidad>();
             unidadEjb.historicosFinales(unidad, historicosFinales);
-            unidad.setHistoricoUO(historicosFinales);
+            //TODO DESCOMENTAR Y ARREGLAR
+        //    unidad.setHistoricoUO(historicosFinales);
 
             return UnidadTF.generar(unidad);
 
@@ -168,7 +171,8 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
                     arbol.add(unidad);
                     //obtenemos sus historicos para poder obtener todos los hijos que dependan de ellos
                     // y poder actualizar el árbol correctamente.
-                    Set<Unidad> historicosRaiz = unidad.getHistoricoUO();
+                    //TODO DESCOMENTAR Y ARREGLAR
+                   /* Set<Unidad> historicosRaiz = unidad.getHistoricoUO();
                     if (historicosRaiz != null) {
                         for (Unidad historico : historicosRaiz) {
                             //añadimos el histórico al arbol de actualizados.
@@ -181,7 +185,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
                                 arbol.addAll(unidadEjb.obtenerArbolUnidadesUnidadNoRaiz(historico.getCodigo(), fechaActualizacion, fechaSincronizacion));
                             }
                         }
-                    }
+                    }*/
                 }
             }
         }
@@ -328,7 +332,8 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
         nodo.setDenominacion(unidad.getDenominacion());
         nodo.setNivel((long) nivel);
         //Obtenemos los históricos de primer nivel de la unidad indicada
-        Set<Unidad> parciales = unidad.getHistoricoUO();
+        //TODO DESCOMENTAR Y ARREGLAR
+       /* Set<Unidad> parciales = unidad.getHistoricoUO();
         List<Nodo> historicosParciales = new ArrayList<Nodo>();
         //Para cada uno de los históricos obtenemos de manera recursiva sus históricos
         for (Unidad parcial : parciales) {
@@ -337,7 +342,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
             montarHistoricosFinales(parcial, nodoParcial, nivel + 1);
         }
         //Asignamos los históricos al nodo principal
-        nodo.setHistoricos(historicosParciales);
+        nodo.setHistoricos(historicosParciales);*/
 
 
     }

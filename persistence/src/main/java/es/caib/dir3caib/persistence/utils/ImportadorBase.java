@@ -69,11 +69,23 @@ public class ImportadorBase {
     @EJB(mappedName = "dir3caib/CatLocalidadEJB/local")
     private CatLocalidadLocal catLocalidadEjb;
 
-    @EJB(mappedName = "dir3caib/ServicioEJB/local")
-    private CatServicioLocal servicioEjb;
+   /* @EJB(mappedName = "dir3caib/ServicioEJB/local")
+    private CatServicioLocal servicioEjb;*/
+
+    @EJB(mappedName = "dir3caib/CatServicioUOEJB/local")
+    private CatServicioUOLocal catServicioUOEjb;
+
+    @EJB(mappedName = "dir3caib/CatServicioOfiEJB/local")
+    private CatServicioLocal catServicioOfiEjb;
 
     @EJB(mappedName = "dir3caib/CatJerarquiaOficinaEJB/local")
     private CatJerarquiaOficinaLocal catJerarquiaOficinaEjb;
+
+    @EJB(mappedName = "dir3caib/CatPoderEJB/local")
+    private CatPoderLocal catPoderEjb;
+
+    @EJB(mappedName = "dir3caib/CatTipoCodigoFuenteExternaEJB/local")
+    private CatTipoCodigoFuenteExternaLocal catTipoFuenteExternaEjb;
 
     public static final SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
 
@@ -91,9 +103,13 @@ public class ImportadorBase {
     public Map<CatAmbitoTerritorialPK, CatAmbitoTerritorial> cacheAmbitoTerritorial = new HashMap<CatAmbitoTerritorialPK, CatAmbitoTerritorial>();
     public Map<Long, CatNivelAdministracion> cacheNivelAdministracion = new TreeMap<Long, CatNivelAdministracion>();
     public Map<String, CatTipoContacto> cacheTipoContacto = new TreeMap<String, CatTipoContacto>();
+    public Map<Long, CatPoder> cachePoder = new TreeMap<Long, CatPoder>();
     public Map<Long, CatServicio> cacheServicioOfi = new TreeMap<Long, CatServicio>();
+    public Map<Long, CatServicioUO> cacheServicioUo = new TreeMap<Long,CatServicioUO>();
     public Map<Long, CatJerarquiaOficina> cacheJerarquiaOficina = new TreeMap<Long, CatJerarquiaOficina>();
+    public Map<Long, CatTipoCodigoFuenteExterna> cacheTipoCodigoFuenteExterna = new TreeMap<Long, CatTipoCodigoFuenteExterna>();
     public Set<String> unidadesExistInBBDD = new TreeSet<String>();
+    public Set<UnidadPK> unidadesExistInBBDDNueva = new TreeSet<UnidadPK>();
     public Set<String> oficinasExistInBBDD = new TreeSet<String>();
     public UnidadesCacheManager cacheUnidad;
 
@@ -186,6 +202,26 @@ public class ImportadorBase {
         }
         log.debug(" TipoContacto : " + cacheTipoContacto.size());
 
+        // CatPoder
+        for (CatPoder cp : catPoderEjb.getAll()) {
+            cachePoder.put(cp.getCodigoPoder(), cp);
+        }
+        log.debug(" Poder : " + cachePoder.size());
+
+        //CatTipoCodigoFuenteExterna
+        for (CatTipoCodigoFuenteExterna fe : catTipoFuenteExternaEjb.getAll()) {
+            cacheTipoCodigoFuenteExterna.put(fe.getCodigoTipoCodigoFuenteExterna(), fe);
+        }
+        log.debug(" CatTipoCodigoFuenteExterna : " + cacheTipoCodigoFuenteExterna.size());
+
+        // CatServicioUO
+        for (CatServicioUO se : catServicioUOEjb.getAll()) {
+            cacheServicioUo.put(se.getCodServicio(), se);
+        }
+        log.debug(" CatServicioUO : " + cacheServicioUo.size());
+
+
+
         long end = System.currentTimeMillis();
         log.debug("Inicialitzades Caches de Importar Unidades en " + Utils.formatElapsedTime(end - start));
 
@@ -193,6 +229,7 @@ public class ImportadorBase {
 
         // Obtenemos todos los códigos de las Unidades que existen en bbdd
         unidadesExistInBBDD.addAll(unidadEjb.getAllCodigos());
+        unidadesExistInBBDDNueva.addAll(unidadEjb.getAllUnidadPK());
 
         end = System.currentTimeMillis();
         log.debug("Inicialitzada Cache Unidades existents en " + Utils.formatElapsedTime(end - start));
@@ -211,7 +248,8 @@ public class ImportadorBase {
         if (isUpdate) { // cache unidades vacia
             cacheUnidad = new UnidadesCacheManager(this.unidadEjb);
         } else { // Si es creación/sincronización solo inicializamos las requeridas(unidades Responsables de las oficinas que se van a sincronizar)
-            List<List<String>> unitsIds = new ArrayList<List<String>>();
+            //List<List<String>> unitsIds = new ArrayList<List<String>>();
+            List<List<UnidadPK>> unitsIds = new ArrayList<List<UnidadPK>>();
             int total = getRequiredUnidades(unitsIds, sincronizacion);
             cacheUnidad = new UnidadesCacheManager(this.unidadEjb, unitsIds, total);
         }
@@ -245,13 +283,16 @@ public class ImportadorBase {
         for (CatJerarquiaOficina je : catJerarquiaOficinaEjb.getAll()) {
             cacheJerarquiaOficina.put(je.getCodigoJerarquiaOficina(), je);
         }
-        log.debug(" CatJerarquiaOficina : " + cacheNivelAdministracion.size());
+        log.debug(" CatJerarquiaOficina : " + cacheJerarquiaOficina.size());
 
         // CatServicio
-        for (CatServicio se : servicioEjb.getAll()) {
+        for (CatServicio se : catServicioOfiEjb.getAll()) {
             cacheServicioOfi.put(se.getCodServicio(), se);
         }
-        log.debug(" ServicioOfi : " + cacheServicioOfi.size());
+        log.debug(" CatServicioOfi : " + cacheServicioOfi.size());
+
+
+
 
         // CatProvincia
         for (CatProvincia ca : catProvinciaEjb.getAll()) {
@@ -306,14 +347,16 @@ public class ImportadorBase {
      * @return
      * @throws Exception
      */
-    private int getRequiredUnidades(List<List<String>> all, Sincronizacion sincronizacion) throws Exception {
+    private int getRequiredUnidades(List<List<UnidadPK>> all, Sincronizacion sincronizacion) throws Exception {
         FileInputStream is1 = null;
         CSVReader reader = null;
 
         // Conjunto donde guardamos todos los códigos de las unidades Responsables para procesarlas
-        Set<String> allCodes = new HashSet<String>();
+        //Set<String> allCodes = new HashSet<String>();
+        Set<UnidadPK> allCodes = new HashSet<UnidadPK>();
 
-        List<String> codigosUnidad = new ArrayList<String>();
+        //List<String> codigosUnidad = new ArrayList<String>();
+        List<UnidadPK> codigosUnidad = new ArrayList<UnidadPK>();
         all.add(codigosUnidad);
 
         int count = 0;
@@ -332,21 +375,22 @@ public class ImportadorBase {
             reader.readNext();
             while ((fila = reader.readNext()) != null) {
 
-                String codUOResponsable = fila[5].trim();
-
+                String codUOResponsable = fila[7].trim();
+                Long versionUOResponsable = Long.valueOf(fila[8].trim());
+                UnidadPK unidadPkResponsable = new UnidadPK(codUOResponsable,versionUOResponsable);
                 // Si no la contiene la añadimos a la lista
                 if (!allCodes.contains(codUOResponsable)) {
                     allCount++;
                     count++;
                     //Traspasamos a la lista final de 500 en 500
                     if (count > 500) {
-                        codigosUnidad = new ArrayList<String>();
+                        codigosUnidad = new ArrayList<UnidadPK>();
                         all.add(codigosUnidad);
                         count = 0;
                     }
 
-                    codigosUnidad.add(codUOResponsable);
-                    allCodes.add(codUOResponsable);
+                    codigosUnidad.add(unidadPkResponsable);
+                    allCodes.add(unidadPkResponsable);
                 }
             }
 
