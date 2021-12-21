@@ -19,27 +19,31 @@ import org.hibernate.annotations.Index;
  */
 @Table(name = "DIR_CONTACTOOFI", schema = "", catalog = "")
 @org.hibernate.annotations.Table(appliesTo = "DIR_CONTACTOOFI", indexes = {
-    @Index(name="DIR_CONTOFI_CATTIPCONT_FK_I", columnNames = {"TIPOCONTACTO"}),
-    @Index(name="DIR_OFICINA_CONTACTOSOFI_FK_I", columnNames = {"CODOFICINA"})
+        @Index(name="DIR_CONTOFI_CATTIPCONT_FK_I", columnNames = {"TIPOCONTACTO"}),
+        @Index(name="DIR_OFICINA_CONTACTOSOFI_FK_I", columnNames = {"CODOFICINA"}),
+        @Index(name="DIR_CONOFI_CESTENT_FK_I", columnNames = {"ESTADO"})
 })
 @Entity
+@SequenceGenerator(name="generator",sequenceName = "DIR_CONOF_SEQ", allocationSize=1)
 public class ContactoOfi implements Serializable {
-  
+
   private Long codContacto;
-	private Oficina oficina;
-	private CatTipoContacto tipoContacto;
-	private String valorContacto;
-	private boolean visibilidad;
+  private Oficina oficina;
+  private CatTipoContacto tipoContacto;
+  private String valorContacto;
+  private boolean visibilidad;
+  private CatEstadoEntidad estado;
 
-	public ContactoOfi(){
+  public ContactoOfi(){
 
-	}
+  }
 
-	public void finalize() throws Throwable {
+  public void finalize() throws Throwable {
 
-	}
+  }
   @Column(name = "CODCONTACTO", nullable = false, length = 6)
   @Id
+  @GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "generator")
   public Long getCodContacto() {
     return codContacto;
   }
@@ -47,21 +51,21 @@ public class ContactoOfi implements Serializable {
   public void setCodContacto(Long codContacto) {
     this.codContacto = codContacto;
   }
-  
-  
+
+
 
   /**
-   * @return the codOficina
+   * @return the oficina
    */
   @ManyToOne
-  @JoinColumn(name="CODOFICINA") 
+  @JoinColumn(name="CODOFICINA")
   @ForeignKey(name="DIR_CONTACTOOFI_OFICINA_FK")
   public Oficina getOficina() {
     return oficina;
   }
 
   /**
-   * @param codOficina the codOficina to set
+   * @param oficina the codOficina to set
    */
   public void setOficina(Oficina oficina) {
     this.oficina = oficina;
@@ -71,7 +75,7 @@ public class ContactoOfi implements Serializable {
    * @return the tipoContacto
    */
   @ManyToOne
-  @JoinColumn(name="TIPOCONTACTO") 
+  @JoinColumn(name="TIPOCONTACTO")
   @ForeignKey(name="DIR_CONTACOFI_CATTIPCONTAC_FK")
   public CatTipoContacto getTipoContacto() {
     return tipoContacto;
@@ -113,7 +117,19 @@ public class ContactoOfi implements Serializable {
   public void setVisibilidad(boolean visibilidad) {
     this.visibilidad = visibilidad;
   }
-  
-  
+
+
+  @ManyToOne
+  @JoinColumn(name="ESTADO")
+  @ForeignKey(name="DIR_CONOFI_CESTENT_FK")
+  public CatEstadoEntidad getEstado() {
+    return estado;
+  }
+
+  public void setEstado(CatEstadoEntidad estado) {
+    this.estado = estado;
+  }
+
+
 
 }

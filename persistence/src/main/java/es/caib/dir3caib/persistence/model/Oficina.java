@@ -39,7 +39,8 @@ public class Oficina implements Serializable {
 	private CatJerarquiaOficina tipoOficina;
 	private Unidad codUoResponsable;
 	private Oficina codOfiResponsable;
-    private CatTipoCodigoFuenteExterna fuenteExterna;
+   // private CatTipoCodigoFuenteExterna fuenteExterna; //TODO PEDIR A MADRID, no cuadra con el manual de atributos.
+    private String fuenteExterna;
 	private String horarioAtencion;
 	private String diasSinHabiles;
 	private String observaciones;
@@ -61,7 +62,7 @@ public class Oficina implements Serializable {
 	private String direccionObservaciones;
 	private List<RelacionSirOfi> sirOfi;
 	private List<RelacionOrganizativaOfi> organizativasOfi;
-	private Set<CatServicio> servicios;
+	private Set<ServicioOfi> servicios;
     private List<ContactoOfi> contactos;
     private Set<Oficina> historicosOfi;
 
@@ -85,7 +86,7 @@ public class Oficina implements Serializable {
     this.codOfiResponsable = new Oficina(codOfiResponsable);
   }
 
-  public Oficina(String codigo, String denominacion, String codUoResponsable, String codOfiResponsable, Set<CatServicio> servicios) {
+  public Oficina(String codigo, String denominacion, String codUoResponsable, String codOfiResponsable, Set<ServicioOfi> servicios) {
     this.codigo = codigo;
     this.denominacion = denominacion;
     this.codUoResponsable = new Unidad(codUoResponsable);
@@ -237,8 +238,18 @@ public class Oficina implements Serializable {
     this.codOfiResponsable = codOfiResponsable;
   }
 
+  @Column(name = "FUENTEEXTERNA" ,length=40)
+  public String getFuenteExterna() {
+    return fuenteExterna;
+  }
 
-  @ManyToOne()
+  public void setFuenteExterna(String fuenteExterna) {
+    this.fuenteExterna = fuenteExterna;
+  }
+
+
+  //Revisar con Madrid
+  /*@ManyToOne()
   @JoinColumn(name="FUENTEEXTERNA")
   @ForeignKey(name="DIR_OFICINA_CFUEXT_FK")
   @JsonIgnore
@@ -248,7 +259,7 @@ public class Oficina implements Serializable {
 
   public void setFuenteExterna(CatTipoCodigoFuenteExterna fuenteExterna) {
     this.fuenteExterna = fuenteExterna;
-  }
+  }*/
 
   /**
    * @return the horarioAtencion
@@ -598,7 +609,7 @@ public class Oficina implements Serializable {
   /**
    * @return the servicios
    */
-  @ManyToMany(cascade=CascadeType.PERSIST, fetch= FetchType.EAGER)
+  /*@ManyToMany(cascade=CascadeType.PERSIST, fetch= FetchType.EAGER)
   @JoinTable(name="DIR_SERVICIOOFI", 
         joinColumns=
             @JoinColumn(name="CODOFICINA"),
@@ -610,10 +621,20 @@ public class Oficina implements Serializable {
     return servicios;
   }
 
-  /**
+  *//**
    * @param servicios the servicios to set
-   */
+   *//*
   public void setServicios(Set<CatServicio> servicios) {
+    this.servicios = servicios;
+  }*/
+
+  @OneToMany(mappedBy = "unidad")
+  @JsonIgnore
+  public Set<ServicioOfi> getServicios() {
+    return servicios;
+  }
+
+  public void setServicios(Set<ServicioOfi> servicios) {
     this.servicios = servicios;
   }
 
@@ -638,7 +659,7 @@ public class Oficina implements Serializable {
    * @return the historicosOfi
    */
   //TODO ELIMINAR
-  @ManyToMany(cascade=CascadeType.PERSIST, fetch= FetchType.EAGER)
+  /*@ManyToMany(cascade=CascadeType.PERSIST, fetch= FetchType.EAGER)
   @JoinTable(name="DIR_HISTORICOOFI",
                joinColumns=@JoinColumn(name="CODANTERIOR"),
                inverseJoinColumns=@JoinColumn(name="CODULTIMA"))
@@ -648,12 +669,12 @@ public class Oficina implements Serializable {
     return historicosOfi;
   }
 
-  /**
+  *//**
    * @param historicosOfi the historicosOfi to set
-   */
+   *//*
   public void setHistoricosOfi(Set<Oficina> historicosOfi) {
     this.historicosOfi = historicosOfi;
-  }
+  }*/
 
   @OneToMany(mappedBy = "oficinaAnterior")
   @JsonIgnore
@@ -688,7 +709,7 @@ public class Oficina implements Serializable {
     return Objects.hash(codigo);
   }
 
-  @Transient
+ /* @Transient
   public Boolean getOficinaSir() {
 
     for (CatServicio servicio : servicios) {
@@ -699,9 +720,22 @@ public class Oficina implements Serializable {
       }
     }
     return false;
-  }
+  }*/
 
   @Transient
+  public Boolean getOficinaSir() {
+
+    for (ServicioOfi servicio : servicios) {
+      if (servicio.getServicio().getCodServicio().equals(Dir3caibConstantes.SERVICIO_SIR) ||
+              servicio.getServicio().getCodServicio().equals(Dir3caibConstantes.SERVICIO_SIR_ENVIO) ||
+              servicio.getServicio().getCodServicio().equals(Dir3caibConstantes.SERVICIO_SIR_RECEPCION)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /*@Transient
   public Boolean getOficinaInformacion() {
 
     for (CatServicio servicio : servicios) {
@@ -710,7 +744,20 @@ public class Oficina implements Serializable {
       }
     }
     return false;
+  }*/
+
+  @Transient
+  public Boolean getOficinaInformacion() {
+
+    for (ServicioOfi servicio : servicios) {
+      if (servicio.getServicio().getCodServicio().equals(Dir3caibConstantes.SERVICIO_OFI_INFORMACION)) {
+        return true;
+      }
+    }
+    return false;
   }
+
+
 
 
 }
