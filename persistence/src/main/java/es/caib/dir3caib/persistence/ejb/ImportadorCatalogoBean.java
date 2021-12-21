@@ -637,6 +637,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                             if (servicio == null) { // Si es nuevo creamos el objeto a introducir
                                 servicio = new CatServicioUO();
                                 servicio.setCodServicio(Long.parseLong(codigoServicio));
+
                             }
                             servicio.setDescServicio(fila[1]);
                             servicio.setTipo(catTipoServicio);
