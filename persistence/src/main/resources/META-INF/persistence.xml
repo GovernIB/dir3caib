@@ -37,6 +37,10 @@ http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
         <class>es.caib.dir3caib.persistence.model.CatServicio</class>
         <class>es.caib.dir3caib.persistence.model.Unidad</class>
         <class>es.caib.dir3caib.persistence.model.Sincronizacion</class>
+        <class>es.caib.dir3caib.persistence.model.HistoricoUO</class>
+        <class>es.caib.dir3caib.persistence.model.HistoricoOfi</class>
+        <class>es.caib.dir3caib.persistence.model.CodigoUnidadOrganica</class>
+        <class>es.caib.dir3caib.persistence.model.NifCifUnidadOrganica</class>
 
 
         <properties>

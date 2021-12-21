@@ -4,13 +4,7 @@
  */
 package es.caib.dir3caib.persistence.ejb;
 
-import es.caib.dir3caib.persistence.model.CatEstadoEntidad;
-import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
-import es.caib.dir3caib.persistence.model.Oficina;
-import es.caib.dir3caib.persistence.model.RelacionOrganizativaOfi;
-import es.caib.dir3caib.persistence.model.RelacionSirOfi;
-import es.caib.dir3caib.persistence.model.CatServicio;
-import es.caib.dir3caib.persistence.model.Unidad;
+import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.utils.DataBaseUtils;
 import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.NodoUtils;
@@ -802,7 +796,9 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
     @Override
     @SuppressWarnings("unchecked")
     public List<Oficina> responsableByUnidadEstado(String codigoUnidadResponsable, String estado) throws Exception {
-        Query q = em.createQuery("Select oficina.codigo, oficina.denominacion, oficina.codUoResponsable.codigo from Oficina as oficina where " +
+        //TODO DESCOMENTAR Y ARREGLAR
+        List<Oficina> oficinas = new ArrayList<Oficina>();
+        /*Query q = em.createQuery("Select oficina.codigo, oficina.denominacion, oficina.codUoResponsable.codigo from Oficina as oficina where " +
            " oficina.codOfiResponsable is null and oficina.codUoResponsable.codUnidadRaiz.codigo =:codigoUnidadResponsable and oficina.estado.codigoEstadoEntidad =:estado " +
            " order by oficina.codigo");
 
@@ -828,14 +824,14 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
 
             oficinas.add(oficina);
-        }
+        }*/
 
         return oficinas;
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public List<Oficina> dependienteByUnidadEstado(String codigoUnidadResponsable, String estado) throws Exception {
+    //TODO MIRAR DE VER SI EL MÉTODO MÁS ABAJO FUNCIONA BIEN Y ELIMINAR ESTE
+   // @Override
+    /*public List<Oficina> dependienteByUnidadEstado2(String codigoUnidadResponsable, String estado) throws Exception {
         Query q = em.createQuery("Select  oficina.codigo, oficina.denominacion, oficina.codUoResponsable.codigo, oficina.codOfiResponsable.codigo from Oficina as oficina where " +
            "oficina.codUoResponsable.codUnidadRaiz.codigo =:codigoUnidadResponsable and oficina.estado.codigoEstadoEntidad =:estado and " +
            "oficina.codOfiResponsable is not null order by oficina.codigo");
@@ -859,6 +855,40 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
             }
 
             Oficina oficina = new Oficina((String) object[0], (String) object[1], (String) object[2], (String) object[3], servicios);
+
+            oficinas.add(oficina);
+        }
+
+        return oficinas;
+
+    }*/
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Oficina> dependienteByUnidadEstado(String codigoUnidadResponsable, String estado) throws Exception {
+        Query q = em.createQuery("Select  oficina.codigo, oficina.denominacion, oficina.codUoResponsable.codigo, oficina.codOfiResponsable.codigo, oficina.servicios from Oficina as oficina where " +
+                "oficina.codUoResponsable.codUnidadRaiz.codigo =:codigoUnidadResponsable and oficina.estado.codigoEstadoEntidad =:estado and " +
+                "oficina.codOfiResponsable is not null order by oficina.codigo");
+
+        q.setParameter("codigoUnidadResponsable", codigoUnidadResponsable);
+        q.setParameter("estado", estado);
+
+        List<Object[]> result = q.getResultList();
+        List<Oficina> oficinas = new ArrayList<Oficina>();
+
+        for (Object[] object : result) {
+
+            /*Query q2 = em.createNativeQuery("select codservicio from DIR_SERVICIOOFI where codoficina=?");
+            q2.setParameter(1, object[0]);
+
+            List<Object> result2 = q2.getResultList();
+
+            Set<CatServicio> servicios = new HashSet<CatServicio>();
+            for (Object obj : result2) {
+                servicios.add(new CatServicio(new Long(obj.toString())));
+            }*/
+
+            Oficina oficina = new Oficina((String) object[0], (String) object[1], (String) object[2], (String) object[3], (Set< ServicioOfi>)object[4]);
 
             oficinas.add(oficina);
         }

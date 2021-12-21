@@ -20,7 +20,7 @@ import java.util.List;
 @Stateless(name = "ServicioEJB")
 @SecurityDomain("seycon")
 @RolesAllowed({"DIR_ADMIN", "DIR_WS"})
-public class CatServicioBean extends BaseEjbJPA<CatServicio, Long> implements CatServicioLocal{
+public class CatServicioBean extends BaseEjbJPA<CatServicio, Long> implements CatServicioLocal {
 
     protected final Logger log = Logger.getLogger(getClass());
 

@@ -55,6 +55,13 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
     @EJB(mappedName = "dir3caib/RelacionSirOfiEJB/local")
     private RelacionSirOfiLocal relSirOfiEjb;
 
+    @EJB(mappedName = "dir3caib/HistoricoOfiEJB/local")
+    private HistoricoOfiLocal historicoOfiEjb;
+
+    @EJB(mappedName = "dir3caib/ServicioOfiEJB/local")
+    private ServicioOfiLocal servicioOfiEjb;
+
+
 
     private Boolean actualizacion;
 
@@ -79,7 +86,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
         // Averiguamos si es una Carga de datos inicial o una Actualización
         actualizacion = sincronizacion.getFechaInicio() != null;
 
-        // Inicializamos la cache para la importación de Unidades
+        // Inicializamos la cache para la importación de Oficinas
         cacheImportadorOficinas(actualizacion, sincronizacion);
 
         // Tiempos
@@ -180,7 +187,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                     importarContactos(fichero, reader);
 
                     //HISTORICOS OFI
-                    importarHistoricos(fichero, reader, actualizacion);
+                    importarHistoricos(fichero, reader);
 
                     // Relaciones organizativas
                     importarRelacionesOrganizativas(fichero, reader);
@@ -235,46 +242,65 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
         oficina.setFechaImportacion(new Date());
 
         // Comunidad Autonoma
-        String codigoComunidadAutonoma = fila[21].trim();
-        if (!codigoComunidadAutonoma.isEmpty()) {
-            oficina.setCodComunidad(cacheComunidadAutonoma.get(new Long(codigoComunidadAutonoma)));
+      //  String codigoComunidadAutonoma = fila[21].trim();
+        Long codigoComunidadAutonoma = Long.valueOf(fila[26].trim());
+        if (codigoComunidadAutonoma!=null) {
+            oficina.setCodComunidad(cacheComunidadAutonoma.get(codigoComunidadAutonoma));
         } else {
             oficina.setCodComunidad(null);
         }
 
         // Pais
-        String codigoPais = fila[20].trim();
-        if (!codigoPais.isEmpty()) {
-            oficina.setCodPais(cachePais.get(new Long(codigoPais)));
+        //String codigoPais = fila[20].trim();
+        Long codigoPais = Long.valueOf(fila[25].trim());
+        if (codigoPais!=null) {
+            oficina.setCodPais(cachePais.get(codigoPais));
         } else {
             oficina.setCodPais(null);
         }
 
-        // Codigo Postal
-        oficina.setCodPostal(fila[19].trim());
 
         //Unidad organica responsable
-        String codUOResponsable = fila[5].trim();
+        //String codUOResponsable = fila[5].trim();
+        String codUOResponsable = fila[7].trim();
+        Long versionUOResponsable = Long.valueOf(fila[8].trim());
+        UnidadPK unidadPKResponsable = new UnidadPK(codUOResponsable,versionUOResponsable);
         if (!codUOResponsable.isEmpty()) {
-            oficina.setCodUoResponsable(cacheUnidad.get(codUOResponsable));
+            //TODO ELIMINAR
+           // oficina.setCodUoResponsable(cacheUnidad.get(codUOResponsable));
+            oficina.setCodUoResponsable(cacheUnidad.get(unidadPKResponsable));
         } else {
             oficina.setCodUoResponsable(null);
         }
 
         // atributos directos
-        oficina.setComplemento(fila[18].trim());
+       // oficina.setComplemento(fila[18].trim());
+        oficina.setComplemento(fila[23].trim());
+       // oficina.setDenominacion(fila[1].trim());
         oficina.setDenominacion(fila[1].trim());
-        oficina.setDiasSinHabiles(fila[10].trim());
-        oficina.setDirExtranjera(fila[25].trim());
-        oficina.setDireccionObservaciones(fila[27].trim());
-        oficina.setHorarioAtencion(fila[9].trim());
-        oficina.setLocExtranjera(fila[26].trim());
-        oficina.setNombreVia(fila[16].trim());
-        oficina.setNumVia(fila[17].trim());
-        oficina.setCodPostal(fila[19].trim());
+        oficina.setDenomlenguacooficial(fila[2].trim());
+        oficina.setIdiomalengua(Integer.valueOf(fila[3].trim()));
+        oficina.setFuenteExterna(fila[12].trim());
+      //  oficina.setDiasSinHabiles(fila[10].trim());
+        oficina.setDiasSinHabiles(fila[14].trim());
+       // oficina.setDirExtranjera(fila[25].trim());
+        oficina.setDirExtranjera(fila[30].trim());
+        //oficina.setDireccionObservaciones(fila[27].trim());
+        oficina.setDireccionObservaciones(fila[32].trim());
+       // oficina.setHorarioAtencion(fila[9].trim());
+        oficina.setHorarioAtencion(fila[13].trim());
+       // oficina.setLocExtranjera(fila[26].trim());
+        oficina.setLocExtranjera(fila[31].trim());
+       // oficina.setNombreVia(fila[16].trim());
+        oficina.setNombreVia(fila[21].trim());
+      //  oficina.setNumVia(fila[17].trim());
+        oficina.setNumVia(fila[22].trim());
+      //  oficina.setCodPostal(fila[19].trim());
+        oficina.setCodPostal(fila[24].trim());
 
         // Estado
-        String codigoEstado = fila[2].trim();
+       // String codigoEstado = fila[2].trim();
+        String codigoEstado = fila[4].trim();
         if (!codigoEstado.isEmpty()) {
             oficina.setEstado(cacheEstadoEntidad.get(codigoEstado));
         } else {
@@ -282,7 +308,8 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
         }
 
         // Fecha alta
-        String sfechaAlta = fila[12].trim();
+       // String sfechaAlta = fila[12].trim();
+        String sfechaAlta = fila[16].trim();
         if (!sfechaAlta.isEmpty()) {
             oficina.setFechaAltaOficial(formatoFecha.parse(sfechaAlta));
         } else {
@@ -290,7 +317,8 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
         }
 
         // Fecha extincioón
-        String sfechaExtincion = fila[13].trim();
+       // String sfechaExtincion = fila[13].trim();
+        String sfechaExtincion = fila[17].trim();
         if (!sfechaExtincion.isEmpty()) {
             oficina.setFechaExtincion(formatoFecha.parse(sfechaExtincion));
         } else {
@@ -298,31 +326,43 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
         }
 
         // Fecha anulación
-        String sfechaAnulacion = fila[14].trim();
+    //    String sfechaAnulacion = fila[14].trim();
+        String sfechaAnulacion = fila[18].trim();
         if (!sfechaAnulacion.isEmpty()) {
             oficina.setFechaExtincion(formatoFecha.parse(sfechaAnulacion));
         } else {
             oficina.setFechaAnulacion(null);
         }
 
+        //Fecha Ultima actualización
+        String sfechaUltAc = fila[19].trim();
+        if (!sfechaUltAc.isEmpty()) {
+            oficina.setFechaUltimaActualizacion(formatoFecha.parse(sfechaUltAc));
+        } else {
+            oficina.setFechaUltimaActualizacion(null);
+        }
+
         //Localidad de la dirección
-        String codigoProv = fila[22].trim();
-        String codigoEntGeog = fila[24].trim();
+     //   String codigoProv = fila[22].trim();
+        Long codigoProv = Long.valueOf(fila[27].trim());
+       // String codigoEntGeog = fila[24].trim();
+        Long codigoEntGeog = Long.valueOf(fila[29].trim());
         CatProvincia provincia = null;
-        if (!codigoProv.isEmpty()) {
-            provincia = cacheProvincia.get(new Long(codigoProv));
+        if (codigoProv!=null) {
+            provincia = cacheProvincia.get(codigoProv);
         }
 
         //Entidad Geografica
         CatEntidadGeografica entidadGeograficaD = null;
-        if (!codigoEntGeog.isEmpty()) {
+        if (codigoEntGeog!=null) {
             entidadGeograficaD = cacheEntidadGeografica.get(codigoEntGeog);
         }
 
         //Localidad
-        String codigoLocalidad = fila[23].trim();
-        if (!codigoLocalidad.isEmpty() && !codigoProv.isEmpty() && !codigoEntGeog.isEmpty()) {
-            CatLocalidadPK catLocalidadPKD = new CatLocalidadPK(new Long(codigoLocalidad), provincia, entidadGeograficaD);
+     //   String codigoLocalidad = fila[23].trim();
+       Long codigoLocalidad = Long.valueOf(fila[28].trim());
+        if (codigoLocalidad!=null && codigoProv!=null && codigoEntGeog!=null) {
+            CatLocalidadPK catLocalidadPKD = new CatLocalidadPK(codigoLocalidad, provincia, entidadGeograficaD);
             CatLocalidad localidadD = cacheLocalidad.get(catLocalidadPKD);
             oficina.setLocalidad(localidadD);
         } else {
@@ -330,31 +370,35 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
         }
 
         //Nivel Administración
-        String codigoNivelAdmin = fila[3].trim();
-        if (!codigoNivelAdmin.isEmpty()) {
-            oficina.setNivelAdministracion(cacheNivelAdministracion.get(new Long(codigoNivelAdmin)));
+        //String codigoNivelAdmin = fila[3].trim();
+        Long codigoNivelAdmin = Long.valueOf(fila[5].trim());
+        if (codigoNivelAdmin!=null) {
+            oficina.setNivelAdministracion(cacheNivelAdministracion.get(codigoNivelAdmin));
         } else {
             oficina.setNivelAdministracion(null);
         }
 
         // TipoOficina
-        String tipoOficina = fila[4].trim();
-        if (!tipoOficina.isEmpty()) {
-            oficina.setTipoOficina(cacheJerarquiaOficina.get(new Long(tipoOficina)));
+        //String tipoOficina = fila[4].trim();
+        Long tipoOficina = Long.valueOf(fila[6].trim());
+        if (tipoOficina!=null) {
+            oficina.setTipoOficina(cacheJerarquiaOficina.get(tipoOficina));
         } else {
             oficina.setTipoOficina(null);
         }
 
         // Tipo Via
-        String tipoVia = fila[15].trim();
-        if (!tipoVia.isEmpty()) {
-            oficina.setTipoVia(cacheTipoVia.get(new Long(tipoVia)));
+       // String tipoVia = fila[15].trim();
+        Long tipoVia = Long.valueOf(fila[20].trim());
+        if (tipoVia!=null) {
+            oficina.setTipoVia(cacheTipoVia.get(tipoVia));
         } else {
             oficina.setTipoVia(null);
         }
 
         // Asignamos la Oficina Responsable
-        String codigoOfiResponsable = fila[7].trim();
+      //  String codigoOfiResponsable = fila[7].trim();
+        String codigoOfiResponsable = fila[10].trim();
         Oficina ofiResponsable = null;
         if (!codigoOfiResponsable.isEmpty()) {
 
@@ -378,7 +422,10 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
         oficina.setServicios(null);
 
         // Eliminamos la relacion con los historicos
-        oficina.setHistoricosOfi(null);
+        //TODO ELIMINAR
+       // oficina.setHistoricosOfi(null);
+        oficina.setHistoricosAnterior(null);
+        oficina.setHistoricosUltima(null);
     }
 
 
@@ -387,10 +434,9 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
      *
      * @param nombreFichero
      * @param reader
-     * @param actualizacion
      * @throws Exception
      */
-    private void importarHistoricos(String nombreFichero, CSVReader reader, boolean actualizacion) throws Exception {
+    private void importarHistoricos(String nombreFichero, CSVReader reader) throws Exception {
 
         if (Dir3caibConstantes.OFI_HISTORICOS_OFI.equals(nombreFichero)) {
 
@@ -410,7 +456,23 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                     if (!codigoOficinaUltima.isEmpty() && !codigoOficinaAnterior.isEmpty() && oficinasExistInBBDD.contains(codigoOficinaUltima)) {// Si no están vacios
 
                         // Creamos el HO mediante una NativeQuery muy eficiente
-                        oficinaEjb.crearHistoricoOficina(codigoOficinaAnterior, codigoOficinaUltima);
+                        Oficina oficinaAnterior = oficinaEjb.getReference(codigoOficinaAnterior);
+                        Oficina oficinaUltima = oficinaEjb.getReference(codigoOficinaUltima);
+                        HistoricoOfi historicoOfi = new HistoricoOfi();
+                        historicoOfi.setOficinaAnterior(oficinaAnterior);
+                        historicoOfi.setOficinaUltima(oficinaUltima);
+                        historicoOfi.setMotivoRelacion(fila[5].trim());
+
+                        //Estado Entidad
+                        String codigoEstado = fila[4].trim();
+                        if (!codigoEstado.isEmpty()) {
+                            historicoOfi.setEstado(cacheEstadoEntidad.get(codigoEstado));
+                        } else {
+                            historicoOfi.setEstado(null);
+                        }
+
+                        //oficinaEjb.crearHistoricoOficina(codigoOficinaAnterior, codigoOficinaUltima);
+                        historicoOfiEjb.persistReal(historicoOfi);
 
                         count++;
                         //Cada 500 realizamos flush y clear para evitar problemas de outofmemory
@@ -471,6 +533,14 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                         Oficina oficina = oficinaEjb.getReference(sOficina);
                         contacto.setOficina(oficina);
 
+                        //Estado Entidad
+                        String codigoEstado = fila[4].trim();
+                        if (!codigoEstado.isEmpty()) {
+                            contacto.setEstado(cacheEstadoEntidad.get(codigoEstado));
+                        } else {
+                            contacto.setEstado(null);
+                        }
+
                         //Tipo contacto
                         contacto.setTipoContacto(cacheTipoContacto.get(stipoContacto));
 
@@ -524,18 +594,19 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
             while ((fila = reader.readNext()) != null) {
                 //Obtenemos codigo y miramos si ya existe en la BD
                 //try {
-                    String sOficina = fila[0].trim();
-                    String sUnidad = fila[2].trim();
+                    String codigoOficina = fila[0].trim();
+                    String codigoUnidad = fila[2].trim();
+                    String versionUnidad = fila[3].trim();
 
-                    if (!sOficina.isEmpty() && !sUnidad.isEmpty()) {
+                    if (!codigoOficina.isEmpty() && !codigoUnidad.isEmpty()) {
 
                         boolean existeix;
 
                         RelacionOrganizativaOfi relacionOrganizativaOfi;
                         //Miramos si existe la relacionOrganizativa
-                        if (cache.existsUnidadOficina(sUnidad, sOficina)) {
+                        if (cache.existsUnidadOficina(codigoUnidad, versionUnidad, codigoOficina)) {
                             long s1 = System.currentTimeMillis();
-                            relacionOrganizativaOfi = relOrgOfiEjb.findByPKs(sUnidad, sOficina);
+                            relacionOrganizativaOfi = relOrgOfiEjb.findByPKs(codigoUnidad, versionUnidad,codigoOficina);
                             existeix = true;
                             findby = findby + (System.currentTimeMillis() - s1);
                         } else {
@@ -546,16 +617,17 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                         if (relacionOrganizativaOfi == null) {
                             relacionOrganizativaOfi = new RelacionOrganizativaOfi();
 
-                            Oficina oficina = oficinaEjb.getReference(sOficina);
+                            Oficina oficina = oficinaEjb.getReference(codigoOficina);
 
-                            Unidad unidad = unidadEjb.getReference(sUnidad);
+                            //Unidad unidad = unidadEjb.getReference(codigoUnidad);
+                            Unidad unidad = unidadEjb.findByPKsReduced(codigoUnidad,Long.valueOf(versionUnidad));
 
                             relacionOrganizativaOfi.setOficina(oficina);
                             relacionOrganizativaOfi.setUnidad(unidad);
                         }
 
                         //Actualizamos el estado en ambos casos
-                        String codigoEstado = fila[4].trim();
+                        String codigoEstado = fila[5].trim();
                         if (!codigoEstado.isEmpty()) {
                             relacionOrganizativaOfi.setEstado(catEstadoEntidadEjb.getReference(codigoEstado));
                         }
@@ -611,34 +683,36 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
             while ((fila = reader.readNext()) != null) {
                 //Obtenemos codigo y miramos si ya existe en la BD
                 //try {
-                    String sOficina = fila[0].trim();
-                    String sUnidad = fila[2].trim();
+                    String codigoOficina = fila[0].trim();
+                    String codigoUnidad = fila[2].trim();
+                    String versionUnidad = fila[3].trim();
 
-                    if (!sOficina.isEmpty() && !sUnidad.isEmpty()) {
+                    if (!codigoOficina.isEmpty() && !codigoUnidad.isEmpty()) {
 
                         boolean existe;
                         RelacionSirOfi relacionSirOfi = null;
 
                         //Miramos si existe previamente la relacionSir
-                        if (cache.existsUnidadOficina(sUnidad, sOficina)) {
+                        if (cache.existsUnidadOficina(codigoUnidad, versionUnidad,codigoOficina)) {
                             long s1 = System.currentTimeMillis();
-                            relacionSirOfi = relSirOfiEjb.findByPKs(sUnidad, sOficina);
+                            relacionSirOfi = relSirOfiEjb.findByPKs(codigoUnidad, versionUnidad, codigoOficina);
                             existe = true;
                             findby = findby + (System.currentTimeMillis() - s1);
                         } else {
                             existe = false;
                             relacionSirOfi = new RelacionSirOfi();
-                            Oficina oficina = oficinaEjb.getReference(sOficina);
+                            Oficina oficina = oficinaEjb.getReference(codigoOficina);
                             if (oficina == null) {
-                                oficina = oficinaEjb.getReference(sOficina);
+                                oficina = oficinaEjb.getReference(codigoOficina);
                             }
 
-                            Unidad unidad = unidadEjb.getReference(sUnidad);
+                            Unidad unidad = unidadEjb.getReference(Long.valueOf(codigoUnidad));
+
 
                             relacionSirOfi.setOficina(oficina);
                             relacionSirOfi.setUnidad(unidad);
                         }
-                        String codigoEstado = fila[4].trim();
+                        String codigoEstado = fila[5].trim();
                         if (!codigoEstado.isEmpty()) {
                             relacionSirOfi.setEstado(catEstadoEntidadEjb.getReference(codigoEstado));
                         }
@@ -681,6 +755,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
      * @param actualizacion
      * @throws Exception
      */
+    //TODO sustituir el codigo por el de importarServiciosUO de ImportarUnidadesBean
     private void importarServicios(String nombreFichero, CSVReader reader, boolean actualizacion) throws Exception {
 
 
@@ -700,8 +775,24 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
 
                     if (!codigoOficina.isEmpty() && !codigoServicio.isEmpty() && oficinasExistInBBDD.contains(codigoOficina)) { // Si no están vacios
 
-                        // Creamos el Servicio mediante una NativeQuery muy eficiente
-                        oficinaEjb.crearServicioOficina(codigoOficina, Long.valueOf(codigoServicio));
+                        Oficina oficina = oficinaEjb.getReference(codigoOficina);
+
+
+                        ServicioOfi servicioOfi = new ServicioOfi();
+                        servicioOfi.setOficina(oficina);
+                        servicioOfi.setServicio(cacheServicioOfi.get(codigoServicio));
+
+                        //Estado Entidad
+                        String codigoEstado = fila[4].trim();
+                        if (!codigoEstado.isEmpty()) {
+                            servicioOfi.setEstado(cacheEstadoEntidad.get(codigoEstado));
+                        } else {
+                            servicioOfi.setEstado(null);
+                        }
+
+
+                        servicioOfiEjb.persistReal(servicioOfi);
+                       // oficinaEjb.crearServicioOficina(codigoOficina, Long.valueOf(codigoServicio));
 
                         count++;
                         if (count % 500 == 0) {

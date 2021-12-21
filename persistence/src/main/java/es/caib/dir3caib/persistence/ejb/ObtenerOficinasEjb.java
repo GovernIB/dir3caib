@@ -132,12 +132,14 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
                 // miramos que no esté extinguida o anulada antes de la primera sincro.
                 if (unidadEjb.unidadValida(unidad, fechaSincronizacion)) {
                     unidades.add(unidad);
+                    /*
+                    //TODO DESCOMENTAR Y ARREGLAR
                     Set<Unidad> historicosRaiz = unidad.getHistoricoUO();
                     if (historicosRaiz != null) {
                         for (Unidad historico : historicosRaiz) {
                             unidades.add(historico);
                         }
-                    }
+                    }*/
                 }
             }
         }

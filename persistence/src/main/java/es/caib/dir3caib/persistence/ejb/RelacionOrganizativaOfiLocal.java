@@ -17,7 +17,7 @@ public interface RelacionOrganizativaOfiLocal extends BaseEjb<RelacionOrganizati
 
   void deleteAll() throws Exception;
 
-  RelacionOrganizativaOfi findByPKs(String codigoUnidad, String codigoOficina) throws Exception;
+  RelacionOrganizativaOfi findByPKs(String codigoUnidad, String versionUnidad, String codigoOficina) throws Exception;
 
   List<String> getUnidadesOficinas() throws Exception;
 

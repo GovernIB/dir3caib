@@ -45,13 +45,14 @@ public class RelacionOrganizativaOfiBean extends BaseEjbJPA<RelacionOrganizativa
     
     
     @Override
-    public RelacionOrganizativaOfi findByPKs(String codigoUnidad, String codigoOficina) throws Exception {
+    public RelacionOrganizativaOfi findByPKs(String codigoUnidad, String versionUnidad, String codigoOficina) throws Exception {
 
        Query query = em.createQuery("Select relacionOrganizativaOfi from RelacionOrganizativaOfi as relacionOrganizativaOfi "
           + " where relacionOrganizativaOfi.oficina.codigo = :codigoOficina AND " 
-          + " relacionOrganizativaOfi.unidad.codigo = :codigoUnidad");
+          + " relacionOrganizativaOfi.unidad.codigo = :codigoUnidad AND relacionOrganizativaOfi.unidad.version = :versionUnidad");
        query.setParameter("codigoUnidad", codigoUnidad);
        query.setParameter("codigoOficina", codigoOficina);
+       query.setParameter("versionUnidad", versionUnidad);
 
        try {
          return (RelacionOrganizativaOfi)query.getSingleResult();
@@ -65,8 +66,11 @@ public class RelacionOrganizativaOfiBean extends BaseEjbJPA<RelacionOrganizativa
     public List<String> getUnidadesOficinas() throws Exception  {
       //select concat(c.firstname, ' ', c.lastname) as fullname from Contact c
       
-      String str  = "Select concat(relacionOrganizativaOfi.unidad.codigo, '_', relacionOrganizativaOfi.oficina.codigo) "
-        +	"from RelacionOrganizativaOfi as relacionOrganizativaOfi ";
+      /*String str  = "Select concat(relacionOrganizativaOfi.unidad.codigo, '_', relacionOrganizativaOfi.oficina.codigo) "
+        +	"from RelacionOrganizativaOfi as relacionOrganizativaOfi ";*/
+
+        String str  = "Select concat(relacionOrganizativaOfi.unidad.codigo, '_', relacionOrganizativaOfi.unidad.version, '_', relacionOrganizativaOfi.oficina.codigo) "
+                +	"from RelacionOrganizativaOfi as relacionOrganizativaOfi ";
         
       Query query = em.createQuery(str);
       
@@ -92,7 +96,7 @@ public class RelacionOrganizativaOfiBean extends BaseEjbJPA<RelacionOrganizativa
         return (Long) q.getSingleResult();
     }
 
-    @SuppressWarnings("unchecked")
+
     @Override
     public List<RelacionOrganizativaOfi> getPagination(int inicio) throws Exception {
 

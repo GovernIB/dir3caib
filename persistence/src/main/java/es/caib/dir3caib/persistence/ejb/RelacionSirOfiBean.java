@@ -45,13 +45,14 @@ public class RelacionSirOfiBean extends BaseEjbJPA<RelacionSirOfi, Long>
     
     
     @Override
-    public RelacionSirOfi findByPKs(String codigoUnidad, String codigoOficina) throws Exception {
+    public RelacionSirOfi findByPKs(String codigoUnidad, String versionUnidad,String codigoOficina) throws Exception {
 
        Query query = em.createQuery("select relacionSirOfi from RelacionSirOfi as relacionSirOfi "
           + " where relacionSirOfi.oficina.codigo = :codigoOficina AND " 
-          + " relacionSirOfi.unidad.codigo = :codigoUnidad");
+          + " relacionSirOfi.unidad.codigo = :codigoUnidad AND relacionSirOfi.unidad.version = :versionUnidad");
        query.setParameter("codigoUnidad", codigoUnidad);
        query.setParameter("codigoOficina", codigoOficina);
+       query.setParameter("versionUnidad", versionUnidad);
 
        try {
          return (RelacionSirOfi)query.getSingleResult();
@@ -66,7 +67,7 @@ public class RelacionSirOfiBean extends BaseEjbJPA<RelacionSirOfi, Long>
     public List<String> getUnidadesOficinas() throws Exception  {
       //select concat(c.firstname, ' ', c.lastname) as fullname from Contact c
       
-      String str  = "Select concat(relacionSirOfi.unidad.codigo, '_', relacionSirOfi.oficina.codigo) "
+      String str  = "Select concat(relacionSirOfi.unidad.codigo, '_',relacionSirOfi.unidad.version,'_', relacionSirOfi.oficina.codigo) "
         + "from RelacionSirOfi as relacionSirOfi ";
         
       Query query = em.createQuery(str);

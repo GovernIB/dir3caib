@@ -6,10 +6,13 @@ package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.ContactoOfi;
 
+import javax.ejb.Local;
+
 /**
  *
  * @author mgonzalez
  */
+@Local
 public interface ContactoOfiLocal extends BaseEjb<ContactoOfi, Long>{
   
    void deleteAll() throws Exception;
