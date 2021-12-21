@@ -17,7 +17,7 @@ import java.util.List;
  * @author earrivi
  * Date: 10/10/13
  */
-@Stateless(name = "ServicioEJB")
+@Stateless(name = "CatServicioEJB")
 @SecurityDomain("seycon")
 @RolesAllowed({"DIR_ADMIN", "DIR_WS"})
 public class CatServicioBean extends BaseEjbJPA<CatServicio, Long> implements CatServicioLocal {

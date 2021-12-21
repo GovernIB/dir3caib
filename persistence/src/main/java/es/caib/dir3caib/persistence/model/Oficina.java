@@ -628,7 +628,7 @@ public class Oficina implements Serializable {
     this.servicios = servicios;
   }*/
 
-  @OneToMany(mappedBy = "unidad")
+  @OneToMany(mappedBy = "oficina")
   @JsonIgnore
   public Set<ServicioOfi> getServicios() {
     return servicios;

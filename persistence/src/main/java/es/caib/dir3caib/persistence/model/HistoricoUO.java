@@ -14,8 +14,8 @@ import java.io.Serializable;
 @Table(name = "DIR_HISTORICOUO", schema = "", catalog = "")
 @org.hibernate.annotations.Table(appliesTo = "DIR_HISTORICOUO", indexes = {
         @Index(name="DIR_HISTOUO_CESTENT_FK_I", columnNames = "ESTADO"),
-        @Index(name = "DIR_HISTUO_UNIDAD_FK_I", columnNames = "CODUNIDAD"),
-        @Index(name = "DIR_HISTUO_OFICINA_FK_I", columnNames = "CODOFICINA")
+        @Index(name = "DIR_HISTUO_UNIANT_FK_I", columnNames = "CODANTERIOR"),
+        @Index(name = "DIR_HISTUO_UNIULT_FK_I", columnNames = "CODULTIMA")
 })
 @SequenceGenerator(name="generator",sequenceName = "DIR_HISTUO_SEQ", allocationSize=1)
 public class HistoricoUO implements Serializable {
@@ -53,7 +53,7 @@ public class HistoricoUO implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "CODANTERIOR")
-    @ForeignKey(name="DIR_HISTO_UNIANT_FK")
+    @ForeignKey(name="DIR_HISTUO_UNIANT_FK")
     public Unidad getUnidadAnterior() {
         return unidadAnterior;
     }
@@ -64,7 +64,7 @@ public class HistoricoUO implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "CODULTIMA")
-    @ForeignKey(name="DIR_HISTO_UNIULT_FK")
+    @ForeignKey(name="DIR_HISTUO_UNIULT_FK")
     public Unidad getUnidadUltima() {
         return unidadUltima;
     }

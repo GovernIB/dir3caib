@@ -29,18 +29,21 @@ http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
         <class>es.caib.dir3caib.persistence.model.CatTipoServicio</class>
         <class>es.caib.dir3caib.persistence.model.CatTipoUnidadOrganica</class>
         <class>es.caib.dir3caib.persistence.model.CatTipoVia</class>
+        <class>es.caib.dir3caib.persistence.model.CatServicio</class>
+        <class>es.caib.dir3caib.persistence.model.CatServicioUO</class>
+        <class>es.caib.dir3caib.persistence.model.CodigoUnidadOrganica</class>
         <class>es.caib.dir3caib.persistence.model.ContactoOfi</class>
         <class>es.caib.dir3caib.persistence.model.ContactoUnidadOrganica</class>
+        <class>es.caib.dir3caib.persistence.model.HistoricoOfi</class>
+        <class>es.caib.dir3caib.persistence.model.HistoricoUO</class>
+        <class>es.caib.dir3caib.persistence.model.NifCifUnidadOrganica</class>
         <class>es.caib.dir3caib.persistence.model.Oficina</class>
         <class>es.caib.dir3caib.persistence.model.RelacionOrganizativaOfi</class>
         <class>es.caib.dir3caib.persistence.model.RelacionSirOfi</class>
-        <class>es.caib.dir3caib.persistence.model.CatServicio</class>
+        <class>es.caib.dir3caib.persistence.model.ServicioOfi</class>
+        <class>es.caib.dir3caib.persistence.model.ServicioUO</class>
         <class>es.caib.dir3caib.persistence.model.Unidad</class>
         <class>es.caib.dir3caib.persistence.model.Sincronizacion</class>
-        <class>es.caib.dir3caib.persistence.model.HistoricoUO</class>
-        <class>es.caib.dir3caib.persistence.model.HistoricoOfi</class>
-        <class>es.caib.dir3caib.persistence.model.CodigoUnidadOrganica</class>
-        <class>es.caib.dir3caib.persistence.model.NifCifUnidadOrganica</class>
 
 
         <properties>
