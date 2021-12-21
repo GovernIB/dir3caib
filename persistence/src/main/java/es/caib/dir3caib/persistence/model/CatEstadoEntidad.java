@@ -83,12 +83,12 @@ public class CatEstadoEntidad implements Serializable {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     CatEstadoEntidad that = (CatEstadoEntidad) o;
-    return codigoEstadoEntidad.equals(that.codigoEstadoEntidad) && descripcionEstadoEntidad.equals(that.descripcionEstadoEntidad) && estado.equals(that.estado);
+    return codigoEstadoEntidad.equals(that.codigoEstadoEntidad) && descripcionEstadoEntidad.equals(that.descripcionEstadoEntidad) && estado.codigoEstadoEntidad.equals(that.estado.codigoEstadoEntidad);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(codigoEstadoEntidad, descripcionEstadoEntidad, estado);
+    return Objects.hash(codigoEstadoEntidad, descripcionEstadoEntidad, estado.codigoEstadoEntidad);
   }
   
   @Override 
