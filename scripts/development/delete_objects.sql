@@ -25,10 +25,6 @@ drop sequence DIR_SINC_SEQ;
 
 drop sequence DIR_UNI_SEQ;
 
-drop sequence DIR_UNI_SEQ;
-
-drop sequence DIR_UNI_SEQ;
-
 drop sequence DIR_RELOFI_SEQ;
 
 drop sequence DIR_RELSIR_SEQ;
