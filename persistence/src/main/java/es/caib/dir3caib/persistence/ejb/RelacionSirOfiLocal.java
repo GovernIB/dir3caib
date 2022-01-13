@@ -17,7 +17,7 @@ public interface RelacionSirOfiLocal extends BaseEjb<RelacionSirOfi, Long> {
   
   void deleteAll() throws Exception;
   
-  RelacionSirOfi findByPKs(String codigoUnidad, String versionUnidad, String codigoOficina) throws Exception;
+  RelacionSirOfi findByPKs(String codigoUnidad, Long versionUnidad, String codigoOficina) throws Exception;
   
   List<String> getUnidadesOficinas() throws Exception;
 

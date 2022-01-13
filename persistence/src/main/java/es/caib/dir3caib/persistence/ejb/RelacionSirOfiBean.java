@@ -45,7 +45,7 @@ public class RelacionSirOfiBean extends BaseEjbJPA<RelacionSirOfi, Long>
     
     
     @Override
-    public RelacionSirOfi findByPKs(String codigoUnidad, String versionUnidad,String codigoOficina) throws Exception {
+    public RelacionSirOfi findByPKs(String codigoUnidad, Long versionUnidad,String codigoOficina) throws Exception {
 
        Query query = em.createQuery("select relacionSirOfi from RelacionSirOfi as relacionSirOfi "
           + " where relacionSirOfi.oficina.codigo = :codigoOficina AND " 

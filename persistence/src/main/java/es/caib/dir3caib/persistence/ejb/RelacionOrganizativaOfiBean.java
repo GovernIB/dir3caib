@@ -45,7 +45,7 @@ public class RelacionOrganizativaOfiBean extends BaseEjbJPA<RelacionOrganizativa
     
     
     @Override
-    public RelacionOrganizativaOfi findByPKs(String codigoUnidad, String versionUnidad, String codigoOficina) throws Exception {
+    public RelacionOrganizativaOfi findByPKs(String codigoUnidad, Long versionUnidad, String codigoOficina) throws Exception {
 
        Query query = em.createQuery("Select relacionOrganizativaOfi from RelacionOrganizativaOfi as relacionOrganizativaOfi "
           + " where relacionOrganizativaOfi.oficina.codigo = :codigoOficina AND " 
@@ -64,7 +64,7 @@ public class RelacionOrganizativaOfiBean extends BaseEjbJPA<RelacionOrganizativa
     @Override
     @SuppressWarnings("unchecked")
     public List<String> getUnidadesOficinas() throws Exception  {
-      //select concat(c.firstname, ' ', c.lastname) as fullname from Contact c
+
       
       /*String str  = "Select concat(relacionOrganizativaOfi.unidad.codigo, '_', relacionOrganizativaOfi.oficina.codigo) "
         +	"from RelacionOrganizativaOfi as relacionOrganizativaOfi ";*/
