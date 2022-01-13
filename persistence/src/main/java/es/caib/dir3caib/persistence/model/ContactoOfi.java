@@ -19,8 +19,8 @@ import org.hibernate.annotations.Index;
  */
 @Table(name = "DIR_CONTACTOOFI", schema = "", catalog = "")
 @org.hibernate.annotations.Table(appliesTo = "DIR_CONTACTOOFI", indexes = {
-        @Index(name="DIR_CONTOFI_CATTIPCONT_FK_I", columnNames = {"TIPOCONTACTO"}),
-        @Index(name="DIR_OFICINA_CONTACTOSOFI_FK_I", columnNames = {"CODOFICINA"}),
+        @Index(name="DIR_CONOFI_CATTIPCONT_FK_I", columnNames = {"TIPOCONTACTO"}),
+        @Index(name="DIR_CONOFI_OFICINA_FK_I", columnNames = {"CODOFICINA"}),
         @Index(name="DIR_CONOFI_CESTENT_FK_I", columnNames = {"ESTADO"})
 })
 @Entity
@@ -59,7 +59,7 @@ public class ContactoOfi implements Serializable {
    */
   @ManyToOne
   @JoinColumn(name="CODOFICINA")
-  @ForeignKey(name="DIR_CONTACTOOFI_OFICINA_FK")
+  @ForeignKey(name="DIR_CONOFI_OFICINA_FK")
   public Oficina getOficina() {
     return oficina;
   }
@@ -76,7 +76,7 @@ public class ContactoOfi implements Serializable {
    */
   @ManyToOne
   @JoinColumn(name="TIPOCONTACTO")
-  @ForeignKey(name="DIR_CONTACOFI_CATTIPCONTAC_FK")
+  @ForeignKey(name="DIR_CONOFI_CATTIPCONT_FK")
   public CatTipoContacto getTipoContacto() {
     return tipoContacto;
   }

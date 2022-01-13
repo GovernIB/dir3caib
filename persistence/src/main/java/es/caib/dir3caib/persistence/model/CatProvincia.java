@@ -15,8 +15,8 @@ import org.hibernate.annotations.Index;
 @Entity
 @Table(name = "DIR_CATPROVINCIA", schema = "", catalog = "")
 @org.hibernate.annotations.Table(appliesTo = "DIR_CATPROVINCIA", indexes = {
-    @Index(name="DIR_CATPROV_CATCOMUNAUT_FK_I", columnNames = {"COMUNIDADAUTONOMA"}),
-    @Index(name="DIR_CPROVIN_CESTENT_FK_I", columnNames = "ESTADO")
+    @Index(name="DIR_CATPROV_CCOMAUT_FK_I", columnNames = {"COMUNIDADAUTONOMA"}),
+    @Index(name="DIR_CATPROV_CESTENT_FK_I", columnNames = "ESTADO")
 })
 public class CatProvincia implements Serializable {
 
@@ -71,7 +71,7 @@ public class CatProvincia implements Serializable {
   
   @ManyToOne(cascade= {CascadeType.PERSIST}, fetch=FetchType.LAZY)
   @JoinColumn(name="COMUNIDADAUTONOMA")
-  @ForeignKey(name="DIR_CATPROVINC_CATCOMUNAUTO_FK")
+  @ForeignKey(name="DIR_CATPROV_CCOMAUT_FK")
   public CatComunidadAutonoma getComunidadAutonoma() {
     return comunidadAutonoma;
   }
@@ -85,7 +85,7 @@ public class CatProvincia implements Serializable {
 
   @ManyToOne
   @JoinColumn(name="ESTADO")
-  @ForeignKey(name="DIR_CPROVIN_CESTENT_FK")
+  @ForeignKey(name="DIR_CATPROV_CESTENT_FK")
   public CatEstadoEntidad getEstado() {
     return estado;
   }

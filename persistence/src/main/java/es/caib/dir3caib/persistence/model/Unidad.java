@@ -338,7 +338,7 @@ public class Unidad implements Serializable {
 
   @ManyToOne()
   @JoinColumn(name="CODTIPOENTPUBLICA")  
-  @ForeignKey(name="DIR_UNIDAD_CATTIPENTPUBLICA_FK")
+  @ForeignKey(name="DIR_UNIDAD_CATTIPENTPUBL_FK")
   @JsonIgnore
   public CatTipoEntidadPublica getCodTipoEntPublica() {
     return codTipoEntPublica;
@@ -352,7 +352,7 @@ public class Unidad implements Serializable {
 
   @ManyToOne()
   @JoinColumn(name="CODTIPOUNIDAD") 
-  @ForeignKey(name="DIR_UNIDAD_CATTIPUNIDORGAN_FK")
+  @ForeignKey(name="DIR_UNIDAD_CATTIPUNIORG_FK_I")
   @JsonIgnore
   public CatTipoUnidadOrganica getCodTipoUnidad() {
     return codTipoUnidad;
@@ -712,7 +712,7 @@ public class Unidad implements Serializable {
 
  @ManyToOne()
  @JoinColumn(name="CODLOCALIDADID")
- @ForeignKey(name="DIR_UNIDAD_LOCDIRECCION_FK")
+ @ForeignKey(name="DIR_UNIDAD_CATLOCAL_FK")
  @JsonIgnore
   public CatLocalidad getCodLocalidad() {
     return codLocalidad;
@@ -735,7 +735,7 @@ public class Unidad implements Serializable {
   }
 
 
-  @Column(name = "LOCEXTRANJERA", length = 40)
+  @Column(name = "LOCEXTRANJERA", length = 120)
   @JsonIgnore
   public String getLocExtranjera() {
     return locExtranjera;

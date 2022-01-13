@@ -13,7 +13,9 @@ import java.io.Serializable;
 @Entity
 @Table(name = "DIR_HISTORICOOFI", schema = "", catalog = "")
 @org.hibernate.annotations.Table(appliesTo = "DIR_HISTORICOOFI", indexes = {
-        @Index(name="DIR_HISOF_CESTENT_FK_I", columnNames = "ESTADO")
+        @Index(name="DIR_HISOFI_CESTENT_FK_I", columnNames = "ESTADO"),
+        @Index(name="DIR_HISOFI_OFIULT_FK_I", columnNames = "CODULTIMA"),
+        @Index(name="DIR_HISOFI_OFIANT_FK_I", columnNames = "CODANTERIOR")
 })
 @SequenceGenerator(name="generator",sequenceName = "DIR_HISOFI_SEQ", allocationSize=1)
 public class HistoricoOfi implements Serializable {
@@ -44,7 +46,7 @@ public class HistoricoOfi implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "CODANTERIOR")
-    @ForeignKey(name="DIR_HISTO_OFIANT_FK")
+    @ForeignKey(name="DIR_HISOFI_OFIANT_FK")
     public Oficina getOficinaAnterior() {
         return oficinaAnterior;
     }
@@ -54,7 +56,7 @@ public class HistoricoOfi implements Serializable {
     }
     @ManyToOne
     @JoinColumn(name = "CODULTIMA")
-    @ForeignKey(name="DIR_HISTO_OFIULT_FK")
+    @ForeignKey(name="DIR_HISOFI_OFIULT_FK")
     public Oficina getOficinaUltima() {
         return oficinaUltima;
     }
@@ -66,7 +68,7 @@ public class HistoricoOfi implements Serializable {
 
     @ManyToOne
     @JoinColumn(name="ESTADO")
-    @ForeignKey(name="DIR_HISOF_CESTENT_FK")
+    @ForeignKey(name="DIR_HISOFI_CESTENT_FK")
     public CatEstadoEntidad getEstado() {
         return estado;
     }

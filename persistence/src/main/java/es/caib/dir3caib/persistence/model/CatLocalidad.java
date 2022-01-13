@@ -31,7 +31,7 @@ import org.hibernate.annotations.Index;
     indexes = {
     @Index(name="DIR_CATLOCAL_CATPROVIN_FK_I", columnNames="PROVINCIA"),
     @Index(name="DIR_CATLOCAL_CATENTGEOGR_FK_I", columnNames="ENTIDADGEOGRAFICA"),
-    @Index(name="DIR_CLOCAL_CESTENT_FK_I", columnNames = "ESTADO")
+    @Index(name="DIR_CATLOCAL_CESTENT_FK_I", columnNames = "ESTADO")
  })
 @SequenceGenerator(name="generator",sequenceName = "DIR_CLOCA_SEQ", allocationSize=1)
 public class CatLocalidad implements Serializable {
@@ -128,7 +128,7 @@ public class CatLocalidad implements Serializable {
 
   @ManyToOne
   @JoinColumn(name="ESTADO")
-  @ForeignKey(name="DIR_CLOCAL_CESTENT_FK")
+  @ForeignKey(name="DIR_CATLOCAL_CESTENT_FK")
   public CatEstadoEntidad getEstado() {
     return estado;
   }

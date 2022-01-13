@@ -64,7 +64,7 @@ public class CatTipoContacto implements Serializable {
 
   @ManyToOne
   @JoinColumn(name="ESTADO")
-  @ForeignKey(name="DIR_CATTIPCON_CATESTENTIDAD_FK")
+  @ForeignKey(name="DIR_CTIPCON_CESTENT_FK")
   public CatEstadoEntidad getEstado() {
     return estado;
   }

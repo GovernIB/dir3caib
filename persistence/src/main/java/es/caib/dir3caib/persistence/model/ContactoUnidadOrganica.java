@@ -20,8 +20,8 @@ import java.io.Serializable;
 @Entity
 @Table(name = "DIR_CONTACTOUO", schema = "", catalog = "")
 @org.hibernate.annotations.Table(appliesTo = "DIR_CONTACTOUO", indexes = {
-        @Index(name="DIR_CONTACUO_CATTIPOCONT_FK_I", columnNames = {"TIPOCONTACTO"}),
-        @Index(name="DIR_UNIDAD_CONTACTOSUO_FK_I", columnNames = {"CODUNIDAD"}),
+        @Index(name="DIR_CONTUO_CATTIPOCONT_FK_I", columnNames = {"TIPOCONTACTO"}),
+        @Index(name="DIR_CONTUO_UNIDAD_FK_I", columnNames = {"CODUNIDAD"}),
         @Index(name="DIR_CONTUO_CESTENT_FK_I", columnNames = {"ESTADO"}),
 
 })
@@ -64,7 +64,7 @@ public class ContactoUnidadOrganica implements Serializable {
    */
   @ManyToOne
   @JoinColumn(name="TIPOCONTACTO")
-  @ForeignKey(name="DIR_CONTACTOUO_CATTIPOCONT_FK")
+  @ForeignKey(name="DIR_CONTUO_CATTIPOCONT_FK")
   public CatTipoContacto getTipoContacto() {
     return tipoContacto;
   }
@@ -81,7 +81,7 @@ public class ContactoUnidadOrganica implements Serializable {
    */
   @ManyToOne
   @JoinColumn(name="CODUNIDAD")
-  @ForeignKey(name="DIR_CONTACTOUO_UNIDAD_FK")
+  @ForeignKey(name="DIR_CONTUO_UNIDAD_FK")
   public Unidad getUnidad() {
     return unidad;
   }

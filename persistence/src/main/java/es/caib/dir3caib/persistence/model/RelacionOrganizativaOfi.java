@@ -15,10 +15,11 @@ import java.io.Serializable;
         uniqueConstraints = @UniqueConstraint(columnNames = {"CODOFICINA", "CODUNIDAD"}))
 @org.hibernate.annotations.Table(appliesTo = "DIR_RELACIONORGANIZATIVAOFI", indexes = {
         @Index(name = "DIR_RELORGANOFI_CATESTENT_FK_I", columnNames = {"ESTADO"}),
-        @Index(name = "DIR_UNIDAD_RELORGOFI_FK_I", columnNames = {"CODUNIDAD"}),
-        @Index(name = "DIR_OFICINA_RELORGOFI_FK_I", columnNames = {"CODOFICINA"})
+        @Index(name = "DIR_RELORGOFI_UNIDAD_FK_I", columnNames = {"CODUNIDAD"}),
+        @Index(name = "DIR_RELORGOFI_OFICINA_FK_I", columnNames = {"CODOFICINA"})
 })
 @Entity
+@SequenceGenerator(name="generator",sequenceName = "DIR_RELOFI_SEQ", allocationSize=1)
 public class RelacionOrganizativaOfi implements Serializable {
 
     private Long id;
@@ -45,7 +46,7 @@ public class RelacionOrganizativaOfi implements Serializable {
 
     @ManyToOne(cascade = CascadeType.PERSIST,optional = false)
     @JoinColumn(name = "CODOFICINA")
-    @ForeignKey(name = "DIR_RELORGOFI_CATOFI_FK")
+    @ForeignKey(name = "DIR_RELORGOFI_OFICINA_FK")
     public Oficina getOficina() {
         return oficina;
     }
@@ -63,7 +64,7 @@ public class RelacionOrganizativaOfi implements Serializable {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "CODUNIDAD")
-    @ForeignKey(name = "DIR_RELORGOFI_CATUNIDAD_FK")
+    @ForeignKey(name = "DIR_RELORGOFI_UNIDAD_FK")
     public Unidad getUnidad() {
         return unidad;
     }
@@ -93,8 +94,10 @@ public class RelacionOrganizativaOfi implements Serializable {
     }
 
 
+    @Column(name = "ID", nullable = false)
     @Id
-    @JoinColumn(name = "ID")
+    //@JoinColumn(name = "ID")
+    @GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "generator")
     public Long getId() {
         return id;
     }

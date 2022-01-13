@@ -23,7 +23,7 @@ import java.util.Set;
     @Index(name="DIR_OFICINA_CATJERAROFI_FK_I", columnNames = {"TIPOOFICINA"}),
     @Index(name="DIR_OFICINA_CATCOMUNIAUT_FK_I", columnNames = {"CODCOMUNIDAD"}),
     @Index(name="DIR_OFICINA_CATNIVELADMIN_FK_I", columnNames = {"NIVELADMINISTRACION"}),
-    @Index(name="DIR_OFICINA_CATESTADENTI_FK_I", columnNames = {"ESTADO"}),
+    @Index(name="DIR_OFICINA_CATESTENT_FK_I", columnNames = {"ESTADO"}),
     @Index(name="DIR_OFICINA_CATLOCAL_FK_I", columnNames = {"LOCALIDADID"}),
     @Index(name="DIR_OFICINA_UNIDAD_FK_I", columnNames = {"CODUORESPONSABLE"}),
     @Index(name="DIR_OFICINA_CFUEXT_FK_I", columnNames = {"FUENTEEXTERNA"})
@@ -153,7 +153,7 @@ public class Oficina implements Serializable {
    */
   @ManyToOne
   @JoinColumn(name="ESTADO")
-  @ForeignKey(name="DIR_OFICINA_CATESTADENTIDAD_FK")
+  @ForeignKey(name="DIR_OFICINA_CATESTENT_FK")
   @JsonIgnore
   public CatEstadoEntidad getEstado() {
     return estado;
@@ -189,7 +189,7 @@ public class Oficina implements Serializable {
    */
   @ManyToOne
   @JoinColumn(name="TIPOOFICINA")
-  @ForeignKey(name="DIR_OFICINA_CATJERARQUIAOFI_FK")
+  @ForeignKey(name="DIR_OFICINA_CATJERAROFI_FK")
   @JsonIgnore
   public CatJerarquiaOficina getTipoOficina() {
     return tipoOficina;

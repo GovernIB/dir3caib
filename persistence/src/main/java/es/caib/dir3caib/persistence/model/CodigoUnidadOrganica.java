@@ -15,7 +15,7 @@ import java.io.Serializable;
 @Table(name = "DIR_CODIGOUO")
 @org.hibernate.annotations.Table(appliesTo = "DIR_CODIGOUO", indexes = {
         @Index(name="DIR_CODUO_CESTENT_FK_I", columnNames = "ESTADO"),
-        @Index(name="DIR_CODUO_CFUEEXT_FK", columnNames = "TIPOCODIGO"),
+        @Index(name="DIR_CODUO_CFUEEXT_FK_I", columnNames = "TIPOCODIGO"),
         @Index(name="DIR_CODUO_UNIDAD_FK_I", columnNames = "CODUNIDAD")
 })
 @SequenceGenerator(name="generator",sequenceName = "DIR_CODUO_SEQ", allocationSize=1)

@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "DIR_HISTORICOUO", schema = "", catalog = "")
 @org.hibernate.annotations.Table(appliesTo = "DIR_HISTORICOUO", indexes = {
-        @Index(name="DIR_HISTOUO_CESTENT_FK_I", columnNames = "ESTADO"),
+        @Index(name = "DIR_HISTUO_CESTENT_FK_I", columnNames = "ESTADO"),
         @Index(name = "DIR_HISTUO_UNIANT_FK_I", columnNames = "CODANTERIOR"),
         @Index(name = "DIR_HISTUO_UNIULT_FK_I", columnNames = "CODULTIMA")
 })
@@ -75,7 +75,7 @@ public class HistoricoUO implements Serializable {
 
     @ManyToOne
     @JoinColumn(name="ESTADO")
-    @ForeignKey(name="DIR_HISTO_CESTENT_FK")
+    @ForeignKey(name="DIR_HISTUO_CESTENT_FK")
     public CatEstadoEntidad getEstado() {
         return estado;
     }

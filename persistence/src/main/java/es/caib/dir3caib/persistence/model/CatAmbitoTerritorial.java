@@ -19,7 +19,7 @@ import java.util.Objects;
   uniqueConstraints= @UniqueConstraint(columnNames={"CODIGOAMBITO", "NIVELADMINISTRACION"}))
 @org.hibernate.annotations.Table(appliesTo = "DIR_CATAMBITOTERRITORIAL", indexes = {
     @Index(name="DIR_CATAMBITOTERRITORIAL_PK_I", columnNames = {"CODIGOAMBITO", "NIVELADMINISTRACION" }),
-    @Index(name="DIR_CATAMBTERR_CATNIVADM_FK_I", columnNames = "NIVELADMINISTRACION"),
+    @Index(name="DIR_CAMBTER_CATNIVADM_FK_I", columnNames = "NIVELADMINISTRACION"),
     @Index(name="DIR_CAMBTER_CESTENT_FK_I", columnNames = "ESTADO")
  })
 @SequenceGenerator(name="generator",sequenceName = "DIR_CAMBTER_SEQ", allocationSize=1)
@@ -98,7 +98,7 @@ public class CatAmbitoTerritorial implements Serializable {
   //@Index(name="DIR_CATAMBTERR_CATNIVADM_FK_I", columnNames="NIVELADMINISTRACION")
   @ManyToOne(cascade=CascadeType.PERSIST)
   @JoinColumn (name="NIVELADMINISTRACION")
-  @ForeignKey(name="DIR_CATAMBTERR_CATNIVADM_FK")
+  @ForeignKey(name="DIR_CAMBTER_CATNIVADM_FK")
   public CatNivelAdministracion getNivelAdministracion() {
     return nivelAdministracion;
   }
