@@ -19,16 +19,13 @@ import java.util.Objects;
 @Entity
 @Table(name = "DIR_CATSERVICIOUO", schema = "", catalog = "")
 @org.hibernate.annotations.Table(appliesTo = "DIR_CATSERVICIOUO", indexes = {
-        @Index(name="DIR_CSERVUO_CTIPSERV_FK_I", columnNames = "TIPO"),
-        @Index(name="DIR_CSERVUO_CESTENT_FK_I", columnNames = "ESTADO")
+        @Index(name="DIR_CSERVUO_CTIPSERV_FK_I", columnNames = "TIPO")
 })
 public class CatServicioUO implements Serializable {
 
   private Long codServicio;
   private String descServicio;
   private CatTipoServicio tipo;
-  private CatEstadoEntidad estado;
-
 
 
   public CatServicioUO(){
@@ -86,17 +83,6 @@ public class CatServicioUO implements Serializable {
     this.tipo = tipo;
   }
 
-
-  @ManyToOne
-  @JoinColumn(name="ESTADO")
-  @ForeignKey(name="DIR_CSERVUO_CESTENT_FK")
-  public CatEstadoEntidad getEstado() {
-    return estado;
-  }
-
-  public void setEstado(CatEstadoEntidad estado) {
-    this.estado = estado;
-  }
 
   @Override
   public boolean equals(Object o) {
