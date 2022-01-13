@@ -84,7 +84,7 @@ public class Dir3caibConstantes {
     public static final String UO_CODIGO_UO = "CodigosUO.csv";
     public static final String UO_NIFCIF_UO = "NifCifUO.csv";
     public static final String UO_SERVICIOS_UO = "ServiciosUO.csv";
-    public static final String[] UO_FICHEROS = {UO_UNIDADES,UO_HISTORICOS_UO,UO_CONTACTO_UO, UO_CODIGO_UO};
+    public static final String[] UO_FICHEROS = {UO_UNIDADES,UO_HISTORICOS_UO,UO_CONTACTO_UO, UO_CODIGO_UO,UO_NIFCIF_UO,UO_SERVICIOS_UO};
 
 
     public static final String FORMATO_FECHA = "dd/MM/yyyy";

@@ -234,10 +234,10 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
             reqContextUnidades.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endPointUnidades);
 
             //Set timeout until a connection is established
-            reqContextUnidades.put("javax.xml.ws.client.connectionTimeout", "300000");
+            reqContextUnidades.put("javax.xml.ws.client.connectionTimeout", "600000");
 
             //Set timeout until the response is received
-            reqContextUnidades.put("javax.xml.ws.client.receiveTimeout", "300000");
+            reqContextUnidades.put("javax.xml.ws.client.receiveTimeout", "600000");
 
             // Service Oficinas
             SD02OFDescargaOficinas serviceOficinas = new SD02OFDescargaOficinasService(new URL(endPointOficinas + "?wsdl")).getSD02OFDescargaOficinas();
@@ -245,10 +245,10 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
             reqContextOficinas.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endPointOficinas);
 
             //Set timeout until a connection is established
-            reqContextOficinas.put("javax.xml.ws.client.connectionTimeout", "300000");
+            reqContextOficinas.put("javax.xml.ws.client.connectionTimeout", "600000");
 
             //Set timeout until the response is received
-            reqContextOficinas.put("javax.xml.ws.client.receiveTimeout", "300000");
+            reqContextOficinas.put("javax.xml.ws.client.receiveTimeout", "600000");
 
             // Establecemos parametros de serviceUnidades
             UnidadesWsVersion parametrosUnidades = new UnidadesWsVersion();
@@ -544,7 +544,7 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
         try{
 
             // Obtenemos la fecha de la ultima descarga/sincronizacion
-            Sincronizacion ultimaSincro = ultimaSincronizacionCompletada(Dir3caibConstantes.UNIDADES_OFICINAS);
+             Sincronizacion ultimaSincro = ultimaSincronizacionCompletada(Dir3caibConstantes.UNIDADES_OFICINAS);
 
             // Descarga de directorio DIR3
             if(ultimaSincro != null){
@@ -555,7 +555,6 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
 
             // Importamos Unidades y Oficinas
             if (sincroUnidadesOficinas != null && sincroUnidadesOficinas.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
-
                 sincroUnidadesOficinas = importarUnidadesOficinas(sincroUnidadesOficinas);
             }
 

@@ -18,7 +18,8 @@ public interface ContactoUOLocal extends BaseEjb<ContactoUnidadOrganica, Long>{
   
    void deleteAll() throws Exception;
 
-    void deleteByUnidad(String idUnidad) throws Exception;
+    void deleteByUnidad(String codigo, Long version) throws Exception;
+
 
    List<ContactoUnidadOrganica> getContactosByUnidad(String codigoUnidad) throws Exception;
   

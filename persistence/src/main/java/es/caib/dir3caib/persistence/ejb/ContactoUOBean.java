@@ -77,12 +77,19 @@ public class ContactoUOBean extends BaseEjbJPA<ContactoUnidadOrganica, Long> imp
     }
 
 
-    public void deleteByUnidad(String idUnidad) throws Exception {
+    public void deleteByUnidad(String codigo, Long version) throws Exception {
 
-        Query q = em.createQuery("delete from ContactoUnidadOrganica where unidad.codigo=:idUnidad");
-        q.setParameter("idUnidad", idUnidad);
+
+        //Query para evitar un ORA-00933.
+        /* Revisar este enlace
+           https://stackoverflow.com/questions/3863309/why-does-this-hql-delete-fail-when-an-hql-select-with-same-terms-works
+         */
+        Query q = em.createQuery("delete from ContactoUnidadOrganica as contacto where contacto.id in (select id from CodigoUnidadOrganica where unidad.codigo=:codigo and unidad.version=:version) ");
+        q.setParameter("codigo", codigo);
+        q.setParameter("version", version);
 
         q.executeUpdate();
+
 
     }
 

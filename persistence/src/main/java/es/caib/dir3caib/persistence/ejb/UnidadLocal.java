@@ -312,10 +312,11 @@ public interface UnidadLocal extends BaseEjb<Unidad, Long> {
 
     /**
      *
-     * @param idUnidad
+     * @param codigo
+     * @param version
      * @throws Exception
      */
-    void eliminarHistoricosUnidad(String idUnidad) throws Exception;
+    void eliminarHistoricosUnidad(String codigo, Long version) throws Exception;
 
     /**
      * Comprueba la existencia de un HistoriooUnidad en concreto

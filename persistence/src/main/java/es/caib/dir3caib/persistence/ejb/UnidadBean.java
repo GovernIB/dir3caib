@@ -1034,10 +1034,16 @@ public class UnidadBean extends BaseEjbJPA<Unidad, Long> implements UnidadLocal 
 
     @Override
     @SuppressWarnings(value = "unchecked")
-    public void eliminarHistoricosUnidad(String idUnidad) throws Exception {
+    public void eliminarHistoricosUnidad(String codigo, Long version) throws Exception {
 
-        Query q =  em.createNativeQuery("delete from dir_historicouo where codultima=?");
-        q.setParameter(1, idUnidad);
+        //TODO ELIMINAR
+       /* Query q =  em.createNativeQuery("delete from dir_historicouo  where codultima=? ");
+        q.setParameter(1, idUnidad);*/
+
+       // Query q = em.createQuery("delete from HistoricoUO where unidadUltima.codigo=:idUnidad and unidadUltima.version=:version ");
+        Query q = em.createQuery("delete from HistoricoUO as historico where historico.id in (select id from HistoricoUO where unidadUltima.codigo=:codigo and unidadUltima.version=:version) ");
+        q.setParameter("codigo", codigo);
+        q.setParameter("version", version);
 
         q.executeUpdate();
 

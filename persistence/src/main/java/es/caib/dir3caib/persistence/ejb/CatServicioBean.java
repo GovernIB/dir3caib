@@ -43,13 +43,13 @@ public class CatServicioBean extends BaseEjbJPA<CatServicio, Long> implements Ca
     @SuppressWarnings(value = "unchecked")
     public List<CatServicio> getAll() throws Exception {
 
-        return  em.createQuery("Select servicio from Servicio as servicio order by servicio.codServicio").getResultList();
+        return  em.createQuery("Select catservicio from CatServicio as catservicio order by catservicio.codServicio").getResultList();
     }
 
     @Override
     public Long getTotal() throws Exception {
 
-        Query q = em.createQuery("Select count(servicio.codServicio) from Servicio as servicio");
+        Query q = em.createQuery("Select count(catservicio.codServicio) from CatServicio as catservicio");
 
         return (Long) q.getSingleResult();
     }
@@ -58,7 +58,7 @@ public class CatServicioBean extends BaseEjbJPA<CatServicio, Long> implements Ca
     @SuppressWarnings("unchecked")
     public List<CatServicio> getPagination(int inicio) throws Exception {
 
-        Query q = em.createQuery("Select servicio from Servicio as servicio order by servicio.codServicio");
+        Query q = em.createQuery("Select catservicio from CatServicio as catservicio order by catservicio.codServicio");
         q.setFirstResult(inicio);
         q.setMaxResults(RESULTADOS_PAGINACION);
 
@@ -67,7 +67,7 @@ public class CatServicioBean extends BaseEjbJPA<CatServicio, Long> implements Ca
     
     public void deleteAll() throws Exception {
 
-        em.createQuery("delete from Servicio").executeUpdate();
+        em.createQuery("delete from CatServicio").executeUpdate();
         
     }
 }

@@ -128,13 +128,12 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                                 //if (unidadesExistInBBDD.contains(codigoUnidad)) {
 
                                     // Si es una actualización: Eliminamos los contactos e historicos de la Unidad
-                                    contactoUOEjb.deleteByUnidad(codigoUnidad);
-                                    unidadEjb.eliminarHistoricosUnidad(codigoUnidad);
+                                    contactoUOEjb.deleteByUnidad(codigoUnidad,version);
+                                    unidadEjb.eliminarHistoricosUnidad(codigoUnidad, version);
 
                                     s = System.currentTimeMillis();
                                     //unidad = unidadEjb.findById(codigoUnidad);
-                                    //unidad = unidadEjb.findByPKs(codigoUnidad,version);
-                                    unidad = unidadEjb.findByPKsReduced(codigoUnidad,version);
+                                    unidad = unidadEjb.findByPKs(codigoUnidad,version);
                                     findbyid = findbyid + (System.currentTimeMillis() - s);
                                     findbyidcount++;
                                 }
@@ -231,9 +230,9 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                                 // Gestionamos EdpPrincipales cuando son así mismas
                               //  String codigoEdpPrincipal = fila[12].trim();
                                 String codigoEdpPrincipal = fila[18].trim();
-                                Long versionEdpPrincipal = Long.valueOf(fila[19].trim());
-                                if(!codigoEdpPrincipal.isEmpty() && versionEdpPrincipal !=null){
-                                    UnidadPK unidadEdpPrincipalPK = new UnidadPK(codigoEdpPrincipal,versionEdpPrincipal);
+                                String versionEdpPrincipal = fila[19].trim();
+                                if(!codigoEdpPrincipal.isEmpty() && !versionEdpPrincipal.isEmpty()){
+                                    UnidadPK unidadEdpPrincipalPK = new UnidadPK(codigoEdpPrincipal,Long.valueOf(versionEdpPrincipal));
                                     if(unidadEdpPrincipalPK.equals(unidadPK)){
                                         unidad.setCodEdpPrincipal(unidad);
                                     }
@@ -349,10 +348,10 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
         //Nivel de administracion
         //String codigoNivelAdmin = fila[5].trim();
-        Long codigoNivelAdmin = Long.valueOf(fila[8].trim());
+        String codigoNivelAdmin = fila[8].trim();
         CatNivelAdministracion nivelAdministracion = null;
-        if (codigoNivelAdmin!=null) {
-            nivelAdministracion = cacheNivelAdministracion.get(codigoNivelAdmin);
+        if (!codigoNivelAdmin.isEmpty()) {
+            nivelAdministracion = cacheNivelAdministracion.get(Long.valueOf(codigoNivelAdmin));
         }
         unidad.setNivelAdministracion(nivelAdministracion);
 
@@ -361,7 +360,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
         String ambTerrit =  fila[23].trim();
         CatAmbitoTerritorial ambitoTerritorial = null;
         if (!ambTerrit.isEmpty()) {
-            CatAmbitoTerritorialPK catAmbitoTerritorialPk = new CatAmbitoTerritorialPK(ambTerrit, codigoNivelAdmin);
+            CatAmbitoTerritorialPK catAmbitoTerritorialPk = new CatAmbitoTerritorialPK(ambTerrit, Long.valueOf(codigoNivelAdmin));
             ambitoTerritorial = cacheAmbitoTerritorial.get(catAmbitoTerritorialPk);
             unidad.setCodAmbitoTerritorial(ambitoTerritorial);
         }
@@ -369,9 +368,9 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
         //Nivel Jerarquico
         //String codigoJerarquico = fila[6].trim();
-        Long codigoJerarquico =Long.valueOf( fila[9].trim());
-        if (codigoJerarquico!=null) {
-            unidad.setNivelJerarquico(codigoJerarquico);
+        String codigoJerarquico =fila[9].trim();
+        if (!codigoJerarquico.isEmpty()) {
+            unidad.setNivelJerarquico(Long.valueOf(codigoJerarquico));
         } else {
             unidad.setNivelJerarquico(null);
         }
@@ -387,9 +386,9 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
         // CodAmbElm
       //  String codAmbElm = fila[23].trim();
-        Long codAmbElm = Long.valueOf(fila[30].trim());
-        if (codAmbElm!=null) {
-            unidad.setCodAmbElm(codAmbElm);
+        String codAmbElm = fila[30].trim();
+        if (!codAmbElm.isEmpty()) {
+            unidad.setCodAmbElm(Long.valueOf(codAmbElm));
         } else {
             unidad.setCodAmbElm(null);
         }
@@ -407,9 +406,9 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
         //Isla
        // String codigoIsla = fila[22].trim();
-        Long codigoIsla = Long.valueOf(fila[29].trim());
-        if (codigoIsla!=null) {
-            unidad.setCodAmbIsla(cacheIsla.get(codigoIsla));
+        String codigoIsla = fila[29].trim();
+        if (!codigoIsla.isEmpty()) {
+            unidad.setCodAmbIsla(cacheIsla.get(Long.valueOf(codigoIsla)));
         } else {
             unidad.setCodAmbIsla(null);
         }
@@ -464,14 +463,14 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
         //Unidad Entidad de Derecho Publico
         //String codigoEdpPrincipal = fila[12].trim();
         String codigoEdpPrincipal = fila[18].trim();
-        Long versionEdpPrincipal = Long.valueOf(fila[19].trim());
+        String versionEdpPrincipal = !fila[19].isEmpty()?fila[19].trim():"1";
         if (!codigoEdpPrincipal.isEmpty()) {
             Unidad unidadEdpPrincipal;
-            UnidadPK unidadEdpPrincipalPK = new UnidadPK(codigoEdpPrincipal, versionEdpPrincipal);
+            UnidadPK unidadEdpPrincipalPK = new UnidadPK(codigoEdpPrincipal, Long.valueOf(versionEdpPrincipal));
             //if (unidadesExistInBBDD.contains(codigoEdpPrincipal)) {
             if (unidadesExistInBBDDNueva.contains(unidadEdpPrincipalPK)) {
                // unidadEdpPrincipal = unidadEjb.findById(codigoEdpPrincipal);
-                unidadEdpPrincipal = unidadEjb.findByPKs(codigoEdpPrincipal,versionEdpPrincipal);
+                unidadEdpPrincipal = unidadEjb.findByPKs(codigoEdpPrincipal,Long.valueOf(versionEdpPrincipal));
             } else {
                 unidadEdpPrincipal = null;
             }
@@ -624,7 +623,10 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
        // unidad.setDenominacion(fila[1].trim());
         unidad.setDenominacion(fila[2].trim());
         unidad.setDenomLenguaCooficial(fila[3].trim());
-        unidad.setIdiomalengua(Integer.valueOf(fila[4].trim()));
+        String idioma = fila[4].trim();
+        if(!idioma.isEmpty()){
+            unidad.setIdiomalengua(Integer.valueOf(idioma));
+        }
        // unidad.setDirExtranjera(fila[44].trim());
         unidad.setDirExtranjera(fila[52].trim());
       //  unidad.setDisposicionLegal(fila[26].trim());
@@ -632,11 +634,11 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
 
         //Poder
-        Long poder = Long.valueOf(fila[10].trim());
-        if(poder != null){
-                unidad.setPoder(cachePoder.get(Long.valueOf(poder)));
+        String poder = fila[10].trim();
+        if(!poder.isEmpty()){
+            unidad.setPoder(cachePoder.get(Long.valueOf(poder)));
         } else {
-                unidad.setPoder(null);
+            unidad.setPoder(null);
         }
 
 
@@ -875,10 +877,10 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                 //cada 500 realizamos flush y clear para evitar problemas de Outofmemory
                 if (count % 500 == 0) {
                     long end = System.currentTimeMillis();
-                    log.info("Procesats 500 contactes (" + (count - 500) + " - " + count
+                    log.info("Procesats 500 codigosuo (" + (count - 500) + " - " + count
                             + ") en " + Utils.formatElapsedTime(end - start));
-                    contactoUOEjb.flush();
-                    contactoUOEjb.clear();
+                    codigoUOEjb.flush();
+                    codigoUOEjb.clear();
                     start = end;
                 }
 
@@ -924,7 +926,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                     nifCifUO.setUnidad(unidad);
 
                     //Estado Entidad
-                    String codigoEstado = fila[5].trim();
+                    String codigoEstado = fila[4].trim();
                     if (!codigoEstado.isEmpty()) {
                         nifCifUO.setEstado(cacheEstadoEntidad.get(codigoEstado));
                     } else {
@@ -947,10 +949,10 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                 //cada 500 realizamos flush y clear para evitar problemas de Outofmemory
                 if (count % 500 == 0) {
                     long end = System.currentTimeMillis();
-                    log.info("Procesats 500 contactes (" + (count - 500) + " - " + count
+                    log.info("Procesats 500 nifcifs (" + (count - 500) + " - " + count
                             + ") en " + Utils.formatElapsedTime(end - start));
-                    contactoUOEjb.flush();
-                    contactoUOEjb.clear();
+                    nifcifUOEjb.flush();
+                    nifcifUOEjb.clear();
                     start = end;
                 }
 
@@ -1013,7 +1015,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                     // cada 500 realizamos un flush y un clear para evitar problemas de Outofmemory
                     if (count % 500 == 0) {
                         long end = System.currentTimeMillis();
-                        log.info("Procesats 500 Historics (" + (count - 500) + " - " + count
+                        log.info("Procesats 500 ServiciosUO (" + (count - 500) + " - " + count
                                 + ") en " + Utils.formatElapsedTime(end - start));
 
                         unidadEjb.flush();
