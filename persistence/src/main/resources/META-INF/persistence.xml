@@ -48,6 +48,7 @@ http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
 
         <properties>
             <property name="hibernate.jdbc.batch_size" value="50"/>
+            <property name="hibernate.show_sql" value="false"/>
         </properties>
 
     </persistence-unit>
