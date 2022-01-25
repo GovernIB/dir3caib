@@ -15,6 +15,7 @@ import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.io.*;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
@@ -123,8 +124,10 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                                 Oficina oficina = null;
                                 boolean existeix;
 
+
                                 //  Miramos si existe ya en la BD
                                 if (oficinasExistInBBDD.contains(codigoOficina)) {
+                                    log.info("Entro en existe oficina "  + codigoOficina);
 
                                     // Eliminamos sus contactos y servicios en la actualizacion
                                     contactoOfiEjb.deleteByOficina(codigoOficina);
@@ -268,6 +271,9 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
         if (!codUOResponsable.isEmpty()) {
             //TODO ELIMINAR
            // oficina.setCodUoResponsable(cacheUnidad.get(codUOResponsable));
+           // Unidad unidadResponsable = unidadEjb.findByPKsReduced(codUOResponsable,Long.valueOf(versionUOResponsable));
+           // oficina.setCodUoResponsable(unidadResponsable);
+            log.info("unidadResponsable " + codUOResponsable + " - "+versionUOResponsable );
             oficina.setCodUoResponsable(cacheUnidad.get(unidadPKResponsable));
         } else {
             oficina.setCodUoResponsable(null);

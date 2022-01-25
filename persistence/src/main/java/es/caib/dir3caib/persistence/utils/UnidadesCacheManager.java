@@ -41,15 +41,16 @@ public class UnidadesCacheManager {
      * @param total
      * @throws Exception
      */
-    public UnidadesCacheManager(UnidadLocal unidadEjb, List<List<UnidadPK>> unidadesRequeridas, int total) throws Exception {
+    public UnidadesCacheManager(UnidadLocal unidadEjb, List<List<String>> unidadesRequeridas, int total) throws Exception {
         this(unidadEjb);
 
 
         List<Unidad> unidades;
         int count = 0;
-        UnidadPK unidadPK = new UnidadPK();
+    //    UnidadPK unidadPK = new UnidadPK();
 
-        for (List<UnidadPK> ids : unidadesRequeridas) {
+        //for (List<UnidadPK> ids : unidadesRequeridas) {
+        for (List<String> ids : unidadesRequeridas) {
             long start2 = System.currentTimeMillis();
 
 
@@ -65,7 +66,9 @@ public class UnidadesCacheManager {
             // Monta la cache de unidad con las unidades obtenidas.
 
             for (Unidad ca : unidades) {
-                unidadPK = new UnidadPK(ca.getCodigo(),ca.getVersion());
+               // String sUnidadPK = ca.getCodigo(); //en el código devolvemos el string "codigo-version"
+              //  String[] unidadPKSeparada = sUnidadPK.split("-");
+                UnidadPK unidadPK = new UnidadPK(ca.getCodigo(),ca.getVersion());
               //  cacheUnidad.put(ca.getCodigo(), ca);
                 cacheUnidad.put(unidadPK, ca);
                 count++;
@@ -79,6 +82,9 @@ public class UnidadesCacheManager {
         log.info(" Cache Of Unidades. Total = " + count);
 
     }
+
+
+
 
     /**
      * Método que obtiene una unidad de la lista de las unidades en cache, si no está en cache, va a bd a buscarla
@@ -109,7 +115,12 @@ public class UnidadesCacheManager {
 
         Unidad unidad = cacheUnidad.get(unidadPK);
 
+        if(unidad!= null) {
+            log.info("Unidad de Cache " + unidad.getCodigo());
+        }
+
         if (unidad == null) { // Si no està en cache
+            log.info("Entramos a cogerla de la BD");
             //Calculamos que se tarda en cogerla de BD
             long start = System.currentTimeMillis();
             unidad = this.unidadEjb.findByPKsReduced(unidadPK.codigo, unidadPK.version);

@@ -161,7 +161,9 @@ public class UnidadController extends BaseController {
 
         //Obtenemos los históricos finales hacia delante.
         Set<Unidad> unidadesHistoricasFinales = new HashSet<Unidad>();
-        unidadEjb.historicosFinales(unidad, unidadesHistoricasFinales);
+       // unidadEjb.historicosFinales(unidad, unidadesHistoricasFinales);
+        //TODO VER SI FUNCIONA BIEN
+        unidadEjb.historicosFinales2(unidad, unidadesHistoricasFinales);
         mav.addObject("historicosFinales", unidadesHistoricasFinales);
 
         //Obtenemos las oficinas que registran a la Unidad

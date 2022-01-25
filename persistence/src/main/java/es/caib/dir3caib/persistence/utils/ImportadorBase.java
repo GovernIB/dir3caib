@@ -248,8 +248,8 @@ public class ImportadorBase {
         if (isUpdate) { // cache unidades vacia
             cacheUnidad = new UnidadesCacheManager(this.unidadEjb);
         } else { // Si es creación/sincronización solo inicializamos las requeridas(unidades Responsables de las oficinas que se van a sincronizar)
-            //List<List<String>> unitsIds = new ArrayList<List<String>>();
-            List<List<UnidadPK>> unitsIds = new ArrayList<List<UnidadPK>>();
+            List<List<String>> unitsIds = new ArrayList<List<String>>();
+           // List<List<UnidadPK>> unitsIds = new ArrayList<List<UnidadPK>>();
             int total = getRequiredUnidades(unitsIds, sincronizacion);
             cacheUnidad = new UnidadesCacheManager(this.unidadEjb, unitsIds, total);
         }
@@ -345,16 +345,16 @@ public class ImportadorBase {
      * @return
      * @throws Exception
      */
-    private int getRequiredUnidades(List<List<UnidadPK>> all, Sincronizacion sincronizacion) throws Exception {
+    private int getRequiredUnidades(List<List<String>> all, Sincronizacion sincronizacion) throws Exception {
         FileInputStream is1 = null;
         CSVReader reader = null;
 
         // Conjunto donde guardamos todos los códigos de las unidades Responsables para procesarlas
-        //Set<String> allCodes = new HashSet<String>();
-        Set<UnidadPK> allCodes = new HashSet<UnidadPK>();
+        Set<String> allCodes = new HashSet<String>();
+      //  Set<UnidadPK> allCodes = new HashSet<UnidadPK>();
 
-        //List<String> codigosUnidad = new ArrayList<String>();
-        List<UnidadPK> codigosUnidad = new ArrayList<UnidadPK>();
+        List<String> codigosUnidad = new ArrayList<String>(); //String que representa codigo-version
+       // List<UnidadPK> codigosUnidad = new ArrayList<UnidadPK>();
         all.add(codigosUnidad);
 
         int count = 0;
@@ -375,20 +375,22 @@ public class ImportadorBase {
 
                 String codUOResponsable = fila[7].trim();
                 Long versionUOResponsable = Long.valueOf(fila[8].trim());
-                UnidadPK unidadPkResponsable = new UnidadPK(codUOResponsable,versionUOResponsable);
+                //UnidadPK unidadPkResponsable = new UnidadPK(codUOResponsable,versionUOResponsable);
+                String sUnidadPKResponsable = codUOResponsable+"-"+versionUOResponsable;
                 // Si no la contiene la añadimos a la lista
-                if (!allCodes.contains(codUOResponsable)) {
+              //  if (!allCodes.contains(codUOResponsable)) {
+                if (!allCodes.contains(sUnidadPKResponsable)) {
                     allCount++;
                     count++;
                     //Traspasamos a la lista final de 500 en 500
                     if (count > 500) {
-                        codigosUnidad = new ArrayList<UnidadPK>();
+                        codigosUnidad = new ArrayList<String>();
                         all.add(codigosUnidad);
                         count = 0;
                     }
 
-                    codigosUnidad.add(unidadPkResponsable);
-                    allCodes.add(unidadPkResponsable);
+                    codigosUnidad.add(sUnidadPKResponsable);
+                    allCodes.add(sUnidadPKResponsable);
                 }
             }
 

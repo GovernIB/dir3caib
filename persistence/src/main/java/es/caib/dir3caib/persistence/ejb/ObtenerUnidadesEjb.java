@@ -1,9 +1,6 @@
 package es.caib.dir3caib.persistence.ejb;
 
-import es.caib.dir3caib.persistence.model.ContactoUnidadOrganica;
-import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
-import es.caib.dir3caib.persistence.model.Sincronizacion;
-import es.caib.dir3caib.persistence.model.Unidad;
+import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.model.ws.UnidadTF;
 import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.utils.Utils;
@@ -115,7 +112,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
             //Obtenemos los historicos finales
             unidad.setContactos(contactosVisibles);
             Set<Unidad> historicosFinales = new HashSet<Unidad>();
-            unidadEjb.historicosFinales(unidad, historicosFinales);
+            unidadEjb.historicosFinales2(unidad, historicosFinales);
             //TODO DESCOMENTAR Y ARREGLAR
         //    unidad.setHistoricoUO(historicosFinales);
 
@@ -282,7 +279,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
         Unidad unidad = unidadEjb.findFullById(codigo);
         Set<Unidad> historicosFinales = new HashSet<Unidad>();
         List<UnidadTF> historicosFinalesList = new ArrayList<UnidadTF>();
-        unidadEjb.historicosFinales(unidad, historicosFinales);
+        unidadEjb.historicosFinales2(unidad, historicosFinales);
 
         for (Unidad uni : historicosFinales) {
             historicosFinalesList.add(UnidadTF.generar(uni));
@@ -305,7 +302,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
         Unidad unidad = unidadEjb.findFullById(codigo);
         Set<Unidad> historicosFinales = new HashSet<Unidad>();
         List<UnidadTF> historicosFinalesList = new ArrayList<UnidadTF>();
-        unidadEjb.historicosFinales(unidad, historicosFinales);
+        unidadEjb.historicosFinales2(unidad, historicosFinales);
 
         for (Unidad uni : historicosFinales) {
             if (oficinaEjb.tieneOficinasSIR(uni.getCodigo())) {
@@ -332,7 +329,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
         nodo.setDenominacion(unidad.getDenominacion());
         nodo.setNivel((long) nivel);
         //Obtenemos los históricos de primer nivel de la unidad indicada
-        //TODO DESCOMENTAR Y ARREGLAR
+
        /* Set<Unidad> parciales = unidad.getHistoricoUO();
         List<Nodo> historicosParciales = new ArrayList<Nodo>();
         //Para cada uno de los históricos obtenemos de manera recursiva sus históricos
@@ -340,9 +337,22 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
             Nodo nodoParcial = new Nodo();
             historicosParciales.add(nodoParcial);
             montarHistoricosFinales(parcial, nodoParcial, nivel + 1);
+        }*/
+
+        //TODO PROBAR
+        Set<HistoricoUO> parciales = unidad.getHistoricosUltima();
+        List<Nodo> historicosParciales = new ArrayList<Nodo>();
+        //Para cada uno de los históricos obtenemos de manera recursiva sus históricos
+        for (HistoricoUO parcial : parciales) {
+            Nodo nodoParcial = new Nodo();
+            historicosParciales.add(nodoParcial);
+            montarHistoricosFinales(parcial.getUnidadUltima(), nodoParcial, nivel + 1);
         }
+
+
+
         //Asignamos los históricos al nodo principal
-        nodo.setHistoricos(historicosParciales);*/
+        nodo.setHistoricos(historicosParciales);
 
 
     }

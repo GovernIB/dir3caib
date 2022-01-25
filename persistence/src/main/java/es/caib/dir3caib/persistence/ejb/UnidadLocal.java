@@ -1,5 +1,6 @@
 package es.caib.dir3caib.persistence.ejb;
 
+import es.caib.dir3caib.persistence.model.HistoricoUO;
 import es.caib.dir3caib.persistence.model.Oficina;
 import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.persistence.model.UnidadPK;
@@ -242,8 +243,8 @@ public interface UnidadLocal extends BaseEjb<Unidad, Long> {
      * @return
      * @throws Exception
      */
-    //List<Unidad> getListByIds(List<String> ids) throws Exception;
-    List<Unidad> getListByIds(List<UnidadPK> ids) throws Exception;
+     List<Unidad> getListByIds(List<String> ids) throws Exception;
+  //  List<Unidad> getListByIds(List<UnidadPK> ids) throws Exception;
 
 
     /**
@@ -344,6 +345,9 @@ public interface UnidadLocal extends BaseEjb<Unidad, Long> {
     * @throws Exception
     */
    void historicosFinales(Unidad unidad, Set<Unidad> historicosFinales) throws Exception;
+
+   //TODO ver si va bien y renombrar este con el nombre del de arriba
+    void historicosFinales2(Unidad unidad, Set<Unidad> historicosFinales) throws Exception;
 
     /* Obtiene las unidades del nivel indicado cuya unidad Raiz es la indicada por codigo */
     public List<Unidad> getUnidadesByNivel(long nivel, String codigo, String estado) throws Exception;

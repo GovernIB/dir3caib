@@ -33,7 +33,7 @@ public class RelacionSirOfi implements Serializable {
 
     public RelacionSirOfi(String codOficina, String denOficina, String codUnidadResponsable, String codUnidad) {
         this.oficina = new Oficina(codOficina, denOficina, codUnidadResponsable,null);
-        this.unidad = new Unidad(codUnidad, null);
+        this.unidad = new Unidad(codUnidad, "");
     }
 
     public void finalize() throws Throwable {

@@ -146,6 +146,10 @@ public class Unidad implements Serializable {
     this.codigo = codigo;
   }
 
+  public Unidad(String codigo, Long version) {
+    this.codigo = codigo;
+    this.version = version;
+  }
 
   @Column(name = "ID", nullable = false)
   @Id
