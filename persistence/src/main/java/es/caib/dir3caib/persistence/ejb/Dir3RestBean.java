@@ -310,7 +310,7 @@ public class Dir3RestBean implements Dir3RestLocal {
     }
 
     /**
-     * TODO REVISAR, parece que el parametro "conOficinas" siempre se indica a "false"
+     * TODO REVISAR, parece que el parametro "conOficinas" siempre se indica a "false" (desde regweb si se envia a false)
      * Búsqueda de organismos según los parámetros indicados que esten vigentes
      *
      * @param codigo                    código de la unidad

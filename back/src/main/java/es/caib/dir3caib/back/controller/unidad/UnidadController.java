@@ -146,23 +146,26 @@ public class UnidadController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/{codUnidad}/detalle", method = RequestMethod.GET)
+    //TODO REVISAR tema historicos
     public ModelAndView mostrarArbolUnidades(HttpServletRequest request, @PathVariable String codUnidad) throws Exception {
+        log.info("Entro en mostrarArbolUnidades");
 
         Long start = System.currentTimeMillis();
         ModelAndView mav = new ModelAndView("unidad/unidadDetalle");
 
         //Obtenemos los datos básicos de la unidad que nos indican
-        Unidad unidad = unidadEjb.findFullById(codUnidad);
+        //TODO Pasar la version en el mapping
+        Unidad unidad = unidadEjb.findFullByPK(codUnidad,1L);
         mav.addObject("unidad", unidad);
 
         //Obtenemos los historicos anteriores de la unidad indicada
-        Set<Unidad> unidadesHistoricasAnteriores = unidadEjb.historicosAnteriores(codUnidad);
+        Set<Unidad> unidadesHistoricasAnteriores = unidadEjb.historicosHaciaAtras(unidad.getCodigo());
         mav.addObject("historicosAnteriores", unidadesHistoricasAnteriores);
 
         //Obtenemos los históricos finales hacia delante.
         Set<Unidad> unidadesHistoricasFinales = new HashSet<Unidad>();
        // unidadEjb.historicosFinales(unidad, unidadesHistoricasFinales);
-        //TODO VER SI FUNCIONA BIEN
+
         unidadEjb.historicosFinales2(unidad, unidadesHistoricasFinales);
         mav.addObject("historicosFinales", unidadesHistoricasFinales);
 
@@ -326,6 +329,34 @@ public class UnidadController extends BaseController {
         mav.addObject("unidadRaiz", unidad.getCodUnidadSuperior());
         mav.addObject("unidadExtinguida", unidadExtinguida);
         return mav;
+
+    }
+
+    /**
+     *
+     */
+    //TODO BORRAR es para hacer pruebas
+    @RequestMapping(value = "/pruebahistoricos", method = RequestMethod.GET)
+    public void pruebahistoricos() throws Exception {
+
+
+      /*  Unidad unidad = unidadEjb.findByCodigoMenorVersion("E04984901");
+        if(unidad!=null) {
+            log.info("ID UNIDAD ENCONTRADA  " + unidad.getId());
+            Set<Unidad> historicosFinales = new HashSet<Unidad>();
+            unidadEjb.historicosFinales2(unidad, historicosFinales);
+            for (Unidad historicoFinal : historicosFinales) {
+                log.info("HISTORICO FINAL ENCONTRADO " + historicoFinal.getCodigo());
+            }
+
+
+        }*/
+
+        Unidad unidad = unidadEjb.findByCodigoMenorVersion("E04984901");
+        Nodo nodo = new Nodo();
+        obtenerUnidadesEjb.montarHistoricosFinales(unidad,nodo,1);
+        //log.info(nodo.getHistoricos().size());
+        //log.info(nodo.getHistoricos().get(0).getCodigo());
 
     }
 

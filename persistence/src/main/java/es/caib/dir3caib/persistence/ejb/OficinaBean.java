@@ -866,9 +866,12 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
     @Override
     @SuppressWarnings("unchecked")
     public List<Oficina> dependienteByUnidadEstado(String codigoUnidadResponsable, String estado) throws Exception {
-        Query q = em.createQuery("Select  oficina.codigo, oficina.denominacion, oficina.codUoResponsable.codigo, oficina.codOfiResponsable.codigo, oficina.servicios from Oficina as oficina where " +
+
+        Query q = em.createQuery("Select  oficina.codigo, oficina.denominacion, oficina.codUoResponsable.codigo, oficina.codOfiResponsable.codigo, servicios from Oficina as oficina  left outer join oficina.servicios servicios where " +
                 "oficina.codUoResponsable.codUnidadRaiz.codigo =:codigoUnidadResponsable and oficina.estado.codigoEstadoEntidad =:estado and " +
                 "oficina.codOfiResponsable is not null order by oficina.codigo");
+
+
 
         q.setParameter("codigoUnidadResponsable", codigoUnidadResponsable);
         q.setParameter("estado", estado);
@@ -878,7 +881,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
         for (Object[] object : result) {
 
-            /*Query q2 = em.createNativeQuery("select codservicio from DIR_SERVICIOOFI where codoficina=?");
+           /* Query q2 = em.createNativeQuery("select codservicio from DIR_SERVICIOOFI where codoficina=?");
             q2.setParameter(1, object[0]);
 
             List<Object> result2 = q2.getResultList();
