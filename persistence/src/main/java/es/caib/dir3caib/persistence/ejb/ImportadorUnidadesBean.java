@@ -119,21 +119,19 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                                 String codigoUnidad = fila[0];
                                 Long version = Long.valueOf(fila[1]);
 
-                                UnidadPK unidadPK = new UnidadPK(codigoUnidad,version);
+                                String codigoUnidadVersion= codigoUnidad+"v"+version;
 
                                 Unidad unidad = null;
 
                                 // Comprobamos si existe ya en la BD
-                                if (unidadesExistInBBDDNueva.contains(unidadPK)) {
-                                //if (unidadesExistInBBDD.contains(codigoUnidad)) {
+                                if (unidadesExistInBBDD.contains(codigoUnidadVersion)) {
 
                                     // Si es una actualización: Eliminamos los contactos e historicos de la Unidad
-                                    contactoUOEjb.deleteByUnidad(codigoUnidad,version);
-                                    unidadEjb.eliminarHistoricosUnidad(codigoUnidad, version);
+                                    contactoUOEjb.deleteByUnidad(codigoUnidadVersion);
+                                    unidadEjb.eliminarHistoricosUnidad(codigoUnidadVersion);
 
                                     s = System.currentTimeMillis();
-                                    //unidad = unidadEjb.findById(codigoUnidad);
-                                    unidad = unidadEjb.findByPKs(codigoUnidad,version);
+                                    unidad = unidadEjb.findById(codigoUnidadVersion);
                                     findbyid = findbyid + (System.currentTimeMillis() - s);
                                     findbyidcount++;
                                 }
@@ -144,8 +142,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                                 boolean existeix;
                                 if (unidad == null) {
                                     unidad = new Unidad();
-                                    unidad.setCodigo(codigoUnidad);
-                                    unidad.setVersion(version);
+                                    unidad.setCodigo(codigoUnidadVersion);
                                     existeix = false;
                                 } else {
                                     existeix = true;
@@ -166,33 +163,28 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                                     unidad = unidadEjb.persistReal(unidad);
                                 }
                                 //la añadimos a la lista de los existentes en BD
-                                unidadPK = new UnidadPK(codigoUnidad, version);
-                                unidadesExistInBBDD.add(codigoUnidad);
-                                unidadesExistInBBDDNueva.add(unidadPK);
+                                unidadesExistInBBDD.add(codigoUnidadVersion);
                                 persist = persist + (System.currentTimeMillis() - s);
 
                                 s = System.currentTimeMillis();
 
                                 // Asignamos la Unidad Raiz de la que depende
-                              //  String codigoUnidadRaiz = fila[9].trim();
                                 String codigoUnidadRaiz = fila[14].trim();
                                 Long versionUnidadRaiz= Long.valueOf(fila[15].trim());
-                                if (!codigoUnidadRaiz.isEmpty()) {
+                                String codigoUnidadRaizVersion= codigoUnidadRaiz+"v"+versionUnidadRaiz;
+                                if (!codigoUnidadRaizVersion.isEmpty()) {
                                     Unidad unidadRaiz = null;
-                                    UnidadPK unidadRaizPK = new UnidadPK(codigoUnidadRaiz, versionUnidadRaiz);
-                                    //if (unidadesExistInBBDD.contains(codigoUnidadRaiz)) { //Si existe la obtenemos
-                                    if (unidadesExistInBBDDNueva.contains(unidadRaizPK)) { //Si existe la obtenemos
-                                        //unidadRaiz = unidadEjb.findById(codigoUnidadRaiz);
-                                        unidadRaiz = unidadEjb.findByPKs(codigoUnidadRaiz,versionUnidadRaiz);
+                                    if (unidadesExistInBBDD.contains(codigoUnidadRaizVersion)) { //Si existe la obtenemos
+                                        unidadRaiz = unidadEjb.findById(codigoUnidadRaizVersion);
                                     } else { // Si no la creamos y la guardamos
                                         unidadRaiz = unidadVacia();
-                                        unidadRaiz.setCodigo(codigoUnidadRaiz);
+                                        unidadRaiz.setCodigo(codigoUnidadRaizVersion);
+                                        unidadRaiz.setCodigoDir3(codigoUnidadRaiz);
                                         unidadRaiz.setVersion(versionUnidadRaiz);
                                         unidadRaiz = unidadEjb.persistReal(unidadRaiz);
                                     }
                                     //añadimos la unidad raiz a los existentes en BD
-                                   // unidadesExistInBBDD.add(codigoUnidadRaiz);
-                                    unidadesExistInBBDDNueva.add(unidadRaizPK);
+                                    unidadesExistInBBDD.add(codigoUnidadRaizVersion);
                                     //le asignamos la unidad raiz
                                     unidad.setCodUnidadRaiz(unidadRaiz);
 
@@ -202,25 +194,22 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
 
                                 //Asignamos la Unidad Superior de la que depende
-                              //  String codigoUnidadSuperior = fila[7].trim();
                                 String codigoUnidadSuperior = fila[11].trim();
                                 Long versionUnidadSuperior = Long.valueOf(fila[12].trim());
-                                if (!codigoUnidadSuperior.isEmpty()) {
+                                String codigoUnidadSuperiorVersion= codigoUnidadSuperior+"v"+versionUnidadSuperior;
+                                if (!codigoUnidadSuperiorVersion.isEmpty()) {
                                     Unidad unidadSuperior = null;
-                                    UnidadPK unidadSuperiorPK = new UnidadPK(codigoUnidadSuperior, versionUnidadSuperior);
-                                   // if (unidadesExistInBBDD.contains(codigoUnidadSuperior)) {//Si existe la obtenemos
-                                    if (unidadesExistInBBDDNueva.contains(unidadSuperiorPK)) {//Si existe la obtenemos
-                                        //unidadSuperior = unidadEjb.findById(codigoUnidadSuperior);
-                                        unidadSuperior = unidadEjb.findByPKs(codigoUnidadSuperior, versionUnidadSuperior);
+                                    if (unidadesExistInBBDD.contains(codigoUnidadSuperiorVersion)) {//Si existe la obtenemos
+                                        unidadSuperior = unidadEjb.findById(codigoUnidadSuperiorVersion);
                                     } else {// Si no la creamos y la guardamos
                                         unidadSuperior = unidadVacia();
-                                        unidadSuperior.setCodigo(codigoUnidadSuperior);
+                                        unidadSuperior.setCodigo(codigoUnidadSuperiorVersion);
+                                        unidadSuperior.setCodigoDir3(codigoUnidadSuperior);
                                         unidadSuperior.setVersion(versionUnidadSuperior);
                                         unidadSuperior = unidadEjb.persistReal(unidadSuperior);
                                     }
                                     //añadimos la unidad superior a los existentes en BD
-                                  //  unidadesExistInBBDD.add(codigoUnidadSuperior);
-                                    unidadesExistInBBDDNueva.add(unidadSuperiorPK);
+                                    unidadesExistInBBDD.add(codigoUnidadSuperiorVersion);
                                     //le asignamos la unidad superior
                                     unidad.setCodUnidadSuperior(unidadSuperior);
                                 } else {//actualizamos a sin superior
@@ -228,14 +217,12 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                                 }
 
                                 // Gestionamos EdpPrincipales cuando son así mismas
-                              //  String codigoEdpPrincipal = fila[12].trim();
                                 String codigoEdpPrincipal = fila[18].trim();
                                 String versionEdpPrincipal = fila[19].trim();
-                                if(!codigoEdpPrincipal.isEmpty() && !versionEdpPrincipal.isEmpty()){
-                                    UnidadPK unidadEdpPrincipalPK = new UnidadPK(codigoEdpPrincipal,Long.valueOf(versionEdpPrincipal));
-                                    if(unidadEdpPrincipalPK.equals(unidadPK)){
-                                        unidad.setCodEdpPrincipal(unidad);
-                                    }
+                                String codigoEdpPrincipalVersion = codigoEdpPrincipal+"v"+versionEdpPrincipal;
+
+                                if (!codigoEdpPrincipalVersion.isEmpty() && codigoEdpPrincipalVersion.equals(unidad.getCodigo())) {
+                                    unidad.setCodEdpPrincipal(unidad);
                                 }
 
 
@@ -343,11 +330,13 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
         String codigoUnidad = fila[0];
 
+        unidad.setCodigoDir3(codigoUnidad);
+        unidad.setVersion(Long.valueOf(fila[1]));
+
         // fecha de cuando se ha importado desde Madrid
         unidad.setFechaImportacion(new Date());
 
         //Nivel de administracion
-        //String codigoNivelAdmin = fila[5].trim();
         String codigoNivelAdmin = fila[8].trim();
         CatNivelAdministracion nivelAdministracion = null;
         if (!codigoNivelAdmin.isEmpty()) {
@@ -356,7 +345,6 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
         unidad.setNivelAdministracion(nivelAdministracion);
 
         //Ámbito territorial
-     //   String ambTerrit = fila[16].trim();
         String ambTerrit =  fila[23].trim();
         CatAmbitoTerritorial ambitoTerritorial = null;
         if (!ambTerrit.isEmpty()) {
@@ -367,7 +355,6 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
         unidad.setCodAmbitoTerritorial(ambitoTerritorial);
 
         //Nivel Jerarquico
-        //String codigoJerarquico = fila[6].trim();
         String codigoJerarquico =fila[9].trim();
         if (!codigoJerarquico.isEmpty()) {
             unidad.setNivelJerarquico(Long.valueOf(codigoJerarquico));
@@ -376,7 +363,6 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
         }
 
         //Comunidad autonoma
-       // String codigoComunidadAutonoma = fila[19].trim();
         String codigoComunidadAutonoma = fila[26].trim();
         if (!codigoComunidadAutonoma.isEmpty()) {
             unidad.setCodAmbComunidad(cacheComunidadAutonoma.get(Long.valueOf(codigoComunidadAutonoma)));
@@ -385,7 +371,6 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
         }
 
         // CodAmbElm
-      //  String codAmbElm = fila[23].trim();
         String codAmbElm = fila[30].trim();
         if (!codAmbElm.isEmpty()) {
             unidad.setCodAmbElm(Long.valueOf(codAmbElm));
@@ -395,7 +380,6 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
         //Entidad Geografica de Ambito
         CatEntidadGeografica entidadGeografica = null;
-     //   String codigoEntGeog = fila[17].trim();
         String codigoEntGeog = fila[24].trim();
         if (!codigoEntGeog.isEmpty()) {
             entidadGeografica = cacheEntidadGeografica.get(codigoEntGeog);
@@ -405,7 +389,6 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
         }
 
         //Isla
-       // String codigoIsla = fila[22].trim();
         String codigoIsla = fila[29].trim();
         if (!codigoIsla.isEmpty()) {
             unidad.setCodAmbIsla(cacheIsla.get(Long.valueOf(codigoIsla)));
@@ -414,12 +397,10 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
         }
 
         //Localidad extranjera cuando el país no es España
-       // unidad.setCodAmbLocExtranjera(fila[24].trim());
         unidad.setCodAmbLocExtranjera(fila[31].trim());
 
         //Provincia
         CatProvincia provincia = null;
-       // final String codigoProvincia = fila[20].trim();
         final String codigoProvincia = fila[27].trim();
         if (!codigoProvincia.isEmpty()) {
             provincia = cacheProvincia.get(Long.valueOf(codigoProvincia));
@@ -433,7 +414,6 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
         }
 
         //Localidad
-     //   String codigoMunicipio = fila[21].trim();
         String codigoMunicipio = fila[28].trim();
         if (provincia != null && entidadGeografica != null && !codigoMunicipio.isEmpty()) {
             CatLocalidadPK catLocalidadPK = new CatLocalidadPK(Long.valueOf(codigoMunicipio), provincia, entidadGeografica);
@@ -443,7 +423,6 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
         }
 
         //Pais
-       // String codigoPais = fila[18].trim();
         String codigoPais = fila[25].trim();
         if (!codigoPais.isEmpty()) {
             unidad.setCodAmbPais(cachePais.get(Long.valueOf(codigoPais)));
@@ -452,7 +431,6 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
         }
 
         //Comunidad de la direccion
-       // String codigoComunidad = fila[40].trim();
         String codigoComunidad = fila[48].trim();
         if (!codigoComunidad.isEmpty()) {
             unidad.setCodComunidad(cacheComunidadAutonoma.get(Long.valueOf(codigoComunidad)));
@@ -461,16 +439,13 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
         }
 
         //Unidad Entidad de Derecho Publico
-        //String codigoEdpPrincipal = fila[12].trim();
         String codigoEdpPrincipal = fila[18].trim();
         String versionEdpPrincipal = !fila[19].isEmpty()?fila[19].trim():"1";
+        String codigoEdpPrincipalVersion= codigoEdpPrincipal+"v"+versionEdpPrincipal;
         if (!codigoEdpPrincipal.isEmpty()) {
             Unidad unidadEdpPrincipal;
-            UnidadPK unidadEdpPrincipalPK = new UnidadPK(codigoEdpPrincipal, Long.valueOf(versionEdpPrincipal));
-            //if (unidadesExistInBBDD.contains(codigoEdpPrincipal)) {
-            if (unidadesExistInBBDDNueva.contains(unidadEdpPrincipalPK)) {
-               // unidadEdpPrincipal = unidadEjb.findById(codigoEdpPrincipal);
-                unidadEdpPrincipal = unidadEjb.findByPKs(codigoEdpPrincipal,Long.valueOf(versionEdpPrincipal));
+            if (unidadesExistInBBDD.contains(codigoEdpPrincipalVersion)) {
+                unidadEdpPrincipal = unidadEjb.findById(codigoEdpPrincipalVersion);
             } else {
                 unidadEdpPrincipal = null;
             }
@@ -480,11 +455,9 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
         }
 
         //Codigo de la unidad que proviene de su fuente
-       // unidad.setCodExterno(fila[31].trim());
         unidad.setCodExterno(fila[39].trim());
 
         //Entidad Geografica
-       // String codigoEntGeogD = fila[43].trim();
         String codigoEntGeogD = fila[51].trim();
         CatEntidadGeografica entidadGeograficaD = null;
         if (!codigoEntGeogD.isEmpty()) {
@@ -492,7 +465,6 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
         }
 
         //Localidad de la direccion
-       // String codigoProvD = fila[41].trim();
         String codigoProvD = fila[49].trim();
         CatProvincia provinciaD = null;
 
@@ -500,7 +472,7 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
             provinciaD = cacheProvincia.get(Long.valueOf(codigoProvD));
         }
 
-       // String codigoLocD = fila[42].trim();
+
         String codigoLocD = fila[50].trim();
         if (!codigoLocD.isEmpty() && !codigoProvD.isEmpty() && !codigoEntGeogD.isEmpty()) {
             CatLocalidadPK catLocalidadPKD = new CatLocalidadPK(Long.valueOf(codigoLocD), provinciaD, entidadGeograficaD);
@@ -510,7 +482,6 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
         }
 
         //Pais
-      //  String codigoPaisD = fila[39].trim();
         String codigoPaisD = fila[47].trim();
         if (!codigoPaisD.isEmpty()) {
             unidad.setCodPais(cachePais.get(Long.valueOf(codigoPaisD)));
@@ -519,11 +490,9 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
         }
 
         //Codigo postal
-        //unidad.setCodPostal(fila[38].trim());
         unidad.setCodPostal(fila[46].trim());
 
         //Tipo Entidad Publica
-        //String codigoTipoEntPubli = fila[14].trim();
         String codigoTipoEntPubli = fila[21].trim();
         if (!codigoTipoEntPubli.isEmpty()) {
             unidad.setCodTipoEntPublica(cacheTipoEntidadPublica.get(codigoTipoEntPubli));
@@ -532,7 +501,6 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
         }
 
         //Tipo Unidad Organica
-       // String codigoTipUniOrg = fila[15].trim();
         String codigoTipUniOrg = fila[22].trim();
         if (!codigoTipUniOrg.isEmpty()) {
             unidad.setCodTipoUnidad(cacheTipoUnidadOrganica.get(codigoTipUniOrg));
@@ -541,12 +509,10 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
         }
 
         //Si es Entidad de Derecho Publico
-       // Boolean esEdp = fila[11].equals("S");
         Boolean esEdp = fila[17].equals("S");
         unidad.setEsEdp(esEdp);
 
         //Estado Entidad
-      //  String codigoEstado = fila[2].trim();
         String codigoEstado = fila[5].trim();
         if (!codigoEstado.isEmpty()) {
             unidad.setEstado(cacheEstadoEntidad.get(codigoEstado));
@@ -555,7 +521,6 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
         }
 
         //Fecha Alta
-       // String sfechaAlta = fila[27].trim();
         String sfechaAlta = fila[34].trim();
         if (!sfechaAlta.isEmpty()) {
             unidad.setFechaAltaOficial(formatoFecha.parse(sfechaAlta));
@@ -564,7 +529,6 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
         }
 
         //Fecha Anulación
-       // String sfechaAnulacion = fila[30].trim();
         String sfechaAnulacion = fila[37].trim();
         if (!sfechaAnulacion.isEmpty()) {
             unidad.setFechaAnulacion(formatoFecha.parse(sfechaAnulacion));
@@ -573,7 +537,6 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
         }
 
         //Fecha Baja
-        //String sfechaBajaOficial = fila[28].trim();
         String sfechaBajaOficial = fila[35].trim();
         if (!sfechaBajaOficial.isEmpty()) {
             unidad.setFechaBajaOficial(formatoFecha.parse(sfechaBajaOficial));
@@ -582,7 +545,6 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
         }
 
         //Fecha Extinción
-        //String sfechaExtincion = fila[29].trim();
         String sfechaExtincion = fila[36].trim();
         if (!sfechaExtincion.isEmpty()) {
             unidad.setFechaExtincion(formatoFecha.parse(sfechaExtincion));
@@ -601,35 +563,22 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
         //Varios
         unidad.setLocExtranjera(fila[45].trim());
-       // unidad.setLocExtranjera(fila[53].trim());
-      //  unidad.setNifcif(fila[3].trim());
         unidad.setNifcif(fila[6].trim());
-       // unidad.setNombreVia(fila[35].trim());
         unidad.setNombreVia(fila[43].trim());
-       // unidad.setNumVia(fila[36].trim());
         unidad.setNumVia(fila[44].trim());
-       // unidad.setObservBaja(fila[33].trim());
         unidad.setObservBaja(fila[41].trim());
-      //  unidad.setObservGenerales(fila[32].trim());
         unidad.setObservGenerales(fila[40].trim());
-        //unidad.setObservaciones(fila[46].trim());
         unidad.setObservaciones(fila[54].trim());
-     //  unidad.setSiglas(fila[4].trim());
         unidad.setSiglas(fila[7].trim());
-      //  unidad.setCompetencias(fila[25].trim());
         unidad.setCompetencias(fila[32].trim());
-       // unidad.setComplemento(fila[37].trim());
         unidad.setComplemento(fila[45].trim());
-       // unidad.setDenominacion(fila[1].trim());
         unidad.setDenominacion(fila[2].trim());
         unidad.setDenomLenguaCooficial(fila[3].trim());
         String idioma = fila[4].trim();
         if(!idioma.isEmpty()){
             unidad.setIdiomalengua(Integer.valueOf(idioma));
         }
-       // unidad.setDirExtranjera(fila[44].trim());
         unidad.setDirExtranjera(fila[52].trim());
-      //  unidad.setDisposicionLegal(fila[26].trim());
         unidad.setDisposicionLegal(fila[33].trim());
 
 
@@ -643,7 +592,6 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
 
 
         //Tipo Via
-        //String codigoTipoVia = fila[34].trim();
         String codigoTipoVia = fila[42].trim();
         if (!codigoTipoVia.isEmpty()) {
             unidad.setTipoVia(cacheTipoVia.get(Long.valueOf(codigoTipoVia)));
@@ -680,22 +628,19 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
             while ((fila = reader.readNext()) != null) {
 
                 //Un historico está representado por una tupla unidad anterior-unidad ultima y una serie de datos.
-              //  String codigoUnidadAnterior = fila[0]; //Unidad que es sustituida
-                //  String codigoUnidadUltima = fila[2]; //unidad que la sustituye
                 String codigoUnidadAnterior = fila[0]; //Unidad que es sustituida
                 String codigoUnidadUltima = fila[3]; //unidad que la sustituye
                 Long versionAnterior = Long.valueOf(fila[1]);
                 Long versionUltima = Long.valueOf(fila[4]);
 
-                UnidadPK unidadUltimaPK = new UnidadPK(codigoUnidadUltima,versionUltima);
+                String codigoUnidadAnteriorVersion=codigoUnidadAnterior+"v"+versionAnterior;
+                String codigoUnidadUltimaVersion=codigoUnidadUltima+"v"+versionUltima;
 
                 //try {
 
-                    //if (!codigoUnidadUltima.isEmpty() && !codigoUnidadAnterior.isEmpty() && unidadesExistInBBDD.contains(codigoUnidadUltima)) { // Si no están vacios
-                    if (!codigoUnidadUltima.isEmpty() && !codigoUnidadAnterior.isEmpty() && unidadesExistInBBDDNueva.contains(unidadUltimaPK)) { // Si no están vacios
-
-                        Unidad unidadAnterior = unidadEjb.findByPKsReduced(codigoUnidadAnterior, versionAnterior);
-                        Unidad unidadUltima = unidadEjb.findByPKsReduced(codigoUnidadUltima, versionUltima);
+                    if (!codigoUnidadUltimaVersion.isEmpty() && !codigoUnidadAnteriorVersion.isEmpty() && unidadesExistInBBDD.contains(codigoUnidadUltimaVersion)) { // Si no están vacios
+                        Unidad unidadAnterior = unidadEjb.getReference(codigoUnidadAnteriorVersion);
+                        Unidad unidadUltima = unidadEjb.getReference(codigoUnidadUltimaVersion);
                         HistoricoUO historicoUO = new HistoricoUO();
                         historicoUO.setUnidadAnterior(unidadAnterior);
                         historicoUO.setUnidadUltima(unidadUltima);
@@ -710,8 +655,6 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                             historicoUO.setEstado(null);
                         }
 
-
-                        //unidadEjb.crearHistoricoUnidad(codigoUnidadAnterior, codigoUnidadUltima);
                         historicoUOEjb.persistReal(historicoUO);
 
                         count++;
@@ -770,16 +713,15 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                     String valorContacto = fila[3].trim();
                     boolean visibilidad = fila[4].trim().equals("1");
 
+                    String codigoUnidadVersion= codigoUnidad+"v"+versionUnidad;
 
 
-
-                    if(!codigoUnidad.isEmpty() && !stipoContacto.isEmpty() && !valorContacto.isEmpty() && visibilidad){
+                    if(!codigoUnidadVersion.isEmpty() && !stipoContacto.isEmpty() && !valorContacto.isEmpty() && visibilidad){
 
                         ContactoUnidadOrganica contacto = new ContactoUnidadOrganica();
 
                         // Asociamos unidad
-                        //Aquí antes habia un getReference()
-                        Unidad unidad = unidadEjb.findByPKsReduced(codigoUnidad,versionUnidad);
+                        Unidad unidad = unidadEjb.getReference(codigoUnidadVersion);
                         contacto.setUnidad(unidad);
 
                         //Estado Entidad
@@ -844,15 +786,16 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                 Long  versionUnidad = Long.valueOf(fila[1].trim());
                 String codigoExterno = fila[2].trim();
 
-                UnidadPK unidadPK = new UnidadPK(codigoUnidad, versionUnidad);
+                String codigoUnidadVersion= codigoUnidad+"v"+versionUnidad;
 
-                if(!codigoUnidad.isEmpty() && versionUnidad!=null && unidadesExistInBBDDNueva.contains(unidadPK)){
+
+
+                if(!codigoUnidadVersion.isEmpty()  && unidadesExistInBBDD.contains(codigoUnidadVersion)){
 
                     CodigoUnidadOrganica codigoUO = new CodigoUnidadOrganica();
 
                     // Asociamos unidad
-                    //Aquí antes habia un getReference()
-                    Unidad unidad = unidadEjb.findByPKsReduced(codigoUnidad,versionUnidad);
+                    Unidad unidad = unidadEjb.getReference(codigoUnidadVersion);
                     codigoUO.setUnidad(unidad);
 
                     //Estado Entidad
@@ -914,15 +857,15 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                 Long  versionUnidad = Long.valueOf(fila[1].trim());
                 String nifUnidad = fila[2].trim();
                 boolean nifPrincipal= fila[3].trim().equals("S");
-                UnidadPK unidadPK = new UnidadPK(codigoUnidad, versionUnidad);
 
-                if(!codigoUnidad.isEmpty() && versionUnidad!=null && unidadesExistInBBDDNueva.contains(unidadPK)){
+                String codigoUnidadVersion= codigoUnidad+"v"+versionUnidad;
+
+                if(!codigoUnidadVersion.isEmpty()  && unidadesExistInBBDD.contains(codigoUnidadVersion)){
 
                     NifCifUnidadOrganica nifCifUO = new NifCifUnidadOrganica();
 
                     // Asociamos unidad
-                    //Aquí antes habia un getReference()
-                    Unidad unidad = unidadEjb.findByPKsReduced(codigoUnidad,versionUnidad);
+                    Unidad unidad = unidadEjb.getReference(codigoUnidadVersion);
                     nifCifUO.setUnidad(unidad);
 
                     //Estado Entidad
@@ -986,14 +929,13 @@ public class ImportadorUnidadesBean extends ImportadorBase implements Importador
                 Long  versionUnidad = Long.valueOf(fila[1]);
                 Long codigoServicio = Long.valueOf(fila[2]);
 
-                UnidadPK unidadPK = new UnidadPK(codigoUnidad,versionUnidad);
+                String codigoUnidadVersion=codigoUnidad+"v"+versionUnidad;
 
                 //try {
 
-                //if (!codigoUnidadUltima.isEmpty() && !codigoUnidadAnterior.isEmpty() && unidadesExistInBBDD.contains(codigoUnidadUltima)) { // Si no están vacios
-                if (!codigoUnidad.isEmpty() && versionUnidad!=null && unidadesExistInBBDDNueva.contains(unidadPK)) { // Si no están vacios
+                if (!codigoUnidadVersion.isEmpty()  && unidadesExistInBBDD.contains(codigoUnidadVersion)) { // Si no están vacios
 
-                    Unidad unidad = unidadEjb.findByPKsReduced(codigoUnidad, versionUnidad);
+                    Unidad unidad = unidadEjb.getReference(codigoUnidadVersion);
 
 
                     ServicioUO servicioUO = new ServicioUO();

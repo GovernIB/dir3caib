@@ -109,7 +109,7 @@ public class ImportadorBase {
     public Map<Long, CatJerarquiaOficina> cacheJerarquiaOficina = new TreeMap<Long, CatJerarquiaOficina>();
     public Map<Long, CatTipoCodigoFuenteExterna> cacheTipoCodigoFuenteExterna = new TreeMap<Long, CatTipoCodigoFuenteExterna>();
     public Set<String> unidadesExistInBBDD = new TreeSet<String>();
-    public Set<UnidadPK> unidadesExistInBBDDNueva = new TreeSet<UnidadPK>();
+  //  public Set<UnidadPK> unidadesExistInBBDDNueva = new TreeSet<UnidadPK>();
     public Set<String> oficinasExistInBBDD = new TreeSet<String>();
     public UnidadesCacheManager cacheUnidad;
 
@@ -229,7 +229,7 @@ public class ImportadorBase {
 
         // Obtenemos todos los códigos de las Unidades que existen en bbdd
         unidadesExistInBBDD.addAll(unidadEjb.getAllCodigos());
-        unidadesExistInBBDDNueva.addAll(unidadEjb.getAllUnidadPK());
+      //  unidadesExistInBBDDNueva.addAll(unidadEjb.getAllUnidadPK());
 
         end = System.currentTimeMillis();
         log.debug("Inicialitzada Cache Unidades existents en " + Utils.formatElapsedTime(end - start));
@@ -375,11 +375,10 @@ public class ImportadorBase {
 
                 String codUOResponsable = fila[7].trim();
                 Long versionUOResponsable = Long.valueOf(fila[8].trim());
-                //UnidadPK unidadPkResponsable = new UnidadPK(codUOResponsable,versionUOResponsable);
-                String sUnidadPKResponsable = codUOResponsable+"-"+versionUOResponsable;
+
+                String uoResponsableCodigoVersion = codUOResponsable+"v"+versionUOResponsable;
                 // Si no la contiene la añadimos a la lista
-              //  if (!allCodes.contains(codUOResponsable)) {
-                if (!allCodes.contains(sUnidadPKResponsable)) {
+                if (!allCodes.contains(uoResponsableCodigoVersion)) {
                     allCount++;
                     count++;
                     //Traspasamos a la lista final de 500 en 500
@@ -389,8 +388,8 @@ public class ImportadorBase {
                         count = 0;
                     }
 
-                    codigosUnidad.add(sUnidadPKResponsable);
-                    allCodes.add(sUnidadPKResponsable);
+                    codigosUnidad.add(uoResponsableCodigoVersion);
+                    allCodes.add(uoResponsableCodigoVersion);
                 }
             }
 

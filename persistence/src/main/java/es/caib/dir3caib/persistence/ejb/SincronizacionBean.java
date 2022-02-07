@@ -372,6 +372,12 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
             Map<String, Object> reqContextCatalogos = ((BindingProvider) catalogoService).getRequestContext();
             reqContextCatalogos.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endPointCatalogos);
 
+            //Set timeout until a connection is established
+           // reqContextCatalogos.put("javax.xml.ws.client.connectionTimeout", "50000");
+
+            //Set timeout until the response is received
+          //  reqContextCatalogos.put("javax.xml.ws.client.receiveTimeout", "50000");
+
             // Invocamos al WS
             es.caib.dir3caib.ws.dir3.catalogo.client.RespuestaWS respuesta = catalogoService.exportarV2(usuario, password, "csv", "COMPLETO");
 
@@ -539,8 +545,8 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
     @TransactionTimeout(value = 50000)
     public Sincronizacion sincronizarUnidadesOficinas() throws Exception{
 
-       // Sincronizacion sincroUnidadesOficinas = null; //TODO restablecer cuando funcione
-        Sincronizacion sincroUnidadesOficinas = findById(7L);
+        Sincronizacion sincroUnidadesOficinas = null;
+       // Sincronizacion sincroUnidadesOficinas = findById(7L);
 
         try{
 
@@ -548,11 +554,11 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
              Sincronizacion ultimaSincro = ultimaSincronizacionCompletada(Dir3caibConstantes.UNIDADES_OFICINAS);
 
             // Descarga de directorio DIR3
-          /*  if(ultimaSincro != null){
+            if(ultimaSincro != null){
                 sincroUnidadesOficinas = descargarDirectorioWS(ultimaSincro.getFechaFin(), new Date());
             } else {//Es una descarga inicial
                 sincroUnidadesOficinas = descargarDirectorioWS(null, null);
-            }*/
+            }
 
             // Importamos Unidades y Oficinas
             if (sincroUnidadesOficinas != null && sincroUnidadesOficinas.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {

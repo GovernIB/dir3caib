@@ -35,14 +35,13 @@ import java.util.*;
     @Index(name="DIR_UNIDAD_CATAMBITTERR_FK_I", columnNames = {"CODAMBITOTERRITORIALID"}),
     @Index(name="DIR_UNIDAD_CATLOCAL_FK_I", columnNames = {"CODLOCALIDADID"}),
     @Index(name="DIR_UNIDAD_UNIDADEDPPRINC_FK_I", columnNames = {"CODEDPPRINCIPAL"}),
-    @Index(name="DIR_UNIDAD_PK_I", columnNames = {"CODIGO", "VERSION" }),
 })
 @SequenceGenerator(name="generator",sequenceName = "DIR_UNI_SEQ", allocationSize=1)
 public class Unidad implements Serializable {
 
-  private Long id;
-  private String codigo;
+  private String codigo; // contiene el string codigo+"v"+version
   private Long version;
+  private String codigoDir3;
   private String denominacion;
   private String denomLenguaCooficial;
   private int idiomalengua;
@@ -146,23 +145,10 @@ public class Unidad implements Serializable {
     this.codigo = codigo;
   }
 
-  public Unidad(String codigo, Long version) {
-    this.codigo = codigo;
-    this.version = version;
-  }
 
-  @Column(name = "ID", nullable = false)
+  @Index (name="DIR_UNIDAD_PK_I")
+  @Column(name = "CODIGO", nullable = false, length = 20)
   @Id
-  @GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "generator")
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  @Column(name = "CODIGO", nullable = false, length = 9)
   public String getCodigo() {
     return codigo;
   }
@@ -179,6 +165,15 @@ public class Unidad implements Serializable {
 
   public void setVersion(Long version) {
     this.version = version;
+  }
+
+  @Column(name = "CODIGODIR3", nullable = false, length = 9)
+  public String getCodigoDir3() {
+    return codigoDir3;
+  }
+
+  public void setCodigoDir3(String codigoDir3) {
+    this.codigoDir3 = codigoDir3;
   }
 
   @Column(name = "DENOMINACION", length = 300)
@@ -900,11 +895,11 @@ public class Unidad implements Serializable {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Unidad unidad = (Unidad) o;
-    return codigo.equals(unidad.codigo) && version.equals(unidad.version);
+    return Objects.equals(codigo, unidad.codigo);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(codigo, version);
+    return Objects.hash(codigo);
   }
 }

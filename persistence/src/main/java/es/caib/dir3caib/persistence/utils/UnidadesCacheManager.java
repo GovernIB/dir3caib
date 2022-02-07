@@ -25,8 +25,8 @@ public class UnidadesCacheManager {
     public int countFind = 0;
     public int countCache = 0;
     public long findByTime = 0;
-    //Map<String, Unidad> cacheUnidad = new TreeMap<String, Unidad>();
-    Map<UnidadPK, Unidad> cacheUnidad = new TreeMap<UnidadPK, Unidad>();
+    Map<String, Unidad> cacheUnidad = new TreeMap<String, Unidad>();
+    //Map<UnidadPK, Unidad> cacheUnidad = new TreeMap<UnidadPK, Unidad>();
 
     public UnidadesCacheManager(UnidadLocal unidadEjb) {
         super();
@@ -47,9 +47,7 @@ public class UnidadesCacheManager {
 
         List<Unidad> unidades;
         int count = 0;
-    //    UnidadPK unidadPK = new UnidadPK();
 
-        //for (List<UnidadPK> ids : unidadesRequeridas) {
         for (List<String> ids : unidadesRequeridas) {
             long start2 = System.currentTimeMillis();
 
@@ -66,11 +64,7 @@ public class UnidadesCacheManager {
             // Monta la cache de unidad con las unidades obtenidas.
 
             for (Unidad ca : unidades) {
-               // String sUnidadPK = ca.getCodigo(); //en el código devolvemos el string "codigo-version"
-              //  String[] unidadPKSeparada = sUnidadPK.split("-");
-                UnidadPK unidadPK = new UnidadPK(ca.getCodigo(),ca.getVersion());
-              //  cacheUnidad.put(ca.getCodigo(), ca);
-                cacheUnidad.put(unidadPK, ca);
+                cacheUnidad.put(ca.getCodigo(), ca);
                 count++;
             }
             long end2 = System.currentTimeMillis();
@@ -89,11 +83,11 @@ public class UnidadesCacheManager {
     /**
      * Método que obtiene una unidad de la lista de las unidades en cache, si no está en cache, va a bd a buscarla
      *
-     * @param unidadPK código de la unidad.
+     * @param codigo código de la unidad.
      * @return
      * @throws Exception
      */
-    /*public Unidad get(String codigo) throws Exception {
+    public Unidad get(String codigo) throws Exception {
 
         Unidad unidad = cacheUnidad.get(codigo);
 
@@ -103,29 +97,6 @@ public class UnidadesCacheManager {
             unidad = this.unidadEjb.getReference(codigo);
             findByTime = findByTime + (System.currentTimeMillis() - start);
             cacheUnidad.put(codigo, unidad);
-            countFind++;
-        } else {
-            countCache++;
-        }
-        return unidad;
-
-    }*/
-
-    public Unidad get(UnidadPK unidadPK) throws Exception {
-
-        Unidad unidad = cacheUnidad.get(unidadPK);
-
-        if(unidad!= null) {
-            log.info("Unidad de Cache " + unidad.getCodigo());
-        }
-
-        if (unidad == null) { // Si no està en cache
-            log.info("Entramos a cogerla de la BD");
-            //Calculamos que se tarda en cogerla de BD
-            long start = System.currentTimeMillis();
-            unidad = this.unidadEjb.findByPKsReduced(unidadPK.codigo, unidadPK.version);
-            findByTime = findByTime + (System.currentTimeMillis() - start);
-            cacheUnidad.put(unidadPK, unidad);
             countFind++;
         } else {
             countCache++;

@@ -127,7 +127,6 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
 
                                 //  Miramos si existe ya en la BD
                                 if (oficinasExistInBBDD.contains(codigoOficina)) {
-                                    log.info("Entro en existe oficina "  + codigoOficina);
 
                                     // Eliminamos sus contactos y servicios en la actualizacion
                                     contactoOfiEjb.deleteByOficina(codigoOficina);
@@ -264,48 +263,31 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
 
 
         //Unidad organica responsable
-        //String codUOResponsable = fila[5].trim();
         String codUOResponsable = fila[7].trim();
         String versionUOResponsable = fila[8].trim();
-        UnidadPK unidadPKResponsable = new UnidadPK(codUOResponsable,Long.valueOf(versionUOResponsable));
-        if (!codUOResponsable.isEmpty()) {
-            //TODO ELIMINAR
-           // oficina.setCodUoResponsable(cacheUnidad.get(codUOResponsable));
-           // Unidad unidadResponsable = unidadEjb.findByPKsReduced(codUOResponsable,Long.valueOf(versionUOResponsable));
-           // oficina.setCodUoResponsable(unidadResponsable);
-            log.info("unidadResponsable " + codUOResponsable + " - "+versionUOResponsable );
-            oficina.setCodUoResponsable(cacheUnidad.get(unidadPKResponsable));
+        String codUoResponsableVersion= codUOResponsable+"v"+versionUOResponsable;
+        if (!codUoResponsableVersion.isEmpty()) {
+            oficina.setCodUoResponsable(cacheUnidad.get(codUoResponsableVersion));
         } else {
             oficina.setCodUoResponsable(null);
         }
 
         // atributos directos
-       // oficina.setComplemento(fila[18].trim());
         oficina.setComplemento(fila[23].trim());
-       // oficina.setDenominacion(fila[1].trim());
         oficina.setDenominacion(fila[1].trim());
         oficina.setDenomlenguacooficial(fila[2].trim());
         oficina.setIdiomalengua(!fila[3].isEmpty()?Integer.parseInt(fila[3].trim()):0);
         oficina.setFuenteExterna(fila[12].trim());
-      //  oficina.setDiasSinHabiles(fila[10].trim());
         oficina.setDiasSinHabiles(fila[14].trim());
-       // oficina.setDirExtranjera(fila[25].trim());
         oficina.setDirExtranjera(fila[30].trim());
-        //oficina.setDireccionObservaciones(fila[27].trim());
         oficina.setDireccionObservaciones(fila[32].trim());
-       // oficina.setHorarioAtencion(fila[9].trim());
         oficina.setHorarioAtencion(fila[13].trim());
-       // oficina.setLocExtranjera(fila[26].trim());
         oficina.setLocExtranjera(fila[31].trim());
-       // oficina.setNombreVia(fila[16].trim());
         oficina.setNombreVia(fila[21].trim());
-      //  oficina.setNumVia(fila[17].trim());
         oficina.setNumVia(fila[22].trim());
-      //  oficina.setCodPostal(fila[19].trim());
         oficina.setCodPostal(fila[24].trim());
 
         // Estado
-       // String codigoEstado = fila[2].trim();
         String codigoEstado = fila[4].trim();
         if (!codigoEstado.isEmpty()) {
             oficina.setEstado(cacheEstadoEntidad.get(codigoEstado));
@@ -314,7 +296,6 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
         }
 
         // Fecha alta
-       // String sfechaAlta = fila[12].trim();
         String sfechaAlta = fila[16].trim();
         if (!sfechaAlta.isEmpty()) {
             oficina.setFechaAltaOficial(formatoFecha.parse(sfechaAlta));
@@ -323,7 +304,6 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
         }
 
         // Fecha extincioón
-       // String sfechaExtincion = fila[13].trim();
         String sfechaExtincion = fila[17].trim();
         if (!sfechaExtincion.isEmpty()) {
             oficina.setFechaExtincion(formatoFecha.parse(sfechaExtincion));
@@ -332,7 +312,6 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
         }
 
         // Fecha anulación
-    //    String sfechaAnulacion = fila[14].trim();
         String sfechaAnulacion = fila[18].trim();
         if (!sfechaAnulacion.isEmpty()) {
             oficina.setFechaExtincion(formatoFecha.parse(sfechaAnulacion));
@@ -349,9 +328,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
         }
 
         //Localidad de la dirección
-     //   String codigoProv = fila[22].trim();
         String codigoProv = fila[27].trim();
-       // String codigoEntGeog = fila[24].trim();
         String codigoEntGeog = fila[29].trim();
         CatProvincia provincia = null;
         if (!codigoProv.isEmpty()) {
@@ -365,7 +342,6 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
         }
 
         //Localidad
-     //   String codigoLocalidad = fila[23].trim();
         String codigoLocalidad = fila[28].trim();
         if (!codigoLocalidad.isEmpty() && codigoProv!=null && codigoEntGeog!=null) {
             CatLocalidadPK catLocalidadPKD = new CatLocalidadPK(Long.valueOf(codigoLocalidad), provincia, entidadGeograficaD);
@@ -376,7 +352,6 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
         }
 
         //Nivel Administración
-        //String codigoNivelAdmin = fila[3].trim();
         String codigoNivelAdmin = fila[5].trim();
         if (!codigoNivelAdmin.isEmpty()) {
             oficina.setNivelAdministracion(cacheNivelAdministracion.get(Long.valueOf(codigoNivelAdmin)));
@@ -385,7 +360,6 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
         }
 
         // TipoOficina
-        //String tipoOficina = fila[4].trim();
         String tipoOficina = fila[6].trim();
         if (!tipoOficina.isEmpty()) {
             oficina.setTipoOficina(cacheJerarquiaOficina.get(Long.valueOf(tipoOficina)));
@@ -394,7 +368,6 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
         }
 
         // Tipo Via
-       // String tipoVia = fila[15].trim();
         String tipoVia = fila[20].trim();
         if (!tipoVia.isEmpty()) {
             oficina.setTipoVia(cacheTipoVia.get(Long.valueOf(tipoVia)));
@@ -403,7 +376,6 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
         }
 
         // Asignamos la Oficina Responsable
-      //  String codigoOfiResponsable = fila[7].trim();
         String codigoOfiResponsable = fila[10].trim();
         Oficina ofiResponsable = null;
         if (!codigoOfiResponsable.isEmpty()) {
@@ -603,6 +575,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                     String codigoOficina = fila[0].trim();
                     String codigoUnidad = fila[2].trim();
                     String versionUnidad = fila[3].trim();
+                    String codigoUnidadVersion= codigoUnidad+"v"+versionUnidad;
 
                     if (!codigoOficina.isEmpty() && !codigoUnidad.isEmpty()) {
 
@@ -625,8 +598,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
 
                             Oficina oficina = oficinaEjb.getReference(codigoOficina);
 
-                            //Unidad unidad = unidadEjb.getReference(codigoUnidad);
-                            Unidad unidad = unidadEjb.findByPKsReduced(codigoUnidad,Long.valueOf(versionUnidad));
+                            Unidad unidad = unidadEjb.getReference(codigoUnidadVersion);
 
                             relacionOrganizativaOfi.setOficina(oficina);
                             relacionOrganizativaOfi.setUnidad(unidad);
@@ -692,6 +664,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                     String codigoOficina = fila[0].trim();
                     String codigoUnidad = fila[2].trim();
                     String versionUnidad = fila[3].trim();
+                    String codigoUnidadVersion = codigoUnidad+"v"+versionUnidad;
 
                     if (!codigoOficina.isEmpty() && !codigoUnidad.isEmpty()) {
 
@@ -712,8 +685,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                                 oficina = oficinaEjb.getReference(codigoOficina);
                             }
 
-                            //Unidad unidad = unidadEjb.getReference(Long.valueOf(codigoUnidad));
-                            Unidad unidad = unidadEjb.findByPKsReduced(codigoUnidad,Long.valueOf(versionUnidad));
+                            Unidad unidad = unidadEjb.getReference(codigoUnidadVersion);
 
 
                             relacionSirOfi.setOficina(oficina);
