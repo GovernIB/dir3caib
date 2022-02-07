@@ -86,14 +86,12 @@
     create table DIR_CATSERVICIO (
         CODSERVICIO number(19,0) not null,
         DESCSERVICIO varchar2(300 char) not null,
-        ESTADO varchar2(2 char),
         TIPO number(19,0)
     );
 
     create table DIR_CATSERVICIOUO (
         CODSERVICIO number(19,0) not null,
         DESCSERVICIO varchar2(300 char) not null,
-        ESTADO varchar2(2 char),
         TIPO number(19,0)
     );
 
@@ -137,7 +135,7 @@
         CODIGOEXTERNO varchar2(255 char),
         ESTADO varchar2(2 char),
         TIPOCODIGO number(19,0),
-        CODUNIDAD number(19,0)
+        CODUNIDAD varchar2(20 char)
     );
 
     create table DIR_CONTACTOOFI (
@@ -155,7 +153,7 @@
         VISIBILIDAD number(1,0),
         ESTADO varchar2(2 char),
         TIPOCONTACTO varchar2(2 char),
-        CODUNIDAD number(19,0)
+        CODUNIDAD varchar2(20 char)
     );
 
     create table DIR_HISTORICOOFI (
@@ -171,8 +169,8 @@
         MOTIVORELACION varchar2(255 char),
         OBSERVEXTINCION varchar2(255 char),
         ESTADO varchar2(2 char),
-        CODANTERIOR number(19,0),
-        CODULTIMA number(19,0)
+        CODANTERIOR varchar2(20 char),
+        CODULTIMA varchar2(20 char)
     );
 
     create table DIR_NIFCIFUO (
@@ -180,7 +178,7 @@
         CODNIFCIF varchar2(255 char),
         NIFPRINCIPAL number(1,0),
         ESTADO varchar2(2 char),
-        CODUNIDAD number(19,0)
+        CODUNIDAD varchar2(20 char)
     );
 
     create table DIR_OFICINA (
@@ -207,7 +205,7 @@
         CODCOMUNIDAD number(19,0),
         CODOFIRESPONSABLE varchar2(9 char),
         CODPAIS number(19,0),
-        CODUORESPONSABLE number(19,0),
+        CODUORESPONSABLE varchar2(20 char),
         ESTADO varchar2(2 char),
         LOCALIDADID number(19,0),
         NIVELADMINISTRACION number(19,0),
@@ -219,14 +217,14 @@
         ID number(19,0) not null,
         ESTADO varchar2(2 char),
         CODOFICINA varchar2(9 char) not null,
-        CODUNIDAD number(19,0) not null
+        CODUNIDAD varchar2(20 char) not null
     );
 
     create table DIR_RELACIONSIROFI (
         ID number(19,0) not null,
         ESTADO varchar2(2 char),
         CODOFICINA varchar2(9 char) not null,
-        CODUNIDAD number(19,0) not null
+        CODUNIDAD varchar2(20 char) not null
     );
 
     create table DIR_SERVICIOOFI (
@@ -240,7 +238,7 @@
         ID number(19,0) not null,
         ESTADO varchar2(2 char),
         CODSERVICIO number(19,0),
-        CODUNIDAD number(19,0)
+        CODUNIDAD varchar2(20 char)
     );
 
     create table DIR_SINCRONIZACION (
@@ -253,12 +251,12 @@
     );
 
     create table DIR_UNIDAD (
-        ID number(19,0) not null,
+        CODIGO varchar2(20 char) not null,
         CODAMBELM number(19,0),
         CODAMBLOCEXTRANJERA varchar2(50 char),
         CODEXTERNO varchar2(40 char),
         CODPOSTAL varchar2(14 char),
-        CODIGO varchar2(9 char) not null,
+        CODIGODIR3 varchar2(9 char) not null,
         COMPARTENIF number(1,0),
         COMPETENCIAS varchar2(400 char),
         COMPLEMENTO varchar2(300 char),
@@ -292,13 +290,13 @@
         CODAMBPROVINCIA number(19,0),
         CODAMBITOTERRITORIALID number(19,0),
         CODCOMUNIDAD number(19,0),
-        CODEDPPRINCIPAL number(19,0),
+        CODEDPPRINCIPAL varchar2(20 char),
         CODLOCALIDADID number(19,0),
         CODPAIS number(19,0),
         CODTIPOENTPUBLICA varchar2(2 char),
         CODTIPOUNIDAD varchar2(3 char),
-        CODUNIDADRAIZ number(19,0),
-        CODUNIDADSUPERIOR number(19,0),
+        CODUNIDADRAIZ varchar2(20 char),
+        CODUNIDADSUPERIOR varchar2(20 char),
         ESTADO varchar2(2 char),
         NIVELADMINISTRACION number(19,0),
         PODER number(19,0),
@@ -331,8 +329,6 @@
 
     create sequence DIR_SINC_SEQ;
 
-    create sequence DIR_UNI_SEQ;
-
 
  -- INICI Indexes
     create index DIR_CAMBTER_CESTENT_FK_I on DIR_CATAMBITOTERRITORIAL (ESTADO);
@@ -356,8 +352,6 @@
     create index DIR_CATPROVINCIA_PK_I on DIR_CATPROVINCIA (CODIGOPROVINCIA);
     create index DIR_CATPROV_CESTENT_FK_I on DIR_CATPROVINCIA (ESTADO);
     create index DIR_CSERVIC_CTIPSERV_FK_I on DIR_CATSERVICIO (TIPO);
-    create index DIR_CSERVIC_CESTENT_FK_I on DIR_CATSERVICIO (ESTADO);
-    create index DIR_CSERVUO_CESTENT_FK_I on DIR_CATSERVICIOUO (ESTADO);
     create index DIR_CSERVUO_CTIPSERV_FK_I on DIR_CATSERVICIOUO (TIPO);
     create index DIR_CFUEEXT_CESTENT_FK_I on DIR_CATTIPOCODFUENTEEXTERNA (ESTADO);
     create index DIR_CTIPCON_CESTENT_FK_I on DIR_CATTIPOCONTACTO (ESTADO);
@@ -412,7 +406,7 @@
     create index DIR_UNIDAD_CATCOMUNIAUTO_FK_I on DIR_UNIDAD (CODCOMUNIDAD);
     create index DIR_UNIDAD_CATPROVINCIA_FK_I on DIR_UNIDAD (CODAMBPROVINCIA);
     create index DIR_UNIDAD_CATPAIS_FK_I on DIR_UNIDAD (CODPAIS);
-    create index DIR_UNIDAD_PK_I on DIR_UNIDAD (CODIGO, VERSION);
+    create index DIR_UNIDAD_PK_I on DIR_UNIDAD (CODIGO);
     create index DIR_UNIDAD_UNIDADEDPPRINC_FK_I on DIR_UNIDAD (CODEDPPRINCIPAL);
     create index DIR_UNIDAD_CATNIVELADMIN_FK_I on DIR_UNIDAD (NIVELADMINISTRACION);
     create index DIR_UNIDAD_CATTIPUNIORG_FK_I on DIR_UNIDAD (CODTIPOUNIDAD);
@@ -487,7 +481,7 @@
 
     alter table DIR_SINCRONIZACION add constraint DIR_SINCRONIZACION_pk primary key (CODIGO);
 
-    alter table DIR_UNIDAD add constraint DIR_UNIDAD_pk primary key (ID);
+    alter table DIR_UNIDAD add constraint DIR_UNIDAD_pk primary key (CODIGO);
 
  -- FINAL PK's
 
@@ -588,20 +582,10 @@
         foreign key (TIPO) 
         references DIR_CATTIPOSERVICIO;
 
-    alter table DIR_CATSERVICIO 
-        add constraint DIR_CSERVIC_CESTENT_FK 
-        foreign key (ESTADO) 
-        references DIR_CATESTADOENTIDAD;
-
     alter table DIR_CATSERVICIOUO 
         add constraint DIR_CSERVUO_CTIPSERV_FK 
         foreign key (TIPO) 
         references DIR_CATTIPOSERVICIO;
-
-    alter table DIR_CATSERVICIOUO 
-        add constraint DIR_CSERVUO_CESTENT_FK 
-        foreign key (ESTADO) 
-        references DIR_CATESTADOENTIDAD;
 
     alter table DIR_CATTIPOCODFUENTEEXTERNA 
         add constraint DIR_CFUEEXT_CESTENT_FK 
