@@ -18,7 +18,7 @@ import java.util.Set;
  */
 
 @Local
-public interface UnidadLocal extends BaseEjb<Unidad, Long> {
+public interface UnidadLocal extends BaseEjb<Unidad, String> {
 
     /**
      * Busca una unidad por su pk
@@ -27,7 +27,17 @@ public interface UnidadLocal extends BaseEjb<Unidad, Long> {
      * @return
      * @throws Exception
      */
-    Unidad findByPKs(String codigo, Long version) throws Exception;
+    Unidad findByPK(String codigo, Long version) throws Exception;
+
+    /**
+     * Obtiene la unidad con código el indicado y de mayor version
+     * @param codigo
+     * @return
+     * @throws Exception
+     */
+    Unidad findByCodigoUltimaVersion(String codigo) throws Exception;
+
+    Unidad findByCodigoMenorVersion(String codigo) throws Exception;
 
     /**
      * Busca la unidad por su pk pero solo carga el identificador
@@ -36,7 +46,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, Long> {
      * @return
      * @throws Exception
      */
-    Unidad findByPKsReduced(String codigo, Long version) throws Exception;
+   // Unidad findByPKsReduced(String codigo, Long version) throws Exception;
 
     /**
      * Borra todas las unidades
@@ -67,15 +77,23 @@ public interface UnidadLocal extends BaseEjb<Unidad, Long> {
      */
     Unidad findUnidadActualizada(String id, Date fechaActualizacion) throws Exception;
 
-
     /**
      * Obtiene una unidad que es vigente con sus historicosUO
+     *
+     * @param codigo
+     * @return
+     * @throws Exception
+     */
+    Unidad findConHistoricosVigente(String codigo) throws Exception;
+
+    /**
+     * Obtiene una unidad no vigente con sus historicosUO a partir del id
      *
      * @param id
      * @return
      * @throws Exception
      */
-    Unidad findConHistoricosVigente(String id) throws Exception;
+    public Unidad findConHistoricos(String codigo) throws Exception;
 
     /**
      * Método que busca la unidad con id indicado y estado indicado
@@ -237,14 +255,13 @@ public interface UnidadLocal extends BaseEjb<Unidad, Long> {
 
     /**
      * Devuelve todas las unidades de la lista de ids indicados. Se emplea para montar la cache de unidades
-     * en la importación de unidades desde Madrid
+     * en la importación de oficinas desde Madrid
      *
      * @param ids
      * @return
      * @throws Exception
      */
      List<Unidad> getListByIds(List<String> ids) throws Exception;
-  //  List<Unidad> getListByIds(List<UnidadPK> ids) throws Exception;
 
 
     /**
@@ -260,11 +277,11 @@ public interface UnidadLocal extends BaseEjb<Unidad, Long> {
     /**
      * OObtiene el código, denominación y estado de la unidad indicada
      *
-     * @param codigo
+     * @param id
      * @return
      * @throws Exception
      */
-    Unidad findByCodigoLigero(String codigo) throws Exception;
+    Unidad findByIdLigero(Long id) throws Exception;
 
     /**
      * Obtiene el código de todas las Unidades hijas de la unidad raiz indicada por código
@@ -312,12 +329,10 @@ public interface UnidadLocal extends BaseEjb<Unidad, Long> {
     void crearHistoricoUnidad(String codigoAnterior, String codigoUltima) throws Exception;
 
     /**
-     *
-     * @param codigo
-     * @param version
+     * @param idUnidad
      * @throws Exception
      */
-    void eliminarHistoricosUnidad(String codigo, Long version) throws Exception;
+    void eliminarHistoricosUnidad(String idUnidad) throws Exception;
 
     /**
      * Comprueba la existencia de un HistoriooUnidad en concreto
@@ -335,7 +350,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, Long> {
     * @return
     * @throws Exception
     */
-   Set<Unidad> historicosAnteriores(String codigoUnidad) throws Exception;
+   Set<Unidad> historicosHaciaAtras(String codigoUnidad) throws Exception;
 
    /**
     * Obtiene los sustitutos de una unidad
@@ -364,6 +379,15 @@ public interface UnidadLocal extends BaseEjb<Unidad, Long> {
      * @throws Exception
      */
     Unidad findFullById(String id) throws Exception;
+
+    /**
+     * Obtiene una unidad con sus contactos y sus relaciones
+     * @param codigo
+     * @param version
+     * @return
+     * @throws Exception
+     */
+    Unidad findFullByPK(String codigo, Long version) throws Exception;
 
    /**
     * Este método mira si la unidad del código especificado tiene oficinas donde registrar.
