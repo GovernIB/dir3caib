@@ -577,15 +577,15 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                     String versionUnidad = fila[3].trim();
                     String codigoUnidadVersion= codigoUnidad+"v"+versionUnidad;
 
-                    if (!codigoOficina.isEmpty() && !codigoUnidad.isEmpty()) {
+                    if (!codigoOficina.isEmpty() && !codigoUnidadVersion.isEmpty()) {
 
                         boolean existeix;
 
                         RelacionOrganizativaOfi relacionOrganizativaOfi;
                         //Miramos si existe la relacionOrganizativa
-                        if (cache.existsUnidadOficina(codigoUnidad, versionUnidad, codigoOficina)) {
+                        if (cache.existsUnidadOficina(codigoUnidadVersion, codigoOficina)) {
                             long s1 = System.currentTimeMillis();
-                            relacionOrganizativaOfi = relOrgOfiEjb.findByPKs(codigoUnidad, Long.valueOf(versionUnidad),codigoOficina);
+                            relacionOrganizativaOfi = relOrgOfiEjb.findByPKs(codigoUnidadVersion,codigoOficina);
                             existeix = true;
                             findby = findby + (System.currentTimeMillis() - s1);
                         } else {
@@ -666,15 +666,15 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
                     String versionUnidad = fila[3].trim();
                     String codigoUnidadVersion = codigoUnidad+"v"+versionUnidad;
 
-                    if (!codigoOficina.isEmpty() && !codigoUnidad.isEmpty()) {
+                    if (!codigoOficina.isEmpty() && !codigoUnidadVersion.isEmpty()) {
 
                         boolean existe;
                         RelacionSirOfi relacionSirOfi = null;
 
                         //Miramos si existe previamente la relacionSir
-                        if (cache.existsUnidadOficina(codigoUnidad, versionUnidad,codigoOficina)) {
+                        if (cache.existsUnidadOficina(codigoUnidadVersion,codigoOficina)) {
                             long s1 = System.currentTimeMillis();
-                            relacionSirOfi = relSirOfiEjb.findByPKs(codigoUnidad, Long.valueOf(versionUnidad), codigoOficina);
+                            relacionSirOfi = relSirOfiEjb.findByPKs(codigoUnidadVersion, codigoOficina);
                             existe = true;
                             findby = findby + (System.currentTimeMillis() - s1);
                         } else {

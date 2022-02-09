@@ -593,7 +593,7 @@ public class Oficina implements Serializable {
    * @return the organizativasOfi
    */
 
-  @OneToMany(mappedBy = "oficina" )
+  @OneToMany(mappedBy = "oficina")
   @JsonIgnore
   public List<RelacionOrganizativaOfi> getOrganizativasOfi() {
     return organizativasOfi;
@@ -628,7 +628,7 @@ public class Oficina implements Serializable {
     this.servicios = servicios;
   }*/
 
-  @OneToMany(mappedBy = "oficina")
+  @OneToMany(mappedBy = "oficina", fetch= FetchType.EAGER )
   @JsonIgnore
   public Set<ServicioOfi> getServicios() {
     return servicios;
@@ -725,11 +725,13 @@ public class Oficina implements Serializable {
   @Transient
   public Boolean getOficinaSir() {
 
-    for (ServicioOfi servicio : servicios) {
-      if (servicio.getServicio().getCodServicio().equals(Dir3caibConstantes.SERVICIO_SIR) ||
-              servicio.getServicio().getCodServicio().equals(Dir3caibConstantes.SERVICIO_SIR_ENVIO) ||
-              servicio.getServicio().getCodServicio().equals(Dir3caibConstantes.SERVICIO_SIR_RECEPCION)) {
-        return true;
+    if(servicios != null) {
+      for (ServicioOfi servicio : servicios) {
+        if (servicio.getServicio().getCodServicio().equals(Dir3caibConstantes.SERVICIO_SIR) ||
+                servicio.getServicio().getCodServicio().equals(Dir3caibConstantes.SERVICIO_SIR_ENVIO) ||
+                servicio.getServicio().getCodServicio().equals(Dir3caibConstantes.SERVICIO_SIR_RECEPCION)) {
+          return true;
+        }
       }
     }
     return false;
@@ -749,9 +751,11 @@ public class Oficina implements Serializable {
   @Transient
   public Boolean getOficinaInformacion() {
 
-    for (ServicioOfi servicio : servicios) {
-      if (servicio.getServicio().getCodServicio().equals(Dir3caibConstantes.SERVICIO_OFI_INFORMACION)) {
-        return true;
+    if(servicios != null) {
+      for (ServicioOfi servicio : servicios) {
+        if (servicio.getServicio().getCodServicio().equals(Dir3caibConstantes.SERVICIO_OFI_INFORMACION)) {
+          return true;
+        }
       }
     }
     return false;

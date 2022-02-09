@@ -501,6 +501,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
     @Override
     @SuppressWarnings(value = "unchecked")
+    //TODO OPTIMIZAR, es muy lento
     public Boolean tieneOficinasSIR(String codigoUnidad) throws Exception {
 
         Query q = em.createQuery("select count(relacionSirOfi.oficina.id) from RelacionSirOfi as relacionSirOfi where relacionSirOfi.unidad.codigo =:codigoUnidad " +
@@ -796,9 +797,8 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
     @Override
     @SuppressWarnings("unchecked")
     public List<Oficina> responsableByUnidadEstado(String codigoUnidadResponsable, String estado) throws Exception {
-        //TODO DESCOMENTAR Y ARREGLAR
-        List<Oficina> oficinas = new ArrayList<Oficina>();
-        /*Query q = em.createQuery("Select oficina.codigo, oficina.denominacion, oficina.codUoResponsable.codigo from Oficina as oficina where " +
+
+        Query q = em.createQuery("Select oficina.codigo, oficina.denominacion, oficina.codUoResponsable.codigo from Oficina as oficina where " +
            " oficina.codOfiResponsable is null and oficina.codUoResponsable.codUnidadRaiz.codigo =:codigoUnidadResponsable and oficina.estado.codigoEstadoEntidad =:estado " +
            " order by oficina.codigo");
 
@@ -810,64 +810,36 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
         for (Object[] object : result) {
 
-            Query q2 = em.createNativeQuery("select codservicio from DIR_SERVICIOOFI where codoficina=?");
-            q2.setParameter(1, object[0]);
+            // Query q2 = em.createNativeQuery("select codservicio from DIR_SERVICIOOFI where codoficina=?");
+            Query q2 = em.createQuery("select servicioOfi.servicio from ServicioOfi as servicioOfi where servicioOfi.oficina.codigo=:codOficina");
+            // q2.setParameter(1, object[0]);
+            q2.setParameter("codOficina", object[0]);
 
             List<Object> result2 = q2.getResultList();
 
-            Set<CatServicio> servicios = new HashSet<CatServicio>();
+            Set<ServicioOfi> servicios = new HashSet<ServicioOfi>();
             for (Object obj : result2) {
-                servicios.add(new CatServicio(new Long(obj.toString())));
+                //ServicioOfi servicioOfi = new ServicioOfi((Long) obj);
+                ServicioOfi servicioOfi = new ServicioOfi((CatServicio) obj);
+                servicios.add(servicioOfi);
             }
 
-            Oficina oficina = new Oficina((String) object[0], (String) object[1], (String) object[2], null, servicios);
-
-
-            oficinas.add(oficina);
-        }*/
-
-        return oficinas;
-    }
-
-    //TODO MIRAR DE VER SI EL MÉTODO MÁS ABAJO FUNCIONA BIEN Y ELIMINAR ESTE
-   // @Override
-    /*public List<Oficina> dependienteByUnidadEstado2(String codigoUnidadResponsable, String estado) throws Exception {
-        Query q = em.createQuery("Select  oficina.codigo, oficina.denominacion, oficina.codUoResponsable.codigo, oficina.codOfiResponsable.codigo from Oficina as oficina where " +
-           "oficina.codUoResponsable.codUnidadRaiz.codigo =:codigoUnidadResponsable and oficina.estado.codigoEstadoEntidad =:estado and " +
-           "oficina.codOfiResponsable is not null order by oficina.codigo");
-
-        q.setParameter("codigoUnidadResponsable", codigoUnidadResponsable);
-        q.setParameter("estado", estado);
-
-        List<Object[]> result = q.getResultList();
-        List<Oficina> oficinas = new ArrayList<Oficina>();
-
-        for (Object[] object : result) {
-
-            Query q2 = em.createNativeQuery("select codservicio from DIR_SERVICIOOFI where codoficina=?");
-            q2.setParameter(1, object[0]);
-
-            List<Object> result2 = q2.getResultList();
-
-            Set<CatServicio> servicios = new HashSet<CatServicio>();
-            for (Object obj : result2) {
-                servicios.add(new CatServicio(new Long(obj.toString())));
-            }
-
-            Oficina oficina = new Oficina((String) object[0], (String) object[1], (String) object[2], (String) object[3], servicios);
+            Oficina oficina = new Oficina((String) object[0], (String) object[1], (String) object[2],null, servicios);
 
             oficinas.add(oficina);
         }
 
-        return oficinas;
 
-    }*/
+
+        return oficinas;
+    }
+
 
     @Override
     @SuppressWarnings("unchecked")
     public List<Oficina> dependienteByUnidadEstado(String codigoUnidadResponsable, String estado) throws Exception {
 
-        Query q = em.createQuery("Select  oficina.codigo, oficina.denominacion, oficina.codUoResponsable.codigo, oficina.codOfiResponsable.codigo, servicios from Oficina as oficina  left outer join oficina.servicios servicios where " +
+        Query q = em.createQuery("Select  oficina.codigo, oficina.denominacion, oficina.codUoResponsable.codigo, oficina.codOfiResponsable.codigo from Oficina as oficina   where " +
                 "oficina.codUoResponsable.codUnidadRaiz.codigo =:codigoUnidadResponsable and oficina.estado.codigoEstadoEntidad =:estado and " +
                 "oficina.codOfiResponsable is not null order by oficina.codigo");
 
@@ -881,20 +853,27 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
         for (Object[] object : result) {
 
-           /* Query q2 = em.createNativeQuery("select codservicio from DIR_SERVICIOOFI where codoficina=?");
-            q2.setParameter(1, object[0]);
+           // Query q2 = em.createNativeQuery("select codservicio from DIR_SERVICIOOFI where codoficina=?");
+            Query q2 = em.createQuery("select servicioOfi.servicio from ServicioOfi as servicioOfi where servicioOfi.oficina.codigo=:codOficina");
+           // q2.setParameter(1, object[0]);
+            q2.setParameter("codOficina", object[0]);
 
             List<Object> result2 = q2.getResultList();
 
-            Set<CatServicio> servicios = new HashSet<CatServicio>();
+            Set<ServicioOfi> servicios = new HashSet<ServicioOfi>();
             for (Object obj : result2) {
-                servicios.add(new CatServicio(new Long(obj.toString())));
-            }*/
+                //ServicioOfi servicioOfi = new ServicioOfi((Long) obj);
+                ServicioOfi servicioOfi = new ServicioOfi((CatServicio) obj);
+                servicios.add(servicioOfi);
+            }
 
-            Oficina oficina = new Oficina((String) object[0], (String) object[1], (String) object[2], (String) object[3], (Set< ServicioOfi>)object[4]);
+
+            Oficina oficina = new Oficina((String) object[0], (String) object[1], (String) object[2], (String) object[3], null);
+
 
             oficinas.add(oficina);
         }
+
 
         return oficinas;
 
