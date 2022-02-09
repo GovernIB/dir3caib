@@ -28,6 +28,14 @@ public class ServicioOfi  implements Serializable {
     public ServicioOfi() {
     }
 
+    public ServicioOfi(CatServicio servicio) {
+        this.servicio = servicio;
+    }
+
+    public ServicioOfi(Long codServicio){
+        this.servicio.setCodServicio(codServicio);
+    }
+
     @Column(name = "ID", nullable = false)
     @Id
     @GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "generator")

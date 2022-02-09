@@ -35,7 +35,7 @@
                                     <div class="box-header well cabeceraDetalle">
                                         <h5><spring:message code="unidad.datos"/></h5>
                                     </div>
-                                    <dt> <spring:message code="unidad.codigo"/>: </dt> <dd> ${unidad.codigo}</dd>
+                                    <dt> <spring:message code="unidad.codigo"/>: </dt> <dd> ${unidad.codigoDir3}</dd>
                                     <dt> <spring:message code="unidad.denominacion"/>: </dt> <dd> ${unidad.denominacion}</dd>
                                     <dt> <spring:message code="unidad.estado"/>: </dt>
                                     <c:if test="${unidad.estado.codigoEstadoEntidad == 'V'}"><dd><span class="label label-success">${unidad.estado.descripcionEstadoEntidad}</span></dd></c:if>
