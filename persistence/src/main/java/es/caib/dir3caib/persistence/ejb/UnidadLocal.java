@@ -285,6 +285,15 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @throws Exception
      */
     Unidad findByIdLigero(Long id) throws Exception;
+    
+    /**
+     * OObtiene el código, denominación y estado de la unidad indicada
+     *
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    Unidad findByIdLigero(String id) throws Exception;
 
     /**
      * Obtiene el código de todas las Unidades hijas de la unidad raiz indicada por código

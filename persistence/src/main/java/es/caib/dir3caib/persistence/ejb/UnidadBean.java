@@ -300,10 +300,42 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
      * @return
      * @throws Exception
      */
+    // TODO Eliminar. La clave primaria de Unidad no es númerico sino alfanúmerico
     @Override
     @SuppressWarnings("unchecked")
     public Unidad findByIdLigero(Long id) throws Exception {
         Query q = em.createQuery("select unidad.codigo, unidad.denominacion, unidad.estado.codigoEstadoEntidad, unidad.codUnidadRaiz.codigo, unidad.codUnidadSuperior.codigo, unidad.nivelJerarquico from Unidad as unidad where unidad.id=:id ");
+        q.setParameter("id", id);
+
+        List<Object[]> result = q.getResultList();
+
+        if (result.size() == 1) {
+            Unidad unidad = new Unidad();
+            unidad.setCodigo((String) result.get(0)[0]);
+            unidad.setDenominacion((String) result.get(0)[1]);
+            unidad.setEstado(new CatEstadoEntidad((String)result.get(0)[2]));
+            Unidad unidadRaiz = new Unidad((String) result.get(0)[3]);
+            unidad.setCodUnidadRaiz(unidadRaiz);
+            Unidad unidadSuperior = new Unidad((String) result.get(0)[4]);
+            unidad.setCodUnidadSuperior(unidadSuperior);
+            unidad.setNivelJerarquico((Long) result.get(0)[5]);
+
+            return  unidad;
+        }else {
+            return  null;
+        }
+    }
+    
+    /**
+     * Obtiene el código, denominación y estado de la unidad indicada
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public Unidad findByIdLigero(String id) throws Exception {
+        Query q = em.createQuery("select unidad.codigo, unidad.denominacion, unidad.estado.codigoEstadoEntidad, unidad.codUnidadRaiz.codigo, unidad.codUnidadSuperior.codigo, unidad.nivelJerarquico from Unidad as unidad where unidad.codigo=:id ");
         q.setParameter("id", id);
 
         List<Object[]> result = q.getResultList();
@@ -1180,8 +1212,8 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         q.setParameter("codigoUnidad", codigoUnidad);
         Set<Unidad> unidadesHistoricasAnteriores = new HashSet<Unidad>();
 
-        List<Long> historicos = q.getResultList();
-        for (Long historico : historicos) {
+        List<String> historicos = q.getResultList();
+        for (String historico : historicos) {
             Unidad unidad = findByIdLigero(historico);
             unidadesHistoricasAnteriores.add(unidad);
         }
