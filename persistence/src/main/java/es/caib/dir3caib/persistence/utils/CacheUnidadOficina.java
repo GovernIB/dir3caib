@@ -25,8 +25,8 @@ public class CacheUnidadOficina {
      * @param oficina código de la oficina
      * @return
      */
-    public boolean existsUnidadOficina(String unidad, String version, String oficina) {
-        return this.caches.contains(unidad + "_" + version + "_" +oficina);
+    public boolean existsUnidadOficina(String unidad, String oficina) {
+        return this.caches.contains(unidad + "_" +oficina);
     }
 
 

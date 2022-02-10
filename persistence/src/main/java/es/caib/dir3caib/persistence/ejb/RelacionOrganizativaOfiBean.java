@@ -45,14 +45,13 @@ public class RelacionOrganizativaOfiBean extends BaseEjbJPA<RelacionOrganizativa
     
     
     @Override
-    public RelacionOrganizativaOfi findByPKs(String codigoUnidad, Long versionUnidad, String codigoOficina) throws Exception {
+    public RelacionOrganizativaOfi findByPKs(String codigoUnidad, String codigoOficina) throws Exception {
 
-       Query query = em.createQuery("Select relacionOrganizativaOfi from RelacionOrganizativaOfi as relacionOrganizativaOfi "
-          + " where relacionOrganizativaOfi.oficina.codigo = :codigoOficina AND " 
-          + " relacionOrganizativaOfi.unidad.codigo = :codigoUnidad AND relacionOrganizativaOfi.unidad.version = :versionUnidad");
-       query.setParameter("codigoUnidad", codigoUnidad);
-       query.setParameter("codigoOficina", codigoOficina);
-       query.setParameter("versionUnidad", versionUnidad);
+        Query query = em.createQuery("Select relacionOrganizativaOfi from RelacionOrganizativaOfi as relacionOrganizativaOfi "
+                + " where relacionOrganizativaOfi.oficina.codigo = :codigoOficina AND "
+                + " relacionOrganizativaOfi.unidad.codigo = :codigoUnidad");
+        query.setParameter("codigoUnidad", codigoUnidad);
+        query.setParameter("codigoOficina", codigoOficina);
 
        try {
          return (RelacionOrganizativaOfi)query.getSingleResult();
