@@ -52,8 +52,31 @@
                                 <form:label path="unidad.codigo" cssClass="control-label"><fmt:message
                                         key="unidad.codigo"/></form:label>
                                 <div class="controls">
-                                    <form:input path="unidad.codigo" cssClass="input-xlarge"/> <form:errors
-                                        path="unidad.codigo" cssClass="help-inline" element="span"/>
+                                    <form:input path="unidad.codigo" cssClass="input-xlarge" style="width:180px"/>
+                                    	<span> - v. </span>
+                                        <form:input path="unidad.version" cssClass="input-xlarge" style="width:30px"/> 
+                                        <form:errors path="unidad.codigo" cssClass="help-inline" element="span" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                    	<div class="span6">
+                    		<div class="control-group">
+                    			<form:label path="unidad.nifcif" cssClass="control-label"><fmt:message
+                                        key="unidad.nifcif"/></form:label>
+                                <div class="controls">
+                                    <form:input path="unidad.nifcif" cssClass="input-xlarge"/> 
+                                    <form:errors path="unidad.nifcif" cssClass="help-inline" element="span"/>
+                                </div>
+                    		</div>
+                    	</div>
+                    	<div class="span6">
+                            <div class="control-group">
+                                <form:label path="unidad.codAmbitoTerritorial.codigoAmbito" cssClass="control-label"><fmt:message key="unidad.ambitoTerritorial"/></form:label>
+                                <div class="controls">
+                                    <form:select path="unidad.codAmbitoTerritorial.codigoAmbito"  cssClass="input-xlarge"/>
+                                    <form:errors path="unidad.codAmbitoTerritorial.codigoAmbito" cssClass="help-inline" element="span"/>
                                 </div>
                             </div>
                         </div>
@@ -73,10 +96,10 @@
                         </div>
                         <div class="span6">
                             <div class="control-group">
-                                <form:label path="unidad.codAmbitoTerritorial.codigoAmbito" cssClass="control-label"><fmt:message key="unidad.ambitoTerritorial"/></form:label>
+                                <form:label path="unidad.codAmbProvincia.codigoProvincia" cssClass="control-label"><fmt:message key="unidad.provincia"/></form:label>
                                 <div class="controls">
-                                    <form:select path="unidad.codAmbitoTerritorial.codigoAmbito"  cssClass="input-xlarge"/>
-                                    <form:errors path="unidad.codAmbitoTerritorial.codigoAmbito" cssClass="help-inline" element="span"/>
+                                    <form:select path="unidad.codAmbProvincia.codigoProvincia"  cssClass="input-xlarge"/>
+                                    <form:errors path="unidad.codAmbProvincia.codigoProvincia" cssClass="help-inline" element="span"/>
                                 </div>
                             </div>
                         </div>
@@ -97,10 +120,13 @@
                         </div>
                         <div class="span6">
                             <div class="control-group">
-                                <form:label path="unidad.codAmbProvincia.codigoProvincia" cssClass="control-label"><fmt:message key="unidad.provincia"/></form:label>
+                                <form:label path="unidad.estado" cssClass="control-label"><fmt:message key="unidad.estado"/></form:label>
                                 <div class="controls">
-                                    <form:select path="unidad.codAmbProvincia.codigoProvincia"  cssClass="input-xlarge"/>
-                                    <form:errors path="unidad.codAmbProvincia.codigoProvincia" cssClass="help-inline" element="span"/>
+                                    <form:select path="unidad.estado.codigoEstadoEntidad"  cssClass="input-xlarge">
+                                        <form:option value="-1" label="..."/>
+                                        <form:options items="${estadosEntidad}" itemValue="codigoEstadoEntidad" itemLabel="descripcionEstadoEntidad"/>
+                                    </form:select>
+                                    <form:errors path="unidad.estado.codigoEstadoEntidad" cssClass="help-inline" element="span"/>
                                 </div>
                             </div>
                         </div>
@@ -115,22 +141,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="span6">
-                            <div class="control-group">
-                                <form:label path="unidad.estado" cssClass="control-label"><fmt:message key="unidad.estado"/></form:label>
-                                <div class="controls">
-                                    <form:select path="unidad.estado.codigoEstadoEntidad"  cssClass="input-xlarge">
-                                        <form:option value="-1" label="..."/>
-                                        <form:options items="${estadosEntidad}" itemValue="codigoEstadoEntidad" itemLabel="descripcionEstadoEntidad"/>
-                                    </form:select>
-                                    <form:errors path="unidad.estado.codigoEstadoEntidad" cssClass="help-inline" element="span"/>
-                                </div>
-                            </div>
-                        </div>
+                        
                     </div>
-
-
-
 
 
                     <div class="form-actions">

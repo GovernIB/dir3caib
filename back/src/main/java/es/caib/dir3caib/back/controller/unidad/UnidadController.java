@@ -116,6 +116,8 @@ public class UnidadController extends BaseController {
         Long codComunidad = (unidad.getCodComunidad() != null) ? unidad.getCodComunidad().getCodigoComunidad() : null;
         Long codAmbProvincia = (unidad.getCodAmbProvincia() != null) ? unidad.getCodAmbProvincia().getCodigoProvincia() : null;
         String codEstadoEntidad = (unidad.getEstado() != null) ? unidad.getEstado().getCodigoEstadoEntidad() : null;
+        Long unidadVersion = (unidad.getVersion() != null) ? unidad.getVersion() : null;
+        String nifcif = (unidad.getNifcif() != null) ? unidad.getNifcif() : null;
 
         Paginacion paginacion = unidadEjb.busqueda(busqueda.getPageNumber(),
                 unidad.getCodigo(),
@@ -123,7 +125,7 @@ public class UnidadController extends BaseController {
                 codNivelAdministracion,
                 codAmbitoTerritorial,
                 codComunidad,
-                codAmbProvincia, busqueda.getUnidadRaiz(), codEstadoEntidad);
+                codAmbProvincia, busqueda.getUnidadRaiz(), codEstadoEntidad, nifcif, unidadVersion);
 
         busqueda.setPageNumber(1);
 

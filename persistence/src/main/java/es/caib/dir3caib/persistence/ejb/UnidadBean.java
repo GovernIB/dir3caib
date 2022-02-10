@@ -476,12 +476,15 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
      * @param codComunidad
      * @param codigoProvincia
      * @param codigoEstado
+     * @param nifcif
+     * @param unidadVersion
      * @return
      * @throws Exception
      */
     @Override
     @SuppressWarnings(value = "unchecked")
-    public Paginacion busqueda(Integer pageNumber, String codigo, String denominacion, Long codigoNivelAdministracion, String codAmbitoTerritorial, Long codComunidad, Long codigoProvincia, Boolean unidadRaiz, String codigoEstado) throws Exception {
+    public Paginacion busqueda(Integer pageNumber, String codigo, String denominacion, Long codigoNivelAdministracion, String codAmbitoTerritorial, 
+    		Long codComunidad, Long codigoProvincia, Boolean unidadRaiz, String codigoEstado, String nifcif, Long unidadVersion) throws Exception {
 
         Query q;
         Query q2;
@@ -492,10 +495,19 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
         // Parametros de busqueda
         if (codigo != null && codigo.length() > 0) {
-            where.add(DataBaseUtils.like("unidad.codigo", "codigo", parametros, codigo));
+			where.add(DataBaseUtils.like("unidad.codigo", "codigo", parametros, codigo));
         }
         if (denominacion != null && denominacion.length() > 0) {
-            where.add(DataBaseUtils.like("unidad.denominacion", "denominacion", parametros, denominacion));
+            
+            String condicion1 = DataBaseUtils.like("unidad.denomLenguaCooficial", "denominacion1", parametros, denominacion);
+            String condicion2 = DataBaseUtils.like("unidad.denominacion", "denominacion2", parametros, denominacion);
+        	
+            // String condicion1 =  "upper(unidad.denomLenguaCooficial) like upper(:denominacion)";
+        	// String condicion2 = " upper(unidad.denominacion) like upper(:denominacion)";
+            
+            where.add("((" + condicion1 + ") or (" + condicion2 + "))");
+            //parametros.put("denominacion", "%"+denominacion+"%");
+            
         }
         if (codigoNivelAdministracion != null && codigoNivelAdministracion != -1) {
             where.add(" unidad.nivelAdministracion.codigoNivelAdministracion = :codigoNivelAdministracion ");
@@ -520,6 +532,15 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         if (unidadRaiz) {
             where.add(" unidad.codUnidadRaiz.codigo = unidad.codigo ");
         }
+        if (nifcif != null && nifcif.length() > 0) {
+        	where.add(DataBaseUtils.like("unidad.nifcif", "nifcif", parametros, nifcif));
+        	//where.add(" upper(unidad.nifcif) like upper(:nifcif)");
+        	//parametros.put("nifcif", "%"+nifcif+"%");
+        }
+        if (unidadVersion != null && unidadVersion > 0) {
+        	where.add(" unidad.version = :unidadversion ");
+        	parametros.put("unidadversion", unidadVersion);
+        }
 
         // Añadimos los parametros a la query
         if (parametros.size() != 0) {
@@ -533,12 +554,13 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
                 count++;
             }
             q2 = em.createQuery(query.toString().replaceAll("Select unidad from Unidad as unidad ", "Select count(unidad.codigo) from Unidad as unidad "));
-            query.append("order by unidad.denominacion asc");
+            query.append("order by unidad.denomLenguaCooficial asc, unidad.denominacion asc");
             q = em.createQuery(query.toString());
 
             for (Map.Entry<String, Object> param : parametros.entrySet()) {
                 q.setParameter(param.getKey(), param.getValue());
                 q2.setParameter(param.getKey(), param.getValue());
+                log.info("UnidadBean:busqueda parametro: " + param.getKey() + " => " + param.getValue());
             }
 
         } else {
@@ -546,9 +568,11 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
                 query.append(" where unidad.codUnidadRaiz.codigo = unidad.codigo ");
             }
             q2 = em.createQuery(query.toString().replaceAll("Select unidad from Unidad as unidad ", "Select count(unidad.codigo) from Unidad as unidad "));
-            query.append("order by unidad.denominacion asc");
+            query.append("order by unidad.denomLenguaCooficial asc, unidad.denominacion asc");
             q = em.createQuery(query.toString());
         }
+        
+        log.info("UnidadBean:busqueda query: " + query.toString());
 
         Paginacion paginacion = null;
 

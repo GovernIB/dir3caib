@@ -94,7 +94,7 @@ public class CatPais implements Serializable {
     this.alfa2Pais = alfa2Pais;
   }
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name="ESTADO")
   @ForeignKey(name="DIR_CPAIS_CESTENT_FK")
   public CatEstadoEntidad getEstado() {

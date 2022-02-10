@@ -72,7 +72,7 @@ public class CatComunidadAutonoma  implements Serializable {
   /**
    * @return the codigoPais
    */
-  @ManyToOne(cascade= {CascadeType.PERSIST}, fetch = FetchType.LAZY)
+  @ManyToOne(cascade= {CascadeType.PERSIST}, fetch = FetchType.EAGER)
   @JoinColumn(name="PAIS")
   @ForeignKey(name="DIR_CCOMAUT_CATPAIS_FK")
   public CatPais getPais() {

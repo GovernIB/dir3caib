@@ -118,11 +118,14 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @param codComunidad
      * @param codigoProvincia
      * @param codigoEstado
+     * @param nifcif
+     * @param unidadVersion
      * @return
      * @throws Exception
      */
     Paginacion busqueda(Integer pageNumber, String codigo, String denominacion, Long codigoNivelAdministracion,
-                        String codAmbitoTerritorial, Long codComunidad, Long codigoProvincia, Boolean unidadRaiz, String codigoEstado) throws Exception;
+                        String codAmbitoTerritorial, Long codComunidad, Long codigoProvincia, Boolean unidadRaiz, String codigoEstado, 
+                        String nifcif, Long unidadVersion) throws Exception;
 
     /**
      * Método recursivo que devuelve el árbol de unidades de la unidad indicada por código,
