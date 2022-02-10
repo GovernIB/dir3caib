@@ -248,7 +248,15 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
             where.add(DataBaseUtils.like("oficina.codigo", "codigo", parametros, codigo));
         }
         if (denominacion != null && denominacion.length() > 0) {
-            where.add(DataBaseUtils.like("oficina.denominacion", "denominacion", parametros, denominacion));
+        	// String condicion1 = DataBaseUtils.like("oficina.denominacion", "denominacion1", parametros, denominacion);
+        	// String condicion2 = DataBaseUtils.like("oficina.denomlenguacooficial", "denominacion2", parametros, denominacion);
+        
+        	String condicion1 = " upper(oficina.denominacion) like upper(:denominacion) ";
+        	String condicion2 = " upper(oficina.denomlenguacooficial) like upper(:denominacion) ";
+        	
+        	where.add(" ( "+condicion1 + " ) or ( " + condicion2+ " ) " );
+        	parametros.put("denominacion", "%"+denominacion+"%");
+
         }
         if (codigoNivelAdministracion != null && codigoNivelAdministracion != -1) {
             where.add(" oficina.nivelAdministracion.codigoNivelAdministracion = :codigoNivelAdministracion ");
@@ -286,6 +294,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
             for (Map.Entry<String, Object> param : parametros.entrySet()) {
                 q.setParameter(param.getKey(), param.getValue());
                 q2.setParameter(param.getKey(), param.getValue());
+                log.info("OficinaBean parametre => " + param.getKey() + " : " + param.getValue());          
             }
 
         } else {
@@ -293,6 +302,8 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
             query.append("order by oficina.codigo desc");
             q = em.createQuery(query.toString());
         }
+        
+        log.info("OficinaBean query => " + query.toString());
 
         Paginacion paginacion = null;
 
