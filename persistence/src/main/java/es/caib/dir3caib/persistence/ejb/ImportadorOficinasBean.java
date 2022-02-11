@@ -673,6 +673,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
 
                         //Miramos si existe previamente la relacionSir
                         if (cache.existsUnidadOficina(codigoUnidadVersion,codigoOficina)) {
+
                             long s1 = System.currentTimeMillis();
                             relacionSirOfi = relSirOfiEjb.findByPKs(codigoUnidadVersion, codigoOficina);
                             existe = true;
