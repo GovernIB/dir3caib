@@ -12,6 +12,8 @@ package es.caib.dir3caib.persistence.model.utils;
 public class ObjetoBasico {
 
   private String codigo;
+  private String codigoDir3;
+  private String version; 
   private String denominacion;
   private String descripcionEstado;
   private String raiz;
@@ -24,12 +26,18 @@ public class ObjetoBasico {
   }
 
   public ObjetoBasico(String codigo, String denominacion, String descripcionEstado, String raiz, String superior, String localidad) {
-    this.codigo = codigo;
+	this.codigo = codigo;
     this.denominacion = denominacion;
     this.descripcionEstado = descripcionEstado;
     this.raiz = raiz;
     this.superior = superior;
     this.localidad = localidad;
+    
+    if (codigo.indexOf("v") > 0) {
+		String[] codigoSeparado = codigo.split("v");
+		this.codigoDir3 = codigoSeparado[0];
+	    this.version = codigoSeparado[1];
+	}
   }
 
    public ObjetoBasico(String codigo, String denominacion, String descripcionEstado, String raiz, String superior, String localidad, String edpPrincipal) {
@@ -40,6 +48,12 @@ public class ObjetoBasico {
       this.superior = superior;
       this.localidad = localidad;
       this.edpPrincipal = edpPrincipal;
+      
+      if (codigo.indexOf("v") > 0) {
+			String[] codigoSeparado = codigo.split("v");
+			this.codigoDir3 = codigoSeparado[0];
+		    this.version = codigoSeparado[1];
+	  }
    }
 
 
@@ -49,6 +63,22 @@ public class ObjetoBasico {
 
   public void setCodigo(String codigo) {
     this.codigo = codigo;
+  }
+
+  public String getCodigoDir3() {
+	return codigoDir3;
+  }
+
+  public void setCodigoDir3(String codigoDir3) {
+	this.codigoDir3 = codigoDir3;
+  }
+
+  public String getVersion() {
+	return version;
+  }
+
+  public void setVersion(String version) {
+	this.version = version;
   }
 
   public String getDenominacion() {
