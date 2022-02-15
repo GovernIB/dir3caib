@@ -65,11 +65,11 @@ public class RelacionOrganizativaOfiBean extends BaseEjbJPA<RelacionOrganizativa
     public List<String> getUnidadesOficinas() throws Exception  {
 
       
-      /*String str  = "Select concat(relacionOrganizativaOfi.unidad.codigo, '_', relacionOrganizativaOfi.oficina.codigo) "
-        +	"from RelacionOrganizativaOfi as relacionOrganizativaOfi ";*/
+      String str  = "Select concat(relacionOrganizativaOfi.unidad.codigo, '_', relacionOrganizativaOfi.oficina.codigo) "
+        +	"from RelacionOrganizativaOfi as relacionOrganizativaOfi ";
 
-        String str  = "Select concat(relacionOrganizativaOfi.unidad.codigo, '_', relacionOrganizativaOfi.unidad.version, '_', relacionOrganizativaOfi.oficina.codigo) "
-                +	"from RelacionOrganizativaOfi as relacionOrganizativaOfi ";
+       /* String str  = "Select concat(relacionOrganizativaOfi.unidad.codigo, '_', relacionOrganizativaOfi.unidad.version, '_', relacionOrganizativaOfi.oficina.codigo) "
+                +	"from RelacionOrganizativaOfi as relacionOrganizativaOfi ";*/
         
       Query query = em.createQuery(str);
       

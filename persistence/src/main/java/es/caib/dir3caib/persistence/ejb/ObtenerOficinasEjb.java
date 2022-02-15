@@ -1,11 +1,6 @@
 package es.caib.dir3caib.persistence.ejb;
 
-import es.caib.dir3caib.persistence.model.ContactoOfi;
-import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
-import es.caib.dir3caib.persistence.model.Oficina;
-import es.caib.dir3caib.persistence.model.RelacionOrganizativaOfi;
-import es.caib.dir3caib.persistence.model.Sincronizacion;
-import es.caib.dir3caib.persistence.model.Unidad;
+import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.model.ws.OficinaTF;
 import es.caib.dir3caib.utils.Utils;
 import org.apache.log4j.Logger;
@@ -132,14 +127,13 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
                 // miramos que no esté extinguida o anulada antes de la primera sincro.
                 if (unidadEjb.unidadValida(unidad, fechaSincronizacion)) {
                     unidades.add(unidad);
-                    /*
-                    //TODO DESCOMENTAR Y ARREGLAR
-                    Set<Unidad> historicosRaiz = unidad.getHistoricoUO();
+                    //TODO PROBAR
+                    Set<HistoricoUO> historicosRaiz = unidad.getHistoricosAnterior();
                     if (historicosRaiz != null) {
-                        for (Unidad historico : historicosRaiz) {
-                            unidades.add(historico);
+                        for (HistoricoUO historico : historicosRaiz) {
+                            unidades.add(historico.getUnidadUltima());
                         }
-                    }*/
+                    }
                 }
             }
         }
@@ -147,6 +141,7 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
 
         if (unidad == null) { // O es Sincro o es actualizacion pero con la raiz sin actualizar.
             unidad = unidadEjb.findUnidadEstado(codigo, Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+            log.info("Unidad encontrada " + unidad.getCodigo());
             if (unidad != null) {
                 //Añadimos la unidad para que se obtengan sus oficinas
                 unidades.add(unidad);
