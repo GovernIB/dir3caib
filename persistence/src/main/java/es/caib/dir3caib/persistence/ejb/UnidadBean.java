@@ -526,10 +526,10 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         StringBuilder query = new StringBuilder("Select unidad from Unidad as unidad ");
 
         // Parametros de busqueda
-        if (codigo != null && codigo.length() > 0) {
+        if (!codigo.isEmpty()) {
 			where.add(DataBaseUtils.like("unidad.codigo", "codigo", parametros, codigo));
         }
-        if (denominacion != null && denominacion.length() > 0) {
+        if (!denominacion.isEmpty()) {
             
             String condicion1 = DataBaseUtils.like("unidad.denomLenguaCooficial", "denominacion1", parametros, denominacion);
             String condicion2 = DataBaseUtils.like("unidad.denominacion", "denominacion2", parametros, denominacion);
@@ -564,7 +564,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         if (unidadRaiz) {
             where.add(" unidad.codUnidadRaiz.codigo = unidad.codigo ");
         }
-        if (nifcif != null && nifcif.length() > 0) {
+        if (!nifcif.isEmpty()) {
         	where.add(DataBaseUtils.like("unidad.nifcif", "nifcif", parametros, nifcif));
         	//where.add(" upper(unidad.nifcif) like upper(:nifcif)");
         	//parametros.put("nifcif", "%"+nifcif+"%");

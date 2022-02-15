@@ -244,10 +244,10 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
         StringBuilder query = new StringBuilder("Select oficina from Oficina as oficina ");
 
         // Parametros de busqueda
-        if (codigo != null && codigo.length() > 0) {
+        if (!codigo.isEmpty()) {
             where.add(DataBaseUtils.like("oficina.codigo", "codigo", parametros, codigo));
         }
-        if (denominacion != null && denominacion.length() > 0) {
+        if (!denominacion.isEmpty()) {
         	// String condicion1 = DataBaseUtils.like("oficina.denominacion", "denominacion1", parametros, denominacion);
         	// String condicion2 = DataBaseUtils.like("oficina.denomlenguacooficial", "denominacion2", parametros, denominacion);
         
