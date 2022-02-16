@@ -123,12 +123,10 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
             log.info("ACTUALIZACION OFICINAS");
             //Obtenemos la raiz en funcion de la fecha de actualización
             unidad = unidadEjb.findUnidadActualizada(codigo, fechaActualizacion);
-            log.info(" ACTUALIZA  " + unidad);
             if (unidad != null) { //Han actualizado la raiz
                 // miramos que no esté extinguida o anulada antes de la primera sincro.
                 if (unidadEjb.unidadValida(unidad, fechaSincronizacion)) {
                     unidades.add(unidad);
-                    //TODO PROBAR
                     Set<HistoricoUO> historicosRaiz = unidad.getHistoricosAnterior();
                     if (historicosRaiz != null) {
                         for (HistoricoUO historico : historicosRaiz) {
@@ -142,7 +140,6 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
 
         if (unidad == null) { // O es Sincro o es actualizacion pero con la raiz sin actualizar.
             unidad = unidadEjb.findUnidadEstado(codigo, Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-            log.info("Unidad encontrada " + unidad.getCodigo());
             if (unidad != null) {
                 //Añadimos la unidad para que se obtengan sus oficinas
                 unidades.add(unidad);
