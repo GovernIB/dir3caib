@@ -58,9 +58,12 @@ public class TestUnidadesWs extends Dir3CaibTestUtils{
     public void testUnidadExtinguida() {
         try {
             Dir3CaibObtenerUnidadesWs apiUnidades = getObtenerUnidadesApi(true);
-            UnidadTF unidad = apiUnidades.obtenerUnidad("A04009905", null, null);
+            //UnidadTF unidad = apiUnidades.obtenerUnidad("A04009905", null, null);
+            UnidadTF unidad = apiUnidades.obtenerUnidad("A04059164", null, null);
             if (unidad != null) {
                 System.out.println(unidad.getDenominacion());
+            }else{
+                System.out.println("La unidad está extinguida");
             }
 
             List<UnidadTF> unidades = apiUnidades.obtenerArbolUnidades("A04009905", null, null);
@@ -72,14 +75,32 @@ public class TestUnidadesWs extends Dir3CaibTestUtils{
         }
     }
 
+    @Test
+    public void testUnidadConHistoricos() {
+        try {
+            Dir3CaibObtenerUnidadesWs apiUnidades = getObtenerUnidadesApi(true);
+            UnidadTF unidad = apiUnidades.obtenerUnidad("A04059164", null, null);
+            if (unidad != null) {
+                System.out.println(unidad.getDenominacion());
+                System.out.println(unidad.getCodigo());
+                System.out.println(unidad.getHistoricosUO());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
    @Test
-   public void obtenerArbolUnidades() {
+   public void obtenerArbolUnidadesActualizacion() {
       try {
          Dir3CaibObtenerUnidadesWs apiUnidades = getObtenerUnidadesApi(true);
-         //  for (int i = 0; i < 20; i++) {
          Long start = System.currentTimeMillis();
          Timestamp.valueOf("2018-12-11 12:38:19.398");
-         List<UnidadTF> destinatarias = apiUnidades.obtenerArbolUnidades("A04003003", Timestamp.valueOf("2018-12-11 12:38:19.398"), Timestamp.valueOf("2018-12-11 12:38:19.398"));
+
+         //Actualizacion
+         List<UnidadTF> destinatarias = apiUnidades.obtenerArbolUnidades("A04059164", Timestamp.valueOf("2022-02-09 12:38:19.398"), Timestamp.valueOf("2022-02-04 12:38:19.398"));
+
          Long end = System.currentTimeMillis();
 
          System.out.println("TIEMPO CARGA ARBOL: " + Utils.formatElapsedTime(end - start));
@@ -88,11 +109,34 @@ public class TestUnidadesWs extends Dir3CaibTestUtils{
             System.out.println(unidadTF.getCodigo() + "\t\t"
                + unidadTF.getDenominacion());
          }
-         //}
+
       } catch (Exception e) {
          e.printStackTrace();
       }
    }
+
+
+
+    @Test
+    public void obtenerArbolUnidadesSincronizacion() {
+        try {
+            Dir3CaibObtenerUnidadesWs apiUnidades = getObtenerUnidadesApi(true);
+            Long start = System.currentTimeMillis();
+            List<UnidadTF> destinatarias = apiUnidades.obtenerArbolUnidades("A04059164", null, null);
+
+            Long end = System.currentTimeMillis();
+
+            System.out.println("TIEMPO CARGA ARBOL: " + Utils.formatElapsedTime(end - start));
+            System.out.println("ARBOL " + destinatarias.size());
+            for (UnidadTF unidadTF : destinatarias) {
+                System.out.println(unidadTF.getCodigo() + "\t\t"
+                        + unidadTF.getDenominacion());
+            }
+            //}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 
    @Test
