@@ -129,7 +129,7 @@ public class NodoUtils {
             		edpPrincipal = unidad.getCodEdpPrincipal().getCodigo() + " - " + unidad.getCodEdpPrincipal().getDenominacion();
             }
             
-            String denominacion = (!unidad.getDenomLenguaCooficial().isEmpty()) ? unidad.getDenomLenguaCooficial() : unidad.getDenominacion();
+            String denominacion = (Utils.isNotEmpty(unidad.getDenomLenguaCooficial())) ? unidad.getDenomLenguaCooficial() : unidad.getDenominacion();
             String descCodUnidadRaiz = (unidad.getCodUnidadRaiz()!=null && Utils.isNotEmpty(unidad.getCodUnidadRaiz().getDenomLenguaCooficial())) ? unidad.getCodUnidadRaiz().getDenomLenguaCooficial() : unidad.getCodUnidadRaiz().getDenominacion();
             String descCodUnidadSuperior = (unidad.getCodUnidadSuperior()!=null && Utils.isNotEmpty(unidad.getCodUnidadSuperior().getDenomLenguaCooficial())) ? unidad.getCodUnidadSuperior().getDenomLenguaCooficial() : unidad.getCodUnidadSuperior().getDenominacion();
 
@@ -150,8 +150,8 @@ public class NodoUtils {
             	String denominacionOfiResponsable = (!oficina.getCodOfiResponsable().getDenomlenguacooficial().isEmpty()) ? oficina.getCodOfiResponsable().getDenomlenguacooficial() : oficina.getCodOfiResponsable().getDenominacion(); 
                 ofiResponsable = oficina.getCodOfiResponsable().getCodigo() + " - " + denominacionOfiResponsable;
             }
-            String denominacion = (!oficina.getDenomlenguacooficial().isEmpty()) ? oficina.getDenomlenguacooficial() : oficina.getDenominacion();
-            String descCodUoResponsable = (!oficina.getCodUoResponsable().getDenomLenguaCooficial().isEmpty()) ? oficina.getCodUoResponsable().getDenomLenguaCooficial() : oficina.getCodUoResponsable().getDenominacion();
+            String denominacion = (Utils.isNotEmpty(oficina.getDenomlenguacooficial())) ? oficina.getDenomlenguacooficial() : oficina.getDenominacion();
+            String descCodUoResponsable = (oficina.getCodUoResponsable()!=null && Utils.isNotEmpty(oficina.getCodUoResponsable().getDenomLenguaCooficial())) ? oficina.getCodUoResponsable().getDenomLenguaCooficial() : oficina.getCodUoResponsable().getDenominacion();
             Nodo nodo = new Nodo(oficina.getCodigo(), denominacion, oficina.getEstado().getDescripcionEstadoEntidad(), ofiResponsable, oficina.getCodUoResponsable().getCodigo() + " - " + descCodUoResponsable, "", oficina.getOficinaSir());
 
             nodos.add(nodo);
