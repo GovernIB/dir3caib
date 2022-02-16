@@ -157,7 +157,7 @@ public class UnidadController extends BaseController {
 
         //Obtenemos los datos básicos de la unidad que nos indican
         //TODO Pasar la version en el mapping
-        Unidad unidad = unidadEjb.findFullByPK(codUnidad,1L);
+        Unidad unidad = unidadEjb.findFullByIdConHistoricos(codUnidad);
         mav.addObject("unidad", unidad);
 
         //Obtenemos los historicos anteriores de la unidad indicada
@@ -166,9 +166,8 @@ public class UnidadController extends BaseController {
 
         //Obtenemos los históricos finales hacia delante.
         Set<Unidad> unidadesHistoricasFinales = new HashSet<Unidad>();
-       // unidadEjb.historicosFinales(unidad, unidadesHistoricasFinales);
 
-        unidadEjb.historicosFinales2(unidad, unidadesHistoricasFinales);
+        unidadEjb.historicosFinales(unidad, unidadesHistoricasFinales);
         mav.addObject("historicosFinales", unidadesHistoricasFinales);
 
         //Obtenemos las oficinas que registran a la Unidad
@@ -333,33 +332,4 @@ public class UnidadController extends BaseController {
         return mav;
 
     }
-
-    /**
-     *
-     */
-    //TODO BORRAR es para hacer pruebas
-    @RequestMapping(value = "/pruebahistoricos", method = RequestMethod.GET)
-    public void pruebahistoricos() throws Exception {
-
-
-      /*  Unidad unidad = unidadEjb.findByCodigoMenorVersion("E04984901");
-        if(unidad!=null) {
-            log.info("ID UNIDAD ENCONTRADA  " + unidad.getId());
-            Set<Unidad> historicosFinales = new HashSet<Unidad>();
-            unidadEjb.historicosFinales2(unidad, historicosFinales);
-            for (Unidad historicoFinal : historicosFinales) {
-                log.info("HISTORICO FINAL ENCONTRADO " + historicoFinal.getCodigo());
-            }
-
-
-        }*/
-
-        Unidad unidad = unidadEjb.findByCodigoMenorVersion("E04984901");
-        Nodo nodo = new Nodo();
-        obtenerUnidadesEjb.montarHistoricosFinales(unidad,nodo,1);
-        //log.info(nodo.getHistoricos().size());
-        //log.info(nodo.getHistoricos().get(0).getCodigo());
-
-    }
-
 }

@@ -89,7 +89,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
     /**
      * Obtiene una unidad no vigente con sus historicosUO a partir del id
      *
-     * @param id
+     * @param codigo
      * @return
      * @throws Exception
      */
@@ -280,20 +280,13 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
     /**
      * OObtiene el código, denominación y estado de la unidad indicada
      *
-     * @param id
+     * @param codigo
      * @return
      * @throws Exception
      */
-    Unidad findByIdLigero(Long id) throws Exception;
+    Unidad findByCodigoLigero(String codigo) throws Exception;
     
-    /**
-     * OObtiene el código, denominación y estado de la unidad indicada
-     *
-     * @param id
-     * @return
-     * @throws Exception
-     */
-    Unidad findByIdLigero(String id) throws Exception;
+
 
     /**
      * Obtiene el código de todas las Unidades hijas de la unidad raiz indicada por código
@@ -371,10 +364,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
     * @param historicosFinales
     * @throws Exception
     */
-   void historicosFinales(Unidad unidad, Set<Unidad> historicosFinales) throws Exception;
-
-   //TODO ver si va bien y renombrar este con el nombre del de arriba
-    void historicosFinales2(Unidad unidad, Set<Unidad> historicosFinales) throws Exception;
+    void historicosFinales(Unidad unidad, Set<Unidad> historicosFinales) throws Exception;
 
     /* Obtiene las unidades del nivel indicado cuya unidad Raiz es la indicada por codigo */
     public List<Unidad> getUnidadesByNivel(long nivel, String codigo, String estado) throws Exception;
@@ -395,11 +385,10 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
     /**
      * Obtiene una unidad con sus contactos y sus relaciones
      * @param codigo
-     * @param version
      * @return
      * @throws Exception
      */
-    Unidad findFullByPK(String codigo, Long version) throws Exception;
+    Unidad findFullByIdConHistoricos(String codigo) throws Exception;
 
    /**
     * Este método mira si la unidad del código especificado tiene oficinas donde registrar.

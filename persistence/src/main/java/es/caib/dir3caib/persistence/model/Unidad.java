@@ -852,22 +852,6 @@ public class Unidad implements Serializable {
   }
 
 
-  //TODO ELIMINAR
- /* @ManyToMany(cascade=CascadeType.PERSIST, fetch= FetchType.EAGER)
-  @JoinTable(name="DIR_HISTORICO",
-               joinColumns=@JoinColumn(name="CODANTERIOR"),
-               inverseJoinColumns=@JoinColumn(name="CODULTIMA"))
-  @ForeignKey(name="DIR_UNI_UNI_HISTANTE_FK", inverseName = "DIR_UNI_UNI_HISTULTI_FK")
-  @JsonIgnore
-  public Set<Unidad> getHistoricoUO() {
-    return historicoUO;
-  }
-
-
-  public void setHistoricoUO(Set<Unidad> historicoUO) {
-    this.historicoUO = historicoUO;
-  }*/
-
   @OneToMany (mappedBy = "unidad", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
   @ForeignKey(name="DIR_UNIDAD_CODUO_FK")
   @JsonIgnore

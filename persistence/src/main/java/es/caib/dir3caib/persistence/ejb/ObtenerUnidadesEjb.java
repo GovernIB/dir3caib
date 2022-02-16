@@ -117,8 +117,8 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
             unidad.setContactos(contactosVisibles);
             Set<Unidad> historicosFinales = new HashSet<Unidad>();
 
-            unidadEjb.historicosFinales2(unidad, historicosFinales);
-            //TODO DESCOMENTAR Y ARREGLAR
+            unidadEjb.historicosFinales(unidad, historicosFinales);
+            //TODO DESCOMENTAR Y ARREGLAR cuando se adapte el modelo de WS
         //    unidad.setHistoricoUO(historicosFinales);
 
             return UnidadTF.generar(unidad);
@@ -152,7 +152,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
      *
      */
     public List<UnidadTF> obtenerArbolUnidadesTF(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
-
+        // TODO falta prova
         log.info("WS: Inicio obtenerArbolUnidadesTF");
         Long start = System.currentTimeMillis();
 
@@ -170,30 +170,12 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
                 unidadRaiz = unidad.getCodUnidadRaiz(); //obtenemos la raiz de la unidad que nos pasan
                 // miramos que la unidad que nos pasan no esté extinguida o anulada antes de la primera sincro.
                 if (unidadEjb.unidadValida(unidad, fechaSincronizacion)) {
+
                     arbol.add(unidad);
                     //obtenemos sus historicos para poder obtener todos los hijos que dependan de ellos
                     // y poder actualizar el árbol correctamente.
-                    //TODO BORRAR cuando se haya probado el codigo de más abajo
-                    /*Set<Unidad> historicosRaiz = unidad.getHistoricoUO();
-
-                    if (historicosRaiz != null) {
-                        for (Unidad historico : historicosRaiz) {
-                            //añadimos el histórico al arbol de actualizados.
-                            arbol.add(historico);
-                            if (unidad.equals(unidadRaiz)) { //Miramos si la unidad extinguida es raiz
-                                //obtenemos el arbol de hijos de los historicos que la sustituyen.
-                                arbol.addAll(unidadEjb.obtenerArbolUnidadesUnidadRaiz(historico.getCodigo(), fechaActualizacion, fechaSincronizacion));
-                            } else {
-                                //obtenemos el arbol de hijos de los historicos que la sustituyen.
-                                arbol.addAll(unidadEjb.obtenerArbolUnidadesUnidadNoRaiz(historico.getCodigo(), fechaActualizacion, fechaSincronizacion));
-                            }
-                        }
-                    }
-
-                     */
                     //Solo cogemos los historicos anterior que es donde ella es anterior y de ahí sacamos sus substitutos
                     Set<HistoricoUO> historicosRaiz = unidad.getHistoricosAnterior();
-                   // historicosRaiz.addAll(unidad.getHistoricosUltima());
                     if (historicosRaiz != null) {
                         for (HistoricoUO historico : historicosRaiz) {
                             //añadimos el histórico al arbol de actualizados.
@@ -229,12 +211,12 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
             //obtenemos el arbol de la unidad que nos han indicado para que se actualice bien
             if (unidad.equals(unidadRaiz)) { // Caso que la unidad que nos indican es unidad raiz
                 log.info("CASO UNIDAD QUE NOS PASAN ES RAIZ");
-                arbol.addAll(unidadEjb.obtenerArbolUnidadesUnidadRaiz(codigo, fechaActualizacion, fechaSincronizacion));
+                arbol.addAll(unidadEjb.obtenerArbolUnidadesUnidadRaiz(unidad.getCodigo(), fechaActualizacion, fechaSincronizacion));
                 log.info("Numero TOTAL de unidades a actualizar: " + arbol.size());
 
             } else { // caso de que la unidad que nos indican no es raiz
                 log.info("CASO UNIDAD QUE NOS PASAN NO ES RAIZ");
-                arbol.addAll(unidadEjb.obtenerArbolUnidadesUnidadNoRaiz(codigo, fechaActualizacion, fechaSincronizacion));
+                arbol.addAll(unidadEjb.obtenerArbolUnidadesUnidadNoRaiz(unidad.getCodigo(), fechaActualizacion, fechaSincronizacion));
                 log.info("Numero TOTAL de unidades a actualizar: " + arbol.size());
             }
 
@@ -307,7 +289,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
         Unidad unidad = unidadEjb.findByCodigoUltimaVersion(codigo);
         Set<Unidad> historicosFinales = new HashSet<Unidad>();
         List<UnidadTF> historicosFinalesList = new ArrayList<UnidadTF>();
-        unidadEjb.historicosFinales2(unidad, historicosFinales);
+        unidadEjb.historicosFinales(unidad, historicosFinales);
 
         for (Unidad uni : historicosFinales) {
             historicosFinalesList.add(UnidadTF.generar(uni));
@@ -327,10 +309,10 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
     public List<UnidadTF> obtenerHistoricosFinalesSIR(String codigo) throws Exception {
         log.info("HISTORICOS FINALES SIR ");
 
-        Unidad unidad = unidadEjb.findFullById(codigo);
+        Unidad unidad = unidadEjb.findFullByIdConHistoricos(codigo);
         Set<Unidad> historicosFinales = new HashSet<Unidad>();
         List<UnidadTF> historicosFinalesList = new ArrayList<UnidadTF>();
-        unidadEjb.historicosFinales2(unidad, historicosFinales);
+        unidadEjb.historicosFinales(unidad, historicosFinales);
 
         for (Unidad uni : historicosFinales) {
             if (oficinaEjb.tieneOficinasSIR(uni.getCodigo())) {
@@ -357,16 +339,6 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
         nodo.setDenominacion(unidad.getDenominacion());
         nodo.setNivel((long) nivel);
         //Obtenemos los históricos de primer nivel de la unidad indicada
-
-       /* Set<Unidad> parciales = unidad.getHistoricoUO();
-        List<Nodo> historicosParciales = new ArrayList<Nodo>();
-        //Para cada uno de los históricos obtenemos de manera recursiva sus históricos
-        for (Unidad parcial : parciales) {
-            Nodo nodoParcial = new Nodo();
-            historicosParciales.add(nodoParcial);
-            montarHistoricosFinales(parcial, nodoParcial, nivel + 1);
-        }*/
-
 
         Set<HistoricoUO> parciales = unidad.getHistoricosAnterior();
         List<Nodo> historicosParciales = new ArrayList<Nodo>();

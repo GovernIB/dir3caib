@@ -123,6 +123,7 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
             log.info("ACTUALIZACION OFICINAS");
             //Obtenemos la raiz en funcion de la fecha de actualización
             unidad = unidadEjb.findUnidadActualizada(codigo, fechaActualizacion);
+            log.info(" ACTUALIZA  " + unidad);
             if (unidad != null) { //Han actualizado la raiz
                 // miramos que no esté extinguida o anulada antes de la primera sincro.
                 if (unidadEjb.unidadValida(unidad, fechaSincronizacion)) {
@@ -148,7 +149,7 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
             }
         }
 
-        unidades.addAll(unidadEjb.obtenerArbol(codigo));
+        unidades.addAll(unidadEjb.obtenerArbol(unidad.getCodigo()));
         log.info("Total arbol: " + unidades.size());
 
         List<Oficina> oficinasCompleto = new ArrayList<Oficina>();
@@ -196,7 +197,7 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
         }
 
 
-        unidades.addAll(unidadEjb.obtenerArbol(codigo));
+        unidades.addAll(unidadEjb.obtenerArbol(unidad.getCodigo()));
         log.info("Total arbol: " + unidades.size());
 
         List<Oficina> oficinasCompleto = new ArrayList<Oficina>();
