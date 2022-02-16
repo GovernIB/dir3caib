@@ -81,4 +81,22 @@ public class Utils {
         if (cal1.get(Calendar.YEAR) > cal2.get(Calendar.YEAR)) return true;
         return cal1.get(Calendar.DAY_OF_YEAR) > cal2.get(Calendar.DAY_OF_YEAR);
     }
+
+    /**
+     * Comprueba si una cadena está vacia ("") o es null.
+     * @param cadena
+     * @return
+     */
+    public static boolean isEmpty(final String cadena) {
+        return cadena == null || cadena.length() == 0;
+    }
+
+    /**
+     * Comprueba si una cadena no está vacia ("") o es null.
+     * @param cadena
+     * @return
+     */
+    public static boolean isNotEmpty(final String cadena) {
+        return !isEmpty(cadena);
+    }
 }

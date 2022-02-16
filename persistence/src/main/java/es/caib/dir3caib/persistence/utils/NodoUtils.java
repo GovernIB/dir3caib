@@ -2,6 +2,8 @@ package es.caib.dir3caib.persistence.utils;
 
 import es.caib.dir3caib.persistence.model.Oficina;
 import es.caib.dir3caib.persistence.model.Unidad;
+import es.caib.dir3caib.utils.Utils;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +13,7 @@ import java.util.List;
  */
 public class NodoUtils {
 
+    protected final Logger log = Logger.getLogger(getClass());
 
     /**
      * Convierte los resultados de una query en una lista de {@link es.caib.dir3caib.persistence.utils.Nodo}
@@ -127,8 +130,9 @@ public class NodoUtils {
             }
             
             String denominacion = (!unidad.getDenomLenguaCooficial().isEmpty()) ? unidad.getDenomLenguaCooficial() : unidad.getDenominacion();
-            String descCodUnidadRaiz = (!unidad.getCodUnidadRaiz().getDenomLenguaCooficial().isEmpty()) ? unidad.getCodUnidadRaiz().getDenomLenguaCooficial() : unidad.getCodUnidadRaiz().getDenominacion(); 
-            String descCodUnidadSuperior = (!unidad.getCodUnidadSuperior().getDenomLenguaCooficial().isEmpty()) ? unidad.getCodUnidadSuperior().getDenomLenguaCooficial() : unidad.getCodUnidadSuperior().getDenominacion();
+            String descCodUnidadRaiz = (unidad.getCodUnidadRaiz()!=null && Utils.isNotEmpty(unidad.getCodUnidadRaiz().getDenomLenguaCooficial())) ? unidad.getCodUnidadRaiz().getDenomLenguaCooficial() : unidad.getCodUnidadRaiz().getDenominacion();
+            String descCodUnidadSuperior = (unidad.getCodUnidadSuperior()!=null && Utils.isNotEmpty(unidad.getCodUnidadSuperior().getDenomLenguaCooficial())) ? unidad.getCodUnidadSuperior().getDenomLenguaCooficial() : unidad.getCodUnidadSuperior().getDenominacion();
+
             Nodo nodo = new Nodo(unidad.getCodigo(), denominacion, unidad.getEstado().getDescripcionEstadoEntidad(), unidad.getCodUnidadRaiz().getCodigo() + " - " + descCodUnidadRaiz, unidad.getCodUnidadSuperior().getCodigo() + " - " + descCodUnidadSuperior, "", false, unidad.isEsEdp(), edpPrincipal);
 
             nodos.add(nodo);
