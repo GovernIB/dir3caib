@@ -13,6 +13,7 @@ public class UnidadBusquedaForm {
     private Unidad unidad;
     private Integer pageNumber;
     private Boolean unidadRaiz;
+    private Boolean denominacionCooficial = true;
 
     public UnidadBusquedaForm() {
     }
@@ -22,8 +23,15 @@ public class UnidadBusquedaForm {
         this.pageNumber = pageNumber;
         this.unidadRaiz = unidadRaiz;
     }
+    
+    public UnidadBusquedaForm(Unidad unidad, Integer pageNumber, Boolean unidadRaiz, Boolean denominacionCooficial) {
+		this.unidad = unidad;
+		this.pageNumber = pageNumber;
+		this.unidadRaiz = unidadRaiz;
+		this.denominacionCooficial = denominacionCooficial;
+	}
 
-    public Unidad getUnidad() {
+	public Unidad getUnidad() {
         return unidad;
     }
 
@@ -46,4 +54,14 @@ public class UnidadBusquedaForm {
     public void setUnidadRaiz(Boolean unidadRaiz) {
       this.unidadRaiz = unidadRaiz;
     }
+
+	public Boolean getDenominacionCooficial() {
+		return denominacionCooficial;
+	}
+
+	public void setDenominacionCooficial(Boolean denominacionCooficial) {
+		this.denominacionCooficial = denominacionCooficial;
+	}
+    
+    
 }

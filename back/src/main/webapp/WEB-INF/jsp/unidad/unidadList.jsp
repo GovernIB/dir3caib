@@ -141,6 +141,15 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="span6">
+                            <div class="control-group">
+                                <form:label path="denominacionCooficial" cssClass="control-label largeLabel"><fmt:message
+                                        key="unidad.denominacion.cooficial"/></form:label>
+                                <div class="controls">
+                                    <form:checkbox path="denominacionCooficial" value="true" cssClass="input-xlarge"/>
+                                </div>
+                            </div>
+                        </div>
                         
                     </div>
 
@@ -220,7 +229,14 @@
                         </td>
                         <td>${nodo.descripcionEstado}</td>
                         <td class="center">
-                            <a class="btn btn-primary btn-sm" href="<c:url value="/unidad/${nodo.codigo}/detalle"/>" title="<spring:message code="dir3caib.detalle"/>"><span class="fa fa-eye"></span></a>
+                        	<c:choose>
+                        		<c:when test="${unidadBusqueda.denominacionCooficial}">
+                        			<a class="btn btn-primary btn-sm" href="<c:url value="/unidad/${nodo.codigo}/detall"/>" title="<spring:message code="dir3caib.detalle"/>"><span class="fa fa-eye"></span></a>
+                        		</c:when>
+                        		<c:otherwise>
+                        			<a class="btn btn-primary btn-sm" href="<c:url value="/unidad/${nodo.codigo}/detalle"/>" title="<spring:message code="dir3caib.detalle"/>"><span class="fa fa-eye"></span></a>
+                        		</c:otherwise>
+                        	</c:choose>  
                         </td>
                     </tr>
                 </c:forEach>
