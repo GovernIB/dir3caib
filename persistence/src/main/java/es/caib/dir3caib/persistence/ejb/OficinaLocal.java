@@ -36,11 +36,13 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      * @param codComunidad codigo de la comunidad  a la que pertenece.
      * @param codigoProvincia codigo de la provincia a la que pertenece.
      * @param codigoEstado codigo de estado (vigente, anulado)
+     * @param denominacionCooficial
      * @return
      * @throws Exception
      */
     Paginacion busqueda(Integer pageNumber, String codigo, String denominacion,
-                        Long codigoNivelAdministracion, Long codComunidad, Long codigoProvincia, String codigoEstado)
+                        Long codigoNivelAdministracion, Long codComunidad, Long codigoProvincia, 
+                        String codigoEstado, Boolean denominacionCooficial)
             throws Exception;
 
     /**
@@ -246,4 +248,10 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
     List<Oficina> obtenerOficinasRegistran(String codigoUnidad) throws Exception;
 
    Boolean isSIRCompleto(String codigoOficina) throws Exception;
+
+   List<Nodo> hijos(String codigo, String estado, boolean denominacionCooficial) throws Exception;
+
+List<Nodo> oficinasDependientes(String codigo, String estado, boolean denominacionCooficial) throws Exception;
+
+List<Nodo> oficinasAuxiliares(String codigo, String estado, boolean denominacionCooficial) throws Exception;
 }

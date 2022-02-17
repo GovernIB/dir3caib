@@ -12,7 +12,7 @@ public class OficinaBusquedaForm {
 
     private Oficina oficina;
     private Integer pageNumber;
-
+    private Boolean denominacionCooficial = true;
 
     public OficinaBusquedaForm() {
     }
@@ -22,7 +22,13 @@ public class OficinaBusquedaForm {
         this.pageNumber = pageNumber;
     }
 
-    public Oficina getOficina() {
+    public OficinaBusquedaForm(Oficina oficina, Integer pageNumber, Boolean denominacionCooficial) {
+		this.oficina = oficina;
+		this.pageNumber = pageNumber;
+		this.denominacionCooficial = denominacionCooficial;
+	}
+
+	public Oficina getOficina() {
       return oficina;
     }
 
@@ -38,5 +44,12 @@ public class OficinaBusquedaForm {
         this.pageNumber = pageNumber;
     }
 
+	public Boolean getDenominacionCooficial() {
+		return denominacionCooficial;
+	}
+
+	public void setDenominacionCooficial(Boolean denominacionCooficial) {
+		this.denominacionCooficial = denominacionCooficial;
+	}
 
 }

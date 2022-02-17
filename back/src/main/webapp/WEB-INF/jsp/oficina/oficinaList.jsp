@@ -107,6 +107,16 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <div class="row-fluid">
+                    	<div class="control-group">
+                             <form:label path="denominacionCooficial" cssClass="control-label largeLabel"><fmt:message
+                                     key="oficina.denominacion.cooficial"/></form:label>
+                             <div class="controls">
+                                 <form:checkbox path="denominacionCooficial" value="true" cssClass="input-xlarge"/>
+                             </div>
+                         </div>
+                    </div>
 
 
                     <div class="form-actions">
@@ -175,9 +185,15 @@
                         </td>
                         <td>${nodo.descripcionEstado}</td>
                         <td class="center">
-                            <a class="btn btn-primary btn-sm" href="<c:url value="/oficina/${nodo.codigo}/detalle"/>" title="<spring:message code="dir3caib.detalle"/>"><span class="fa fa-eye"></span></a>
+                        	<c:choose>
+                        		<c:when test="${oficinaBusqueda.denominacionCooficial}">
+                        			<a class="btn btn-primary btn-sm" href="<c:url value="/oficina/${nodo.codigo}/detall"/>" title="<spring:message code="dir3caib.detalle"/>"><span class="fa fa-eye"></span></a>
+                        		</c:when>
+                        		<c:otherwise>
+                        			<a class="btn btn-primary btn-sm" href="<c:url value="/oficina/${nodo.codigo}/detalle"/>" title="<spring:message code="dir3caib.detalle"/>"><span class="fa fa-eye"></span></a>
+                        		</c:otherwise>
+                        	</c:choose>                         
                         </td>
-
                     </tr>
                 </c:forEach>
                 </tbody>

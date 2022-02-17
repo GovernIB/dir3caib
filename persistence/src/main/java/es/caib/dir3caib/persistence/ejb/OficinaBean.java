@@ -234,7 +234,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
      */
     @Override
     @SuppressWarnings("unchecked")
-    public Paginacion busqueda(Integer pageNumber, String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, Long codigoProvincia, String codigoEstado) throws Exception {
+    public Paginacion busqueda(Integer pageNumber, String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, Long codigoProvincia, String codigoEstado, Boolean denominacionCooficial) throws Exception {
 
         Query q;
         Query q2;
@@ -317,7 +317,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
             paginacion = new Paginacion(0, 0);
         }
 
-        List<Nodo> nodos = NodoUtils.getNodoListOficina(q.getResultList());
+        List<Nodo> nodos = NodoUtils.getNodoListOficina(q.getResultList(), denominacionCooficial);
 
 
         paginacion.setListado(new ArrayList<Object>(nodos));
@@ -352,16 +352,23 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
      * @param estado estado de la oficina padre.
      * @return {@link es.caib.dir3caib.persistence.utils.Nodo}
      */
+    
     @Override
     @SuppressWarnings("unchecked")
     public List<Nodo> hijos(String codigo, String estado) throws Exception {
+    	return hijos(codigo, estado, false);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Nodo> hijos(String codigo, String estado, boolean denominacionCooficial) throws Exception {
 
-        Query q = em.createQuery("Select oficina.codigo, oficina.denominacion, oficina.estado.descripcionEstadoEntidad from Oficina as oficina where oficina.codOfiResponsable.codigo =:codigo and oficina.codigo !=:codigo and oficina.estado.codigoEstadoEntidad =:estado order by oficina.codigo");
+        Query q = em.createQuery("Select oficina.codigo, oficina.denominacion, oficina.estado.descripcionEstadoEntidad, oficina.denomcooficial from Oficina as oficina where oficina.codOfiResponsable.codigo =:codigo and oficina.codigo !=:codigo and oficina.estado.codigoEstadoEntidad =:estado order by oficina.codigo");
 
         q.setParameter("codigo", codigo);
         q.setParameter("estado", estado);
 
-        return NodoUtils.getNodoList(q.getResultList());
+        return NodoUtils.getNodoList(q.getResultList(), denominacionCooficial);
     }
 
     /**
@@ -711,18 +718,25 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
      *
      * @return {@link es.caib.dir3caib.persistence.utils.Nodo}
      */
+    
     @Override
     @SuppressWarnings("unchecked")
     public List<Nodo> oficinasDependientes(String codigo, String estado) throws Exception {
+        return oficinasDependientes(codigo,estado,false);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Nodo> oficinasDependientes(String codigo, String estado, boolean denominacionCooficial) throws Exception {
 
-        Query q = em.createQuery("Select oficina.codigo, oficina.denominacion, oficina.estado.descripcionEstadoEntidad from Oficina as oficina where " +
+        Query q = em.createQuery("Select oficina.codigo, oficina.denominacion, oficina.estado.descripcionEstadoEntidad, oficina.denomcooficial from Oficina as oficina where " +
                 "oficina.codUoResponsable.codigo=:codigo and oficina.estado.codigoEstadoEntidad=:estado " +
                 "and oficina.codOfiResponsable.codigo is null order by oficina.codigo");
 
         q.setParameter("codigo", codigo);
         q.setParameter("estado", estado);
 
-        return NodoUtils.getNodoList(q.getResultList());
+        return NodoUtils.getNodoList(q.getResultList(), denominacionCooficial);
     }
 
     /**
@@ -736,6 +750,12 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
     @Override
     @SuppressWarnings("unchecked")
     public List<Nodo> oficinasAuxiliares(String codigo, String estado) throws Exception {
+    	return oficinasAuxiliares(codigo,estado,false);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Nodo> oficinasAuxiliares(String codigo, String estado, boolean denominacionCooficial) throws Exception {
 
         Query q = em.createQuery("Select oficina.codigo, oficina.denominacion, oficina.estado.descripcionEstadoEntidad from Oficina as oficina where " +
                 " oficina.codOfiResponsable.codigo=:codigo and oficina.estado.codigoEstadoEntidad =:estado " +
@@ -743,7 +763,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
         q.setParameter("codigo", codigo);
         q.setParameter("estado", estado);
-        return NodoUtils.getNodoList(q.getResultList());
+        return NodoUtils.getNodoList(q.getResultList(), denominacionCooficial);
     }
 
     @Override

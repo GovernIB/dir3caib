@@ -35,6 +35,11 @@ body { background-image:url(../img/background-pattern.png); color:#666666; paddi
     border-right: 1px solid #FFFFFF;
 }
 
+/* forms */
+.largeLabel {
+	width: auto !important; 
+}
+
 /* Navigation */
 /*min-width:300px !important; */
 .navbar {  width:100%;}
