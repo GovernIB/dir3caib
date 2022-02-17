@@ -32,7 +32,7 @@ public class ContactoTF {
 
     public void rellenar(ContactoOfi contactoOfi) {
 
-        this.setTipoContacto(contactoOfi.getTipoContacto().getDescripcionTipoContacto());
+        this.setTipoContacto(contactoOfi.getTipoContacto()!=null?contactoOfi.getTipoContacto().getDescripcionTipoContacto():"");
         this.setValorContacto(contactoOfi.getValorContacto());
 
     }
