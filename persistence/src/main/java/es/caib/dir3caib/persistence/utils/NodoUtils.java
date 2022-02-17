@@ -38,17 +38,20 @@ public class NodoUtils {
 
     /**
      * Convierte los resultados de una query en una lista de {@link es.caib.dir3caib.persistence.utils.Nodo}
-     * se devuelve codigo, denominación y estado
+     * se devuelve codigo, denominación y estado. 
+     * Si denominacionCooficial es true, devuelve la denominacionCooficial si no es nula.
      * @param result
+     * @param denominacionCooficial
      * @return
      * @throws Exception
      */
-    public static List<Nodo> getNodoList(List<Object[]> result) throws Exception {
+    public static List<Nodo> getNodoList(List<Object[]> result, boolean denominacionCooficial) throws Exception {
 
         List<Nodo> nodos = new ArrayList<Nodo>();
 
         for (Object[] object : result) {
-            Nodo nodo = new Nodo((String) object[0], (String) object[1], (String) object[2], "", "", "");
+        	String denominacion = ( denominacionCooficial && !((String) object[3]).isEmpty()) ? (String) object[3] : (String) object[1];
+            Nodo nodo = new Nodo((String) object[0], denominacion, (String) object[2], "", "", "");
 
             nodos.add(nodo);
         }
@@ -64,7 +67,7 @@ public class NodoUtils {
      * @return
      * @throws Exception
      */
-    public static List<Nodo> getNodoListExtendido(List<Object[]> result) throws Exception {
+    public static List<Nodo> getNodoListExtendido(List<Object[]> result, boolean denominacionCooficial) throws Exception {
 
         List<Nodo> nodos = new ArrayList<Nodo>();
 
@@ -78,6 +81,9 @@ public class NodoUtils {
             //object[5] --> superior.codigo
             //object[6] --> superior.denominacion
             //object[7] --> localidad
+        	//object[8] --> oficina.denomcooficial, 
+        	//object[9] --> unidadRaiz.denomcooficial, 
+        	//object[10] --> oficina.codUoResponsable.denomcooficial 
 
             String[] obj = new String[object.length];
 
@@ -85,8 +91,11 @@ public class NodoUtils {
             for (int i = 0; i < object.length; i++)
                 obj[i] = String.valueOf(object[i]);
 
+            String denominacion = ( denominacionCooficial && !((String) object[8]).isEmpty()) ? (String) object[8] : (String) object[1];
+            String denominacionUnidadRaiz = ( denominacionCooficial && !((String) object[9]).isEmpty()) ? (String) object[9] : (String) object[4];
+            String denominacionUoResponsable = ( denominacionCooficial && !((String) object[10]).isEmpty()) ? (String) object[10] : (String) object[6];
 
-            Nodo nodo = new Nodo(obj[0], obj[1], obj[2], obj[4] + " - " + obj[3], obj[6], obj[5], obj[7]);
+            Nodo nodo = new Nodo(obj[0], denominacion, obj[2], denominacionUnidadRaiz + " - " + obj[3], denominacionUoResponsable, obj[5], obj[7]);
 
 
             nodos.add(nodo);
@@ -103,12 +112,23 @@ public class NodoUtils {
      * @return
      * @throws Exception
      */
-    public static List<Nodo> getNodoListUnidadRaizUnidadSuperior(List<Object[]> result) throws Exception {
+    public static List<Nodo> getNodoListUnidadRaizUnidadSuperior(List<Object[]> result, boolean denominacionCooficial) throws Exception {
 
+    	//0 unidad.codigo, 
+    	//1 unidad.denominacion
+    	//2 unidad.codUnidadRaiz.denominacion, 
+	    //3 unidad.codUnidadSuperior.denominacion, 
+    	//4 unidad.denomLenguaCooficial
+    	//5 unidad.codUnidadRaiz.denomLenguaCooficial
+	    //6 unidad.codUnidadSuperior.denomLenguaCooficial
+    	
         List<Nodo> nodos = new ArrayList<Nodo>();
 
         for (Object[] object : result) {
-            Nodo nodo = new Nodo((String) object[0], (String) object[1], "", (String) object[2], (String) object[3], "");
+        	String denominacion = (denominacionCooficial && Utils.isNotEmpty((String)object[4])) ?(String) object[4] : (String) object[1];
+        	String denominacionUnidadRaiz = (denominacionCooficial && Utils.isNotEmpty((String)object[5])) ?(String) object[5] : (String) object[2];
+        	String denominacionUnidadSuperior = (denominacionCooficial && Utils.isNotEmpty((String)object[6])) ?(String) object[6] : (String) object[3];		
+            Nodo nodo = new Nodo((String) object[0], denominacion, "", denominacionUnidadRaiz, denominacionUnidadSuperior, "");
 
             nodos.add(nodo);
         }
@@ -117,21 +137,21 @@ public class NodoUtils {
     }
 
 
-    public static List<Nodo> getNodoListUnidad(List<Unidad> result) throws Exception {
+    public static List<Nodo> getNodoListUnidad(List<Unidad> result, Boolean denominacionCooficial) throws Exception {
 
         List<Nodo> nodos = new ArrayList<Nodo>();
         String edpPrincipal = "";
         for (Unidad unidad : result) {
             if (unidad.getCodEdpPrincipal() != null) {
-            	if (!unidad.getCodEdpPrincipal().getDenomLenguaCooficial().isEmpty())
+            	if (denominacionCooficial && !unidad.getCodEdpPrincipal().getDenomLenguaCooficial().isEmpty())
             		edpPrincipal = unidad.getCodEdpPrincipal().getCodigo() + " - " + unidad.getCodEdpPrincipal().getDenomLenguaCooficial();
             	else
             		edpPrincipal = unidad.getCodEdpPrincipal().getCodigo() + " - " + unidad.getCodEdpPrincipal().getDenominacion();
             }
             
-            String denominacion = (Utils.isNotEmpty(unidad.getDenomLenguaCooficial())) ? unidad.getDenomLenguaCooficial() : unidad.getDenominacion();
-            String descCodUnidadRaiz = (unidad.getCodUnidadRaiz()!=null && Utils.isNotEmpty(unidad.getCodUnidadRaiz().getDenomLenguaCooficial())) ? unidad.getCodUnidadRaiz().getDenomLenguaCooficial() : unidad.getCodUnidadRaiz().getDenominacion();
-            String descCodUnidadSuperior = (unidad.getCodUnidadSuperior()!=null && Utils.isNotEmpty(unidad.getCodUnidadSuperior().getDenomLenguaCooficial())) ? unidad.getCodUnidadSuperior().getDenomLenguaCooficial() : unidad.getCodUnidadSuperior().getDenominacion();
+            String denominacion = (denominacionCooficial && Utils.isNotEmpty(unidad.getDenomLenguaCooficial())) ? unidad.getDenomLenguaCooficial() : unidad.getDenominacion();
+            String descCodUnidadRaiz = (denominacionCooficial && unidad.getCodUnidadRaiz()!=null && Utils.isNotEmpty(unidad.getCodUnidadRaiz().getDenomLenguaCooficial())) ? unidad.getCodUnidadRaiz().getDenomLenguaCooficial() : unidad.getCodUnidadRaiz().getDenominacion();
+            String descCodUnidadSuperior = (denominacionCooficial && unidad.getCodUnidadSuperior()!=null && Utils.isNotEmpty(unidad.getCodUnidadSuperior().getDenomLenguaCooficial())) ? unidad.getCodUnidadSuperior().getDenomLenguaCooficial() : unidad.getCodUnidadSuperior().getDenominacion();
 
             Nodo nodo = new Nodo(unidad.getCodigo(), denominacion, unidad.getEstado().getDescripcionEstadoEntidad(), unidad.getCodUnidadRaiz().getCodigo() + " - " + descCodUnidadRaiz, unidad.getCodUnidadSuperior().getCodigo() + " - " + descCodUnidadSuperior, "", false, unidad.isEsEdp(), edpPrincipal);
 
@@ -141,17 +161,17 @@ public class NodoUtils {
         return nodos;
     }
 
-    public static List<Nodo> getNodoListOficina(List<Oficina> result) throws Exception {
+    public static List<Nodo> getNodoListOficina(List<Oficina> result, Boolean denominacionCooficial) throws Exception {
 
         List<Nodo> nodos = new ArrayList<Nodo>();
         String ofiResponsable = "";
         for (Oficina oficina : result) {
             if (oficina.getCodOfiResponsable() != null) {
-            	String denominacionOfiResponsable = (!oficina.getCodOfiResponsable().getDenomlenguacooficial().isEmpty()) ? oficina.getCodOfiResponsable().getDenomlenguacooficial() : oficina.getCodOfiResponsable().getDenominacion(); 
+            	String denominacionOfiResponsable = (denominacionCooficial && !oficina.getCodOfiResponsable().getDenomlenguacooficial().isEmpty()) ? oficina.getCodOfiResponsable().getDenomlenguacooficial() : oficina.getCodOfiResponsable().getDenominacion(); 
                 ofiResponsable = oficina.getCodOfiResponsable().getCodigo() + " - " + denominacionOfiResponsable;
             }
-            String denominacion = (Utils.isNotEmpty(oficina.getDenomlenguacooficial())) ? oficina.getDenomlenguacooficial() : oficina.getDenominacion();
-            String descCodUoResponsable = (oficina.getCodUoResponsable()!=null && Utils.isNotEmpty(oficina.getCodUoResponsable().getDenomLenguaCooficial())) ? oficina.getCodUoResponsable().getDenomLenguaCooficial() : oficina.getCodUoResponsable().getDenominacion();
+            String denominacion = (denominacionCooficial && Utils.isNotEmpty(oficina.getDenomlenguacooficial())) ? oficina.getDenomlenguacooficial() : oficina.getDenominacion();
+            String descCodUoResponsable = (denominacionCooficial && oficina.getCodUoResponsable()!=null && Utils.isNotEmpty(oficina.getCodUoResponsable().getDenomLenguaCooficial())) ? oficina.getCodUoResponsable().getDenomLenguaCooficial() : oficina.getCodUoResponsable().getDenominacion();
             Nodo nodo = new Nodo(oficina.getCodigo(), denominacion, oficina.getEstado().getDescripcionEstadoEntidad(), ofiResponsable, oficina.getCodUoResponsable().getCodigo() + " - " + descCodUoResponsable, "", oficina.getOficinaSir());
 
             nodos.add(nodo);
@@ -169,7 +189,7 @@ public class NodoUtils {
      * @return
      * @throws Exception
      */
-    public static List<Nodo> getNodoListOpenData(List<Object[]> result) throws Exception {
+    public static List<Nodo> getNodoListOpenData(List<Object[]> result, boolean denominacionCooficial) throws Exception {
 
         List<Nodo> nodos = new ArrayList<Nodo>();
 
@@ -197,8 +217,9 @@ public class NodoUtils {
             //object[19] --> codAmbComunidad.descripcionComunidad
             //object[20] --> codAmbProvincia.descripcionProvincia
             //object[21] --> codAmbIsla.descripcionIsla
-
-
+        	//object[22] --> unidad.denomcooficial, 
+        	//object[23] --> unidad.codUnidadRaiz.denomcooficial, 
+        	//object[24] --> unidad.codUnidadSuperior.denomcooficial
 
             String[] obj = new String[object.length];
 
@@ -206,7 +227,12 @@ public class NodoUtils {
             for (int i = 0; i < object.length; i++) {
                 obj[i] = String.valueOf(object[i]);
             }
-            Nodo nodo = new Nodo(obj[0], obj[1], obj[2], obj[4] + " - " + obj[3], obj[6] + " - " + obj[5], obj[7],Boolean.parseBoolean(obj[8]),Long.parseLong(obj[9]), obj[10],obj[11], obj[12],obj[13] + " " + obj[14]+ ", " + obj[15]+ ", "+ obj[16]+ ", " + obj[17],obj[18],obj[19],obj[20],obj[21],obj[22]);
+            
+            String denominacion = ( denominacionCooficial && !((String) obj[22]).isEmpty()) ? (String) obj[22] : (String) obj[1]; 
+            String denominacioUnidadRaiz = ( denominacionCooficial && !((String) obj[23]).isEmpty()) ? (String) obj[23] : (String) obj[4];
+            String denominacionUnidadSuperior = ( denominacionCooficial && !((String) obj[24]).isEmpty()) ? (String) obj[24] : (String) obj[6];
+            
+            Nodo nodo = new Nodo(obj[0], denominacion, obj[2], denominacioUnidadRaiz + " - " + obj[3], denominacionUnidadSuperior + " - " + obj[5], obj[7],Boolean.parseBoolean(obj[8]),Long.parseLong(obj[9]), obj[10],obj[11], obj[12],obj[13] + " " + obj[14]+ ", " + obj[15]+ ", "+ obj[16]+ ", " + obj[17],obj[18],obj[19],obj[20],obj[21],obj[22]);
 
 
             nodos.add(nodo);

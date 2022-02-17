@@ -8,6 +8,7 @@ import java.util.List;
 public class OficinaJson {
    private String codigoDir3;
    private String denominacion;
+   private String denominacionCooficial;
    private String estado;    //CatEstadoEntidad
    private String nivelAdministracion;  //CatNivelAdministracion
    private String tipoOficina;  //CatJerarquiaOficina
@@ -45,6 +46,14 @@ public class OficinaJson {
 
    public void setDenominacion(String denominacion) {
       this.denominacion = denominacion;
+   }
+   
+   public String getDenominacionCooficial() {
+	  return denominacionCooficial;
+   }
+
+   public void setDenominacionCooficial(String denominacionCooficial) {
+	  this.denominacionCooficial = denominacionCooficial;
    }
 
    public String getEstado() {

@@ -1,6 +1,5 @@
 package es.caib.dir3caib.persistence.ejb;
 
-import es.caib.dir3caib.persistence.model.HistoricoUO;
 import es.caib.dir3caib.persistence.model.Oficina;
 import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.persistence.model.UnidadPK;
@@ -125,7 +124,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      */
     Paginacion busqueda(Integer pageNumber, String codigo, String denominacion, Long codigoNivelAdministracion,
                         String codAmbitoTerritorial, Long codComunidad, Long codigoProvincia, Boolean unidadRaiz, String codigoEstado, 
-                        String nifcif, Long unidadVersion) throws Exception;
+                        String nifcif, Long unidadVersion, Boolean denominacionCooficial) throws Exception;
 
     /**
      * Método recursivo que devuelve el árbol de unidades de la unidad indicada por código,
@@ -408,5 +407,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @throws Exception
      */
     void crearServicioUnidad(String codigoUnidad, Long codigoServicio) throws Exception;
+
+	List<Nodo> hijos(String codigo, String estado, boolean denominacionCooficial) throws Exception;
 
 }

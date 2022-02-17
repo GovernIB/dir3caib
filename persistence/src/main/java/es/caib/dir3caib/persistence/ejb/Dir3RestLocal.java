@@ -18,25 +18,35 @@ import java.util.List;
 public interface Dir3RestLocal  {
 
   List<ObjetoDirectorio> findUnidadesByDenominacion(String denominacion) throws Exception;
+  
+  List<ObjetoDirectorio> findUnidadesByDenominacion(String denominacion, boolean denominacionCooficial) throws Exception;
 
   List<ObjetoDirectorio> findOficinasByDenominacion(String denominacion) throws Exception;
+  
+  List<ObjetoDirectorio> findOficinasByDenominacion(String denominacion, boolean denominacionCooficial) throws Exception;
+  
   Boolean tieneHijos(String codigo) throws Exception;
+  
   List<Unidad> obtenerArbolUnidades(String codigo, String fechaActualizacion) throws Exception;
 
   List<Nodo> obtenerArbolUnidades(String codigo) throws Exception;
+  
   List<Oficina> obtenerOficinasOrganismo(String codigo, String fechaActualizacion) throws Exception;
 
   List<Oficina> obtenerArbolOficinasOpenData(String codigo) throws Exception;
-
+  
   List<Oficina> getOficinasBalearesOpenData() throws Exception;
+  
   Boolean tieneOficinasOrganismo(String codigo) throws Exception;
 
   List<Nodo> busquedaOrganismos(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, boolean conOficinas, boolean unidadRaiz, Long provincia, String localidad, boolean vigentes) throws Exception;
 
   List<Nodo> busquedaOficinas(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, Long provincia, String localidad, boolean oficinasSir, boolean vigentes) throws Exception;
+  
   String unidadDenominacion(String codigo) throws Exception;
 
   String unidadEstado(String codigo) throws Exception;
+  
   String oficinaDenominacion(String codigo) throws Exception;
 
   List<Nodo> busquedaDenominacionComunidad(String denominacion, Long codComunidad) throws Exception;
@@ -56,5 +66,22 @@ public interface Dir3RestLocal  {
   List<CodigoValor> getAmbitoTerritorialByAdministracion(Long nivelAdministracion) throws Exception;
 
   List<Oficina> obtenerOficinasSIRUnidad(String codigoUnidad) throws Exception;
+
+  List<Nodo> busquedaOrganismos(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad,
+		boolean conOficinas, boolean unidadRaiz, Long provincia, String localidad, boolean vigentes,
+		boolean denominacionCooficial) throws Exception;
+
+List<Nodo> busquedaOficinas(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad,
+		Long provincia, String localidad, boolean oficinasSir, boolean vigentes, boolean denominacionCooficial)
+		throws Exception;
+
+String unidadDenominacion(String codigo, boolean denominacionCooficial) throws Exception;
+
+String oficinaDenominacion(String codigo, boolean denominacionCooficial) throws Exception;
+
+List<Nodo> obtenerArbolUnidades(String codigo, boolean denominacionCooficial) throws Exception;
+
+List<Nodo> busquedaDenominacionComunidad(String denominacion, Long codComunidad, boolean denominacionCooficial)
+		throws Exception;
 
 }

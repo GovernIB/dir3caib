@@ -472,13 +472,14 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
      * @param codigoEstado
      * @param nifcif
      * @param unidadVersion
+     * @param denominacionCooficial
      * @return
      * @throws Exception
      */
     @Override
     @SuppressWarnings(value = "unchecked")
-    public Paginacion busqueda(Integer pageNumber, String codigo, String denominacion, Long codigoNivelAdministracion, String codAmbitoTerritorial,
-    		Long codComunidad, Long codigoProvincia, Boolean unidadRaiz, String codigoEstado, String nifcif, Long unidadVersion) throws Exception {
+    public Paginacion busqueda(Integer pageNumber, String codigo, String denominacion, Long codigoNivelAdministracion, String codAmbitoTerritorial, 
+    		Long codComunidad, Long codigoProvincia, Boolean unidadRaiz, String codigoEstado, String nifcif, Long unidadVersion, Boolean denominacionCooficial) throws Exception {
 
         Query q;
         Query q2;
@@ -580,7 +581,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
             paginacion = new Paginacion(0, 0);
         }
 
-        List<Nodo> nodos = NodoUtils.getNodoListUnidad(q.getResultList());
+        List<Nodo> nodos = NodoUtils.getNodoListUnidad(q.getResultList(), denominacionCooficial);
 
         for (Nodo nodo : nodos) {
             nodo.setTieneOficinaSir(oficinaEjb.tieneOficinasSIR(nodo.getCodigo()));
@@ -664,13 +665,22 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     @Override
     @SuppressWarnings(value = "unchecked")
     public List<Nodo> hijos(String codigo, String estado) throws Exception {
+        return hijos(codigo,estado,false);
+    }
+    
+    @Override
+    @SuppressWarnings(value = "unchecked")
+    public List<Nodo> hijos(String codigo, String estado, boolean denominacionCooficial) throws Exception {
 
-        Query q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.estado.codigoEstadoEntidad,unidad.codUnidadRaiz.codigo, unidad.codUnidadRaiz.denominacion, unidad.codUnidadSuperior.codigo, unidad.codUnidadSuperior.denominacion from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:estado order by unidad.codigo");
+        Query q = em.createQuery("Select unidad.codigo, unidad.denominacion, unidad.estado.codigoEstadoEntidad,unidad.codUnidadRaiz.codigo, "
+        		+ "unidad.codUnidadRaiz.denominacion, unidad.codUnidadSuperior.codigo, unidad.codUnidadSuperior.denominacion, "
+        		+ "unidad.denomLenguaCooficial, unidad.codUnidadRaiz.denomLenguaCooficial, unidad.codUnidadSuperior.denomLenguaCooficial "
+        		+ "from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:estado order by unidad.codigo");
 
         q.setParameter("codigo", codigo);
         q.setParameter("estado", estado);
 
-        return NodoUtils.getNodoList(q.getResultList());
+        return NodoUtils.getNodoList(q.getResultList(), denominacionCooficial);
     }
 
     /**
