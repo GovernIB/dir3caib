@@ -37,6 +37,7 @@
                                     </div>
                                     <dt> <spring:message code="unidad.codigo"/>: </dt> <dd> ${unidad.codigo}</dd>
                                     <dt> <spring:message code="unidad.denominacion"/>: </dt> <dd> ${unidad.denominacion}</dd>
+                                    <c:if test="${not empty unidad.denomLenguaCooficial}"><dt> <spring:message code="unidad.denominacion.cooficial"/>: </dt> <dd> ${unidad.denomLenguaCooficial}</dd></c:if>
                                     <dt> <spring:message code="unidad.estado"/>: </dt>
                                     <c:if test="${unidad.estado.codigoEstadoEntidad == 'V'}"><dd><span class="label label-success">${unidad.estado.descripcionEstadoEntidad}</span></dd></c:if>
                                     <c:if test="${unidad.estado.codigoEstadoEntidad == 'E'}">

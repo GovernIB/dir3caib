@@ -410,4 +410,22 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
 
 	List<Nodo> hijos(String codigo, String estado, boolean denominacionCooficial) throws Exception;
 
+	Unidad findByCodigoLigero(String codigo, boolean denominacionCooficial) throws Exception;
+
+	String unidadDenominacion(String codigo, boolean denominacionCooficial) throws Exception;
+
+	List<Unidad> findByDenominacion(String denominacion, boolean denominacionCooficial) throws Exception;
+
+	Nodo findUnidad(String id, String estado, boolean denominacionCooficial) throws Exception;
+
+	void arbolHijos(Set<Unidad> unidadesPadres, String estado, Set<Unidad> hijosTotales, boolean denominacionCooficial)
+			throws Exception;
+
+	List<Unidad> obtenerArbolUnidadesUnidadRaiz(String codigo, Date fechaActualizacion, Date fechaSincronizacion,
+			boolean denominacionCooficial) throws Exception;
+
+	List<Unidad> obtenerArbolUnidadesDestinatarias(String codigo, boolean denominacionCooficial) throws Exception;
+	
+	public List<Unidad> getUnidadesByNivelByUnidadSuperior(long nivel, String codigo, String estado, boolean denominacionCooficial) throws Exception;
+
 }
