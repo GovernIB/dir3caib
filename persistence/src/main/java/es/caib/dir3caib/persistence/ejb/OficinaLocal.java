@@ -251,7 +251,17 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
 
    List<Nodo> hijos(String codigo, String estado, boolean denominacionCooficial) throws Exception;
 
-List<Nodo> oficinasDependientes(String codigo, String estado, boolean denominacionCooficial) throws Exception;
+   List<Nodo> oficinasDependientes(String codigo, String estado, boolean denominacionCooficial) throws Exception;
 
-List<Nodo> oficinasAuxiliares(String codigo, String estado, boolean denominacionCooficial) throws Exception;
+   List<Nodo> oficinasAuxiliares(String codigo, String estado, boolean denominacionCooficial) throws Exception;
+
+   Oficina findByCodigoLigero(String codigo, boolean denominacionCooficial) throws Exception;
+
+   Nodo findOficina(String id, String estado, boolean denominacionCooficial) throws Exception;
+
+   List<Oficina> responsableByUnidadEstado(String codigoUnidadResponsable, String estado, boolean denominacionCooficial)
+		throws Exception;
+
+   List<Oficina> dependienteByUnidadEstado(String codigoUnidadResponsable, String estado, boolean denominacionCooficial)
+		throws Exception;
 }

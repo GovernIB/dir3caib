@@ -1,6 +1,8 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.RelacionSirOfi;
+import es.caib.dir3caib.utils.Utils;
+
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.SecurityDomain;
 
@@ -108,9 +110,14 @@ public class RelacionSirOfiBean extends BaseEjbJPA<RelacionSirOfi, Long>
         em.flush();
     }
 
-   public List<RelacionSirOfi> relacionesSirOfiByUnidaddEstado(String codigo, String estado) throws Exception {
+   
+    public List<RelacionSirOfi> relacionesSirOfiByUnidaddEstado(String codigo, String estado) throws Exception{
+    	return  relacionesSirOfiByUnidaddEstado(codigo,estado,false);   
+    }
+    
+   public List<RelacionSirOfi> relacionesSirOfiByUnidaddEstado(String codigo, String estado, boolean denominacionCooficial) throws Exception {
       Query q = em.createQuery("Select relacionSirOfi.oficina.codigo, relacionSirOfi.oficina.denominacion, " +
-              "relacionSirOfi.oficina.codUoResponsable.codigo, relacionSirOfi.unidad.codigo " +
+              "relacionSirOfi.oficina.codUoResponsable.codigo, relacionSirOfi.unidad.codigo, relacionSirOfi.oficina.denomlenguacooficial " +
               "from RelacionSirOfi as relacionSirOfi where relacionSirOfi.unidad.codUnidadRaiz.codigo =:codigo " +
               "and relacionSirOfi.estado.codigoEstadoEntidad =:estado order by relacionSirOfi.oficina.codigo");
 
@@ -121,7 +128,8 @@ public class RelacionSirOfiBean extends BaseEjbJPA<RelacionSirOfi, Long>
        List<RelacionSirOfi> relacionSirOfis = new ArrayList<RelacionSirOfi>();
 
        for (Object[] object : result) {
-           RelacionSirOfi relacionOrganizativaOfi = new RelacionSirOfi((String) object[0], (String) object[1], (String) object[2], (String) object[3]);
+    	   String denominacion = (denominacionCooficial && Utils.isNotEmpty((String) object[4])) ? (String) object[4] : (String) object[1];
+           RelacionSirOfi relacionOrganizativaOfi = new RelacionSirOfi((String) object[0], denominacion, (String) object[2], (String) object[3]);
            relacionSirOfis.add(relacionOrganizativaOfi);
        }
 

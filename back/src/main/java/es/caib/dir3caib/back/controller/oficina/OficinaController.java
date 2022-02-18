@@ -156,16 +156,7 @@ public class OficinaController extends BaseController {
 
     }
     
-    
-    /**
-     * Método que obtiene el detalle y el árbol de una oficina con el campo de DenominacionCooficial activo
-     *
-     * @param request
-     * @param idOficina
-     * @return
-     */
-    @RequestMapping(value = "/{idOficina}/detall", method = RequestMethod.GET)
-    public ModelAndView detall(HttpServletRequest request, @PathVariable String idOficina) throws Exception {
+    private ModelAndView detalleComun(String idOficina, boolean denominacionCooficial) throws Exception{
     	
     	Long start = System.currentTimeMillis();
         ModelAndView mav = new ModelAndView("oficina/oficinaDetalle");
@@ -285,15 +276,15 @@ public class OficinaController extends BaseController {
         List<RelacionSirOfi> relacionesSirOfi;
         //Si no es raiz, pasamos el codigo de la raiz para que obtenga en una sola query todas las oficinas de la raiz
         if (unidad.getCodUnidadRaiz() != null && !unidad.getCodUnidadRaiz().getCodigo().equals(unidad.getCodigo())) {
-            oficinasPrincipales = oficinaEjb.responsableByUnidadEstado(unidad.getCodUnidadRaiz().getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-            oficinasAuxiliares = oficinaEjb.dependienteByUnidadEstado(unidad.getCodUnidadRaiz().getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-            relacionesOrganizativaOfi = relacionOrganizativaOfiEjb.getOrganizativasCompletoByUnidadEstado(unidad.getCodUnidadRaiz().getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-            relacionesSirOfi = relacionSirOfiEjb.relacionesSirOfiByUnidaddEstado(unidad.getCodUnidadRaiz().getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+            oficinasPrincipales = oficinaEjb.responsableByUnidadEstado(unidad.getCodUnidadRaiz().getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE, denominacionCooficial);
+            oficinasAuxiliares = oficinaEjb.dependienteByUnidadEstado(unidad.getCodUnidadRaiz().getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE, denominacionCooficial);
+            relacionesOrganizativaOfi = relacionOrganizativaOfiEjb.getOrganizativasCompletoByUnidadEstado(unidad.getCodUnidadRaiz().getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE, denominacionCooficial);
+            relacionesSirOfi = relacionSirOfiEjb.relacionesSirOfiByUnidaddEstado(unidad.getCodUnidadRaiz().getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE, denominacionCooficial);
         } else { //Si es raiz, devuelve todas las oficinas en una sola query.
-            oficinasPrincipales = oficinaEjb.responsableByUnidadEstado(unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-            oficinasAuxiliares = oficinaEjb.dependienteByUnidadEstado(unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-            relacionesOrganizativaOfi = relacionOrganizativaOfiEjb.getOrganizativasCompletoByUnidadEstado(unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-            relacionesSirOfi = relacionSirOfiEjb.relacionesSirOfiByUnidaddEstado(unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+            oficinasPrincipales = oficinaEjb.responsableByUnidadEstado(unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE, denominacionCooficial);
+            oficinasAuxiliares = oficinaEjb.dependienteByUnidadEstado(unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE, denominacionCooficial);
+            relacionesOrganizativaOfi = relacionOrganizativaOfiEjb.getOrganizativasCompletoByUnidadEstado(unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE, denominacionCooficial);
+            relacionesSirOfi = relacionSirOfiEjb.relacionesSirOfiByUnidaddEstado(unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE, denominacionCooficial);
         }
 
         Long end = System.currentTimeMillis();
@@ -313,8 +304,23 @@ public class OficinaController extends BaseController {
         mav.addObject("relacionesOrganizativaOfi", relacionesOrganizativaOfi);
         mav.addObject("relacionesSirOfi", relacionesSirOfi);
         mav.addObject("unidadRaiz", unidad.getCodUnidadSuperior());
+        mav.addObject("denominacionCooficial", denominacionCooficial);
         return mav;
     	
+    	
+    }
+    
+    
+    /**
+     * Método que obtiene el detalle y el árbol de una oficina con el campo de DenominacionCooficial activo
+     *
+     * @param request
+     * @param idOficina
+     * @return
+     */
+    @RequestMapping(value = "/{idOficina}/detall", method = RequestMethod.GET)
+    public ModelAndView detall(HttpServletRequest request, @PathVariable String idOficina) throws Exception {
+    	return detalleComun(idOficina, true);
     }
 
 
@@ -327,155 +333,7 @@ public class OficinaController extends BaseController {
      */
     @RequestMapping(value = "/{idOficina}/detalle", method = RequestMethod.GET)
     public ModelAndView detalle(HttpServletRequest request, @PathVariable String idOficina) throws Exception {
-
-        Long start = System.currentTimeMillis();
-        ModelAndView mav = new ModelAndView("oficina/oficinaDetalle");
-
-        // OBTENEMOS LOS DATOS PROPIOS DE LA OFICINA
-        // Obtenemos la oficina
-        Oficina oficina = oficinaEjb.findFullById(idOficina);
-        mav.addObject("oficina", oficina);
-
-
-        // OBTENEMOS EL ÁRBOL DE LA OFICINA
-        //Obtenemos los datos de la unidad
-        Unidad unidad = unidadEjb.findFullById(oficina.getCodUoResponsable().getCodigo());
-
-        //Obtenemos en diferentes listas las unidades hasta el septimo nivel
-        List<Unidad> unidadesPrimerNivel = new ArrayList<Unidad>();
-        List<Unidad> unidadesSegundoNivel = new ArrayList<Unidad>();
-        List<Unidad> unidadesTercerNivel = new ArrayList<Unidad>();
-        List<Unidad> unidadesCuartoNivel = new ArrayList<Unidad>();
-        List<Unidad> unidadesQuintoNivel = new ArrayList<Unidad>();
-        List<Unidad> unidadesSextoNivel = new ArrayList<Unidad>();
-        List<Unidad> unidadesSeptimoNivel = new ArrayList<Unidad>();
-
-        //Si no es raiz
-        if (unidad.getCodUnidadRaiz() != null && !unidad.getCodUnidadRaiz().getCodigo().equals(unidad.getCodigo())) {
-            //Como no es raiz, indicamos el nivel jerarquico del que partimos
-            long nivelJerarquicoInicial = unidad.getNivelJerarquico();
-
-            //añadimos la unidad a las unidades de primer nivel
-            unidadesPrimerNivel.add(unidad);
-            unidadesSegundoNivel.addAll(unidadEjb.getUnidadesByNivelByUnidadSuperior(nivelJerarquicoInicial + 1, unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
-            for (Unidad unidad2 : unidadesSegundoNivel) {
-                unidadesTercerNivel.addAll(unidadEjb.getUnidadesByNivelByUnidadSuperior(nivelJerarquicoInicial + 2, unidad2.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
-            }
-            for (Unidad unidad3 : unidadesTercerNivel) {
-                unidadesCuartoNivel.addAll(unidadEjb.getUnidadesByNivelByUnidadSuperior(nivelJerarquicoInicial + 3, unidad3.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
-            }
-            for (Unidad unidad4 : unidadesCuartoNivel) {
-                unidadesQuintoNivel.addAll(unidadEjb.getUnidadesByNivelByUnidadSuperior(nivelJerarquicoInicial + 4, unidad4.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
-            }
-            for (Unidad unidad5 : unidadesQuintoNivel) {
-                unidadesSextoNivel.addAll(unidadEjb.getUnidadesByNivelByUnidadSuperior(nivelJerarquicoInicial + 5, unidad5.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
-            }
-            for (Unidad unidad6 : unidadesSextoNivel) {
-                unidadesSeptimoNivel.addAll(unidadEjb.getUnidadesByNivelByUnidadSuperior(nivelJerarquicoInicial + 6, unidad6.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE));
-            }
-        } else {
-            //si es raiz, partimos del nivel jerarquico 1
-            unidadesPrimerNivel = unidadEjb.getUnidadesByNivel((long) 1, unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-            unidadesSegundoNivel = unidadEjb.getUnidadesByNivel((long) 2, unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-            unidadesTercerNivel = unidadEjb.getUnidadesByNivel((long) 3, unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-            unidadesCuartoNivel = unidadEjb.getUnidadesByNivel((long) 4, unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-            unidadesQuintoNivel = unidadEjb.getUnidadesByNivel((long) 5, unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-            unidadesSextoNivel = unidadEjb.getUnidadesByNivel((long) 6, unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-            unidadesSeptimoNivel = unidadEjb.getUnidadesByNivel((long) 7, unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-        }
-
-
-        // Subimos los niveles de los unidades para empezar desde la raiz
-        if (unidadesPrimerNivel.size() == 0) {
-            if (unidadesSegundoNivel.size() == 0) {
-                if (unidadesTercerNivel.size() == 0) {
-                    if (unidadesCuartoNivel.size() == 0) {
-                        if (unidadesQuintoNivel.size() == 0) {
-                            if (unidadesSextoNivel.size() == 0) {
-                                if (unidadesSeptimoNivel.size() > 0) {
-                                    unidadesPrimerNivel.addAll(unidadesSeptimoNivel);
-                                    unidadesSeptimoNivel.clear();
-                                }
-                            } else {
-                                unidadesPrimerNivel.addAll(unidadesSextoNivel);
-                                unidadesSegundoNivel.addAll(unidadesSeptimoNivel);
-                                unidadesSextoNivel.clear();
-                                unidadesSeptimoNivel.clear();
-                            }
-                        } else {
-                            unidadesPrimerNivel.addAll(unidadesQuintoNivel);
-                            unidadesSegundoNivel.addAll(unidadesSextoNivel);
-                            unidadesTercerNivel.addAll(unidadesSeptimoNivel);
-                            unidadesQuintoNivel.clear();
-                            unidadesSextoNivel.clear();
-                            unidadesSeptimoNivel.clear();
-                        }
-                    } else {
-                        unidadesPrimerNivel.addAll(unidadesCuartoNivel);
-                        unidadesSegundoNivel.addAll(unidadesQuintoNivel);
-                        unidadesTercerNivel.addAll(unidadesSextoNivel);
-                        unidadesCuartoNivel.addAll(unidadesSeptimoNivel);
-                        unidadesQuintoNivel.clear();
-                        unidadesSextoNivel.clear();
-                        unidadesSeptimoNivel.clear();
-                    }
-                } else {
-                    unidadesPrimerNivel.addAll(unidadesTercerNivel);
-                    unidadesSegundoNivel.addAll(unidadesCuartoNivel);
-                    unidadesTercerNivel.addAll(unidadesQuintoNivel);
-                    unidadesCuartoNivel.addAll(unidadesSextoNivel);
-                    unidadesQuintoNivel.addAll(unidadesSeptimoNivel);
-                    unidadesSextoNivel.clear();
-                    unidadesSeptimoNivel.clear();
-                }
-            } else {
-                unidadesPrimerNivel.addAll(unidadesSegundoNivel);
-                unidadesSegundoNivel.addAll(unidadesTercerNivel);
-                unidadesTercerNivel.addAll(unidadesCuartoNivel);
-                unidadesCuartoNivel.addAll(unidadesQuintoNivel);
-                unidadesQuintoNivel.addAll(unidadesSextoNivel);
-                unidadesSextoNivel.addAll(unidadesSeptimoNivel);
-                unidadesSeptimoNivel.clear();
-            }
-        }
-
-        //Obtenemos todas las oficinas principales, dependendientes, organizativas y sir de la unidad raiz.
-        List<Oficina> oficinasPrincipales;
-        List<Oficina> oficinasAuxiliares;
-        List<RelacionOrganizativaOfi> relacionesOrganizativaOfi;
-        List<RelacionSirOfi> relacionesSirOfi;
-        //Si no es raiz, pasamos el codigo de la raiz para que obtenga en una sola query todas las oficinas de la raiz
-        if (unidad.getCodUnidadRaiz() != null && !unidad.getCodUnidadRaiz().getCodigo().equals(unidad.getCodigo())) {
-            oficinasPrincipales = oficinaEjb.responsableByUnidadEstado(unidad.getCodUnidadRaiz().getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-            oficinasAuxiliares = oficinaEjb.dependienteByUnidadEstado(unidad.getCodUnidadRaiz().getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-            relacionesOrganizativaOfi = relacionOrganizativaOfiEjb.getOrganizativasCompletoByUnidadEstado(unidad.getCodUnidadRaiz().getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-            relacionesSirOfi = relacionSirOfiEjb.relacionesSirOfiByUnidaddEstado(unidad.getCodUnidadRaiz().getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-        } else { //Si es raiz, devuelve todas las oficinas en una sola query.
-            oficinasPrincipales = oficinaEjb.responsableByUnidadEstado(unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-            oficinasAuxiliares = oficinaEjb.dependienteByUnidadEstado(unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-            relacionesOrganizativaOfi = relacionOrganizativaOfiEjb.getOrganizativasCompletoByUnidadEstado(unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-            relacionesSirOfi = relacionSirOfiEjb.relacionesSirOfiByUnidaddEstado(unidad.getCodigo(), Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-        }
-
-        Long end = System.currentTimeMillis();
-
-        //log.info("TIEMPO CARGA ARBOL: " + Utils.formatElapsedTime(end - start));
-
-        //mav.addObject("nodo", nodo);
-        mav.addObject("unidadesPrimerNivel", unidadesPrimerNivel);
-        mav.addObject("unidadesSegundoNivel", unidadesSegundoNivel);
-        mav.addObject("unidadesTercerNivel", unidadesTercerNivel);
-        mav.addObject("unidadesCuartoNivel", unidadesCuartoNivel);
-        mav.addObject("unidadesQuintoNivel", unidadesQuintoNivel);
-        mav.addObject("unidadesSextoNivel", unidadesSextoNivel);
-        mav.addObject("unidadesSeptimoNivel", unidadesSeptimoNivel);
-        mav.addObject("oficinasPrincipales", oficinasPrincipales);
-        mav.addObject("oficinasAuxiliares", oficinasAuxiliares);
-        mav.addObject("relacionesOrganizativaOfi", relacionesOrganizativaOfi);
-        mav.addObject("relacionesSirOfi", relacionesSirOfi);
-        mav.addObject("unidadRaiz", unidad.getCodUnidadSuperior());
-        return mav;
-
+    	return detalleComun(idOficina, false);
     }
 
 }

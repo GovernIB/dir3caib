@@ -23,12 +23,15 @@ public class NodoUtils {
      * @return
      * @throws Exception
      */
-    public static List<Nodo> getNodoListMinimo(List<Object[]> result) throws Exception {
+    public static List<Nodo> getNodoListMinimo(List<Object[]> result, boolean denominacionCooficial) throws Exception {
 
         List<Nodo> nodos = new ArrayList<Nodo>();
 
         for (Object[] object : result) {
-            Nodo nodo = new Nodo((String) object[0], (String) object[1], "", "", "", "");
+        	
+        	String denominacion = (denominacionCooficial && Utils.isNotEmpty((String) object[2])) ? (String) object[2] : (String) object[1];
+        	
+            Nodo nodo = new Nodo((String) object[0], denominacion, "", "", "", "");
 
             nodos.add(nodo);
         }

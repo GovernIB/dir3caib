@@ -3,6 +3,8 @@ package es.caib.dir3caib.persistence.ejb;
 import es.caib.dir3caib.persistence.model.RelacionOrganizativaOfi;
 import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.NodoUtils;
+import es.caib.dir3caib.utils.Utils;
+
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.SecurityDomain;
 
@@ -105,26 +107,39 @@ public class RelacionOrganizativaOfiBean extends BaseEjbJPA<RelacionOrganizativa
 
         return q.getResultList();
     }
+    
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Nodo> getOrganizativasByUnidadEstado(String codigo, String estado) throws Exception { 
+    	return getOrganizativasByUnidadEstado(codigo,estado,false);
+    }
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<Nodo> getOrganizativasByUnidadEstado(String codigo, String estado) throws Exception {
-        Query q = em.createQuery("Select relacionOrganizativaOfi.oficina.codigo, relacionOrganizativaOfi.oficina.denominacion  from RelacionOrganizativaOfi as relacionOrganizativaOfi where " +
-                "relacionOrganizativaOfi.unidad.codigo =:codigo and relacionOrganizativaOfi.estado.codigoEstadoEntidad =:estado order by relacionOrganizativaOfi.oficina.codigo");
+    public List<Nodo> getOrganizativasByUnidadEstado(String codigo, String estado, boolean denominacionCooficial) throws Exception {
+        Query q = em.createQuery("Select relacionOrganizativaOfi.oficina.codigo, relacionOrganizativaOfi.oficina.denominacion, relacionOrganizativaOfi.oficina.denomlenguacooficial "
+        		+ "from RelacionOrganizativaOfi as relacionOrganizativaOfi where relacionOrganizativaOfi.unidad.codigo =:codigo and relacionOrganizativaOfi.estado.codigoEstadoEntidad =:estado "
+                + "order by relacionOrganizativaOfi.oficina.codigo");
 
         q.setParameter("codigo",codigo);
         q.setParameter("estado",estado);
 
-
-        return NodoUtils.getNodoListMinimo(q.getResultList());
+        return NodoUtils.getNodoListMinimo(q.getResultList(), denominacionCooficial);
     }
 
     @Override
     public List<RelacionOrganizativaOfi> getOrganizativasCompletoByUnidadEstado(String codigo, String estado) throws Exception {
+    	return getOrganizativasCompletoByUnidadEstado(codigo,estado,false);
+    }
+    
+    @Override
+    public List<RelacionOrganizativaOfi> getOrganizativasCompletoByUnidadEstado(String codigo, String estado, boolean denominacionCooficial) throws Exception {
         Query q = em.createQuery("Select relacionOrganizativaOfi.oficina.codigo, relacionOrganizativaOfi.oficina.denominacion, " +
                 "relacionOrganizativaOfi.oficina.codUoResponsable.codigo, relacionOrganizativaOfi.unidad.codigo, " +
-                "relacionOrganizativaOfi.unidad.codUnidadRaiz.codigo from RelacionOrganizativaOfi as relacionOrganizativaOfi where " +
-           "relacionOrganizativaOfi.unidad.codUnidadRaiz.codigo =:codigo and relacionOrganizativaOfi.estado.codigoEstadoEntidad =:estado order by relacionOrganizativaOfi.oficina.codigo");
+                "relacionOrganizativaOfi.unidad.codUnidadRaiz.codigo, relacionOrganizativaOfi.oficina.denomlenguacooficial " +
+                "from RelacionOrganizativaOfi as relacionOrganizativaOfi where " +
+        		"relacionOrganizativaOfi.unidad.codUnidadRaiz.codigo =:codigo and relacionOrganizativaOfi.estado.codigoEstadoEntidad =:estado " +
+        		"order by relacionOrganizativaOfi.oficina.codigo");
 
         q.setParameter("codigo", codigo);
         q.setParameter("estado", estado);
@@ -133,7 +148,8 @@ public class RelacionOrganizativaOfiBean extends BaseEjbJPA<RelacionOrganizativa
         List<RelacionOrganizativaOfi> relacionOrganizativaOfis = new ArrayList<RelacionOrganizativaOfi>();
 
         for (Object[] object : result) {
-            RelacionOrganizativaOfi relacionOrganizativaOfi = new RelacionOrganizativaOfi((String) object[0], (String) object[1], (String) object[2], (String) object[3], (String) object[4]);
+        	String denominacion = (denominacionCooficial && Utils.isNotEmpty((String) object[5])) ? (String) object[5] : (String) object[1];
+            RelacionOrganizativaOfi relacionOrganizativaOfi = new RelacionOrganizativaOfi((String) object[0], denominacion, (String) object[2], (String) object[3], (String) object[4]);
             relacionOrganizativaOfis.add(relacionOrganizativaOfi);
         }
 
