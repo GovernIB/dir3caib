@@ -20,7 +20,7 @@ import java.util.List;
  * Date: 12/02/14
  */
 @Stateless(name = "ObtenerCatalogosEJB")
-@RunAs("DIR_WS")  //todo añadir seguridad
+@RunAs(Dir3caibConstantes.DIR_WS)  //todo añadir seguridad
 public class ObtenerCatalogosEjb implements ObtenerCatalogosLocal {
 
     protected final Logger log = Logger.getLogger(getClass());

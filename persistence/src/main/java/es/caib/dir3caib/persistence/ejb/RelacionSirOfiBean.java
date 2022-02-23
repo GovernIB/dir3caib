@@ -1,5 +1,6 @@
 package es.caib.dir3caib.persistence.ejb;
 
+import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.model.RelacionSirOfi;
 import es.caib.dir3caib.utils.Utils;
 
@@ -23,7 +24,7 @@ import java.util.List;
  */
 @Stateless(name = "RelacionSirOfiEJB")
 @SecurityDomain("seycon")
-@RolesAllowed({"DIR_ADMIN", "tothom", "DIR_WS"})
+@RolesAllowed({Dir3caibConstantes.DIR_ADMIN, Dir3caibConstantes.ROL_TOTHOM, Dir3caibConstantes.DIR_WS})
 public class RelacionSirOfiBean extends BaseEjbJPA<RelacionSirOfi, Long>
    implements RelacionSirOfiLocal{
 

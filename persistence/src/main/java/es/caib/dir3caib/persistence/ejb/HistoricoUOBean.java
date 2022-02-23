@@ -1,5 +1,6 @@
 package es.caib.dir3caib.persistence.ejb;
 
+import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.model.HistoricoUO;
 import es.caib.dir3caib.persistence.model.RelacionOrganizativaOfi;
 import org.apache.log4j.Logger;
@@ -19,7 +20,7 @@ import java.util.List;
 
 @Stateless(name = "HistoricoUOEJB")
 @SecurityDomain("seycon")
-@RolesAllowed({"DIR_ADMIN", "tothom", "DIR_WS"})
+@RolesAllowed({Dir3caibConstantes.DIR_ADMIN, Dir3caibConstantes.ROL_TOTHOM, Dir3caibConstantes.DIR_WS})
 public class HistoricoUOBean extends BaseEjbJPA<HistoricoUO, Long> implements HistoricoUOLocal{
 
     protected final Logger log = Logger.getLogger(getClass());

@@ -1,6 +1,8 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.CatIsla;
+import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
+
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.SecurityDomain;
 
@@ -19,7 +21,7 @@ import java.util.List;
  */
 @Stateless(name = "CatIslaEJB")
 @SecurityDomain("seycon")
-@RolesAllowed({"DIR_ADMIN", "DIR_WS"})
+@RolesAllowed({Dir3caibConstantes.DIR_ADMIN, Dir3caibConstantes.DIR_WS})
 public class CatIslaBean extends BaseEjbJPA<CatIsla, Long> implements CatIslaLocal{
 
     protected final Logger log = Logger.getLogger(getClass());

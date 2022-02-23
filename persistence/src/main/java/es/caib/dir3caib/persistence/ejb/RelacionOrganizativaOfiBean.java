@@ -1,5 +1,6 @@
 package es.caib.dir3caib.persistence.ejb;
 
+import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.model.RelacionOrganizativaOfi;
 import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.NodoUtils;
@@ -24,7 +25,7 @@ import java.util.List;
  */
 @Stateless(name = "RelacionOrganizativaOfiEJB")
 @SecurityDomain("seycon")
-@RolesAllowed({"DIR_ADMIN", "tothom", "DIR_WS"})
+@RolesAllowed({Dir3caibConstantes.DIR_ADMIN, Dir3caibConstantes.ROL_TOTHOM, Dir3caibConstantes.DIR_WS})
 public class RelacionOrganizativaOfiBean extends BaseEjbJPA<RelacionOrganizativaOfi, Long>
     implements RelacionOrganizativaOfiLocal{
 

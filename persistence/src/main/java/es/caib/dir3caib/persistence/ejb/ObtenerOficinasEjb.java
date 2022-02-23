@@ -24,7 +24,7 @@ import java.util.Set;
  * Date: 12/02/14
  */
 @Stateless(name = "ObtenerOficinasEJB")
-@RunAs("DIR_WS")  //todo añadir seguridad
+@RunAs(Dir3caibConstantes.DIR_WS)  //todo añadir seguridad
 public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
 
     protected final Logger log = Logger.getLogger(getClass());

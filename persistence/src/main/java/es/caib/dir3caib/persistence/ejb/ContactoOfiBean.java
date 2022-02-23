@@ -5,6 +5,8 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.ContactoOfi;
+import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
+
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.SecurityDomain;
 
@@ -21,7 +23,7 @@ import java.util.List;
  */
 @Stateless(name = "ContactoOfiEJB")
 @SecurityDomain("seycon")
-@RolesAllowed({"DIR_ADMIN", "tothom", "DIR_WS"})
+@RolesAllowed({Dir3caibConstantes.DIR_ADMIN, Dir3caibConstantes.ROL_TOTHOM, Dir3caibConstantes.DIR_WS})
 public class ContactoOfiBean extends BaseEjbJPA<ContactoOfi, Long> implements ContactoOfiLocal{
 
     protected final Logger log = Logger.getLogger(getClass());
