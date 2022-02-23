@@ -1,6 +1,9 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.CatComunidadAutonoma;
+import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
+import es.caib.dir3caib.utils.Utils;
+
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.SecurityDomain;
 
@@ -19,7 +22,7 @@ import java.util.List;
  */
 @Stateless(name = "CatComunidadAutonomaEJB")
 @SecurityDomain("seycon")
-@RolesAllowed({"DIR_ADMIN", "tothom", "DIR_WS"})
+@RolesAllowed({Dir3caibConstantes.DIR_ADMIN, Dir3caibConstantes.ROL_TOTHOM, Dir3caibConstantes.DIR_WS})
 public class CatComunidadAutonomaBean extends BaseEjbJPA<CatComunidadAutonoma, Long> implements CatComunidadAutonomaLocal{
 
     protected final Logger log = Logger.getLogger(getClass());
@@ -44,6 +47,24 @@ public class CatComunidadAutonomaBean extends BaseEjbJPA<CatComunidadAutonoma, L
     public List<CatComunidadAutonoma> getAll() throws Exception {
 
         return em.createQuery("Select catComunidadAutonoma from CatComunidadAutonoma as catComunidadAutonoma order by catComunidadAutonoma.descripcionComunidad").getResultList();
+    }
+    
+    @Override
+    @SuppressWarnings(value = "unchecked")
+    public List<CatComunidadAutonoma> getAll(String estado) throws Exception {
+
+    	String where = "";
+    	
+    	if(Utils.isNotEmpty(estado)) {
+    		where = " where catComunidadAutonoma.estado = :estado ";
+    	}
+    	
+    	Query q = em.createQuery("Select catComunidadAutonoma from CatComunidadAutonoma as catComunidadAutonoma " + where + " order by catComunidadAutonoma.descripcionComunidad");
+    	
+    	if(where != "")
+    		q.setParameter("estado", estado);
+    	
+        return q.getResultList();
     }
 
     @Override

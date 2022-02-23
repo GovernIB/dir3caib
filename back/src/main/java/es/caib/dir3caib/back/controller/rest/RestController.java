@@ -4,6 +4,7 @@ import es.caib.dir3caib.persistence.ejb.ArbolLocal;
 import es.caib.dir3caib.persistence.ejb.Dir3RestLocal;
 import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.model.json.OficinaJson;
+import es.caib.dir3caib.persistence.model.json.PaisJson;
 import es.caib.dir3caib.persistence.utils.CodigoValor;
 import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.ObjetoDirectorio;
@@ -45,11 +46,11 @@ public class RestController {
     @RequestMapping(value = "/unidad/unidadesDenominacion", method = RequestMethod.GET)
     public
     @ResponseBody
-    ResponseEntity<List<ObjetoDirectorio>> unidadesPorDenominacion(@RequestParam String denominacion, @RequestParam(defaultValue="false") boolean cooficial) throws Exception {
+    ResponseEntity<List<ObjetoDirectorio>> unidadesPorDenominacion(@RequestParam String denominacion, @RequestParam(defaultValue="false") boolean cooficial, @RequestParam(defaultValue="") String estado) throws Exception {
 
         //Transformamos el campo denominacion de ISO a UTF-8 para realizar las búsquedas en bd que estan en UTF-8.
         //Esto se hace porque el @RequestParam viene en ISO-8859-1.
-        List<ObjetoDirectorio> resultado = dir3RestEjb.findUnidadesByDenominacion(new String(denominacion.getBytes("ISO-8859-1"), "UTF-8"), cooficial);
+        List<ObjetoDirectorio> resultado = dir3RestEjb.findUnidadesByDenominacion(new String(denominacion.getBytes("ISO-8859-1"), "UTF-8"), cooficial, estado);
 
         HttpHeaders headers = addAccessControllAllowOrigin();
         //Si hay resultados fijamos el HttpStatus a OK, sino indicamos que no hay resultados.
@@ -65,11 +66,11 @@ public class RestController {
     @RequestMapping(value = "/oficina/oficinasDenominacion", method = RequestMethod.GET)
     public
     @ResponseBody
-    ResponseEntity<List<ObjetoDirectorio>> oficinasPorDenominacion(@RequestParam String denominacion, @RequestParam(defaultValue="false") boolean cooficial) throws Exception {
+    ResponseEntity<List<ObjetoDirectorio>> oficinasPorDenominacion(@RequestParam String denominacion, @RequestParam(defaultValue="false") boolean cooficial, @RequestParam(defaultValue="") String estado) throws Exception {
 
         //Transformamos el campo denominacion de ISO a UTF-8 para realizar las búsquedas en bd que estan en UTF-8.
         //Esto se hace porque el @RequestParam viene en ISO-8859-1.
-        List<ObjetoDirectorio> resultado = dir3RestEjb.findOficinasByDenominacion(new String(denominacion.getBytes("ISO-8859-1"), "UTF-8"), cooficial);
+        List<ObjetoDirectorio> resultado = dir3RestEjb.findOficinasByDenominacion(new String(denominacion.getBytes("ISO-8859-1"), "UTF-8"), cooficial, estado);
 
         HttpHeaders headers = addAccessControllAllowOrigin();
         //Si hay resultados fijamos el HttpStatus a OK, sino indicamos que no hay resultados.
@@ -86,9 +87,9 @@ public class RestController {
     @RequestMapping(value = "/unidad/arbolUnidades", method = RequestMethod.GET)
     public
     @ResponseBody
-    ResponseEntity<List<ObjetoDirectorio>> arbolUnidades(@RequestParam String codigo, @RequestParam(defaultValue="false") boolean cooficial) throws Exception {
+    ResponseEntity<List<ObjetoDirectorio>> arbolUnidades(@RequestParam String codigo, @RequestParam(defaultValue="false") boolean cooficial, @RequestParam(defaultValue="") String estado) throws Exception {
 
-        List<Unidad> resultado = dir3RestEjb.obtenerArbolUnidades(codigo, null);
+        List<Unidad> resultado = dir3RestEjb.obtenerArbolUnidades(codigo, null, estado);
 
         HttpHeaders headers = addAccessControllAllowOrigin();
         //Si hay resultados fijamos el HttpStatus a OK, sino indicamos que no hay resultados.
@@ -105,10 +106,10 @@ public class RestController {
     @RequestMapping(value = "/oficina/oficinasOrganismo", method = RequestMethod.GET)
     public
     @ResponseBody
-    ResponseEntity<List<ObjetoDirectorio>> oficinasOrganismo(@RequestParam String codigo, @RequestParam(defaultValue="false") boolean cooficial) throws Exception {
+    ResponseEntity<List<ObjetoDirectorio>> oficinasOrganismo(@RequestParam String codigo, @RequestParam(defaultValue="false") boolean cooficial, @RequestParam(defaultValue="") String estado) throws Exception {
 
 
-        List<Oficina> resultado = dir3RestEjb.obtenerOficinasOrganismo(codigo, null);
+        List<Oficina> resultado = dir3RestEjb.obtenerOficinasOrganismo(codigo, null, estado);
 
         HttpHeaders headers = addAccessControllAllowOrigin();
         //Si hay resultados fijamos el HttpStatus a OK, sino indicamos que no hay resultados.
@@ -198,9 +199,9 @@ public class RestController {
     @RequestMapping(value = "/unidad/denominacion", method = RequestMethod.GET)
     public
     @ResponseBody
-    ResponseEntity<String> unidadDenominacion(@RequestParam String codigo, @RequestParam(defaultValue = "false") boolean denominacionCooficial) throws Exception {
+    ResponseEntity<String> unidadDenominacion(@RequestParam String codigo, @RequestParam(defaultValue = "false") boolean denominacionCooficial, @RequestParam(defaultValue="") String estado) throws Exception {
 
-        String denominacion = dir3RestEjb.unidadDenominacion(codigo, denominacionCooficial);
+        String denominacion = dir3RestEjb.unidadDenominacion(codigo, denominacionCooficial,estado);
         HttpHeaders headers = addAccessControllAllowOrigin();
         //Si hay resultados fijamos el HttpStatus a OK, sino indicamos que no hay resultados.
         HttpStatus status = (!denominacion.isEmpty()) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
@@ -231,9 +232,9 @@ public class RestController {
     @RequestMapping(value = "/oficina/denominacion", method = RequestMethod.GET)
     public
     @ResponseBody
-    ResponseEntity<String> oficinaDenominacion(@RequestParam String codigo, @RequestParam(defaultValue = "false") boolean denominacionCooficial) throws Exception {
+    ResponseEntity<String> oficinaDenominacion(@RequestParam String codigo, @RequestParam(defaultValue = "false") boolean denominacionCooficial, @RequestParam(defaultValue="") String estado) throws Exception {
 
-        String denominacion = dir3RestEjb.oficinaDenominacion(codigo, denominacionCooficial);
+        String denominacion = dir3RestEjb.oficinaDenominacion(codigo, denominacionCooficial,estado);
         HttpHeaders headers = addAccessControllAllowOrigin();
         //Si hay resultados fijamos el HttpStatus a OK, sino indicamos que no hay resultados.
         HttpStatus status = (!denominacion.isEmpty()) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
@@ -298,14 +299,13 @@ public class RestController {
     /**
      * Obtiene los {@link es.caib.dir3caib.persistence.model.CatAmbitoTerritorial} del nivel administracion seleccionado
      * Se emplea en unidadList.jsp
-     * TODO devuelve todo.... y los no vigentes?
      */
     @RequestMapping(value = "/catalogo/ambitosTerritoriales", method = RequestMethod.GET)
     public
     @ResponseBody
-    ResponseEntity<List<CodigoValor>> ambitosTerritoriales(@RequestParam Long id) throws Exception {
+    ResponseEntity<List<CodigoValor>> ambitosTerritoriales(@RequestParam Long id, @RequestParam(defaultValue="") String estado) throws Exception {
 
-        List<CodigoValor> resultado = dir3RestEjb.getAmbitoTerritorialByAdministracion(id);
+        List<CodigoValor> resultado = dir3RestEjb.getAmbitoTerritorialByAdministracion(id, estado);
 
         HttpHeaders headers = addAccessControllAllowOrigin();
         //Si hay resultados fijamos el HttpStatus a OK, sino indicamos que no hay resultados.
@@ -320,9 +320,9 @@ public class RestController {
      */
     @RequestMapping(value = "/catalogo/comunidadesAutonomas", method = RequestMethod.GET)
     public @ResponseBody
-    ResponseEntity<List<CodigoValor>> comunidadesAutonomas() throws Exception {
+    ResponseEntity<List<CodigoValor>> comunidadesAutonomas(@RequestParam(defaultValue="") String estado) throws Exception {
 
-        List<CodigoValor> resultado = dir3RestEjb.getComunidadesAutonomas();
+        List<CodigoValor> resultado = dir3RestEjb.getComunidadesAutonomas(estado);
 
         HttpHeaders headers = addAccessControllAllowOrigin();
         //Si hay resultados fijamos el HttpStatus a OK, sino indicamos que no hay resultados.
@@ -337,9 +337,9 @@ public class RestController {
      */
     @RequestMapping(value = "/catalogo/entidadesGeograficas", method = RequestMethod.GET)
     public @ResponseBody
-    ResponseEntity<List<CodigoValor>> entidadesGeograficas() throws Exception {
+    ResponseEntity<List<CodigoValor>> entidadesGeograficas(@RequestParam(defaultValue="") String estado) throws Exception {
 
-        List<CodigoValor> resultado = dir3RestEjb.getEntidadesGeograficas();
+        List<CodigoValor> resultado = dir3RestEjb.getEntidadesGeograficas(estado);
 
         HttpHeaders headers = addAccessControllAllowOrigin();
         //Si hay resultados fijamos el HttpStatus a OK, sino indicamos que no hay resultados.
@@ -354,9 +354,9 @@ public class RestController {
      */
     @RequestMapping(value = "/catalogo/provincias", method = RequestMethod.GET)
     public @ResponseBody
-    ResponseEntity<List<CodigoValor>> provincias() throws Exception {
+    ResponseEntity<List<CodigoValor>> provincias(@RequestParam(defaultValue="") String estado) throws Exception {
 
-        List<CodigoValor> resultado = dir3RestEjb.getProvincias();
+        List<CodigoValor> resultado = dir3RestEjb.getProvincias(estado);
 
         HttpHeaders headers = addAccessControllAllowOrigin();
         //Si hay resultados fijamos el HttpStatus a OK, sino indicamos que no hay resultados.
@@ -371,9 +371,9 @@ public class RestController {
      */
     @RequestMapping(value = "/catalogo/provincias/comunidadAutonoma", method = RequestMethod.GET)
     public @ResponseBody
-    ResponseEntity<List<CodigoValor>> provinciasCA(@RequestParam Long id) throws Exception {
+    ResponseEntity<List<CodigoValor>> provinciasCA(@RequestParam Long id, @RequestParam(defaultValue="") String estado) throws Exception {
 
-        List<CodigoValor> resultado = dir3RestEjb.getProvinciasByComunidad(id);
+        List<CodigoValor> resultado = dir3RestEjb.getProvinciasByComunidad(id,estado);
 
         HttpHeaders headers = addAccessControllAllowOrigin();
         //Si hay resultados fijamos el HttpStatus a OK, sino indicamos que no hay resultados.
@@ -388,8 +388,8 @@ public class RestController {
      */
     @RequestMapping(value = "/catalogo/localidades/provincia/entidadGeografica", method = RequestMethod.GET)
     public @ResponseBody
-    ResponseEntity<List<CodigoValor>> localidades(@RequestParam Long codigoProvincia, String codigoEntidadGeografica) throws Exception {
-        List<CodigoValor> resultado = dir3RestEjb.getLocalidadByProvinciaEntidadGeografica(codigoProvincia, codigoEntidadGeografica);
+    ResponseEntity<List<CodigoValor>> localidades(@RequestParam Long codigoProvincia, String codigoEntidadGeografica, @RequestParam(defaultValue="") String estado) throws Exception {
+        List<CodigoValor> resultado = dir3RestEjb.getLocalidadByProvinciaEntidadGeografica(codigoProvincia, codigoEntidadGeografica, estado);
 
         HttpHeaders headers = addAccessControllAllowOrigin();
         //Si hay resultados fijamos el HttpStatus a OK, sino indicamos que no hay resultados.
@@ -404,15 +404,63 @@ public class RestController {
      */
     @RequestMapping(value = "/catalogo/nivelesAdministracion", method = RequestMethod.GET)
     public @ResponseBody
-    ResponseEntity<List<CodigoValor>> nivelesAdministracion() throws Exception {
+    ResponseEntity<List<CodigoValor>> nivelesAdministracion(@RequestParam(defaultValue="") String estado) throws Exception {
 
-        List<CodigoValor> resultado = dir3RestEjb.getNivelesAdministracion();
+        List<CodigoValor> resultado = dir3RestEjb.getNivelesAdministracion(estado);
 
         HttpHeaders headers = addAccessControllAllowOrigin();
         //Si hay resultados fijamos el HttpStatus a OK, sino indicamos que no hay resultados.
         HttpStatus status = (resultado.size() > 0) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
         return new ResponseEntity<List<CodigoValor>>(resultado, headers, status);
     }
+    
+    
+    /**
+     * Obtiene los 
+     * {@link es.caib.dir3caib.persistence.model.CatEstadoEntidad}
+     */
+    @RequestMapping(value = "/catalogo/estados", method = RequestMethod.GET)
+    public @ResponseBody
+    ResponseEntity<List<CodigoValor>> estadosEntidad(@RequestParam(defaultValue="") String estado) throws Exception {
+    	
+    	List<CodigoValor> resultado = dir3RestEjb.getEstadosEntidad(estado);
+    	
+    	HttpHeaders headers = addAccessControllAllowOrigin();
+    	HttpStatus status = (resultado.size() > 0) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
+    	return new ResponseEntity<List<CodigoValor>>(resultado,headers,status);
+    }
+    
+    /**
+     * Obtiene los 
+     * {@link es.caib.dir3caib.persistence.model.CatTipoVia}
+     */
+    @RequestMapping(value = "/catalogo/tiposvia", method = RequestMethod.GET)
+    public @ResponseBody
+    ResponseEntity<List<CodigoValor>> tiposVia(@RequestParam(defaultValue="") String estado) throws Exception {
+    	
+    	List<CodigoValor> resultado = dir3RestEjb.getTiposVia(estado);
+    	
+    	HttpHeaders headers = addAccessControllAllowOrigin();
+    	HttpStatus status = (resultado.size() > 0) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
+    	return new ResponseEntity<List<CodigoValor>>(resultado,headers,status);
+    }
+    
+    
+    /**
+     * Obtiene los
+     * {@link es.caib.dir3caib.persistence.model.CatPais}
+     */
+    @RequestMapping(value = "/catalogo/paises", method = RequestMethod.GET)
+    public @ResponseBody
+    ResponseEntity<List<PaisJson>> paises(@RequestParam(defaultValue="") String estado) throws Exception {
+    	
+    	List<CatPais> resultado = dir3RestEjb.getPaises(estado);
+    	
+    	HttpHeaders headers = addAccessControllAllowOrigin();
+    	HttpStatus status = (resultado.size() > 0) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
+    	return new ResponseEntity<List<PaisJson>>(tranformarAPaisJson(resultado),headers,status);
+    }
+    
 
 
     private HttpHeaders addAccessControllAllowOrigin() {
@@ -460,6 +508,25 @@ public class RestController {
 
         return objetoDirectorios;
 
+    }
+    
+    
+    /*
+     * Método que transforma los resultados de una lista de Paises en una lista de PaisesJson
+     */
+    private List<PaisJson> tranformarAPaisJson(List<CatPais> resultados) {
+    	
+    	List<PaisJson> paisesJson = new ArrayList<PaisJson>();
+    	for(CatPais pais : resultados) {
+    		PaisJson paisJson = new PaisJson();
+    		paisJson.setCodigoPais(String.valueOf(pais.getCodigoPais()));
+    		paisJson.setDescripcionPais(pais.getDescripcionPais());
+    		paisJson.setAlfa2Pais(pais.getAlfa2Pais());
+    		paisJson.setAlfa3Pais(pais.getAlfa3Pais());
+    		paisJson.setEstado(pais.getEstado().getCodigoEstadoEntidad());
+    		paisesJson.add(paisJson);
+    	}
+    	return paisesJson;
     }
 
     /*

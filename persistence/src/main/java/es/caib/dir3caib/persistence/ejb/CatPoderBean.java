@@ -1,6 +1,8 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.CatPoder;
+import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
+
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.SecurityDomain;
 
@@ -19,7 +21,7 @@ import java.util.List;
  */
 @Stateless(name = "CatPoderEJB")
 @SecurityDomain("seycon")
-@RolesAllowed({"DIR_ADMIN", "DIR_WS"})
+@RolesAllowed({Dir3caibConstantes.DIR_ADMIN, Dir3caibConstantes.DIR_WS})
 public class CatPoderBean extends BaseEjbJPA<CatPoder, Long> implements CatPoderLocal{
 
     protected final Logger log = Logger.getLogger(getClass());

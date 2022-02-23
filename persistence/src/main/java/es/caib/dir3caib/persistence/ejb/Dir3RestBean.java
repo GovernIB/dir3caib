@@ -4,6 +4,7 @@ import es.caib.dir3caib.persistence.model.ContactoUnidadOrganica;
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.model.Oficina;
 import es.caib.dir3caib.persistence.model.RelacionOrganizativaOfi;
+import es.caib.dir3caib.persistence.model.CatPais;
 import es.caib.dir3caib.persistence.model.CatServicio;
 import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.persistence.utils.CodigoValor;
@@ -11,6 +12,8 @@ import es.caib.dir3caib.persistence.utils.DataBaseUtils;
 import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.NodoUtils;
 import es.caib.dir3caib.persistence.utils.ObjetoDirectorio;
+import es.caib.dir3caib.utils.Utils;
+
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 
@@ -36,7 +39,7 @@ import java.util.Set;
  *         rest que pueden ser llamados desde otras aplicaciones.
  */
 @Stateless(name = "Dir3RestEJB")
-@RunAs("DIR_WS")
+@RunAs(Dir3caibConstantes.DIR_WS)
 public class Dir3RestBean implements Dir3RestLocal {
 
 	protected final Logger log = Logger.getLogger(getClass());
@@ -68,7 +71,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 	@Override
 	@SuppressWarnings(value = "unchecked")
 	public List<ObjetoDirectorio> findUnidadesByDenominacion(String denominacion) throws Exception {
-		return findUnidadesByDenominacion(denominacion, false);
+		return findUnidadesByDenominacion(denominacion, false, null);
 	}
 	
 	/**
@@ -83,7 +86,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 	 */
 	@Override
 	@SuppressWarnings(value = "unchecked")
-	public List<ObjetoDirectorio> findUnidadesByDenominacion(String denominacion, boolean denominacionCooficial) throws Exception {
+	public List<ObjetoDirectorio> findUnidadesByDenominacion(String denominacion, boolean denominacionCooficial, String estado) throws Exception {
 
 		if (!denominacion.isEmpty()) {
 			Query q = em.createQuery(
@@ -91,8 +94,9 @@ public class Dir3RestBean implements Dir3RestLocal {
 					+ "from Unidad as unidad "
 					+ "where ( upper(unidad.denominacion) like upper(:denominacion) "
 					+ "	or upper(unidad.denomLenguaCooficial) like upper(:denominacion))"
-					+ "and unidad.version = (select max(uu.version) from Unidad uu where uu.codigoDir3 = unidad.codigoDir3)");
+					+ "and unidad.estado.codigoEstadoEntidad = :estado");
 			q.setParameter("denominacion", "%" + denominacion.toLowerCase() + "%");
+			q.setParameter("estado", (Utils.isNotEmpty(estado)) ? estado : Dir3caibConstantes.DESCRIPCION_ESTADO_ENTIDAD_VIGENTE );
 			return transformarAObjetoDirectorio(q.getResultList(), denominacionCooficial);
 		} else {
 			return new ArrayList<ObjetoDirectorio>();
@@ -110,7 +114,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 	@Override
 	@SuppressWarnings(value = "unchecked")
 	public List<ObjetoDirectorio> findOficinasByDenominacion(String denominacion) throws Exception {
-		return findOficinasByDenominacion(denominacion, false);
+		return findOficinasByDenominacion(denominacion, false, null);
 	}
 	
 
@@ -125,15 +129,20 @@ public class Dir3RestBean implements Dir3RestLocal {
 	 */
 	@Override
 	@SuppressWarnings(value = "unchecked")
-	public List<ObjetoDirectorio> findOficinasByDenominacion(String denominacion, boolean denominacionCooficial) throws Exception {
+	public List<ObjetoDirectorio> findOficinasByDenominacion(String denominacion, boolean denominacionCooficial, String estado) throws Exception {
 		if (!denominacion.isEmpty()) {
+			
 			Query q = em.createQuery(
 					"select distinct oficina.codigo, oficina.denominacion, oficina.denomlenguacooficial "
 					+ "from Oficina as oficina "
 					+ "where (upper(oficina.denominacion) like upper(:denominacion)"
-					+ "or upper(oficina.denomlenguacooficial) like upper(:denominacion))");
+					+ "or upper(oficina.denomlenguacooficial) like upper(:denominacion))"
+					+ "and oficina.estado.codigoEstadoEntidad = :estado");
+			
 			q.setParameter("denominacion", "%" + denominacion.toLowerCase() + "%");
+			q.setParameter("estado", (Utils.isNotEmpty(estado)) ? estado : Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 			return transformarAObjetoDirectorio(q.getResultList(), denominacionCooficial);
+			
 		} else {
 			return new ArrayList<ObjetoDirectorio>();
 		}
@@ -168,7 +177,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 	// TODO REVISAR PARECE QUE NO SE EMPLEA, en REGWEB3 NO SE EMPLEA(03/10/2017)
 	@Override
 	@SuppressWarnings(value = "unchecked")
-	public List<Unidad> obtenerArbolUnidades(String codigo, String fechaActualizacion) throws Exception {
+	public List<Unidad> obtenerArbolUnidades(String codigo, String fechaActualizacion, String estado) throws Exception {
 		Query q;
 		if (fechaActualizacion == null) { // Es una sincronizacion, solo traemos vigentes
 			q = em.createQuery(
@@ -177,10 +186,9 @@ public class Dir3RestBean implements Dir3RestLocal {
 					+ "where unidad.codUnidadSuperior.codigoDir3 =:codigo "
 					+ " and unidad.codigoDir3 !=:codigo "
 					+ " and unidad.estado.codigoEstadoEntidad =:vigente "
-					+ " and unidad.version = (select max(uu.version) from Unidad uu where uu.codigoDir3 = unidad.codigoDir3)"
 					+ " order by unidad.codigoDir3");
 			q.setParameter("codigo", codigo);
-			q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+			q.setParameter("vigente", (Utils.isNotEmpty(estado)) ? estado : Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 		} else {// es una actualizacion, lo traemos todo
 			q = em.createQuery(
 					"Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigoDir3 =:codigo and unidad.codigoDir3 !=:codigo  order by unidad.codigo");
@@ -208,7 +216,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 
 		for (Unidad unidad : padres) {
 			if (tieneHijos(unidad.getCodigo())) {
-				List<Unidad> hijos = obtenerArbolUnidades(unidad.getCodigo(), fechaActualizacion);
+				List<Unidad> hijos = obtenerArbolUnidades(unidad.getCodigo(), fechaActualizacion, estado);
 				listaCompleta.addAll(hijos);
 			}
 		}
@@ -229,12 +237,12 @@ public class Dir3RestBean implements Dir3RestLocal {
 	@Override
 	@SuppressWarnings(value = "unchecked")
 	public List<Nodo> obtenerArbolUnidades(String codigo) throws Exception {
-		return obtenerArbolUnidades(codigo,false);
+		return obtenerArbolUnidades(codigo,false, null);
 	}
 	
 	@Override
 	@SuppressWarnings(value = "unchecked")
-	public List<Nodo> obtenerArbolUnidades(String codigo, boolean denominacionCooficial) throws Exception {
+	public List<Nodo> obtenerArbolUnidades(String codigo, boolean denominacionCooficial, String estado) throws Exception {
 		Query q;
 
 		q = em.createQuery(
@@ -245,7 +253,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 				+ "and unidad.estado.codigoEstadoEntidad =:vigente "
 				+ "order by unidad.codigo");
 		q.setParameter("codigo", codigo);
-		q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+		q.setParameter("vigente", (Utils.isNotEmpty(estado)) ? estado : Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
 		List<Nodo> padres = NodoUtils.getNodoList(q.getResultList(), denominacionCooficial);
 		List<Nodo> listaCompleta;
@@ -254,7 +262,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 
 		for (Nodo unidad : padres) {
 			if (tieneHijos(unidad.getCodigo())) {
-				List<Nodo> hijos = obtenerArbolUnidades(unidad.getCodigo(), denominacionCooficial);
+				List<Nodo> hijos = obtenerArbolUnidades(unidad.getCodigo(), denominacionCooficial, estado);
 				listaCompleta.addAll(hijos);
 			}
 		}
@@ -267,20 +275,22 @@ public class Dir3RestBean implements Dir3RestLocal {
 	 * de la ultima actualización de regweb. Se emplea para la sincronizacion y
 	 * actualización con regweb
 	 */
+	
 	@Override
 	@SuppressWarnings(value = "unchecked")
-	public List<Oficina> obtenerOficinasOrganismo(String codigo, String fechaActualizacion) throws Exception {
+	public List<Oficina> obtenerOficinasOrganismo(String codigo, String fechaActualizacion, String estado) throws Exception {
 
 		Query q = em.createQuery(
 				"Select oficina "
 				+ "from Oficina as oficina "
 				+ "where oficina.codUoResponsable.codigoDir3 =:codigo "
-				+ "  and oficina.codUoResponsable.version = (select max(uu.version) from Unidad uu where uu.codigoDir3 = oficina.codUoResponsable.codigoDir3)"
-				+ "  and oficina.estado.codigoEstadoEntidad= :vigente "
+				+ "  and oficina.codUoResponsable.estado.codigoEstadoEntidad= :vigente)"
+				+ "  and oficina.estado.codigoEstadoEntidad= :estado "
 				+ "order by oficina.codigo");
 
 		q.setParameter("codigo", codigo);
 		q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+		q.setParameter("estado", (Utils.isNotEmpty(estado)) ? estado : Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
 		List<Oficina> oficinas = q.getResultList();
 		List<Oficina> oficinasCompletas;
@@ -699,18 +709,19 @@ public class Dir3RestBean implements Dir3RestLocal {
 	@Override
 	@SuppressWarnings(value = "unchecked")
 	public String unidadDenominacion(String codigo) throws Exception {
-		return unidadDenominacion(codigo,false);
+		return unidadDenominacion(codigo,false,null);
 	}
 	
 	@Override
 	@SuppressWarnings(value = "unchecked")
-	public String unidadDenominacion(String codigo, boolean denominacionCooficial) throws Exception {
+	public String unidadDenominacion(String codigo, boolean denominacionCooficial, String estado) throws Exception {
 		
 		Query q = em.createQuery("select unidad.denominacion, unidad.denomLenguaCooficial "
 				+ "from Unidad as unidad "
 				+ "where unidad.codigoDir3=:codigo "
-				+ "and unidad.version = (select max(uu.version) from Unidad uu where uu.codigoDir3 = unidad.codigoDir3)")
-				.setParameter("codigo", codigo);
+				+ "and unidad.estado.codigoEstadoEntidad = :estado");
+		q.setParameter("codigo", codigo);
+		q.setParameter("estado", (Utils.isNotEmpty(estado)) ? estado : Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
 		List<Object[]> unidades = q.getResultList();
 
@@ -761,15 +772,17 @@ public class Dir3RestBean implements Dir3RestLocal {
 	@Override
 	@SuppressWarnings(value = "unchecked")
 	public String oficinaDenominacion(String codigo) throws Exception {
-		return oficinaDenominacion(codigo, false);
+		return oficinaDenominacion(codigo, false, null);
 	}
 
 	@Override
 	@SuppressWarnings(value = "unchecked")
-	public String oficinaDenominacion(String codigo, boolean denominacionCooficial) throws Exception {
+	public String oficinaDenominacion(String codigo, boolean denominacionCooficial, String estado) throws Exception {
 
-		Query q = em.createQuery("select oficina.denominacion, oficina.denomlenguacooficial from Oficina as oficina where oficina.codigo=:codigo")
-				.setParameter("codigo", codigo);
+		Query q = em.createQuery("select oficina.denominacion, oficina.denomlenguacooficial from Oficina as oficina where oficina.codigo=:codigo and oficina.estado.codigoEstadoEntidad = :estado");
+		
+		q.setParameter("codigo", codigo);
+		q.setParameter("estado", (Utils.isNotEmpty(estado)) ? estado : Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
 		List<Object[]> oficinas = q.getResultList();
 
@@ -862,12 +875,13 @@ public class Dir3RestBean implements Dir3RestLocal {
 		Query q = em.createQuery(
 				"select relacionSirOfi.oficina from RelacionSirOfi as relacionSirOfi where relacionSirOfi.unidad.codigo =:codigoUnidad "
 						+ "and :SERVICIO_SIR_RECEPCION in elements(relacionSirOfi.oficina.servicios) "
-						+ "and relacionSirOfi.estado.codigoEstadoEntidad='V' ");
+						+ "and relacionSirOfi.estado.codigoEstadoEntidad= :vigente ");
 
 		q.setParameter("codigoUnidad", codigoUnidad);
 		// q.setParameter("SERVICIO_SIR", new
 		// Servicio(Dir3caibConstantes.SERVICIO_SIR));
 		q.setParameter("SERVICIO_SIR_RECEPCION", new CatServicio(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
+		q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
 		return q.getResultList() != null ? q.getResultList() : new ArrayList<Oficina>();
 
@@ -885,7 +899,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 	@Override
 	@SuppressWarnings(value = "unchecked")
 	public List<CodigoValor> getLocalidadByProvinciaEntidadGeografica(Long codigoProvincia,
-			String codigoEntidadGeografica) throws Exception {
+			String codigoEntidadGeografica, String estado) throws Exception {
 
 		Query q;
 
@@ -893,43 +907,48 @@ public class Dir3RestBean implements Dir3RestLocal {
 				"Select catLocalidad.codigoLocalidad, catLocalidad.descripcionLocalidad from CatLocalidad as catLocalidad "
 						+ " left outer join catLocalidad.provincia as provincia "
 						+ " left outer join catLocalidad.entidadGeografica as entidadGeografica "
-						+ " where provincia.codigoProvincia =:codigoProvincia and entidadGeografica.codigoEntidadGeografica=:codigoEntidadGeografica ");
+						+ " where provincia.codigoProvincia =:codigoProvincia and entidadGeografica.codigoEntidadGeografica=:codigoEntidadGeografica and catLocalidad.estado.codigoEstadoEntidad = :estado");
 
 		q.setParameter("codigoProvincia", codigoProvincia);
 		q.setParameter("codigoEntidadGeografica", codigoEntidadGeografica);
+		q.setParameter("estado", (Utils.isNotEmpty(estado)) ? estado : Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
 		return transformarACodigoValor(q.getResultList());
 
 	}
 
 	/**
-	 * Obtiene todas las comunidades Autónomas
+	 * Obtiene todas las comunidades Autónomas por defecto que estan vigentes.
 	 *
 	 * @return
 	 * @throws Exception
 	 */
 	@Override
 	@SuppressWarnings(value = "unchecked")
-	public List<CodigoValor> getComunidadesAutonomas() throws Exception {
+	public List<CodigoValor> getComunidadesAutonomas(String estado) throws Exception {
 		Query q = em.createQuery(
-				"select ca.codigoComunidad, ca.descripcionComunidad from CatComunidadAutonoma as ca order by ca.descripcionComunidad");
+				"select ca.codigoComunidad, ca.descripcionComunidad from CatComunidadAutonoma as ca where ca.estado.codigoEstadoEntidad = :estado order by ca.descripcionComunidad");
 
+		q.setParameter("estado", (Utils.isNotEmpty(estado)) ? estado : Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+		
 		return transformarACodigoValor(q.getResultList());
 
 	}
 
 	/**
-	 * Obtiene todas las entidades geográficas
+	 * Obtiene todas las entidades geográficas por defecto que están vigentes
 	 *
 	 * @return
 	 * @throws Exception
 	 */
 	@Override
 	@SuppressWarnings(value = "unchecked")
-	public List<CodigoValor> getEntidadesGeograficas() throws Exception {
+	public List<CodigoValor> getEntidadesGeograficas(String estado) throws Exception {
 		Query q = em.createQuery(
-				"select eg.codigoEntidadGeografica, eg.descripcionEntidadGeografica from CatEntidadGeografica as eg");
+				"select eg.codigoEntidadGeografica, eg.descripcionEntidadGeografica from CatEntidadGeografica as eg where eg.estado.codigoEstadoEntidad = :estado");
 
+		q.setParameter("estado", (Utils.isNotEmpty(estado)) ? estado : Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+		
 		return transformarACodigoValor(q.getResultList());
 
 	}
@@ -942,9 +961,11 @@ public class Dir3RestBean implements Dir3RestLocal {
 	 */
 	@Override
 	@SuppressWarnings(value = "unchecked")
-	public List<CodigoValor> getProvincias() throws Exception {
+	public List<CodigoValor> getProvincias(String estado) throws Exception {
 		Query q = em.createQuery(
-				"select prov.codigoProvincia, prov.descripcionProvincia from CatProvincia as prov order by prov.descripcionProvincia");
+				"select prov.codigoProvincia, prov.descripcionProvincia from CatProvincia as prov where prov.estado.codigoEstadoEntidad = :estado order by prov.descripcionProvincia");
+		
+		q.setParameter("estado", (Utils.isNotEmpty(estado)) ? estado : Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
 		return transformarACodigoValor(q.getResultList());
 
@@ -958,11 +979,12 @@ public class Dir3RestBean implements Dir3RestLocal {
 	 */
 	@Override
 	@SuppressWarnings(value = "unchecked")
-	public List<CodigoValor> getProvinciasByComunidad(Long codComunidad) throws Exception {
+	public List<CodigoValor> getProvinciasByComunidad(Long codComunidad, String estado) throws Exception {
 		Query q = em.createQuery("Select prov.codigoProvincia, prov.descripcionProvincia from CatProvincia as prov "
-				+ "where prov.comunidadAutonoma.codigoComunidad =:codComunidad order by prov.codigoProvincia");
+				+ "where prov.comunidadAutonoma.codigoComunidad =:codComunidad and prov.estado.codigoEstadoEntidad = :estado order by prov.codigoProvincia");
 
 		q.setParameter("codComunidad", codComunidad);
+		q.setParameter("estado", (Utils.isNotEmpty(estado)) ? estado : Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
 		return transformarACodigoValor(q.getResultList());
 
@@ -976,10 +998,12 @@ public class Dir3RestBean implements Dir3RestLocal {
 	 */
 	@Override
 	@SuppressWarnings(value = "unchecked")
-	public List<CodigoValor> getNivelesAdministracion() throws Exception {
+	public List<CodigoValor> getNivelesAdministracion(String estado) throws Exception {
 		Query q = em.createQuery(
 				"select na.codigoNivelAdministracion, na.descripcionNivelAdministracion "
-				+ "from CatNivelAdministracion as na order by na.descripcionNivelAdministracion");
+				+ "from CatNivelAdministracion as na where na.estado.codigoEstadoEntidad = :estado order by na.descripcionNivelAdministracion");
+		
+		q.setParameter("estado", (Utils.isNotEmpty(estado)) ? estado : Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
 		return transformarACodigoValor(q.getResultList());
 
@@ -987,17 +1011,69 @@ public class Dir3RestBean implements Dir3RestLocal {
 
 	@Override
 	@SuppressWarnings(value = "unchecked")
-	public List<CodigoValor> getAmbitoTerritorialByAdministracion(Long nivelAdministracion) throws Exception {
+	public List<CodigoValor> getAmbitoTerritorialByAdministracion(Long nivelAdministracion, String estado) throws Exception {
 
 		Query q = em.createQuery(
 				"Select catAmbitoTerritorial.codigoAmbito,catAmbitoTerritorial.descripcionAmbito "
 				+ "from CatAmbitoTerritorial as catAmbitoTerritorial "
 				+ "where catAmbitoTerritorial.nivelAdministracion.codigoNivelAdministracion = :nivelAdministracion "
+				+ "and catAmbitoTerritorial.estado.codigoEstadoEntidad = :estado "
 				+ "order by catAmbitoTerritorial.codigoAmbito");
 
 		q.setParameter("nivelAdministracion", nivelAdministracion);
+		q.setParameter("estado", (Utils.isNotEmpty(estado)) ? estado : Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
 		return transformarACodigoValor(q.getResultList());
+	}
+	
+	@Override
+	@SuppressWarnings(value = "unchecked")
+	public List<CodigoValor> getEstadosEntidad(String estado) throws Exception {
+		
+		Query q = em.createQuery("Select catEstadoEntidad.codigoEstadoEntidad, catEstadoEntidad.descripcionEstadoEntidad "
+				+ "from CatEstadoEntidad as catEstadoEntidad "
+				+ "where catEstadoEntidad.estado.codigoEstadoEntidad = :estado "
+				+ "order by catEstadoEntidad.codigoEstadoEntidad");
+		
+		q.setParameter("estado", (Utils.isNotEmpty(estado)) ? estado : Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+		
+		return transformarACodigoValor(q.getResultList());
+		
+	}
+	
+	@Override
+	@SuppressWarnings(value = "unchecked")
+	public List<CodigoValor> getTiposVia(String estado) throws Exception {
+		
+		Query q = em.createQuery("Select catTipoVia.codigoTipoVia, catTipoVia.descripcionTipoVia "
+				+ "from CatTipoVia as catTipoVia "
+				+ "where catTipoVia.estado.codigoEstadoEntidad = :estado "
+				+ "order by catTipoVia.descripcionTipoVia");
+		
+		q.setParameter("estado", (Utils.isNotEmpty(estado)) ? estado : Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+		
+		return transformarACodigoValor(q.getResultList());
+		
+	}
+	
+	@Override
+	@SuppressWarnings(value = "unchecked")
+	public List<CatPais> getPaises(String estado) throws Exception {
+		
+		Query q = em.createQuery("Select catPais "
+				+ "from CatPais as catPais "
+				+ "where catPais.estado.codigoEstadoEntidad = :estado "
+				+ "order by catPais.descripcionPais");
+		
+		q.setParameter("estado", (Utils.isNotEmpty(estado)) ? estado : Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+		
+		if(Utils.isNotEmpty(estado))
+			System.out.println("Estado is not empty");
+		else
+			System.out.println("Estado is empty");
+		
+		return q.getResultList();
+		
 	}
 
 	/**

@@ -1,6 +1,8 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.CatLocalidad;
+import es.caib.dir3caib.utils.Utils;
+
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.SecurityDomain;
 
@@ -63,14 +65,28 @@ public class CatLocalidadBean extends BaseEjbJPA<CatLocalidad, Long> implements 
        
     }
     
-    
-    
-
     @Override
     @SuppressWarnings(value = "unchecked")
     public List<CatLocalidad> getAll() throws Exception {
 
         return  em.createQuery("Select catLocalidad from CatLocalidad as catLocalidad order by catLocalidad.codigoLocalidad").getResultList();
+    }
+    
+    @Override
+    @SuppressWarnings(value = "unchecked")
+    public List<CatLocalidad> getAll(String estado) throws Exception {
+    	
+    	String where = "";
+    	if(Utils.isNotEmpty(estado)) {
+    		where = " where catLocalidad.estado = :estado ";
+    	}
+
+    	Query q = em.createQuery("Select catLocalidad from CatLocalidad as catLocalidad " + where + " order by catLocalidad.codigoLocalidad");
+    	
+    	if(where != "")
+    		q.setParameter("estado", estado);
+    	
+        return  q.getResultList();
     }
 
     @Override

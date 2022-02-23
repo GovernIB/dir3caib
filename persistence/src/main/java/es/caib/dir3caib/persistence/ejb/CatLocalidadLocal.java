@@ -2,6 +2,8 @@ package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.CatLocalidad;
 
+import java.util.List;
+
 import javax.ejb.Local;
 
 /**
@@ -18,5 +20,7 @@ public interface CatLocalidadLocal extends BaseEjb<CatLocalidad, Long> {
                          String codigoEntidadGeografica) throws Exception;
   
   void deleteAll() throws Exception;
+
+  List<CatLocalidad> getAll(String estado) throws Exception;
 
 }

@@ -1,6 +1,9 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.CatTipoVia;
+import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
+import es.caib.dir3caib.utils.Utils;
+
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.SecurityDomain;
 
@@ -19,7 +22,7 @@ import java.util.List;
  */
 @Stateless(name = "CatTipoViaEJB")
 @SecurityDomain("seycon")
-@RolesAllowed({"DIR_ADMIN", "DIR_WS"})
+@RolesAllowed({Dir3caibConstantes.DIR_ADMIN, Dir3caibConstantes.DIR_WS})
 public class CatTipoViaBean extends BaseEjbJPA<CatTipoVia, Long> implements CatTipoViaLocal{
 
     protected final Logger log = Logger.getLogger(getClass());
@@ -44,6 +47,23 @@ public class CatTipoViaBean extends BaseEjbJPA<CatTipoVia, Long> implements CatT
     public List<CatTipoVia> getAll() throws Exception {
 
         return  em.createQuery("Select catTipoVia from CatTipoVia as catTipoVia order by catTipoVia.codigoTipoVia").getResultList();
+    }
+    
+    @Override
+    @SuppressWarnings(value = "unchecked")
+    public List<CatTipoVia> getAll(String estado) throws Exception {
+
+    	String where = "";
+    	if(Utils.isNotEmpty(estado)) {
+    		where = " where catTipoVia.estado = :estado ";
+    	}
+    	
+    	Query q = em.createQuery("Select catTipoVia from CatTipoVia as catTipoVia " + where + " order by catTipoVia.codigoTipoVia");
+    	
+    	if(where!="")
+    		q.setParameter("estado", estado);
+    	
+        return q.getResultList();
     }
 
     @Override

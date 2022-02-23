@@ -1,6 +1,9 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.CatEstadoEntidad;
+import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
+import es.caib.dir3caib.utils.Utils;
+
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.SecurityDomain;
 
@@ -19,7 +22,7 @@ import java.util.List;
  */
 @Stateless(name = "CatEstadoEntidadEJB")
 @SecurityDomain("seycon")
-@RolesAllowed({"DIR_ADMIN", "tothom", "DIR_WS"})
+@RolesAllowed({Dir3caibConstantes.DIR_ADMIN, Dir3caibConstantes.ROL_TOTHOM, Dir3caibConstantes.DIR_WS})
 public class CatEstadoEntidadBean extends BaseEjbJPA<CatEstadoEntidad, String> implements CatEstadoEntidadLocal{
 
     protected final Logger log = Logger.getLogger(getClass());
@@ -44,6 +47,23 @@ public class CatEstadoEntidadBean extends BaseEjbJPA<CatEstadoEntidad, String> i
     public List<CatEstadoEntidad> getAll() throws Exception {
 
         return  em.createQuery("Select catEstadoEntidad from CatEstadoEntidad as catEstadoEntidad order by catEstadoEntidad.codigoEstadoEntidad").getResultList();
+    }
+    
+    @Override
+    @SuppressWarnings(value = "unchecked")
+    public List<CatEstadoEntidad> getAll(String estado) throws Exception {
+    	
+    	String where = "";
+    	if(Utils.isNotEmpty(estado)) {
+    		where = " where catEstadoEntidad.estado = :estado ";
+    	}
+    	
+    	Query q = em.createQuery("Select catEstadoEntidad from CatEstadoEntidad as catEstadoEntidad " + where + " order by catEstadoEntidad.codigoEstadoEntidad");
+    	
+    	if(where!="")
+    		q.setParameter(":estado", estado);
+    	
+        return q.getResultList();
     }
 
     @Override
