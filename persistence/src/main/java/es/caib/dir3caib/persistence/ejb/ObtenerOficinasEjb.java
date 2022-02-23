@@ -52,7 +52,7 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
      *          fecha en la que se realiza la actualizacion.
      */
     @Override
-    public OficinaTF obtenerOficina(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
+    public OficinaTF obtenerOficina(String codigo, Date fechaActualizacion, Date fechaSincronizacion, boolean denominacionOficial) throws Exception {
 
         Oficina oficina = oficinaEjb.findById(codigo, Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
@@ -82,10 +82,10 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
                     oficina.setOrganizativasOfi(null);
                     oficina.setOrganizativasOfi(new ArrayList<RelacionOrganizativaOfi>(relacionesValidas));
 
-                    oficinaTF = OficinaTF.generar(oficina);
+                    oficinaTF = OficinaTF.generar(oficina, denominacionOficial);
                 }
             } else {
-                oficinaTF = OficinaTF.generar(oficina);
+                oficinaTF = OficinaTF.generar(oficina, denominacionOficial);
             }
 
             return oficinaTF;
@@ -109,7 +109,7 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
      * @param fechaActualizacion fecha en la que se realiza la actualizacion.
      */
     @Override
-    public List<OficinaTF> obtenerArbolOficinas(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
+    public List<OficinaTF> obtenerArbolOficinas(String codigo, Date fechaActualizacion, Date fechaSincronizacion, boolean denominacionOficial) throws Exception {
 
         log.info("WS: Inicio obtener Oficinas");
         // Obtenemos todos las unidades vigentes de la unidad Raiz
@@ -160,7 +160,7 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
         // Convertimos las Oficinas en OficinaTF
         List<OficinaTF> arbolTF = new ArrayList<OficinaTF>();
         for (Oficina oficina : oficinasCompleto) {
-            arbolTF.add(OficinaTF.generar(oficina));
+            arbolTF.add(OficinaTF.generar(oficina,denominacionOficial));
         }
 
         Long end = System.currentTimeMillis();
@@ -220,14 +220,14 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
      * @param codigoUnidad Código de la unidad
      */
     @Override
-    public List<OficinaTF> obtenerOficinasSIRUnidad(String codigoUnidad) throws Exception {
+    public List<OficinaTF> obtenerOficinasSIRUnidad(String codigoUnidad, boolean denominacionOficial) throws Exception {
 
         List<Oficina> oficinas = oficinaEjb.obtenerOficinasSIRUnidad(codigoUnidad);
 
         List<OficinaTF> oficinasTF = new ArrayList<OficinaTF>();
 
         for (Oficina oficina : oficinas) {
-            oficinasTF.add(OficinaTF.generar(oficina));
+            oficinasTF.add(OficinaTF.generar(oficina, denominacionOficial));
         }
 
         return oficinasTF;

@@ -66,7 +66,7 @@ public class Dir3CaibObtenerOficinasImpl /* extends CommonMethodsImpl */implemen
   @Override
   public OficinaTF obtenerOficina(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
 
-    return obtenerOficinasEjb.obtenerOficina(codigo, fechaActualizacion,fechaSincronizacion);
+    return obtenerOficinasEjb.obtenerOficina(codigo, fechaActualizacion,fechaSincronizacion, false);
   }
 
   /**
@@ -83,7 +83,7 @@ public class Dir3CaibObtenerOficinasImpl /* extends CommonMethodsImpl */implemen
   public List<OficinaTF> obtenerArbolOficinas(String codigo, Date fechaActualizacion, Date fechaSincronizacion)
       throws Exception {
 
-    return obtenerOficinasEjb.obtenerArbolOficinas(codigo, fechaActualizacion, fechaSincronizacion);
+    return obtenerOficinasEjb.obtenerArbolOficinas(codigo, fechaActualizacion, fechaSincronizacion, false);
   }
 
   /**
@@ -96,7 +96,7 @@ public class Dir3CaibObtenerOficinasImpl /* extends CommonMethodsImpl */implemen
   @Override
   public List<OficinaTF> obtenerOficinasSIRUnidad(String codigoUnidad)
       throws Exception{
-      return obtenerOficinasEjb.obtenerOficinasSIRUnidad(codigoUnidad);
+      return obtenerOficinasEjb.obtenerOficinasSIRUnidad(codigoUnidad, false);
   }
 
   /**

@@ -1,6 +1,7 @@
 package es.caib.dir3caib.persistence.model.ws;
 
 import es.caib.dir3caib.persistence.model.*;
+import es.caib.dir3caib.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -221,9 +222,9 @@ public class OficinaTF {
         this.organizativasOfi = relacionOrganizativaOfiTFList;
     }
 
-    public void rellenar(Oficina oficina){
+    public void rellenar(Oficina oficina, boolean denominacionOficial){
         this.setCodigo(oficina.getCodigo());
-        this.setDenominacion(oficina.getDenominacion());
+        this.setDenominacion((denominacionOficial && Utils.isNotEmpty(oficina.getDenomlenguacooficial())) ? oficina.getDenomlenguacooficial() : oficina.getDenominacion());
         this.setEstado(oficina.getEstado().getCodigoEstadoEntidad());
         if(oficina.getCodPais()!=null) {
             this.setCodigoPais(oficina.getCodPais().getCodigoPais());
@@ -302,11 +303,11 @@ public class OficinaTF {
     }
 
 
-    public static OficinaTF generar(Oficina oficina){
+    public static OficinaTF generar(Oficina oficina, boolean denominacionOficial){
         OficinaTF oficinaTF = null;
         if(oficina!=null){
             oficinaTF = new OficinaTF();
-            oficinaTF.rellenar(oficina);
+            oficinaTF.rellenar(oficina,denominacionOficial);
         }
         return oficinaTF;
     }
