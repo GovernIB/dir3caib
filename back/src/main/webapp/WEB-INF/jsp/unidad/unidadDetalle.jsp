@@ -157,6 +157,16 @@
                                         <dt>&nbsp;</dt><dd><spring:message code="oficina.busqueda.vacio"/></dd>
                                     </c:if>
 
+
+                                    <!-- Muestra Clasificación de la oficina-->
+                                    <hr class="divider">
+                                    <div class="box-header well cabeceraDetalle">
+                                        <h5><spring:message code="oficina.clasificacion"/></h5>
+                                    </div>
+                                    <c:forEach items="${unidad.servicios}" var="servicio">
+                                        <dt> - </dt><dd>${servicio.servicio.descServicio}</dd>
+                                    </c:forEach>
+
                                 </dl>
                             </div>
                         </div>
