@@ -1,6 +1,7 @@
 package es.caib.dir3caib.persistence.model.ws;
 
 import es.caib.dir3caib.persistence.model.ContactoUnidadOrganica;
+import es.caib.dir3caib.persistence.model.HistoricoUO;
 import es.caib.dir3caib.persistence.model.Unidad;
 
 import java.io.Serializable;
@@ -310,10 +311,9 @@ public class UnidadTF implements Serializable {
         this.setCodPostal(unidad.getCodPostal());
         // Enviamos los historicos a regweb para la gestión del organigrama
         Set<String> sHistoricosUO = new HashSet<String>();
-       /* //TODO DESCOMENTAR Y ARREGLAR
-       for (Unidad historico : unidad.getHistoricoUO()) {
-            sHistoricosUO.add(historico.getCodigo());
-        }*/
+       for (HistoricoUO historico : unidad.getHistoricosAnterior()) {
+            sHistoricosUO.add(historico.getUnidadUltima().getCodigoDir3());
+        }
         this.setHistoricosUO(sHistoricosUO);
 
         if (unidad.getContactos() != null) {

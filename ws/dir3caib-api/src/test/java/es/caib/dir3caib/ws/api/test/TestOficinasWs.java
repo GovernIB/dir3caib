@@ -55,6 +55,23 @@ public class TestOficinasWs extends Dir3CaibTestUtils {
         }
     }
 
+    @Test
+    public void testOficinaContactos() {
+        try {
+            Dir3CaibObtenerOficinasWs apiOficinas = getObtenerOficinasApi(true);
+            OficinaTF oficinaTF = apiOficinas.obtenerOficina("O00012829", null, null);
+            if (oficinaTF != null) {
+                for(ContactoTF contTF: oficinaTF.getContactos()){
+                    System.out.println(contTF.getTipoContacto());
+                }
+                System.out.println(oficinaTF.getDenominacion());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @Test
     public void testObtenerArbolOficinasActualizacion() {
@@ -111,8 +128,14 @@ public class TestOficinasWs extends Dir3CaibTestUtils {
         try {
             Dir3CaibObtenerOficinasWs apiOficinas = getObtenerOficinasApi(true);
 
-            List<OficinaTF> oficinas = apiOficinas.obtenerOficinasSIRUnidad("A04009905");
+            List<OficinaTF> oficinas = apiOficinas.obtenerOficinasSIRUnidad("EA0012602v1");
+          //  List<OficinaTF> oficinas = apiOficinas.obtenerOficinasSIRUnidad("A04009905");
             System.out.println(oficinas.size());
+            for(OficinaTF ofiTF: oficinas){
+                for(ContactoTF contTF: ofiTF.getContactos()){
+                    System.out.print(contTF.getTipoContacto());
+                }
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

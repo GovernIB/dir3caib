@@ -1,8 +1,8 @@
 package es.caib.dir3caib.ws.api.test;
 
 import es.caib.dir3caib.ws.api.catalogo.CatComunidadAutonomaTF;
-import es.caib.dir3caib.ws.api.catalogo.Dir3CaibObtenerCatalogosWs;
 import es.caib.dir3caib.ws.api.catalogo.Dir3CaibObtenerCatalogosWsService;
+import es.caib.dir3caib.ws.api.catalogo.Dir3CaibObtenerCatalogosWs;
 import org.junit.Test;
 
 import javax.xml.ws.BindingProvider;
