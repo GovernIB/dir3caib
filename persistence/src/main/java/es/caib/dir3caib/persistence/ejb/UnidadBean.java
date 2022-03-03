@@ -118,17 +118,6 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 		}
 	}
 
-	/*
-	 * @Override public Unidad findByPKsReduced(String codigo, Long version) throws
-	 * Exception { Query q =
-	 * em.createQuery("Select unidad.id from Unidad as unidad " +
-	 * " where unidad.version = :version " + " AND unidad.codigo = :codigo " );
-	 * 
-	 * q.setParameter("version", version); q.setParameter("codigo", codigo);
-	 * 
-	 * try { Long id = (Long)q.getSingleResult(); Unidad unidad = new Unidad();
-	 * unidad.setId(id); return unidad; } catch(Throwable th) { return null; } }
-	 */
 
 	/**
 	 * Obtiene una unidad que es vigente con sus historicosUO
@@ -216,7 +205,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 	 * Obtiene el codigo, la denominación, el estado, la tupla codigo-denominacion
 	 * de la unidad raiz y la tupla codigo-denominacion de la unidad. Se emplea para
 	 * mostrar el arbol de unidades.
-	 * 
+	 *
 	 * @param id     identificador de la unidad
 	 * @param estado estado de la unidad
 	 * @return {@link es.caib.dir3caib.persistence.utils.Nodo}
@@ -268,7 +257,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 	 * unidad se actualiza cada vez que se sincroniza con directorio común.
 	 *
 	 * Se usa para la sincronizacion con regweb3
-	 * 
+	 *
 	 * @param id
 	 * @param fechaActualizacion
 	 * @return
@@ -296,7 +285,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
 	/**
 	 * Obtiene el código, denominación y estado de la unidad indicada
-	 * 
+	 *
 	 * @param codigo
 	 * @return
 	 * @throws Exception
@@ -361,7 +350,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 	/**
 	 * Obtiene una lista de unidades paginada desde un valor inicial y de la
 	 * longitud base que establece dir3caib
-	 * 
+	 *
 	 * @return
 	 * @throws Exception
 	 */
@@ -379,7 +368,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 	/**
 	 * Obtiene una lista de unidades paginada desde un valor inicial y de una
 	 * longitud determinada
-	 * 
+	 *
 	 * @param startItem     valor inicial
 	 * @param numberOfItems longitud de la lista
 	 * @return
@@ -428,7 +417,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 	/**
 	 * Devuelve todas las unidades de la lista de ids indicados. Se emplea para
 	 * montar la cache de unidades en la importación de unidades desde Madrid
-	 * 
+	 *
 	 * @param ids
 	 * @return
 	 * @throws Exception
@@ -456,7 +445,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 	 * Obtiene todas las unidades de la lista de ids indicados. Se usa para la caché
 	 * de unidades en la importación de oficinas y debe devolver los objetos de la
 	 * bd, si no da un transient cuando se borran los contactos de una oficina.
-	 * 
+	 *
 	 * @param ids
 	 * @return
 	 * @throws Exception
@@ -464,19 +453,19 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 	// @Override
 	/*
 	 * public List<Unidad> getListByIds(List<String> ids) throws Exception {
-	 * 
+	 *
 	 * Query q = em.createQuery("Select unidad from Unidad as unidad " +
 	 * " where concat(unidad.codigo, '-', unidad.version) in (:theids) order by unidad.codigo"
 	 * );
-	 * 
+	 *
 	 * q.setParameter("theids", ids);
-	 * 
+	 *
 	 * return q.getResultList(); }
 	 */
 
 	/**
 	 * Borra todos los historicos de las unidades
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public void deleteHistoricosUnidad() throws Exception {
@@ -492,7 +481,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 	/**
 	 * Realiza una busqueda de {@link es.caib.dir3caib.persistence.model.Unidad}
 	 * según los parámetros
-	 * 
+	 *
 	 * @param pageNumber
 	 * @param codigo
 	 * @param denominacion
@@ -679,7 +668,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
 	/**
 	 * Método que comprueba si una unidad tiene más unidades hijas
-	 * 
+	 *
 	 * @param codigo
 	 * @return
 	 * @throws Exception
@@ -701,7 +690,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 	/**
 	 * Método que obtiene los hijos de primer nivel de una unidad en función del
 	 * estado de la unidad padre Se emplea para pintar el árbol de Unidades.
-	 * 
+	 *
 	 * @param codigo identificador de la unidad padre.
 	 * @param estado estado de la unidad padre.
 	 * @return {@link es.caib.dir3caib.persistence.utils.Nodo}
@@ -731,7 +720,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 	/**
 	 * Método que obtiene los codigos de los hijos vigentes de primer nivel de una
 	 * unidad
-	 * 
+	 *
 	 * @param codigo identificador de la unidad padre.
 	 * @return {@link es.caib.dir3caib.persistence.model.Unidad}
 	 */
@@ -814,7 +803,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 	 * código, teniendo en cuenta la fecha de la ultima actualización de regweb para
 	 * el caso en que la unidad indicada no es raíz. Se emplea para la
 	 * sincronizacion y actualización con regweb
-	 * 
+	 *
 	 * @param codigo
 	 * @param fechaActualizacion
 	 * @param fechaSincronizacion
@@ -908,14 +897,14 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 	 * @throws Exception
 	 */
 	// TODO debemos pasarle la denominacionCooficial??
-	
+
 	@Override
 	@SuppressWarnings(value = "unchecked")
 	public List<Unidad> obtenerArbolUnidadesUnidadRaiz(String codigo, Date fechaActualizacion, Date fechaSincronizacion)
 			throws Exception {
 		return obtenerArbolUnidadesUnidadRaiz(codigo,fechaActualizacion,fechaSincronizacion,false);
 	}
-	
+
 	@Override
 	@SuppressWarnings(value = "unchecked")
 	public List<Unidad> obtenerArbolUnidadesUnidadRaiz(String codigo, Date fechaActualizacion, Date fechaSincronizacion, boolean denominacionCooficial)
@@ -982,7 +971,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 	 * Método que devuelve la unidad indicada por código siempre que esté vigente y
 	 * tenga oficinas donde registrar. A partir de ella se obtienen todos sus hijos
 	 * vigentes. solicitado por SISTRA
-	 * 
+	 *
 	 * @param codigo código de la unidad raiz de la que partimos.
 	 * @return
 	 * @throws Exception
@@ -992,7 +981,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 	public List<Unidad> obtenerArbolUnidadesDestinatarias(String codigo) throws Exception {
 		return obtenerArbolUnidadesDestinatarias(codigo,false);
 	}
-	
+
 	@Override
 	@SuppressWarnings(value = "unchecked")
 	public List<Unidad> obtenerArbolUnidadesDestinatarias(String codigo, boolean denominacionCooficial) throws Exception {
@@ -1190,22 +1179,6 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
 	@Override
 	@SuppressWarnings(value = "unchecked")
-	public List<UnidadPK> getAllUnidadPK() {
-		Query q = em.createQuery("Select unidad.codigo, unidad.version from Unidad as unidad order by unidad.codigo");
-
-		List<UnidadPK> unidadesPK = new ArrayList<UnidadPK>();
-		List<Object[]> result = q.getResultList();
-
-		for (Object[] object : result) {
-			UnidadPK unidadPk = new UnidadPK((String) object[0], (Long) object[1]);
-			unidadesPK.add(unidadPk);
-		}
-		return unidadesPK;
-
-	}
-
-	@Override
-	@SuppressWarnings(value = "unchecked")
 	public void crearUnidad(String codigoUnidad) throws Exception {
 
 		Query q = em.createNativeQuery("insert into dir_unidad (codigo, esedp) values (?,?)");
@@ -1249,29 +1222,6 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
 	}
 
-	// @Override
-	// @SuppressWarnings(value = "unchecked")
-	/*
-	 * public void eliminarHistoricosUnidad2(String codigo, Long version) throws
-	 * Exception {
-	 * 
-	 * //TODO ELIMINAR
-	 *//*
-		 * Query q =
-		 * em.createNativeQuery("delete from dir_historicouo  where codultima=? ");
-		 * q.setParameter(1, idUnidad);
-		 *//*
-			 * 
-			 * // Query q = em.
-			 * createQuery("delete from HistoricoUO where unidadUltima.codigo=:idUnidad and unidadUltima.version=:version "
-			 * ); Query q = em.
-			 * createQuery("delete from HistoricoUO as historico where historico.id in (select id from HistoricoUO where unidadUltima.codigo=:codigo and unidadUltima.version=:version) "
-			 * ); q.setParameter("codigo", codigo); q.setParameter("version", version);
-			 * 
-			 * q.executeUpdate();
-			 * 
-			 * }
-			 */
 
 	@Override
 	@SuppressWarnings(value = "unchecked")
@@ -1328,7 +1278,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 		}
 
 	}
-	
+
 	public List<Unidad> getUnidadesByNivel(long nivel, String codigo, String estado) throws Exception{
 		return getUnidadesByNivel(nivel,codigo,estado,false);
 	}
@@ -1361,7 +1311,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 	public List<Unidad> getUnidadesByNivelByUnidadSuperior(long nivel, String codigo, String estado) throws Exception {
 		return getUnidadesByNivelByUnidadSuperior(nivel, codigo, estado, false);
 	}
-	
+
 	@Override
 	public List<Unidad> getUnidadesByNivelByUnidadSuperior(long nivel, String codigo, String estado, boolean denominacionCooficial) throws Exception {
 
@@ -1421,9 +1371,10 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 		if (unidad != null) {
 			Hibernate.initialize(unidad.getOrganizativaOfi());
 //            Hibernate.initialize(unidad.getSirOfi());
-			Hibernate.initialize(unidad.getContactos());
-			Hibernate.initialize(unidad.getHistoricosAnterior());
-		}
+            Hibernate.initialize(unidad.getContactos());
+            Hibernate.initialize(unidad.getHistoricosAnterior());
+            Hibernate.initialize(unidad.getServicios());
+        }
 
 		return unidad;
 	}
@@ -1433,7 +1384,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 	 * registrar. Para ello comprueba si es unidadResponsable de alguna oficina y
 	 * después mira si tiene relacionesOrganizativas con oficinas. Es además
 	 * recursivo, así que lo mira hasta el último nivel del organigrama.
-	 * 
+	 *
 	 * @param codigo de la unidad
 	 * @return
 	 * @throws Exception

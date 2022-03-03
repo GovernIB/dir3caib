@@ -44,7 +44,7 @@ public class Unidad implements Serializable {
   private String codigoDir3;
   private String denominacion;
   private String denomLenguaCooficial;
-  private int idiomalengua;
+  private int idiomalengua;  //idioma de la lengua cooficial
   private CatEstadoEntidad estado;
   private String nifcif;
   private String siglas;

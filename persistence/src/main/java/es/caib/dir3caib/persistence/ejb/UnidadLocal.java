@@ -247,12 +247,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      */
     List<String> getAllCodigos();
 
-    /**
-     * Obtiene todos las unidadesPk de las unidades. Se emplea para la importación de las unidades desde Madrid.
-     *
-     * @return
-     */
-    List<UnidadPK> getAllUnidadPK();
+
 
 
     /**
