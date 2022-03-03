@@ -284,16 +284,15 @@ public class OficinaTF {
             this.setOrganizativasOfiTF(null);
         }
 
-        //TODO ADAPTAR
-        /*if(oficina.getServicios() != null){
+        if(oficina.getServicios() != null){
             List<Long> serviciosIds= new ArrayList<Long>();
-            for(CatServicio servicio: oficina.getServicios()){
-                serviciosIds.add(servicio.getCodServicio());
+            for(ServicioOfi servicio: oficina.getServicios()){
+                serviciosIds.add(servicio.getServicio().getCodServicio());
             }
             this.setServicios(serviciosIds);
         } else {
             this.setServicios(null);
-        }*/
+        }
 
         if (oficina.getContactos() != null) {
             this.setContactosTF(oficina.getContactos());

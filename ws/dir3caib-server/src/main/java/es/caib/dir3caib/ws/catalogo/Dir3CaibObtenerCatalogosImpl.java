@@ -1,11 +1,8 @@
 package es.caib.dir3caib.ws.catalogo;
 
 import es.caib.dir3caib.persistence.ejb.ObtenerCatalogosLocal;
-import es.caib.dir3caib.persistence.model.*;
-import es.caib.dir3caib.persistence.model.ws.CatComunidadAutonomaTF;
-import es.caib.dir3caib.persistence.model.ws.CatEntidadGeograficaTF;
-import es.caib.dir3caib.persistence.model.ws.CatLocalidadTF;
-import es.caib.dir3caib.persistence.model.ws.CatProvinciaTF;
+import es.caib.dir3caib.persistence.model.ws.*;
+import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.utils.Versio;
 import es.caib.dir3caib.utils.Configuracio;
 import org.jboss.ejb3.annotation.SecurityDomain;
@@ -18,6 +15,7 @@ import javax.ejb.Stateless;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -155,7 +153,7 @@ public class Dir3CaibObtenerCatalogosImpl implements Dir3CaibObtenerCatalogosWs 
     @Override
     @WebMethod
     @RolesAllowed({ /*Dir3caibConstantes.DIR_ADMIN,*/ Dir3caibConstantes.DIR_WS})
-    public List<CatServicio> obtenerCatServicio() throws Exception{
+    public List<Servicio> obtenerCatServicio() throws Exception{
         return  obtenerCatalogosEjb.obtenerCatServicio();
     }
 

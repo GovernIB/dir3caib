@@ -27,21 +27,23 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "obtenerHistoricosFinales", propOrder = {
-   "arg0"
+    "arg0"
 })
 public class ObtenerHistoricosFinales {
 
-   protected String arg0;
+    protected String arg0;
 
-   /**
-    * Obtiene el valor de la propiedad arg0.
-    *
-    * @return possible object is
-    * {@link String }
-    */
-   public String getArg0() {
-      return arg0;
-   }
+    /**
+     * Obtiene el valor de la propiedad arg0.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getArg0() {
+        return arg0;
+    }
 
     /**
      * Define el valor de la propiedad arg0.

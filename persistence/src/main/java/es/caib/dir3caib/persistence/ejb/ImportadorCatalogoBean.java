@@ -166,10 +166,10 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                     		
                     		CatEstadoEntidad estadoEstadoEntidad = cacheEstadoEntidad.get(codigoEstadoEstadoEntidad);
                     		
-                    		if (estadoEstadoEntidad == null) {
+                    		/*if (estadoEstadoEntidad == null) {
                     			estadoEstadoEntidad = nuevoEstadoEntidadVacio(codigoEstadoEstadoEntidad);
                     			cacheEstadoEntidad.put(codigoEstadoEstadoEntidad,estadoEstadoEntidad);
-                    		}
+                    		}*/
                     		
                     		CatEstadoEntidad estadoEntidad = cacheEstadoEntidad.get(codigoEstado);
                     		
@@ -179,7 +179,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                     		}
                     		
                     		estadoEntidad.setDescripcionEstadoEntidad(fila[1]);
-                    		estadoEntidad.setEstado(estadoEstadoEntidad);
+                    		estadoEntidad.setEstado(codigoEstadoEstadoEntidad);
                     		 
                     		catEstadoEntidadEjb.persist(estadoEntidad);
                     		

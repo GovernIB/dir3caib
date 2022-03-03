@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="Dir3CaibObtenerCatalogosWsService" targetNamespace="http://catalogo.ws.dir3caib.caib.es/"
-                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://catalogo.ws.dir3caib.caib.es/"
-                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+<wsdl:definitions name="Dir3CaibObtenerCatalogosWsService" targetNamespace="http://catalogo.ws.dir3caib.caib.es/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://catalogo.ws.dir3caib.caib.es/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
   <wsdl:types>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://catalogo.ws.dir3caib.caib.es/" elementFormDefault="unqualified" targetNamespace="http://catalogo.ws.dir3caib.caib.es/" version="1.0">
 <xs:element name="getVersion" type="tns:getVersion"/>

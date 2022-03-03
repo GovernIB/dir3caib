@@ -153,7 +153,6 @@ public class UnidadController extends BaseController {
         ModelAndView mav = new ModelAndView("unidad/unidadDetalle");
 
         //Obtenemos los datos básicos de la unidad que nos indican
-        //TODO Pasar la version en el mapping
         Unidad unidad = unidadEjb.findFullByIdConHistoricos(codUnidad);
         mav.addObject("unidad", unidad);
 

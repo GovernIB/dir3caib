@@ -1,10 +1,13 @@
 package es.caib.dir3caib.persistence.ejb;
 
-import es.caib.dir3caib.persistence.model.*;
-import es.caib.dir3caib.persistence.model.ws.CatComunidadAutonomaTF;
-import es.caib.dir3caib.persistence.model.ws.CatEntidadGeograficaTF;
-import es.caib.dir3caib.persistence.model.ws.CatLocalidadTF;
-import es.caib.dir3caib.persistence.model.ws.CatProvinciaTF;
+
+import es.caib.dir3caib.persistence.model.CatComunidadAutonoma;
+import es.caib.dir3caib.persistence.model.CatProvincia;
+import es.caib.dir3caib.persistence.model.CatLocalidad;
+import es.caib.dir3caib.persistence.model.CatEntidadGeografica;
+import es.caib.dir3caib.persistence.model.CatServicio;
+import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
+import es.caib.dir3caib.persistence.model.ws.*;
 import org.apache.log4j.Logger;
 
 import javax.annotation.security.RunAs;
@@ -60,7 +63,14 @@ public class ObtenerCatalogosEjb implements ObtenerCatalogosLocal {
    */
     @Override
     public List<CatEstadoEntidad> obtenerCatEstadoEntidad() throws Exception {
-        return catEstadoEntidadEjb.getAll();
+        List<es.caib.dir3caib.persistence.model.CatEstadoEntidad> estadosEntidad= catEstadoEntidadEjb.getAll();
+
+        List<CatEstadoEntidad>  estadosEntidadWs = new ArrayList<>();
+        for(es.caib.dir3caib.persistence.model.CatEstadoEntidad estado:estadosEntidad){
+            estadosEntidadWs.add(CatEstadoEntidad.generar(estado));
+        }
+        return estadosEntidadWs;
+       // return catEstadoEntidadEjb.getAll();
     }
 
    /**
@@ -70,7 +80,14 @@ public class ObtenerCatalogosEjb implements ObtenerCatalogosLocal {
    */
     @Override
     public List<CatNivelAdministracion> obtenerCatNivelAdministracion() throws Exception {
-        return catNivelAdministracionEjb.getAll();
+        List<es.caib.dir3caib.persistence.model.CatNivelAdministracion> nivelAdministracions= catNivelAdministracionEjb.getAll();
+
+        List<CatNivelAdministracion>  nivelAdminWs = new ArrayList<>();
+        for(es.caib.dir3caib.persistence.model.CatNivelAdministracion nivel:nivelAdministracions){
+            nivelAdminWs.add(CatNivelAdministracion.generar(nivel));
+        }
+        return nivelAdminWs;
+
     }
 
     /**
@@ -80,7 +97,14 @@ public class ObtenerCatalogosEjb implements ObtenerCatalogosLocal {
      */
     @Override
     public List<CatPais> obtenerCatPais() throws Exception {
-        return catPaisEjb.getAll();
+        List<es.caib.dir3caib.persistence.model.CatPais> paises= catPaisEjb.getAll();
+
+        List<CatPais>  paisesWs = new ArrayList<>();
+        for(es.caib.dir3caib.persistence.model.CatPais pais:paises){
+            paisesWs.add(CatPais.generar(pais));
+        }
+        return paisesWs;
+
     }
 
     /**
@@ -162,8 +186,15 @@ public class ObtenerCatalogosEjb implements ObtenerCatalogosLocal {
      * @throws Exception
      */
     @Override
-    public List<CatServicio> obtenerCatServicio() throws Exception{
-        return servicioEjb.getAll();
+    public List<Servicio> obtenerCatServicio() throws Exception{
+
+        List<Servicio> servicios = new ArrayList<>();
+
+       for(CatServicio catServicio: servicioEjb.getAll()){
+           servicios.add( Servicio.generar(catServicio));
+       }
+
+       return servicios;
     }
 
     /**
@@ -173,6 +204,12 @@ public class ObtenerCatalogosEjb implements ObtenerCatalogosLocal {
      */
     @Override
     public List<CatTipoVia> obtenerCatTipoVia() throws Exception{
-        return catTipoViaEjb.getAll();
+        List<es.caib.dir3caib.persistence.model.CatTipoVia> tipoVias= catTipoViaEjb.getAll();
+
+        List<CatTipoVia>  tipoViasWs = new ArrayList<>();
+        for(es.caib.dir3caib.persistence.model.CatTipoVia tipoVia:tipoVias){
+            tipoViasWs.add(CatTipoVia.generar(tipoVia));
+        }
+        return tipoViasWs;
     }
 }

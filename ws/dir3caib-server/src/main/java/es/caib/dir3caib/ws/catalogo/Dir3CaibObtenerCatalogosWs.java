@@ -1,10 +1,7 @@
 package es.caib.dir3caib.ws.catalogo;
 
-import es.caib.dir3caib.persistence.model.*;
-import es.caib.dir3caib.persistence.model.ws.CatComunidadAutonomaTF;
-import es.caib.dir3caib.persistence.model.ws.CatEntidadGeograficaTF;
-import es.caib.dir3caib.persistence.model.ws.CatLocalidadTF;
-import es.caib.dir3caib.persistence.model.ws.CatProvinciaTF;
+import es.caib.dir3caib.persistence.model.ws.*;
+import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
@@ -64,7 +61,7 @@ public interface Dir3CaibObtenerCatalogosWs {
 
   @WebMethod
   @RolesAllowed({Dir3caibConstantes.DIR_WS})
-  List<CatServicio> obtenerCatServicio() throws Exception;
+  List<Servicio> obtenerCatServicio() throws Exception;
 
   @WebMethod
   @RolesAllowed({Dir3caibConstantes.DIR_WS})

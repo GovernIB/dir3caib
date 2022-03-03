@@ -22,7 +22,8 @@ public class CatEstadoEntidad implements Serializable {
 
 	private String codigoEstadoEntidad;
 	private String descripcionEstadoEntidad;
-    private CatEstadoEntidad estado;
+   // private CatEstadoEntidad estado;
+    private String estado;
 
 	public CatEstadoEntidad(){
 
@@ -67,7 +68,7 @@ public class CatEstadoEntidad implements Serializable {
     this.descripcionEstadoEntidad = descripcionEstadoEntidad;
   }
 
-  @ManyToOne(cascade = {CascadeType.PERSIST},optional = true, fetch = FetchType.EAGER)
+  /*@ManyToOne(cascade = {CascadeType.PERSIST},optional = true, fetch = FetchType.EAGER)
   @JoinColumn(name="ESTADO")
   @ForeignKey(name="DIR_CESTENT_CESTENT_FK")
   public CatEstadoEntidad getEstado() {
@@ -76,19 +77,28 @@ public class CatEstadoEntidad implements Serializable {
 
   public void setEstado(CatEstadoEntidad estado) {
     this.estado = estado;
-  }
+  }*/
 
-  @Override
+    @Column(name = "ESTADO", length = 2)
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    @Override
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     CatEstadoEntidad that = (CatEstadoEntidad) o;
-    return codigoEstadoEntidad.equals(that.codigoEstadoEntidad) && descripcionEstadoEntidad.equals(that.descripcionEstadoEntidad) && estado.codigoEstadoEntidad.equals(that.estado.codigoEstadoEntidad);
+    return codigoEstadoEntidad.equals(that.codigoEstadoEntidad) && descripcionEstadoEntidad.equals(that.descripcionEstadoEntidad) ;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(codigoEstadoEntidad, descripcionEstadoEntidad, estado.codigoEstadoEntidad);
+    return Objects.hash(codigoEstadoEntidad, descripcionEstadoEntidad);
   }
   
   @Override 
@@ -101,7 +111,7 @@ public class CatEstadoEntidad implements Serializable {
 		  temp += this.getDescripcionEstadoEntidad();
 	  temp += " ,Estado:";
 	  if(this.getEstado() != null)
-		  temp += this.getEstado().getCodigoEstadoEntidad();
+		  temp += this.getEstado();
 	  temp += "}";
 	  return  temp;
   }

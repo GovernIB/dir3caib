@@ -1,10 +1,8 @@
 package es.caib.dir3caib.persistence.ejb;
 
-import es.caib.dir3caib.persistence.model.*;
-import es.caib.dir3caib.persistence.model.ws.CatComunidadAutonomaTF;
-import es.caib.dir3caib.persistence.model.ws.CatEntidadGeograficaTF;
-import es.caib.dir3caib.persistence.model.ws.CatLocalidadTF;
-import es.caib.dir3caib.persistence.model.ws.CatProvinciaTF;
+import es.caib.dir3caib.persistence.model.ws.*;
+
+
 
 import javax.ejb.Local;
 import java.util.List;
@@ -32,7 +30,7 @@ public interface ObtenerCatalogosLocal {
 
     List<CatEntidadGeograficaTF> obtenerCatEntidadGeografica() throws Exception;
 
-    List<CatServicio> obtenerCatServicio() throws Exception;
+    List<Servicio> obtenerCatServicio() throws Exception;
 
     List<CatTipoVia> obtenerCatTipoVia() throws Exception;
 
