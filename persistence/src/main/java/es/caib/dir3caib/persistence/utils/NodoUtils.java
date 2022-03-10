@@ -146,7 +146,7 @@ public class NodoUtils {
         String edpPrincipal = "";
         for (Unidad unidad : result) {
             if (unidad.getCodEdpPrincipal() != null) {
-            	if (denominacionCooficial && !unidad.getCodEdpPrincipal().getDenomLenguaCooficial().isEmpty())
+            	if (denominacionCooficial && Utils.isNotEmpty(unidad.getCodEdpPrincipal().getDenomLenguaCooficial()))
             		edpPrincipal = unidad.getCodEdpPrincipal().getCodigo() + " - " + unidad.getCodEdpPrincipal().getDenomLenguaCooficial();
             	else
             		edpPrincipal = unidad.getCodEdpPrincipal().getCodigo() + " - " + unidad.getCodEdpPrincipal().getDenominacion();
@@ -170,7 +170,7 @@ public class NodoUtils {
         String ofiResponsable = "";
         for (Oficina oficina : result) {
             if (oficina.getCodOfiResponsable() != null) {
-            	String denominacionOfiResponsable = (denominacionCooficial && !oficina.getCodOfiResponsable().getDenomlenguacooficial().isEmpty()) ? oficina.getCodOfiResponsable().getDenomlenguacooficial() : oficina.getCodOfiResponsable().getDenominacion(); 
+            	String denominacionOfiResponsable = (denominacionCooficial && Utils.isNotEmpty(oficina.getCodOfiResponsable().getDenomlenguacooficial())) ? oficina.getCodOfiResponsable().getDenomlenguacooficial() : oficina.getCodOfiResponsable().getDenominacion();
                 ofiResponsable = oficina.getCodOfiResponsable().getCodigo() + " - " + denominacionOfiResponsable;
             }
             String denominacion = (denominacionCooficial && Utils.isNotEmpty(oficina.getDenomlenguacooficial())) ? oficina.getDenomlenguacooficial() : oficina.getDenominacion();
