@@ -1,11 +1,14 @@
 package es.caib.dir3caib.ws.api.test;
 
 import es.caib.dir3caib.utils.Utils;
+import es.caib.dir3caib.ws.api.unidad.ContactoTF;
 import es.caib.dir3caib.ws.api.unidad.Dir3CaibObtenerUnidadesWs;
 import es.caib.dir3caib.ws.api.unidad.UnidadTF;
+import es.caib.dir3caib.ws.api.unidad.UnidadWs;
 import org.junit.Test;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,48 +21,26 @@ public class TestUnidadesWs extends Dir3CaibTestUtils{
     public void obtenerArbolUnidadesDestinatarias() {
       try{
           Dir3CaibObtenerUnidadesWs apiUnidades = getObtenerUnidadesApi(true);
-         for (int i = 0; i < 20; i++) {
+        // for (int i = 0; i < 20; i++) {
             Long start = System.currentTimeMillis();
-            List<UnidadTF> destinatarias = apiUnidades.obtenerArbolUnidadesDestinatarias("A04003003");
+            List<UnidadTF> destinatarias = apiUnidades.obtenerArbolUnidadesDestinatarias("A04019281");
             Long end = System.currentTimeMillis();
 
             System.out.println("TIEMPO CARGA UNIDADESDESTINATARIAS: " + Utils.formatElapsedTime(end - start));
             System.out.println("DESTINATRIAS " + destinatarias.size());
-            /* for (UnidadTF unidadTF : destinatarias) {
-                System.out.println(unidadTF.getCodigo() + "\t\t"
-                   + unidadTF.getDenominacion());
-             }*/
-          }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-    //Descomentar cuando regeneremos la api ws ccn contactos
-   /* public void obtenerOficina() {
-        try{
-            Dir3CaibObtenerUnidadesWs apiUnidades = getObtenerUnidadesApi(true);
-            UnidadTF unidadTF = apiUnidades.obtenerUnidad("E00120903", null, null);
-
-            System.out.println(unidadTF.getCodigo() + "\t\t"
-                    + unidadTF.getDenominacion()  );
-            System.out.println("SIZE: "+unidadTF.getContactos().size());
-            for(ContactoTF contactoTF :unidadTF.getContactos()){
-                System.out.println(contactoTF.getTipoContacto() + "\t\t"
-                        + contactoTF.getValorContacto()  );
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }*/
 
     @Test
     public void testUnidadExtinguida() {
         try {
             Dir3CaibObtenerUnidadesWs apiUnidades = getObtenerUnidadesApi(true);
             //UnidadTF unidad = apiUnidades.obtenerUnidad("A04009905", null, null);
-            UnidadTF unidad = apiUnidades.obtenerUnidad("A04059164", null, null);
+            //UnidadTF unidad = apiUnidades.obtenerUnidad("A04059164", null, null);
+            UnidadTF unidad = apiUnidades.obtenerUnidad("A04019281", null, null);
             if (unidad != null) {
                 System.out.println(unidad.getDenominacion());
             }else{
@@ -158,4 +139,58 @@ public class TestUnidadesWs extends Dir3CaibTestUtils{
          e.printStackTrace();
       }
    }
+
+    @Test
+    public void obtenerFechaUltimaActualizacion() {
+        try {
+            Dir3CaibObtenerUnidadesWs apiUnidades = getObtenerUnidadesApi(true);
+            Date fecha = apiUnidades.obtenerFechaUltimaActualizacion();
+            System.out.println(fecha);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Test
+    public void obtenerHistoricosFinales() {
+        try{
+            Dir3CaibObtenerUnidadesWs apiUnidades = getObtenerUnidadesApi(true);
+
+            Long start = System.currentTimeMillis();
+            List<UnidadTF> unidadTFList = apiUnidades.obtenerHistoricosFinales("A04008301");
+            Long end = System.currentTimeMillis();
+
+            System.out.println("TIEMPO CARGA UNIDAD: " + Utils.formatElapsedTime(end - start));
+            System.out.println("Unidades Historicos Finales: " + unidadTFList.size());
+            for(UnidadTF unidadTF:unidadTFList){
+                System.out.println(unidadTF.getCodigo() + " - "+ unidadTF.getDenominacion());
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void obtenerHistoricosFinalesSIR() {
+        try{
+            Dir3CaibObtenerUnidadesWs apiUnidades = getObtenerUnidadesApi(true);
+
+            Long start = System.currentTimeMillis();
+            List<UnidadTF> unidadTFList = apiUnidades.obtenerHistoricosFinalesSIR("A04008301");
+            Long end = System.currentTimeMillis();
+
+            System.out.println("TIEMPO CARGA UNIDAD: " + Utils.formatElapsedTime(end - start));
+            System.out.println("Unidades Historicos Finales: " + unidadTFList.size());
+            for(UnidadTF unidadTF:unidadTFList){
+                System.out.println(unidadTF.getCodigo() + " - "+ unidadTF.getDenominacion());
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -75,43 +75,15 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 	}
 
 	@Override
-	public Unidad findByCodigoUltimaVersion(String codigo) throws Exception {
-		/*
-		 * Query q = em.createQuery("Select unidad from Unidad as unidad " +
-		 * " where unidad.codigo = :codigo " +
-		 * " AND unidad.version = max(unidad.version) " );
-		 */
-
-		Query q = em.createQuery("select u from Unidad u" + "        where  u.codigo =:codigo and  u.version = "
-				+ "                (select max(uu.version) from Unidad uu where uu.codigo = u.codigo)  ");
+	public Unidad findByCodigoDir3UltimaVersion(String codigo) throws Exception {
+		Query q = em.createQuery("select u from Unidad u " + "where  u.codigoDir3 =:codigo and  u.version = "
+				+ " (select max(uu.version) from Unidad uu where uu.codigo = u.codigo)  ");
 
 		q.setParameter("codigo", codigo);
 
-		try {
-			Unidad unidad = (Unidad) q.getSingleResult();
-			return unidad;
-		} catch (Throwable th) {
-			return null;
-		}
-	}
-
-	@Override
-	public Unidad findByCodigoMenorVersion(String codigo) throws Exception {
-		/*
-		 * Query q = em.createQuery("Select unidad from Unidad as unidad " +
-		 * " where unidad.codigo = :codigo " +
-		 * " AND unidad.version = max(unidad.version) " );
-		 */
-
-		Query q = em.createQuery("select u from Unidad u" + "        where  u.codigo =:codigo and  u.version = "
-				+ "                (select min(uu.version) from Unidad uu where uu.codigo = u.codigo)  ");
-
-		q.setParameter("codigo", codigo);
 
 		try {
 			Unidad unidad = (Unidad) q.getSingleResult();
-			// Hibernate.initialize(unidad.getHistoricosUltima());
-			Hibernate.initialize(unidad.getHistoricosAnterior());
 			return unidad;
 		} catch (Throwable th) {
 			return null;
@@ -769,10 +741,10 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 			boolean denominacionCooficial) throws Exception {
 		for (Unidad unidad : unidadesPadres) {
 
-			Query q = em.createQuery("select unidad.codigo, unidad.denominacion, unidad.codUnidadRaiz.codigo, "
-					+ "unidad.codUnidadSuperior.codigo, unidad.esEdp, unidad.denomLenguaCooficial "
+			Query q = em.createQuery("select unidad.codigoDir3, unidad.denominacion, unidad.codUnidadRaiz.codigo, "
+					+ "unidad.codUnidadSuperior.codigoDir3, unidad.esEdp, unidad.denomLenguaCooficial "
 					+ "from Unidad as unidad "
-					+ "where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:estado "
+					+ "where unidad.codUnidadSuperior.codigoDir3 =:codigo and unidad.codigoDir3 !=:codigo and unidad.estado.codigoEstadoEntidad =:estado "
 					+ "order by unidad.codigo");
 
 			q.setParameter("codigo", unidad.getCodigo());
@@ -987,8 +959,8 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 	public List<Unidad> obtenerArbolUnidadesDestinatarias(String codigo, boolean denominacionCooficial) throws Exception {
 
 		Query q = em.createQuery(
-				"Select unidad.codigo, unidad.denominacion, unidad.codUnidadRaiz.codigo, unidad.codUnidadSuperior.codigo, unidad.esEdp, unidad.denomLenguaCooficial "
-				+ "from Unidad as unidad where unidad.codigo =:codigo and unidad.estado.codigoEstadoEntidad =:vigente");
+				"Select unidad.codigoDir3, unidad.denominacion, unidad.codUnidadRaiz.codigoDir3, unidad.codUnidadSuperior.codigoDir3, unidad.esEdp, unidad.denomLenguaCooficial "
+				+ "from Unidad as unidad where unidad.codigoDir3 =:codigo and unidad.estado.codigoEstadoEntidad =:vigente");
 		q.setParameter("codigo", codigo);
 		q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
@@ -1080,28 +1052,12 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
 		List<Unidad> unidades = new ArrayList<Unidad>();
 		Unidad unidad = null;
-		// Esto ya estaba comentado en la versión 1.0
-		// unidades.add(unidadEjb.obtenerUnidad(codigo)); // Añadimos la raiz
-		/*
-		 * if (fechaActualizacion != null) { // ES actualizacion, miramos si la raiz se
-		 * ha actualizado log.info("ACTUALIZACION OFICINAS"); //Obtenemos la raiz en
-		 * funcion de la fecha de actualización unidad =
-		 * unidadEjb.findUnidadActualizada(codigo, fechaActualizacion); if (unidad !=
-		 * null) { //Han actualizado la raiz // miramos que no esté extinguida o anulada
-		 * antes de la primera sincro. if (unidadEjb.unidadValida(unidad,
-		 * fechaSincronizacion)) { unidades.add(unidad); Set<Unidad> historicosRaiz =
-		 * unidad.getHistoricoUO(); if (historicosRaiz != null) { for (Unidad historico
-		 * : historicosRaiz) { unidades.add(historico); } } } } }
-		 */
 
-		// if (unidad == null) { // O es Sincro o es actualizacion pero con la raiz sin
-		// actualizar.
 		unidad = findUnidadEstado(codigo, Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 		if (unidad != null) {
 			// Añadimos la unidad para que se obtengan sus oficinas
 			unidades.add(unidad);
 		}
-		// }
 
 		unidades.addAll(obtenerArbol(unidad.getCodigo()));
 		log.info("Total arbol: " + unidades.size());
@@ -1279,6 +1235,23 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
 	}
 
+	@Override
+	public void historicosUOFinales(Unidad unidad, Set<HistoricoUO> historicosFinales) throws Exception {
+
+		Set<HistoricoUO> parciales = unidad.getHistoricosAnterior(); // Esto nos devuelve los historicos en que la
+		// unidad está en la columna anterior
+		for (HistoricoUO parcial : parciales) {
+			// Necesitamos cargas sus historicos finales para
+			Unidad parcialUltima = findConHistoricos(parcial.getUnidadUltima().getCodigo());
+			if (parcialUltima.getHistoricosAnterior().size() == 0) {
+				historicosFinales.add(parcial);
+			} else {
+				historicosUOFinales(parcialUltima, historicosFinales);
+			}
+		}
+
+	}
+
 	public List<Unidad> getUnidadesByNivel(long nivel, String codigo, String estado) throws Exception{
 		return getUnidadesByNivel(nivel,codigo,estado,false);
 	}
@@ -1380,6 +1353,28 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 	}
 
 	/**
+	 * Obtiene una unidad con sus contactos y sus relaciones
+	 *
+	 * @param codigo
+	 * @return
+	 * @throws Exception
+	 */
+	public Unidad findFullByCodigoDir3ConHistoricos(String codigo) throws Exception {
+
+		Unidad unidad = findByCodigoDir3UltimaVersion(codigo);
+
+		if (unidad != null) {
+			Hibernate.initialize(unidad.getOrganizativaOfi());
+//            Hibernate.initialize(unidad.getSirOfi());
+			Hibernate.initialize(unidad.getContactos());
+			Hibernate.initialize(unidad.getHistoricosAnterior());
+			Hibernate.initialize(unidad.getServicios());
+		}
+
+		return unidad;
+	}
+
+	/**
 	 * Este método mira si la unidad del código especificado tiene oficinas donde
 	 * registrar. Para ello comprueba si es unidadResponsable de alguna oficina y
 	 * después mira si tiene relacionesOrganizativas con oficinas. Es además
@@ -1393,7 +1388,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 	public Boolean tieneOficinasArbol(String codigo) throws Exception {
 
 		Query q = em.createQuery(
-				"Select oficina.codigo from Oficina as oficina where oficina.codUoResponsable.codigo =:codigo and oficina.estado.codigoEstadoEntidad=:vigente");
+				"Select oficina.codigo from Oficina as oficina where oficina.codUoResponsable.codigoDir3 =:codigo and oficina.estado.codigoEstadoEntidad=:vigente");
 
 		q.setParameter("codigo", codigo);
 		q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
@@ -1410,7 +1405,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 			return true;
 		} else {
 			q = em.createQuery(
-					"Select count(relorg.id) from RelacionOrganizativaOfi as relorg where relorg.unidad.codigo=:codigo and relorg.estado.codigoEstadoEntidad=:vigente");
+					"Select count(relorg.id) from RelacionOrganizativaOfi as relorg where relorg.unidad.codigoDir3=:codigo and relorg.estado.codigoEstadoEntidad=:vigente");
 
 			q.setParameter("codigo", codigo);
 			q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
@@ -1419,7 +1414,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 				return true;
 			} else {// no tiene oficinas, miramos sus hijos
 				Query q2 = em.createQuery(
-						"Select unidad.codigo from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:estado");
+						"Select unidad.codigo from Unidad as unidad where unidad.codUnidadSuperior.codigoDir3 =:codigo and unidad.codigoDir3 !=:codigo and unidad.estado.codigoEstadoEntidad =:estado");
 
 				q2.setParameter("codigo", codigo);
 				q2.setParameter("estado", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);

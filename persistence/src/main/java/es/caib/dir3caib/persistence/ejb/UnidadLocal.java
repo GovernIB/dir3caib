@@ -1,5 +1,6 @@
 package es.caib.dir3caib.persistence.ejb;
 
+import es.caib.dir3caib.persistence.model.HistoricoUO;
 import es.caib.dir3caib.persistence.model.Oficina;
 import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.persistence.model.UnidadPK;
@@ -34,9 +35,8 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @return
      * @throws Exception
      */
-    Unidad findByCodigoUltimaVersion(String codigo) throws Exception;
+    Unidad findByCodigoDir3UltimaVersion(String codigo) throws Exception;
 
-    Unidad findByCodigoMenorVersion(String codigo) throws Exception;
 
     /**
      * Busca la unidad por su pk pero solo carga el identificador
@@ -164,7 +164,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      */
     List<Unidad> obtenerArbolUnidadesDestinatarias(String codigo) throws Exception;
 
-   List<Oficina> obtenerArbolOficinasOpenData(String codigo) throws Exception;
+    List<Oficina> obtenerArbolOficinasOpenData(String codigo) throws Exception;
 
     /**
      * Metodo que comprueba si una unidad tiene más unidades hijas
@@ -360,6 +360,8 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
     */
     void historicosFinales(Unidad unidad, Set<Unidad> historicosFinales) throws Exception;
 
+    void historicosUOFinales(Unidad unidad, Set<HistoricoUO> historicosFinales) throws Exception;
+
     /* Obtiene las unidades del nivel indicado cuya unidad Raiz es la indicada por codigo */
     public List<Unidad> getUnidadesByNivel(long nivel, String codigo, String estado) throws Exception;
 
@@ -383,6 +385,8 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @throws Exception
      */
     Unidad findFullByIdConHistoricos(String codigo) throws Exception;
+
+    Unidad findFullByCodigoDir3ConHistoricos(String codigo) throws Exception;
 
    /**
     * Este método mira si la unidad del código especificado tiene oficinas donde registrar.

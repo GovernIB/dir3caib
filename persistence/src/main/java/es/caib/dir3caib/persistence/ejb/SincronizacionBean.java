@@ -50,7 +50,7 @@ import java.util.zip.ZipInputStream;
  */
 @Stateless(name = "SincronizacionEJB")
 @SecurityDomain("seycon")
-@RolesAllowed("DIR_ADMIN")
+@RolesAllowed({ Dir3caibConstantes.DIR_ADMIN, Dir3caibConstantes.DIR_WS })
 public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> implements SincronizacionLocal{
 
     protected final Logger log = Logger.getLogger(getClass());

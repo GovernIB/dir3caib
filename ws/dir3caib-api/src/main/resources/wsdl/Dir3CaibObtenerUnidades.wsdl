@@ -4,6 +4,8 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://unidad.ws.dir3caib.caib.es/" elementFormDefault="unqualified" targetNamespace="http://unidad.ws.dir3caib.caib.es/" version="1.0">
 <xs:element name="buscarUnidad" type="tns:buscarUnidad"/>
 <xs:element name="buscarUnidadResponse" type="tns:buscarUnidadResponse"/>
+<xs:element name="buscarUnidadV2" type="tns:buscarUnidadV2"/>
+<xs:element name="buscarUnidadV2Response" type="tns:buscarUnidadV2Response"/>
 <xs:element name="getVersion" type="tns:getVersion"/>
 <xs:element name="getVersionResponse" type="tns:getVersionResponse"/>
 <xs:element name="getVersionWs" type="tns:getVersionWs"/>
@@ -11,15 +13,25 @@
 <xs:element name="obtenerArbolUnidades" type="tns:obtenerArbolUnidades"/>
 <xs:element name="obtenerArbolUnidadesDestinatarias" type="tns:obtenerArbolUnidadesDestinatarias"/>
 <xs:element name="obtenerArbolUnidadesDestinatariasResponse" type="tns:obtenerArbolUnidadesDestinatariasResponse"/>
+<xs:element name="obtenerArbolUnidadesDestinatariasV2" type="tns:obtenerArbolUnidadesDestinatariasV2"/>
+<xs:element name="obtenerArbolUnidadesDestinatariasV2Response" type="tns:obtenerArbolUnidadesDestinatariasV2Response"/>
 <xs:element name="obtenerArbolUnidadesResponse" type="tns:obtenerArbolUnidadesResponse"/>
+<xs:element name="obtenerArbolUnidadesV2" type="tns:obtenerArbolUnidadesV2"/>
+<xs:element name="obtenerArbolUnidadesV2Response" type="tns:obtenerArbolUnidadesV2Response"/>
 <xs:element name="obtenerFechaUltimaActualizacion" type="tns:obtenerFechaUltimaActualizacion"/>
 <xs:element name="obtenerFechaUltimaActualizacionResponse" type="tns:obtenerFechaUltimaActualizacionResponse"/>
 <xs:element name="obtenerHistoricosFinales" type="tns:obtenerHistoricosFinales"/>
 <xs:element name="obtenerHistoricosFinalesResponse" type="tns:obtenerHistoricosFinalesResponse"/>
 <xs:element name="obtenerHistoricosFinalesSIR" type="tns:obtenerHistoricosFinalesSIR"/>
 <xs:element name="obtenerHistoricosFinalesSIRResponse" type="tns:obtenerHistoricosFinalesSIRResponse"/>
+<xs:element name="obtenerHistoricosFinalesSIRV2" type="tns:obtenerHistoricosFinalesSIRV2"/>
+<xs:element name="obtenerHistoricosFinalesSIRV2Response" type="tns:obtenerHistoricosFinalesSIRV2Response"/>
+<xs:element name="obtenerHistoricosFinalesV2" type="tns:obtenerHistoricosFinalesV2"/>
+<xs:element name="obtenerHistoricosFinalesV2Response" type="tns:obtenerHistoricosFinalesV2Response"/>
 <xs:element name="obtenerUnidad" type="tns:obtenerUnidad"/>
 <xs:element name="obtenerUnidadResponse" type="tns:obtenerUnidadResponse"/>
+<xs:element name="obtenerUnidadV2" type="tns:obtenerUnidadV2"/>
+<xs:element name="obtenerUnidadV2Response" type="tns:obtenerUnidadV2Response"/>
 <xs:complexType name="buscarUnidad">
     <xs:sequence>
       <xs:element minOccurs="0" name="arg0" type="xs:string"/>
@@ -65,6 +77,30 @@
       <xs:element minOccurs="0" name="valorContacto" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
+<xs:complexType name="obtenerArbolUnidadesDestinatariasV2">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="obtenerArbolUnidadesDestinatariasV2Response">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:unidadWs"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="unidadWs">
+    <xs:complexContent>
+      <xs:extension base="tns:unidadTF">
+        <xs:sequence>
+          <xs:element name="comparteNif" type="xs:boolean"/>
+          <xs:element minOccurs="0" name="denomLenguaCooficial" type="xs:string"/>
+          <xs:element minOccurs="0" name="fechaUltimaActualizacion" type="xs:dateTime"/>
+          <xs:element name="idiomalengua" type="xs:int"/>
+          <xs:element minOccurs="0" name="poder" type="xs:string"/>
+          <xs:element minOccurs="0" name="version" type="xs:long"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
 <xs:complexType name="obtenerFechaUltimaActualizacion">
     <xs:sequence/>
   </xs:complexType>
@@ -101,6 +137,18 @@
       <xs:element minOccurs="0" name="return" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
+<xs:complexType name="obtenerArbolUnidadesV2">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+      <xs:element minOccurs="0" name="arg1" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="arg2" type="xs:dateTime"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="obtenerArbolUnidadesV2Response">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:unidadWs"/>
+    </xs:sequence>
+  </xs:complexType>
 <xs:complexType name="obtenerArbolUnidades">
     <xs:sequence>
       <xs:element minOccurs="0" name="arg0" type="xs:string"/>
@@ -111,6 +159,18 @@
 <xs:complexType name="obtenerArbolUnidadesResponse">
     <xs:sequence>
       <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:unidadTF"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="obtenerUnidadV2">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+      <xs:element minOccurs="0" name="arg1" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="arg2" type="xs:dateTime"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="obtenerUnidadV2Response">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:unidadWs"/>
     </xs:sequence>
   </xs:complexType>
 <xs:complexType name="obtenerHistoricosFinalesSIR">
@@ -133,6 +193,16 @@
       <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:unidadTF"/>
     </xs:sequence>
   </xs:complexType>
+<xs:complexType name="obtenerHistoricosFinalesSIRV2">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="obtenerHistoricosFinalesSIRV2Response">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:unidadWs"/>
+    </xs:sequence>
+  </xs:complexType>
 <xs:complexType name="obtenerArbolUnidadesDestinatarias">
     <xs:sequence>
       <xs:element minOccurs="0" name="arg0" type="xs:string"/>
@@ -143,30 +213,42 @@
       <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:unidadTF"/>
     </xs:sequence>
   </xs:complexType>
+<xs:complexType name="obtenerHistoricosFinalesV2">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="obtenerHistoricosFinalesV2Response">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:unidadWs"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="buscarUnidadV2">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="buscarUnidadV2Response">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:unidadWs"/>
+    </xs:sequence>
+  </xs:complexType>
 </xs:schema>
   </wsdl:types>
   <wsdl:message name="obtenerArbolUnidadesDestinatarias">
     <wsdl:part name="parameters" element="tns:obtenerArbolUnidadesDestinatarias">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="buscarUnidadResponse">
-    <wsdl:part name="parameters" element="tns:buscarUnidadResponse">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="obtenerFechaUltimaActualizacion">
-    <wsdl:part name="parameters" element="tns:obtenerFechaUltimaActualizacion">
+  <wsdl:message name="buscarUnidadV2">
+    <wsdl:part name="parameters" element="tns:buscarUnidadV2">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="obtenerArbolUnidadesDestinatariasResponse">
     <wsdl:part name="parameters" element="tns:obtenerArbolUnidadesDestinatariasResponse">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="getVersionResponse">
-    <wsdl:part name="parameters" element="tns:getVersionResponse">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="obtenerArbolUnidades">
-    <wsdl:part name="parameters" element="tns:obtenerArbolUnidades">
+  <wsdl:message name="obtenerArbolUnidadesV2Response">
+    <wsdl:part name="parameters" element="tns:obtenerArbolUnidadesV2Response">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="obtenerUnidadResponse">
@@ -181,16 +263,8 @@
     <wsdl:part name="parameters" element="tns:obtenerHistoricosFinales">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="obtenerHistoricosFinalesResponse">
-    <wsdl:part name="parameters" element="tns:obtenerHistoricosFinalesResponse">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="obtenerArbolUnidadesResponse">
-    <wsdl:part name="parameters" element="tns:obtenerArbolUnidadesResponse">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="buscarUnidad">
-    <wsdl:part name="parameters" element="tns:buscarUnidad">
+  <wsdl:message name="obtenerHistoricosFinalesSIRV2">
+    <wsdl:part name="parameters" element="tns:obtenerHistoricosFinalesSIRV2">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="getVersionWs">
@@ -201,12 +275,76 @@
     <wsdl:part name="parameters" element="tns:obtenerHistoricosFinalesSIR">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="getVersion">
-    <wsdl:part name="parameters" element="tns:getVersion">
+  <wsdl:message name="obtenerArbolUnidadesDestinatariasV2">
+    <wsdl:part name="parameters" element="tns:obtenerArbolUnidadesDestinatariasV2">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="obtenerHistoricosFinalesSIRResponse">
     <wsdl:part name="parameters" element="tns:obtenerHistoricosFinalesSIRResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerHistoricosFinalesSIRV2Response">
+    <wsdl:part name="parameters" element="tns:obtenerHistoricosFinalesSIRV2Response">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="buscarUnidadResponse">
+    <wsdl:part name="parameters" element="tns:buscarUnidadResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerFechaUltimaActualizacion">
+    <wsdl:part name="parameters" element="tns:obtenerFechaUltimaActualizacion">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="buscarUnidadV2Response">
+    <wsdl:part name="parameters" element="tns:buscarUnidadV2Response">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getVersionResponse">
+    <wsdl:part name="parameters" element="tns:getVersionResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerArbolUnidadesV2">
+    <wsdl:part name="parameters" element="tns:obtenerArbolUnidadesV2">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerArbolUnidades">
+    <wsdl:part name="parameters" element="tns:obtenerArbolUnidades">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerHistoricosFinalesV2">
+    <wsdl:part name="parameters" element="tns:obtenerHistoricosFinalesV2">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerArbolUnidadesResponse">
+    <wsdl:part name="parameters" element="tns:obtenerArbolUnidadesResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerHistoricosFinalesResponse">
+    <wsdl:part name="parameters" element="tns:obtenerHistoricosFinalesResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerUnidadV2">
+    <wsdl:part name="parameters" element="tns:obtenerUnidadV2">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="buscarUnidad">
+    <wsdl:part name="parameters" element="tns:buscarUnidad">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerArbolUnidadesDestinatariasV2Response">
+    <wsdl:part name="parameters" element="tns:obtenerArbolUnidadesDestinatariasV2Response">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerHistoricosFinalesV2Response">
+    <wsdl:part name="parameters" element="tns:obtenerHistoricosFinalesV2Response">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getVersion">
+    <wsdl:part name="parameters" element="tns:getVersion">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerUnidadV2Response">
+    <wsdl:part name="parameters" element="tns:obtenerUnidadV2Response">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="obtenerFechaUltimaActualizacionResponse">
@@ -222,6 +360,12 @@
       <wsdl:input name="buscarUnidad" message="tns:buscarUnidad">
     </wsdl:input>
       <wsdl:output name="buscarUnidadResponse" message="tns:buscarUnidadResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerArbolUnidadesDestinatariasV2">
+      <wsdl:input name="obtenerArbolUnidadesDestinatariasV2" message="tns:obtenerArbolUnidadesDestinatariasV2">
+    </wsdl:input>
+      <wsdl:output name="obtenerArbolUnidadesDestinatariasV2Response" message="tns:obtenerArbolUnidadesDestinatariasV2Response">
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="obtenerFechaUltimaActualizacion">
@@ -248,10 +392,22 @@
       <wsdl:output name="getVersionResponse" message="tns:getVersionResponse">
     </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="obtenerArbolUnidadesV2">
+      <wsdl:input name="obtenerArbolUnidadesV2" message="tns:obtenerArbolUnidadesV2">
+    </wsdl:input>
+      <wsdl:output name="obtenerArbolUnidadesV2Response" message="tns:obtenerArbolUnidadesV2Response">
+    </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="obtenerArbolUnidades">
       <wsdl:input name="obtenerArbolUnidades" message="tns:obtenerArbolUnidades">
     </wsdl:input>
       <wsdl:output name="obtenerArbolUnidadesResponse" message="tns:obtenerArbolUnidadesResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerUnidadV2">
+      <wsdl:input name="obtenerUnidadV2" message="tns:obtenerUnidadV2">
+    </wsdl:input>
+      <wsdl:output name="obtenerUnidadV2Response" message="tns:obtenerUnidadV2Response">
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="obtenerHistoricosFinalesSIR">
@@ -266,10 +422,28 @@
       <wsdl:output name="obtenerHistoricosFinalesResponse" message="tns:obtenerHistoricosFinalesResponse">
     </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="obtenerHistoricosFinalesSIRV2">
+      <wsdl:input name="obtenerHistoricosFinalesSIRV2" message="tns:obtenerHistoricosFinalesSIRV2">
+    </wsdl:input>
+      <wsdl:output name="obtenerHistoricosFinalesSIRV2Response" message="tns:obtenerHistoricosFinalesSIRV2Response">
+    </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="obtenerArbolUnidadesDestinatarias">
       <wsdl:input name="obtenerArbolUnidadesDestinatarias" message="tns:obtenerArbolUnidadesDestinatarias">
     </wsdl:input>
       <wsdl:output name="obtenerArbolUnidadesDestinatariasResponse" message="tns:obtenerArbolUnidadesDestinatariasResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerHistoricosFinalesV2">
+      <wsdl:input name="obtenerHistoricosFinalesV2" message="tns:obtenerHistoricosFinalesV2">
+    </wsdl:input>
+      <wsdl:output name="obtenerHistoricosFinalesV2Response" message="tns:obtenerHistoricosFinalesV2Response">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="buscarUnidadV2">
+      <wsdl:input name="buscarUnidadV2" message="tns:buscarUnidadV2">
+    </wsdl:input>
+      <wsdl:output name="buscarUnidadV2Response" message="tns:buscarUnidadV2Response">
     </wsdl:output>
     </wsdl:operation>
   </wsdl:portType>
@@ -281,6 +455,15 @@
         <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output name="buscarUnidadResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerArbolUnidadesDestinatariasV2">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="obtenerArbolUnidadesDestinatariasV2">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="obtenerArbolUnidadesDestinatariasV2Response">
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
@@ -320,6 +503,15 @@
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="obtenerArbolUnidadesV2">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="obtenerArbolUnidadesV2">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="obtenerArbolUnidadesV2Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="obtenerArbolUnidades">
       <soap:operation soapAction="" style="document"/>
       <wsdl:input name="obtenerArbolUnidades">
@@ -338,6 +530,15 @@
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="obtenerUnidadV2">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="obtenerUnidadV2">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="obtenerUnidadV2Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="obtenerHistoricosFinales">
       <soap:operation soapAction="" style="document"/>
       <wsdl:input name="obtenerHistoricosFinales">
@@ -347,12 +548,39 @@
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="obtenerHistoricosFinalesSIRV2">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="obtenerHistoricosFinalesSIRV2">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="obtenerHistoricosFinalesSIRV2Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="obtenerArbolUnidadesDestinatarias">
       <soap:operation soapAction="" style="document"/>
       <wsdl:input name="obtenerArbolUnidadesDestinatarias">
         <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output name="obtenerArbolUnidadesDestinatariasResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerHistoricosFinalesV2">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="obtenerHistoricosFinalesV2">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="obtenerHistoricosFinalesV2Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="buscarUnidadV2">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="buscarUnidadV2">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="buscarUnidadV2Response">
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>

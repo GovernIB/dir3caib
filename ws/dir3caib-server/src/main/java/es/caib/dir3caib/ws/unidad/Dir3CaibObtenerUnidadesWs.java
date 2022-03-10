@@ -2,6 +2,7 @@ package es.caib.dir3caib.ws.unidad;
 
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.model.ws.UnidadTF;
+import es.caib.dir3caib.persistence.model.ws.v2.UnidadWs;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
@@ -37,7 +38,16 @@ public interface Dir3CaibObtenerUnidadesWs {
 
   @WebMethod
   @RolesAllowed({Dir3caibConstantes.DIR_WS})
+  UnidadWs obtenerUnidadV2(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception;
+
+  @WebMethod
+  @RolesAllowed({Dir3caibConstantes.DIR_WS})
   UnidadTF buscarUnidad(String codigo) throws Exception;
+
+  @WebMethod
+  @RolesAllowed({Dir3caibConstantes.DIR_WS})
+  UnidadWs buscarUnidadV2(String codigo) throws Exception;
+
 
   @WebMethod
   @RolesAllowed({Dir3caibConstantes.DIR_WS})
@@ -46,8 +56,18 @@ public interface Dir3CaibObtenerUnidadesWs {
 
   @WebMethod
   @RolesAllowed({Dir3caibConstantes.DIR_WS})
+  List<UnidadWs> obtenerArbolUnidadesV2(String codigo, Date fechaActualizacion, Date fechaSincronizacion)
+          throws Exception;
+
+  @WebMethod
+  @RolesAllowed({Dir3caibConstantes.DIR_WS})
   List<UnidadTF> obtenerArbolUnidadesDestinatarias(String codigo)
       throws Exception;
+
+  @WebMethod
+  @RolesAllowed({Dir3caibConstantes.DIR_WS})
+  List<UnidadWs> obtenerArbolUnidadesDestinatariasV2(String codigo)
+          throws Exception;
 
   @WebMethod
   @RolesAllowed({Dir3caibConstantes.DIR_WS})
@@ -57,9 +77,17 @@ public interface Dir3CaibObtenerUnidadesWs {
   @RolesAllowed({Dir3caibConstantes.DIR_WS})
   List<UnidadTF> obtenerHistoricosFinales(String codigo) throws Exception;
 
+  @WebMethod
+  @RolesAllowed({Dir3caibConstantes.DIR_WS})
+  List<UnidadWs> obtenerHistoricosFinalesV2(String codigo) throws Exception;
+
 
    @WebMethod
    @RolesAllowed({Dir3caibConstantes.DIR_WS})
    List<UnidadTF> obtenerHistoricosFinalesSIR(String codigo) throws Exception;
+
+  @WebMethod
+  @RolesAllowed({Dir3caibConstantes.DIR_WS})
+  List<UnidadWs> obtenerHistoricosFinalesSIRV2(String codigo) throws Exception;
 
 }

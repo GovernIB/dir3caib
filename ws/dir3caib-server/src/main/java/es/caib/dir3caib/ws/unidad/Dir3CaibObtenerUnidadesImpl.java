@@ -3,6 +3,7 @@ package es.caib.dir3caib.ws.unidad;
 import es.caib.dir3caib.persistence.ejb.ObtenerUnidadesLocal;
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.model.ws.UnidadTF;
+import es.caib.dir3caib.persistence.model.ws.v2.UnidadWs;
 import es.caib.dir3caib.persistence.utils.Versio;
 import es.caib.dir3caib.utils.Configuracio;
 import org.jboss.ejb3.annotation.SecurityDomain;
@@ -65,7 +66,25 @@ public class Dir3CaibObtenerUnidadesImpl implements Dir3CaibObtenerUnidadesWs {
   @Override
   public UnidadTF obtenerUnidad(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
 
-    return obtenerUnidadesEjb.obtenerUnidad(codigo, fechaActualizacion, fechaSincronizacion);
+    return obtenerUnidadesEjb.obtenerUnidadTF(codigo, fechaActualizacion, fechaSincronizacion);
+  }
+
+  /**
+   * Método que devuelve una {@link UnidadWs} vigente  a partir del código
+   * indicado y en función de la fecha de actualización
+   *
+   * @param codigo
+   *          código de la unidad a transferir
+   * @param fechaActualizacion
+   *          fecha en la que se realiza la actualización
+   * @return null si la unidad no está vigente
+   */
+  @Override
+  public UnidadWs obtenerUnidadV2(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception{
+
+    UnidadWs unidadWs = obtenerUnidadesEjb.obtenerUnidadWs(codigo, fechaActualizacion, fechaSincronizacion);
+    return unidadWs;
+
   }
 
   /**
@@ -77,7 +96,19 @@ public class Dir3CaibObtenerUnidadesImpl implements Dir3CaibObtenerUnidadesWs {
   @Override
   public UnidadTF buscarUnidad(String codigo) throws Exception {
 
-    return obtenerUnidadesEjb.buscarUnidad(codigo);
+    return obtenerUnidadesEjb.buscarUnidadTF(codigo);
+  }
+
+  /**
+   * Método que devuelve una {@link es.caib.dir3caib.persistence.model.ws.v2.UnidadWs} a partir del código indicado
+   * independientemente de su estado
+   *
+   * @param codigo código de la unidad a transferir
+   */
+  @Override
+  public UnidadWs buscarUnidadV2(String codigo) throws Exception {
+
+    return obtenerUnidadesEjb.buscarUnidadWs(codigo);
   }
 
   /**
@@ -100,6 +131,23 @@ public class Dir3CaibObtenerUnidadesImpl implements Dir3CaibObtenerUnidadesWs {
 
   }
 
+
+  /**
+   * Método que devuelve la lista de {@link es.caib.dir3caib.persistence.model.ws.v2.UnidadWs} a partir del
+   * código indicado y las fechas indicadas
+   * Si no se especifican fechas obtiene aquellas unidades que son vigentes.
+   * Si se especifica la fecha de actualización obtiene las unidades que han sufrido cambios entre esa fecha y la actual.
+   * La fecha de sincronización nos sirve para evitar traer unidades (extinguidas/anuladas) anteriores a esta fecha
+   *
+   * @param codigo
+   *          código de la unidad raiz
+   * @param fechaActualizacion
+   *          fecha en la que se realiza la actualización
+   */
+  public List<UnidadWs> obtenerArbolUnidadesV2(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception{
+    return obtenerUnidadesEjb.obtenerArbolUnidadesWs(codigo, fechaActualizacion, fechaSincronizacion);
+  }
+
   /**
    * Método que devuelve la lista de {@link es.caib.dir3caib.persistence.model.ws.UnidadTF} a partir del
    * código indicado y que estan vigentes y tienen oficinas. Método que emplea la aplicación SISTRA para
@@ -113,7 +161,23 @@ public class Dir3CaibObtenerUnidadesImpl implements Dir3CaibObtenerUnidadesWs {
   public List<UnidadTF> obtenerArbolUnidadesDestinatarias(String codigo)
       throws Exception {
 
-    return obtenerUnidadesEjb.obtenerArbolUnidadesDestinatarias(codigo);
+    return obtenerUnidadesEjb.obtenerArbolUnidadesDestinatariasTF(codigo);
+  }
+
+  /**
+   * Método que devuelve la lista de {@link es.caib.dir3caib.persistence.model.ws.v2.UnidadWs} a partir del
+   * código indicado y que estan vigentes y tienen oficinas. Método que emplea la aplicación SISTRA para
+   * saber donde enviar un registro telemático.
+   *
+   * @param codigo
+   *          código de la unidad raiz
+   *
+   */
+  @Override
+  public List<UnidadWs> obtenerArbolUnidadesDestinatariasV2(String codigo)
+          throws Exception {
+
+    return obtenerUnidadesEjb.obtenerArbolUnidadesDestinatariasWs(codigo);
   }
 
   /**
@@ -129,7 +193,7 @@ public class Dir3CaibObtenerUnidadesImpl implements Dir3CaibObtenerUnidadesWs {
 
 
   /**
-   * Obtiene los históricos finales de una unidad
+   * Obtiene los históricos finales de una unidad como list de {@link es.caib.dir3caib.persistence.model.ws.UnidadTF}
    *
    * @return
    * @throws Exception
@@ -137,11 +201,24 @@ public class Dir3CaibObtenerUnidadesImpl implements Dir3CaibObtenerUnidadesWs {
   @Override
   public List<UnidadTF> obtenerHistoricosFinales(String codigo) throws Exception {
 
-    return obtenerUnidadesEjb.obtenerHistoricosFinales(codigo);
+    return obtenerUnidadesEjb.obtenerHistoricosFinalesTF(codigo);
+  }
+
+
+  /**
+   * Obtiene los históricos finales de una unidad como list de {@link es.caib.dir3caib.persistence.model.ws.v2.UnidadWs}
+   *
+   * @return
+   * @throws Exception
+   */
+  @Override
+  public List<UnidadWs> obtenerHistoricosFinalesV2(String codigo) throws Exception {
+
+    return obtenerUnidadesEjb.obtenerHistoricosFinalesWs(codigo);
   }
 
    /**
-    * Obtiene los históricos finales de una unidad
+    * Obtiene los históricos finales SIR de una unidad. Es decir, aquellos que tienen oficinas SIR
     *
     * @return
     * @throws Exception
@@ -149,9 +226,19 @@ public class Dir3CaibObtenerUnidadesImpl implements Dir3CaibObtenerUnidadesWs {
    @Override
    public List<UnidadTF> obtenerHistoricosFinalesSIR(String codigo) throws Exception {
 
-      return obtenerUnidadesEjb.obtenerHistoricosFinalesSIR(codigo);
+      return obtenerUnidadesEjb.obtenerHistoricosFinalesSIRTF(codigo);
    }
 
+  /**
+   * Obtiene los históricos finales SIR de una unidad. Es decir, aquellos que tienen oficinas SIR
+   *
+   * @return
+   * @throws Exception
+   */
+  @Override
+  public List<UnidadWs> obtenerHistoricosFinalesSIRV2(String codigo) throws Exception {
 
+    return obtenerUnidadesEjb.obtenerHistoricosFinalesSIRWs(codigo);
+  }
 
 }
