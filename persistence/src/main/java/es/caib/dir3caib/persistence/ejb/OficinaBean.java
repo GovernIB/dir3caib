@@ -404,7 +404,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 	public List<Nodo> hijos(String codigo, String estado, boolean denominacionCooficial) throws Exception {
 
 		Query q = em.createQuery(
-				"Select oficina.codigo, oficina.denominacion, oficina.estado.descripcionEstadoEntidad, oficina.denomcooficial from Oficina as oficina where oficina.codOfiResponsable.codigo =:codigo and oficina.codigo !=:codigo and oficina.estado.codigoEstadoEntidad =:estado order by oficina.codigo");
+				"Select oficina.codigo, oficina.denominacion, oficina.estado.descripcionEstadoEntidad, oficina.denomlenguacooficial from Oficina as oficina where oficina.codOfiResponsable.codigo =:codigo and oficina.codigo !=:codigo and oficina.estado.codigoEstadoEntidad =:estado order by oficina.codigo");
 
 		q.setParameter("codigo", codigo);
 		q.setParameter("estado", estado);
@@ -559,35 +559,39 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 	public List<Oficina> obtenerOficinasSIRUnidad(String codigoUnidad) throws Exception {
 
 		Query q = em.createQuery(
-				"select relacionSirOfi.oficina from RelacionSirOfi as relacionSirOfi where relacionSirOfi.unidad.codigo =:codigoUnidad "
-						+ "and :SERVICIO_SIR_RECEPCION in elements(relacionSirOfi.oficina.servicios) "
+				"select relacionSirOfi.oficina from RelacionSirOfi as relacionSirOfi " +
+				" left outer join relacionSirOfi.oficina.servicios as servicios " +
+						"  where relacionSirOfi.unidad.codigo =:codigoUnidad "
+						+ "and  servicios.servicio=:SERVICIO_SIR_RECEPCION "
 						+ "and relacionSirOfi.estado.codigoEstadoEntidad= :vigente ");
 
 		q.setParameter("codigoUnidad", codigoUnidad);
-		// q.setParameter("SERVICIO_SIR", new
-		// Servicio(Dir3caibConstantes.SERVICIO_SIR));
-		q.setParameter("SERVICIO_SIR_RECEPCION", new CatServicio(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
+		q.setParameter("SERVICIO_SIR_RECEPCION", servicioEjb.findById(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
 		q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
-		return q.getResultList();
+		return q.getResultList() ;
 
 	}
 
 	@Override
 	@SuppressWarnings(value = "unchecked")
-	// TODO OPTIMIZAR, es muy lento
+
 	public Boolean tieneOficinasSIR(String codigoUnidad) throws Exception {
 
 		Query q = em.createQuery(
-				"select count(relacionSirOfi.oficina.id) from RelacionSirOfi as relacionSirOfi where relacionSirOfi.unidad.codigo =:codigoUnidad "
-						+ "and (:SERVICIO_SIR in elements(relacionSirOfi.oficina.servicios) or :SERVICIO_SIR_ENVIO in elements(relacionSirOfi.oficina.servicios) or :SERVICIO_SIR_RECEPCION in elements(relacionSirOfi.oficina.servicios)) "
+				"select count(relacionSirOfi.oficina.codigo) from RelacionSirOfi as relacionSirOfi " +
+						" left outer join relacionSirOfi.oficina.servicios as servicios " +
+						"  where relacionSirOfi.unidad.codigo =:codigoUnidad "
+						+ "and (servicios.servicio=:SERVICIO_SIR or servicios.servicio=:SERVICIO_SIR_ENVIO or servicios.servicio=:SERVICIO_SIR_RECEPCION) "
 						+ "and relacionSirOfi.estado.codigoEstadoEntidad= :vigente ");
 
+
 		q.setParameter("codigoUnidad", codigoUnidad);
-		q.setParameter("SERVICIO_SIR", new CatServicio(Dir3caibConstantes.SERVICIO_SIR));
-		q.setParameter("SERVICIO_SIR_ENVIO", new CatServicio(Dir3caibConstantes.SERVICIO_SIR_ENVIO));
-		q.setParameter("SERVICIO_SIR_RECEPCION", new CatServicio(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
+		q.setParameter("SERVICIO_SIR", servicioEjb.findById(Dir3caibConstantes.SERVICIO_SIR));
+		q.setParameter("SERVICIO_SIR_ENVIO", servicioEjb.findById(Dir3caibConstantes.SERVICIO_SIR_ENVIO));
+		q.setParameter("SERVICIO_SIR_RECEPCION", servicioEjb.findById(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
 		q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+
 
 		Long count = (Long) q.getSingleResult();
 		return count > 0;
@@ -807,7 +811,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 			throws Exception {
 
 		Query q = em.createQuery(
-				"Select oficina.codigo, oficina.denominacion, oficina.estado.descripcionEstadoEntidad, oficina.denomcooficial "
+				"Select oficina.codigo, oficina.denominacion, oficina.estado.descripcionEstadoEntidad, oficina.denomlenguacooficial "
 				+ "from Oficina as oficina where "
 				+ "oficina.codUoResponsable.codigo=:codigo and oficina.estado.codigoEstadoEntidad=:estado "
 				+ "and oficina.codOfiResponsable.codigo is null order by oficina.codigo");
