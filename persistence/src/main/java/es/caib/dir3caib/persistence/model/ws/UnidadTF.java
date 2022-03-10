@@ -3,6 +3,7 @@ package es.caib.dir3caib.persistence.model.ws;
 import es.caib.dir3caib.persistence.model.ContactoUnidadOrganica;
 import es.caib.dir3caib.persistence.model.HistoricoUO;
 import es.caib.dir3caib.persistence.model.Unidad;
+import es.caib.dir3caib.persistence.model.ws.v2.UnidadWs;
 
 import java.io.Serializable;
 import java.util.*;
@@ -44,6 +45,63 @@ public class UnidadTF implements Serializable {
 
     public UnidadTF() {
     }
+
+    public UnidadTF(UnidadTF unidadTF) {
+        codigo = unidadTF.codigo;
+        denominacion = unidadTF.denominacion;
+        codigoEstadoEntidad = unidadTF.codigoEstadoEntidad;
+        nivelJerarquico = unidadTF.nivelJerarquico;
+        codUnidadSuperior = unidadTF.codUnidadSuperior;
+        codUnidadRaiz = unidadTF.codUnidadRaiz;
+        esEdp = unidadTF.esEdp;
+        codEdpPrincipal = unidadTF.codEdpPrincipal;
+        competencias = unidadTF.competencias;
+        fechaAltaOficial = unidadTF.fechaAltaOficial;
+        fechaBajaOficial = unidadTF.fechaBajaOficial;
+        fechaExtincion = unidadTF.fechaExtincion;
+        fechaAnulacion = unidadTF.fechaAnulacion;
+        nivelAdministracion = unidadTF.nivelAdministracion;
+        codigoAmbitoTerritorial = unidadTF.codigoAmbitoTerritorial;
+        codigoAmbPais = unidadTF.codigoAmbPais;
+        codAmbProvincia = unidadTF.codAmbProvincia;
+        codAmbComunidad = unidadTF.codAmbComunidad;
+        descripcionLocalidad = unidadTF.descripcionLocalidad;
+        nombreVia = unidadTF.nombreVia;
+        numVia = unidadTF.numVia;
+        codigoTipoVia = unidadTF.codigoTipoVia;
+        codPostal = unidadTF.codPostal;
+        historicosUO = unidadTF.historicosUO;
+        contactos = unidadTF.contactos;
+    }
+
+
+    /*public UnidadTF(String codigo, String denominacion, String codigoEstadoEntidad, Long nivelJerarquico, String codUnidadSuperior, String codUnidadRaiz, boolean esEdp, String codEdpPrincipal, String competencias, Date fechaAltaOficial, Date fechaBajaOficial, Date fechaExtincion, Date fechaAnulacion, Long nivelAdministracion, String codigoAmbitoTerritorial, Long codigoAmbPais, Long codAmbProvincia, Long codAmbComunidad, String descripcionLocalidad, String nombreVia, String numVia, Long codigoTipoVia, String codPostal, Set<String> historicosUO, List<ContactoTF> contactos) {
+        this.codigo = codigo;
+        this.denominacion = denominacion;
+        this.codigoEstadoEntidad = codigoEstadoEntidad;
+        this.nivelJerarquico = nivelJerarquico;
+        this.codUnidadSuperior = codUnidadSuperior;
+        this.codUnidadRaiz = codUnidadRaiz;
+        this.esEdp = esEdp;
+        this.codEdpPrincipal = codEdpPrincipal;
+        this.competencias = competencias;
+        this.fechaAltaOficial = fechaAltaOficial;
+        this.fechaBajaOficial = fechaBajaOficial;
+        this.fechaExtincion = fechaExtincion;
+        this.fechaAnulacion = fechaAnulacion;
+        this.nivelAdministracion = nivelAdministracion;
+        this.codigoAmbitoTerritorial = codigoAmbitoTerritorial;
+        this.codigoAmbPais = codigoAmbPais;
+        this.codAmbProvincia = codAmbProvincia;
+        this.codAmbComunidad = codAmbComunidad;
+        this.descripcionLocalidad = descripcionLocalidad;
+        this.nombreVia = nombreVia;
+        this.numVia = numVia;
+        this.codigoTipoVia = codigoTipoVia;
+        this.codPostal = codPostal;
+        this.historicosUO = historicosUO;
+        this.contactos = contactos;
+    }*/
 
     public String getCodigo() {
         return codigo;
