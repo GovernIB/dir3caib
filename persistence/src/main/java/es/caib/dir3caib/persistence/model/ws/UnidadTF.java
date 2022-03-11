@@ -4,6 +4,7 @@ import es.caib.dir3caib.persistence.model.ContactoUnidadOrganica;
 import es.caib.dir3caib.persistence.model.HistoricoUO;
 import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.persistence.model.ws.v2.UnidadWs;
+import es.caib.dir3caib.utils.Utils;
 
 import java.io.Serializable;
 import java.util.*;
@@ -74,34 +75,6 @@ public class UnidadTF implements Serializable {
         contactos = unidadTF.contactos;
     }
 
-
-    /*public UnidadTF(String codigo, String denominacion, String codigoEstadoEntidad, Long nivelJerarquico, String codUnidadSuperior, String codUnidadRaiz, boolean esEdp, String codEdpPrincipal, String competencias, Date fechaAltaOficial, Date fechaBajaOficial, Date fechaExtincion, Date fechaAnulacion, Long nivelAdministracion, String codigoAmbitoTerritorial, Long codigoAmbPais, Long codAmbProvincia, Long codAmbComunidad, String descripcionLocalidad, String nombreVia, String numVia, Long codigoTipoVia, String codPostal, Set<String> historicosUO, List<ContactoTF> contactos) {
-        this.codigo = codigo;
-        this.denominacion = denominacion;
-        this.codigoEstadoEntidad = codigoEstadoEntidad;
-        this.nivelJerarquico = nivelJerarquico;
-        this.codUnidadSuperior = codUnidadSuperior;
-        this.codUnidadRaiz = codUnidadRaiz;
-        this.esEdp = esEdp;
-        this.codEdpPrincipal = codEdpPrincipal;
-        this.competencias = competencias;
-        this.fechaAltaOficial = fechaAltaOficial;
-        this.fechaBajaOficial = fechaBajaOficial;
-        this.fechaExtincion = fechaExtincion;
-        this.fechaAnulacion = fechaAnulacion;
-        this.nivelAdministracion = nivelAdministracion;
-        this.codigoAmbitoTerritorial = codigoAmbitoTerritorial;
-        this.codigoAmbPais = codigoAmbPais;
-        this.codAmbProvincia = codAmbProvincia;
-        this.codAmbComunidad = codAmbComunidad;
-        this.descripcionLocalidad = descripcionLocalidad;
-        this.nombreVia = nombreVia;
-        this.numVia = numVia;
-        this.codigoTipoVia = codigoTipoVia;
-        this.codPostal = codPostal;
-        this.historicosUO = historicosUO;
-        this.contactos = contactos;
-    }*/
 
     public String getCodigo() {
         return codigo;
@@ -315,7 +288,7 @@ public class UnidadTF implements Serializable {
         this.contactos = contactoTFList;
     }
 
-    public void rellenar(Unidad unidad) {
+    public void rellenar(Unidad unidad,boolean denominacionOficial) {
         this.setCodigo(unidad.getCodigo());
         this.setCodUnidadRaiz(unidad.getCodUnidadRaiz().getCodigo());
         this.setCodUnidadSuperior(unidad.getCodUnidadSuperior().getCodigo());
@@ -328,6 +301,7 @@ public class UnidadTF implements Serializable {
         }
         this.setCompetencias(unidad.getCompetencias());
         this.setDenominacion(unidad.getDenominacion());
+        this.setDenominacion((denominacionOficial && Utils.isNotEmpty(unidad.getDenomLenguaCooficial())) ? unidad.getDenomLenguaCooficial() : unidad.getDenominacion());
         this.setFechaAltaOficial(unidad.getFechaAltaOficial());
         this.setFechaAnulacion(unidad.getFechaAnulacion());
         this.setFechaBajaOficial(unidad.getFechaBajaOficial());
@@ -382,28 +356,28 @@ public class UnidadTF implements Serializable {
 
     }
 
-    public void rellenarLigero(Unidad unidad) {
+   /* public void rellenarLigero(Unidad unidad) {
         this.setCodigo(unidad.getCodigo());
         this.setDenominacion(unidad.getDenominacion());
-    }
+    }*/
 
 
-    public static UnidadTF generar(Unidad unidad) {
+    public static UnidadTF generar(Unidad unidad,boolean denominacionOficial) {
         UnidadTF unidadTF = null;
         if (unidad != null) {
             unidadTF = new UnidadTF();
-            unidadTF.rellenar(unidad);
+            unidadTF.rellenar(unidad, denominacionOficial);
         }
 
         return unidadTF;
     }
 
-    public static UnidadTF generarLigero(Unidad unidad) {
+    public static UnidadTF generarLigero(Unidad unidad,boolean denominacionOficial) {
         UnidadTF unidadTF = null;
         if (unidad != null) {
             unidadTF = new UnidadTF();
             unidadTF.setCodigo(unidad.getCodigo());
-            unidadTF.setDenominacion(unidad.getDenominacion());
+            unidadTF.setDenominacion((denominacionOficial && Utils.isNotEmpty(unidad.getDenomLenguaCooficial())) ? unidad.getDenomLenguaCooficial() : unidad.getDenominacion());
             unidadTF.setCodUnidadRaiz(unidad.getCodUnidadRaiz().getCodigo());
             unidadTF.setCodUnidadSuperior(unidad.getCodUnidadSuperior().getCodigo());
             unidadTF.setEsEdp(unidad.isEsEdp());

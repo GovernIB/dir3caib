@@ -36,6 +36,27 @@ public class OficinaTF {
     public OficinaTF() {
     }
 
+    public OficinaTF(OficinaTF oficinaTF) {
+        codigo=oficinaTF.codigo;;
+        denominacion=oficinaTF.denominacion;
+        estado=oficinaTF.estado;
+        nivelAdministracion=oficinaTF.nivelAdministracion;
+        tipoOficina=oficinaTF.tipoOficina;
+        codUoResponsable=oficinaTF.codUoResponsable;
+        codOfiResponsable=oficinaTF.codOfiResponsable;
+        sirOfi=oficinaTF.sirOfi;
+        organizativasOfi=oficinaTF.organizativasOfi;
+        codigoPais=oficinaTF.codigoPais;
+        codigoComunidad=oficinaTF.codigoComunidad;
+        descripcionLocalidad=oficinaTF.descripcionLocalidad;
+        nombreVia=oficinaTF.nombreVia;
+        numVia=oficinaTF.numVia;
+        codigoTipoVia=oficinaTF.codigoTipoVia;
+        codPostal=oficinaTF.codPostal;
+        servicios=oficinaTF.servicios;
+        contactos=oficinaTF.contactos;
+    }
+
     public String getCodigo() {
         return codigo;
     }
@@ -224,7 +245,7 @@ public class OficinaTF {
 
     public void rellenar(Oficina oficina, boolean denominacionOficial){
         this.setCodigo(oficina.getCodigo());
-        this.setDenominacion((denominacionOficial && Utils.isNotEmpty(oficina.getDenomlenguacooficial())) ? oficina.getDenomlenguacooficial() : oficina.getDenominacion());
+        this.setDenominacion((denominacionOficial && Utils.isNotEmpty(oficina.getDenomLenguaCooficial())) ? oficina.getDenomLenguaCooficial() : oficina.getDenominacion());
         this.setEstado(oficina.getEstado().getCodigoEstadoEntidad());
         if(oficina.getCodPais()!=null) {
             this.setCodigoPais(oficina.getCodPais().getCodigoPais());

@@ -3,6 +3,7 @@ package es.caib.dir3caib.ws.oficina;
 import es.caib.dir3caib.persistence.ejb.ObtenerOficinasLocal;
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.model.ws.OficinaTF;
+import es.caib.dir3caib.persistence.model.ws.v2.OficinaWs;
 import es.caib.dir3caib.persistence.utils.Versio;
 import es.caib.dir3caib.utils.Configuracio;
 import org.jboss.ejb3.annotation.SecurityDomain;
@@ -66,7 +67,23 @@ public class Dir3CaibObtenerOficinasImpl /* extends CommonMethodsImpl */implemen
   @Override
   public OficinaTF obtenerOficina(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
 
-    return obtenerOficinasEjb.obtenerOficina(codigo, fechaActualizacion,fechaSincronizacion, false);
+    return obtenerOficinasEjb.obtenerOficinaTF(codigo, fechaActualizacion,fechaSincronizacion, false);
+  }
+
+  /**
+   * Obtiene los datos de una {@link es.caib.dir3caib.persistence.model.ws.OficinaTF}  en función del codigo y la
+   * fecha de actualización. Si la fecha de actualización es inferior a la de
+   * importación con Madrid se supone que no ha cambiado y se envia null
+   *
+   * @param codigo
+   *          Código de la oficina
+   * @param fechaActualizacion
+   *          fecha en la que se realiza la actualizacion.
+   */
+  @Override
+  public OficinaWs obtenerOficinaV2(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
+
+    return obtenerOficinasEjb.obtenerOficinaWs(codigo, fechaActualizacion,fechaSincronizacion);
   }
 
   /**
@@ -83,7 +100,24 @@ public class Dir3CaibObtenerOficinasImpl /* extends CommonMethodsImpl */implemen
   public List<OficinaTF> obtenerArbolOficinas(String codigo, Date fechaActualizacion, Date fechaSincronizacion)
       throws Exception {
 
-    return obtenerOficinasEjb.obtenerArbolOficinas(codigo, fechaActualizacion, fechaSincronizacion, false);
+    return obtenerOficinasEjb.obtenerArbolOficinasTF(codigo, fechaActualizacion, fechaSincronizacion, false);
+  }
+
+  /**
+   *
+   * Obtiene todas las {@link es.caib.dir3caib.persistence.model.ws.v2.OficinaWs} cuyo organismo responsable es el indicado por código(son todas padres e hijas).Solo se envian aquellas
+   * que han sido actualizadas controlando que la unidad del código que nos pasan se haya podido actualizar también.
+   * Esto es debido a que cuando en Madrid actualizan una unidad la tendencia es extinguirla y crear una nueva con código diferente.
+   * Esto hace que se tengan que traer las oficinas de la vieja y de la nueva.
+   *
+   * @param codigo             Código del organismo
+   * @param fechaActualizacion fecha en la que se realiza la actualizacion.
+   */
+  @Override
+  public List<OficinaWs> obtenerArbolOficinasV2(String codigo, Date fechaActualizacion, Date fechaSincronizacion)
+          throws Exception {
+
+    return obtenerOficinasEjb.obtenerArbolOficinasWs(codigo, fechaActualizacion, fechaSincronizacion);
   }
 
   /**
@@ -96,7 +130,20 @@ public class Dir3CaibObtenerOficinasImpl /* extends CommonMethodsImpl */implemen
   @Override
   public List<OficinaTF> obtenerOficinasSIRUnidad(String codigoUnidad)
       throws Exception{
-      return obtenerOficinasEjb.obtenerOficinasSIRUnidad(codigoUnidad, false);
+      return obtenerOficinasEjb.obtenerOficinasSIRUnidadTF(codigoUnidad, false);
+  }
+
+  /**
+   * Obtiene el listado de oficinas Sir de una Unidad
+   *
+   * @param codigoUnidad
+   *          Código de la unidad
+   *
+   */
+  @Override
+  public List<OficinaWs> obtenerOficinasSIRUnidadV2(String codigoUnidad)
+          throws Exception{
+    return obtenerOficinasEjb.obtenerOficinasSIRUnidadWs(codigoUnidad);
   }
 
   /**
