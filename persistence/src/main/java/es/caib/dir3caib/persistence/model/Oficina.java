@@ -32,7 +32,7 @@ public class Oficina implements Serializable {
 
 	private String codigo;
 	private String denominacion;
-    private String denomlenguacooficial;
+    private String denomLenguaCooficial;
     private int idiomalengua;
 	private CatEstadoEntidad estado;
 	private CatNivelAdministracion nivelAdministracion;
@@ -130,13 +130,16 @@ public class Oficina implements Serializable {
   }
 
   @Column(name = "DENOMCOOFICIAL", length = 300)
-  public String getDenomlenguacooficial() {
-    return denomlenguacooficial;
+  public String getDenomLenguaCooficial() {
+    return denomLenguaCooficial;
   }
 
-  public void setDenomlenguacooficial(String denomlenguacooficial) {
-    this.denomlenguacooficial = denomlenguacooficial;
+  public void setDenomLenguaCooficial(String denomLenguaCooficial) {
+    this.denomLenguaCooficial = denomLenguaCooficial;
   }
+
+
+
 
   @Column(name = "IDIOMALENGUA")
   @JsonIgnore

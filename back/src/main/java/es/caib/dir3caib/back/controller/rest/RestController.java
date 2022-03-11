@@ -8,6 +8,7 @@ import es.caib.dir3caib.persistence.model.json.PaisJson;
 import es.caib.dir3caib.persistence.utils.CodigoValor;
 import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.ObjetoDirectorio;
+import es.caib.dir3caib.utils.Utils;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -502,7 +503,7 @@ public class RestController {
         for (Oficina oficina : resultados) {
             ObjetoDirectorio objetoDirectorio = new ObjetoDirectorio();
             objetoDirectorio.setCodigo(oficina.getCodigo());
-            objetoDirectorio.setDenominacion((denominacionCooficial && !oficina.getDenomlenguacooficial().isEmpty()) ? oficina.getDenomlenguacooficial() : oficina.getDenominacion());
+            objetoDirectorio.setDenominacion((denominacionCooficial && Utils.isNotEmpty(oficina.getDenomLenguaCooficial())) ? oficina.getDenomLenguaCooficial() : oficina.getDenominacion());
             objetoDirectorios.add(objetoDirectorio);
         }
 
@@ -538,7 +539,7 @@ public class RestController {
             OficinaJson oficinaJson = new OficinaJson();
             oficinaJson.setCodigoDir3(ofi.getCodigo());
             oficinaJson.setDenominacion(ofi.getDenominacion());
-            oficinaJson.setDenominacionCooficial(ofi.getDenomlenguacooficial());
+            oficinaJson.setDenominacionCooficial(ofi.getDenomLenguaCooficial());
             oficinaJson.setEstado(ofi.getEstado().getDescripcionEstadoEntidad());
             oficinaJson.setNivelAdministracion(ofi.getNivelAdministracion().getDescripcionNivelAdministracion());
 

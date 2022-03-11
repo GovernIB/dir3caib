@@ -275,7 +275,7 @@ public class ImportadorOficinasBean extends ImportadorBase implements Importador
         // atributos directos
         oficina.setComplemento(fila[23].trim());
         oficina.setDenominacion(fila[1].trim());
-        oficina.setDenomlenguacooficial(fila[2].trim());
+        oficina.setDenomLenguaCooficial(fila[2].trim());
         oficina.setIdiomalengua(!fila[3].isEmpty()?Integer.parseInt(fila[3].trim()):0);
         oficina.setFuenteExterna(fila[12].trim());
         oficina.setDiasSinHabiles(fila[14].trim());
