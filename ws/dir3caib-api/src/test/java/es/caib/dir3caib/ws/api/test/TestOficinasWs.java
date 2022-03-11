@@ -3,6 +3,7 @@ package es.caib.dir3caib.ws.api.test;
 import es.caib.dir3caib.ws.api.oficina.ContactoTF;
 import es.caib.dir3caib.ws.api.oficina.Dir3CaibObtenerOficinasWs;
 import es.caib.dir3caib.ws.api.oficina.OficinaTF;
+import es.caib.dir3caib.ws.api.unidad.Dir3CaibObtenerUnidadesWs;
 import org.junit.Test;
 
 import java.sql.Timestamp;
@@ -18,12 +19,12 @@ public class TestOficinasWs extends Dir3CaibTestUtils {
 
 
     //Descomentar cuando regeneremos la api ws ccn contactos
-    //@Test
+    @Test
     public void obtenerOficina() {
         try {
             Dir3CaibObtenerOficinasWs apiOficinas = getObtenerOficinasApi(true);
             // OficinaTF oficinaTF = apiOficinas.obtenerOficina("O00015341", null, null);
-            OficinaTF oficinaTF = apiOficinas.obtenerOficina("O00023131", null, null);
+            OficinaTF oficinaTF = apiOficinas.obtenerOficina("O00020952", null, null);
 
             if (oficinaTF != null) {
                 System.out.println(oficinaTF.getCodigo() + "\t\t"
@@ -42,7 +43,7 @@ public class TestOficinasWs extends Dir3CaibTestUtils {
 
 
     @Test
-    public void testOficinaUnidadExtinguida() {
+    public void testOficinaExtinguida() {
         try {
             Dir3CaibObtenerOficinasWs apiOficinas = getObtenerOficinasApi(true);
             OficinaTF oficinaTF = apiOficinas.obtenerOficina("O00023131", null, null);
@@ -108,7 +109,7 @@ public class TestOficinasWs extends Dir3CaibTestUtils {
         try {
             Dir3CaibObtenerOficinasWs apiOficinas = getObtenerOficinasApi(true);
             //Sincro
-             List<OficinaTF> oficinas = apiOficinas.obtenerArbolOficinas("A04059164", null, null);
+             List<OficinaTF> oficinas = apiOficinas.obtenerArbolOficinas("A04019281", null, null);
 
             System.out.println(oficinas.size());
             for(OficinaTF ofi: oficinas ){
@@ -128,7 +129,8 @@ public class TestOficinasWs extends Dir3CaibTestUtils {
         try {
             Dir3CaibObtenerOficinasWs apiOficinas = getObtenerOficinasApi(true);
 
-            List<OficinaTF> oficinas = apiOficinas.obtenerOficinasSIRUnidad("EA0012602v1");
+            List<OficinaTF> oficinas = apiOficinas.obtenerOficinasSIRUnidad("E03139201v1");
+           // List<OficinaTF> oficinas = apiOficinas.obtenerOficinasSIRUnidad("A04031681v1");
           //  List<OficinaTF> oficinas = apiOficinas.obtenerOficinasSIRUnidad("A04009905");
             System.out.println(oficinas.size());
             for(OficinaTF ofiTF: oficinas){
@@ -141,5 +143,16 @@ public class TestOficinasWs extends Dir3CaibTestUtils {
             e.printStackTrace();
         }
 
+    }
+
+    @Test
+    public void obtenerFechaUltimaActualizacion() {
+        try {
+            Dir3CaibObtenerOficinasWs apiOficinas = getObtenerOficinasApi(true);
+            Date fecha = apiOficinas.obtenerFechaUltimaActualizacion();
+            System.out.println(fecha);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
