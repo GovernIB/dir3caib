@@ -117,12 +117,24 @@ public class Unidad implements Serializable {
   public Unidad(String codigo, String denominacion) {
     this.codigo = codigo;
     this.denominacion = denominacion;
+    
+    if (codigo.indexOf("v") > 0) {
+		String[] codigoSeparado = codigo.split("v");
+		this.codigoDir3 = codigoSeparado[0];
+	    this.version = Long.parseLong(codigoSeparado[1]);
+	}
   }
 
   public Unidad(String codigo, String denominacion, String codUnidadRaiz) {
     this.codigo = codigo;
     this.denominacion = denominacion;
     this.codUnidadRaiz = new Unidad(codUnidadRaiz);
+    
+    if (codigo.indexOf("v") > 0) {
+		String[] codigoSeparado = codigo.split("v");
+		this.codigoDir3 = codigoSeparado[0];
+	    this.version = Long.parseLong(codigoSeparado[1]);
+	}
   }
 
   public Unidad(String codigo, String denominacion, Unidad codUnidadRaiz, Unidad codUnidadSuperior, boolean esEdp) {
@@ -131,6 +143,12 @@ public class Unidad implements Serializable {
     this.codUnidadSuperior = codUnidadSuperior;
     this.codUnidadRaiz = codUnidadRaiz;
     this.esEdp = esEdp;
+    
+    if (codigo.indexOf("v") > 0) {
+		String[] codigoSeparado = codigo.split("v");
+		this.codigoDir3 = codigoSeparado[0];
+	    this.version = Long.parseLong(codigoSeparado[1]);
+	}
   }
 
    public Unidad(String codigo, String denominacion, String codUnidadRaiz, String codUnidadSuperior, boolean esEdp) {
@@ -139,6 +157,12 @@ public class Unidad implements Serializable {
       this.codUnidadSuperior = new Unidad(codUnidadSuperior);
       this.codUnidadRaiz = new Unidad(codUnidadRaiz);
       this.esEdp = esEdp;
+      
+      if (codigo.indexOf("v") > 0) {
+  		String[] codigoSeparado = codigo.split("v");
+  		this.codigoDir3 = codigoSeparado[0];
+  	    this.version = Long.parseLong(codigoSeparado[1]);
+  	  }
    }
 
   public Unidad(String codigo) {
