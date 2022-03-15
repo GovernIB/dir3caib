@@ -29,6 +29,8 @@ public class TestOficinasV2Ws extends Dir3CaibTestUtils{
                         + oficinaWs.getDenominacion());
                 System.out.println(oficinaWs.getCodigo() + "\t\t"
                         + oficinaWs.getDenomLenguaCooficial());
+                System.out.println(oficinaWs.getFuenteExterna());
+                System.out.println(oficinaWs.getVersionUoResponsable());
                 System.out.println("SIZE: " + oficinaWs.getContactos().size());
                 for (ContactoTF contactoTF : oficinaWs.getContactos()) {
                     System.out.println(contactoTF.getTipoContacto() + "\t\t"
