@@ -51,19 +51,13 @@ public class CatEstadoEntidadBean extends BaseEjbJPA<CatEstadoEntidad, String> i
     
     @Override
     @SuppressWarnings(value = "unchecked")
-    public List<CatEstadoEntidad> getAll(String estado) throws Exception {
-    	
-    	String where = "";
-    	if(Utils.isNotEmpty(estado)) {
-    		where = " where catEstadoEntidad.estado = :estado ";
-    	}
-    	
-    	Query q = em.createQuery("Select catEstadoEntidad from CatEstadoEntidad as catEstadoEntidad " + where + " order by catEstadoEntidad.codigoEstadoEntidad");
-    	
-    	if(where!="")
-    		q.setParameter(":estado", estado);
-    	
-        return q.getResultList();
+    public List<CatEstadoEntidad> getByEstado(String estado) throws Exception {
+
+       Query q =  em.createQuery("Select catEstadoEntidad from CatEstadoEntidad as catEstadoEntidad where catEstadoEntidad.codigoEstadoEntidad=:estado order by catEstadoEntidad.codigoEstadoEntidad");
+
+       q.setParameter("estado" , estado);
+
+       return q.getResultList();
     }
 
     @Override

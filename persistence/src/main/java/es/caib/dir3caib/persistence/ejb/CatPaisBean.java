@@ -51,17 +51,10 @@ public class CatPaisBean extends BaseEjbJPA<CatPais, Long> implements CatPaisLoc
     
     @Override
     @SuppressWarnings(value = "unchecked")
-    public List<CatPais> getAll(String estado) throws Exception {
+    public List<CatPais> getByEstado(String estado) throws Exception {
 
-    	String where = "";
-    	if (Utils.isNotEmpty(estado)) {
-    		where = " where catPais.estado = :estado ";
-    	}
-    	
-    	Query q = em.createQuery("Select catPais from CatPais as catPais " + where + " order by catPais.codigoPais");
-    	
-    	if(where != "")
-    		q.setParameter("estado", estado);
+        Query q = em.createQuery("Select catPais from CatPais as catPais where catPais.estado.codigoEstadoEntidad=:estado order by catPais.codigoPais");
+        q.setParameter("estado", estado);
     	
         return q.getResultList();
     }

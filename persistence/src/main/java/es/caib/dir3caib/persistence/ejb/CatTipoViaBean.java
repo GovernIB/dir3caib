@@ -51,17 +51,10 @@ public class CatTipoViaBean extends BaseEjbJPA<CatTipoVia, Long> implements CatT
     
     @Override
     @SuppressWarnings(value = "unchecked")
-    public List<CatTipoVia> getAll(String estado) throws Exception {
+    public List<CatTipoVia> getByEstado(String estado) throws Exception {
 
-    	String where = "";
-    	if(Utils.isNotEmpty(estado)) {
-    		where = " where catTipoVia.estado = :estado ";
-    	}
-    	
-    	Query q = em.createQuery("Select catTipoVia from CatTipoVia as catTipoVia " + where + " order by catTipoVia.codigoTipoVia");
-    	
-    	if(where!="")
-    		q.setParameter("estado", estado);
+        Query q = em.createQuery("Select catTipoVia from CatTipoVia as catTipoVia where catTipoVia.estado.codigoEstadoEntidad=:estado order by catTipoVia.codigoTipoVia");
+        q.setParameter("estado", estado);
     	
         return q.getResultList();
     }

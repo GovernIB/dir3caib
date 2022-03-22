@@ -18,5 +18,5 @@ public interface CatEstadoEntidadLocal extends BaseEjb<CatEstadoEntidad, String>
   CatEstadoEntidad findByCodigo(String codigo) throws Exception;
   void deleteAll() throws Exception;
   
-  List<CatEstadoEntidad> getAll(String estado) throws Exception;
+  List<CatEstadoEntidad> getByEstado(String estado) throws Exception;
 }

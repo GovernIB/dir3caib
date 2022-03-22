@@ -51,18 +51,11 @@ public class CatNivelAdministracionBean extends BaseEjbJPA<CatNivelAdministracio
     
     @Override
     @SuppressWarnings(value = "unchecked")
-    public List<CatNivelAdministracion> getAll(String estado) throws Exception {
-    	
-    	String where = "";
-    	if (Utils.isNotEmpty(estado)) {
-    		where = " where catNivelAdministracion.estado = :estado ";
-    	}
+    public List<CatNivelAdministracion> getByEstado(String estado) throws Exception {
 
-    	Query q = em.createQuery("Select catNivelAdministracion from CatNivelAdministracion as catNivelAdministracion " + where + " order by catNivelAdministracion.codigoNivelAdministracion");
-    	
-    	if (where != "")
-    		q.setParameter("estado", estado);
-    	
+        Query q = em.createQuery("Select catNivelAdministracion from CatNivelAdministracion as catNivelAdministracion where catNivelAdministracion.estado.codigoEstadoEntidad=:estado order by catNivelAdministracion.codigoNivelAdministracion");
+    	q.setParameter("estado", estado);
+
         return  q.getResultList();
     }
 

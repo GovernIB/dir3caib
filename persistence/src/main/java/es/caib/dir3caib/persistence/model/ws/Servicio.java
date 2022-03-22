@@ -39,4 +39,20 @@ public class Servicio  {
         }
         return servicio;
     }
+
+
+    public void rellenar(es.caib.dir3caib.persistence.model.CatServicioUO catServicioUo) {
+
+        this.setCodServicio(catServicioUo.getCodServicio());
+        this.setDescServicio(catServicioUo.getDescServicio());
+
+    }
+
+    public static Servicio generar(es.caib.dir3caib.persistence.model.CatServicioUO catServicioUO) {
+        Servicio servicio = new Servicio();
+        if (catServicioUO != null) {
+            servicio.rellenar(catServicioUO);
+        }
+        return servicio;
+    }
 }

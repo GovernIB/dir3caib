@@ -17,6 +17,6 @@ public interface CatEntidadGeograficaLocal extends BaseEjb<CatEntidadGeografica,
   
   void deleteAll() throws Exception;
 
-  List<CatEntidadGeografica> getAll(String estado) throws Exception;
+  List<CatEntidadGeografica> getByEstado(String estado) throws Exception;
   
 }

@@ -3,6 +3,7 @@ package es.caib.dir3caib.ws.api.catalogo;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -34,6 +35,9 @@ import javax.xml.bind.annotation.XmlType;
     "alfa3Pais",
     "codigoPais",
     "descripcionPais"
+})
+@XmlSeeAlso({
+    CatPaisWs.class
 })
 public class CatPais {
 

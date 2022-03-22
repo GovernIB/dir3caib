@@ -51,19 +51,11 @@ public class CatEntidadGeograficaBean extends BaseEjbJPA<CatEntidadGeografica, S
     
     @Override
     @SuppressWarnings(value = "unchecked")
-    public List<CatEntidadGeografica> getAll(String estado) throws Exception {
-
-    	String where = "";
-    	if(Utils.isNotEmpty(estado)) {
-    		where = " where catEntidadGeografica.estado = :estado ";
-    	}
+    public List<CatEntidadGeografica> getByEstado(String estado) throws Exception {
+        Query q = em.createQuery("Select catEntidadGeografica from CatEntidadGeografica as catEntidadGeografica where catEntidadGeografica.estado.codigoEstadoEntidad=:estado order by catEntidadGeografica.codigoEntidadGeografica");
+        q.setParameter("estado", estado);
     	
-    	Query q = em.createQuery("Select catEntidadGeografica from CatEntidadGeografica as catEntidadGeografica " + where + " order by catEntidadGeografica.codigoEntidadGeografica");
-        
-    	if(where != "")
-    		q.setParameter("estado", estado);
-    	
-    	return q.getResultList();
+        return q.getResultList();
     }
 
     @Override
