@@ -17,5 +17,5 @@ public interface CatTipoViaLocal extends BaseEjb<CatTipoVia, Long> {
   
   void deleteAll() throws Exception;
 
-  List<CatTipoVia> getAll(String estado) throws Exception;
+  List<CatTipoVia> getByEstado(String estado) throws Exception;
 }

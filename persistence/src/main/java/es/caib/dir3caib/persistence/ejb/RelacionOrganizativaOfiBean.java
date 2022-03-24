@@ -118,7 +118,7 @@ public class RelacionOrganizativaOfiBean extends BaseEjbJPA<RelacionOrganizativa
     @SuppressWarnings("unchecked")
     @Override
     public List<Nodo> getOrganizativasByUnidadEstado(String codigo, String estado, boolean denominacionCooficial) throws Exception {
-        Query q = em.createQuery("Select relacionOrganizativaOfi.oficina.codigo, relacionOrganizativaOfi.oficina.denominacion, relacionOrganizativaOfi.oficina.denomlenguacooficial "
+        Query q = em.createQuery("Select relacionOrganizativaOfi.oficina.codigo, relacionOrganizativaOfi.oficina.denominacion, relacionOrganizativaOfi.oficina.denomLenguaCooficial "
         		+ "from RelacionOrganizativaOfi as relacionOrganizativaOfi where relacionOrganizativaOfi.unidad.codigo =:codigo and relacionOrganizativaOfi.estado.codigoEstadoEntidad =:estado "
                 + "order by relacionOrganizativaOfi.oficina.codigo");
 
@@ -137,7 +137,7 @@ public class RelacionOrganizativaOfiBean extends BaseEjbJPA<RelacionOrganizativa
     public List<RelacionOrganizativaOfi> getOrganizativasCompletoByUnidadEstado(String codigo, String estado, boolean denominacionCooficial) throws Exception {
         Query q = em.createQuery("Select relacionOrganizativaOfi.oficina.codigo, relacionOrganizativaOfi.oficina.denominacion, " +
                 "relacionOrganizativaOfi.oficina.codUoResponsable.codigo, relacionOrganizativaOfi.unidad.codigo, " +
-                "relacionOrganizativaOfi.unidad.codUnidadRaiz.codigo, relacionOrganizativaOfi.oficina.denomlenguacooficial " +
+                "relacionOrganizativaOfi.unidad.codUnidadRaiz.codigo, relacionOrganizativaOfi.oficina.denomLenguaCooficial " +
                 "from RelacionOrganizativaOfi as relacionOrganizativaOfi where " +
         		"relacionOrganizativaOfi.unidad.codUnidadRaiz.codigo =:codigo and relacionOrganizativaOfi.estado.codigoEstadoEntidad =:estado " +
         		"order by relacionOrganizativaOfi.oficina.codigo");

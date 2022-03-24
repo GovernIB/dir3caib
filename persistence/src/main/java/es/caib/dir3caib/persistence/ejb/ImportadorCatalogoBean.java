@@ -164,13 +164,6 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                     		String codigoEstado = fila[0];
                     		String codigoEstadoEstadoEntidad = fila[2];
                     		
-                    		CatEstadoEntidad estadoEstadoEntidad = cacheEstadoEntidad.get(codigoEstadoEstadoEntidad);
-                    		
-                    		/*if (estadoEstadoEntidad == null) {
-                    			estadoEstadoEntidad = nuevoEstadoEntidadVacio(codigoEstadoEstadoEntidad);
-                    			cacheEstadoEntidad.put(codigoEstadoEstadoEntidad,estadoEstadoEntidad);
-                    		}*/
-                    		
                     		CatEstadoEntidad estadoEntidad = cacheEstadoEntidad.get(codigoEstado);
                     		
                     		if (estadoEntidad == null) {

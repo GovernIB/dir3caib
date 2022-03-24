@@ -118,7 +118,7 @@ public class RelacionSirOfiBean extends BaseEjbJPA<RelacionSirOfi, Long>
     
    public List<RelacionSirOfi> relacionesSirOfiByUnidaddEstado(String codigo, String estado, boolean denominacionCooficial) throws Exception {
       Query q = em.createQuery("Select relacionSirOfi.oficina.codigo, relacionSirOfi.oficina.denominacion, " +
-              "relacionSirOfi.oficina.codUoResponsable.codigo, relacionSirOfi.unidad.codigo, relacionSirOfi.oficina.denomlenguacooficial " +
+              "relacionSirOfi.oficina.codUoResponsable.codigo, relacionSirOfi.unidad.codigo, relacionSirOfi.oficina.denomLenguaCooficial " +
               "from RelacionSirOfi as relacionSirOfi where relacionSirOfi.unidad.codUnidadRaiz.codigo =:codigo " +
               "and relacionSirOfi.estado.codigoEstadoEntidad =:estado order by relacionSirOfi.oficina.codigo");
 

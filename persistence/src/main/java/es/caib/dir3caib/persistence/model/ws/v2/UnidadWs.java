@@ -77,7 +77,7 @@ public class UnidadWs extends es.caib.dir3caib.persistence.model.ws.UnidadTF {
     }
 
     public void rellenar(Unidad unidad) {
-        super.rellenar(unidad);
+        super.rellenar(unidad,false);
         this.setDenomLenguaCooficial(unidad.getDenomLenguaCooficial());
         this.setIdiomalengua(unidad.getIdiomalengua());
         this.setVersion(unidad.getVersion());

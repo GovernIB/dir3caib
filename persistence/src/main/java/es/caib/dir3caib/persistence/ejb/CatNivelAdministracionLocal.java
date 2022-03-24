@@ -17,6 +17,6 @@ public interface CatNivelAdministracionLocal extends BaseEjb<CatNivelAdministrac
   
   void deleteAll() throws Exception;
   
-  List<CatNivelAdministracion> getAll(String estado) throws Exception;
+  List<CatNivelAdministracion> getByEstado(String estado) throws Exception;
   
 }

@@ -42,8 +42,8 @@ public class Dir3caibConstantes {
     public static final String CAT_SERVICIOS = "CAT_SERVICIOS.CSV";
     public static final String CAT_SERVICIOS_UO = "CAT_SERVICIOS_UO.CSV";
     public static final String[] CAT_FICHEROS = {
-    		CAT_ENTIDAD_GEOGRAFICA, 
-    		CAT_ESTADO_ENTIDAD, 
+            CAT_ESTADO_ENTIDAD,
+    		CAT_ENTIDAD_GEOGRAFICA,
     		CAT_JERARQUIA_OFICINA, 
     		CAT_MOTIVO_EXTINCION, 
     		CAT_NIVEL_ADMINISTRACION, 

@@ -51,17 +51,10 @@ public class CatProvinciaBean extends BaseEjbJPA<CatProvincia, Long> implements 
     
     @Override
     @SuppressWarnings(value = "unchecked")
-    public List<CatProvincia> getAll(String estado) throws Exception {
-    	
-    	String where = "";
-    	if(Utils.isNotEmpty(estado)) {
-    		where = " where catProvincia.estado = :estado ";
-    	}
+    public List<CatProvincia> getByEstado(String estado) throws Exception {
 
-    	Query q =  em.createQuery("Select catProvincia from CatProvincia as catProvincia " + where + " order by catProvincia.codigoProvincia");
-
-    	if(where != "")
-    		q.setParameter("estado", estado);
+        Query q = em.createQuery("Select catProvincia from CatProvincia as catProvincia where catProvincia.estado.codigoEstadoEntidad=:estado order by catProvincia.codigoProvincia");
+        q.setParameter("estado", estado);
     	
         return q.getResultList();
     }

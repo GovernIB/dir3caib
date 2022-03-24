@@ -2,6 +2,7 @@ package es.caib.dir3caib.ws.oficina;
 
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.model.ws.OficinaTF;
+import es.caib.dir3caib.persistence.model.ws.v2.OficinaWs;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
@@ -37,13 +38,27 @@ public interface Dir3CaibObtenerOficinasWs /* extends CommonMethods */{
 
   @WebMethod
   @RolesAllowed({Dir3caibConstantes.DIR_WS})
+  OficinaWs obtenerOficinaV2(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception;
+
+  @WebMethod
+  @RolesAllowed({Dir3caibConstantes.DIR_WS})
   List<OficinaTF> obtenerArbolOficinas(String codigo, Date fechaActualizacion, Date fechaSincronizacion)
       throws Exception;
 
   @WebMethod
   @RolesAllowed({Dir3caibConstantes.DIR_WS})
+  List<OficinaWs> obtenerArbolOficinasV2(String codigo, Date fechaActualizacion, Date fechaSincronizacion)
+          throws Exception;
+
+  @WebMethod
+  @RolesAllowed({Dir3caibConstantes.DIR_WS})
   List<OficinaTF> obtenerOficinasSIRUnidad(String codigoUnidad)
       throws Exception;
+
+  @WebMethod
+  @RolesAllowed({Dir3caibConstantes.DIR_WS})
+  List<OficinaWs> obtenerOficinasSIRUnidadV2(String codigoUnidad)
+          throws Exception;
 
   @WebMethod
   @RolesAllowed({Dir3caibConstantes.DIR_WS})

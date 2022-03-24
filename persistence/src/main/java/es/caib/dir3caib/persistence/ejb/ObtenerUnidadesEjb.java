@@ -59,7 +59,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
     @Override
     public UnidadTF obtenerUnidadTF(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
         Unidad unidad = obtenerUnidad(codigo,fechaActualizacion,fechaSincronizacion);
-        return UnidadTF.generar(unidad);
+        return UnidadTF.generar(unidad,false);
 
     }
 
@@ -83,7 +83,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
     @Override
     public UnidadTF buscarUnidadTF(String codigo) throws Exception {
         Unidad unidad = buscarUnidad(codigo);
-        return UnidadTF.generar(unidad);
+        return UnidadTF.generar(unidad, false);
     }
 
     /**
@@ -141,7 +141,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
         List<UnidadTF> arbolTF = new ArrayList<UnidadTF>();
         List<Unidad> arbolUnidades = obtenerArbolUnidades(codigo, fechaActualizacion, fechaSincronizacion);
         for (Unidad uni : arbolUnidades) {
-            arbolTF.add(UnidadTF.generar(uni));
+            arbolTF.add(UnidadTF.generar(uni,false));
         }
          return arbolTF;
 
@@ -284,7 +284,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
 
 
         for (Unidad unidad : arbol) {
-            arbolTF.add(UnidadTF.generarLigero(unidad));
+            arbolTF.add(UnidadTF.generarLigero(unidad,false));
         }
 
         return arbolTF;
@@ -340,7 +340,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
         List<UnidadTF> historicosFinalesList = new ArrayList<UnidadTF>();
         Set<Unidad> historicosFinales = obtenerHistoricosFinales(codigo);
         for (Unidad uni : historicosFinales) {
-            historicosFinalesList.add(UnidadTF.generar(uni));
+            historicosFinalesList.add(UnidadTF.generar(uni,false));
         }
         return historicosFinalesList;
 
@@ -378,7 +378,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
         Set<Unidad> historicosFinalesSIR = obtenerHistoricosFinalesSIR(codigo);
         List<UnidadTF> historicosFinales = new ArrayList<>();
         for(Unidad uni: historicosFinalesSIR){
-            historicosFinales.add(UnidadTF.generar(uni));
+            historicosFinales.add(UnidadTF.generar(uni,false));
         }
         return historicosFinales;
     }

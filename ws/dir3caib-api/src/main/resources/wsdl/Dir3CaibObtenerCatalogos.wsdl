@@ -7,23 +7,82 @@
 <xs:element name="getVersionWs" type="tns:getVersionWs"/>
 <xs:element name="getVersionWsResponse" type="tns:getVersionWsResponse"/>
 <xs:element name="obtenerCatComunidadAutonoma" type="tns:obtenerCatComunidadAutonoma"/>
+<xs:element name="obtenerCatComunidadAutonomaByEstado" type="tns:obtenerCatComunidadAutonomaByEstado"/>
+<xs:element name="obtenerCatComunidadAutonomaByEstadoResponse" type="tns:obtenerCatComunidadAutonomaByEstadoResponse"/>
 <xs:element name="obtenerCatComunidadAutonomaResponse" type="tns:obtenerCatComunidadAutonomaResponse"/>
+<xs:element name="obtenerCatComunidadAutonomaV2" type="tns:obtenerCatComunidadAutonomaV2"/>
+<xs:element name="obtenerCatComunidadAutonomaV2Response" type="tns:obtenerCatComunidadAutonomaV2Response"/>
 <xs:element name="obtenerCatEntidadGeografica" type="tns:obtenerCatEntidadGeografica"/>
+<xs:element name="obtenerCatEntidadGeograficaByEstado" type="tns:obtenerCatEntidadGeograficaByEstado"/>
+<xs:element name="obtenerCatEntidadGeograficaByEstadoResponse" type="tns:obtenerCatEntidadGeograficaByEstadoResponse"/>
 <xs:element name="obtenerCatEntidadGeograficaResponse" type="tns:obtenerCatEntidadGeograficaResponse"/>
+<xs:element name="obtenerCatEntidadGeograficaV2" type="tns:obtenerCatEntidadGeograficaV2"/>
+<xs:element name="obtenerCatEntidadGeograficaV2Response" type="tns:obtenerCatEntidadGeograficaV2Response"/>
 <xs:element name="obtenerCatEstadoEntidad" type="tns:obtenerCatEstadoEntidad"/>
+<xs:element name="obtenerCatEstadoEntidadByEstado" type="tns:obtenerCatEstadoEntidadByEstado"/>
+<xs:element name="obtenerCatEstadoEntidadByEstadoResponse" type="tns:obtenerCatEstadoEntidadByEstadoResponse"/>
 <xs:element name="obtenerCatEstadoEntidadResponse" type="tns:obtenerCatEstadoEntidadResponse"/>
+<xs:element name="obtenerCatEstadoEntidadV2" type="tns:obtenerCatEstadoEntidadV2"/>
+<xs:element name="obtenerCatEstadoEntidadV2Response" type="tns:obtenerCatEstadoEntidadV2Response"/>
 <xs:element name="obtenerCatLocalidad" type="tns:obtenerCatLocalidad"/>
+<xs:element name="obtenerCatLocalidadByEstado" type="tns:obtenerCatLocalidadByEstado"/>
+<xs:element name="obtenerCatLocalidadByEstadoResponse" type="tns:obtenerCatLocalidadByEstadoResponse"/>
 <xs:element name="obtenerCatLocalidadResponse" type="tns:obtenerCatLocalidadResponse"/>
+<xs:element name="obtenerCatLocalidadV2" type="tns:obtenerCatLocalidadV2"/>
+<xs:element name="obtenerCatLocalidadV2Response" type="tns:obtenerCatLocalidadV2Response"/>
 <xs:element name="obtenerCatNivelAdministracion" type="tns:obtenerCatNivelAdministracion"/>
+<xs:element name="obtenerCatNivelAdministracionByEstado" type="tns:obtenerCatNivelAdministracionByEstado"/>
+<xs:element name="obtenerCatNivelAdministracionByEstadoResponse" type="tns:obtenerCatNivelAdministracionByEstadoResponse"/>
 <xs:element name="obtenerCatNivelAdministracionResponse" type="tns:obtenerCatNivelAdministracionResponse"/>
+<xs:element name="obtenerCatNivelAdministracionV2" type="tns:obtenerCatNivelAdministracionV2"/>
+<xs:element name="obtenerCatNivelAdministracionV2Response" type="tns:obtenerCatNivelAdministracionV2Response"/>
 <xs:element name="obtenerCatPais" type="tns:obtenerCatPais"/>
+<xs:element name="obtenerCatPaisByEstado" type="tns:obtenerCatPaisByEstado"/>
+<xs:element name="obtenerCatPaisByEstadoResponse" type="tns:obtenerCatPaisByEstadoResponse"/>
 <xs:element name="obtenerCatPaisResponse" type="tns:obtenerCatPaisResponse"/>
+<xs:element name="obtenerCatPaisV2" type="tns:obtenerCatPaisV2"/>
+<xs:element name="obtenerCatPaisV2Response" type="tns:obtenerCatPaisV2Response"/>
 <xs:element name="obtenerCatProvincia" type="tns:obtenerCatProvincia"/>
+<xs:element name="obtenerCatProvinciaByEstado" type="tns:obtenerCatProvinciaByEstado"/>
+<xs:element name="obtenerCatProvinciaByEstadoResponse" type="tns:obtenerCatProvinciaByEstadoResponse"/>
 <xs:element name="obtenerCatProvinciaResponse" type="tns:obtenerCatProvinciaResponse"/>
+<xs:element name="obtenerCatProvinciaV2" type="tns:obtenerCatProvinciaV2"/>
+<xs:element name="obtenerCatProvinciaV2Response" type="tns:obtenerCatProvinciaV2Response"/>
 <xs:element name="obtenerCatServicio" type="tns:obtenerCatServicio"/>
 <xs:element name="obtenerCatServicioResponse" type="tns:obtenerCatServicioResponse"/>
+<xs:element name="obtenerCatServicioUO" type="tns:obtenerCatServicioUO"/>
+<xs:element name="obtenerCatServicioUOResponse" type="tns:obtenerCatServicioUOResponse"/>
 <xs:element name="obtenerCatTipoVia" type="tns:obtenerCatTipoVia"/>
+<xs:element name="obtenerCatTipoViaByEstado" type="tns:obtenerCatTipoViaByEstado"/>
+<xs:element name="obtenerCatTipoViaByEstadoResponse" type="tns:obtenerCatTipoViaByEstadoResponse"/>
 <xs:element name="obtenerCatTipoViaResponse" type="tns:obtenerCatTipoViaResponse"/>
+<xs:element name="obtenerCatTipoViaV2" type="tns:obtenerCatTipoViaV2"/>
+<xs:element name="obtenerCatTipoViaV2Response" type="tns:obtenerCatTipoViaV2Response"/>
+<xs:complexType name="obtenerCatLocalidadV2">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="obtenerCatLocalidadV2Response">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:catLocalidadWs"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="catLocalidadWs">
+    <xs:complexContent>
+      <xs:extension base="tns:catLocalidadTF">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="estado" type="xs:string"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+<xs:complexType name="catLocalidadTF">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codigoEntidadGeografica" type="xs:string"/>
+      <xs:element minOccurs="0" name="codigoLocalidad" type="xs:long"/>
+      <xs:element minOccurs="0" name="codigoProvincia" type="xs:long"/>
+      <xs:element minOccurs="0" name="descripcionLocalidad" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
 <xs:complexType name="obtenerCatTipoVia">
     <xs:sequence/>
   </xs:complexType>
@@ -38,6 +97,129 @@
       <xs:element minOccurs="0" name="descripcionTipoVia" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
+<xs:complexType name="obtenerCatTipoViaByEstado">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="obtenerCatTipoViaByEstadoResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:catTipoViaWs"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="catTipoViaWs">
+    <xs:complexContent>
+      <xs:extension base="tns:catTipoVia">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="estado" type="xs:string"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+<xs:complexType name="obtenerCatTipoViaV2">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="obtenerCatTipoViaV2Response">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:catTipoViaWs"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="obtenerCatEstadoEntidadV2">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="obtenerCatEstadoEntidadV2Response">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:catEstadoEntidadWs"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="catEstadoEntidadWs">
+    <xs:complexContent>
+      <xs:extension base="tns:catEstadoEntidad">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="estado" type="xs:string"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+<xs:complexType name="catEstadoEntidad">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codigoEstadoEntidad" type="xs:string"/>
+      <xs:element minOccurs="0" name="descripcionEstadoEntidad" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="obtenerCatEntidadGeograficaV2">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="obtenerCatEntidadGeograficaV2Response">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:catEntidadGeograficaWs"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="catEntidadGeograficaWs">
+    <xs:complexContent>
+      <xs:extension base="tns:catEntidadGeograficaTF">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="estado" type="xs:string"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+<xs:complexType name="catEntidadGeograficaTF">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codigoEntidadGeografica" type="xs:string"/>
+      <xs:element minOccurs="0" name="descripcionEntidadGeografica" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="obtenerCatProvinciaByEstado">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="obtenerCatProvinciaByEstadoResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:catProvinciaWs"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="catProvinciaWs">
+    <xs:complexContent>
+      <xs:extension base="tns:catProvinciaTF">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="estado" type="xs:string"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+<xs:complexType name="catProvinciaTF">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codigoComunidadAutonoma" type="xs:long"/>
+      <xs:element minOccurs="0" name="codigoProvincia" type="xs:long"/>
+      <xs:element minOccurs="0" name="descripcionProvincia" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="obtenerCatComunidadAutonomaV2">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="obtenerCatComunidadAutonomaV2Response">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:catComunidadAutonomaWs"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="catComunidadAutonomaWs">
+    <xs:complexContent>
+      <xs:extension base="tns:catComunidadAutonomaTF">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="estado" type="xs:string"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+<xs:complexType name="catComunidadAutonomaTF">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codigoComunidad" type="xs:long"/>
+      <xs:element minOccurs="0" name="codigoPais" type="xs:long"/>
+      <xs:element minOccurs="0" name="descripcionComunidad" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
 <xs:complexType name="obtenerCatComunidadAutonoma">
     <xs:sequence/>
   </xs:complexType>
@@ -46,11 +228,14 @@
       <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:catComunidadAutonomaTF"/>
     </xs:sequence>
   </xs:complexType>
-<xs:complexType name="catComunidadAutonomaTF">
+<xs:complexType name="obtenerCatEntidadGeograficaByEstado">
     <xs:sequence>
-      <xs:element minOccurs="0" name="codigoComunidad" type="xs:long"/>
-      <xs:element minOccurs="0" name="codigoPais" type="xs:long"/>
-      <xs:element minOccurs="0" name="descripcionComunidad" type="xs:string"/>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="obtenerCatEntidadGeograficaByEstadoResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:catEntidadGeograficaWs"/>
     </xs:sequence>
   </xs:complexType>
 <xs:complexType name="obtenerCatEntidadGeografica">
@@ -61,10 +246,22 @@
       <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:catEntidadGeograficaTF"/>
     </xs:sequence>
   </xs:complexType>
-<xs:complexType name="catEntidadGeograficaTF">
+<xs:complexType name="obtenerCatComunidadAutonomaByEstado">
     <xs:sequence>
-      <xs:element minOccurs="0" name="codigoEntidadGeografica" type="xs:string"/>
-      <xs:element minOccurs="0" name="descripcionEntidadGeografica" type="xs:string"/>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="obtenerCatComunidadAutonomaByEstadoResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:catComunidadAutonomaWs"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="obtenerCatProvinciaV2">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="obtenerCatProvinciaV2Response">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:catProvinciaWs"/>
     </xs:sequence>
   </xs:complexType>
 <xs:complexType name="obtenerCatProvincia">
@@ -75,11 +272,29 @@
       <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:catProvinciaTF"/>
     </xs:sequence>
   </xs:complexType>
-<xs:complexType name="catProvinciaTF">
+<xs:complexType name="obtenerCatNivelAdministracionByEstado">
     <xs:sequence>
-      <xs:element minOccurs="0" name="codigoComunidadAutonoma" type="xs:long"/>
-      <xs:element minOccurs="0" name="codigoProvincia" type="xs:long"/>
-      <xs:element minOccurs="0" name="descripcionProvincia" type="xs:string"/>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="obtenerCatNivelAdministracionByEstadoResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:catNivelAdministracionWs"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="catNivelAdministracionWs">
+    <xs:complexContent>
+      <xs:extension base="tns:catNivelAdministracion">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="estado" type="xs:string"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+<xs:complexType name="catNivelAdministracion">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codigoNivelAdministracion" type="xs:long"/>
+      <xs:element minOccurs="0" name="descripcionNivelAdministracion" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
 <xs:complexType name="obtenerCatLocalidad">
@@ -90,14 +305,6 @@
       <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:catLocalidadTF"/>
     </xs:sequence>
   </xs:complexType>
-<xs:complexType name="catLocalidadTF">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="codigoEntidadGeografica" type="xs:string"/>
-      <xs:element minOccurs="0" name="codigoLocalidad" type="xs:long"/>
-      <xs:element minOccurs="0" name="codigoProvincia" type="xs:long"/>
-      <xs:element minOccurs="0" name="descripcionLocalidad" type="xs:string"/>
-    </xs:sequence>
-  </xs:complexType>
 <xs:complexType name="obtenerCatNivelAdministracion">
     <xs:sequence/>
   </xs:complexType>
@@ -106,10 +313,14 @@
       <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:catNivelAdministracion"/>
     </xs:sequence>
   </xs:complexType>
-<xs:complexType name="catNivelAdministracion">
+<xs:complexType name="obtenerCatLocalidadByEstado">
     <xs:sequence>
-      <xs:element minOccurs="0" name="codigoNivelAdministracion" type="xs:long"/>
-      <xs:element minOccurs="0" name="descripcionNivelAdministracion" type="xs:string"/>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="obtenerCatLocalidadByEstadoResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:catLocalidadWs"/>
     </xs:sequence>
   </xs:complexType>
 <xs:complexType name="obtenerCatEstadoEntidad">
@@ -120,10 +331,12 @@
       <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:catEstadoEntidad"/>
     </xs:sequence>
   </xs:complexType>
-<xs:complexType name="catEstadoEntidad">
+<xs:complexType name="obtenerCatNivelAdministracionV2">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="obtenerCatNivelAdministracionV2Response">
     <xs:sequence>
-      <xs:element minOccurs="0" name="codigoEstadoEntidad" type="xs:string"/>
-      <xs:element minOccurs="0" name="descripcionEstadoEntidad" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:catNivelAdministracionWs"/>
     </xs:sequence>
   </xs:complexType>
 <xs:complexType name="obtenerCatServicio">
@@ -164,6 +377,43 @@
       <xs:element minOccurs="0" name="return" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
+<xs:complexType name="obtenerCatEstadoEntidadByEstado">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="obtenerCatEstadoEntidadByEstadoResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:catEstadoEntidadWs"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="obtenerCatPaisByEstado">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="obtenerCatPaisByEstadoResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:catPaisWs"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="catPaisWs">
+    <xs:complexContent>
+      <xs:extension base="tns:catPais">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="estado" type="xs:string"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+<xs:complexType name="obtenerCatServicioUO">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="obtenerCatServicioUOResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:servicio"/>
+    </xs:sequence>
+  </xs:complexType>
 <xs:complexType name="getVersion">
     <xs:sequence/>
   </xs:complexType>
@@ -172,46 +422,146 @@
       <xs:element minOccurs="0" name="return" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
+<xs:complexType name="obtenerCatPaisV2">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="obtenerCatPaisV2Response">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:catPaisWs"/>
+    </xs:sequence>
+  </xs:complexType>
 </xs:schema>
   </wsdl:types>
   <wsdl:message name="getVersionWsResponse">
     <wsdl:part name="parameters" element="tns:getVersionWsResponse">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="getVersion">
-    <wsdl:part name="parameters" element="tns:getVersion">
+  <wsdl:message name="obtenerCatTipoViaByEstadoResponse">
+    <wsdl:part name="parameters" element="tns:obtenerCatTipoViaByEstadoResponse">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="obtenerCatProvinciaResponse">
-    <wsdl:part name="parameters" element="tns:obtenerCatProvinciaResponse">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="obtenerCatProvincia">
-    <wsdl:part name="parameters" element="tns:obtenerCatProvincia">
+  <wsdl:message name="obtenerCatEstadoEntidadV2Response">
+    <wsdl:part name="parameters" element="tns:obtenerCatEstadoEntidadV2Response">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="obtenerCatEstadoEntidad">
     <wsdl:part name="parameters" element="tns:obtenerCatEstadoEntidad">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="getVersionWs">
-    <wsdl:part name="parameters" element="tns:getVersionWs">
-    </wsdl:part>
-  </wsdl:message>
   <wsdl:message name="obtenerCatEntidadGeograficaResponse">
     <wsdl:part name="parameters" element="tns:obtenerCatEntidadGeograficaResponse">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="obtenerCatEstadoEntidadResponse">
-    <wsdl:part name="parameters" element="tns:obtenerCatEstadoEntidadResponse">
+  <wsdl:message name="obtenerCatLocalidadV2">
+    <wsdl:part name="parameters" element="tns:obtenerCatLocalidadV2">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatComunidadAutonomaV2">
+    <wsdl:part name="parameters" element="tns:obtenerCatComunidadAutonomaV2">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatProvinciaV2Response">
+    <wsdl:part name="parameters" element="tns:obtenerCatProvinciaV2Response">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatComunidadAutonomaByEstado">
+    <wsdl:part name="parameters" element="tns:obtenerCatComunidadAutonomaByEstado">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatEntidadGeograficaV2">
+    <wsdl:part name="parameters" element="tns:obtenerCatEntidadGeograficaV2">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatComunidadAutonomaResponse">
+    <wsdl:part name="parameters" element="tns:obtenerCatComunidadAutonomaResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatTipoViaV2">
+    <wsdl:part name="parameters" element="tns:obtenerCatTipoViaV2">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatLocalidad">
+    <wsdl:part name="parameters" element="tns:obtenerCatLocalidad">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getVersionResponse">
+    <wsdl:part name="parameters" element="tns:getVersionResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatLocalidadByEstado">
+    <wsdl:part name="parameters" element="tns:obtenerCatLocalidadByEstado">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatProvinciaV2">
+    <wsdl:part name="parameters" element="tns:obtenerCatProvinciaV2">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatComunidadAutonomaByEstadoResponse">
+    <wsdl:part name="parameters" element="tns:obtenerCatComunidadAutonomaByEstadoResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatNivelAdministracionV2Response">
+    <wsdl:part name="parameters" element="tns:obtenerCatNivelAdministracionV2Response">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatProvincia">
+    <wsdl:part name="parameters" element="tns:obtenerCatProvincia">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getVersionWs">
+    <wsdl:part name="parameters" element="tns:getVersionWs">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="obtenerCatPais">
     <wsdl:part name="parameters" element="tns:obtenerCatPais">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="obtenerCatEstadoEntidadByEstado">
+    <wsdl:part name="parameters" element="tns:obtenerCatEstadoEntidadByEstado">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="obtenerCatPaisResponse">
     <wsdl:part name="parameters" element="tns:obtenerCatPaisResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatServicioUO">
+    <wsdl:part name="parameters" element="tns:obtenerCatServicioUO">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatNivelAdministracionByEstadoResponse">
+    <wsdl:part name="parameters" element="tns:obtenerCatNivelAdministracionByEstadoResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatLocalidadByEstadoResponse">
+    <wsdl:part name="parameters" element="tns:obtenerCatLocalidadByEstadoResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatEntidadGeograficaByEstadoResponse">
+    <wsdl:part name="parameters" element="tns:obtenerCatEntidadGeograficaByEstadoResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatNivelAdministracionByEstado">
+    <wsdl:part name="parameters" element="tns:obtenerCatNivelAdministracionByEstado">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatNivelAdministracionResponse">
+    <wsdl:part name="parameters" element="tns:obtenerCatNivelAdministracionResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getVersion">
+    <wsdl:part name="parameters" element="tns:getVersion">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatLocalidadV2Response">
+    <wsdl:part name="parameters" element="tns:obtenerCatLocalidadV2Response">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatEstadoEntidadResponse">
+    <wsdl:part name="parameters" element="tns:obtenerCatEstadoEntidadResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatEstadoEntidadV2">
+    <wsdl:part name="parameters" element="tns:obtenerCatEstadoEntidadV2">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="obtenerCatTipoViaResponse">
@@ -220,10 +570,6 @@
   </wsdl:message>
   <wsdl:message name="obtenerCatServicio">
     <wsdl:part name="parameters" element="tns:obtenerCatServicio">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="obtenerCatComunidadAutonomaResponse">
-    <wsdl:part name="parameters" element="tns:obtenerCatComunidadAutonomaResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="obtenerCatComunidadAutonoma">
@@ -238,12 +584,56 @@
     <wsdl:part name="parameters" element="tns:obtenerCatNivelAdministracion">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="obtenerCatLocalidad">
-    <wsdl:part name="parameters" element="tns:obtenerCatLocalidad">
+  <wsdl:message name="obtenerCatPaisV2">
+    <wsdl:part name="parameters" element="tns:obtenerCatPaisV2">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="getVersionResponse">
-    <wsdl:part name="parameters" element="tns:getVersionResponse">
+  <wsdl:message name="obtenerCatPaisByEstadoResponse">
+    <wsdl:part name="parameters" element="tns:obtenerCatPaisByEstadoResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatPaisV2Response">
+    <wsdl:part name="parameters" element="tns:obtenerCatPaisV2Response">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatEntidadGeograficaByEstado">
+    <wsdl:part name="parameters" element="tns:obtenerCatEntidadGeograficaByEstado">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatNivelAdministracionV2">
+    <wsdl:part name="parameters" element="tns:obtenerCatNivelAdministracionV2">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatProvinciaResponse">
+    <wsdl:part name="parameters" element="tns:obtenerCatProvinciaResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatTipoViaByEstado">
+    <wsdl:part name="parameters" element="tns:obtenerCatTipoViaByEstado">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatEstadoEntidadByEstadoResponse">
+    <wsdl:part name="parameters" element="tns:obtenerCatEstadoEntidadByEstadoResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatPaisByEstado">
+    <wsdl:part name="parameters" element="tns:obtenerCatPaisByEstado">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatTipoViaV2Response">
+    <wsdl:part name="parameters" element="tns:obtenerCatTipoViaV2Response">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatEntidadGeograficaV2Response">
+    <wsdl:part name="parameters" element="tns:obtenerCatEntidadGeograficaV2Response">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatProvinciaByEstadoResponse">
+    <wsdl:part name="parameters" element="tns:obtenerCatProvinciaByEstadoResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatServicioUOResponse">
+    <wsdl:part name="parameters" element="tns:obtenerCatServicioUOResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="obtenerCatTipoVia">
@@ -254,19 +644,65 @@
     <wsdl:part name="parameters" element="tns:obtenerCatEntidadGeografica">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="obtenerCatComunidadAutonomaV2Response">
+    <wsdl:part name="parameters" element="tns:obtenerCatComunidadAutonomaV2Response">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="obtenerCatServicioResponse">
     <wsdl:part name="parameters" element="tns:obtenerCatServicioResponse">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="obtenerCatNivelAdministracionResponse">
-    <wsdl:part name="parameters" element="tns:obtenerCatNivelAdministracionResponse">
+  <wsdl:message name="obtenerCatProvinciaByEstado">
+    <wsdl:part name="parameters" element="tns:obtenerCatProvinciaByEstado">
     </wsdl:part>
   </wsdl:message>
   <wsdl:portType name="Dir3CaibObtenerCatalogosWs">
+    <wsdl:operation name="obtenerCatLocalidadV2">
+      <wsdl:input name="obtenerCatLocalidadV2" message="tns:obtenerCatLocalidadV2">
+    </wsdl:input>
+      <wsdl:output name="obtenerCatLocalidadV2Response" message="tns:obtenerCatLocalidadV2Response">
+    </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="obtenerCatTipoVia">
       <wsdl:input name="obtenerCatTipoVia" message="tns:obtenerCatTipoVia">
     </wsdl:input>
       <wsdl:output name="obtenerCatTipoViaResponse" message="tns:obtenerCatTipoViaResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatTipoViaByEstado">
+      <wsdl:input name="obtenerCatTipoViaByEstado" message="tns:obtenerCatTipoViaByEstado">
+    </wsdl:input>
+      <wsdl:output name="obtenerCatTipoViaByEstadoResponse" message="tns:obtenerCatTipoViaByEstadoResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatTipoViaV2">
+      <wsdl:input name="obtenerCatTipoViaV2" message="tns:obtenerCatTipoViaV2">
+    </wsdl:input>
+      <wsdl:output name="obtenerCatTipoViaV2Response" message="tns:obtenerCatTipoViaV2Response">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatEstadoEntidadV2">
+      <wsdl:input name="obtenerCatEstadoEntidadV2" message="tns:obtenerCatEstadoEntidadV2">
+    </wsdl:input>
+      <wsdl:output name="obtenerCatEstadoEntidadV2Response" message="tns:obtenerCatEstadoEntidadV2Response">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatEntidadGeograficaV2">
+      <wsdl:input name="obtenerCatEntidadGeograficaV2" message="tns:obtenerCatEntidadGeograficaV2">
+    </wsdl:input>
+      <wsdl:output name="obtenerCatEntidadGeograficaV2Response" message="tns:obtenerCatEntidadGeograficaV2Response">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatProvinciaByEstado">
+      <wsdl:input name="obtenerCatProvinciaByEstado" message="tns:obtenerCatProvinciaByEstado">
+    </wsdl:input>
+      <wsdl:output name="obtenerCatProvinciaByEstadoResponse" message="tns:obtenerCatProvinciaByEstadoResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatComunidadAutonomaV2">
+      <wsdl:input name="obtenerCatComunidadAutonomaV2" message="tns:obtenerCatComunidadAutonomaV2">
+    </wsdl:input>
+      <wsdl:output name="obtenerCatComunidadAutonomaV2Response" message="tns:obtenerCatComunidadAutonomaV2Response">
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="obtenerCatComunidadAutonoma">
@@ -275,16 +711,40 @@
       <wsdl:output name="obtenerCatComunidadAutonomaResponse" message="tns:obtenerCatComunidadAutonomaResponse">
     </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="obtenerCatEntidadGeograficaByEstado">
+      <wsdl:input name="obtenerCatEntidadGeograficaByEstado" message="tns:obtenerCatEntidadGeograficaByEstado">
+    </wsdl:input>
+      <wsdl:output name="obtenerCatEntidadGeograficaByEstadoResponse" message="tns:obtenerCatEntidadGeograficaByEstadoResponse">
+    </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="obtenerCatEntidadGeografica">
       <wsdl:input name="obtenerCatEntidadGeografica" message="tns:obtenerCatEntidadGeografica">
     </wsdl:input>
       <wsdl:output name="obtenerCatEntidadGeograficaResponse" message="tns:obtenerCatEntidadGeograficaResponse">
     </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="obtenerCatComunidadAutonomaByEstado">
+      <wsdl:input name="obtenerCatComunidadAutonomaByEstado" message="tns:obtenerCatComunidadAutonomaByEstado">
+    </wsdl:input>
+      <wsdl:output name="obtenerCatComunidadAutonomaByEstadoResponse" message="tns:obtenerCatComunidadAutonomaByEstadoResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatProvinciaV2">
+      <wsdl:input name="obtenerCatProvinciaV2" message="tns:obtenerCatProvinciaV2">
+    </wsdl:input>
+      <wsdl:output name="obtenerCatProvinciaV2Response" message="tns:obtenerCatProvinciaV2Response">
+    </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="obtenerCatProvincia">
       <wsdl:input name="obtenerCatProvincia" message="tns:obtenerCatProvincia">
     </wsdl:input>
       <wsdl:output name="obtenerCatProvinciaResponse" message="tns:obtenerCatProvinciaResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatNivelAdministracionByEstado">
+      <wsdl:input name="obtenerCatNivelAdministracionByEstado" message="tns:obtenerCatNivelAdministracionByEstado">
+    </wsdl:input>
+      <wsdl:output name="obtenerCatNivelAdministracionByEstadoResponse" message="tns:obtenerCatNivelAdministracionByEstadoResponse">
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="obtenerCatLocalidad">
@@ -299,10 +759,22 @@
       <wsdl:output name="obtenerCatNivelAdministracionResponse" message="tns:obtenerCatNivelAdministracionResponse">
     </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="obtenerCatLocalidadByEstado">
+      <wsdl:input name="obtenerCatLocalidadByEstado" message="tns:obtenerCatLocalidadByEstado">
+    </wsdl:input>
+      <wsdl:output name="obtenerCatLocalidadByEstadoResponse" message="tns:obtenerCatLocalidadByEstadoResponse">
+    </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="obtenerCatEstadoEntidad">
       <wsdl:input name="obtenerCatEstadoEntidad" message="tns:obtenerCatEstadoEntidad">
     </wsdl:input>
       <wsdl:output name="obtenerCatEstadoEntidadResponse" message="tns:obtenerCatEstadoEntidadResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatNivelAdministracionV2">
+      <wsdl:input name="obtenerCatNivelAdministracionV2" message="tns:obtenerCatNivelAdministracionV2">
+    </wsdl:input>
+      <wsdl:output name="obtenerCatNivelAdministracionV2Response" message="tns:obtenerCatNivelAdministracionV2Response">
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="obtenerCatServicio">
@@ -323,21 +795,108 @@
       <wsdl:output name="getVersionWsResponse" message="tns:getVersionWsResponse">
     </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="obtenerCatEstadoEntidadByEstado">
+      <wsdl:input name="obtenerCatEstadoEntidadByEstado" message="tns:obtenerCatEstadoEntidadByEstado">
+    </wsdl:input>
+      <wsdl:output name="obtenerCatEstadoEntidadByEstadoResponse" message="tns:obtenerCatEstadoEntidadByEstadoResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatPaisByEstado">
+      <wsdl:input name="obtenerCatPaisByEstado" message="tns:obtenerCatPaisByEstado">
+    </wsdl:input>
+      <wsdl:output name="obtenerCatPaisByEstadoResponse" message="tns:obtenerCatPaisByEstadoResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatServicioUO">
+      <wsdl:input name="obtenerCatServicioUO" message="tns:obtenerCatServicioUO">
+    </wsdl:input>
+      <wsdl:output name="obtenerCatServicioUOResponse" message="tns:obtenerCatServicioUOResponse">
+    </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="getVersion">
       <wsdl:input name="getVersion" message="tns:getVersion">
     </wsdl:input>
       <wsdl:output name="getVersionResponse" message="tns:getVersionResponse">
     </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="obtenerCatPaisV2">
+      <wsdl:input name="obtenerCatPaisV2" message="tns:obtenerCatPaisV2">
+    </wsdl:input>
+      <wsdl:output name="obtenerCatPaisV2Response" message="tns:obtenerCatPaisV2Response">
+    </wsdl:output>
+    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="Dir3CaibObtenerCatalogosWsServiceSoapBinding" type="tns:Dir3CaibObtenerCatalogosWs">
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="obtenerCatLocalidadV2">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="obtenerCatLocalidadV2">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="obtenerCatLocalidadV2Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="obtenerCatTipoVia">
       <soap:operation soapAction="" style="document"/>
       <wsdl:input name="obtenerCatTipoVia">
         <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output name="obtenerCatTipoViaResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatTipoViaByEstado">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="obtenerCatTipoViaByEstado">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="obtenerCatTipoViaByEstadoResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatEstadoEntidadV2">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="obtenerCatEstadoEntidadV2">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="obtenerCatEstadoEntidadV2Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatTipoViaV2">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="obtenerCatTipoViaV2">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="obtenerCatTipoViaV2Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatEntidadGeograficaV2">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="obtenerCatEntidadGeograficaV2">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="obtenerCatEntidadGeograficaV2Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatProvinciaByEstado">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="obtenerCatProvinciaByEstado">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="obtenerCatProvinciaByEstadoResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatComunidadAutonomaV2">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="obtenerCatComunidadAutonomaV2">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="obtenerCatComunidadAutonomaV2Response">
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
@@ -350,12 +909,30 @@
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="obtenerCatEntidadGeograficaByEstado">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="obtenerCatEntidadGeograficaByEstado">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="obtenerCatEntidadGeograficaByEstadoResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="obtenerCatEntidadGeografica">
       <soap:operation soapAction="" style="document"/>
       <wsdl:input name="obtenerCatEntidadGeografica">
         <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output name="obtenerCatEntidadGeograficaResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatComunidadAutonomaByEstado">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="obtenerCatComunidadAutonomaByEstado">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="obtenerCatComunidadAutonomaByEstadoResponse">
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
@@ -368,12 +945,30 @@
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="obtenerCatProvinciaV2">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="obtenerCatProvinciaV2">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="obtenerCatProvinciaV2Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="obtenerCatLocalidad">
       <soap:operation soapAction="" style="document"/>
       <wsdl:input name="obtenerCatLocalidad">
         <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output name="obtenerCatLocalidadResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatNivelAdministracionByEstado">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="obtenerCatNivelAdministracionByEstado">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="obtenerCatNivelAdministracionByEstadoResponse">
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
@@ -386,12 +981,30 @@
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="obtenerCatLocalidadByEstado">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="obtenerCatLocalidadByEstado">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="obtenerCatLocalidadByEstadoResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="obtenerCatEstadoEntidad">
       <soap:operation soapAction="" style="document"/>
       <wsdl:input name="obtenerCatEstadoEntidad">
         <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output name="obtenerCatEstadoEntidadResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatNivelAdministracionV2">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="obtenerCatNivelAdministracionV2">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="obtenerCatNivelAdministracionV2Response">
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
@@ -422,12 +1035,48 @@
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="obtenerCatEstadoEntidadByEstado">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="obtenerCatEstadoEntidadByEstado">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="obtenerCatEstadoEntidadByEstadoResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatPaisByEstado">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="obtenerCatPaisByEstado">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="obtenerCatPaisByEstadoResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatServicioUO">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="obtenerCatServicioUO">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="obtenerCatServicioUOResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="getVersion">
       <soap:operation soapAction="" style="document"/>
       <wsdl:input name="getVersion">
         <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output name="getVersionResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatPaisV2">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="obtenerCatPaisV2">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="obtenerCatPaisV2Response">
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
