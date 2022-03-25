@@ -17,6 +17,8 @@ public class Dir3caibConstantes {
     public static final String DIR3CAIB_PROPERTY_BASE = "es.caib.dir3caib.";
 
     public static final String SECURITY_DOMAIN = "seycon";
+    
+    public static final String SEPARADOR_CODIGO_VERSION = "v";
 
     // Importación Catalogo
     public static final String CATALOGOS_ARCHIVO_ZIP = "catalogos";

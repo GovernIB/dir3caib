@@ -298,7 +298,7 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
      * @param codigo Código del organismo
      */
     @Override
-    public List<Oficina> obtenerArbolOficinasOpenData(String codigo) throws Exception {
+    public List<Oficina> obtenerArbolOficinasOpenData(String codigo, String estado) throws Exception {
 
         log.info("WS: Inicio obtener Oficinas");
         // Obtenemos todos las unidades vigentes de la unidad Raiz

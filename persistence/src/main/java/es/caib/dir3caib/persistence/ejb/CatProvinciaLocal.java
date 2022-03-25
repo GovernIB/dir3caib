@@ -16,5 +16,6 @@ public interface CatProvinciaLocal extends BaseEjb<CatProvincia, Long> {
 
   List<CatProvincia> getByComunidadAutonoma(Long idComunidadAutonoma) throws Exception;
   void deleteAll() throws Exception;
+  List<CatProvincia> getAll(String estado) throws Exception;
   List<CatProvincia> getByEstado(String estado) throws Exception;
 }

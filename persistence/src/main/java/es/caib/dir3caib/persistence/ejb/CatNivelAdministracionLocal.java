@@ -16,6 +16,8 @@ import es.caib.dir3caib.persistence.model.CatNivelAdministracion;
 public interface CatNivelAdministracionLocal extends BaseEjb<CatNivelAdministracion, Long> {
   
   void deleteAll() throws Exception;
+
+  List<CatNivelAdministracion> getAll(String estado) throws Exception;
   
   List<CatNivelAdministracion> getByEstado(String estado) throws Exception;
   

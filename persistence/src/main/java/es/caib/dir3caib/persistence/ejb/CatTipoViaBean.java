@@ -48,6 +48,23 @@ public class CatTipoViaBean extends BaseEjbJPA<CatTipoVia, Long> implements CatT
 
         return  em.createQuery("Select catTipoVia from CatTipoVia as catTipoVia order by catTipoVia.codigoTipoVia").getResultList();
     }
+
+    @Override
+    @SuppressWarnings(value = "unchecked")
+    public List<CatTipoVia> getAll(String estado) throws Exception {
+
+    	String where = "";
+    	if(Utils.isNotEmpty(estado)) {
+    		where = " where catTipoVia.estado = :estado ";
+    	}
+    	
+    	Query q = em.createQuery("Select catTipoVia from CatTipoVia as catTipoVia " + where + " order by catTipoVia.codigoTipoVia");
+    	
+    	if(where!="")
+    		q.setParameter("estado", estado);
+    	
+        return q.getResultList();
+    }
     
     @Override
     @SuppressWarnings(value = "unchecked")

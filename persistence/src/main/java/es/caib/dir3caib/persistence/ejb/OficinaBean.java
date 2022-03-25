@@ -428,6 +428,13 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 	@SuppressWarnings("unchecked")
 	public List<Oficina> obtenerOficinasOrganismo(String codigo, Date fechaActualizacion, Date fechaSincronizacion)
 			throws Exception {
+		return obtenerOficinasOrganismoByEstado(codigo, fechaActualizacion, fechaSincronizacion, Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Oficina> obtenerOficinasOrganismoByEstado(String codigo, Date fechaActualizacion, Date fechaSincronizacion, String estado)
+			throws Exception {
 
 		// En un primer paso obtenemos las oficinas en función de si es SINCRO o
 		// ACTUALIZACION
@@ -437,7 +444,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 		if (fechaActualizacion == null) {// Es una sincronizacion, solo se mandan las vigentes
 			q = em.createQuery(
 					"Select oficina from Oficina as oficina where oficina.codUoResponsable.codigo =:codigo and oficina.estado.codigoEstadoEntidad =:vigente order by oficina.codigo");
-			q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+			q.setParameter("vigente", estado);
 		} else { // Es una actualizacion, se mandan todas las que tienen fechaactualizacion
 					// anterior a la fecha de importacion de las oficinas
 			q = em.createQuery("Select oficina from Oficina as oficina where oficina.codUoResponsable.codigo =:codigo "
@@ -458,22 +465,22 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 				Set<RelacionOrganizativaOfi> relaciones = new HashSet<RelacionOrganizativaOfi>(
 						oficina.getOrganizativasOfi());
 
-				Set<RelacionOrganizativaOfi> relacionesVigentes = new HashSet<RelacionOrganizativaOfi>();
+				Set<RelacionOrganizativaOfi> relacionesEstado = new HashSet<RelacionOrganizativaOfi>();
 				// Metemos en la lista las relaciones cuyo estado es vigente y el estado de la
 				// unidad con la que esta relacionada
 				// tambien es vigente. En el caso de la sincro solo nos interesa que la relación
 				// sea vigente y la unidad
 				// con la que está relacionada también.
 				for (RelacionOrganizativaOfi relOrg : relaciones) {
-					if (relOrg.getEstado().getCodigoEstadoEntidad().equals(Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE)
+					if (relOrg.getEstado().getCodigoEstadoEntidad().equals(estado)
 							&& relOrg.getUnidad().getEstado().getCodigoEstadoEntidad()
-									.equals(Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE)) {
-						relacionesVigentes.add(relOrg);
+									.equals(estado)) {
+						relacionesEstado.add(relOrg);
 					}
 				}
-				// Asignamos las relaciones vigentes encontradas para ser enviadas.
+				// Asignamos las relaciones encontradas para ser enviadas.
 				oficina.setOrganizativasOfi(null);
-				oficina.setOrganizativasOfi(new ArrayList<RelacionOrganizativaOfi>(relacionesVigentes));
+				oficina.setOrganizativasOfi(new ArrayList<RelacionOrganizativaOfi>(relacionesEstado));
 
 				// Solo se envian las relaciones sir vigentes.
 				Set<RelacionSirOfi> relacionesSir = new HashSet<RelacionSirOfi>(oficina.getSirOfi());
@@ -483,9 +490,9 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 				// de la unidad con la que esta relacionada
 				// tambien es vigente.
 				for (RelacionSirOfi relSir : relacionesSir) {
-					if (relSir.getEstado().getCodigoEstadoEntidad().equals(Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE)
+					if (relSir.getEstado().getCodigoEstadoEntidad().equals(estado)
 							&& relSir.getUnidad().getEstado().getCodigoEstadoEntidad()
-									.equals(Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE)) {
+									.equals(estado)) {
 						relacionesSirVigentes.add(relSir);
 					}
 				}
@@ -557,19 +564,27 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 	@Override
 	@SuppressWarnings(value = "unchecked")
 	public List<Oficina> obtenerOficinasSIRUnidad(String codigoUnidad) throws Exception {
+		return obtenerOficinasSIRUnidad(codigoUnidad,false);
+	}
+	
+	@Override
+	@SuppressWarnings(value = "unchecked")
+	public List<Oficina> obtenerOficinasSIRUnidad(String codigoUnidad, boolean isCodigoDir3) throws Exception {
 
+		String variableCampo = (isCodigoDir3) ? "codigoDir3" : "codigo";
+		
 		Query q = em.createQuery(
 				"select relacionSirOfi.oficina from RelacionSirOfi as relacionSirOfi " +
 				" left outer join relacionSirOfi.oficina.servicios as servicios " +
-						"  where relacionSirOfi.unidad.codigo =:codigoUnidad "
-						+ "and  servicios.servicio=:SERVICIO_SIR_RECEPCION "
+						"  where relacionSirOfi.unidad." + variableCampo + " =:codigoUnidad "
+					    + "and servicios.servicio=:SERVICIO_SIR_RECEPCION "
 						+ "and relacionSirOfi.estado.codigoEstadoEntidad= :vigente ");
 
 		q.setParameter("codigoUnidad", codigoUnidad);
 		q.setParameter("SERVICIO_SIR_RECEPCION", servicioEjb.findById(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
 		q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
-		return q.getResultList() ;
+		return q.getResultList();
 
 	}
 

@@ -48,6 +48,23 @@ public class CatNivelAdministracionBean extends BaseEjbJPA<CatNivelAdministracio
 
         return  em.createQuery("Select catNivelAdministracion from CatNivelAdministracion as catNivelAdministracion order by catNivelAdministracion.codigoNivelAdministracion").getResultList();
     }
+
+    @Override
+    @SuppressWarnings(value = "unchecked")
+    public List<CatNivelAdministracion> getAll(String estado) throws Exception {
+    	
+    	String where = "";
+    	if (Utils.isNotEmpty(estado)) {
+    		where = " where catNivelAdministracion.estado = :estado ";
+    	}
+
+    	Query q = em.createQuery("Select catNivelAdministracion from CatNivelAdministracion as catNivelAdministracion " + where + " order by catNivelAdministracion.codigoNivelAdministracion");
+    	
+    	if (where != "")
+    		q.setParameter("estado", estado);
+    	
+        return  q.getResultList();
+    }
     
     @Override
     @SuppressWarnings(value = "unchecked")

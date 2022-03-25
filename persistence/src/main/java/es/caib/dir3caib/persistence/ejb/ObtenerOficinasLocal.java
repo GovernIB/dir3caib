@@ -24,7 +24,7 @@ public interface ObtenerOficinasLocal {
     List<OficinaTF> obtenerArbolOficinasTF(String codigo, Date fechaActualizacion, Date fechaSincronizacion, boolean denominacionOficial) throws Exception;
     List<OficinaWs> obtenerArbolOficinasWs(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception;
 
-    List<Oficina> obtenerArbolOficinasOpenData(String codigo) throws Exception;
+    List<Oficina> obtenerArbolOficinasOpenData(String codigo, String estado) throws Exception;
 
     List<OficinaTF> obtenerOficinasSIRUnidadTF(String codigoUnidad, boolean denominacionOficial) throws Exception;
     List<OficinaWs> obtenerOficinasSIRUnidadWs(String codigoUnidad) throws Exception;

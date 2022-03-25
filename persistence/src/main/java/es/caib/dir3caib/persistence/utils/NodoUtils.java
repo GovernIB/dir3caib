@@ -55,6 +55,7 @@ public class NodoUtils {
         for (Object[] object : result) {
         	String denominacion = ( denominacionCooficial && !((String) object[3]).isEmpty()) ? (String) object[3] : (String) object[1];
             Nodo nodo = new Nodo((String) object[0], denominacion, (String) object[2], "", "", "");
+            nodo.setCodigoDir3((String) object[10]);
 
             nodos.add(nodo);
         }
@@ -94,9 +95,9 @@ public class NodoUtils {
             for (int i = 0; i < object.length; i++)
                 obj[i] = String.valueOf(object[i]);
 
-            String denominacion = ( denominacionCooficial && !((String) object[8]).isEmpty()) ? (String) object[8] : (String) object[1];
-            String denominacionUnidadRaiz = ( denominacionCooficial && !((String) object[9]).isEmpty()) ? (String) object[9] : (String) object[4];
-            String denominacionUoResponsable = ( denominacionCooficial && !((String) object[10]).isEmpty()) ? (String) object[10] : (String) object[6];
+            String denominacion = ( denominacionCooficial && Utils.isNotEmpty((String) object[8])) ? (String) object[8] : (String) object[1];
+            String denominacionUnidadRaiz = ( denominacionCooficial && Utils.isNotEmpty((String) object[9])) ? (String) object[9] : (String) object[4];
+            String denominacionUoResponsable = ( denominacionCooficial && Utils.isNotEmpty((String) object[10])) ? (String) object[10] : (String) object[6];
 
             Nodo nodo = new Nodo(obj[0], denominacion, obj[2], denominacionUnidadRaiz + " - " + obj[3], denominacionUoResponsable, obj[5], obj[7]);
 
@@ -115,7 +116,7 @@ public class NodoUtils {
      * @return
      * @throws Exception
      */
-    public static List<Nodo> getNodoListUnidadRaizUnidadSuperior(List<Object[]> result, boolean denominacionCooficial) throws Exception {
+    public static List<Nodo> getNodoListUnidadRaizUnidadSuperior(List<Object[]> result, boolean denominacionCooficial, boolean retornoCodigoDir3) throws Exception {
 
     	//0 unidad.codigo, 
     	//1 unidad.denominacion
@@ -124,15 +125,17 @@ public class NodoUtils {
     	//4 unidad.denomLenguaCooficial
     	//5 unidad.codUnidadRaiz.denomLenguaCooficial
 	    //6 unidad.codUnidadSuperior.denomLenguaCooficial
+    	//7 unidad.codigoDir3
     	
         List<Nodo> nodos = new ArrayList<Nodo>();
 
         for (Object[] object : result) {
+        	String codigo = (retornoCodigoDir3) ? (String) object[7] : (String) object[0];
         	String denominacion = (denominacionCooficial && Utils.isNotEmpty((String)object[4])) ?(String) object[4] : (String) object[1];
         	String denominacionUnidadRaiz = (denominacionCooficial && Utils.isNotEmpty((String)object[5])) ?(String) object[5] : (String) object[2];
         	String denominacionUnidadSuperior = (denominacionCooficial && Utils.isNotEmpty((String)object[6])) ?(String) object[6] : (String) object[3];		
-            Nodo nodo = new Nodo((String) object[0], denominacion, "", denominacionUnidadRaiz, denominacionUnidadSuperior, "");
-
+            Nodo nodo = new Nodo(codigo, denominacion, "", denominacionUnidadRaiz, denominacionUnidadSuperior, "");
+            nodo.setCodigoDir3((String) object[7]);
             nodos.add(nodo);
         }
 
@@ -231,9 +234,9 @@ public class NodoUtils {
                 obj[i] = String.valueOf(object[i]);
             }
             
-            String denominacion = ( denominacionCooficial && !((String) obj[22]).isEmpty()) ? (String) obj[22] : (String) obj[1]; 
-            String denominacioUnidadRaiz = ( denominacionCooficial && !((String) obj[23]).isEmpty()) ? (String) obj[23] : (String) obj[4];
-            String denominacionUnidadSuperior = ( denominacionCooficial && !((String) obj[24]).isEmpty()) ? (String) obj[24] : (String) obj[6];
+            String denominacion = ( denominacionCooficial && Utils.isNotEmpty((String) obj[22])) ? (String) obj[22] : (String) obj[1]; 
+            String denominacioUnidadRaiz = ( denominacionCooficial && Utils.isNotEmpty((String) obj[23])) ? (String) obj[23] : (String) obj[4];
+            String denominacionUnidadSuperior = ( denominacionCooficial && Utils.isNotEmpty((String) obj[24])) ? (String) obj[24] : (String) obj[6];
             
             Nodo nodo = new Nodo(obj[0], denominacion, obj[2], denominacioUnidadRaiz + " - " + obj[3], denominacionUnidadSuperior + " - " + obj[5], obj[7],Boolean.parseBoolean(obj[8]),Long.parseLong(obj[9]), obj[10],obj[11], obj[12],obj[13] + " " + obj[14]+ ", " + obj[15]+ ", "+ obj[16]+ ", " + obj[17],obj[18],obj[19],obj[20],obj[21],obj[22]);
 

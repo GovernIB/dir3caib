@@ -18,15 +18,16 @@ public interface ArbolLocal {
      * @param nodo        nodo en el que se montará todo el árbol.
      * @param estado      estado de las unidades que queremos mostrar en el arbol.
      * @param conOficinas indica si se quieren incluir las oficinas en el organigrama
+     * @param denominacionCooficial indica si queremos devolver la denominacion cooficial si existe
      */
-    void arbolUnidades(String idUnidad, Nodo nodo, String estado, boolean conOficinas) throws Exception;
+    void arbolUnidades(String idUnidad, Nodo nodo, String estado, boolean conOficinas, boolean denominacionCooficial) throws Exception;
 
     /**
      * Metodo que devuelve una estructura de nodos que representan un árbol de oficinas
      *
      * @param idOficina oficina raiz de la que partimos.
      */
-    void arbolOficinas(String idOficina, Nodo nodo, String estado) throws Exception;
+    void arbolOficinas(String idOficina, Nodo nodo, String estado, boolean denominacionCooficial) throws Exception;
 
     /**
      * Método que devuelve el árbol completo(ascendentes y descendentes) de la unidad indicada.
@@ -38,6 +39,7 @@ public interface ArbolLocal {
      * @param estado      estado de las unidades que queremos mostrar en el arbol.
      * @param conOficinas indica si se quieren incluir las oficinas en el organigrama (es para mostrar el arbol en las
      *                    búsquedas de organismo destinatario de regweb3)
+     * @param denominacionCooficial indica si queremos mostrar las denominaciones cooficiales si existen.
      */
-    void arbolUnidadesAscendentes(String idUnidad, Nodo nodo, String estado, boolean conOficinas) throws Exception;
+    void arbolUnidadesAscendentes(String idUnidad, Nodo nodo, String estado, boolean conOficinas, boolean denominacionCooficial) throws Exception;
 }

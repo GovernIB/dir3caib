@@ -188,9 +188,10 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * Método que obtiene los hijos vigentes de primer nivel de una unidad
      *
      * @param codigo identificador de la unidad padre.
+     * @param codigo del estado si queremos filtrar por estado
      * @return {@link es.caib.dir3caib.persistence.model.Unidad}
      */
-    List<Unidad> hijosPrimerNivel(String codigo) throws Exception;
+    List<Unidad> hijosPrimerNivel(String codigo, String estado) throws Exception;
 
     /**
      * Metodo que obtiene los hijos de una unidad en función del estado de la unidad padre
@@ -220,6 +221,8 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @throws Exception
      */
     List<Unidad> obtenerArbol(String codigo) throws Exception;
+    
+    List<Unidad> obtenerArbol(String codigo, String estado) throws Exception;
 
     /**
      * Obtiene una lista de unidades páginada
@@ -407,7 +410,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      */
     void crearServicioUnidad(String codigoUnidad, Long codigoServicio) throws Exception;
 
-	List<Nodo> hijos(String codigo, String estado, boolean denominacionCooficial) throws Exception;
+	List<Nodo> hijos(String codigo, String estado, boolean denominacionCooficial, boolean codigoDir3) throws Exception;
 
 	Unidad findByCodigoLigero(String codigo, boolean denominacionCooficial) throws Exception;
 
@@ -416,6 +419,8 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
 	List<Unidad> findByDenominacion(String denominacion, boolean denominacionCooficial) throws Exception;
 
 	Nodo findUnidad(String id, String estado, boolean denominacionCooficial) throws Exception;
+	
+	Nodo findUnidadByCodigoDir3(String codigoDir3, String estado, boolean denominacionCooficial) throws Exception;
 
 	void arbolHijos(Set<Unidad> unidadesPadres, String estado, Set<Unidad> hijosTotales, boolean denominacionCooficial)
 			throws Exception;

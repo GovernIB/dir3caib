@@ -1,6 +1,9 @@
 package es.caib.dir3caib.persistence.ejb;
 
+import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.utils.Nodo;
+import es.caib.dir3caib.utils.Utils;
+
 import org.apache.log4j.Logger;
 
 import javax.annotation.security.RunAs;
@@ -41,7 +44,7 @@ public class ArbolBean implements ArbolLocal {
      * @param conOficinas indica si se quieren incluir las oficinas en el organigrama (es para mostrar el arbol en las
      *                    búsquedas de organismo destinatario de regweb3)
      */
-    public void arbolUnidades(String idUnidad, Nodo nodo, String estado, boolean conOficinas) throws Exception {
+    public void arbolUnidades(String idUnidad, Nodo nodo, String estado, boolean conOficinas, boolean denominacionCooficial) throws Exception {
 
         Nodo unidadPadre = unidadEjb.findUnidad(idUnidad, estado);
 
@@ -63,10 +66,10 @@ public class ArbolBean implements ArbolLocal {
             List<Nodo> oficinasDependientesTransf = new ArrayList<Nodo>();
             for (Nodo oficina : oficinasDependientes) {
                 // Obtenemos las oficinas auxiliares del nodo oficina que estamos tratando
-                List<Nodo> oficinasAuxTransformadas = oficinaEjb.oficinasAuxiliares(oficina.getCodigo(), estado);
+                List<Nodo> oficinasAuxTransformadas = oficinaEjb.oficinasAuxiliares(oficina.getCodigo(), estado, denominacionCooficial);
 
                 //Obtenemos las oficinas auxiliares de segundo nivel
-                obtenerAuxiliares(oficinasAuxTransformadas, estado);
+                obtenerAuxiliares(oficinasAuxTransformadas, estado, denominacionCooficial);
 
 
                 // Configuramos los datos del nodo (Representa una oficina)
@@ -99,7 +102,7 @@ public class ArbolBean implements ArbolLocal {
             hijo.setDescripcionEstado(unidadHija.getDescripcionEstado());
             hijos.add(hijo);
             // llamada recursiva
-            arbolUnidades(unidadHija.getCodigo(), hijo, estado, conOficinas);
+            arbolUnidades(unidadHija.getCodigo(), hijo, estado, conOficinas, denominacionCooficial);
         }
         nodo.setHijos(hijos);
     }
@@ -116,16 +119,16 @@ public class ArbolBean implements ArbolLocal {
      * @param estado      estado de las unidades que queremos mostrar en el arbol.
      * @param conOficinas indica si se quieren incluir las oficinas en el organigrama (es para mostrar el arbol en las
      *                    búsquedas de organismo destinatario de regweb3)
+     * @param denominacionCooficial 	retornamos las denominaciones cooficiales si existen de los nodos del árbol
      */
-    public void arbolUnidadesAscendentes(String idUnidad, Nodo nodo, String estado, boolean conOficinas) throws Exception {
+    public void arbolUnidadesAscendentes(String idUnidad, Nodo nodo, String estado, boolean conOficinas, boolean denominacionCooficial) throws Exception {
 
 
         Nodo nodoInicial = new Nodo(); // Nodo en el que guardaremos los datos de la unidad indicada por IdUnidad
-        Nodo unidad = unidadEjb.findUnidad(idUnidad, estado); // Obtenemos la unidad que nos han indicado(solo se obtienen parte de los datos del nodo)
+        Nodo unidad = unidadEjb.findUnidadByCodigoDir3(idUnidad, estado, denominacionCooficial); // Obtenemos la unidad que nos han indicado(solo se obtienen parte de los datos del nodo)
         if (unidad != null) {
             String codigoSuperior = new StringTokenizer(unidad.getSuperior(), " - ").nextToken();//Obtenemos el código de la Unidad Superior
             unidad.setIdPadre(codigoSuperior); //Asignamos el identificador del padre de la unidad.
-
 
             // Creamos el nodo asociado a la unidad indicada por idUnidad
             // este nodo lo necesitaremos posteriormente para montar todo el arbol hacia arriba y hacia abajo
@@ -143,23 +146,24 @@ public class ArbolBean implements ArbolLocal {
 
             //Obtenemos todos los hijos hacia abajo con el metodo de arbolUnidades
             List<Nodo> hijos = new ArrayList<Nodo>();
-            List<Nodo> unidadesHijas = unidadEjb.hijos(idUnidad, estado);
+            List<Nodo> unidadesHijas = unidadEjb.hijos(idUnidad, estado, denominacionCooficial, true);
             //Llamada a arbolUnidades para cada uno de los hijos encontrados
             for (Nodo unidadHija : unidadesHijas) {
                 Nodo hijo = new Nodo();
                 hijo.setCodigo(unidadHija.getCodigo());
+                hijo.setCodigoDir3(unidadHija.getCodigoDir3());
                 hijo.setIdPadre(idUnidad);
                 hijo.setDenominacion(unidadHija.getDenominacion());
                 hijo.setSuperior(unidadHija.getSuperior());
                 hijo.setRaiz(unidadHija.getRaiz());
                 hijo.setDescripcionEstado(unidadHija.getDescripcionEstado());
                 //Averiguamos si tiene oficinas SIR y lo indicamos
-               tieneOficinasSir = oficinaEjb.obtenerOficinasSIRUnidad(unidadHija.getCodigo()).size() > 0;
+               tieneOficinasSir = oficinaEjb.obtenerOficinasSIRUnidad(unidadHija.getCodigo(), denominacionCooficial).size() > 0;
                 hijo.setTieneOficinaSir(tieneOficinasSir);
                 hijos.add(hijo);
 
                 // llamada recursiva
-                arbolUnidades(unidadHija.getCodigo(), hijo, unidadHija.getDescripcionEstado(), conOficinas);
+                arbolUnidades(unidadHija.getCodigo(), hijo, unidadHija.getDescripcionEstado(), conOficinas, denominacionCooficial);
             }
             nodoInicial.setHijos(hijos);
 
@@ -169,8 +173,8 @@ public class ArbolBean implements ArbolLocal {
             while (!nodoActual.getCodigo().equals(codigoRaiz)) {//mientras el codigo del nodo actual con el codigo de su raiz sean distintos
                 Nodo nodoSuperior;
                 codigoSuperior = new StringTokenizer(nodoActual.getSuperior(), " - ").nextToken();//Obtenemos el código de la Unidad Superior
-                nodoSuperior = unidadEjb.findUnidad(codigoSuperior, estado); // Obtenemos la unidad que nos han indicado(solo se obtienen parte de los datos del nodo)
-               tieneOficinasSir = oficinaEjb.obtenerOficinasSIRUnidad(codigoSuperior).size() > 0;
+                nodoSuperior = unidadEjb.findUnidad(codigoSuperior, estado, denominacionCooficial); // Obtenemos la unidad que nos han indicado(solo se obtienen parte de los datos del nodo)
+                tieneOficinasSir = oficinaEjb.obtenerOficinasSIRUnidad(codigoSuperior, denominacionCooficial).size() > 0;
                 nodoSuperior.setTieneOficinaSir(tieneOficinasSir);
                 List<Nodo> hijosS = new ArrayList<Nodo>();
                 hijosS.add(nodoActual);
@@ -182,8 +186,8 @@ public class ArbolBean implements ArbolLocal {
             //TRATAMOS RAIZ
             Nodo nodoSuperior;
             codigoSuperior = new StringTokenizer(nodoActual.getSuperior(), " - ").nextToken();//Obtenemos el código de la Unidad Superior
-            nodoSuperior = unidadEjb.findUnidad(codigoSuperior, estado); // Obtenemos la unidad que nos han indicado(solo se obtienen parte de los datos del nodo)
-            tieneOficinasSir = oficinaEjb.obtenerOficinasSIRUnidad(codigoSuperior).size() > 0;
+            nodoSuperior = unidadEjb.findUnidad(codigoSuperior, estado, denominacionCooficial); // Obtenemos la unidad que nos han indicado(solo se obtienen parte de los datos del nodo)
+            tieneOficinasSir = oficinaEjb.obtenerOficinasSIRUnidad(codigoSuperior, denominacionCooficial).size() > 0;
             nodoSuperior.setTieneOficinaSir(tieneOficinasSir);
             List<Nodo> hijosS = new ArrayList<Nodo>();
             hijosS.add(nodoActual);
@@ -211,15 +215,15 @@ public class ArbolBean implements ArbolLocal {
      * @param estado
      * @throws Exception
      */
-    private void obtenerAuxiliares(List<Nodo> oficinas, String estado) throws Exception {
+    private void obtenerAuxiliares(List<Nodo> oficinas, String estado, boolean denominacionCooficial) throws Exception {
 
         for (Nodo oficinaAuxiliarTrans : oficinas) {
             // obtener sus auxiliares
-            List<Nodo> oficinasAuxiliares = oficinaEjb.oficinasAuxiliares(oficinaAuxiliarTrans.getCodigo(), estado);
+            List<Nodo> oficinasAuxiliares = oficinaEjb.oficinasAuxiliares(oficinaAuxiliarTrans.getCodigo(), estado, denominacionCooficial);
             List<Nodo> oficinasAuxTransformadas = oficinasAuxiliares;
             oficinaAuxiliarTrans.setOficinasAuxiliares(oficinasAuxTransformadas);
             //recursividad
-            obtenerAuxiliares(oficinasAuxTransformadas, estado);
+            obtenerAuxiliares(oficinasAuxTransformadas, estado, denominacionCooficial);
         }
     }
 
@@ -230,11 +234,11 @@ public class ArbolBean implements ArbolLocal {
      * @param idOficina oficina raiz de la que partimos.
      * @return Nodo (árbol)
      */
-    public void arbolOficinas(String idOficina, Nodo nodo, String estado) throws Exception {
+    public void arbolOficinas(String idOficina, Nodo nodo, String estado, boolean denominacionCooficial) throws Exception {
 
         log.info(" CODIGO DE LA OFICINA " + idOficina);
         //Oficina oficinaPadre = oficinaEjb.findById(idOficina);
-        Nodo oficinaPadre = oficinaEjb.findOficina(idOficina, estado);
+        Nodo oficinaPadre = oficinaEjb.findOficina(idOficina, estado, denominacionCooficial);
         nodo.setCodigo(oficinaPadre.getCodigo());
         nodo.setDenominacion(oficinaPadre.getDenominacion());
         nodo.setIdPadre(idOficina);
@@ -243,7 +247,7 @@ public class ArbolBean implements ArbolLocal {
         nodo.setDescripcionEstado(oficinaPadre.getDescripcionEstado());
 
         List<Nodo> hijos = new ArrayList<Nodo>();
-        List<Nodo> oficinasHijas = oficinaEjb.hijos(idOficina, estado);
+        List<Nodo> oficinasHijas = oficinaEjb.hijos(idOficina, estado, denominacionCooficial);
 
         for (Nodo oficinaHija : oficinasHijas) {
             Nodo hijo = new Nodo();
@@ -255,7 +259,7 @@ public class ArbolBean implements ArbolLocal {
             hijo.setDescripcionEstado(oficinaHija.getDescripcionEstado());
             hijos.add(hijo);
             // llamada recursiva
-            arbolOficinas(oficinaHija.getCodigo(), hijo, estado);
+            arbolOficinas(oficinaHija.getCodigo(), hijo, estado, denominacionCooficial);
         }
         nodo.setHijos(hijos);
 

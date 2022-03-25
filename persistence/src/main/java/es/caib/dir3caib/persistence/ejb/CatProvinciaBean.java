@@ -48,6 +48,23 @@ public class CatProvinciaBean extends BaseEjbJPA<CatProvincia, Long> implements 
 
         return  em.createQuery("Select catProvincia from CatProvincia as catProvincia order by catProvincia.codigoProvincia").getResultList();
     }
+
+    @Override
+    @SuppressWarnings(value = "unchecked")
+    public List<CatProvincia> getAll(String estado) throws Exception {
+    	
+    	String where = "";
+    	if(Utils.isNotEmpty(estado)) {
+    		where = " where catProvincia.estado = :estado ";
+    	}
+
+    	Query q =  em.createQuery("Select catProvincia from CatProvincia as catProvincia " + where + " order by catProvincia.codigoProvincia");
+
+    	if(where != "")
+    		q.setParameter("estado", estado);
+    	
+        return q.getResultList();
+    }
     
     @Override
     @SuppressWarnings(value = "unchecked")
