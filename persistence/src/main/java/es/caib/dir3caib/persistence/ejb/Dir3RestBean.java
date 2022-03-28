@@ -756,7 +756,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 
 		if (unidades.size() > 0) {
 			Object[] obj = unidades.get(0);
-			return (denominacionCooficial && !((String) obj[1]).isEmpty()) ? (String) obj[1] : (String) obj[0];
+			return (denominacionCooficial && Utils.isNotEmpty((String) obj[1])) ? (String) obj[1] : (String) obj[0];
 		} else {
 			return "";
 		}
@@ -815,7 +815,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 
 		if (oficinas.size() > 0) {
 			Object[] obj = oficinas.get(0);
-			return (denominacionCooficial && !((String) obj[1]).isEmpty()) ? (String) obj[1] : (String) obj[0];
+			return (denominacionCooficial && Utils.isNotEmpty((String) obj[1])) ? (String) obj[1] : (String) obj[0];
 		} else {
 			return "";
 		}
@@ -1181,7 +1181,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 			ObjetoDirectorio objetoDirectorio = new ObjetoDirectorio();
 			objetoDirectorio.setCodigo((String) obj[0]);
 			objetoDirectorio.setDenominacion(
-					(denominacionCooficial && !((String) obj[2]).isEmpty()) ? (String) obj[2] : (String) obj[1]);
+					(denominacionCooficial && Utils.isNotEmpty((String) obj[2])) ? (String) obj[2] : (String) obj[1]);
 			objetoDirectorios.add(objetoDirectorio);
 		}
 
