@@ -150,10 +150,10 @@ public class Dir3RestBean implements Dir3RestLocal {
 		if (!denominacion.isEmpty()) {
 
 			Query q = em
-					.createQuery("select distinct oficina.codigo, oficina.denominacion, oficina.denomlenguacooficial "
+					.createQuery("select distinct oficina.codigo, oficina.denominacion, oficina.denomLenguaCooficial "
 							+ "from Oficina as oficina "
 							+ "where (upper(oficina.denominacion) like upper(:denominacion)"
-							+ "or upper(oficina.denomlenguacooficial) like upper(:denominacion))"
+							+ "or upper(oficina.denomLenguaCooficial) like upper(:denominacion))"
 							+ "and oficina.estado.codigoEstadoEntidad = :estado");
 
 			q.setParameter("denominacion", "%" + denominacion.toLowerCase() + "%");
@@ -636,7 +636,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 				"Select oficina.codigo, oficina.denominacion, oficina.estado.codigoEstadoEntidad, "
 						+ "unidadRaiz.codigo, unidadRaiz.denominacion, oficina.codUoResponsable.codigo, oficina.codUoResponsable.denominacion, "
 						+ "ofilocalidad.descripcionLocalidad, "
-						+ "oficina.denomlenguacooficial, unidadRaiz.denomLenguaCooficial, oficina.codUoResponsable.denomLenguaCooficial "
+						+ "oficina.denomLenguaCooficial, unidadRaiz.denomLenguaCooficial, oficina.codUoResponsable.denomLenguaCooficial "
 						+ "from Oficina as oficina left outer join oficina.codUoResponsable.codUnidadRaiz as unidadRaiz left outer join oficina.localidad as ofilocalidad ");
 
 		// Parametros de busqueda
@@ -648,7 +648,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 			// where.add(DataBaseUtils.like("oficina.denominacion ", "denominacion",
 			// parametros, denominacion));
 			String condicion1 = DataBaseUtils.like("oficina.denominacion ", "denominacion", parametros, denominacion);
-			String condicion2 = DataBaseUtils.like("oficina.denomlenguacooficial ", "denomcooficial", parametros,
+			String condicion2 = DataBaseUtils.like("oficina.denomLenguaCooficial ", "denomcooficial", parametros,
 					denominacion);
 			where.add("((" + condicion1 + ") or (" + condicion2 + "))");
 		}
@@ -706,7 +706,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 				query.append(w);
 				count++;
 			}
-			query.append("order by oficina.denominacion asc, oficina.denomlenguacooficial asc");
+			query.append("order by oficina.denominacion asc, oficina.denomLenguaCooficial asc");
 			q = em.createQuery(query.toString());
 
 			for (Map.Entry<String, Object> param : parametros.entrySet()) {
@@ -806,7 +806,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 	public String oficinaDenominacion(String codigo, boolean denominacionCooficial, String estado) throws Exception {
 
 		Query q = em.createQuery(
-				"select oficina.denominacion, oficina.denomlenguacooficial from Oficina as oficina where oficina.codigo=:codigo and oficina.estado.codigoEstadoEntidad = :estado");
+				"select oficina.denominacion, oficina.denomLenguaCooficial from Oficina as oficina where oficina.codigo=:codigo and oficina.estado.codigoEstadoEntidad = :estado");
 
 		q.setParameter("codigo", codigo);
 		q.setParameter("estado", (Utils.isNotEmpty(estado)) ? estado : Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
