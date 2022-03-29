@@ -584,7 +584,7 @@
 																				class="fa fa-home"></i> ${oficinaPrincipal.codigo} -
 																				<c:choose>
 																					<c:when
-																						test="${denominacionCooficial and not empty oficinaPrincipal.denomlenguacooficial}">${oficinaPrincipal.denomlenguacooficial}</c:when>
+																						test="${denominacionCooficial and not empty oficinaPrincipal.denomLenguaCooficial}">${oficinaPrincipal.denomLenguaCooficial}</c:when>
 																					<c:otherwise>${oficinaPrincipal.denominacion}</c:otherwise>
 																				</c:choose></span></a> <c:if test="${oficinaPrincipal.oficinaSir}">
 																			<a href="javascript:void(0);"><span
@@ -607,7 +607,7 @@
 																								class="fa fa-home"></i>
 																								${oficinaAuxiliar.codigo} - <c:choose>
 																									<c:when
-																										test="${denominacionCooficial and not empty oficinaAuxiliar.denomlenguacooficial}">${oficinaAuxiliar.denomlenguacooficial}</c:when>
+																										test="${denominacionCooficial and not empty oficinaAuxiliar.denomLenguaCooficial}">${oficinaAuxiliar.denomLenguaCooficial}</c:when>
 																									<c:otherwise>${oficinaAuxiliar.denominacion}</c:otherwise>
 																								</c:choose></span></a> <c:if test="${oficinaAuxiliar.oficinaSir}">
 																							<a href="javascript:void(0);"><span
@@ -641,7 +641,7 @@
 																												class="fa fa-home"></i>
 																												${oficinaAuxiliar2.codigo} - <c:choose>
 																													<c:when
-																														test="${denominacionCooficial and not empty oficinaAuxiliar2.denomlenguacooficial}">${oficinaAuxiliar2.denomlenguacooficial}</c:when>
+																														test="${denominacionCooficial and not empty oficinaAuxiliar2.denomLenguaCooficial}">${oficinaAuxiliar2.denomLenguaCooficial}</c:when>
 																													<c:otherwise>${oficinaAuxiliar2.denominacion}</c:otherwise>
 																												</c:choose></span></a></li>
 																								</c:if>
@@ -665,7 +665,7 @@
 																					class="fa fa-institution"></i>
 																					${relacionOrganizativaOfi.oficina.codigo} - <c:choose>
 																						<c:when
-																							test="${denominacionCooficial and not empty relacionOrganizativaOfi.oficina.denomlenguacooficial}">${relacionOrganizativaOfi.oficina.denomlenguacooficial}</c:when>
+																							test="${denominacionCooficial and not empty relacionOrganizativaOfi.oficina.denomLenguaCooficial}">${relacionOrganizativaOfi.oficina.denomLenguaCooficial}</c:when>
 																						<c:otherwise>${relacionOrganizativaOfi.oficina.denominacion}</c:otherwise>
 																					</c:choose></span></a></li>
 																	</c:if>
@@ -711,7 +711,7 @@
 																								class="fa fa-home"></i>
 																								${oficinaPrincipal.codigo} - <c:choose>
 																									<c:when
-																										test="${denominacionCooficial and not empty oficinaPrincipal.denomlenguacooficial}">${oficinaPrincipal.denomlenguacooficial}</c:when>
+																										test="${denominacionCooficial and not empty oficinaPrincipal.denomLenguaCooficial}">${oficinaPrincipal.denomLenguaCooficial}</c:when>
 																									<c:otherwise>${oficinaPrincipal.denominacion}</c:otherwise>
 																								</c:choose></span></a> <c:if test="${oficinaPrincipal.oficinaSir}">
 																							<a href="javascript:void(0);"><span
@@ -734,7 +734,7 @@
 																												class="fa fa-home"></i>
 																												${oficinaAuxiliar.codigo} - <c:choose>
 																													<c:when
-																														test="${denominacionCooficial and not empty oficinaAuxiliar.denomlenguacooficial}">${oficinaAuxiliar.denomlenguacooficial}</c:when>
+																														test="${denominacionCooficial and not empty oficinaAuxiliar.denomLenguaCooficial}">${oficinaAuxiliar.denomLenguaCooficial}</c:when>
 																													<c:otherwise>${oficinaAuxiliar.denominacion}</c:otherwise>
 																												</c:choose></span></a> <c:if test="${oficinaAuxiliar.oficinaSir}">
 																											<a href="javascript:void(0);"><span
@@ -768,7 +768,7 @@
 																																class="fa fa-home"></i>
 																																${oficinaAuxiliar2.codigo} - <c:choose>
 																																	<c:when
-																																		test="${denominacionCooficial and not empty oficinaAuxiliar2.denomlenguacooficial}">${oficinaAuxiliar2.denomlenguacooficial}</c:when>
+																																		test="${denominacionCooficial and not empty oficinaAuxiliar2.denomLenguaCooficial}">${oficinaAuxiliar2.denomLenguaCooficial}</c:when>
 																																	<c:otherwise>${oficinaAuxiliar2.denominacion}</c:otherwise>
 																																</c:choose></span></a></li>
 																												</c:if>
@@ -793,7 +793,7 @@
 																									class="fa fa-institution"></i>
 																									${relacionOrganizativaOfi.oficina.codigo} - <c:choose>
 																										<c:when
-																											test="${denominacionCooficial and not empty relacionOrganizativaOfi.oficina.denomlenguacooficial}">${relacionOrganizativaOfi.oficina.denomlenguacooficial}</c:when>
+																											test="${denominacionCooficial and not empty relacionOrganizativaOfi.oficina.denomLenguaCooficial}">${relacionOrganizativaOfi.oficina.denomLenguaCooficial}</c:when>
 																										<c:otherwise>${relacionOrganizativaOfi.oficina.denominacion}</c:otherwise>
 																									</c:choose></span></a></li>
 																					</c:if>
@@ -842,7 +842,7 @@
 																												class="fa fa-home"></i>
 																												${oficinaPrincipal.codigo} - <c:choose>
 																													<c:when
-																														test="${denominacionCooficial and not empty oficinaPrincipal.denomlenguacooficial}">${oficinaPrincipal.denomlenguacooficial}</c:when>
+																														test="${denominacionCooficial and not empty oficinaPrincipal.denomLenguaCooficial}">${oficinaPrincipal.denomLenguaCooficial}</c:when>
 																													<c:otherwise>${oficinaPrincipal.denominacion}</c:otherwise>
 																												</c:choose></span></a> <c:if test="${oficinaPrincipal.oficinaSir}">
 																											<a href="javascript:void(0);"><span
@@ -865,7 +865,7 @@
 																																class="fa fa-home"></i>
 																																${oficinaAuxiliar.codigo} - <c:choose>
 																																	<c:when
-																																		test="${denominacionCooficial and not empty oficinaAuxiliar.denomlenguacooficial}">${oficinaAuxiliar.denomlenguacooficial}</c:when>
+																																		test="${denominacionCooficial and not empty oficinaAuxiliar.denomLenguaCooficial}">${oficinaAuxiliar.denomLenguaCooficial}</c:when>
 																																	<c:otherwise>${oficinaAuxiliar.denominacion}</c:otherwise>
 																																</c:choose></span></a> <c:if
 																															test="${oficinaAuxiliar.oficinaSir}">
@@ -900,7 +900,7 @@
 																																				class="fa fa-home"></i>
 																																				${oficinaAuxiliar2.codigo} - <c:choose>
 																																					<c:when
-																																						test="${denominacionCooficial and not empty oficinaAuxiliar2.denomlenguacooficial}">${oficinaAuxiliar2.denomlenguacooficial}</c:when>
+																																						test="${denominacionCooficial and not empty oficinaAuxiliar2.denomLenguaCooficial}">${oficinaAuxiliar2.denomLenguaCooficial}</c:when>
 																																					<c:otherwise>${oficinaAuxiliar2.denominacion}</c:otherwise>
 																																				</c:choose></span></a></li>
 																																</c:if>
@@ -926,7 +926,7 @@
 																													${relacionOrganizativaOfi.oficina.codigo} -
 																													<c:choose>
 																														<c:when
-																															test="${denominacionCooficial and not empty relacionOrganizativaOfi.oficina.denomlenguacooficial}">${relacionOrganizativaOfi.oficina.denomlenguacooficial}</c:when>
+																															test="${denominacionCooficial and not empty relacionOrganizativaOfi.oficina.denomLenguaCooficial}">${relacionOrganizativaOfi.oficina.denomLenguaCooficial}</c:when>
 																														<c:otherwise>${relacionOrganizativaOfi.oficina.denominacion}</c:otherwise>
 																													</c:choose></span></a></li>
 																									</c:if>
@@ -976,7 +976,7 @@
 																																class="fa fa-home"></i>
 																																${oficinaPrincipal.codigo} - <c:choose>
 																																	<c:when
-																																		test="${denominacionCooficial and not empty oficinaPrincipal.denomlenguacooficial}">${oficinaPrincipal.denomlenguacooficial}</c:when>
+																																		test="${denominacionCooficial and not empty oficinaPrincipal.denomLenguaCooficial}">${oficinaPrincipal.denomLenguaCooficial}</c:when>
 																																	<c:otherwise>${oficinaPrincipal.denominacion}</c:otherwise>
 																																</c:choose></span></a> <c:if
 																															test="${oficinaPrincipal.oficinaSir}">
@@ -1000,7 +1000,7 @@
 																																				class="fa fa-home"></i>
 																																				${oficinaAuxiliar.codigo} - <c:choose>
 																																					<c:when
-																																						test="${denominacionCooficial and not empty oficinaAuxiliar.denomlenguacooficial}">${oficinaAuxiliar.denomlenguacooficial}</c:when>
+																																						test="${denominacionCooficial and not empty oficinaAuxiliar.denomLenguaCooficial}">${oficinaAuxiliar.denomLenguaCooficial}</c:when>
 																																					<c:otherwise>${oficinaAuxiliar.denominacion}</c:otherwise>
 																																				</c:choose></span></a> <c:if
 																																			test="${oficinaAuxiliar.oficinaSir}">
@@ -1037,7 +1037,7 @@
 																																								class="fa fa-home"></i>
 																																								${oficinaAuxiliar2.codigo} - <c:choose>
 																																									<c:when
-																																										test="${denominacionCooficial and not empty oficinaAuxiliar2.denomlenguacooficial}">${oficinaAuxiliar2.denomlenguacooficial}</c:when>
+																																										test="${denominacionCooficial and not empty oficinaAuxiliar2.denomLenguaCooficial}">${oficinaAuxiliar2.denomLenguaCooficial}</c:when>
 																																									<c:otherwise>${oficinaAuxiliar2.denominacion}</c:otherwise>
 																																								</c:choose></span></a></li>
 																																				</c:if>
@@ -1063,7 +1063,7 @@
 																																	${relacionOrganizativaOfi.oficina.codigo}
 																																	- <c:choose>
 																																		<c:when
-																																			test="${denominacionCooficial and not empty relacionOrganizativaOfi.oficina.denomlenguacooficial}">${relacionOrganizativaOfi.oficina.denomlenguacooficial}</c:when>
+																																			test="${denominacionCooficial and not empty relacionOrganizativaOfi.oficina.denomLenguaCooficial}">${relacionOrganizativaOfi.oficina.denomLenguaCooficial}</c:when>
 																																		<c:otherwise>${relacionOrganizativaOfi.oficina.denominacion}</c:otherwise>
 																																	</c:choose></span></a></li>
 																													</c:if>
@@ -1113,7 +1113,7 @@
 																																				class="fa fa-home"></i>
 																																				${oficinaPrincipal.codigo} - <c:choose>
 																																					<c:when
-																																						test="${denominacionCooficial and not empty oficinaPrincipal.denomlenguacooficial}">${oficinaPrincipal.denomlenguacooficial}</c:when>
+																																						test="${denominacionCooficial and not empty oficinaPrincipal.denomLenguaCooficial}">${oficinaPrincipal.denomLenguaCooficial}</c:when>
 																																					<c:otherwise>${oficinaPrincipal.denominacion}</c:otherwise>
 																																				</c:choose></span></a> <c:if
 																																			test="${oficinaPrincipal.oficinaSir}">
@@ -1138,7 +1138,7 @@
 																																								class="fa fa-home"></i>
 																																								${oficinaAuxiliar.codigo} - <c:choose>
 																																									<c:when
-																																										test="${denominacionCooficial and not empty oficinaAuxiliar.denomlenguacooficial}">${oficinaAuxiliar.denomlenguacooficial}</c:when>
+																																										test="${denominacionCooficial and not empty oficinaAuxiliar.denomLenguaCooficial}">${oficinaAuxiliar.denomLenguaCooficial}</c:when>
 																																									<c:otherwise>${oficinaAuxiliar.denominacion}</c:otherwise>
 																																								</c:choose></span></a> <c:if
 																																							test="${oficinaAuxiliar.oficinaSir}">
@@ -1177,7 +1177,7 @@
 																																												${oficinaAuxiliar2.codigo} -
 																																												<c:choose>
 																																													<c:when
-																																														test="${denominacionCooficial and not empty oficinaAuxiliar2.denomlenguacooficial}">${oficinaAuxiliar2.denomlenguacooficial}</c:when>
+																																														test="${denominacionCooficial and not empty oficinaAuxiliar2.denomLenguaCooficial}">${oficinaAuxiliar2.denomLenguaCooficial}</c:when>
 																																													<c:otherwise>${oficinaAuxiliar2.denominacion}</c:otherwise>
 																																												</c:choose></span></a></li>
 																																								</c:if>
@@ -1203,7 +1203,7 @@
 																																					${relacionOrganizativaOfi.oficina.codigo}
 																																					- <c:choose>
 																																						<c:when
-																																							test="${denominacionCooficial and not empty relacionOrganizativaOfi.oficina.denomlenguacooficial}">${relacionOrganizativaOfi.oficina.denomlenguacooficial}</c:when>
+																																							test="${denominacionCooficial and not empty relacionOrganizativaOfi.oficina.denomLenguaCooficial}">${relacionOrganizativaOfi.oficina.denomLenguaCooficial}</c:when>
 																																						<c:otherwise>${relacionOrganizativaOfi.oficina.denominacion}</c:otherwise>
 																																					</c:choose></span></a></li>
 																																	</c:if>
@@ -1257,7 +1257,7 @@
 																																								class="fa fa-home"></i>
 																																								${oficinaPrincipal.codigo} - <c:choose>
 																																									<c:when
-																																										test="${denominacionCooficial and not empty oficinaPrincipal.denomlenguacooficial}">${oficinaPrincipal.denomlenguacooficial}</c:when>
+																																										test="${denominacionCooficial and not empty oficinaPrincipal.denomLenguaCooficial}">${oficinaPrincipal.denomLenguaCooficial}</c:when>
 																																									<c:otherwise>${oficinaPrincipal.denominacion}</c:otherwise>
 																																								</c:choose></span></a> <c:if
 																																							test="${oficinaPrincipal.oficinaSir}">
@@ -1284,7 +1284,7 @@
 																																												${oficinaAuxiliar.codigo} -
 																																												<c:choose>
 																																													<c:when
-																																														test="${denominacionCooficial and not empty oficinaAuxiliar.denomlenguacooficial}">${oficinaAuxiliar.denomlenguacooficial}</c:when>
+																																														test="${denominacionCooficial and not empty oficinaAuxiliar.denomLenguaCooficial}">${oficinaAuxiliar.denomLenguaCooficial}</c:when>
 																																													<c:otherwise>${oficinaAuxiliar.denominacion}</c:otherwise>
 																																												</c:choose></span></a> <c:if
 																																											test="${oficinaAuxiliar.oficinaSir}">
@@ -1325,7 +1325,7 @@
 																																																${oficinaAuxiliar2.codigo}
 																																																- <c:choose>
 																																																	<c:when
-																																																		test="${denominacionCooficial and not empty oficinaAuxiliar2.denomlenguacooficial}">${oficinaAuxiliar2.denomlenguacooficial}</c:when>
+																																																		test="${denominacionCooficial and not empty oficinaAuxiliar2.denomLenguaCooficial}">${oficinaAuxiliar2.denomLenguaCooficial}</c:when>
 																																																	<c:otherwise>${oficinaAuxiliar2.denominacion}</c:otherwise>
 																																																</c:choose></span></a></li>
 																																												</c:if>
@@ -1353,7 +1353,7 @@
 																																									${relacionOrganizativaOfi.oficina.codigo}
 																																									- <c:choose>
 																																										<c:when
-																																											test="${denominacionCooficial and not empty relacionOrganizativaOfi.oficina.denomlenguacooficial}">${relacionOrganizativaOfi.oficina.denomlenguacooficial}</c:when>
+																																											test="${denominacionCooficial and not empty relacionOrganizativaOfi.oficina.denomLenguaCooficial}">${relacionOrganizativaOfi.oficina.denomLenguaCooficial}</c:when>
 																																										<c:otherwise>${relacionOrganizativaOfi.oficina.denominacion}</c:otherwise>
 																																									</c:choose></span></a></li>
 																																					</c:if>
@@ -1408,7 +1408,7 @@
 																																												${oficinaPrincipal.codigo} -
 																																												<c:choose>
 																																													<c:when
-																																														test="${denominacionCooficial and not empty oficinaPrincipal.denomlenguacooficial}">${oficinaPrincipal.denomlenguacooficial}</c:when>
+																																														test="${denominacionCooficial and not empty oficinaPrincipal.denomLenguaCooficial}">${oficinaPrincipal.denomLenguaCooficial}</c:when>
 																																													<c:otherwise>${oficinaPrincipal.denominacion}</c:otherwise>
 																																												</c:choose></span></a> <c:if
 																																											test="${oficinaPrincipal.oficinaSir}">
@@ -1436,7 +1436,7 @@
 																																																${oficinaAuxiliar.codigo}
 																																																- <c:choose>
 																																																	<c:when
-																																																		test="${denominacionCooficial and not empty oficinaAuxiliar.denomlenguacooficial}">${oficinaAuxiliar.denomlenguacooficial}</c:when>
+																																																		test="${denominacionCooficial and not empty oficinaAuxiliar.denomLenguaCooficial}">${oficinaAuxiliar.denomLenguaCooficial}</c:when>
 																																																	<c:otherwise>${oficinaAuxiliar.denominacion}</c:otherwise>
 																																																</c:choose></span></a> <c:if
 																																															test="${oficinaAuxiliar.oficinaSir}">
@@ -1478,7 +1478,7 @@
 																																																				${oficinaAuxiliar2.codigo}
 																																																				- <c:choose>
 																																																					<c:when
-																																																						test="${denominacionCooficial and not empty oficinaAuxiliar2.denomlenguacooficial}">${oficinaAuxiliar2.denomlenguacooficial}</c:when>
+																																																						test="${denominacionCooficial and not empty oficinaAuxiliar2.denomLenguaCooficial}">${oficinaAuxiliar2.denomLenguaCooficial}</c:when>
 																																																					<c:otherwise>${oficinaAuxiliar2.denominacion}</c:otherwise>
 																																																				</c:choose></span></a></li>
 																																																</c:if>
@@ -1506,7 +1506,7 @@
 																																													${relacionOrganizativaOfi.oficina.codigo}
 																																													- <c:choose>
 																																														<c:when
-																																															test="${denominacionCooficial and not empty relacionOrganizativaOfi.oficina.denomlenguacooficial}">${relacionOrganizativaOfi.oficina.denomlenguacooficial}</c:when>
+																																															test="${denominacionCooficial and not empty relacionOrganizativaOfi.oficina.denomLenguaCooficial}">${relacionOrganizativaOfi.oficina.denomLenguaCooficial}</c:when>
 																																														<c:otherwise>${relacionOrganizativaOfi.oficina.denominacion}</c:otherwise>
 																																													</c:choose></span></a></li>
 																																									</c:if>
