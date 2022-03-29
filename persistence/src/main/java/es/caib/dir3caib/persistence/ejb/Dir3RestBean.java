@@ -107,7 +107,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 			String estado) throws Exception {
 
 		if (!denominacion.isEmpty()) {
-			Query q = em.createQuery("select distinct unidad.codigo, unidad.denominacion, unidad.denomLenguaCooficial "
+			Query q = em.createQuery("select distinct unidad.codigoDir3, unidad.denominacion, unidad.denomLenguaCooficial "
 					+ "from Unidad as unidad " + "where ( upper(unidad.denominacion) like upper(:denominacion) "
 					+ "	or upper(unidad.denomLenguaCooficial) like upper(:denominacion))"
 					+ "and unidad.estado.codigoEstadoEntidad = :estado");
@@ -1042,8 +1042,8 @@ public class Dir3RestBean implements Dir3RestLocal {
 
 		q.setParameter("codComunidad", codComunidad);
 
-		if (filtreEstado != "")
-			q.setParameter("estado", estado);
+		if (filtreEstado != "") { q.setParameter("estado", estado);}
+
 
 		return transformarACodigoValor(q.getResultList());
 
@@ -1066,7 +1066,8 @@ public class Dir3RestBean implements Dir3RestLocal {
 				+ filtreEstado
 				+ "order by na.descripcionNivelAdministracion");
 
-		q.setParameter("estado", estado);
+		if (filtreEstado != "")  {q.setParameter("estado", estado);}
+
 
 		return transformarACodigoValor(q.getResultList());
 
@@ -1087,8 +1088,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 
 		q.setParameter("nivelAdministracion", nivelAdministracion);
 
-		if (filtreEstado != "")
-			q.setParameter("estado", (Utils.isNotEmpty(estado)) ? estado : Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+		if (filtreEstado != "") {q.setParameter("estado", (Utils.isNotEmpty(estado)) ? estado : Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);}
 
 		return transformarACodigoValor(q.getResultList());
 	}
@@ -1105,8 +1105,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 						+ filtreEstado
 						+ "order by catEstadoEntidad.codigoEstadoEntidad ASC");
 
-		if (filtreEstado != "")
-			q.setParameter("estado", estado);
+		if (filtreEstado != "") {q.setParameter("estado", estado);}
 
 		return transformarACodigoValor(q.getResultList());
 
@@ -1123,8 +1122,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 				+ filtreEstado
 				+ "order by catTipoVia.descripcionTipoVia");
 
-		if (filtreEstado != "")
-			q.setParameter("estado", estado);
+		if (filtreEstado != "") {q.setParameter("estado", estado);}
 
 		return transformarACodigoValor(q.getResultList());
 
@@ -1140,8 +1138,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 				+ filtreEstado 
 				+ "order by catPais.descripcionPais");
 
-		if (filtreEstado != "")
-			q.setParameter("estado", estado);
+		if (filtreEstado != "") {q.setParameter("estado", estado);}
 
 		return q.getResultList();
 

@@ -47,6 +47,7 @@ public interface Dir3RestLocal  {
   
   Boolean tieneOficinasOrganismo(String codigo) throws Exception;
 
+  /*TODO ELIMINAR los métodos que no se usan */
   List<Nodo> busquedaOrganismos(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, boolean conOficinas, boolean unidadRaiz, Long provincia, String localidad, boolean vigentes) throws Exception;
 
   List<Nodo> busquedaOficinas(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, Long provincia, String localidad, boolean oficinasSir, boolean vigentes) throws Exception;

@@ -10,6 +10,7 @@ import es.caib.dir3caib.persistence.model.json.UnidadRest;
 import es.caib.dir3caib.persistence.utils.CodigoValor;
 import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.ObjetoDirectorio;
+import es.caib.dir3caib.utils.Utils;
 import org.apache.log4j.Logger;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
@@ -667,7 +668,7 @@ public class RestController {
 		for (Unidad unidad : resultados) {
 			ObjetoDirectorio objetoDirectorio = new ObjetoDirectorio();
 			objetoDirectorio.setCodigo(unidad.getCodigoDir3());
-			objetoDirectorio.setDenominacion((denominacionCooficial && !unidad.getDenomLenguaCooficial().isEmpty())
+			objetoDirectorio.setDenominacion((denominacionCooficial && Utils.isNotEmpty(unidad.getDenomLenguaCooficial()))
 					? unidad.getDenomLenguaCooficial()
 					: unidad.getDenominacion());
 			objetoDirectorios.add(objetoDirectorio);
@@ -690,7 +691,7 @@ public class RestController {
 		for (Oficina oficina : resultados) {
 			ObjetoDirectorio objetoDirectorio = new ObjetoDirectorio();
 			objetoDirectorio.setCodigo(oficina.getCodigo());
-			objetoDirectorio.setDenominacion((denominacionCooficial && !oficina.getDenomLenguaCooficial().isEmpty())
+			objetoDirectorio.setDenominacion((denominacionCooficial && Utils.isNotEmpty(oficina.getDenomLenguaCooficial()))
 					? oficina.getDenomLenguaCooficial()
 					: oficina.getDenominacion());
 			objetoDirectorios.add(objetoDirectorio);
@@ -734,7 +735,7 @@ public class RestController {
 			oficinaJson.setNivelAdministracion(ofi.getNivelAdministracion().getDescripcionNivelAdministracion());
 
 			oficinaJson.setTipoOficina(ofi.getTipoOficina().getDescripcionJerarquiaOficina()); // CatJerarquiaOficina
-			oficinaJson.setUnidadResponsable(ofi.getDenominacion());// Unidad
+			oficinaJson.setUnidadResponsable(ofi.getCodUoResponsable().getDenominacion());// Unidad
 			if (ofi.getCodOfiResponsable() != null) {
 				oficinaJson.setOficinaResponsable(ofi.getCodOfiResponsable().getDenominacion()); // Oficina
 			}
@@ -774,81 +775,6 @@ public class RestController {
 			for (ServicioOfi serv : ofi.getServicios()) {
 				servicios.add(serv.getServicio().getDescServicio());
 			}
-
-			// Version Map
-			/*
-			 * Map<Integer, String> serviciosMap = new HashMap<Integer, String>() { { put(1,
-			 * " "); put(2, " "); put(3, " "); put(4, " "); put(5, " "); put(6, " "); put(7,
-			 * " "); put(8, " "); put(9, " "); put(10, " "); put(11, " "); put(12, " ");
-			 * put(13, " "); put(14, " "); put(15, " "); } };
-			 * 
-			 * 
-			 * for (Servicio serv : ofi.getServicios()) {
-			 * 
-			 * switch (serv.getCodServicio().intValue()) { case
-			 * Dir3caibConstantes.SERVICIO_OFI_REGISTRO: {
-			 * serviciosMap.remove(Dir3caibConstantes.SERVICIO_OFI_REGISTRO);
-			 * serviciosMap.put(Dir3caibConstantes.SERVICIO_OFI_REGISTRO,
-			 * serv.getDescServicio()); break; } case
-			 * Dir3caibConstantes.SERVICIO_OFI_INFORMACION: {
-			 * serviciosMap.remove(Dir3caibConstantes.SERVICIO_OFI_INFORMACION);
-			 * serviciosMap.put(Dir3caibConstantes.SERVICIO_OFI_INFORMACION,
-			 * serv.getDescServicio()); break; } case
-			 * Dir3caibConstantes.SERVICIO_OFI_TRAMITACION: {
-			 * serviciosMap.remove(Dir3caibConstantes.SERVICIO_OFI_TRAMITACION);
-			 * serviciosMap.put(Dir3caibConstantes.SERVICIO_OFI_TRAMITACION,
-			 * serv.getDescServicio()); break; } case
-			 * Dir3caibConstantes.SERVICIO_REG_VIRTUAL: {
-			 * serviciosMap.remove(Dir3caibConstantes.SERVICIO_REG_VIRTUAL);
-			 * serviciosMap.put(Dir3caibConstantes.SERVICIO_REG_VIRTUAL,
-			 * serv.getDescServicio()); break; } case Dir3caibConstantes.SERVICIO_SIR: {
-			 * serviciosMap.remove(Dir3caibConstantes.SERVICIO_SIR);
-			 * serviciosMap.put(Dir3caibConstantes.SERVICIO_SIR, serv.getDescServicio());
-			 * break; } case Dir3caibConstantes.SERVICIO_SIR_ENVIO: {
-			 * serviciosMap.remove(Dir3caibConstantes.SERVICIO_SIR_ENVIO);
-			 * serviciosMap.put(Dir3caibConstantes.SERVICIO_SIR_ENVIO,
-			 * serv.getDescServicio()); break; } case
-			 * Dir3caibConstantes.SERVICIO_SIR_RECEPCION: {
-			 * serviciosMap.remove(Dir3caibConstantes.SERVICIO_SIR_RECEPCION);
-			 * serviciosMap.put(Dir3caibConstantes.SERVICIO_SIR_RECEPCION,
-			 * serv.getDescServicio()); break; } case Dir3caibConstantes.SERVICIO_060: {
-			 * serviciosMap.remove(Dir3caibConstantes.SERVICIO_060);
-			 * serviciosMap.put(Dir3caibConstantes.SERVICIO_060, serv.getDescServicio());
-			 * break; } case Dir3caibConstantes.SERVICIO_OFI_CORREOS: {
-			 * serviciosMap.remove(Dir3caibConstantes.SERVICIO_OFI_CORREOS);
-			 * serviciosMap.put(Dir3caibConstantes.SERVICIO_OFI_CORREOS,
-			 * serv.getDescServicio()); break; } case
-			 * Dir3caibConstantes.SERVICIO_OFI_EXTRANJERIA: {
-			 * serviciosMap.remove(Dir3caibConstantes.SERVICIO_OFI_EXTRANJERIA);
-			 * serviciosMap.put(Dir3caibConstantes.SERVICIO_OFI_EXTRANJERIA,
-			 * serv.getDescServicio()); break; } case
-			 * Dir3caibConstantes.SERVICIO_OFI_VIOLGENERO: {
-			 * serviciosMap.remove(Dir3caibConstantes.SERVICIO_OFI_VIOLGENERO);
-			 * serviciosMap.put(Dir3caibConstantes.SERVICIO_OFI_VIOLGENERO,
-			 * serv.getDescServicio()); break; } case
-			 * Dir3caibConstantes.SERVICIO_OFI_ACCESIBLE: {
-			 * serviciosMap.remove(Dir3caibConstantes.SERVICIO_OFI_ACCESIBLE);
-			 * serviciosMap.put(Dir3caibConstantes.SERVICIO_OFI_ACCESIBLE,
-			 * serv.getDescServicio()); break; } case Dir3caibConstantes.SERVICIO_CLAVE: {
-			 * serviciosMap.remove(Dir3caibConstantes.SERVICIO_CLAVE);
-			 * serviciosMap.put(Dir3caibConstantes.SERVICIO_CLAVE, serv.getDescServicio());
-			 * break; } case Dir3caibConstantes.SERVICIO_REA: {
-			 * serviciosMap.remove(Dir3caibConstantes.SERVICIO_REA);
-			 * serviciosMap.put(Dir3caibConstantes.SERVICIO_REA, serv.getDescServicio());
-			 * break; } case Dir3caibConstantes.SERVICIO_OFI_ORD: {
-			 * serviciosMap.remove(Dir3caibConstantes.SERVICIO_OFI_ORD);
-			 * serviciosMap.put(Dir3caibConstantes.SERVICIO_OFI_ORD,
-			 * serv.getDescServicio()); break; } }
-			 * 
-			 * 
-			 * }
-			 * 
-			 * StringBuffer serviciosBuffer = new StringBuffer(); for (Map.Entry<Integer,
-			 * String> entry : serviciosMap.entrySet()) {
-			 * serviciosBuffer.append(entry.getValue() + ";"); }
-			 * 
-			 * oficinaJson.setServicios(serviciosBuffer.toString());
-			 */
 
 			List<String> contactos = new ArrayList<String>();
 			for (ContactoOfi contactoOfi : ofi.getContactos()) {
