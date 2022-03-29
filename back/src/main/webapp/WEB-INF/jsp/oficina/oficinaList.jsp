@@ -110,11 +110,11 @@
                     
                     <div class="row-fluid">
                     	<div class="control-group">
-                             <form:label path="denominacionCooficial" cssClass="control-label largeLabel"><fmt:message
-                                     key="oficina.denominacion.cooficial"/></form:label>
-                             <div class="controls">
+                             <div class="check-controls">
                                  <form:checkbox path="denominacionCooficial" value="true" cssClass="input-xlarge"/>
                              </div>
+                             <form:label path="denominacionCooficial" cssClass="control-label largeLabel"><fmt:message
+                                     key="oficina.busqueda.cooficial"/></form:label>
                          </div>
                     </div>
 

@@ -353,6 +353,8 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
     * @throws Exception
     */
    Set<Unidad> historicosHaciaAtras(String codigoUnidad) throws Exception;
+   
+   Set<Unidad> historicosHaciaAtras(String codigoUnidad, boolean denominacionCooficial) throws Exception;
 
    /**
     * Obtiene los sustitutos de una unidad

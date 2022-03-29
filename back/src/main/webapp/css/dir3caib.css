@@ -40,6 +40,13 @@ body { background-image:url(../img/background-pattern.png); color:#666666; paddi
 	width: auto !important; 
 }
 
+.check-controls{
+	width: 120px;
+	text-align: right;
+	float: left;
+	margin-right: 20px;
+}
+
 /* Navigation */
 /*min-width:300px !important; */
 .navbar {  width:100%;}

@@ -305,6 +305,7 @@ public class OficinaController extends BaseController {
         mav.addObject("relacionesSirOfi", relacionesSirOfi);
         mav.addObject("unidadRaiz", unidad.getCodUnidadSuperior());
         mav.addObject("denominacionCooficial", denominacionCooficial);
+        mav.addObject("paginaUrl", (denominacionCooficial) ? "detall" : "detalle");
         return mav;
     	
     	

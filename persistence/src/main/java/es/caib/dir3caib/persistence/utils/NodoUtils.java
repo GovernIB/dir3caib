@@ -1,5 +1,6 @@
 package es.caib.dir3caib.persistence.utils;
 
+import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.model.Oficina;
 import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.utils.Utils;
@@ -159,8 +160,13 @@ public class NodoUtils {
             String descCodUnidadRaiz = (denominacionCooficial && unidad.getCodUnidadRaiz()!=null && Utils.isNotEmpty(unidad.getCodUnidadRaiz().getDenomLenguaCooficial())) ? unidad.getCodUnidadRaiz().getDenomLenguaCooficial() : unidad.getCodUnidadRaiz().getDenominacion();
             String descCodUnidadSuperior = (denominacionCooficial && unidad.getCodUnidadSuperior()!=null && Utils.isNotEmpty(unidad.getCodUnidadSuperior().getDenomLenguaCooficial())) ? unidad.getCodUnidadSuperior().getDenomLenguaCooficial() : unidad.getCodUnidadSuperior().getDenominacion();
 
-            Nodo nodo = new Nodo(unidad.getCodigo(), denominacion, unidad.getEstado().getDescripcionEstadoEntidad(), unidad.getCodUnidadRaiz().getCodigo() + " - " + descCodUnidadRaiz, unidad.getCodUnidadSuperior().getCodigo() + " - " + descCodUnidadSuperior, "", false, unidad.isEsEdp(), edpPrincipal);
-
+            Nodo nodo = new Nodo(unidad.getCodigo(), denominacion, 
+            		unidad.getEstado().getDescripcionEstadoEntidad(), 
+            		unidad.getCodUnidadRaiz().getCodigoDir3() + " " + Dir3caibConstantes.SEPARADOR_CODIGO_VERSION + unidad.getCodUnidadRaiz().getVersion() + " - " + descCodUnidadRaiz, 
+            		unidad.getCodUnidadSuperior().getCodigoDir3() + " " + Dir3caibConstantes.SEPARADOR_CODIGO_VERSION + unidad.getCodUnidadSuperior().getVersion() +  " - " + descCodUnidadSuperior, 
+            		"", false, unidad.isEsEdp(), edpPrincipal);
+            nodo.setCodigoDir3(unidad.getCodigoDir3());
+            nodo.setVersion(String.valueOf(unidad.getVersion()));
             nodos.add(nodo);
         }
 
@@ -178,7 +184,9 @@ public class NodoUtils {
             }
             String denominacion = (denominacionCooficial && Utils.isNotEmpty(oficina.getDenomLenguaCooficial())) ? oficina.getDenomLenguaCooficial() : oficina.getDenominacion();
             String descCodUoResponsable = (denominacionCooficial && oficina.getCodUoResponsable()!=null && Utils.isNotEmpty(oficina.getCodUoResponsable().getDenomLenguaCooficial())) ? oficina.getCodUoResponsable().getDenomLenguaCooficial() : oficina.getCodUoResponsable().getDenominacion();
-            Nodo nodo = new Nodo(oficina.getCodigo(), denominacion, oficina.getEstado().getDescripcionEstadoEntidad(), ofiResponsable, oficina.getCodUoResponsable().getCodigo() + " - " + descCodUoResponsable, "", oficina.getOficinaSir());
+            String uoResponsable = oficina.getCodUoResponsable().getCodigoDir3() + " " + Dir3caibConstantes.SEPARADOR_CODIGO_VERSION + oficina.getCodUoResponsable().getVersion()  + " - " + descCodUoResponsable;
+            Nodo nodo = new Nodo(oficina.getCodigo(), denominacion, oficina.getEstado().getDescripcionEstadoEntidad(), 
+            		ofiResponsable, uoResponsable, "", oficina.getOficinaSir());
 
             nodos.add(nodo);
         }

@@ -163,7 +163,7 @@
 													test="${denominacionCooficial and not empty unidad.codUnidadRaiz.denomLenguaCooficial}">
 													<dd>
 														<a
-															onclick="goTo('<c:url value="/unidad/${unidad.codUnidadRaiz.codigo}/detall"/>','<spring:message code="dir3caib.organismo.detalle.generar" javaScriptEscape="true"/>')"
+															onclick="goTo('<c:url value="/unidad/${unidad.codUnidadRaiz.codigo}/${paginaUrl}"/>','<spring:message code="dir3caib.organismo.detalle.generar" javaScriptEscape="true"/>')"
 															onmouseover="this.style.cursor='pointer';">${unidad.codUnidadRaiz.codigoDir3}
 															v${unidad.codUnidadRaiz.version} -
 															${unidad.codUnidadRaiz.denomLenguaCooficial}</a>
@@ -172,7 +172,7 @@
 												<c:otherwise>
 													<dd>
 														<a
-															onclick="goTo('<c:url value="/unidad/${unidad.codUnidadRaiz.codigo}/detalle"/>','<spring:message code="dir3caib.organismo.detalle.generar" javaScriptEscape="true"/>')"
+															onclick="goTo('<c:url value="/unidad/${unidad.codUnidadRaiz.codigo}/${paginaUrl}"/>','<spring:message code="dir3caib.organismo.detalle.generar" javaScriptEscape="true"/>')"
 															onmouseover="this.style.cursor='pointer';">${unidad.codUnidadRaiz.codigoDir3}
 															v${unidad.codUnidadRaiz.version} -
 															${unidad.codUnidadRaiz.denominacion}</a>
@@ -190,7 +190,7 @@
 													test="${denominacionCooficial and not empty unidad.codUnidadSuperior.denomLenguaCooficial}">
 													<dd>
 														<a
-															onclick="goTo('<c:url value="/unidad/${unidad.codUnidadSuperior.codigo}/detall"/>','<spring:message code="dir3caib.organismo.detalle.generar" javaScriptEscape="true"/>')"
+															onclick="goTo('<c:url value="/unidad/${unidad.codUnidadSuperior.codigo}/${paginaUrl}"/>','<spring:message code="dir3caib.organismo.detalle.generar" javaScriptEscape="true"/>')"
 															onmouseover="this.style.cursor='pointer';">${unidad.codUnidadSuperior.codigoDir3}
 															v${unidad.codUnidadSuperior.version} -
 															${unidad.codUnidadSuperior.denomLenguaCooficial}</a>
@@ -199,7 +199,7 @@
 												<c:otherwise>
 													<dd>
 														<a
-															onclick="goTo('<c:url value="/unidad/${unidad.codUnidadSuperior.codigo}/detalle"/>','<spring:message code="dir3caib.organismo.detalle.generar" javaScriptEscape="true"/>')"
+															onclick="goTo('<c:url value="/unidad/${unidad.codUnidadSuperior.codigo}/${paginaUrl}"/>','<spring:message code="dir3caib.organismo.detalle.generar" javaScriptEscape="true"/>')"
 															onmouseover="this.style.cursor='pointer';">${unidad.codUnidadSuperior.codigoDir3}
 															v${unidad.codUnidadSuperior.version} -
 															${unidad.codUnidadSuperior.denominacion}</a>
@@ -215,19 +215,19 @@
 														<c:when test="${denominacionCooficial and not empty historico.denomLenguaCooficial }">
 														<li><a
 														onclick="goTo('<c:url
-                                                        value="/unidad/${historico.codigo}/detall"/>','<spring:message
+                                                        value="/unidad/${historico.codigo}/${paginaUrl}"/>','<spring:message
                                                         code="dir3caib.organismo.detalle.generar"
                                                         javaScriptEscape="true"/>')"
-														onmouseover="this.style.cursor='pointer';">${historico.codigo}
+														onmouseover="this.style.cursor='pointer';">${historico.codigoDir3} v${historico.version}
 															 - ${historico.denomLenguaCooficial}</a></li>
 														</c:when>
 														<c:otherwise>
 														<li><a
 														onclick="goTo('<c:url
-                                                        value="/unidad/${historico.codigo}/detalle"/>','<spring:message
+                                                        value="/unidad/${historico.codigo}/${paginaUrl}"/>','<spring:message
                                                         code="dir3caib.organismo.detalle.generar"
                                                         javaScriptEscape="true"/>')"
-														onmouseover="this.style.cursor='pointer';">${historico.codigo}
+														onmouseover="this.style.cursor='pointer';">${historico.codigoDir3} v${historico.version}
 															 - ${historico.denominacion}</a></li>
 														</c:otherwise>
 													</c:choose>
@@ -242,19 +242,19 @@
 													<c:when test="${denominacionCooficial and not empty sustituto.denomLenguaCooficial} }">
 													<li><a
 														onclick="goTo('<c:url
-                                                        value="/unidad/${sustituto.codigo}/detall"/>','<spring:message
+                                                        value="/unidad/${sustituto.codigo}/${paginaUrl}"/>','<spring:message
                                                         code="dir3caib.organismo.detalle.generar"
                                                         javaScriptEscape="true"/>')"
-														onmouseover="this.style.cursor='pointer';">${sustituto.codigo}
+														onmouseover="this.style.cursor='pointer';">${sustituto.codigoDir3} v${sustituto.version}
 															 - ${sustituto.denomLenguaCooficial}</a></li>
 													</c:when>
 													<c:otherwise>
 													<li><a
 														onclick="goTo('<c:url
-                                                        value="/unidad/${sustituto.codigo}/detalle"/>','<spring:message
+                                                        value="/unidad/${sustituto.codigo}/${paginaUrl}"/>','<spring:message
                                                         code="dir3caib.organismo.detalle.generar"
                                                         javaScriptEscape="true"/>')"
-														onmouseover="this.style.cursor='pointer';">${sustituto.codigo}
+														onmouseover="this.style.cursor='pointer';">${sustituto.codigoDir3} v${sustituto.version}
 															 - ${sustituto.denominacion}</a></li>
 													</c:otherwise>
 													</c:choose>
@@ -515,11 +515,23 @@
 									</button>
 								</div>
 								<div class="btn-group infoBranca opcionArbol">
-									<button type="button" class="btn btn-info infoBranca tamany12"
-										onclick="goTo('<c:url value="/unidad/${unidad.codigo}/detalle"/>')">
+									<c:choose>
+										<c:when test="${denominacionCooficial and not empty unidad.codUnidadRaiz.denomLenguaCooficial}">
+										<button type="button" class="btn btn-info infoBranca tamany12"
+										onclick="goTo('<c:url value="/unidad/${unidad.codigo}/${paginaUrl}"/>')">
 										<i class="fa fa-sitemap"></i>
 										<spring:message code="dir3caib.arbol.abre" />
 									</button>
+										</c:when>
+										<c:otherwise>
+											<button type="button" class="btn btn-info infoBranca tamany12"
+										onclick="goTo('<c:url value="/unidad/${unidad.codigo}/${paginaUrl}"/>')">
+										<i class="fa fa-sitemap"></i>
+										<spring:message code="dir3caib.arbol.abre" />
+									</button>
+										</c:otherwise>
+									</c:choose>
+									
 								</div>
 								<div class="btn-group infoBranca">
 									<button type="button" id="infoCopy"

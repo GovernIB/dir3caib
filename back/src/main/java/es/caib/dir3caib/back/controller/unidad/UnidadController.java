@@ -146,8 +146,6 @@ public class UnidadController extends BaseController {
     
     
     private ModelAndView detalleComun(String codUnidad, boolean denominacionCooficial) throws Exception {
-    	
-    	log.info("Entro en mostrarArbolUnidades");
 
         Long start = System.currentTimeMillis();
         ModelAndView mav = new ModelAndView("unidad/unidadDetalle");
@@ -157,7 +155,7 @@ public class UnidadController extends BaseController {
         mav.addObject("unidad", unidad);
 
         //Obtenemos los historicos anteriores de la unidad indicada
-        Set<Unidad> unidadesHistoricasAnteriores = unidadEjb.historicosHaciaAtras(unidad.getCodigo());
+        Set<Unidad> unidadesHistoricasAnteriores = unidadEjb.historicosHaciaAtras(unidad.getCodigo(), denominacionCooficial);
         mav.addObject("historicosAnteriores", unidadesHistoricasAnteriores);
 
         //Obtenemos los históricos finales hacia delante.
@@ -326,6 +324,7 @@ public class UnidadController extends BaseController {
         mav.addObject("unidadRaiz", unidad.getCodUnidadSuperior());
         mav.addObject("unidadExtinguida", unidadExtinguida);
         mav.addObject("denominacionCooficial", denominacionCooficial);
+        mav.addObject("paginaUrl", (denominacionCooficial) ? "detall" : "detalle");
         return mav;
     	
     }

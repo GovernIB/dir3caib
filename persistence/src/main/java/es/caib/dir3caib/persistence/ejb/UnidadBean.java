@@ -325,7 +325,8 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 	@SuppressWarnings("unchecked")
 	public Unidad findByCodigoLigero(String codigo, boolean denominacionCooficial) throws Exception {
 		Query q = em.createQuery("select unidad.codigo, unidad.denominacion, unidad.estado.codigoEstadoEntidad, "
-				+ "unidad.codUnidadRaiz.codigo, unidad.codUnidadSuperior.codigo, unidad.nivelJerarquico, unidad.denomLenguaCooficial "
+				+ "unidad.codUnidadRaiz.codigo, unidad.codUnidadSuperior.codigo, unidad.nivelJerarquico, unidad.denomLenguaCooficial,"
+				+ "unidad.codigoDir3, unidad.version "
 				+ "from Unidad as unidad where unidad.codigo=:codigo ");
 		q.setParameter("codigo", codigo);
 
@@ -337,6 +338,8 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 			unidad.setDenominacion(
 					(denominacionCooficial && Utils.isNotEmpty((String) result.get(0)[6])) ? (String) result.get(0)[6]
 							: (String) result.get(0)[1]);
+			unidad.setCodigoDir3((String) result.get(0)[7]);
+			unidad.setVersion((Long) result.get(0)[8]);
 			unidad.setEstado(new CatEstadoEntidad((String) result.get(0)[2]));
 			Unidad unidadRaiz = new Unidad((String) result.get(0)[3]);
 			unidad.setCodUnidadRaiz(unidadRaiz);
@@ -600,11 +603,13 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 			query.append("order by unidad.denomLenguaCooficial asc, unidad.denominacion asc");
 			q = em.createQuery(query.toString());
 
+			
 			for (Map.Entry<String, Object> param : parametros.entrySet()) {
 				q.setParameter(param.getKey(), param.getValue());
 				q2.setParameter(param.getKey(), param.getValue());
-				log.info("UnidadBean:busqueda parametro: " + param.getKey() + " => " + param.getValue());
+				//log.info("UnidadBean:busqueda parametro: " + param.getKey() + " => " + param.getValue());
 			}
+			
 
 		} else {
 			if (unidadRaiz) {
@@ -616,7 +621,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 			q = em.createQuery(query.toString());
 		}
 
-		log.info("UnidadBean:busqueda query: " + query.toString());
+		// log.info("UnidadBean:busqueda query: " + query.toString());
 
 		Paginacion paginacion = null;
 
@@ -1254,10 +1259,16 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
 		return historicos.size() > 0;
 	}
-
+	
 	@Override
 	@SuppressWarnings(value = "unchecked")
 	public Set<Unidad> historicosHaciaAtras(String codigoUnidad) throws Exception {
+		return historicosHaciaAtras(codigoUnidad, false);
+	}
+
+	@Override
+	@SuppressWarnings(value = "unchecked")
+	public Set<Unidad> historicosHaciaAtras(String codigoUnidad, boolean denominacionCooficial) throws Exception {
 
 		Query q = em
 				.createQuery("select unidadAnterior.codigo from HistoricoUO where unidadUltima.codigo =:codigoUnidad ");
@@ -1267,7 +1278,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
 		List<String> historicos = q.getResultList();
 		for (String historico : historicos) {
-			Unidad unidad = findByCodigoLigero(historico);
+			Unidad unidad = findByCodigoLigero(historico, denominacionCooficial);
 			unidadesHistoricasAnteriores.add(unidad);
 		}
 

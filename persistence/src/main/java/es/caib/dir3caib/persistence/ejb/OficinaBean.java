@@ -333,7 +333,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 			for (Map.Entry<String, Object> param : parametros.entrySet()) {
 				q.setParameter(param.getKey(), param.getValue());
 				q2.setParameter(param.getKey(), param.getValue());
-				log.info("OficinaBean parametre => " + param.getKey() + " : " + param.getValue());
+				//log.info("OficinaBean parametre => " + param.getKey() + " : " + param.getValue());
 			}
 
 		} else {
@@ -343,7 +343,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 			q = em.createQuery(query.toString());
 		}
 
-		log.info("OficinaBean query => " + query.toString());
+		//log.info("OficinaBean query => " + query.toString());
 
 		Paginacion paginacion = null;
 

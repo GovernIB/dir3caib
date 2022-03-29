@@ -134,20 +134,20 @@
                     <div class="row-fluid">
                         <div class="span6">
                             <div class="control-group">
-                                <form:label path="unidadRaiz" cssClass="control-label"><fmt:message
-                                        key="unidad.unidades.raiz"/></form:label>
-                                <div class="controls">
+                                <div class="check-controls">
                                     <form:checkbox path="unidadRaiz" value="false" cssClass="input-xlarge"/>
                                 </div>
+                                <form:label path="unidadRaiz" cssClass="control-label largeLabel"><fmt:message
+                                        key="unidad.unidades.raiz"/></form:label>
                             </div>
                         </div>
                         <div class="span6">
                             <div class="control-group">
-                                <form:label path="denominacionCooficial" cssClass="control-label largeLabel"><fmt:message
-                                        key="unidad.denominacion.cooficial"/></form:label>
-                                <div class="controls">
+                                <div class="check-controls">
                                     <form:checkbox path="denominacionCooficial" value="true" cssClass="input-xlarge"/>
                                 </div>
+                                <form:label path="denominacionCooficial" cssClass="control-label largeLabel"><fmt:message
+                                        key="unidad.busqueda.cooficial"/></form:label>
                             </div>
                         </div>
                         
@@ -205,7 +205,7 @@
                 <c:forEach var="nodo" items="${paginacion.listado}">
                     <tr>
 
-                        <td>${nodo.codigo}</td>
+                        <td>${nodo.codigoDir3} v${nodo.version} </td>
                         <td>${nodo.denominacion}</td>
                         <td>${nodo.superior}</td>
                         <td>${nodo.raiz}</td>
