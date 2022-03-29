@@ -1,9 +1,5 @@
 package es.caib.dir3caib.persistence.model;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.hibernate.annotations.ForeignKey;
-import org.hibernate.annotations.Index;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -15,9 +11,7 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "DIR_CATESTADOENTIDAD", schema = "", catalog = "")
-@org.hibernate.annotations.Table(appliesTo = "DIR_CATESTADOENTIDAD", indexes = {
-        @Index(name="DIR_CESTENT_CESTENT_FK_I", columnNames = "ESTADO")
-})
+@org.hibernate.annotations.Table(appliesTo = "DIR_CATESTADOENTIDAD")
 public class CatEstadoEntidad implements Serializable {
 
 	private String codigoEstadoEntidad;
