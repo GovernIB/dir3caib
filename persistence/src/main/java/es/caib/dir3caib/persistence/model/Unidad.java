@@ -36,7 +36,6 @@ import java.util.*;
     @Index(name="DIR_UNIDAD_CATLOCAL_FK_I", columnNames = {"CODLOCALIDADID"}),
     @Index(name="DIR_UNIDAD_UNIDADEDPPRINC_FK_I", columnNames = {"CODEDPPRINCIPAL"}),
 })
-@SequenceGenerator(name="generator",sequenceName = "DIR_UNI_SEQ", allocationSize=1)
 public class Unidad implements Serializable {
 
   private String codigo; // contiene el string codigo+"v"+version

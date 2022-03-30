@@ -213,8 +213,8 @@
         CODIGO varchar(9) not null,
         CODPOSTAL varchar(14),
         COMPLEMENTO varchar(300),
-        DENOMINACION varchar(300),
         DENOMCOOFICIAL varchar(300),
+        DENOMINACION varchar(300),
         DIASSINHABILES varchar(400),
         DIREXTRANJERA varchar(200),
         DIRECCIONOBSERVACIONES varchar(400),
@@ -375,13 +375,6 @@
 
     alter table DIR_CATENTIDADGEOGRAFICA 
         add constraint DIR_CENTGEO_CESTENT_FK 
-        foreign key (ESTADO) 
-        references DIR_CATESTADOENTIDAD;
-
-    create index DIR_CESTENT_CESTENT_FK_I on DIR_CATESTADOENTIDAD (ESTADO);
-
-    alter table DIR_CATESTADOENTIDAD 
-        add constraint DIR_CESTENT_CESTENT_FK 
         foreign key (ESTADO) 
         references DIR_CATESTADOENTIDAD;
 

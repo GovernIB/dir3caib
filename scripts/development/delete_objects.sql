@@ -23,8 +23,6 @@ drop sequence DIR_SERVUO_SEQ;
 
 drop sequence DIR_SINC_SEQ;
 
-drop sequence DIR_UNI_SEQ;
-
 drop sequence DIR_RELOFI_SEQ;
 
 drop sequence DIR_RELSIR_SEQ;
@@ -53,8 +51,6 @@ create sequence DIR_SERVOFI_SEQ;
 create sequence DIR_SERVUO_SEQ;
 
 create sequence DIR_SINC_SEQ;
-
-create sequence DIR_UNI_SEQ;
 
 create sequence DIR_RELOFI_SEQ;
 
