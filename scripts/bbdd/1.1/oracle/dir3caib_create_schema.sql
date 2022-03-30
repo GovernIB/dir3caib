@@ -185,8 +185,8 @@
         CODIGO varchar2(9 char) not null,
         CODPOSTAL varchar2(14 char),
         COMPLEMENTO varchar2(300 char),
-        DENOMINACION varchar2(300 char),
         DENOMCOOFICIAL varchar2(300 char),
+        DENOMINACION varchar2(300 char),
         DIASSINHABILES varchar2(400 char),
         DIREXTRANJERA varchar2(200 char),
         DIRECCIONOBSERVACIONES varchar2(400 char),
@@ -337,7 +337,6 @@
     create index DIR_CCOMAUT_CESTENT_FK_I on DIR_CATCOMUNIDADAUTONOMA (ESTADO);
     create index DIR_CCOMAUT_CATPAIS_FK_I on DIR_CATCOMUNIDADAUTONOMA (PAIS);
     create index DIR_CENTGEO_CESTENT_FK_I on DIR_CATENTIDADGEOGRAFICA (ESTADO);
-    create index DIR_CESTENT_CESTENT_FK_I on DIR_CATESTADOENTIDAD (ESTADO);
     create index DIR_CATISLA_CATPROV_FK_I on DIR_CATISLA (PROVINCIA);
     create index DIR_CATISLA_CESTENT_FK_I on DIR_CATISLA (ESTADO);
     create index DIR_CJEROFI_CESTENT_FK_I on DIR_CATJERARQUIAOFICINA (ESTADO);
@@ -509,11 +508,6 @@
 
     alter table DIR_CATENTIDADGEOGRAFICA 
         add constraint DIR_CENTGEO_CESTENT_FK 
-        foreign key (ESTADO) 
-        references DIR_CATESTADOENTIDAD;
-
-    alter table DIR_CATESTADOENTIDAD 
-        add constraint DIR_CESTENT_CESTENT_FK 
         foreign key (ESTADO) 
         references DIR_CATESTADOENTIDAD;
 
