@@ -592,7 +592,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 				unidad2.setTieneOficinaSir(true);
 			}
 			// Unidad, unidad raiz, unidadSuperior
-			String[] codigoSeparado = unidad2.getCodigo().toUpperCase().split(Dir3caibConstantes.SEPARADOR_CODIGO_VERSION);
+			String[] codigoSeparado = unidad2.getCodigo().split(Dir3caibConstantes.SEPARADOR_CODIGO_VERSION);
 			unidad2.setCodigo(codigoSeparado[0]);
 			unidad2.setSuperior(unidad2.getSuperior().substring(0, unidad2.getSuperior().lastIndexOf(Dir3caibConstantes.SEPARADOR_CODIGO_VERSION)));
 			unidad2.setRaiz(unidad2.getRaiz().substring(0, unidad2.getRaiz().lastIndexOf(Dir3caibConstantes.SEPARADOR_CODIGO_VERSION)));

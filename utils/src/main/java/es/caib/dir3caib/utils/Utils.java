@@ -88,7 +88,7 @@ public class Utils {
      * @return
      */
     public static boolean isEmpty(final String cadena) {
-        return cadena == null || cadena.length() == 0;
+        return cadena == null || cadena.length() == 0 || cadena.equals("null");
     }
 
     /**
