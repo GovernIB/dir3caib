@@ -208,33 +208,39 @@ public class NodoUtils {
         List<Nodo> nodos = new ArrayList<Nodo>();
 
         for (Object[] object : result) {
-            // CAMPOS DE LA UNIDAD DEVUELTOS POR LA QUERY
-            //object[0] --> codigo
-            //object[1] --> denominacion
-            //object[2] --> descripcionEstado
-            //object[3] --> raiz.codigo
-            //object[4] --> raiz.denominacion
-            //object[5] --> superior.codigo
-            //object[6] --> superior.denominacion
-            //object[7] --> localidad
-            //object[8] --> esEdp
-            //object[9] --> nivelJerarquico
-            //object[10] --> nifcif
-            //object[11] --> nivelAdministracion.descripcionNivelAdministracion
-            //object[12] --> descripcionTipoUnidadOrganica
-            //object[13] --> descripcionTipoVia
-            //object[14] --> nombreVia
-            //object[15] --> numVia
-            //object[16] --> complemento
-            //object[17] --> codAmbitoTerritorial.descripcionAmbito
-            //object[18] --> codAmbPais.descripcionPais
-            //object[19] --> codAmbComunidad.descripcionComunidad
-            //object[20] --> codAmbProvincia.descripcionProvincia
-            //object[21] --> codAmbIsla.descripcionIsla
-        	//object[22] --> unidad.denomcooficial, 
-        	//object[23] --> unidad.codUnidadRaiz.denomcooficial, 
-        	//object[24] --> unidad.codUnidadSuperior.denomcooficial
-
+        	
+        	/*
+        	object[0] --> unidad.codigo
+        	object[1] --> unidad.denominacion
+        	object[2] --> unidad.estado.codigoEstadoEntidad
+        	object[3] --> unidad.codunidadRaiz.codigo
+        	object[4] --> unidad.codunidadRaiz.denominacion
+        	object[5] --> unidad.codunidadSuperior.codigo
+        	object[6] --> unidad.codunidadSuperior.denominacion
+        	object[7] --> unidad.codLocalidad.descripcionLocalidad
+        	object[8] --> unidad.esEdp
+        	object[9] --> unidad.nivelJerarquico
+        	object[10] --> unidad.nifcif
+        	object[11] --> unidad.nivelAdministracion.descripcionNivelAdministracion
+        	object[12] --> unidad.codTipounidad.descripcionTipoobject[0] --> unidadOrganica
+        	object[13] --> unidad.tipoVia.descripcionTipoVia
+        	object[14] --> unidad.nombreVia
+        	object[15] --> unidad.numVia
+        	object[16] --> unidad.complemento
+        	object[17] --> unidad.codPostal
+        	object[18] --> unidad.codAmbitoTerritorial.descripcionAmbito
+        	object[19] --> unidad.codAmbPais.descripcionPais
+        	object[20] --> unidad.codAmbComunidad.descripcionComobject[0] --> unidad
+        	object[21] --> unidad.codAmbProvincia.descripcionProvincia
+        	object[22] --> unidad.codAmbIsla.descripcionIsla
+        	object[23] --> unidad.denomLenguaCooficial
+        	object[24] --> unidad.codunidadRaiz.denomLenguaCooficial
+        	object[25] --> unidad.codunidadSuperior.denomLenguaCooficial
+        	object[26] --> unidad.codigoDir3
+        	object[27] --> unidad.codunidadRaiz.codigoDir3
+        	object[28] --> unidad.codunidadSuperior.codigoDir3
+			*/
+        	
             String[] obj = new String[object.length];
 
             // copy elements from object array to string array
@@ -242,13 +248,12 @@ public class NodoUtils {
                 obj[i] = String.valueOf(object[i]);
             }
             
-            String denominacion = ( denominacionCooficial && Utils.isNotEmpty((String) obj[22])) ? (String) obj[22] : (String) obj[1]; 
-            String denominacioUnidadRaiz = ( denominacionCooficial && Utils.isNotEmpty((String) obj[23])) ? (String) obj[23] : (String) obj[4];
-            String denominacionUnidadSuperior = ( denominacionCooficial && Utils.isNotEmpty((String) obj[24])) ? (String) obj[24] : (String) obj[6];
+            String denominacion = ( denominacionCooficial && Utils.isNotEmpty((String) obj[23])) ? (String) obj[23] : (String) obj[1]; 
+            String denominacioUnidadRaiz = ( denominacionCooficial && Utils.isNotEmpty((String) obj[24])) ? (String) obj[24] : (String) obj[4];
+            String denominacionUnidadSuperior = ( denominacionCooficial && Utils.isNotEmpty((String) obj[25])) ? (String) obj[25] : (String) obj[6];
             
             Nodo nodo = new Nodo(obj[0], denominacion, obj[2], denominacioUnidadRaiz + " - " + obj[3], denominacionUnidadSuperior + " - " + obj[5], obj[7],Boolean.parseBoolean(obj[8]),Long.parseLong(obj[9]), obj[10],obj[11], obj[12],obj[13] + " " + obj[14]+ ", " + obj[15]+ ", "+ obj[16]+ ", " + obj[17],obj[18],obj[19],obj[20],obj[21],obj[22]);
-
-
+            nodo.setCodigoDir3((String)obj[26]);
             nodos.add(nodo);
         }
 
