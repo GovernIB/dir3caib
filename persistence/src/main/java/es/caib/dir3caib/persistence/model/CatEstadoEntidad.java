@@ -83,31 +83,31 @@ public class CatEstadoEntidad implements Serializable {
     }
 
     @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    CatEstadoEntidad that = (CatEstadoEntidad) o;
-    return codigoEstadoEntidad.equals(that.codigoEstadoEntidad) && descripcionEstadoEntidad.equals(that.descripcionEstadoEntidad) ;
-  }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CatEstadoEntidad that = (CatEstadoEntidad) o;
+        return codigoEstadoEntidad.equals(that.codigoEstadoEntidad) && descripcionEstadoEntidad.equals(that.descripcionEstadoEntidad) ;
+    }
 
-  @Override
-  public int hashCode() {
+    @Override
+    public int hashCode() {
     return Objects.hash(codigoEstadoEntidad, descripcionEstadoEntidad);
   }
-  
-  @Override 
-  public String toString() {
-	  String temp = "{Codigo: ";
-	  if (this.getCodigoEstadoEntidad() != null)
-		  temp += this.getCodigoEstadoEntidad();
-	  temp += ",Descripcion: ";
-	  if (this.getDescripcionEstadoEntidad() != null)
-		  temp += this.getDescripcionEstadoEntidad();
-	  temp += " ,Estado:";
-	  if(this.getEstado() != null)
-		  temp += this.getEstado();
-	  temp += "}";
-	  return  temp;
+
+    @Override
+    public String toString() {
+      String temp = "{Codigo: ";
+      if (this.getCodigoEstadoEntidad() != null)
+          temp += this.getCodigoEstadoEntidad();
+      temp += ",Descripcion: ";
+      if (this.getDescripcionEstadoEntidad() != null)
+          temp += this.getDescripcionEstadoEntidad();
+      temp += " ,Estado:";
+      if(this.getEstado() != null)
+          temp += this.getEstado();
+      temp += "}";
+      return  temp;
   }
 
 

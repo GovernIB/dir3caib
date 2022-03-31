@@ -53,7 +53,7 @@ public class CatEstadoEntidadBean extends BaseEjbJPA<CatEstadoEntidad, String> i
     @SuppressWarnings(value = "unchecked")
     public List<CatEstadoEntidad> getByEstado(String estado) throws Exception {
 
-       Query q =  em.createQuery("Select catEstadoEntidad from CatEstadoEntidad as catEstadoEntidad where catEstadoEntidad.codigoEstadoEntidad=:estado order by catEstadoEntidad.codigoEstadoEntidad");
+       Query q =  em.createQuery("Select catEstadoEntidad from CatEstadoEntidad as catEstadoEntidad where catEstadoEntidad.estado=:estado order by catEstadoEntidad.codigoEstadoEntidad");
 
        q.setParameter("estado" , estado);
 
