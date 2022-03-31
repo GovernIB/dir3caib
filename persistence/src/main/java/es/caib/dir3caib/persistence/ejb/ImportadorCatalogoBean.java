@@ -137,6 +137,8 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
         for (int i = 0; i < Dir3caibConstantes.CAT_FICHEROS.length; i++) {
             String fichero = Dir3caibConstantes.CAT_FICHEROS[i];
 
+            log.info(" XXXXXXX   Fichero a procesar " + fichero);
+
             String[] fila;
 
             CSVReader reader = null;
@@ -162,7 +164,7 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                     	while ((fila = reader.readNext()) != null) {
                     		
                     		String codigoEstado = fila[0];
-                    		String codigoEstadoEstadoEntidad = fila[2];
+                    		String estado = fila[2];
                     		
                     		CatEstadoEntidad estadoEntidad = cacheEstadoEntidad.get(codigoEstado);
                     		
@@ -172,7 +174,9 @@ public class ImportadorCatalogoBean implements ImportadorCatalogoLocal {
                     		}
                     		
                     		estadoEntidad.setDescripcionEstadoEntidad(fila[1]);
-                    		estadoEntidad.setEstado(codigoEstadoEstadoEntidad);
+                    		estadoEntidad.setEstado(estado);
+
+                            estadoEntidad.toString();
                     		 
                     		catEstadoEntidadEjb.persist(estadoEntidad);
                     		
