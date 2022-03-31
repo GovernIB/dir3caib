@@ -17,5 +17,5 @@ public interface CatComunidadAutonomaLocal extends BaseEjb<CatComunidadAutonoma,
   
   void deleteAll() throws Exception;
 
-  List<CatComunidadAutonoma> getAll(String estado) throws Exception;
+  List<CatComunidadAutonoma> getByEstado(String estado) throws Exception;
 }

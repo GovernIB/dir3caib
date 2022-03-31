@@ -1,6 +1,7 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.CatComunidadAutonoma;
+import es.caib.dir3caib.persistence.model.CatPais;
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.utils.Utils;
 
@@ -51,21 +52,16 @@ public class CatComunidadAutonomaBean extends BaseEjbJPA<CatComunidadAutonoma, L
     
     @Override
     @SuppressWarnings(value = "unchecked")
-    public List<CatComunidadAutonoma> getAll(String estado) throws Exception {
+    public List<CatComunidadAutonoma> getByEstado(String estado) throws Exception {
 
-    	String where = "";
-    	
-    	if(Utils.isNotEmpty(estado)) {
-    		where = " where catComunidadAutonoma.estado = :estado ";
-    	}
-    	
-    	Query q = em.createQuery("Select catComunidadAutonoma from CatComunidadAutonoma as catComunidadAutonoma " + where + " order by catComunidadAutonoma.descripcionComunidad");
-    	
-    	if(where != "")
-    		q.setParameter("estado", estado);
+    	Query q = em.createQuery("Select catComunidadAutonoma from CatComunidadAutonoma as catComunidadAutonoma where catComunidadAutonoma.estado.codigoEstadoEntidad=:estado order by catComunidadAutonoma.descripcionComunidad");
+
+        q.setParameter("estado", estado);
     	
         return q.getResultList();
     }
+
+
 
     @Override
     public Long getTotal() throws Exception {
