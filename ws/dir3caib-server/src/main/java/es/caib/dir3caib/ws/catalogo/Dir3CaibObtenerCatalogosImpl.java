@@ -83,7 +83,7 @@ public class Dir3CaibObtenerCatalogosImpl implements Dir3CaibObtenerCatalogosWs 
     @WebMethod
     @RolesAllowed({Dir3caibConstantes.DIR_WS})
     public List<CatEstadoEntidadWs> obtenerCatEstadoEntidadV2() throws Exception {
-        return obtenerCatalogosEjb.obtenerCatEstadoEntidadWs();
+        return obtenerCatalogosEjb.obtenerCatEstadoEntidadWs("");
     }
 
     /**
@@ -95,7 +95,7 @@ public class Dir3CaibObtenerCatalogosImpl implements Dir3CaibObtenerCatalogosWs 
     @WebMethod
     @RolesAllowed({Dir3caibConstantes.DIR_WS})
     public List<CatEstadoEntidadWs> obtenerCatEstadoEntidadByEstado(String estado) throws Exception {
-        return obtenerCatalogosEjb.obtenerCatEstadoEntidadByEstado(estado);
+        return obtenerCatalogosEjb.obtenerCatEstadoEntidadWs(estado);
     }
 
     /**
@@ -119,7 +119,7 @@ public class Dir3CaibObtenerCatalogosImpl implements Dir3CaibObtenerCatalogosWs 
     @WebMethod
     @RolesAllowed({Dir3caibConstantes.DIR_WS})
     public List<CatNivelAdministracionWs> obtenerCatNivelAdministracionV2() throws Exception{
-        return  obtenerCatalogosEjb.obtenerCatNivelAdministracionWs();
+        return  obtenerCatalogosEjb.obtenerCatNivelAdministracionWs("");
     }
 
     /**
@@ -131,7 +131,7 @@ public class Dir3CaibObtenerCatalogosImpl implements Dir3CaibObtenerCatalogosWs 
     @WebMethod
     @RolesAllowed({Dir3caibConstantes.DIR_WS})
     public List<CatNivelAdministracionWs> obtenerCatNivelAdministracionByEstado(String estado) throws Exception{
-        return  obtenerCatalogosEjb.obtenerCatNivelAdministracionByEstado(estado);
+        return  obtenerCatalogosEjb.obtenerCatNivelAdministracionWs(estado);
     }
 
     /**
@@ -155,7 +155,7 @@ public class Dir3CaibObtenerCatalogosImpl implements Dir3CaibObtenerCatalogosWs 
     @WebMethod
     @RolesAllowed({Dir3caibConstantes.DIR_WS})
     public List<CatPaisWs> obtenerCatPaisV2() throws Exception{
-        return  obtenerCatalogosEjb.obtenerCatPaisWs();
+        return  obtenerCatalogosEjb.obtenerCatPaisWs("");
     }
 
     /**
@@ -167,7 +167,7 @@ public class Dir3CaibObtenerCatalogosImpl implements Dir3CaibObtenerCatalogosWs 
     @WebMethod
     @RolesAllowed({Dir3caibConstantes.DIR_WS})
     public List<CatPaisWs> obtenerCatPaisByEstado(String estado) throws Exception{
-        return  obtenerCatalogosEjb.obtenerCatPaisByEstado(estado);
+        return  obtenerCatalogosEjb.obtenerCatPaisWs(estado);
     }
 
     /**
@@ -191,7 +191,7 @@ public class Dir3CaibObtenerCatalogosImpl implements Dir3CaibObtenerCatalogosWs 
     @WebMethod
     @RolesAllowed({Dir3caibConstantes.DIR_WS})
     public List<CatComunidadAutonomaWs> obtenerCatComunidadAutonomaV2() throws Exception{
-        return  obtenerCatalogosEjb.obtenerCatComunidadAutonomaWs();
+        return  obtenerCatalogosEjb.obtenerCatComunidadAutonomaWs("");
     }
 
     /**
@@ -203,7 +203,7 @@ public class Dir3CaibObtenerCatalogosImpl implements Dir3CaibObtenerCatalogosWs 
     @WebMethod
     @RolesAllowed({Dir3caibConstantes.DIR_WS})
     public List<CatComunidadAutonomaWs> obtenerCatComunidadAutonomaByEstado(String estado) throws Exception{
-        return  obtenerCatalogosEjb.obtenerCatComunidadAutonomaByEstado(estado);
+        return  obtenerCatalogosEjb.obtenerCatComunidadAutonomaWs(estado);
     }
 
     /**
@@ -227,7 +227,7 @@ public class Dir3CaibObtenerCatalogosImpl implements Dir3CaibObtenerCatalogosWs 
     @WebMethod
     @RolesAllowed({Dir3caibConstantes.DIR_WS})
     public List<CatProvinciaWs> obtenerCatProvinciaV2() throws Exception{
-        return  obtenerCatalogosEjb.obtenerCatProvinciaWs();
+        return  obtenerCatalogosEjb.obtenerCatProvinciaWs("");
     }
 
     /**
@@ -239,7 +239,7 @@ public class Dir3CaibObtenerCatalogosImpl implements Dir3CaibObtenerCatalogosWs 
     @WebMethod
     @RolesAllowed({Dir3caibConstantes.DIR_WS})
     public List<CatProvinciaWs> obtenerCatProvinciaByEstado(String estado) throws Exception{
-        return  obtenerCatalogosEjb.obtenerCatProvinciaByEstado(estado);
+        return  obtenerCatalogosEjb.obtenerCatProvinciaWs(estado);
     }
 
     /**
@@ -263,7 +263,7 @@ public class Dir3CaibObtenerCatalogosImpl implements Dir3CaibObtenerCatalogosWs 
     @WebMethod
     @RolesAllowed({Dir3caibConstantes.DIR_WS})
     public List<CatLocalidadWs> obtenerCatLocalidadV2() throws Exception{
-        return  obtenerCatalogosEjb.obtenerCatLocalidadWs();
+        return  obtenerCatalogosEjb.obtenerCatLocalidadWs("");
     }
 
     /**
@@ -275,7 +275,7 @@ public class Dir3CaibObtenerCatalogosImpl implements Dir3CaibObtenerCatalogosWs 
     @WebMethod
     @RolesAllowed({Dir3caibConstantes.DIR_WS})
     public List<CatLocalidadWs> obtenerCatLocalidadByEstado(String estado) throws Exception{
-        return  obtenerCatalogosEjb.obtenerCatLocalidadByEstado(estado);
+        return  obtenerCatalogosEjb.obtenerCatLocalidadWs(estado);
     }
 
    /**
@@ -299,7 +299,7 @@ public class Dir3CaibObtenerCatalogosImpl implements Dir3CaibObtenerCatalogosWs 
     @WebMethod
     @RolesAllowed({Dir3caibConstantes.DIR_WS})
     public List<CatEntidadGeograficaWs> obtenerCatEntidadGeograficaV2() throws Exception{
-        return  obtenerCatalogosEjb.obtenerCatEntidadGeograficaWs();
+        return  obtenerCatalogosEjb.obtenerCatEntidadGeograficaWs("");
     }
 
     /**
@@ -311,7 +311,7 @@ public class Dir3CaibObtenerCatalogosImpl implements Dir3CaibObtenerCatalogosWs 
     @WebMethod
     @RolesAllowed({Dir3caibConstantes.DIR_WS})
     public List<CatEntidadGeograficaWs> obtenerCatEntidadGeograficaByEstado(String estado) throws Exception{
-        return  obtenerCatalogosEjb.obtenerCatEntidadGeograficaByEstado(estado);
+        return  obtenerCatalogosEjb.obtenerCatEntidadGeograficaWs(estado);
     }
 
     /**
@@ -361,7 +361,7 @@ public class Dir3CaibObtenerCatalogosImpl implements Dir3CaibObtenerCatalogosWs 
     @WebMethod
     @RolesAllowed({ Dir3caibConstantes.DIR_WS})
     public List<CatTipoViaWs> obtenerCatTipoViaV2() throws Exception{
-        return  obtenerCatalogosEjb.obtenerCatTipoViaWs();
+        return  obtenerCatalogosEjb.obtenerCatTipoViaWs("");
     }
 
     /**
@@ -373,6 +373,6 @@ public class Dir3CaibObtenerCatalogosImpl implements Dir3CaibObtenerCatalogosWs 
     @WebMethod
     @RolesAllowed({ Dir3caibConstantes.DIR_WS})
     public List<CatTipoViaWs> obtenerCatTipoViaByEstado(String estado) throws Exception{
-        return  obtenerCatalogosEjb.obtenerCatTipoViaByEstado(estado);
+        return  obtenerCatalogosEjb.obtenerCatTipoViaWs(estado);
     }
 }

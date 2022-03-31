@@ -8,6 +8,7 @@ import es.caib.dir3caib.persistence.model.ws.CatNivelAdministracion;
 import es.caib.dir3caib.persistence.model.ws.CatPais;
 import es.caib.dir3caib.persistence.model.ws.CatTipoVia;
 import es.caib.dir3caib.persistence.model.ws.v2.*;
+import es.caib.dir3caib.utils.Utils;
 import org.apache.log4j.Logger;
 
 import javax.annotation.security.RunAs;
@@ -77,30 +78,19 @@ public class ObtenerCatalogosEjb implements ObtenerCatalogosLocal {
     }
 
     /**
-     * Obtiene todos los estados en los que puede estar una entidad(organismo).
+     * Obtiene todos los estados en los que puede estar una entidad
+     * @param estado si no se indica estado devuelve todos
      * @return
      * @throws Exception
      */
     @Override
-    public List<CatEstadoEntidadWs>  obtenerCatEstadoEntidadWs() throws Exception {
-        List<es.caib.dir3caib.persistence.model.CatEstadoEntidad> estadosEntidad= catEstadoEntidadEjb.getAll();
-
-        List<CatEstadoEntidadWs>  estadosEntidadWs = new ArrayList<>();
-        for(es.caib.dir3caib.persistence.model.CatEstadoEntidad estadoEntidad:estadosEntidad){
-            estadosEntidadWs.add(CatEstadoEntidadWs.generar(estadoEntidad));
+    public List<CatEstadoEntidadWs> obtenerCatEstadoEntidadWs(String estado) throws Exception {
+        List<es.caib.dir3caib.persistence.model.CatEstadoEntidad> estadosEntidad;
+        if(Utils.isNotEmpty(estado)){
+            estadosEntidad= catEstadoEntidadEjb.getByEstado(estado);
+        }else {
+            estadosEntidad= catEstadoEntidadEjb.getAll();
         }
-        return estadosEntidadWs;
-
-    }
-
-    /**
-     * Obtiene todos los estados en los que puede estar una entidad(organismo) del estado indicado
-     * @return
-     * @throws Exception
-     */
-    @Override
-    public List<CatEstadoEntidadWs> obtenerCatEstadoEntidadByEstado(String estado) throws Exception {
-        List<es.caib.dir3caib.persistence.model.CatEstadoEntidad> estadosEntidad= catEstadoEntidadEjb.getByEstado(estado);
 
         List<CatEstadoEntidadWs>  estadosEntidadWs = new ArrayList<>();
         for(es.caib.dir3caib.persistence.model.CatEstadoEntidad estadoEntidad:estadosEntidad){
@@ -129,31 +119,25 @@ public class ObtenerCatalogosEjb implements ObtenerCatalogosLocal {
 
     }
 
+
+
+
     /**
-     * Obtiene todos los niveles de administración
+     * Obtiene todos los niveles de administración en los que puede estar una entidad
+     * @param estado si no se indica estado devuelve todos
      * @return
      * @throws Exception
      */
     @Override
-    public List<CatNivelAdministracionWs> obtenerCatNivelAdministracionWs() throws Exception {
-        List<es.caib.dir3caib.persistence.model.CatNivelAdministracion> nivelAdministracions= catNivelAdministracionEjb.getAll();
+    public List<CatNivelAdministracionWs> obtenerCatNivelAdministracionWs(String estado) throws Exception {
 
-        List<CatNivelAdministracionWs>  nivelAdminWs = new ArrayList<>();
-        for(es.caib.dir3caib.persistence.model.CatNivelAdministracion nivel:nivelAdministracions){
-            nivelAdminWs.add(CatNivelAdministracionWs.generar(nivel));
+        List<es.caib.dir3caib.persistence.model.CatNivelAdministracion> nivelAdministracions;
+
+        if(Utils.isNotEmpty(estado)){
+            nivelAdministracions= catNivelAdministracionEjb.getByEstado(estado);
+        }else {
+            nivelAdministracions= catNivelAdministracionEjb.getAll();
         }
-        return nivelAdminWs;
-
-    }
-
-    /**
-     * Obtiene todos los niveles de administración del estado indicado
-     * @return
-     * @throws Exception
-     */
-    @Override
-    public List<CatNivelAdministracionWs> obtenerCatNivelAdministracionByEstado(String estado) throws Exception {
-        List<es.caib.dir3caib.persistence.model.CatNivelAdministracion> nivelAdministracions= catNivelAdministracionEjb.getByEstado(estado);
 
         List<CatNivelAdministracionWs>  nivelAdminWs = new ArrayList<>();
         for(es.caib.dir3caib.persistence.model.CatNivelAdministracion nivel:nivelAdministracions){
@@ -181,30 +165,20 @@ public class ObtenerCatalogosEjb implements ObtenerCatalogosLocal {
     }
 
     /**
-     * Obtiene todos los paises del catálogo
+     * Obtiene todos los paises en los que puede estar una entidad
+     * @param estado si no se indica estado devuelve todos
      * @return
      * @throws Exception
      */
     @Override
-    public List<CatPaisWs> obtenerCatPaisWs() throws Exception {
-        List<es.caib.dir3caib.persistence.model.CatPais> paises= catPaisEjb.getAll();
+    public List<CatPaisWs> obtenerCatPaisWs(String estado) throws Exception {
 
-        List<CatPaisWs>  paisesWs = new ArrayList<>();
-        for(es.caib.dir3caib.persistence.model.CatPais pais:paises){
-            paisesWs.add(CatPaisWs.generar(pais));
+        List<es.caib.dir3caib.persistence.model.CatPais> paises;
+        if(Utils.isNotEmpty(estado)){
+            paises= catPaisEjb.getByEstado(estado);
+        }else {
+            paises= catPaisEjb.getAll();
         }
-        return paisesWs;
-
-    }
-
-    /**
-     * Obtiene todos los paises del catálogo del estado indicado
-     * @return
-     * @throws Exception
-     */
-    @Override
-    public List<CatPaisWs> obtenerCatPaisByEstado(String estado) throws Exception {
-        List<es.caib.dir3caib.persistence.model.CatPais> paises= catPaisEjb.getByEstado(estado);
 
         List<CatPaisWs>  paisesWs = new ArrayList<>();
         for(es.caib.dir3caib.persistence.model.CatPais pais:paises){
@@ -232,33 +206,17 @@ public class ObtenerCatalogosEjb implements ObtenerCatalogosLocal {
     }
 
 
-    /**
-     * Obtiene todas las comunidades autónomas
-     * @return
-     * @throws Exception
-     */
     @Override
-    public List<CatComunidadAutonomaWs> obtenerCatComunidadAutonomaWs() throws Exception {
-        List<CatComunidadAutonoma>  comunidadesAutonomas = catComunidadAutonomaEjb.getAll();
-        List<CatComunidadAutonomaWs> comunidadesAutonomasWs = new ArrayList<CatComunidadAutonomaWs>();
+    public List<CatComunidadAutonomaWs> obtenerCatComunidadAutonomaWs(String estado) throws Exception {
+        List<CatComunidadAutonoma>  comunidadesAutonomas;
 
-        for( CatComunidadAutonoma comunidad : comunidadesAutonomas){
-            comunidadesAutonomasWs.add(CatComunidadAutonomaWs.generar(comunidad));
+        if(Utils.isNotEmpty(estado)){
+            comunidadesAutonomas= catComunidadAutonomaEjb.getByEstado(estado);
+        }else {
+            comunidadesAutonomas= catComunidadAutonomaEjb.getAll();
         }
 
-        return comunidadesAutonomasWs;
-    }
-
-    /**
-     * Obtiene todas las comunidades autónomas del estado indicado
-     * @return
-     * @throws Exception
-     */
-    @Override
-    public List<CatComunidadAutonomaWs> obtenerCatComunidadAutonomaByEstado(String estado) throws Exception {
-        List<CatComunidadAutonoma>  comunidadesAutonomas = catComunidadAutonomaEjb.getAll();
         List<CatComunidadAutonomaWs> comunidadesAutonomasWs = new ArrayList<CatComunidadAutonomaWs>();
-
         for( CatComunidadAutonoma comunidad : comunidadesAutonomas){
             comunidadesAutonomasWs.add(CatComunidadAutonomaWs.generar(comunidad));
         }
@@ -286,30 +244,20 @@ public class ObtenerCatalogosEjb implements ObtenerCatalogosLocal {
 
     /**
      * Obtiene todas las provincias
+     * @param estado si no se indica estado se obtienen todas
      * @return
      * @throws Exception
      */
     @Override
-    public List<CatProvinciaWs> obtenerCatProvinciaWs() throws Exception {
-        List<CatProvincia>  provincias = catProvinciaEjb.getAll();
-        List<CatProvinciaWs> provinciasWs = new ArrayList<CatProvinciaWs>();
+    public List<CatProvinciaWs> obtenerCatProvinciaWs(String estado ) throws Exception {
+        List<CatProvincia>  provincias;
 
-        for( CatProvincia provincia : provincias){
-            provinciasWs.add(CatProvinciaWs.generar(provincia));
+        if(Utils.isNotEmpty(estado)){
+            provincias= catProvinciaEjb.getByEstado(estado);
+        }else {
+            provincias= catProvinciaEjb.getAll();
         }
 
-        return provinciasWs;
-
-    }
-
-    /**
-     * Obtiene todas las provincias del estado indicado
-     * @return
-     * @throws Exception
-     */
-    @Override
-    public List<CatProvinciaWs> obtenerCatProvinciaByEstado(String estado) throws Exception {
-        List<CatProvincia>  provincias = catProvinciaEjb.getByEstado(estado);
         List<CatProvinciaWs> provinciasWs = new ArrayList<CatProvinciaWs>();
 
         for( CatProvincia provincia : provincias){
@@ -339,40 +287,22 @@ public class ObtenerCatalogosEjb implements ObtenerCatalogosLocal {
 
     }
 
-    /**
-     * Obtiene todas las localidades
-     * @return
-     * @throws Exception
-     */
-    @Override
-    public List<CatLocalidadWs> obtenerCatLocalidadWs() throws Exception {
-        List<CatLocalidad>  localidades = catLocalidadEjb.getAll();
-        log.info("Localidades obtenidas de la bbdd dir3caib:" + localidades.size());
-        List<CatLocalidadWs> localidadesWs = new ArrayList<CatLocalidadWs>();
 
+
+    @Override
+    public List<CatLocalidadWs> obtenerCatLocalidadWs(String estado) throws Exception {
+        List<CatLocalidad>  localidades;
+
+        if(Utils.isNotEmpty(estado)){
+            localidades= catLocalidadEjb.getByEstado(estado);
+        }else {
+            localidades= catLocalidadEjb.getAll();
+        }
+
+        List<CatLocalidadWs> localidadesWs = new ArrayList<CatLocalidadWs>();
         for( CatLocalidad localidad : localidades){
             localidadesWs.add(CatLocalidadWs.generar(localidad));
         }
-        log.info("Localidades procesadas para WS:" + localidadesWs.size());
-        return localidadesWs;
-
-    }
-
-    /**
-     * Obtiene todas las localidades del estado indicado
-     * @return
-     * @throws Exception
-     */
-    @Override
-    public List<CatLocalidadWs> obtenerCatLocalidadByEstado(String estado) throws Exception {
-        List<CatLocalidad>  localidades = catLocalidadEjb.getByEstado(estado);
-        log.info("Localidades obtenidas de la bbdd dir3caib:" + localidades.size());
-        List<CatLocalidadWs> localidadesWs = new ArrayList<CatLocalidadWs>();
-
-        for( CatLocalidad localidad : localidades){
-            localidadesWs.add(CatLocalidadWs.generar(localidad));
-        }
-        log.info("Localidades procesadas para WS:" + localidadesWs.size());
         return localidadesWs;
 
     }
@@ -402,29 +332,16 @@ public class ObtenerCatalogosEjb implements ObtenerCatalogosLocal {
      * @throws Exception
      */
     @Override
-    public List<CatEntidadGeograficaWs> obtenerCatEntidadGeograficaWs() throws Exception {
-        List<CatEntidadGeografica>  entidadesGeograficas = catEntidadGeograficaEjb.getAll();
-        List<CatEntidadGeograficaWs> entidadesGeograficasWs = new ArrayList<CatEntidadGeograficaWs>();
+    public List<CatEntidadGeograficaWs> obtenerCatEntidadGeograficaWs(String estado) throws Exception {
+        List<CatEntidadGeografica>  entidadesGeograficas;
 
-        for( CatEntidadGeografica entidadGeografica : entidadesGeograficas){
-            entidadesGeograficasWs.add(CatEntidadGeograficaWs.generar(entidadGeografica));
+        if(Utils.isNotEmpty(estado)){
+            entidadesGeograficas= catEntidadGeograficaEjb.getByEstado(estado);
+        }else {
+            entidadesGeograficas = catEntidadGeograficaEjb.getAll();
         }
 
-        return entidadesGeograficasWs;
-
-    }
-
-
-    /**
-     * Obtiene todas las entidades geográficas.
-     * @return
-     * @throws Exception
-     */
-    @Override
-    public List<CatEntidadGeograficaWs> obtenerCatEntidadGeograficaByEstado(String estado) throws Exception {
-        List<CatEntidadGeografica>  entidadesGeograficas = catEntidadGeograficaEjb.getByEstado(estado);
         List<CatEntidadGeograficaWs> entidadesGeograficasWs = new ArrayList<CatEntidadGeograficaWs>();
-
         for( CatEntidadGeografica entidadGeografica : entidadesGeograficas){
             entidadesGeograficasWs.add(CatEntidadGeograficaWs.generar(entidadGeografica));
         }
@@ -491,8 +408,14 @@ public class ObtenerCatalogosEjb implements ObtenerCatalogosLocal {
      * @throws Exception
      */
     @Override
-    public List<CatTipoViaWs> obtenerCatTipoViaWs() throws Exception{
-        List<es.caib.dir3caib.persistence.model.CatTipoVia> tipoVias= catTipoViaEjb.getAll();
+    public List<CatTipoViaWs> obtenerCatTipoViaWs(String estado) throws Exception{
+        List<es.caib.dir3caib.persistence.model.CatTipoVia> tipoVias;
+
+        if(Utils.isNotEmpty(estado)){
+            tipoVias= catTipoViaEjb.getByEstado(estado);
+        }else {
+            tipoVias = catTipoViaEjb.getAll();
+        }
 
         List<CatTipoViaWs>  tipoViasWs = new ArrayList<>();
         for(es.caib.dir3caib.persistence.model.CatTipoVia tipoVia:tipoVias){
@@ -501,19 +424,5 @@ public class ObtenerCatalogosEjb implements ObtenerCatalogosLocal {
         return tipoViasWs;
     }
 
-    /**
-     * Obtiene todos los Tipo Via
-     * @return
-     * @throws Exception
-     */
-    @Override
-    public List<CatTipoViaWs> obtenerCatTipoViaByEstado(String estado) throws Exception{
-        List<es.caib.dir3caib.persistence.model.CatTipoVia> tipoVias= catTipoViaEjb.getByEstado(estado);
 
-        List<CatTipoViaWs>  tipoViasWs = new ArrayList<>();
-        for(es.caib.dir3caib.persistence.model.CatTipoVia tipoVia:tipoVias){
-            tipoViasWs.add(CatTipoViaWs.generar(tipoVia));
-        }
-        return tipoViasWs;
-    }
 }
