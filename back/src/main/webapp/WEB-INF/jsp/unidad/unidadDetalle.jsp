@@ -47,60 +47,24 @@
 												<spring:message code="unidad.datos" />
 											</h5>
 										</div>
-										<dt>
-											<spring:message code="unidad.codigo" />
-											:
-										</dt>
-										<dd>${unidad.codigoDir3} v${unidad.version}</dd>
-										<dt>
-											<spring:message code="unidad.denominacion" />
-											:
-										</dt>
-										<dd>${unidad.denominacion}</dd>
+										<dt><spring:message code="unidad.codigo" />:</dt><dd>${unidad.codigoDir3} v${unidad.version}</dd>
+										<dt><spring:message code="unidad.denominacion" />:</dt><dd>${unidad.denominacion}</dd>
 										<c:if test="${not empty unidad.denomLenguaCooficial}">
-											<dt>
-												<spring:message code="unidad.denominacion.cooficial" />
-												:
-											</dt>
-											<dd>${unidad.denomLenguaCooficial}</dd>
+											<dt><spring:message code="unidad.denominacion.cooficial" />:</dt><dd>${unidad.denomLenguaCooficial}</dd>
 										</c:if>
-										<dt>
-											<spring:message code="unidad.estado" />
-											:
-										</dt>
+										<dt><spring:message code="unidad.estado" />:</dt>
 										<c:if test="${unidad.estado.codigoEstadoEntidad == 'V'}">
-											<dd>
-												<span class="label label-success">${unidad.estado.descripcionEstadoEntidad}</span>
-											</dd>
+											<dd><span class="label label-success">${unidad.estado.descripcionEstadoEntidad}</span></dd>
 										</c:if>
 										<c:if test="${unidad.estado.codigoEstadoEntidad == 'E'}">
-											<dd>
-												<span class="label btn-danger">${unidad.estado.descripcionEstadoEntidad}</span>
-											</dd>
-											<dt>
-												<spring:message code="unidad.fechaExtincion" />
-												:
-											</dt>
-											<dd>
-												<fmt:formatDate pattern="dd/MM/yyyy"
-													value="${unidad.fechaExtincion}" />
-											</dd>
-											<dt>
-												<spring:message code="unidad.baja" />
-												:
-											</dt>
-											<dd>${unidad.observBaja}</dd>
+											<dd><span class="label btn-danger">${unidad.estado.descripcionEstadoEntidad}</span></dd>
+										    <c:if test="${not empty unidad.fechaExtincion}"><dt><spring:message code="unidad.fechaExtincion" />:</dt><dd><fmt:formatDate pattern="dd/MM/yyyy" value="${unidad.fechaExtincion}" /></dd></c:if>
+											<c:if test="${not empty unidad.observBaja}"><dt><spring:message code="unidad.baja" />:</dt><dd>${unidad.observBaja}</dd> </c:if>
 										</c:if>
-										<dt>
-											<spring:message code="unidad.edp" />
-											:
-										</dt>
+										<dt><spring:message code="unidad.edp" />:</dt>
 										<c:if test="${unidad.esEdp}">
-											<dd>
-												<p class="centrat ajustarEDP" rel="edp"
-													data-content="
-                                           	<c:if test="${not empty unidad.codEdpPrincipal}">Edp Principal: <c:if test="${denominacionCooficial and not empty unidad.codEdpPrincipal.denomLenguaCooficial}"><c:out value="${unidad.codEdpPrincipal.codigoDir3} v${unidad.codEdpPrincipal.version} - ${unidad.codEdpPrincipal.denomLenguaCooficial}" escapeXml="true"/></c:if>
-                                           	<c:if test="${not denominacionCooficial}"><c:out value="${unidad.codEdpPrincipal.codigoDir3} v${unidad.codEdpPrincipal.version} - ${unidad.codEdpPrincipal.denominacion}" escapeXml="true"/></c:if></c:if>"
+											<dd><p class="centrat ajustarEDP" rel="edp"
+												    data-content="<c:if test="${not empty unidad.codEdpPrincipal}">Edp Principal: <c:if test="${denominacionCooficial and not empty unidad.codEdpPrincipal.denomLenguaCooficial}"><c:out value="${unidad.codEdpPrincipal.codigoDir3} v${unidad.codEdpPrincipal.version} - ${unidad.codEdpPrincipal.denomLenguaCooficial}" escapeXml="true"/></c:if><c:if test="${not denominacionCooficial}"><c:out value="${unidad.codEdpPrincipal.codigoDir3} v${unidad.codEdpPrincipal.version} - ${unidad.codEdpPrincipal.denominacion}" escapeXml="true"/></c:if></c:if>"
 													data-toggle="popover">
 													<span class="label label-success">Sí</span>
 												</p>
@@ -1579,10 +1543,8 @@
 									<div class="tree pad-top20">
 										<ul class="ampleComplet">
 											<%-- Mostramos los históricos de una unidad de manera recursiva--%>
-											<c:if test="${not empty nodo.historicos}">
 												<c:set var="nodo" value="${nodo}" scope="request" />
 												<jsp:include page="../nodohistorico.jsp" flush="true" />
-											</c:if>
 										</ul>
 									</div>
 								</div>

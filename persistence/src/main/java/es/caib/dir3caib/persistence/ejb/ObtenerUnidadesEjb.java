@@ -418,12 +418,13 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
      * @throws Exception
      */
     @Override
-    public void montarHistoricosFinales(Unidad unidad, Nodo nodo, int nivel) throws Exception {
+    public void montarHistoricosFinales(Unidad unidad, Nodo nodo, int nivel, String codigoEstado) throws Exception {
 
         //Asignamos los valores de la unidad que nos pasan
         nodo.setCodigo(unidad.getCodigo());
         nodo.setDenominacion(unidad.getDenominacion());
         nodo.setNivel((long) nivel);
+        nodo.setCodigoEstado(codigoEstado);
         //Obtenemos los históricos de primer nivel de la unidad indicada
 
         Set<HistoricoUO> parciales = unidad.getHistoricosAnterior();
@@ -433,7 +434,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
             Unidad ultima = unidadEjb.findConHistoricos(parcial.getUnidadUltima().getCodigo());
             Nodo nodoParcial = new Nodo();
             historicosParciales.add(nodoParcial);
-            montarHistoricosFinales(ultima, nodoParcial, nivel + 1);
+            montarHistoricosFinales(ultima, nodoParcial, nivel + 1, ultima.getEstado().getCodigoEstadoEntidad());
         }
 
         //Asignamos los históricos al nodo principal

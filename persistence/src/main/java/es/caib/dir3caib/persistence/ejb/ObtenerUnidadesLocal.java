@@ -36,7 +36,7 @@ public interface ObtenerUnidadesLocal {
 
     Date obtenerFechaUltimaActualizacion() throws Exception;
 
-    void montarHistoricosFinales(Unidad unidad, Nodo nodo, int nivel) throws Exception;
+    void montarHistoricosFinales(Unidad unidad, Nodo nodo, int nivel, String codigoEstado) throws Exception;
 
     List<UnidadTF> obtenerHistoricosFinalesTF(String codigo) throws Exception;
 

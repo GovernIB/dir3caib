@@ -1270,8 +1270,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 	@SuppressWarnings(value = "unchecked")
 	public Set<Unidad> historicosHaciaAtras(String codigoUnidad, boolean denominacionCooficial) throws Exception {
 
-		Query q = em
-				.createQuery("select unidadAnterior.codigo from HistoricoUO where unidadUltima.codigo =:codigoUnidad ");
+		Query q = em.createQuery("select unidadAnterior.codigo from HistoricoUO where unidadUltima.codigo =:codigoUnidad ");
 
 		q.setParameter("codigoUnidad", codigoUnidad);
 		Set<Unidad> unidadesHistoricasAnteriores = new HashSet<Unidad>();
@@ -1420,6 +1419,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 //            Hibernate.initialize(unidad.getSirOfi());
             Hibernate.initialize(unidad.getContactos());
             Hibernate.initialize(unidad.getHistoricosAnterior());
+            Hibernate.initialize(unidad.getHistoricosUltima());
             Hibernate.initialize(unidad.getServicios());
         }
 

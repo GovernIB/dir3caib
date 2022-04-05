@@ -317,7 +317,7 @@ public class UnidadController extends BaseController {
         if (!Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE.equals(unidad.getEstado().getCodigoEstadoEntidad())) {
             unidadExtinguida = true;
             Nodo nodo = new Nodo();
-            obtenerUnidadesEjb.montarHistoricosFinales(unidad, nodo, 1);
+            obtenerUnidadesEjb.montarHistoricosFinales(unidad, nodo, 1,unidad.getEstado().getCodigoEstadoEntidad());
             mav.addObject("nodo", nodo);
         }
 

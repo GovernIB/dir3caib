@@ -16,6 +16,7 @@ public class ObjetoBasico {
   private String version; 
   private String denominacion;
   private String descripcionEstado;
+  private String codigoEstado;
   private String raiz;
   private String superior; // denominación
   private String codigoSuperior; // código
@@ -96,6 +97,10 @@ public class ObjetoBasico {
   public void setDescripcionEstado(String descripcionEstado) {
     this.descripcionEstado = descripcionEstado;
   }
+
+  public String getCodigoEstado() {return codigoEstado;}
+
+  public void setCodigoEstado(String codigoEstado) {this.codigoEstado = codigoEstado;}
 
   public String getRaiz() {
     return raiz;
