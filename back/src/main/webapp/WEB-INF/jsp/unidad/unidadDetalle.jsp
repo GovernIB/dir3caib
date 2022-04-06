@@ -54,10 +54,10 @@
 										</c:if>
 										<dt><spring:message code="unidad.estado" />:</dt>
 										<c:if test="${unidad.estado.codigoEstadoEntidad == 'V'}">
-											<dd><span class="label label-success">${unidad.estado.descripcionEstadoEntidad}</span></dd>
+											<dd><span class="label label-success"><spring:message code="estado.${unidad.estado.codigoEstadoEntidad}"/></span></dd>
 										</c:if>
 										<c:if test="${unidad.estado.codigoEstadoEntidad == 'E'}">
-											<dd><span class="label btn-danger">${unidad.estado.descripcionEstadoEntidad}</span></dd>
+											<dd><span class="label btn-danger"><spring:message code="estado.${unidad.estado.codigoEstadoEntidad}"/></span></dd>
 										    <c:if test="${not empty unidad.fechaExtincion}"><dt><spring:message code="unidad.fechaExtincion" />:</dt><dd><fmt:formatDate pattern="dd/MM/yyyy" value="${unidad.fechaExtincion}" /></dd></c:if>
 											<c:if test="${not empty unidad.observBaja}"><dt><spring:message code="unidad.baja" />:</dt><dd>${unidad.observBaja}</dd> </c:if>
 										</c:if>
@@ -77,12 +77,12 @@
 										</c:if>
 										<c:if test="${unidad.estado.codigoEstadoEntidad == 'A'}">
 											<dd>
-												<span class="label label-important">${unidad.estado.descripcionEstadoEntidad}</span>
+												<span class="label label-important"><spring:message code="estado.${unidad.estado.codigoEstadoEntidad}"/></span>
 											</dd>
 										</c:if>
 										<c:if test="${unidad.estado.codigoEstadoEntidad == 'T'}">
 											<dd>
-												<span class="label label-info">${unidad.estado.descripcionEstadoEntidad}</span>
+												<span class="label label-info"><spring:message code="estado.${unidad.estado.codigoEstadoEntidad}"/></span>
 											</dd>
 										</c:if>
 										<c:if test="${not empty unidad.nivelJerarquico}">
@@ -292,7 +292,7 @@
 											</c:forEach>
 										</c:if>
 
-										<!-- Muestra Ambíto de la unidad-->
+										<!-- Muestra Ámbito de la unidad-->
 										<hr class="divider">
 										<div class="box-header well cabeceraDetalle">
 											<h5>
@@ -343,14 +343,16 @@
 												<spring:message code="unidad.oficinas" />
 											</h5>
 										</div>
+										<c:set var="sinOficinas" scope="session" value="true" />
 										<c:forEach items="${unidad.organizativaOfi}" var="oficina">
 											<c:if test="${oficina.estado.codigoEstadoEntidad == 'V'}">
+												<c:set var="sinOficinas" value="false" />
 												<dt>-</dt>
 												<dd>${oficina.oficina.codigo}-
 													${oficina.oficina.denominacion}</dd>
 											</c:if>
 										</c:forEach>
-										<c:if test="${empty unidad.organizativaOfi}">
+										<c:if test="${empty unidad.organizativaOfi || sinOficinas}">
 											<dt>&nbsp;</dt>
 											<dd>
 												<spring:message code="oficina.busqueda.vacio" />
@@ -364,16 +366,16 @@
 												<spring:message code="unidad.registren" />
 											</h5>
 										</div>
-										<c:set var="sinOficinas" scope="session" value="false" />
+										<c:set var="sinOficinas" scope="session" value="true" />
 										<c:forEach items="${oficinasRegistran}" var="oficinaRegistra">
 											<c:if test="${oficinaRegistra.oficinaInformacion}">
-												<c:set var="sinOficinas" value="true" />
+												<c:set var="sinOficinas" value="false" />
 												<dt>-</dt>
 												<dd>${oficinaRegistra.codigo}-
 													${oficinaRegistra.denominacion}</dd>
 											</c:if>
 										</c:forEach>
-										<c:if test="${empty oficinasRegistran || !sinOficinas}">
+										<c:if test="${empty oficinasRegistran || sinOficinas}">
 											<dt>&nbsp;</dt>
 											<dd>
 												<spring:message code="oficina.busqueda.vacio" />
