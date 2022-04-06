@@ -183,7 +183,7 @@
                                 <span class="label label-danger">No</span>
                             </c:if>
                         </td>
-                        <td>${nodo.descripcionEstado}</td>
+                        <td><spring:message code="estado.${nodo.codigoEstado}"/></td>
                         <td class="center">
                         	<c:choose>
                         		<c:when test="${oficinaBusqueda.denominacionCooficial}">

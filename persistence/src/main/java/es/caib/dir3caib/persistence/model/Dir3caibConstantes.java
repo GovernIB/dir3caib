@@ -162,5 +162,10 @@ public interface Dir3caibConstantes {
      Long GALEGO= 4L;
      Long VALENCIA= 5L;
 
+     String TIPO_CONTACTO_EMAIL= "E";
+     String TIPO_CONTACTO_FAX= "F";
+     String TIPO_CONTACTO_URL= "U";
+     String TIPO_CONTACTO_TELEFONO= "T";
+
 
 }

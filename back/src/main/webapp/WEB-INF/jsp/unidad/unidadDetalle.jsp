@@ -53,10 +53,10 @@
 											<dt><spring:message code="unidad.denominacion.cooficial" />:</dt><dd>${unidad.denomLenguaCooficial}</dd>
 										</c:if>
 										<dt><spring:message code="unidad.estado" />:</dt>
-										<c:if test="${unidad.estado.codigoEstadoEntidad == 'V'}">
+										<c:if test="${unidad.estado.codigoEstadoEntidad == Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE}">
 											<dd><span class="label label-success"><spring:message code="estado.${unidad.estado.codigoEstadoEntidad}"/></span></dd>
 										</c:if>
-										<c:if test="${unidad.estado.codigoEstadoEntidad == 'E'}">
+										<c:if test="${unidad.estado.codigoEstadoEntidad == Dir3caibConstantes.ESTADO_ENTIDAD_EXTINGUIDO}">
 											<dd><span class="label btn-danger"><spring:message code="estado.${unidad.estado.codigoEstadoEntidad}"/></span></dd>
 										    <c:if test="${not empty unidad.fechaExtincion}"><dt><spring:message code="unidad.fechaExtincion" />:</dt><dd><fmt:formatDate pattern="dd/MM/yyyy" value="${unidad.fechaExtincion}" /></dd></c:if>
 											<c:if test="${not empty unidad.observBaja}"><dt><spring:message code="unidad.baja" />:</dt><dd>${unidad.observBaja}</dd> </c:if>
@@ -75,12 +75,12 @@
 												<span class="label label-danger">No</span>
 											</dd>
 										</c:if>
-										<c:if test="${unidad.estado.codigoEstadoEntidad == 'A'}">
+										<c:if test="${unidad.estado.codigoEstadoEntidad == Dir3caibConstantes.ESTADO_ENTIDAD_ANULADO}">
 											<dd>
 												<span class="label label-important"><spring:message code="estado.${unidad.estado.codigoEstadoEntidad}"/></span>
 											</dd>
 										</c:if>
-										<c:if test="${unidad.estado.codigoEstadoEntidad == 'T'}">
+										<c:if test="${unidad.estado.codigoEstadoEntidad == Dir3caibConstantes.ESTADO_ENTIDAD_TRANSITORIO}">
 											<dd>
 												<span class="label label-info"><spring:message code="estado.${unidad.estado.codigoEstadoEntidad}"/></span>
 											</dd>
@@ -345,7 +345,7 @@
 										</div>
 										<c:set var="sinOficinas" scope="session" value="true" />
 										<c:forEach items="${unidad.organizativaOfi}" var="oficina">
-											<c:if test="${oficina.estado.codigoEstadoEntidad == 'V'}">
+											<c:if test="${oficina.estado.codigoEstadoEntidad == Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE}">
 												<c:set var="sinOficinas" value="false" />
 												<dt>-</dt>
 												<dd>${oficina.oficina.codigo}-

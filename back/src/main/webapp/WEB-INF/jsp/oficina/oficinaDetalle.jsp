@@ -39,10 +39,10 @@
                                     <dt> <spring:message code="oficina.denominacion"/>: </dt> <dd> ${oficina.denominacion}</dd>
                                     <c:if test="${not empty oficina.denomLenguaCooficial}"><dt> <spring:message code="oficina.denominacion.cooficial"/>: </dt> <dd>${oficina.denomLenguaCooficial}</dd></c:if>
                                     <dt> <spring:message code="oficina.estado"/>: </dt>
-                                        <c:if test="${oficina.estado.codigoEstadoEntidad == 'V'}"><dd><span class="label label-success"><spring:message code="estado.${oficina.estado.codigoEstadoEntidad}"/></span></dd></c:if>
-                                        <c:if test="${oficina.estado.codigoEstadoEntidad == 'E'}"><dd><span class="label label-warning"><spring:message code="estado.${oficina.estado.codigoEstadoEntidad}"/></span></dd></c:if>
-                                        <c:if test="${oficina.estado.codigoEstadoEntidad == 'A'}"><dd><span class="label label-important"><spring:message code="estado.${oficina.estado.codigoEstadoEntidad}"/></span></dd></c:if>
-                                        <c:if test="${oficina.estado.codigoEstadoEntidad == 'T'}"><dd><span class="label label-info"><spring:message code="estado.${oficina.estado.codigoEstadoEntidad}"/></span></dd></c:if>
+                                        <c:if test="${oficina.estado.codigoEstadoEntidad == Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE}"><dd><span class="label label-success"><spring:message code="estado.${oficina.estado.codigoEstadoEntidad}"/></span></dd></c:if>
+                                        <c:if test="${oficina.estado.codigoEstadoEntidad == Dir3caibConstantes.ESTADO_ENTIDAD_EXTINGUIDO}"><dd><span class="label label-warning"><spring:message code="estado.${oficina.estado.codigoEstadoEntidad}"/></span></dd></c:if>
+                                        <c:if test="${oficina.estado.codigoEstadoEntidad == ESTADO_ENTIDAD_ANULADO}"><dd><span class="label label-important"><spring:message code="estado.${oficina.estado.codigoEstadoEntidad}"/></span></dd></c:if>
+                                        <c:if test="${oficina.estado.codigoEstadoEntidad == ESTADO_ENTIDAD_TRANSITORIO}"><dd><span class="label label-info"><spring:message code="estado.${oficina.estado.codigoEstadoEntidad}"/></span></dd></c:if>
                                     <c:if test="${not empty oficina.nivelAdministracion.descripcionNivelAdministracion}"><dt> <spring:message code="oficina.administracion"/>: </dt> <dd> ${oficina.nivelAdministracion.descripcionNivelAdministracion}</dd></c:if>
                                     <c:if test="${not empty oficina.tipoOficina.descripcionJerarquiaOficina}"><dt> <spring:message code="oficina.tipo"/>: </dt> <dd> ${oficina.tipoOficina.descripcionJerarquiaOficina}</dd></c:if>
                                     <c:if test="${not empty oficina.codUoResponsable.codigo}"><dt> <spring:message code="oficina.unidadresponsable"/>: </dt> <dd> <a onclick="goTo('<c:url value="/unidad/${oficina.codUoResponsable.codigo}/${paginaUrl}"/>','<spring:message code="dir3caib.organismo.detalle.generar" javaScriptEscape="true"/>')" onmouseover="this.style.cursor='pointer';">${oficina.codUoResponsable.codigoDir3} v${oficina.codUoResponsable.version} - <c:choose><c:when test="${denominacionCooficial and not empty(oficina.codUoResponsable.denomLenguaCooficial)}">${oficina.codUoResponsable.denomLenguaCooficial}</c:when><c:otherwise>${oficina.codUoResponsable.denominacion}</c:otherwise></c:choose></a></dd></c:if>
@@ -67,9 +67,9 @@
                                             <h5><spring:message code="oficina.contacto"/></h5>
                                         </div>
                                         <c:forEach items="${oficina.contactos}" var="contacto">
-                                            <c:if test="${contacto.tipoContacto.codigoTipoContacto == 'E'}"><dt> <spring:message code="oficina.contacto.mail"/>: </dt></c:if>
-                                            <c:if test="${contacto.tipoContacto.codigoTipoContacto == 'F' || contacto.tipoContacto.codigoTipoContacto == 'T'}"><dt> <spring:message code="oficina.contacto.telefono"/>: </dt></c:if>
-                                            <c:if test="${contacto.tipoContacto.codigoTipoContacto == 'U'}"><dt> <spring:message code="oficina.contacto.url"/>: </dt></c:if>
+                                            <c:if test="${contacto.tipoContacto.codigoTipoContacto == Dir3caibConstantes.TIPO_CONTACTO_EMAIL}"><dt> <spring:message code="oficina.contacto.mail"/>: </dt></c:if>
+                                            <c:if test="${contacto.tipoContacto.codigoTipoContacto == Dir3caibConstantes.TIPO_CONTACTO_FAX || contacto.tipoContacto.codigoTipoContacto == Dir3caibConstantes.TIPO_CONTACTO_TELEFONO}"><dt> <spring:message code="oficina.contacto.telefono"/>: </dt></c:if>
+                                            <c:if test="${contacto.tipoContacto.codigoTipoContacto == Dir3caibConstantes.TIPO_CONTACTO_URL}"><dt> <spring:message code="oficina.contacto.url"/>: </dt></c:if>
                                             <dd> ${contacto.valorContacto}</dd>
                                         </c:forEach>
                                         <c:if test="${not empty oficina.horarioAtencion}"><dt> <spring:message code="oficina.horario"/>: </dt> <dd> ${oficina.horarioAtencion}</dd></c:if>

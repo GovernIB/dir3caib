@@ -167,6 +167,7 @@ public class NodoUtils {
             		"", false, unidad.isEsEdp(), edpPrincipal);
             nodo.setCodigoDir3(unidad.getCodigoDir3());
             nodo.setVersion(String.valueOf(unidad.getVersion()));
+            nodo.setCodigoEstado(unidad.getEstado().getCodigoEstadoEntidad());
             nodos.add(nodo);
         }
 
@@ -187,6 +188,7 @@ public class NodoUtils {
             String uoResponsable = oficina.getCodUoResponsable().getCodigoDir3() + " " + Dir3caibConstantes.SEPARADOR_CODIGO_VERSION + oficina.getCodUoResponsable().getVersion()  + " - " + descCodUoResponsable;
             Nodo nodo = new Nodo(oficina.getCodigo(), denominacion, oficina.getEstado().getDescripcionEstadoEntidad(), 
             		ofiResponsable, uoResponsable, "", oficina.getOficinaSir());
+            nodo.setCodigoEstado(oficina.getEstado().getCodigoEstadoEntidad());
 
             nodos.add(nodo);
         }
