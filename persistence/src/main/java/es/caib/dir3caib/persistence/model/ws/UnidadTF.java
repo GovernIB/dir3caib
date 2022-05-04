@@ -289,7 +289,7 @@ public class UnidadTF implements Serializable {
     }
 
     public void rellenar(Unidad unidad,boolean denominacionOficial) {
-        this.setCodigo(unidad.getCodigo());
+        this.setCodigo(unidad.getCodigoDir3());
         this.setCodUnidadRaiz(unidad.getCodUnidadRaiz().getCodigo());
         this.setCodUnidadSuperior(unidad.getCodUnidadSuperior().getCodigo());
         this.setCodigoEstadoEntidad(unidad.getEstado().getCodigoEstadoEntidad());
