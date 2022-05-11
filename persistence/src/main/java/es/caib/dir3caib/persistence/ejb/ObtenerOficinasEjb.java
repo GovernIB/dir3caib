@@ -36,6 +36,9 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
     @EJB(mappedName = "dir3caib/UnidadEJB/local")
     private UnidadLocal unidadEjb;
 
+    @EJB(mappedName = "dir3caib/ObtenerUnidadesEJB/local")
+    private ObtenerUnidadesLocal obtenerUnidadesEjb;
+
     @EJB(mappedName = "dir3caib/SincronizacionEJB/local")
     private SincronizacionLocal sincronizacionEjb;
     
@@ -235,7 +238,7 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
 
         Long start = System.currentTimeMillis();
 
-        List<Unidad> unidades = new ArrayList<Unidad>();
+        Set<Unidad> unidades = new HashSet<>();
         Unidad unidad = null;
         //unidades.add(unidadEjb.obtenerUnidad(codigo)); // Añadimos la raiz
         if (fechaActualizacion != null) { // ES actualizacion, miramos si la raiz se ha actualizado
@@ -265,9 +268,15 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
             }
         }
 
+        //Obtenemos las unidades hijas vigentes del código que nos han indicado
         if(unidad!=null) {
             unidades.addAll(unidadEjb.obtenerArbol(unidad.getCodigo()));
         }
+
+        //Obtenemos las unidades que se han actualizado(extinguido, eetc) entre las fechas indicadas para obtener sus oficinas que
+        //se han actualizado
+        unidades.addAll(obtenerUnidadesEjb.obtenerArbolUnidades( codigo, fechaActualizacion, fechaSincronizacion));
+
 
         List<Oficina> oficinasCompleto = new ArrayList<Oficina>();
 
@@ -276,12 +285,6 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
             List<Oficina> oficinas = oficinaEjb.obtenerOficinasOrganismo(uni.getCodigo(), fechaActualizacion, fechaSincronizacion);
             oficinasCompleto.addAll(oficinas);
         }
-
-        // Convertimos las Oficinas en OficinaTF
-       /* List<OficinaTF> arbolTF = new ArrayList<OficinaTF>();
-        for (Oficina oficina : oficinasCompleto) {
-            arbolTF.add(OficinaTF.generar(oficina,denominacionOficial));
-        }*/
 
         Long end = System.currentTimeMillis();
         log.info("tiempo obtenerArbolOficinas: " + Utils.formatElapsedTime(end - start));

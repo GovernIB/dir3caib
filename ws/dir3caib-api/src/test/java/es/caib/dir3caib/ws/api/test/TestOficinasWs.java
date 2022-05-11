@@ -78,8 +78,6 @@ public class TestOficinasWs extends Dir3CaibTestUtils {
     public void testObtenerArbolOficinasActualizacion() {
         try {
             Dir3CaibObtenerOficinasWs apiOficinas = getObtenerOficinasApi(true);
-            //Sincro
-           // List<OficinaTF> oficinas = apiOficinas.obtenerArbolOficinas("A04059164", null, null);
 
             //Actualizacion
             DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -87,14 +85,15 @@ public class TestOficinasWs extends Dir3CaibTestUtils {
             long fechasincroregweb = date.getTime();
 
             dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            date = dateFormat.parse("09/02/2022");
+            date = dateFormat.parse("11/05/2022");
             long fechaactuaregweb = date.getTime();
 
-            List<OficinaTF> oficinas = apiOficinas.obtenerArbolOficinas("A04059164", new Timestamp(fechaactuaregweb), new Timestamp(fechasincroregweb));
+            //List<OficinaTF> oficinas = apiOficinas.obtenerArbolOficinas("A04059164", new Timestamp(fechaactuaregweb), new Timestamp(fechasincroregweb));
+            List<OficinaTF> oficinas = apiOficinas.obtenerArbolOficinas("A04032314", new Timestamp(fechaactuaregweb), new Timestamp(fechasincroregweb));
 
             System.out.println(oficinas.size());
             for(OficinaTF ofi: oficinas ){
-                System.out.println(ofi.getDenominacion());
+                System.out.println(ofi.getDenominacion() +"- "+ ofi.getCodigo());
             }
 
 
