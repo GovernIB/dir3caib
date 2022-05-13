@@ -187,7 +187,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
      * ACTUALIZACION DE  UNIDAD NO RAIZ SIN CAMBIO DE RAIZ
      *
      */
-    private List<Unidad> obtenerArbolUnidades(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
+    public List<Unidad> obtenerArbolUnidades(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
         // TODO falta prova
         log.info("WS: Inicio obtenerArbolUnidadesTF");
         Long start = System.currentTimeMillis();
