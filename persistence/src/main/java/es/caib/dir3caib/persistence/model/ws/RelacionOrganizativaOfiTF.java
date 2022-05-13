@@ -46,7 +46,7 @@ public class RelacionOrganizativaOfiTF {
 
         this.setEstado(relacionOrganizativaOfi.getEstado().getCodigoEstadoEntidad());
         this.setOficina(relacionOrganizativaOfi.getOficina().getCodigo());
-        this.setUnidad(relacionOrganizativaOfi.getUnidad().getCodigo());
+        this.setUnidad(relacionOrganizativaOfi.getUnidad().getCodigoDir3());
     }
 
     public static RelacionOrganizativaOfiTF generar(RelacionOrganizativaOfi relacionOrganizativaOfi){

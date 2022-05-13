@@ -284,7 +284,7 @@ public class OficinaTF {
         } else {
             this.setTipoOficina(null);
         }
-        this.setCodUoResponsable(oficina.getCodUoResponsable().getCodigo());
+        this.setCodUoResponsable(oficina.getCodUoResponsable().getCodigoDir3());
 
         if(oficina.getCodOfiResponsable() != null){
             this.setCodOfiResponsable(oficina.getCodOfiResponsable().getCodigo());

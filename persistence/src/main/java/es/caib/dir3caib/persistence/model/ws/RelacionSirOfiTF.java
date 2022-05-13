@@ -48,7 +48,7 @@ public class RelacionSirOfiTF {
 
         this.setEstado(relacionSirOfi.getEstado().getCodigoEstadoEntidad());
         this.setOficina(relacionSirOfi.getOficina().getCodigo());
-        this.setUnidad(relacionSirOfi.getUnidad().getCodigo());
+        this.setUnidad(relacionSirOfi.getUnidad().getCodigoDir3());
     }
 
     public static RelacionSirOfiTF generar(RelacionSirOfi relacionSirOfi){
