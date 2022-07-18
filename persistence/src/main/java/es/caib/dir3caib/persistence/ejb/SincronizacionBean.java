@@ -423,6 +423,7 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
 
         } catch (Exception e) { //si hay algun problema, modificamos el estadod e la descarga
             log.info("Excepcion en la descarga del catalogo");
+            e.printStackTrace();
             sincronizacion.setEstado(Dir3caibConstantes.SINCRONIZACION_ERROR_DESCARGA);
             merge(sincronizacion);
             MailUtils.envioEmailErrorSincronizacion(Dir3caibConstantes.SINCRONIZACION_CATALOGO,e);
@@ -512,7 +513,7 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
             }
 
         }catch (Exception e){
-
+            e.printStackTrace();
             // Si ha habido un Error en la sincronización, modificamos el estado de la descarga
             if(sincroCatalogo != null && sincroCatalogo.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)){
                 try {
@@ -523,7 +524,6 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
                 }
             }
             MailUtils.envioEmailErrorSincronizacion(Dir3caibConstantes.SINCRONIZACION_CATALOGO, e);
-            e.printStackTrace();
             throw e;
         }
 
