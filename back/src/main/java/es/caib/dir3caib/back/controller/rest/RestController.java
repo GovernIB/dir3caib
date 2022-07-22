@@ -179,7 +179,7 @@ public class RestController {
 			@RequestParam String denominacion, @RequestParam Long codNivelAdministracion,
 			@RequestParam Long codComunidadAutonoma, @RequestParam boolean conOficinas,
 			@RequestParam boolean unidadRaiz, @RequestParam Long provincia, @RequestParam String localidad,
-			@RequestParam boolean vigentes, @RequestParam(defaultValue = "false") boolean cooficial) throws Exception {
+			@RequestParam boolean vigentes, @RequestParam(defaultValue = "true") boolean cooficial) throws Exception {
 
 		// Transformamos el campo denominacion de ISO a UTF-8 para realizar las
 		// búsquedas en bd que estan en UTF-8.
@@ -203,7 +203,7 @@ public class RestController {
 			@RequestParam String denominacion, @RequestParam Long codNivelAdministracion,
 			@RequestParam Long codComunidadAutonoma, @RequestParam Long provincia, @RequestParam String localidad,
 			@RequestParam boolean oficinasSir, @RequestParam boolean vigentes,
-			@RequestParam(defaultValue = "false") boolean cooficial) throws Exception {
+			@RequestParam(defaultValue = "true") boolean cooficial) throws Exception {
 
 		// Transformamos el campo denominacion de ISO a UTF-8 para realizar las
 		// búsquedas en bd que estan en UTF-8.
