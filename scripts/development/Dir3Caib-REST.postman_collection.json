@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "9785b758-f3eb-4ef0-a152-a7def0d50a8d",
+		"_postman_id": "ab10bec4-5ef9-421f-b013-f374b1c3abf6",
 		"name": "Dir3Caib-REST",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12593652"
 	},
 	"item": [
 		{
@@ -14,7 +15,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{SERVER_URL}}rest/unidad/unidadesDenominacion?denominacion=salut&cooficial=true&estado",
+					"raw": "{{SERVER_URL}}rest/unidad/unidadesDenominacion?denominacion=salut&cooficial=true&estado=V",
 					"host": [
 						"{{SERVER_URL}}rest"
 					],
@@ -35,12 +36,12 @@
 						},
 						{
 							"key": "estado",
-							"value": null,
+							"value": "V",
 							"description": "Filtre d'estat de la unitat que es vol retorna. Els posibles valors són: [\"A\"|\"E\"|\"V\"|\"\"]"
 						}
 					]
 				},
-				"description": "***Definició***\n\n*   Aquest servei cerca organismes/unitats que contenguin la denominació indicada.\n    \n\n**Paràmetres**\n\n*   denominacion: String - obligatori.\n*   cooficial : Boolean - per defecte, false.\n*   estado: String que té un dels següents valors:\n    *   \"A\" : anul·lat\n    *   \"E\" : extingit\n    *   \"V\" : vigent\n    *   \"\" : valor per defecte, retorna tots els vigents\n\n**Resposta**\n\n*   Llista de ObjetoDirectorio"
+				"description": "***Definició***\n\n*   Aquest servei cerca organismes/unitats que contenguin la denominació indicada.\n    \n\n**Paràmetres**\n\n*   denominacion: String - obligatori.\n*   cooficial : Boolean - per defecte, false.\n*   estado: String que té un dels següents valors:\n    *   \"A\" : anul·lat\n    *   \"E\" : extingit\n    *   \"V\" : vigent\n    *   \"\" : valor per defecte, retorna tots els vigents\n\n**Resposta**\n\n*   Status : 200 => Llista de ObjetoDirectorio en format JSON\n*   Status 204 => Sense contingut"
 			},
 			"response": []
 		},
@@ -50,7 +51,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{SERVER_URL}}rest/oficina/oficinasDenominacion?denominacion=salut&cooficial=false&estado=V",
+					"raw": "{{SERVER_URL}}rest/oficina/oficinasDenominacion?denominacion=salut&cooficial=true&estado=V",
 					"host": [
 						"{{SERVER_URL}}rest"
 					],
@@ -66,17 +67,17 @@
 						},
 						{
 							"key": "cooficial",
-							"value": "false",
+							"value": "true",
 							"description": "booleà per indicar que ens retorni l’organisme en la denominació cooficial si existeix a base de dades."
 						},
 						{
 							"key": "estado",
 							"value": "V",
-							"description": "filtre per codi d'estat. Per defecte, si no s'informa, retorna tots els registres vigents. "
+							"description": "filtre per odi d'estat. Per defecte, si no s'informa, retorna tots els registres vigents. "
 						}
 					]
 				},
-				"description": "**Definició**\n\nAquest servei cerca oficines que contenguin la  \ndenominació indicada.\n\n**Paràmetres**\n\n*   denominacion: String - obligatori\n*   cooficial : boolean - per defecte: false\n*   estado: String que té un dels següents valors:\n    *   \"A\" : anul·lat\n    *   \"E\" : extingit\n    *   \"V\" : vigent\n    *   \"\" : per defecte, retorna els Vigents.\n\n**Resposta**\n\n*   Llista de ObjetoDirectorio"
+				"description": "**Definició**\n\nAquest servei cerca oficines que contenguin la  \ndenominació indicada.\n\n**Paràmetres**\n\n*   denominacion: String - obligatori\n*   cooficial : boolean - per defecte: false\n*   estado: String que té un dels següents valors:\n    *   \"A\" : anul·lat\n    *   \"E\" : extingit\n    *   \"V\" : vigent\n    *   \"\" : per defecte, retorna els Vigents.\n\n**Resposta**\n\n*   Status 200 : Llista de ObjetoDirectorio en format JSON.\n*   Status 204: Sense contingut"
 			},
 			"response": []
 		},
@@ -108,11 +109,11 @@
 						{
 							"key": "estado",
 							"value": "",
-							"description": "filtre per codi d'estat. Per defecte, si no s'informa, retorna tots els registres vigents. "
+							"description": "filtre per odi d'estat. Per defecte, si no s'informa, retorna tots els registres vigents. "
 						}
 					]
 				},
-				"description": "**Definició**  \nAquest servei obté l'arbre d'organismes/unitats del codi indicat.\n\n**Paràmetres**\n\n*   denominacion: String - obligatori.\n*   cooficial : Boolean - per defecte, false.\n*   estado: String que té un dels següents valors:\n    *   \"A\" : anul·lat\n    *   \"E\" : extingit\n    *   \"V\" : vigent\n    *   \"\" : per defecte, retorna els Vigents.\n\n**Resposta**\n\n*   Llista de ObjetoDirectorio"
+				"description": "**Definició**  \nAquest servei obté l'arbre d'organismes/unitats del codi indicat.\n\n**Paràmetres**\n\n*   codigo: String - obligatori.\n*   cooficial : Boolean - per defecte, false.\n*   estado: String que té un dels següents valors:\n    *   \"A\" : anul·lat\n    *   \"E\" : extingit\n    *   \"V\" : vigent\n    *   \"\" : per defecte, retorna els Vigents.\n\n**Resposta**\n\n*   Status 204: sense contingut\n*   Status 200: Llista de ObjetoDirectorio en format JSON."
 			},
 			"response": []
 		},
@@ -144,11 +145,11 @@
 						{
 							"key": "estado",
 							"value": "",
-							"description": "filtre per codi d'estat. Per defecte, si no s'informa, retorna tots els registres vigents. "
+							"description": "filtre per odi d'estat. Per defecte, si no s'informa, retorna tots els registres vigents. "
 						}
 					]
 				},
-				"description": "**Definició**  \nAquest servei obté les oficines que depenen de l'organisme del codi indicat\n\n**Paràmetres**\n\n*   codigo: String - obligatori.\n*   cooficial : Boolean - per defecte, false.\n*   estado: String que té un dels següents valors:\n    *   \"A\" : anul·lat\n    *   \"E\" : extingit\n    *   \"V\" : vigent\n    *   \"\" : per defecte, retorna els Vigents.\n\n**Resposta**\n\n*   Llista de ObjetoDirectorio"
+				"description": "**Definició**  \nAquest servei obté les oficines que depenen de l'organisme del codi indicat\n\n**Paràmetres**\n\n*   codigo: String - obligatori.\n*   cooficial : Boolean - per defecte, false.\n*   estado: String que té un dels següents valors:\n    *   \"A\" : anul·lat\n    *   \"E\" : extingit\n    *   \"V\" : vigent\n    *   \"\" : per defecte, retorna els Vigents.\n\n**Resposta**\n\n*   Status 204 : sense contingut\n*   Status 200 : Llista de ObjetoDirectorio en format JSON"
 			},
 			"response": []
 		},
@@ -158,7 +159,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{SERVER_URL}}rest/busqueda/organismos?codigo=&denominacion=&codNivelAdministracion=3&codComunidadAutonoma=4&conOficinas=false&unidadRaiz=true&provincia=7&localidad=407-01&vigentes=true&cooficial=false",
+					"raw": "{{SERVER_URL}}rest/busqueda/organismos?codigo=A04059084&denominacion=Fundacio&codNivelAdministracion=2&codComunidadAutonoma=4&conOficinas=false&unidadRaiz=false&provincia=&localidad=&vigentes=true&cooficial=true",
 					"host": [
 						"{{SERVER_URL}}rest"
 					],
@@ -169,17 +170,17 @@
 					"query": [
 						{
 							"key": "codigo",
-							"value": "",
+							"value": "A04059084",
 							"description": "codi de l'organisme que cercam"
 						},
 						{
 							"key": "denominacion",
-							"value": "",
+							"value": "Fundacio",
 							"description": "denominació de l'organisme que cercam"
 						},
 						{
 							"key": "codNivelAdministracion",
-							"value": "3",
+							"value": "2",
 							"description": "codi del nivell d'administració dels organismes que cercam"
 						},
 						{
@@ -190,36 +191,36 @@
 						{
 							"key": "conOficinas",
 							"value": "false",
-							"description": "Indicam si volem que només es tornin els organismes que tenguin oficines"
+							"description": "Indica si volem que només es tornin els organismes que tenguin oficines"
 						},
 						{
 							"key": "unidadRaiz",
-							"value": "true",
-							"description": "indicam que només volem que es retornin els organismes arrels"
+							"value": "false",
+							"description": "indica si només volem que es retornin els organismes arrels"
 						},
 						{
 							"key": "provincia",
-							"value": "7",
-							"description": "Indicam la província dels organismes que cercam"
+							"value": "",
+							"description": "Indica el codi de la província dels organismes que cercam"
 						},
 						{
 							"key": "localidad",
-							"value": "407-01",
+							"value": "",
 							"description": "Indicam la localitat dels organismes que cercam"
 						},
 						{
 							"key": "vigentes",
 							"value": "true",
-							"description": "Indicam que només volem aquells organismes que són vigents"
+							"description": "Indica si només volem aquells organismes que són vigents"
 						},
 						{
 							"key": "cooficial",
-							"value": "false",
-							"description": "booleà per indicar que ens retorni l’organisme en la denominació cooficial si existeix a base de dades."
+							"value": "true",
+							"description": "indica si volem que ens retornin les denominacións cooficials si existeixen"
 						}
 					]
 				},
-				"description": "**Definició**\n\nAquest servei permet fer una cerca d'organismes dins dir3 en funció dels paràmetres indicats. S'empra per cercar organismes externs destinataris quan es fa un registre d'entrada/sortida\n\n**Resposta**\n\n*   Llista de d'objectes Nodo"
+				"description": "**Definició**\n\nAquest servei permet fer una cerca d'organismes dins dir3 en funció dels paràmetres indicats. S'empra per cercar organismes externs destinataris quan es fa un registre d'entrada/sortida\n\n**Resposta**\n\n*   Status 200 : Llista de d'objectes Nodo en format JSON\n*   Status 204 : Sense contingut"
 			},
 			"response": []
 		},
@@ -229,7 +230,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{SERVER_URL}}rest/busqueda/oficinas?codigo=&denominacion=&codNivelAdministracion=3&codComunidadAutonoma=4&provincia=7&localidad=&oficinasSir=false&vigentes=true&cooficial=true",
+					"raw": "{{SERVER_URL}}rest/busqueda/oficinas?codigo=O00034251&denominacion=&codNivelAdministracion=3&codComunidadAutonoma=4&provincia=7&localidad=&oficinasSir=false&vigentes=true&cooficial=true",
 					"host": [
 						"{{SERVER_URL}}rest"
 					],
@@ -240,7 +241,7 @@
 					"query": [
 						{
 							"key": "codigo",
-							"value": "",
+							"value": "O00034251",
 							"description": "codi de  l'oficina que cercam."
 						},
 						{
@@ -261,31 +262,31 @@
 						{
 							"key": "provincia",
 							"value": "7",
-							"description": "indicam la provincia de les oficines que cercam."
+							"description": "indica el codi de la provincia de les oficines que cercam"
 						},
 						{
 							"key": "localidad",
 							"value": "",
-							"description": "indicam la localitat de les oficines que cercam."
+							"description": "indica el codi de la localitat de les oficines que cercam."
 						},
 						{
 							"key": "oficinasSir",
 							"value": "false",
-							"description": "indicam que només volem aquelles oficines que estan integrades en SIR."
+							"description": "indica si només volem aquelles oficines que estan integrades en SIR"
 						},
 						{
 							"key": "vigentes",
 							"value": "true",
-							"description": "indicam que només volem aquelles oficines que són vigents."
+							"description": "indica si només volem aquelles oficines que són vigents"
 						},
 						{
 							"key": "cooficial",
 							"value": "true",
-							"description": "indicam si volem que es retornin les denominacions cooficials si existeixen."
+							"description": "indica si volem que es retornin les denominacions cooficials"
 						}
 					]
 				},
-				"description": "**Descripció**\n\nAquest servei permet fer una cerca d'oficines origen dins dir3 en funció dels paràmetres indicats. S'empra per cercar oficines d'origen externes quan es fa un registre d'entrada/sortida\n\n  \n**Resposta**\n\nLlista d'objectes Nodo."
+				"description": "**Descripció**\n\nAquest servei permet fer una cerca d'oficines origen dins dir3 en funció dels paràmetres indicats. S'empra per cercar oficines d'origen externes quan es fa un registre d'entrada/sortida\n\n**Resposta**\n\n*   Status 204: sense contingut\n*   Status 200 : llista d'objectes Nodo en format JSON"
 			},
 			"response": []
 		},
@@ -312,16 +313,16 @@
 						{
 							"key": "denominacionCooficial",
 							"value": "true",
-							"description": "indicam si volem que es retornin les denominacions cooficials si existeixen."
+							"description": "indica si volem que es retorni la denominació cooficial si existeix."
 						},
 						{
 							"key": "estado",
 							"value": "V",
-							"description": "filtre per codi de l’estat. Si no s’indica, retorna els registres amb estat Vigent"
+							"description": "filtre per codi de l’estat. Si no s’indica, filtre pels registres amb estat Vigent"
 						}
 					]
 				},
-				"description": "**Descripció**\n\nAquest servei permet obtenir la denominació d'una unitat a partir del seu codi dir3.\n\n**Resposta**\n\nString de la denominació de la unitat."
+				"description": "**Descripció**\n\nAquest servei permet obtenir la denominació d'una unitat a partir del seu codi dir3.\n\n**Resposta**\n\n*   Status 200 : string de la denominació de la unitat.\n*   Status 204: sense contingut"
 			},
 			"response": []
 		},
@@ -331,7 +332,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{SERVER_URL}}rest/oficina/denominacion?codigo=O00016615&cooficial=true&estado",
+					"raw": "{{SERVER_URL}}rest/oficina/denominacion?codigo=O00016615&cooficial=true&estado=V",
 					"host": [
 						"{{SERVER_URL}}rest"
 					],
@@ -352,7 +353,7 @@
 						},
 						{
 							"key": "estado",
-							"value": null,
+							"value": "V",
 							"description": "filtre per codi de l’estat. Si no s’indica, retorna els registres amb estat Vigent"
 						}
 					]
@@ -387,7 +388,92 @@
 						}
 					]
 				},
-				"description": "**Descripció**\n\nAquest servei obté l'arbre d'organismes/unitats del codi indicat pero la estructura que monta es un conjunt d'informació reduida. La classe Nodo que es retorna conté  \nun subconjunt d'informació de l'organisme.\n\n**Resposta**\n\n*   Llista de Nodo."
+				"description": "**Descripció**\n\nAquest servei obté l'arbre d'organismes/unitats del codi indicat pero la estructura que monta es un conjunt d'informació reduida. La classe Nodo que es retorna conté  \nun subconjunt d'informació de l'organisme.\n\n**Resposta**\n\n*   Status 200 : Llista d'objectes Nodo amb un subconjunt d'informació reduïda.\n*   Status 204 : sense contingut"
+			},
+			"response": []
+		},
+		{
+			"name": "rest/GET/unidad/estado",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER_URL}}rest/GET/unidad/estado?codigo=L01502973",
+					"host": [
+						"{{SERVER_URL}}rest"
+					],
+					"path": [
+						"GET",
+						"unidad",
+						"estado"
+					],
+					"query": [
+						{
+							"key": "codigo",
+							"value": "L01502973",
+							"description": "codi Dir3 d'una unitat"
+						}
+					]
+				},
+				"description": "**Descripció**\n\nPermet obtenir el codi de l'estat d'una unitat.\n\n**Resposta**\n\n*   Status 200 : codi de l'estat\n*   Status 204 : sense contingut"
+			},
+			"response": []
+		},
+		{
+			"name": "rest/GET/oficinas",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER_URL}}rest/GET/oficinas?codigo=L01502973&estado=V",
+					"host": [
+						"{{SERVER_URL}}rest"
+					],
+					"path": [
+						"GET",
+						"oficinas"
+					],
+					"query": [
+						{
+							"key": "codigo",
+							"value": "L01502973",
+							"description": "codi de la unitat de la que volem obtenir les seves oficines"
+						},
+						{
+							"key": "estado",
+							"value": "V",
+							"description": "filtre per codi de l’estat. Si no s’indica, retorna tots els registres vigents. Valors possibles: A (anul·lats), E (extingits), V (vigents). "
+						}
+					]
+				},
+				"description": "**Descripció**\n\nPermet obtenir totes les oficines depenents d'una unitat indicada per paràmetre mitjançant el seu codi DIR3.\n\n**Resposta**\n\nLlista de objectes OficinaJson."
+			},
+			"response": []
+		},
+		{
+			"name": "rest/GET/oficinas/baleares",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER_URL}}rest/GET/oficinas/baleares?estado=",
+					"host": [
+						"{{SERVER_URL}}rest"
+					],
+					"path": [
+						"GET",
+						"oficinas",
+						"baleares"
+					],
+					"query": [
+						{
+							"key": "estado",
+							"value": "",
+							"description": "filtre per codi de l’estat. Si no s’indica, retorna tots els registres vigents. Valors possibles: A (anul·lats), E (extingits), V (vigents). "
+						}
+					]
+				},
+				"description": "**Descripció**\n\nPermet obtenir totes les oficines de la Comunitat de les Illes Balears.\n\n**Resposta**\n\n*   Status 200 : Llista de objectes OficinaJson.\n*   Status 204 : Sense contingut"
 			},
 			"response": []
 		},
@@ -397,9 +483,9 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "8{{SERVER_URL}}rest/busqueda/unidades/denominacion/comunidad?denominacion=salut&codComunidad=7&cooficial=false",
+					"raw": "{{SERVER_URL}}rest/busqueda/unidades/denominacion/comunidad?denominacion=&codComunidad=7&cooficial=false",
 					"host": [
-						"8{{SERVER_URL}}rest"
+						"{{SERVER_URL}}rest"
 					],
 					"path": [
 						"busqueda",
@@ -410,8 +496,8 @@
 					"query": [
 						{
 							"key": "denominacion",
-							"value": "salut",
-							"description": "enominació per la que ens interessa cercar"
+							"value": "",
+							"description": "denominació per la que ens interessa cercar"
 						},
 						{
 							"key": "codComunidad",
@@ -425,7 +511,7 @@
 						}
 					]
 				},
-				"description": "**Descripció**\n\nAquest servei permet cercar unitats per denominació i comunitat autònoma.\n\n**Resposta**\n\nLlista de Nodo."
+				"description": "**Descripció**\n\nAquest servei permet cercar unitats per denominació i comunitat autònoma.\n\n**Resposta**\n\n*   Status 200 : llista d'objectes Nodo.\n*   Status 204 : sense contingut"
 			},
 			"response": []
 		},
@@ -435,7 +521,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{SERVER_URL}}rest/catalogo/ambitosTerritoriales?id=2&estado=",
+					"raw": "{{SERVER_URL}}rest/catalogo/ambitosTerritoriales?id=2&estado=V",
 					"host": [
 						"{{SERVER_URL}}rest"
 					],
@@ -451,12 +537,12 @@
 						},
 						{
 							"key": "estado",
-							"value": "",
+							"value": "V",
 							"description": "filtre per codi de l’estat. Si no s’indica, retorna tots els registres. Valors possibles: A (anul·lats), E (extingits), V (vigents) o \"\" (tots)."
 						}
 					]
 				},
-				"description": "**Descripció**\n\nAquest servei permet obtenir els àmbits  \nterritorials del nivell d'administració indicat\n\n**Resposta**\n\nLlista de CodigoValor"
+				"description": "**Descripció**\n\nAquest servei permet obtenir els àmbits  \nterritorials del nivell d'administració indicat\n\n**Resposta**\n\n*   Status 200 : llista de CodigoValor\n*   Status 204 : sense contingut"
 			},
 			"response": []
 		},
@@ -508,7 +594,7 @@
 						}
 					]
 				},
-				"description": "**Descripció**\n\nAquest servei permet obtenir totes les entitats geogràfiques o aplicar un filtre d'estat per retornar només les vigents.\n\n**Resposta**\n\nLlista de CodigoValor"
+				"description": "**Descripció**\n\nAquest servei permet obtenir totes les entitats geogràfiques o aplicar un filtre d'estat per retornar només les vigents.\n\n**Resposta**\n\n*   Status 200 : llista de CodigoValor\n*   Status 204 : sense contingut"
 			},
 			"response": []
 		},
@@ -534,7 +620,7 @@
 						}
 					]
 				},
-				"description": "**Descripció**\n\nAquest servei permet obtenir totes les  \nprovincies.\n\n  \n**Resposta**\n\nLlista de CodigoValor"
+				"description": "**Descripció**\n\nAquest servei permet obtenir totes les  \nprovincies.\n\n**Resposta**\n\n*   Status 200 : lista de CodigoValor\n*   Status 204 : sense contingut"
 			},
 			"response": []
 		},
@@ -544,7 +630,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{SERVER_URL}}rest/catalogo/provincias/comunidadAutonoma?id=7&estado=",
+					"raw": "{{SERVER_URL}}rest/catalogo/provincias/comunidadAutonoma?id=7&estado=V",
 					"host": [
 						"{{SERVER_URL}}rest"
 					],
@@ -561,12 +647,12 @@
 						},
 						{
 							"key": "estado",
-							"value": "",
+							"value": "V",
 							"description": "filtre per codi de l’estat. Si no s’indica, retorna tots els registres. Valors possibles: A (anul·lats), E (extingits), V (vigents) o \"\" (tots)."
 						}
 					]
 				},
-				"description": "**Descripció**\n\nAquest servei permet obtenir totes les  \nprovincies de la comunitat autònoma indicada per paràmetre.\n\n**Resposta**\n\nLlista de CodigoValor"
+				"description": "**Descripció**\n\nAquest servei permet obtenir totes les  \nprovincies de la comunitat autònoma indicada per paràmetre.\n\n**Resposta**\n\n*   Status 200 : llista de CodigoValor\n*   Status 204 : sense contingut"
 			},
 			"response": []
 		},
@@ -604,7 +690,7 @@
 						}
 					]
 				},
-				"description": "**Descripció**\n\nAquest servei permet obtenir totes les  \nlocalitats d'una provincia i d'una entitat geogràfica especificades.\n\n  \n**Resposta**\n\nLlista de CodigoValor"
+				"description": "**Descripció**\n\nAquest servei permet obtenir totes les  \nlocalitats d'una provincia i d'una entitat geogràfica especificades.\n\n**Resposta**\n\n*   Status 200 : llista de CodigoValor\n*   Status 204 : sense contingut"
 			},
 			"response": []
 		},
@@ -630,7 +716,7 @@
 						}
 					]
 				},
-				"description": "**Descripció**\n\nAquest servei permet obtenir els nivells  \nd'administració\n\n  \n**Resposta**\n\nLlista de CodigoValor"
+				"description": "**Descripció**\n\nAquest servei permet obtenir els nivells  \nd'administració\n\n**Resposta**\n\n*   Status 200 : Llista de CodigoValor\n*   Status 204 : sense contingut"
 			},
 			"response": []
 		},
@@ -656,7 +742,7 @@
 						}
 					]
 				},
-				"description": "**Descripció**\n\nAquest servei permet obtenir tots els estats.\n\n**Resposta**\n\nLlista de CodigoValor"
+				"description": "**Descripció**\n\nAquest servei permet obtenir tots els estats.\n\n**Resposta**\n\n*   Status 200 : Llista de CodigoValor\n*   Status 204 : sense contingut"
 			},
 			"response": []
 		},
@@ -682,7 +768,7 @@
 						}
 					]
 				},
-				"description": "**Descripció**\n\nAquest servei permet obtenir tots els tpus de vía.\n\n**Resposta**\n\nLlista de CodigoValor"
+				"description": "**Descripció**\n\nAquest servei permet obtenir tots els tpus de vía.\n\n**Resposta**\n\n*   Status 200 : llista de CodigoValor\n*   Status 204 : sense contingut"
 			},
 			"response": []
 		},
@@ -692,7 +778,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{SERVER_URL}}rest/catalogo/paises?estado=",
+					"raw": "{{SERVER_URL}}rest/catalogo/paises?estado=V",
 					"host": [
 						"{{SERVER_URL}}rest"
 					],
@@ -703,97 +789,49 @@
 					"query": [
 						{
 							"key": "estado",
-							"value": "",
+							"value": "V",
 							"description": "filtre per codi de l’estat. Si no s’indica, retorna tots els registres. Valors possibles: A (anul·lats), E (extingits), V (vigents) o \"\" (tots)."
 						}
 					]
 				},
-				"description": "**Descripció**\n\nAquest servei permet obtenir tots els països.\n\n**Resposta**\n\nLlista de CodigoValor"
+				"description": "**Descripció**\n\nAquest servei permet obtenir tots els països.\n\n**Resposta**\n\n*   Status 200 : llista d'objectes PaisJson.\n*   Status 204 : sense contingut"
 			},
 			"response": []
 		},
 		{
-			"name": "rest/GET/oficinas",
+			"name": "rest/getVersion",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{SERVER_URL}}rest/GET/oficinas?codigo=L01502973&estado=V",
+					"raw": "{{SERVER_URL}}rest/catalogo/version",
 					"host": [
 						"{{SERVER_URL}}rest"
 					],
 					"path": [
-						"GET",
-						"oficinas"
-					],
-					"query": [
-						{
-							"key": "codigo",
-							"value": "L01502973",
-							"description": "codi de la unitat de la que volem obtenir les seves oficines"
-						},
-						{
-							"key": "estado",
-							"value": "V",
-							"description": "filtre per codi de l’estat. Si no s’indica, retorna tots els registres vigents. Valors possibles: A (anul·lats), E (extingits), V (vigents). "
-						}
+						"catalogo",
+						"version"
 					]
 				},
-				"description": "**Descripció**\n\nPermet obtenir totes les oficines depenents d'una unitat indicada per paràmetre mitjançant el seu codi DIR3.\n\n**Resposta**\n\nLlista de objectes OficinaJson."
+				"description": "**Descripció**\n\nAquest servei permet obtenir la versió de Dir3Caib\n\n**Resposta**\n\n*   Status 200 : string amb la versió de dir3Caib\n*   Status 204 : sense contingut"
 			},
 			"response": []
 		},
 		{
-			"name": "rest/GET/oficinas/baleares",
+			"name": "rest/sincronizacion/fechaUltimaActualizacion",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{SERVER_URL}}rest/GET/oficinas/baleares?estado=V",
+					"raw": "{{SERVER_URL}}rest/sincronizacion/fechaUltimaActualizacion",
 					"host": [
 						"{{SERVER_URL}}rest"
 					],
 					"path": [
-						"GET",
-						"oficinas",
-						"baleares"
-					],
-					"query": [
-						{
-							"key": "estado",
-							"value": "V",
-							"description": "filtre per codi de l’estat. Si no s’indica, retorna tots els registres vigents. Valors possibles: A (anul·lats), E (extingits), V (vigents). "
-						}
+						"sincronizacion",
+						"fechaUltimaActualizacion"
 					]
-				},
-				"description": "**Descripció**\n\nPermet obtenir totes les oficines de la Comunitat de les Illes Balears.\n\n**Resposta**\n\nLlista de objectes OficinaJson."
-			},
-			"response": []
-		},
-		{
-			"name": "rest/GET/unidad/estado",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{SERVER_URL}}rest/GET/unidad/estado?codigo=L01502973",
-					"host": [
-						"{{SERVER_URL}}rest"
-					],
-					"path": [
-						"GET",
-						"unidad",
-						"estado"
-					],
-					"query": [
-						{
-							"key": "codigo",
-							"value": "L01502973",
-							"description": "codi Dir3 d'una unitat"
-						}
-					]
-				},
-				"description": "**Descripció**\n\nPermet obtenir el codi de l'estat d'una unitat.\n\n**Resposta**\n\nCodi de l'estat"
+				}
 			},
 			"response": []
 		},
@@ -803,7 +841,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{SERVER_URL}}rest/oficinas/obtenerOficina?codigo=O00045531&denominacionCooficial=true&fechaActualizacion&fechaSincronizacion",
+					"raw": "{{SERVER_URL}}rest/oficinas/obtenerOficina?codigo=O00031074&denominacionCooficial=false&fechaActualizacion&fechaSincronizacion",
 					"host": [
 						"{{SERVER_URL}}rest"
 					],
@@ -814,25 +852,27 @@
 					"query": [
 						{
 							"key": "codigo",
-							"value": "O00045531",
+							"value": "O00031074",
 							"description": "codi de l'oficina"
 						},
 						{
 							"key": "denominacionCooficial",
-							"value": "true",
+							"value": "false",
 							"description": "booleà per indicar si volem que es retorni la denominació cooficial si existeix"
 						},
 						{
 							"key": "fechaActualizacion",
-							"value": null
+							"value": null,
+							"description": "data de la darrera actualització. Format: yyyy-MM-dd"
 						},
 						{
 							"key": "fechaSincronizacion",
-							"value": null
+							"value": null,
+							"description": "data en la que es va fer la primera sincronització. Format: yyyy-MM-dd"
 						}
 					]
 				},
-				"description": "**Descripció**\n\nObté les dades d'una oficina en funció del  \ncodi i la data d'actualització i la data de la primera sincronització.\n\nSi la data d'actualització és posterior a la  \nd'importació amb dir3 de Madrid se suposa que ha canviat i s'envia.\n\n**Resposta**\n\nUn objecte del tipus OficinaRest que representa les dades de l'oficina."
+				"description": "**Descripció**\n\nObté les dades d'una oficina en funció del  \ncodi i la data d'actualització i la data de la primera sincronització.\n\nSi la data d'actualització és posterior a la  \nd'importació amb dir3 de Madrid se suposa que ha canviat i s'envia.\n\n**Resposta**\n\n*   Status 200 : Un objecte del tipus OficinaRest que representa les dades de l'oficina.\n*   Status 204 : sense contingut"
 			},
 			"response": []
 		},
@@ -842,7 +882,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{SERVER_URL}}rest/oficinas/obtenerArbolOficinas?codigo=A04059084&fechaActualizacion&fechaSincronizacion&denominacionCooficial=true",
+					"raw": "{{SERVER_URL}}rest/oficinas/obtenerArbolOficinas?codigo=L01502973&fechaActualizacion&fechaSincronizacion&denominacionCooficial=false",
 					"host": [
 						"{{SERVER_URL}}rest"
 					],
@@ -853,27 +893,27 @@
 					"query": [
 						{
 							"key": "codigo",
-							"value": "A04059084",
+							"value": "L01502973",
 							"description": "codi de la unitat"
 						},
 						{
 							"key": "fechaActualizacion",
 							"value": null,
-							"description": "data en la que es fa l'actualització"
+							"description": "data de la darrera actualització. Format: yyyy-MM-dd"
 						},
 						{
 							"key": "fechaSincronizacion",
 							"value": null,
-							"description": "data en la que es va fer la primera sincronització"
+							"description": "data en la que es va fer la primera sincronització. Format: yyyy-MM-dd"
 						},
 						{
 							"key": "denominacionCooficial",
-							"value": "true",
+							"value": "false",
 							"description": "booleà per indicar si volem que es retorni la denominació cooficial si existeix"
 						}
 					]
 				},
-				"description": "**Descripció**\n\nObté l'arbre d'oficines que depenen de la unitat indicada pel codi. Només s'envien aquelles que han estat actualitzades. Si no s'indica data d'actualització es considera que és una sincronització i et retorna tot l'arbre d'oficines vigents relacionades amb la unitat.\n\nSi s'indica data d'actualització, retorna les oficines que han estat actualitzades dins el període de temps indicat considerant també la data de la darrera importació des de dir3 Madrid.\n\nS'empra per a la sincronització i actualització amb regweb.\n\nEl valor que retorna és l'arbre en forma de llista.\n\n**  \nResposta**\n\nUna llista d'objectes del tipus OficinaRest que representa les dades de l'oficina."
+				"description": "**Descripció**\n\nObté l'arbre d'oficines que depenen de la unitat indicada pel codi. Només s'envien aquelles que han estat actualitzades. Si no s'indica data d'actualització es considera que és una sincronització i et retorna tot l'arbre d'oficines vigents relacionades amb la unitat.\n\nSi s'indica data d'actualització, retorna les oficines que han estat actualitzades dins el període de temps indicat considerant també la data de la darrera importació des de dir3 Madrid.\n\nS'empra per a la sincronització i actualització amb regweb.\n\nEl valor que retorna és l'arbre en forma de llista.\n\n**Resposta**\n\n*   Status 200 : llista d'objectes del tipus OficinaRest que representa les dades de l'oficina.\n*   Status 204 : sense contingut"
 			},
 			"response": []
 		},
@@ -883,7 +923,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{SERVER_URL}}rest/oficinas/obtenerOficinasSIRUnidad?codigo=A04032338&denominacionCooficial=false",
+					"raw": "{{SERVER_URL}}rest/oficinas/obtenerOficinasSIRUnidad?codigo=E03139201&denominacionCooficial=false",
 					"host": [
 						"{{SERVER_URL}}rest"
 					],
@@ -894,13 +934,13 @@
 					"query": [
 						{
 							"key": "codigo",
-							"value": "A04032338",
+							"value": "E03139201",
 							"description": "Cadena de text que representa el codi de la unitat"
 						},
 						{
 							"key": "denominacionCooficial",
 							"value": "false",
-							"description": "Booleà. Si el valor és true, retorna la denominació cooficial de la oficina si existeix. "
+							"description": "booleà que indica si volem que es retorni la denominació cooficial si existeix"
 						},
 						{
 							"key": "",
@@ -909,7 +949,7 @@
 						}
 					]
 				},
-				"description": "Mètode per obtenir les oficines SIR associades a una Unitat Orgànica."
+				"description": "**Descripció**\n\nMètode per obtenir les oficines SIR associades a una Unitat Orgànica.\n\n**Resposta**\n\n*   Status 200 : Llista d'objectes OficinaRest que representa l'arbre en format llista\n*   Status 204 : sense contingut"
 			},
 			"response": [
 				{
@@ -991,30 +1031,12 @@
 			]
 		},
 		{
-			"name": "rest/sincronizacion/fechaUltimaActualizacion",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{SERVER_URL}}rest/sincronizacion/fechaUltimaActualizacion",
-					"host": [
-						"{{SERVER_URL}}rest"
-					],
-					"path": [
-						"sincronizacion",
-						"fechaUltimaActualizacion"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "rest/unidades/obtenerUnidad",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{SERVER_URL}}rest/unidades/obtenerUnidad?codigo=A04059084&denominacionCooficial=true&fechaActualizacion&fechaSincronizacion",
+					"raw": "{{SERVER_URL}}rest/unidades/obtenerUnidad?codigo=E03139201&denominacionCooficial=false&fechaActualizacion&fechaSincronizacion",
 					"host": [
 						"{{SERVER_URL}}rest"
 					],
@@ -1025,27 +1047,27 @@
 					"query": [
 						{
 							"key": "codigo",
-							"value": "A04059084",
+							"value": "E03139201",
 							"description": "codi de la unitat arrel"
 						},
 						{
 							"key": "denominacionCooficial",
-							"value": "true",
+							"value": "false",
 							"description": "booleà per indicar si volem que es retorni la denominació cooficial si existeix"
 						},
 						{
 							"key": "fechaActualizacion",
 							"value": null,
-							"description": "data de la darrera actualització"
+							"description": "data de la darrera actualització. Format: yyyy-MM-dd"
 						},
 						{
 							"key": "fechaSincronizacion",
 							"value": null,
-							"description": "data en la que es va efr la primera sincronització amb dir3caib"
+							"description": "data en la que es va fer la primera sincronització. Format: yyyy-MM-dd"
 						}
 					]
 				},
-				"description": "**Descripció**\n\nMètode que retorna una UnidadRest vigent a partir del codi indicat en funció de la data d'actualització i la de sincronització ( indica quan es va fer la primera sincronització).\n\nSi la data d'actualització és posterior a la d'importació amb DIR3 de Madrid se suposa que ha canviat i s'envia.\n\n**Resposta**\n\nUn objecte del tipus UnidadRest que representa les dades d'una unitat."
+				"description": "**Descripció**\n\nMètode que retorna una UnidadRest vigent a partir del codi indicat en funció de la data d'actualització i la de sincronització ( indica quan es va fer la primera sincronització).\n\nSi la data d'actualització és posterior a la d'importació amb DIR3 de Madrid se suposa que ha canviat i s'envia.\n\n**Resposta**\n\n*   Status 200 :Un objecte del tipus UnidadRest que representa les dades d'una unitat.\n*   Status 204 : sense contingut"
 			},
 			"response": []
 		},
@@ -1055,7 +1077,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{SERVER_URL}}rest/unidades/buscarUnidad?codigo=A04059084&denominacionCooficial=true",
+					"raw": "{{SERVER_URL}}rest/unidades/buscarUnidad?codigo=E03139201&denominacionCooficial=true",
 					"host": [
 						"{{SERVER_URL}}rest"
 					],
@@ -1066,17 +1088,17 @@
 					"query": [
 						{
 							"key": "codigo",
-							"value": "A04059084",
+							"value": "E03139201",
 							"description": "codi de la unitat"
 						},
 						{
 							"key": "denominacionCooficial",
 							"value": "true",
-							"description": "booleà per indicar si volem que es retorni la denominació cooficial si existeix"
+							"description": "booleà que indica si volem que es retorni la denominació cooficial si existeix"
 						}
 					]
 				},
-				"description": "**Descripció**\n\nMètode que retorna una UnidadTF a partir del codi indicat, sense tenir en compte el seu estat.\n\n**Resposta**\n\nUn objecte del tipus UnidadRest que representa les dades d'una unitat."
+				"description": "**Descripció**\n\nMètode que retorna una UnidadTF a partir del codi indicat, sense tenir en compte el seu estat.\n\n**Resposta**\n\n*   Status 200 : Un objecte del tipus UnidadRest que representa les dades d'una unitat.\n*   Status 204 : sense contingut"
 			},
 			"response": []
 		},
@@ -1086,7 +1108,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{SERVER_URL}}rest/unidades/obtenerArbolUnidades?codigo=A04019281&denominacionCooficial=true&fechaActualizacion&fechaSincronizacion",
+					"raw": "{{SERVER_URL}}rest/unidades/obtenerArbolUnidades?codigo=E03139201&denominacionCooficial=false&fechaActualizacion&fechaSincronizacion",
 					"host": [
 						"{{SERVER_URL}}rest"
 					],
@@ -1097,26 +1119,27 @@
 					"query": [
 						{
 							"key": "codigo",
-							"value": "A04019281"
+							"value": "E03139201",
+							"description": "codi de la unitat arrel"
 						},
 						{
 							"key": "denominacionCooficial",
-							"value": "true",
-							"description": "booleà per indicar si volem que es retorni la denominació cooficial si existeix"
+							"value": "false",
+							"description": "booleà que indica si volem que es retorni la denominació cooficial si existeix"
 						},
 						{
 							"key": "fechaActualizacion",
 							"value": null,
-							"description": "data de la darrera actualització"
+							"description": "data de la darrera actualització. Format: yyyy-MM-dd"
 						},
 						{
 							"key": "fechaSincronizacion",
 							"value": null,
-							"description": "data en la que es va efr la primera sincronització amb dir3caib"
+							"description": "data en la que es va fer la primera sincronització. Format: yyyy-MM-dd"
 						}
 					]
 				},
-				"description": "**Descripció**\n\nMètode que retorna l 'arbre d'unitats de la unitat indicada pel codi, partint de la data de la darrera actualització que indiquen i la data de la sincronització indicada també. Si no s'indica data d'actualització es considera que és una sincronització i et retorna tot l'arbre d'unitats vigents.\n\nSi s'indica data d'actualització, retorna les unitats que han estat actualitzades dins el període de temps indicat tenint en compte també la data de la darrera importació des de dir3 Madrid.\n\nS'empra per a la sincronització i actualització amb regwed.  \n\n**Resposta**\n\nUna llista del tipus UnidadRest que representa les dades d'una unitat."
+				"description": "**Descripció**\n\nMètode que retorna l 'arbre d'unitats de la unitat indicada pel codi, partint de la data de la darrera actualització que indiquen i la data de la sincronització indicada també. Si no s'indica data d'actualització es considera que és una sincronització i et retorna tot l'arbre d'unitats vigents.\n\nSi s'indica data d'actualització, retorna les unitats que han estat actualitzades dins el període de temps indicat tenint en compte també la data de la darrera importació des de dir3 Madrid.\n\nS'empra per a la sincronització i actualització amb regwed.\n\n**Resposta**\n\n*   Status 200 : Una llista del tipus UnidadRest que representa les dades d'una unitat.\n*   Status 204 : sense contingut"
 			},
 			"response": []
 		},
@@ -1157,7 +1180,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{SERVER_URL}}rest/unidades/obtenerHistoricosFinales?codigo=A04009843&denominacionCooficial=true",
+					"raw": "{{SERVER_URL}}rest/unidades/obtenerHistoricosFinales?codigo=E04984901&denominacionCooficial=true",
 					"host": [
 						"{{SERVER_URL}}rest"
 					],
@@ -1168,7 +1191,7 @@
 					"query": [
 						{
 							"key": "codigo",
-							"value": "A04009843",
+							"value": "E04984901",
 							"description": "codi de la unitat extingida"
 						},
 						{
@@ -1188,7 +1211,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{SERVER_URL}}rest/unidades/obtenerHistoricosFinalesSIR?codigo=A04009843&denominacionCooficial=false",
+					"raw": "{{SERVER_URL}}rest/unidades/obtenerHistoricosFinalesSIR?codigo=E04984901&denominacionCooficial=false",
 					"host": [
 						"{{SERVER_URL}}rest"
 					],
@@ -1199,7 +1222,7 @@
 					"query": [
 						{
 							"key": "codigo",
-							"value": "A04009843",
+							"value": "E04984901",
 							"description": "codi de la unitat arrel"
 						},
 						{
