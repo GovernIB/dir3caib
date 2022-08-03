@@ -82,7 +82,7 @@ public interface Dir3RestLocal  {
 
   List<CodigoValor> getAmbitoTerritorialByAdministracion(Long nivelAdministracion, String estado) throws Exception;
 
-  List<Oficina> obtenerOficinasSIRUnidad(String codigoUnidad) throws Exception;
+ // List<Oficina> obtenerOficinasSIRUnidad(String codigoUnidad) throws Exception;
 
   List<Nodo> busquedaOrganismos(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad,
 		boolean conOficinas, boolean unidadRaiz, Long provincia, String localidad, boolean vigentes,

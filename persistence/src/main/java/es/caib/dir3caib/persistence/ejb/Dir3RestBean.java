@@ -77,6 +77,9 @@ public class Dir3RestBean implements Dir3RestLocal {
 	@EJB(mappedName = "dir3caib/ObtenerUnidadesEJB/local")
 	private ObtenerUnidadesLocal obtenerUnidadesEjb;
 
+	@EJB(mappedName = "dir3caib/CatServicioEJB/local")
+	private CatServicioLocal servicioEjb;
+
 	/**
 	 * Obtiene las unidades(codigo-denominacion) cuya denominación coincide con la
 	 * indicada.
@@ -588,7 +591,8 @@ public class Dir3RestBean implements Dir3RestLocal {
 		// Actualizamos las unidades obtenidas y marcamos si tienen oficinasSIR
 		// y sustituimos el valor del codigo por el codigoDir3(sin version)
 		for (Nodo unidad2 : unidades) {
-			if (obtenerOficinasSIRUnidad(unidad2.getCodigo()).size() > 0) {
+			//if (obtenerOficinasSIRUnidad(unidad2.getCodigo()).size() > 0) {
+			if (oficinaEjb.obtenerOficinasSIRUnidad(unidad2.getCodigo()).size() > 0) {
 				unidad2.setTieneOficinaSir(true);
 			}
 			// Unidad, unidad raiz, unidadSuperior
@@ -898,24 +902,24 @@ public class Dir3RestBean implements Dir3RestLocal {
 		return NodoUtils.getNodoListUnidadRaizUnidadSuperior(q.getResultList(), denominacionCooficial, true);
 	}
 
-	@SuppressWarnings(value = "unchecked")
+	/*@SuppressWarnings(value = "unchecked")
 	@Override
 	public List<Oficina> obtenerOficinasSIRUnidad(String codigoUnidad) throws Exception {
 
 		Query q = em.createQuery(
-				"select relacionSirOfi.oficina from RelacionSirOfi as relacionSirOfi where relacionSirOfi.unidad.codigo =:codigoUnidad "
-						+ "and :SERVICIO_SIR_RECEPCION in elements(relacionSirOfi.oficina.servicios) "
+				"select relacionSirOfi.oficina from RelacionSirOfi as relacionSirOfi " +
+						" left outer join relacionSirOfi.oficina.servicios as servicios " +
+						"  where relacionSirOfi.unidad.codigo =:codigoUnidad "
+						+ "and (servicios.servicio=:SERVICIO_SIR_RECEPCION) "
 						+ "and relacionSirOfi.estado.codigoEstadoEntidad= :vigente ");
 
 		q.setParameter("codigoUnidad", codigoUnidad);
-		// q.setParameter("SERVICIO_SIR", new
-		// Servicio(Dir3caibConstantes.SERVICIO_SIR));
-		q.setParameter("SERVICIO_SIR_RECEPCION", new CatServicio(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
+		q.setParameter("SERVICIO_SIR_RECEPCION", servicioEjb.findById(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
 		q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
 		return q.getResultList() != null ? q.getResultList() : new ArrayList<Oficina>();
 
-	}
+	}*/
 
 	/**
 	 * Método que obtiene las localidades en funcion de una provincia y de una
