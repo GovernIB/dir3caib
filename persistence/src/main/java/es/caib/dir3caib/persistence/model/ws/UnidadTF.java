@@ -290,12 +290,12 @@ public class UnidadTF implements Serializable {
 
     public void rellenar(Unidad unidad,boolean denominacionOficial) {
         this.setCodigo(unidad.getCodigoDir3());
-        this.setCodUnidadRaiz(unidad.getCodUnidadRaiz().getCodigo());
-        this.setCodUnidadSuperior(unidad.getCodUnidadSuperior().getCodigo());
+        this.setCodUnidadRaiz(unidad.getCodUnidadRaiz().getCodigoDir3());
+        this.setCodUnidadSuperior(unidad.getCodUnidadSuperior().getCodigoDir3());
         this.setCodigoEstadoEntidad(unidad.getEstado().getCodigoEstadoEntidad());
         this.setEsEdp(unidad.isEsEdp());
         if (unidad.getCodEdpPrincipal() != null) {
-            this.setCodEdpPrincipal(unidad.getCodEdpPrincipal().getCodigo());
+            this.setCodEdpPrincipal(unidad.getCodEdpPrincipal().getCodigoDir3());
         } else {
             this.setCodEdpPrincipal(null);
         }
@@ -376,10 +376,10 @@ public class UnidadTF implements Serializable {
         UnidadTF unidadTF = null;
         if (unidad != null) {
             unidadTF = new UnidadTF();
-            unidadTF.setCodigo(unidad.getCodigo());
+            unidadTF.setCodigo(unidad.getCodigoDir3());
             unidadTF.setDenominacion((denominacionOficial && Utils.isNotEmpty(unidad.getDenomLenguaCooficial())) ? unidad.getDenomLenguaCooficial() : unidad.getDenominacion());
-            unidadTF.setCodUnidadRaiz(unidad.getCodUnidadRaiz().getCodigo());
-            unidadTF.setCodUnidadSuperior(unidad.getCodUnidadSuperior().getCodigo());
+            unidadTF.setCodUnidadRaiz(unidad.getCodUnidadRaiz().getCodigoDir3());
+            unidadTF.setCodUnidadSuperior(unidad.getCodUnidadSuperior().getCodigoDir3());
             unidadTF.setEsEdp(unidad.isEsEdp());
         }
 
