@@ -1,8 +1,7 @@
 package es.caib.dir3caib.ws.api.test;
 
-import es.caib.dir3caib.ws.api.oficina.ContactoTF;
-import es.caib.dir3caib.ws.api.oficina.Dir3CaibObtenerOficinasWs;
-import es.caib.dir3caib.ws.api.oficina.OficinaTF;
+import es.caib.dir3caib.persistence.model.RelacionSirOfi;
+import es.caib.dir3caib.ws.api.oficina.*;
 import es.caib.dir3caib.ws.api.unidad.Dir3CaibObtenerUnidadesWs;
 import org.junit.Test;
 
@@ -81,19 +80,34 @@ public class TestOficinasWs extends Dir3CaibTestUtils {
 
             //Actualizacion
             DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            Date date = dateFormat.parse("04/02/2022");
+           // Date date = dateFormat.parse("04/02/2022");
+            Date date = dateFormat.parse("14/10/2016");
             long fechasincroregweb = date.getTime();
 
             dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            date = dateFormat.parse("11/05/2022");
+           // date = dateFormat.parse("11/05/2022");
+            date = dateFormat.parse("13/10/2021");
             long fechaactuaregweb = date.getTime();
 
+
+
             //List<OficinaTF> oficinas = apiOficinas.obtenerArbolOficinas("A04059164", new Timestamp(fechaactuaregweb), new Timestamp(fechasincroregweb));
-            List<OficinaTF> oficinas = apiOficinas.obtenerArbolOficinas("A04032314", new Timestamp(fechaactuaregweb), new Timestamp(fechasincroregweb));
+        //    List<OficinaTF> oficinas = apiOficinas.obtenerArbolOficinas("A04032314", new Timestamp(fechaactuaregweb), new Timestamp(fechasincroregweb));
+            List<OficinaTF> oficinas = apiOficinas.obtenerArbolOficinas("A04003003", new Timestamp(fechaactuaregweb), new Timestamp(fechasincroregweb));
 
             System.out.println(oficinas.size());
             for(OficinaTF ofi: oficinas ){
                 System.out.println(ofi.getDenominacion() +"- "+ ofi.getCodigo());
+                for(RelacionOrganizativaOfiTF relOfi: ofi.getOrganizativasOfi()){
+                    System.out.println("OFI " + relOfi.getOficina() +" - "+ relOfi.getUnidad()+ " - " + relOfi.getEstado());
+                }
+                System.out.println(ofi.getOrganizativasOfi().size());
+
+                for(RelacionSirOfiTF sir: ofi.getSirOfi()){
+                    System.out.println("SIR" + sir.getOficina() +" - "+ sir.getUnidad() + " - " + sir.getEstado());
+                }
+                System.out.println(ofi.getSirOfi().size());
+
             }
 
 

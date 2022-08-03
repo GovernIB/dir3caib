@@ -5,10 +5,7 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.*;
-import es.caib.dir3caib.persistence.utils.DataBaseUtils;
-import es.caib.dir3caib.persistence.utils.Nodo;
-import es.caib.dir3caib.persistence.utils.NodoUtils;
-import es.caib.dir3caib.persistence.utils.Paginacion;
+import es.caib.dir3caib.persistence.utils.*;
 import es.caib.dir3caib.utils.Utils;
 
 import org.apache.log4j.Logger;
@@ -510,38 +507,11 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 				// sincronizacion de regweb
 				if (oficinaValida(oficina, fechaSincronizacion)) {
 
-					// Cogemos solo las relaciones organizativas que no han sido anuladas o
-					// extinguidas anterior a la fecha de sincronizacion
-					Set<RelacionOrganizativaOfi> todasRelaciones = new HashSet<RelacionOrganizativaOfi>(
-							oficina.getOrganizativasOfi());
+					//Obtenemos las relacionesOfiValidas
+					oficina.setOrganizativasOfi(obtenerRelacionesOfi(oficina.getOrganizativasOfi(), fechaSincronizacion));
 
-					Set<RelacionOrganizativaOfi> relacionesValidas = new HashSet<RelacionOrganizativaOfi>();
-					for (RelacionOrganizativaOfi relOrg : todasRelaciones) {
-						// En el caso de la actualización además hay que asegurarse que no se traen
-						// relaciones extinguidas
-						// o anuladas anterior a la fecha de sincronización.
-						if (relacionValida(relOrg, fechaSincronizacion)) {
-							relacionesValidas.add(relOrg);
-						}
-					}
-
-					oficina.setOrganizativasOfi(null);
-					oficina.setOrganizativasOfi(new ArrayList<RelacionOrganizativaOfi>(relacionesValidas));
-
-					// Cogemos solo las relaciones sir que no han sido anuladas o extinguidas
-					// anterior a la fecha de sincronizacion
-					Set<RelacionSirOfi> todasRelacionesSir = new HashSet<RelacionSirOfi>(oficina.getSirOfi());
-					Set<RelacionSirOfi> relacionesSirValidas = new HashSet<RelacionSirOfi>();
-					for (RelacionSirOfi relSir : todasRelacionesSir) {
-						// En el caso de la actualización además hay que asegurarse que no se traen
-						// relaciones extinguidas
-						// o anuladas anterior a la fecha de sincronización.
-						if (relacionSirValida(relSir, fechaSincronizacion)) {
-							relacionesSirValidas.add(relSir);
-						}
-					}
-					oficina.setSirOfi(null);
-					oficina.setSirOfi(new ArrayList<RelacionSirOfi>(relacionesSirValidas));
+                    //Obtenemos las relacionesSirValidas
+					oficina.setSirOfi(obtenerRelacionesSir(oficina.getSirOfi(), fechaSincronizacion));
 
 					oficinasActualizadas.add(oficina);
 				}
@@ -1044,5 +1014,125 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 		q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
 		return q.getResultList();
+	}
+
+
+	/**
+	 * Método que obtiene las relaciones organizativas de una oficina que son válidas según la fecha de sincronización y obteniendo las de la unidad con mayor versión
+	 *
+	 * @param relacionOrganizativaOfis
+	 * @param fechaSincronizacion
+	 * @return
+	 * @throws Exception
+	 */
+	private List<RelacionOrganizativaOfi> obtenerRelacionesOfi(List<RelacionOrganizativaOfi> relacionOrganizativaOfis, Date fechaSincronizacion) throws Exception{
+
+		List<String> codigos = new ArrayList<>();
+		Map<String, RelacionOrganizativaOfi> noDuplicadasOFI = new HashMap<>();
+		int posCodigo;
+
+		// Cogemos solo las relaciones organizativas que no han sido anuladas o
+		// extinguidas anterior a la fecha de sincronizacion
+		Set<RelacionOrganizativaOfi> todasRelaciones = new HashSet<RelacionOrganizativaOfi>(
+				relacionOrganizativaOfis);
+
+		Set<RelacionOrganizativaOfi> relacionesValidas = new HashSet<RelacionOrganizativaOfi>();
+		for (RelacionOrganizativaOfi relOrg : todasRelaciones) {
+			// En el caso de la actualización además hay que asegurarse que no se traen
+			// relaciones extinguidas
+			// o anuladas anterior a la fecha de sincronización.
+			if (relacionValida(relOrg, fechaSincronizacion)) {
+				relacionesValidas.add(relOrg);
+			}
+		}
+
+
+
+		//Enviamos solo las relaciones organizativas que estan relacionadas con la unidad de mayor versión
+		for(RelacionOrganizativaOfi rel: relacionesValidas){
+			//separamos el codigo de la versión
+			String codigoUnidad = rel.getUnidad().getCodigo();
+			posCodigo = (codigoUnidad != null) ? codigoUnidad.indexOf(Dir3caibConstantes.SEPARADOR_CODIGO_VERSION) : -1;
+			String codigoSinVersion = (posCodigo > 0 ) ? codigoUnidad.substring(0, posCodigo) : codigoUnidad;
+			long version = (posCodigo > 0 )?Long.parseLong(codigoUnidad.substring(posCodigo+1)):-1;
+
+
+			//Si no contiene el código vamos guardando las relaciones en el map
+			if(!codigos.contains(codigoSinVersion)){
+				codigos.add(codigoSinVersion);
+				noDuplicadasOFI.put(codigoSinVersion, rel);
+
+			}else{ //si lo contiene quiere decir que hay dos relaciones apuntando a la misma unidad pero con versiones diferentes y cogemos la de mayor versión
+				RelacionOrganizativaOfi antigua = noDuplicadasOFI.get(codigoSinVersion);
+				String versionAntigua = antigua.getUnidad().getCodigo();
+				posCodigo = (versionAntigua != null) ? versionAntigua.indexOf(Dir3caibConstantes.SEPARADOR_CODIGO_VERSION) : -1;
+				long antiguaVersion = (posCodigo > 0 )?Long.parseLong(versionAntigua.substring(posCodigo+1)):-1;
+				if(antiguaVersion<version){
+					noDuplicadasOFI.remove(codigoSinVersion);
+					noDuplicadasOFI.put(codigoSinVersion,rel);
+				}
+			}
+		}
+
+		return new ArrayList<>(noDuplicadasOFI.values());
+
+	}
+
+
+	/**
+	 * Método que obtiene las relaciones sir de una oficina que son válidas según la fecha de sincronización y obteniendo las de la unidad con mayor versión
+	 *
+	 * @param relacionSirOfis
+	 * @param fechaSincronizacion
+	 * @return
+	 * @throws Exception
+	 */
+	private List<RelacionSirOfi> obtenerRelacionesSir(List<RelacionSirOfi> relacionSirOfis, Date fechaSincronizacion) throws Exception{
+
+		int posCodigo;
+		List<String> codigos = new ArrayList<>();
+		Map<String, RelacionSirOfi> noDuplicadasSIR = new HashMap<>();
+
+		// Cogemos solo las relaciones sir que no han sido anuladas o extinguidas
+		// anterior a la fecha de sincronizacion
+		Set<RelacionSirOfi> todasRelacionesSir = new HashSet<RelacionSirOfi>(relacionSirOfis);
+		Set<RelacionSirOfi> relacionesSirValidas = new HashSet<RelacionSirOfi>();
+		for (RelacionSirOfi relSir : todasRelacionesSir) {
+			// En el caso de la actualización además hay que asegurarse que no se traen
+			// relaciones extinguidas
+			// o anuladas anterior a la fecha de sincronización.
+			if (relacionSirValida(relSir, fechaSincronizacion)) {
+				relacionesSirValidas.add(relSir);
+			}
+		}
+
+
+		//Enviamos solo las relaciones sir que estan relacionadas con la unidad de mayor versión
+		for(RelacionSirOfi rel: relacionesSirValidas){
+
+			String codigoUnidad = rel.getUnidad().getCodigo();
+			posCodigo = (codigoUnidad != null) ? codigoUnidad.indexOf(Dir3caibConstantes.SEPARADOR_CODIGO_VERSION) : -1;
+			String codigoSinVersion = (posCodigo > 0 ) ? codigoUnidad.substring(0, posCodigo) : codigoUnidad;
+			long version = (posCodigo > 0 )?Long.parseLong(codigoUnidad.substring(posCodigo+1)):-1;
+
+			//Si no contiene el código vamos guardando las relaciones en el map
+			if(!codigos.contains(codigoSinVersion)){
+				codigos.add(codigoSinVersion);
+				noDuplicadasSIR.put(codigoSinVersion, rel);
+
+			}else{
+				RelacionSirOfi antigua = noDuplicadasSIR.get(codigoSinVersion);
+				String versionAntigua = antigua.getUnidad().getCodigo();
+				posCodigo = (versionAntigua != null) ? versionAntigua.indexOf(Dir3caibConstantes.SEPARADOR_CODIGO_VERSION) : -1;
+				long antiguaVersion = (posCodigo > 0 )?Long.parseLong(versionAntigua.substring(posCodigo+1)):-1;
+				if(antiguaVersion<version){
+					noDuplicadasSIR.remove(codigoSinVersion);
+					noDuplicadasSIR.put(codigoSinVersion,rel);
+				}
+			}
+		}
+
+		return new ArrayList<>(noDuplicadasSIR.values());
+
 	}
 }
