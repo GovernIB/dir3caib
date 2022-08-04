@@ -345,11 +345,7 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
     @Override
     public List<OficinaTF> obtenerOficinasSIRUnidadTF(String codigoUnidad, boolean denominacionOficial) throws Exception {
 
-        log.info("ENTORE AQUI  obtenerOficinasSIRUnidadTF" );
-
         List<Oficina> oficinas = oficinaEjb.obtenerOficinasSIRUnidad(codigoUnidad);
-
-        log.info(oficinas.size());
 
         List<OficinaTF> oficinasTF = new ArrayList<OficinaTF>();
 

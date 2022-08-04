@@ -541,8 +541,6 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 	@SuppressWarnings(value = "unchecked")
 	public List<Oficina> obtenerOficinasSIRUnidad(String codigoUnidad, boolean isCodigoDir3) throws Exception {
 
-		log.info("CODIGO DIR 3" + codigoUnidad);
-
 		String variableCampo = (isCodigoDir3) ? "codigoDir3" : "codigo";
 		
 		Query q = em.createQuery(
