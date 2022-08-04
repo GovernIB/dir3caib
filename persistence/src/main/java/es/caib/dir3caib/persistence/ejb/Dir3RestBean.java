@@ -592,7 +592,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 		// y sustituimos el valor del codigo por el codigoDir3(sin version)
 		for (Nodo unidad2 : unidades) {
 			//if (obtenerOficinasSIRUnidad(unidad2.getCodigo()).size() > 0) {
-			if (oficinaEjb.obtenerOficinasSIRUnidad(unidad2.getCodigo()).size() > 0) {
+			if (oficinaEjb.obtenerOficinasSIRUnidad(unidad2.getCodigo(),false).size() > 0) {
 				unidad2.setTieneOficinaSir(true);
 			}
 			// Unidad, unidad raiz, unidadSuperior

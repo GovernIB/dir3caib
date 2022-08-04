@@ -534,12 +534,14 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 	@Override
 	@SuppressWarnings(value = "unchecked")
 	public List<Oficina> obtenerOficinasSIRUnidad(String codigoUnidad) throws Exception {
-		return obtenerOficinasSIRUnidad(codigoUnidad,false);
+		return obtenerOficinasSIRUnidad(codigoUnidad,true);
 	}
 	
 	@Override
 	@SuppressWarnings(value = "unchecked")
 	public List<Oficina> obtenerOficinasSIRUnidad(String codigoUnidad, boolean isCodigoDir3) throws Exception {
+
+		log.info("CODIGO DIR 3" + codigoUnidad);
 
 		String variableCampo = (isCodigoDir3) ? "codigoDir3" : "codigo";
 		
@@ -553,6 +555,8 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 		q.setParameter("codigoUnidad", codigoUnidad);
 		q.setParameter("SERVICIO_SIR_RECEPCION", servicioEjb.findById(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
 		q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+
+
 
 		return q.getResultList();
 
