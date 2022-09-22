@@ -159,10 +159,12 @@ public class UnidadController extends BaseController {
         Set<Unidad> unidadesHistoricasAnteriores = unidadEjb.historicosAnteriores(codUnidad);
         mav.addObject("historicosAnteriores", unidadesHistoricasAnteriores);
 
-        //Obtenemos los históricos finales hacia delante.
-        Set<Unidad> unidadesHistoricasFinales = new HashSet<Unidad>();
-        unidadEjb.historicosFinales(unidad, unidadesHistoricasFinales);
-        mav.addObject("historicosFinales", unidadesHistoricasFinales);
+        //Obtenemos los históricos finales hacia delante si está extinguida
+        if(!Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE.equals(unidad.getEstado().getCodigoEstadoEntidad())) {
+            Set<Unidad> unidadesHistoricasFinales = new HashSet<Unidad>();
+            unidadEjb.historicosFinales(unidad, unidadesHistoricasFinales);
+            mav.addObject("historicosFinales", unidadesHistoricasFinales);
+        }
 
         //Obtenemos las oficinas que registran a la Unidad
         List<Oficina> oficinasRegistran = oficinaEjb.obtenerOficinasRegistran(unidad.getCodigo());

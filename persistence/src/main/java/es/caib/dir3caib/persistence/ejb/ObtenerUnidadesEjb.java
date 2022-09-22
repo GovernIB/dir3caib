@@ -110,11 +110,14 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
 
                 }
             }
-            //Obtenemos los historicos finales
+
             unidad.setContactos(contactosVisibles);
-            Set<Unidad> historicosFinales = new HashSet<Unidad>();
-            unidadEjb.historicosFinales(unidad, historicosFinales);
-            unidad.setHistoricoUO(historicosFinales);
+            if(!Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE.equals(unidad.getEstado().getCodigoEstadoEntidad())) {
+                //Obtenemos los historicos finales
+                Set<Unidad> historicosFinales = new HashSet<Unidad>();
+                unidadEjb.historicosFinales(unidad, historicosFinales);
+                unidad.setHistoricoUO(historicosFinales);
+            }
 
             return UnidadTF.generar(unidad);
 
