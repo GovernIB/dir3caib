@@ -559,14 +559,14 @@
         references DIR_CATISLA;
 
     alter table DIR_UNIDAD 
-        add constraint DIR_UNIDAD_LOCDIRECCION_FK 
-        foreign key (CODLOCALIDADID) 
-        references DIR_CATLOCALIDAD;
-
-    alter table DIR_UNIDAD 
         add constraint DIR_UNIDAD_CATTIPUNIDORGAN_FK 
         foreign key (CODTIPOUNIDAD) 
         references DIR_CATTIPOUNIDADORGANICA;
+
+    alter table DIR_UNIDAD 
+        add constraint DIR_UNIDAD_LOCDIRECCION_FK 
+        foreign key (CODLOCALIDADID) 
+        references DIR_CATLOCALIDAD;
 
     alter table DIR_UNIDAD 
         add constraint DIR_UNIDAD_CATNIVELADMIN_FK 
