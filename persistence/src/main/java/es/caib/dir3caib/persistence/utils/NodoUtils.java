@@ -133,8 +133,8 @@ public class NodoUtils {
     public static List<Nodo> getNodoListOficina(List<Oficina> result) throws Exception {
 
         List<Nodo> nodos = new ArrayList<Nodo>();
-        String ofiResponsable = "";
         for (Oficina oficina : result) {
+            String ofiResponsable = "";
             if (oficina.getCodOfiResponsable() != null) {
                 ofiResponsable = oficina.getCodOfiResponsable().getCodigo() + " - " + oficina.getCodOfiResponsable().getDenominacion();
             }
