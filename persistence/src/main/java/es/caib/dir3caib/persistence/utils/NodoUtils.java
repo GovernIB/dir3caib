@@ -177,8 +177,8 @@ public class NodoUtils {
     public static List<Nodo> getNodoListOficina(List<Oficina> result, Boolean denominacionCooficial) throws Exception {
 
         List<Nodo> nodos = new ArrayList<Nodo>();
-        String ofiResponsable = "";
         for (Oficina oficina : result) {
+            String ofiResponsable = "";
             if (oficina.getCodOfiResponsable() != null) {
             	String denominacionOfiResponsable = (denominacionCooficial && Utils.isNotEmpty(oficina.getCodOfiResponsable().getDenomLenguaCooficial())) ? oficina.getCodOfiResponsable().getDenomLenguaCooficial() : oficina.getCodOfiResponsable().getDenominacion();
                 ofiResponsable = oficina.getCodOfiResponsable().getCodigo() + " - " + denominacionOfiResponsable;
