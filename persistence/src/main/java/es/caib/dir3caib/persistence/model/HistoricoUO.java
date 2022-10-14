@@ -83,7 +83,7 @@ public class HistoricoUO implements Serializable {
     public void setEstado(CatEstadoEntidad estado) {
         this.estado = estado;
     }
-    @Column(name = "MOTIVORELACION")
+    @Column(name = "MOTIVORELACION", length = 2000)
     public String getMotivoRelacion() {
         return motivoRelacion;
     }
@@ -92,7 +92,7 @@ public class HistoricoUO implements Serializable {
         this.motivoRelacion = motivoRelacion;
     }
 
-    @Column(name = "OBSERVEXTINCION")
+    @Column(name = "OBSERVEXTINCION", length = 2000)
     public String getObservacionExtincion() {
         return observacionExtincion;
     }
