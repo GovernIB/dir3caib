@@ -496,7 +496,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 		}
 
 		if (provincia != null && provincia != -1) {
-			where.add(" unidad.codAmbProvincia.codigoProvincia = :codProvincia");
+			where.add(" unidad.codAmbProvincia.codigoProvincia = :codProvincia ");
 			parametros.put("codProvincia", provincia);
 		}
 		if (localidad != null && !localidad.equals("-1") && !localidad.isEmpty()) {
