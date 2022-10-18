@@ -829,7 +829,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 				raiz.setCodigoDir3((String) object[2]);
 				superior.setCodigoDir3((String) object[3]);
 
-				Unidad uni = new Unidad((String) object[6],(String) object[2],denominacion,raiz,superior,(Boolean) object[4]);
+				Unidad uni = new Unidad((String) object[6],(String) object[0],denominacion,raiz,superior,(Boolean) object[4]);
 
 				if(Utils.isNotEmpty((String) object[5]))
 					uni.setDenomLenguaCooficial((String) object[5]);
@@ -1050,7 +1050,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 			Unidad superior = new Unidad();
 			superior.setCodigoDir3((String) object[3]);
 
-			Unidad nueva = new Unidad((String) object[6],(String) object[2],denominacion,raiz,superior,(Boolean) object[4]);
+			Unidad nueva = new Unidad((String) object[6],(String) object[0],denominacion,raiz,superior,(Boolean) object[4]);
 
 			if(Utils.isNotEmpty((String) object[5]))
 				nueva.setDenomLenguaCooficial((String) object[5]);

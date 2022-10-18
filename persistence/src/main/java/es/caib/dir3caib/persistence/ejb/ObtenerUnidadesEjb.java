@@ -284,7 +284,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
 
 
         for (Unidad unidad : arbol) {
-            arbolTF.add(UnidadTF.generarLigero(unidad,false));
+            arbolTF.add(UnidadTF.generarLigero(unidad,true));
         }
 
         return arbolTF;
