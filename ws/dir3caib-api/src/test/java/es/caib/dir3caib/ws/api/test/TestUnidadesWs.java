@@ -23,11 +23,18 @@ public class TestUnidadesWs extends Dir3CaibTestUtils{
           Dir3CaibObtenerUnidadesWs apiUnidades = getObtenerUnidadesApi(true);
         // for (int i = 0; i < 20; i++) {
             Long start = System.currentTimeMillis();
-            List<UnidadTF> destinatarias = apiUnidades.obtenerArbolUnidadesDestinatarias("A04019281");
+            List<UnidadTF> destinatarias = apiUnidades.obtenerArbolUnidadesDestinatarias("A04003003");
             Long end = System.currentTimeMillis();
 
             System.out.println("TIEMPO CARGA UNIDADESDESTINATARIAS: " + Utils.formatElapsedTime(end - start));
             System.out.println("DESTINATRIAS " + destinatarias.size());
+            for(int i= 0; i<destinatarias.size(); i++){
+                System.out.println(destinatarias.get(i).getCodigo());
+                System.out.println(destinatarias.get(i).getCodUnidadRaiz());
+                System.out.println(destinatarias.get(i).getCodUnidadSuperior());
+                System.out.println(destinatarias.get(i).getDenominacion());
+                System.out.println(destinatarias.get(i).isEsEdp());
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

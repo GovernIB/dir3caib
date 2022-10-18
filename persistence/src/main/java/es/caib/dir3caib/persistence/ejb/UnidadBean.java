@@ -806,10 +806,10 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 			boolean denominacionCooficial) throws Exception {
 		for (Unidad unidad : unidadesPadres) {
 
-			Query q = em.createQuery("select unidad.codigoDir3, unidad.denominacion, unidad.codUnidadRaiz.codigo, "
-					+ "unidad.codUnidadSuperior.codigoDir3, unidad.esEdp, unidad.denomLenguaCooficial "
+			Query q = em.createQuery("select unidad.codigoDir3, unidad.denominacion, unidad.codUnidadRaiz.codigoDir3, "
+					+ "unidad.codUnidadSuperior.codigoDir3, unidad.esEdp, unidad.denomLenguaCooficial, unidad.codigo "
 					+ "from Unidad as unidad "
-					+ "where unidad.codUnidadSuperior.codigoDir3 =:codigo and unidad.codigoDir3 !=:codigo and unidad.estado.codigoEstadoEntidad =:estado "
+					+ "where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:estado "
 					+ "order by unidad.codigo");
 
 			q.setParameter("codigo", unidad.getCodigo());
@@ -823,8 +823,18 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 				String denominacion = (denominacionCooficial && Utils.isNotEmpty((String) object[5]))
 						? (String) object[5]
 						: (String) object[1];
-				hijos.add(new Unidad((String) object[0], denominacion, new Unidad((String) object[2]),
-						new Unidad((String) object[3]), (Boolean) object[4]));
+
+				Unidad raiz= new Unidad();
+				Unidad superior= new Unidad();
+				raiz.setCodigoDir3((String) object[2]);
+				superior.setCodigoDir3((String) object[3]);
+
+				Unidad uni = new Unidad((String) object[6],(String) object[2],denominacion,raiz,superior,(Boolean) object[4]);
+
+				if(Utils.isNotEmpty((String) object[5]))
+					uni.setDenomLenguaCooficial((String) object[5]);
+
+				hijos.add(uni);
 			}
 
 			hijosTotales.addAll(hijos);
@@ -1024,7 +1034,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 	public List<Unidad> obtenerArbolUnidadesDestinatarias(String codigo, boolean denominacionCooficial) throws Exception {
 
 		Query q = em.createQuery(
-				"Select unidad.codigoDir3, unidad.denominacion, unidad.codUnidadRaiz.codigoDir3, unidad.codUnidadSuperior.codigoDir3, unidad.esEdp, unidad.denomLenguaCooficial "
+				"Select unidad.codigoDir3, unidad.denominacion, unidad.codUnidadRaiz.codigoDir3, unidad.codUnidadSuperior.codigoDir3, unidad.esEdp, unidad.denomLenguaCooficial, unidad.codigo "
 				+ "from Unidad as unidad where unidad.codigoDir3 =:codigo and unidad.estado.codigoEstadoEntidad =:vigente");
 		q.setParameter("codigo", codigo);
 		q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
@@ -1035,12 +1045,18 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
 		for (Object[] object : result) {
 			String denominacion = (denominacionCooficial && Utils.isNotEmpty((String) object[5])) ? (String) object[5] : (String) object[1];
-			Unidad nueva = new Unidad((String) object[0], denominacion, new Unidad((String) object[2]),
-					new Unidad((String) object[3]), (Boolean) object[4]);
+			Unidad raiz = new Unidad();
+			raiz.setCodigoDir3((String) object[2]);
+			Unidad superior = new Unidad();
+			superior.setCodigoDir3((String) object[3]);
+
+			Unidad nueva = new Unidad((String) object[6],(String) object[2],denominacion,raiz,superior,(Boolean) object[4]);
+
 			if(Utils.isNotEmpty((String) object[5]))
 				nueva.setDenomLenguaCooficial((String) object[5]);
 			unidades.add(nueva);
 		}
+
 
 		Unidad unidadRaiz = null;
 		// Lista con el resultado final de unidades destinatarias
@@ -1461,8 +1477,10 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 	@Override
 	public Boolean tieneOficinasArbol(String codigo) throws Exception {
 
+		//log.info("tieneOficinasArbol codigo " + codigo);
+
 		Query q = em.createQuery(
-				"Select oficina.codigo from Oficina as oficina where oficina.codUoResponsable.codigoDir3 =:codigo and oficina.estado.codigoEstadoEntidad=:vigente");
+				"Select oficina.codigo from Oficina as oficina where oficina.codUoResponsable.codigo =:codigo and oficina.estado.codigoEstadoEntidad=:vigente");
 
 		q.setParameter("codigo", codigo);
 		q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
@@ -1475,11 +1493,13 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 			oficinas.add(new Oficina((String) object));
 		}
 
+		//log.info(" tieneOficinasArbol OFICINAS " +oficinas.size());
+
 		if (oficinas.size() > 0) {
 			return true;
 		} else {
 			q = em.createQuery(
-					"Select count(relorg.id) from RelacionOrganizativaOfi as relorg where relorg.unidad.codigoDir3=:codigo and relorg.estado.codigoEstadoEntidad=:vigente");
+					"Select count(relorg.id) from RelacionOrganizativaOfi as relorg where relorg.unidad.codigo=:codigo and relorg.estado.codigoEstadoEntidad=:vigente");
 
 			q.setParameter("codigo", codigo);
 			q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
@@ -1488,7 +1508,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 				return true;
 			} else {// no tiene oficinas, miramos sus hijos
 				Query q2 = em.createQuery(
-						"Select unidad.codigo from Unidad as unidad where unidad.codUnidadSuperior.codigoDir3 =:codigo and unidad.codigoDir3 !=:codigo and unidad.estado.codigoEstadoEntidad =:estado");
+						"Select unidad.codigo from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo and unidad.estado.codigoEstadoEntidad =:estado");
 
 				q2.setParameter("codigo", codigo);
 				q2.setParameter("estado", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
@@ -1501,6 +1521,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 				}
 
 				for (Unidad hijo : hijos) {
+					//log.info( "tieneOficinasArbol " + hijo.getCodigo());
 					boolean tiene = tieneOficinasArbol(hijo.getCodigo());
 					if (tiene) {
 						return true;
