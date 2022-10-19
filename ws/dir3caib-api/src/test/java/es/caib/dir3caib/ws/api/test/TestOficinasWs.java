@@ -23,7 +23,8 @@ public class TestOficinasWs extends Dir3CaibTestUtils {
         try {
             Dir3CaibObtenerOficinasWs apiOficinas = getObtenerOficinasApi(true);
             // OficinaTF oficinaTF = apiOficinas.obtenerOficina("O00015341", null, null);
-            OficinaTF oficinaTF = apiOficinas.obtenerOficina("O00020952", null, null);
+           // OficinaTF oficinaTF = apiOficinas.obtenerOficina("O00020952", null, null);
+            OficinaTF oficinaTF = apiOficinas.obtenerOficina("O00033964", null, null);
 
             if (oficinaTF != null) {
                 System.out.println(oficinaTF.getCodigo() + "\t\t"
@@ -45,7 +46,8 @@ public class TestOficinasWs extends Dir3CaibTestUtils {
     public void testOficinaExtinguida() {
         try {
             Dir3CaibObtenerOficinasWs apiOficinas = getObtenerOficinasApi(true);
-            OficinaTF oficinaTF = apiOficinas.obtenerOficina("O00023131", null, null);
+            //OficinaTF oficinaTF = apiOficinas.obtenerOficina("O00023131", null, null);
+            OficinaTF oficinaTF = apiOficinas.obtenerOficina("O00029844", null, null);
             if (oficinaTF != null) {
                 System.out.println(oficinaTF.getDenominacion());
             }
@@ -142,9 +144,7 @@ public class TestOficinasWs extends Dir3CaibTestUtils {
         try {
             Dir3CaibObtenerOficinasWs apiOficinas = getObtenerOficinasApi(true);
 
-            List<OficinaTF> oficinas = apiOficinas.obtenerOficinasSIRUnidad("E03139201v1");
-           // List<OficinaTF> oficinas = apiOficinas.obtenerOficinasSIRUnidad("A04031681v1");
-          //  List<OficinaTF> oficinas = apiOficinas.obtenerOficinasSIRUnidad("A04009905");
+            List<OficinaTF> oficinas = apiOficinas.obtenerOficinasSIRUnidad("A04027052");
             System.out.println(oficinas.size());
             for(OficinaTF ofiTF: oficinas){
                 for(ContactoTF contTF: ofiTF.getContactos()){

@@ -58,50 +58,9 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
     @Override
     public OficinaTF obtenerOficinaTF(String codigo, Date fechaActualizacion, Date fechaSincronizacion, boolean denominacionOficial) throws Exception {
 
-        Oficina oficina = obtenerOficina(codigo,fechaActualizacion,fechaSincronizacion,false);
+        Oficina oficina = obtenerOficina(codigo,fechaActualizacion,fechaSincronizacion);
 
-        return OficinaTF.generar(oficina, false);
-
-        /*Oficina oficina = oficinaEjb.findById(codigo, Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-
-        if (oficina != null) {
-            OficinaTF oficinaTF = null;
-
-            List<ContactoOfi> contactosVisibles = new ArrayList<ContactoOfi>();
-            for (ContactoOfi contactoOfi : oficina.getContactos()) {
-                if (contactoOfi.isVisibilidad()) {
-                    contactosVisibles.add(contactoOfi);
-                }
-            }
-            oficina.setContactos(contactosVisibles);
-            if (fechaActualizacion != null) {
-
-                if (fechaActualizacion.before(oficina.getFechaImportacion())) {
-
-                    // Cogemos solo las relaciones organizativas posteriores a la fecha de sincronizacion
-                    Set<RelacionOrganizativaOfi> todasRelaciones = new HashSet<RelacionOrganizativaOfi>(oficina.getOrganizativasOfi());
-                    Set<RelacionOrganizativaOfi> relacionesValidas = new HashSet<RelacionOrganizativaOfi>();
-                    for (RelacionOrganizativaOfi relOrg : todasRelaciones) {
-                        //TODO revisar esta condicion
-                        if (relOrg.getUnidad().getFechaExtincion().before(fechaSincronizacion)) {
-                            relacionesValidas.add(relOrg);
-                        }
-                    }
-                    oficina.setOrganizativasOfi(null);
-                    oficina.setOrganizativasOfi(new ArrayList<RelacionOrganizativaOfi>(relacionesValidas));
-
-                    oficinaTF = OficinaTF.generar(oficina, denominacionOficial);
-                }
-            } else {
-                oficinaTF = OficinaTF.generar(oficina, denominacionOficial);
-            }
-
-            return oficinaTF;
-        } else {
-            log.info("WS: Oficina cuyo codigoDir3 es " + codigo + " no existe o no es vigente");
-            return null;
-        }*/
-
+        return OficinaTF.generar(oficina, denominacionOficial);
 
     }
 
@@ -118,7 +77,7 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
     @Override
     public OficinaWs obtenerOficinaWs(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
 
-        Oficina oficina = obtenerOficina(codigo, fechaActualizacion, fechaSincronizacion, false);
+        Oficina oficina = obtenerOficina(codigo, fechaActualizacion, fechaSincronizacion);
 
         return OficinaWs.generar(oficina);
     }
@@ -133,7 +92,7 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
      * @param fechaActualizacion
      *          fecha en la que se realiza la actualizacion.
      */
-    private Oficina obtenerOficina(String codigo, Date fechaActualizacion, Date fechaSincronizacion, boolean denominacionOficial) throws Exception {
+    private Oficina obtenerOficina(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
 
         Oficina oficina = oficinaEjb.findById(codigo, Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
@@ -164,11 +123,9 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
                     oficina.setOrganizativasOfi(new ArrayList<RelacionOrganizativaOfi>(relacionesValidas));
 
                     return oficina;
-                    //oficinaTF = OficinaTF.generar(oficina, denominacionOficial);
                 }
             } else {
                 return oficina;
-                //oficinaTF = OficinaTF.generar(oficina, denominacionOficial);
             }
 
             return oficina;
@@ -193,7 +150,7 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
      */
     @Override
     public List<OficinaTF> obtenerArbolOficinasTF(String codigo, Date fechaActualizacion, Date fechaSincronizacion, boolean denominacionOficial) throws Exception {
-        List<Oficina> oficinas = obtenerArbolOficinas(codigo,fechaActualizacion,fechaSincronizacion,false);
+        List<Oficina> oficinas = obtenerArbolOficinas(codigo,fechaActualizacion,fechaSincronizacion);
         List<OficinaTF> arbolTF = new ArrayList<OficinaTF>();
         for (Oficina oficina : oficinas) {
             arbolTF.add(OficinaTF.generar(oficina,denominacionOficial));
@@ -213,7 +170,7 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
      */
     @Override
     public List<OficinaWs> obtenerArbolOficinasWs(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
-        List<Oficina> oficinas = obtenerArbolOficinas(codigo,fechaActualizacion,fechaSincronizacion,false);
+        List<Oficina> oficinas = obtenerArbolOficinas(codigo,fechaActualizacion,fechaSincronizacion);
         List<OficinaWs> arbolWs = new ArrayList<OficinaWs>();
         for (Oficina oficina : oficinas) {
             arbolWs.add(OficinaWs.generar(oficina));
@@ -231,7 +188,7 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
      * @param codigo             Código del organismo
      * @param fechaActualizacion fecha en la que se realiza la actualizacion.
      */
-    private List<Oficina> obtenerArbolOficinas(String codigo, Date fechaActualizacion, Date fechaSincronizacion, boolean denominacionOficial) throws Exception {
+    private List<Oficina> obtenerArbolOficinas(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
 
         log.info("WS: Inicio obtener Oficinas");
         // Obtenemos todos las unidades vigentes de la unidad Raiz

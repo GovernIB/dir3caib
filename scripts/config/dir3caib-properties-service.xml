@@ -42,6 +42,9 @@
 			<!--Configuración email -->
 			es.caib.dir3caib.administrador.email=
 
+            <!-- Indica si enviar las unidades y las oficinas con la denominación cooficial-->
+            es.caib.dir3caib.denominacioncooficial=true
+
         </attribute>
     </mbean>
 </server>

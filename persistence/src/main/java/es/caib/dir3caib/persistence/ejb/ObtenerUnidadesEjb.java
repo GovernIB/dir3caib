@@ -4,6 +4,7 @@ import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.model.ws.UnidadTF;
 import es.caib.dir3caib.persistence.model.ws.v2.UnidadWs;
 import es.caib.dir3caib.persistence.utils.Nodo;
+import es.caib.dir3caib.utils.Configuracio;
 import es.caib.dir3caib.utils.Utils;
 import org.apache.log4j.Logger;
 
@@ -59,7 +60,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
     @Override
     public UnidadTF obtenerUnidadTF(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
         Unidad unidad = obtenerUnidad(codigo,fechaActualizacion,fechaSincronizacion);
-        return UnidadTF.generar(unidad,false);
+        return UnidadTF.generar(unidad,Configuracio.isDenominacionCooficial());
 
     }
 
@@ -83,7 +84,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
     @Override
     public UnidadTF buscarUnidadTF(String codigo) throws Exception {
         Unidad unidad = buscarUnidad(codigo);
-        return UnidadTF.generar(unidad, false);
+        return UnidadTF.generar(unidad, Configuracio.isDenominacionCooficial());
     }
 
     /**
@@ -141,7 +142,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
         List<UnidadTF> arbolTF = new ArrayList<UnidadTF>();
         List<Unidad> arbolUnidades = obtenerArbolUnidades(codigo, fechaActualizacion, fechaSincronizacion);
         for (Unidad uni : arbolUnidades) {
-            arbolTF.add(UnidadTF.generar(uni,false));
+            arbolTF.add(UnidadTF.generar(uni,Configuracio.isDenominacionCooficial()));
         }
          return arbolTF;
 
@@ -284,7 +285,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
 
 
         for (Unidad unidad : arbol) {
-            arbolTF.add(UnidadTF.generarLigero(unidad,true));
+            arbolTF.add(UnidadTF.generarLigero(unidad, Configuracio.isDenominacionCooficial()));
         }
 
         return arbolTF;
@@ -340,7 +341,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
         List<UnidadTF> historicosFinalesList = new ArrayList<UnidadTF>();
         Set<Unidad> historicosFinales = obtenerHistoricosFinales(codigo);
         for (Unidad uni : historicosFinales) {
-            historicosFinalesList.add(UnidadTF.generar(uni,false));
+            historicosFinalesList.add(UnidadTF.generar(uni,Configuracio.isDenominacionCooficial()));
         }
         return historicosFinalesList;
 
@@ -378,7 +379,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
         Set<Unidad> historicosFinalesSIR = obtenerHistoricosFinalesSIR(codigo);
         List<UnidadTF> historicosFinales = new ArrayList<>();
         for(Unidad uni: historicosFinalesSIR){
-            historicosFinales.add(UnidadTF.generar(uni,false));
+            historicosFinales.add(UnidadTF.generar(uni,Configuracio.isDenominacionCooficial()));
         }
         return historicosFinales;
     }

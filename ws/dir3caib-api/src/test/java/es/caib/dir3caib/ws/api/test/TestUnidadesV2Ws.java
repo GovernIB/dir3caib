@@ -1,6 +1,9 @@
 package es.caib.dir3caib.ws.api.test;
 
 import es.caib.dir3caib.utils.Utils;
+import es.caib.dir3caib.ws.api.oficina.Dir3CaibObtenerOficinasWs;
+import es.caib.dir3caib.ws.api.oficina.OficinaTF;
+import es.caib.dir3caib.ws.api.oficina.OficinaWs;
 import es.caib.dir3caib.ws.api.unidad.ContactoTF;
 import es.caib.dir3caib.ws.api.unidad.Dir3CaibObtenerUnidadesWs;
 import es.caib.dir3caib.ws.api.unidad.UnidadTF;
@@ -41,7 +44,8 @@ public class TestUnidadesV2Ws extends Dir3CaibTestUtils{
             Dir3CaibObtenerUnidadesWs apiUnidades = getObtenerUnidadesApi(true);
            // for (int i = 0; i < 20; i++) {
                 Long start = System.currentTimeMillis();
-                List<UnidadWs> destinatarias = apiUnidades.obtenerArbolUnidadesDestinatariasV2("A04019281");
+                //List<UnidadWs> destinatarias = apiUnidades.obtenerArbolUnidadesDestinatariasV2("A04019281");
+                List<UnidadWs> destinatarias = apiUnidades.obtenerArbolUnidadesDestinatariasV2("A04003003");
                 Long end = System.currentTimeMillis();
 
                 System.out.println("TIEMPO CARGA UNIDADESDESTINATARIAS: " + Utils.formatElapsedTime(end - start));
@@ -136,6 +140,25 @@ public class TestUnidadesV2Ws extends Dir3CaibTestUtils{
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void testObtenerOficinasSIRUnidad() {
+        try {
+            Dir3CaibObtenerOficinasWs apiOficinas = getObtenerOficinasApi(true);
+
+            List<OficinaWs> oficinas = apiOficinas.obtenerOficinasSIRUnidadV2("A04027052");
+            System.out.println(oficinas.size());
+            for(OficinaWs ofiWs: oficinas){
+                for(es.caib.dir3caib.ws.api.oficina.ContactoTF contTF: ofiWs.getContactos()){
+                    System.out.print(contTF.getTipoContacto());
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
 

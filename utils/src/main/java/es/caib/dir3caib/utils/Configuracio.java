@@ -102,4 +102,8 @@ public class Configuracio {
         return System.getProperty(DIR3CAIB_PROPERTY_BASE + "administrador.email");
     }
 
+    public static boolean isDenominacionCooficial() {
+        return Boolean.getBoolean(DIR3CAIB_PROPERTY_BASE + "denominacioncooficial");
+    }
+
 }

@@ -29,11 +29,11 @@ public class TestUnidadesWs extends Dir3CaibTestUtils{
             System.out.println("TIEMPO CARGA UNIDADESDESTINATARIAS: " + Utils.formatElapsedTime(end - start));
             System.out.println("DESTINATRIAS " + destinatarias.size());
             for(int i= 0; i<destinatarias.size(); i++){
-                System.out.println(destinatarias.get(i).getCodigo());
-                System.out.println(destinatarias.get(i).getCodUnidadRaiz());
-                System.out.println(destinatarias.get(i).getCodUnidadSuperior());
-                System.out.println(destinatarias.get(i).getDenominacion());
-                System.out.println(destinatarias.get(i).isEsEdp());
+                System.out.println(" CODIGO: "  + destinatarias.get(i).getCodigo());
+                System.out.println(" RAIZ: " + destinatarias.get(i).getCodUnidadRaiz());
+                System.out.println(" SUPERIOR: " +destinatarias.get(i).getCodUnidadSuperior());
+                System.out.println(" DENOMINACION: " + destinatarias.get(i).getDenominacion());
+                System.out.println(" EDP: " + destinatarias.get(i).isEsEdp());
             }
 
         } catch (Exception e) {
