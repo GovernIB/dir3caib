@@ -29,8 +29,13 @@ import java.util.List;
 
 /**
  * Created 25/03/14 13:32
- *
  * @author mgonzalez
+ * @author jagarcia
+ *
+ * Si s'afegeix o es modifica la firma d'un mètode REST s'ha d'actualitzar la corresponent
+ * firma al fitxer RestResource de dins el package swagger per tal d'actualitzar la documentació
+ * si s'utilitza SwaggerUI.
+ *
  */
 @Controller
 @RequestMapping(value = "/rest")
@@ -50,8 +55,8 @@ public class RestController {
 	 */
 	@RequestMapping(value = "/unidad/unidadesDenominacion", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<List<ObjetoDirectorio>> unidadesPorDenominacion(
-			@RequestParam String denominacion, @RequestParam(defaultValue = "false") boolean cooficial,
-			@RequestParam(defaultValue = "") String estado) throws Exception {
+			@RequestParam String denominacion, @RequestParam(required = false, defaultValue = "false") boolean cooficial,
+			@RequestParam(required = false, defaultValue = "") String estado) throws Exception {
 
 		// Transformamos el campo denominacion de ISO a UTF-8 para realizar las
 		// búsquedas en bd que estan en UTF-8.
@@ -73,8 +78,8 @@ public class RestController {
 	 */
 	@RequestMapping(value = "/oficina/oficinasDenominacion", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<List<ObjetoDirectorio>> oficinasPorDenominacion(
-			@RequestParam String denominacion, @RequestParam(defaultValue = "false") boolean cooficial,
-			@RequestParam(defaultValue = "") String estado) throws Exception {
+			@RequestParam String denominacion, @RequestParam(required = false, defaultValue = "false") boolean cooficial,
+			@RequestParam(required = false, defaultValue = "") String estado) throws Exception {
 
 		// Transformamos el campo denominacion de ISO a UTF-8 para realizar las
 		// búsquedas en bd que estan en UTF-8.
@@ -96,8 +101,8 @@ public class RestController {
 	 */
 	@RequestMapping(value = "/unidad/arbolUnidades", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<List<ObjetoDirectorio>> arbolUnidades(@RequestParam String codigo,
-			@RequestParam(defaultValue = "false") boolean cooficial, @RequestParam(defaultValue = "") String estado)
-			throws Exception {
+			@RequestParam(required = false, defaultValue = "false") boolean cooficial,
+		    @RequestParam(required = false, defaultValue = "") String estado) throws Exception {
 
 		List<Unidad> resultado = dir3RestEjb.obtenerArbolUnidades(codigo, null, estado);
 
@@ -116,8 +121,8 @@ public class RestController {
 	 */
 	@RequestMapping(value = "/oficina/oficinasOrganismo", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<List<ObjetoDirectorio>> oficinasOrganismo(@RequestParam String codigo,
-			@RequestParam(defaultValue = "false") boolean cooficial, @RequestParam(defaultValue = "") String estado)
-			throws Exception {
+			@RequestParam(required = false, defaultValue = "false") boolean cooficial,
+			@RequestParam(required = false, defaultValue = "") String estado) throws Exception {
 
 		List<Oficina> resultado = dir3RestEjb.obtenerOficinasOrganismo(codigo, null, estado);
 
@@ -175,19 +180,31 @@ public class RestController {
 	 * es para definir parametros opcionales
 	 */
 	@RequestMapping(value = "/busqueda/organismos", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<List<Nodo>> busquedaOrganismos(@RequestParam String codigo,
-			@RequestParam String denominacion, @RequestParam Long codNivelAdministracion,
-			@RequestParam Long codComunidadAutonoma, @RequestParam boolean conOficinas,
-			@RequestParam boolean unidadRaiz, @RequestParam Long provincia, @RequestParam String localidad,
-			@RequestParam boolean vigentes, @RequestParam(defaultValue = "true") boolean cooficial) throws Exception {
+	public @ResponseBody ResponseEntity<List<Nodo>> busquedaOrganismos(	@RequestParam(required = false) String codigo,
+			@RequestParam(required = false) String denominacion, @RequestParam(required = false) Long codNivelAdministracion,
+			@RequestParam(required = false) Long codComunidadAutonoma, @RequestParam(required = false, defaultValue = "false") boolean conOficinas,
+			@RequestParam(required = false) boolean unidadRaiz, @RequestParam(required = false) String provincia,
+		    @RequestParam(required = false) String localidad, @RequestParam(defaultValue = "true", required = false) boolean vigentes,
+		    @RequestParam(defaultValue = "true", required = false) boolean cooficial) throws Exception {
+
+
+		HttpHeaders headers = addAccessControllAllowOrigin();
+
+		/*
+		if (Utils.isEmpty(denominacion) && Utils.isEmpty(codigo)){
+			return new ResponseEntity<List<Nodo>>(null, headers, HttpStatus.BAD_REQUEST);
+		}*/
 
 		// Transformamos el campo denominacion de ISO a UTF-8 para realizar las
 		// búsquedas en bd que estan en UTF-8.
 		// Esto se hace porque el @RequestParam viene en ISO-8859-1.
+
+		String deno = (Utils.isNotEmpty(denominacion)) ? new String(denominacion.getBytes("ISO-8859-1"), "UTF-8") : "";
+
 		List<Nodo> resultado = dir3RestEjb.busquedaOrganismos(codigo,
-				new String(denominacion.getBytes("ISO-8859-1"), "UTF-8"), codNivelAdministracion, codComunidadAutonoma,
-				conOficinas, unidadRaiz, provincia, localidad, vigentes, cooficial);
-		HttpHeaders headers = addAccessControllAllowOrigin();
+				deno, codNivelAdministracion, codComunidadAutonoma,
+				conOficinas, unidadRaiz, (Utils.isNumeric(provincia)) ? Long.parseLong(provincia) : null, localidad, vigentes, cooficial);
+
 		// Si hay resultados fijamos el HttpStatus a OK, sino indicamos que no hay
 		// resultados.
 		HttpStatus status = (resultado.size() > 0) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
@@ -199,15 +216,22 @@ public class RestController {
 	 * los criterios de busqueda
 	 */
 	@RequestMapping(value = "/busqueda/oficinas", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<List<Nodo>> busquedaOficinas(@RequestParam String codigo,
-			@RequestParam String denominacion, @RequestParam Long codNivelAdministracion,
-			@RequestParam Long codComunidadAutonoma, @RequestParam Long provincia, @RequestParam String localidad,
-			@RequestParam boolean oficinasSir, @RequestParam boolean vigentes,
-			@RequestParam(defaultValue = "true") boolean cooficial) throws Exception {
+	public @ResponseBody ResponseEntity<List<Nodo>> busquedaOficinas(
+			@RequestParam(required = false, defaultValue = "") String codigo,
+			@RequestParam(required = false, defaultValue = "") String denominacion,
+			@RequestParam(required = false, defaultValue = "-1") Long codNivelAdministracion,
+			@RequestParam(required = false, defaultValue = "") Long codComunidadAutonoma,
+			@RequestParam(required = false, defaultValue = "-1") Long provincia,
+			@RequestParam(required = false, defaultValue = "") String localidad,
+			@RequestParam(required = false, defaultValue = "false") boolean oficinasSir,
+			@RequestParam(required = false, defaultValue = "false") boolean vigentes,
+			@RequestParam(required = false, defaultValue = "true") boolean cooficial)
+			throws Exception {
 
 		// Transformamos el campo denominacion de ISO a UTF-8 para realizar las
 		// búsquedas en bd que estan en UTF-8.
 		// Esto se hace porque el @RequestParam viene en ISO-8859-1.
+
 		List<Nodo> resultado = dir3RestEjb.busquedaOficinas(codigo,
 				new String(denominacion.getBytes("ISO-8859-1"), "UTF-8"), codNivelAdministracion, codComunidadAutonoma,
 				provincia, localidad, oficinasSir, vigentes, cooficial);
@@ -340,7 +364,7 @@ public class RestController {
 	 */
 	@RequestMapping(value = "/busqueda/unidades/denominacion/comunidad", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<List<Nodo>> obtenerUnidadesDenominacionComunidad(
-			@RequestParam String denominacion, @RequestParam Long codComunidad,
+			@RequestParam(required = false, defaultValue = "") String denominacion, @RequestParam Long codComunidad,
 			@RequestParam(defaultValue = "false") boolean cooficial) throws Exception {
 		List<Nodo> resultado = new ArrayList<Nodo>();
 
@@ -522,9 +546,9 @@ public class RestController {
 	 */
 	@RequestMapping(value = "/oficinas/obtenerOficina", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<OficinaRest> obtenerOficina(@RequestParam String codigo,
-			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaActualizacion,
-			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaSincronizacion,
-			@RequestParam(defaultValue = "false") boolean denominacionCooficial) throws Exception {
+			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaActualizacion,
+			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaSincronizacion,
+			@RequestParam(required = false, defaultValue = "false") boolean denominacionCooficial) throws Exception {
 
 		OficinaRest resultado = dir3RestEjb.obtenerOficina(codigo, fechaActualizacion, fechaSincronizacion,
 				denominacionCooficial, Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
@@ -537,9 +561,9 @@ public class RestController {
 
 	@RequestMapping(value = "/oficinas/obtenerArbolOficinas", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<List<OficinaRest>> obtenerArbolOficinas(@RequestParam String codigo,
-			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaActualizacion,
-			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaSincronizacion,
-			@RequestParam(defaultValue = "false") boolean denominacionCooficial) throws Exception {
+			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaActualizacion,
+			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaSincronizacion,
+			@RequestParam(required = false, defaultValue = "false") boolean denominacionCooficial) throws Exception {
 
 		List<OficinaRest> resultados = dir3RestEjb.obtenerArbolOficinas(codigo, fechaActualizacion, fechaSincronizacion,
 				denominacionCooficial);
@@ -575,9 +599,9 @@ public class RestController {
 
 	@RequestMapping(value = "/unidades/obtenerUnidad", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<UnidadRest> obtenerUnidad(@RequestParam String codigo,
-			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaActualizacion,
-			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaSincronizacion,
-			@RequestParam(defaultValue = "false") boolean denominacionCooficial) throws Exception {
+			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaActualizacion,
+			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaSincronizacion,
+			@RequestParam(required = false, defaultValue = "false") boolean denominacionCooficial) throws Exception {
 
 		UnidadRest resultado = dir3RestEjb.obtenerUnidad(codigo, fechaActualizacion, fechaSincronizacion, denominacionCooficial);
 
@@ -601,9 +625,9 @@ public class RestController {
 
 	@RequestMapping(value = "/unidades/obtenerArbolUnidades", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<List<UnidadRest>> obtenerArbolUnidades(@RequestParam String codigo,
-			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaActualizacion,
-			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaSincronizacion,
-			@RequestParam(defaultValue = "false") boolean denominacionCooficial) throws Exception {
+			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaActualizacion,
+			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaSincronizacion,
+			@RequestParam(required = false, defaultValue = "false") boolean denominacionCooficial) throws Exception {
 
 		List<UnidadRest> resultados = dir3RestEjb.obtenerArbolUnidades(codigo, fechaActualizacion, fechaSincronizacion, denominacionCooficial);
 

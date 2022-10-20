@@ -100,4 +100,22 @@ public class Utils {
     public static boolean isNotEmpty(final String cadena) {
         return !isEmpty(cadena);
     }
+
+    /**
+     * Comprueba si una cadena es númerico
+     * @param cadena
+     * @return true si es númerico, false si no lo es.
+     */
+
+    public static boolean isNumeric(String cadena) {
+        if (cadena == null) {
+            return false;
+        }
+        try {
+            double d = Double.parseDouble(cadena);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
+    }
 }
