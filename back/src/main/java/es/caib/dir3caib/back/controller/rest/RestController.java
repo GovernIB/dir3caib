@@ -22,24 +22,33 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
+import javax.servlet.http.HttpServletRequest;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import es.caib.dir3caib.back.controller.rest.RestUtils;
+import es.caib.dir3caib.back.security.LoginInfo;
+
 /**
  * Created 25/03/14 13:32
+ * 
  * @author mgonzalez
  * @author jagarcia
  *
- * Si s'afegeix o es modifica la firma d'un mètode REST s'ha d'actualitzar la corresponent
- * firma al fitxer RestResource de dins el package swagger per tal d'actualitzar la documentació
- * si s'utilitza SwaggerUI.
+ *         Si s'afegeix o es modifica la firma d'un mètode REST s'ha
+ *         d'actualitzar la corresponent firma al fitxer RestResource de dins el
+ *         package swagger per tal d'actualitzar la documentació si s'utilitza
+ *         SwaggerUI.
  *
  */
 @Controller
 @RequestMapping(value = "/rest")
-public class RestController {
+public class RestController extends RestUtils {
 
 	protected final Logger log = Logger.getLogger(getClass());
 
@@ -53,9 +62,11 @@ public class RestController {
 	 * Obtiene los {@link es.caib.dir3caib.persistence.model.Unidad} por
 	 * denominacion
 	 */
+	@RolesAllowed({ Dir3caibConstantes.DIR_WS })
 	@RequestMapping(value = "/unidad/unidadesDenominacion", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<List<ObjetoDirectorio>> unidadesPorDenominacion(
-			@RequestParam String denominacion, @RequestParam(required = false, defaultValue = "false") boolean cooficial,
+			@RequestParam String denominacion,
+			@RequestParam(required = false, defaultValue = "false") boolean cooficial,
 			@RequestParam(required = false, defaultValue = "") String estado) throws Exception {
 
 		// Transformamos el campo denominacion de ISO a UTF-8 para realizar las
@@ -78,7 +89,8 @@ public class RestController {
 	 */
 	@RequestMapping(value = "/oficina/oficinasDenominacion", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<List<ObjetoDirectorio>> oficinasPorDenominacion(
-			@RequestParam String denominacion, @RequestParam(required = false, defaultValue = "false") boolean cooficial,
+			@RequestParam String denominacion,
+			@RequestParam(required = false, defaultValue = "false") boolean cooficial,
 			@RequestParam(required = false, defaultValue = "") String estado) throws Exception {
 
 		// Transformamos el campo denominacion de ISO a UTF-8 para realizar las
@@ -102,7 +114,7 @@ public class RestController {
 	@RequestMapping(value = "/unidad/arbolUnidades", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<List<ObjetoDirectorio>> arbolUnidades(@RequestParam String codigo,
 			@RequestParam(required = false, defaultValue = "false") boolean cooficial,
-		    @RequestParam(required = false, defaultValue = "") String estado) throws Exception {
+			@RequestParam(required = false, defaultValue = "") String estado) throws Exception {
 
 		List<Unidad> resultado = dir3RestEjb.obtenerArbolUnidades(codigo, null, estado);
 
@@ -142,7 +154,7 @@ public class RestController {
 	 */
 	@RequestMapping(value = "/GET/oficinas", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<List<OficinaJson>> getArbolOficinasOrganismoOpenData(
-			@RequestParam String codigo, @RequestParam(defaultValue="V") String estado) throws Exception {
+			@RequestParam String codigo, @RequestParam(defaultValue = "V") String estado) throws Exception {
 
 		List<Oficina> resultado = dir3RestEjb.obtenerArbolOficinasOpenData(codigo, estado);
 
@@ -159,7 +171,8 @@ public class RestController {
 	 * indicado
 	 */
 	@RequestMapping(value = "/GET/oficinas/baleares", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<List<OficinaJson>> getOficinasBalearesOpenData(@RequestParam(defaultValue="V") String estado) throws Exception {
+	public @ResponseBody ResponseEntity<List<OficinaJson>> getOficinasBalearesOpenData(
+			@RequestParam(defaultValue = "V") String estado) throws Exception {
 
 		List<Oficina> resultado = dir3RestEjb.getOficinasBalearesOpenData(estado);
 
@@ -180,20 +193,22 @@ public class RestController {
 	 * es para definir parametros opcionales
 	 */
 	@RequestMapping(value = "/busqueda/organismos", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<List<Nodo>> busquedaOrganismos(	@RequestParam(required = false) String codigo,
-			@RequestParam(required = false) String denominacion, @RequestParam(required = false) Long codNivelAdministracion,
-			@RequestParam(required = false) Long codComunidadAutonoma, @RequestParam(required = false, defaultValue = "false") boolean conOficinas,
+	public @ResponseBody ResponseEntity<List<Nodo>> busquedaOrganismos(@RequestParam(required = false) String codigo,
+			@RequestParam(required = false) String denominacion,
+			@RequestParam(required = false) Long codNivelAdministracion,
+			@RequestParam(required = false) Long codComunidadAutonoma,
+			@RequestParam(required = false, defaultValue = "false") boolean conOficinas,
 			@RequestParam(required = false) boolean unidadRaiz, @RequestParam(required = false) String provincia,
-		    @RequestParam(required = false) String localidad, @RequestParam(defaultValue = "true", required = false) boolean vigentes,
-		    @RequestParam(defaultValue = "true", required = false) boolean cooficial) throws Exception {
-
+			@RequestParam(required = false) String localidad,
+			@RequestParam(defaultValue = "true", required = false) boolean vigentes,
+			@RequestParam(defaultValue = "true", required = false) boolean cooficial) throws Exception {
 
 		HttpHeaders headers = addAccessControllAllowOrigin();
 
 		/*
-		if (Utils.isEmpty(denominacion) && Utils.isEmpty(codigo)){
-			return new ResponseEntity<List<Nodo>>(null, headers, HttpStatus.BAD_REQUEST);
-		}*/
+		 * if (Utils.isEmpty(denominacion) && Utils.isEmpty(codigo)){ return new
+		 * ResponseEntity<List<Nodo>>(null, headers, HttpStatus.BAD_REQUEST); }
+		 */
 
 		// Transformamos el campo denominacion de ISO a UTF-8 para realizar las
 		// búsquedas en bd que estan en UTF-8.
@@ -201,9 +216,9 @@ public class RestController {
 
 		String deno = (Utils.isNotEmpty(denominacion)) ? new String(denominacion.getBytes("ISO-8859-1"), "UTF-8") : "";
 
-		List<Nodo> resultado = dir3RestEjb.busquedaOrganismos(codigo,
-				deno, codNivelAdministracion, codComunidadAutonoma,
-				conOficinas, unidadRaiz, (Utils.isNumeric(provincia)) ? Long.parseLong(provincia) : null, localidad, vigentes, cooficial);
+		List<Nodo> resultado = dir3RestEjb.busquedaOrganismos(codigo, deno, codNivelAdministracion,
+				codComunidadAutonoma, conOficinas, unidadRaiz,
+				(Utils.isNumeric(provincia)) ? Long.parseLong(provincia) : null, localidad, vigentes, cooficial);
 
 		// Si hay resultados fijamos el HttpStatus a OK, sino indicamos que no hay
 		// resultados.
@@ -225,8 +240,7 @@ public class RestController {
 			@RequestParam(required = false, defaultValue = "") String localidad,
 			@RequestParam(required = false, defaultValue = "false") boolean oficinasSir,
 			@RequestParam(required = false, defaultValue = "false") boolean vigentes,
-			@RequestParam(required = false, defaultValue = "true") boolean cooficial)
-			throws Exception {
+			@RequestParam(required = false, defaultValue = "true") boolean cooficial) throws Exception {
 
 		// Transformamos el campo denominacion de ISO a UTF-8 para realizar las
 		// búsquedas en bd que estan en UTF-8.
@@ -247,8 +261,8 @@ public class RestController {
 	 */
 	@RequestMapping(value = "/unidad/denominacion", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<String> unidadDenominacion(@RequestParam String codigo,
-			@RequestParam(defaultValue = "false") boolean cooficial,
-			@RequestParam(defaultValue = "") String estado) throws Exception {
+			@RequestParam(defaultValue = "false") boolean cooficial, @RequestParam(defaultValue = "") String estado)
+			throws Exception {
 
 		String denominacion = dir3RestEjb.unidadDenominacion(codigo, cooficial, estado);
 		HttpHeaders headers = addAccessControllAllowOrigin();
@@ -279,8 +293,8 @@ public class RestController {
 	 */
 	@RequestMapping(value = "/oficina/denominacion", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<String> oficinaDenominacion(@RequestParam String codigo,
-			@RequestParam(defaultValue = "false") boolean cooficial,
-			@RequestParam(defaultValue = "") String estado) throws Exception {
+			@RequestParam(defaultValue = "false") boolean cooficial, @RequestParam(defaultValue = "") String estado)
+			throws Exception {
 
 		String denominacion = dir3RestEjb.oficinaDenominacion(codigo, cooficial, estado);
 		HttpHeaders headers = addAccessControllAllowOrigin();
@@ -300,12 +314,12 @@ public class RestController {
 	 *               Cambiar select para codigodir3 en vez de codigo interno
 	 */
 	@RequestMapping(value = "/organigrama", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<Nodo> organigrama(@RequestParam String codigo, 
-			@RequestParam(defaultValue="false") boolean cooficial) throws Exception {
+	public @ResponseBody ResponseEntity<Nodo> organigrama(@RequestParam String codigo,
+			@RequestParam(defaultValue = "false") boolean cooficial) throws Exception {
 
 		Nodo nodo = new Nodo();
 		arbolEjb.arbolUnidadesAscendentes(codigo, nodo, Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE, false, cooficial);
-		
+
 		nodo = revisarOrganigrama(nodo);
 
 		HttpHeaders headers = addAccessControllAllowOrigin();
@@ -315,38 +329,38 @@ public class RestController {
 		return new ResponseEntity<Nodo>(nodo, headers, status);
 
 	}
-	
-	
+
 	private Nodo revisarOrganigrama(Nodo arbol) throws Exception {
-		
-		for(Nodo n : arbol.getHijos()) {
+
+		for (Nodo n : arbol.getHijos()) {
 			revisarOrganigrama(n);
 		}
-		
+
 		String codigo = arbol.getCodigo();
 		int posCodigo = (codigo != null) ? codigo.indexOf(Dir3caibConstantes.SEPARADOR_CODIGO_VERSION) : -1;
-		arbol.setCodigo((posCodigo > 0 ) ? codigo.substring(0, posCodigo) : codigo);
-		
+		arbol.setCodigo((posCodigo > 0) ? codigo.substring(0, posCodigo) : codigo);
+
 		String codigoIdPadre = arbol.getIdPadre();
-		int posIdPadre = (codigoIdPadre != null) ? codigoIdPadre.indexOf(Dir3caibConstantes.SEPARADOR_CODIGO_VERSION) : -1; 
-		arbol.setIdPadre((posIdPadre > 0 ) ? codigoIdPadre.substring(0, posIdPadre) : codigoIdPadre);
-		
+		int posIdPadre = (codigoIdPadre != null) ? codigoIdPadre.indexOf(Dir3caibConstantes.SEPARADOR_CODIGO_VERSION)
+				: -1;
+		arbol.setIdPadre((posIdPadre > 0) ? codigoIdPadre.substring(0, posIdPadre) : codigoIdPadre);
+
 		String raiz = arbol.getRaiz();
 		int raizPosBlanco = raiz.indexOf(" ");
-		int raizPosSeparador = raiz.indexOf(Dir3caibConstantes.SEPARADOR_CODIGO_VERSION);		
-		String raizCodigo = (raizPosSeparador > 0) ? raiz.substring(0,raizPosSeparador) : "";
+		int raizPosSeparador = raiz.indexOf(Dir3caibConstantes.SEPARADOR_CODIGO_VERSION);
+		String raizCodigo = (raizPosSeparador > 0) ? raiz.substring(0, raizPosSeparador) : "";
 		String raizNombre = (raizPosBlanco > 0) ? raiz.substring(raizPosBlanco) : raiz;
 		arbol.setRaiz(raizCodigo + raizNombre);
-		
+
 		String superior = arbol.getSuperior();
 		int superiorBlanco = superior.indexOf(" ");
 		int superiorCodigoSeparador = superior.indexOf(Dir3caibConstantes.SEPARADOR_CODIGO_VERSION);
-		String superiorCodigo = (superiorCodigoSeparador > 0) ? superior.substring(0,superiorCodigoSeparador) : "";
+		String superiorCodigo = (superiorCodigoSeparador > 0) ? superior.substring(0, superiorCodigoSeparador) : "";
 		String superiorNombre = (superiorBlanco > 0) ? superior.substring(superiorBlanco) : superior;
 		arbol.setSuperior(superiorCodigo + superiorNombre);
-		
+
 		return arbol;
-		
+
 	}
 
 	//
@@ -544,136 +558,210 @@ public class RestController {
 	 *
 	 * Date Format yyyy-MM-dd — for example, "2000-10-31".
 	 */
+	@RolesAllowed({ Dir3caibConstantes.DIR_ADMIN })
 	@RequestMapping(value = "/oficinas/obtenerOficina", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<OficinaRest> obtenerOficina(@RequestParam String codigo,
+	public @ResponseBody ResponseEntity<OficinaRest> obtenerOficina(HttpServletRequest request,
+			@RequestParam String codigo,
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaActualizacion,
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaSincronizacion,
 			@RequestParam(required = false, defaultValue = "false") boolean denominacionCooficial) throws Exception {
 
+		HttpHeaders headers = addAccessControllAllowOrigin();
+
+		String error = autenticateUsrApp(request, Arrays.asList(Dir3caibConstantes.DIR_WS));
+		if (error != null) {
+			return new ResponseEntity<OficinaRest>(null, headers, HttpStatus.UNAUTHORIZED);
+		}
+
 		OficinaRest resultado = dir3RestEjb.obtenerOficina(codigo, fechaActualizacion, fechaSincronizacion,
 				denominacionCooficial, Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
-		HttpHeaders headers = addAccessControllAllowOrigin();
 		HttpStatus status = (resultado != null) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
 		return new ResponseEntity<OficinaRest>(resultado, headers, status);
 
 	}
 
+	@RolesAllowed({ Dir3caibConstantes.DIR_WS })
 	@RequestMapping(value = "/oficinas/obtenerArbolOficinas", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<List<OficinaRest>> obtenerArbolOficinas(@RequestParam String codigo,
+	public @ResponseBody ResponseEntity<List<OficinaRest>> obtenerArbolOficinas(HttpServletRequest request,
+			@RequestParam String codigo,
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaActualizacion,
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaSincronizacion,
 			@RequestParam(required = false, defaultValue = "false") boolean denominacionCooficial) throws Exception {
 
+		HttpHeaders headers = addAccessControllAllowOrigin();
+		
+		String error = autenticateUsrApp(request, Arrays.asList(Dir3caibConstantes.DIR_WS));
+		if (error != null) {
+			return new ResponseEntity<List<OficinaRest>>(null, headers, HttpStatus.UNAUTHORIZED);
+		}
+		
 		List<OficinaRest> resultados = dir3RestEjb.obtenerArbolOficinas(codigo, fechaActualizacion, fechaSincronizacion,
 				denominacionCooficial);
 
-		HttpHeaders headers = addAccessControllAllowOrigin();
 		HttpStatus status = (resultados.size() > 0) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
 		return new ResponseEntity<List<OficinaRest>>(resultados, headers, status);
 
 	}
 
+	@RolesAllowed({ Dir3caibConstantes.DIR_WS })
 	@RequestMapping(value = "/oficinas/obtenerOficinasSIRUnidad", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<List<OficinaRest>> obtenerOficinasSIRUnidad(@RequestParam String codigo,
+	public @ResponseBody ResponseEntity<List<OficinaRest>> obtenerOficinasSIRUnidad( HttpServletRequest request,
+			@RequestParam String codigo,
 			@RequestParam(defaultValue = "false") boolean denominacionCooficial) throws Exception {
 
-		List<OficinaRest> resultados = dir3RestEjb.obtenerOficinasSIRUnidad(codigo, denominacionCooficial);
-
 		HttpHeaders headers = addAccessControllAllowOrigin();
+		String error = autenticateUsrApp(request, Arrays.asList(Dir3caibConstantes.DIR_WS));
+		if (error != null) {
+			return new ResponseEntity<List<OficinaRest>>(null, headers, HttpStatus.UNAUTHORIZED);
+		}
+		
+		List<OficinaRest> resultados = dir3RestEjb.obtenerOficinasSIRUnidad(codigo, denominacionCooficial);
+		
 		HttpStatus status = (resultados.size() > 0) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
 		return new ResponseEntity<List<OficinaRest>>(resultados, headers, status);
 
 	}
 
+	@RolesAllowed({ Dir3caibConstantes.DIR_WS })
 	@RequestMapping(value = "/sincronizacion/fechaUltimaActualizacion", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<Date> obtenerFechaUltimaActualizacion() throws Exception {
-
-		Date resultado = dir3RestEjb.obtenerFechaUltimaActualizacion();
+	public @ResponseBody ResponseEntity<Date> obtenerFechaUltimaActualizacion(HttpServletRequest request) throws Exception {
 
 		HttpHeaders headers = addAccessControllAllowOrigin();
+		String error = autenticateUsrApp(request, Arrays.asList(Dir3caibConstantes.DIR_WS));
+		if (error != null) {
+			return new ResponseEntity<Date>(null, headers, HttpStatus.UNAUTHORIZED);
+		}
+		
+		Date resultado = dir3RestEjb.obtenerFechaUltimaActualizacion();
+
+		
 		HttpStatus status = (resultado != null) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
 		return new ResponseEntity<Date>(resultado, headers, status);
 
 	}
 
+	@RolesAllowed({ Dir3caibConstantes.DIR_WS })
 	@RequestMapping(value = "/unidades/obtenerUnidad", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<UnidadRest> obtenerUnidad(@RequestParam String codigo,
+	public @ResponseBody ResponseEntity<UnidadRest> obtenerUnidad( HttpServletRequest request,
+			@RequestParam String codigo,
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaActualizacion,
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaSincronizacion,
 			@RequestParam(required = false, defaultValue = "false") boolean denominacionCooficial) throws Exception {
 
-		UnidadRest resultado = dir3RestEjb.obtenerUnidad(codigo, fechaActualizacion, fechaSincronizacion, denominacionCooficial);
-
 		HttpHeaders headers = addAccessControllAllowOrigin();
+		String error = autenticateUsrApp(request, Arrays.asList(Dir3caibConstantes.DIR_WS));
+		if (error != null) {
+			return new ResponseEntity<UnidadRest>(null, headers, HttpStatus.UNAUTHORIZED);
+		}
+		
+		UnidadRest resultado = dir3RestEjb.obtenerUnidad(codigo, fechaActualizacion, fechaSincronizacion,
+				denominacionCooficial);
+
 		HttpStatus status = (resultado != null) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
 		return new ResponseEntity<UnidadRest>(resultado, headers, status);
 
 	}
 
+	@RolesAllowed({ Dir3caibConstantes.DIR_WS })
 	@RequestMapping(value = "/unidades/buscarUnidad", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<UnidadRest> obtenerUnidad(@RequestParam String codigo,
+	public @ResponseBody ResponseEntity<UnidadRest> obtenerUnidad( HttpServletRequest request,
+			@RequestParam String codigo,
 			@RequestParam(defaultValue = "false") boolean denominacionCooficial) throws Exception {
 
+		HttpHeaders headers = addAccessControllAllowOrigin();
+		String error = autenticateUsrApp(request, Arrays.asList(Dir3caibConstantes.DIR_WS));
+		if (error != null) {
+			return new ResponseEntity<UnidadRest>(null, headers, HttpStatus.UNAUTHORIZED);
+		}
+		
 		UnidadRest resultado = dir3RestEjb.buscarUnidad(codigo, denominacionCooficial);
 
-		HttpHeaders headers = addAccessControllAllowOrigin();
 		HttpStatus status = (resultado != null) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
 		return new ResponseEntity<UnidadRest>(resultado, headers, status);
 
 	}
 
+	@RolesAllowed({ Dir3caibConstantes.DIR_WS })
 	@RequestMapping(value = "/unidades/obtenerArbolUnidades", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<List<UnidadRest>> obtenerArbolUnidades(@RequestParam String codigo,
+	public @ResponseBody ResponseEntity<List<UnidadRest>> obtenerArbolUnidades( HttpServletRequest request,
+			@RequestParam String codigo,
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaActualizacion,
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaSincronizacion,
 			@RequestParam(required = false, defaultValue = "false") boolean denominacionCooficial) throws Exception {
 
-		List<UnidadRest> resultados = dir3RestEjb.obtenerArbolUnidades(codigo, fechaActualizacion, fechaSincronizacion, denominacionCooficial);
-
 		HttpHeaders headers = addAccessControllAllowOrigin();
+		String error = autenticateUsrApp(request, Arrays.asList(Dir3caibConstantes.DIR_WS));
+		if (error != null) {
+			return new ResponseEntity<List<UnidadRest>>(null, headers, HttpStatus.UNAUTHORIZED);
+		}
+		
+		List<UnidadRest> resultados = dir3RestEjb.obtenerArbolUnidades(codigo, fechaActualizacion, fechaSincronizacion,
+				denominacionCooficial);
+
 		HttpStatus status = (resultados.size() > 0) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
 		return new ResponseEntity<List<UnidadRest>>(resultados, headers, status);
 
 	}
 
+	@RolesAllowed({ Dir3caibConstantes.DIR_WS })
 	@RequestMapping(value = "/unidades/obtenerArbolUnidadesDestinatarias", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<List<UnidadRest>> obtenerArbolUnidadesDestinatarias(@RequestParam String codigo,
+	public @ResponseBody ResponseEntity<List<UnidadRest>> obtenerArbolUnidadesDestinatarias( HttpServletRequest request,
+			@RequestParam String codigo,
 			@RequestParam(defaultValue = "false") boolean denominacionCooficial) throws Exception {
 
+		HttpHeaders headers = addAccessControllAllowOrigin();
+		String error = autenticateUsrApp(request, Arrays.asList(Dir3caibConstantes.DIR_WS));
+		if (error != null) {
+			return new ResponseEntity<List<UnidadRest>>(null, headers, HttpStatus.UNAUTHORIZED);
+		}
+		
 		List<UnidadRest> resultados = dir3RestEjb.obtenerArbolUnidadesDestinatarias(codigo, denominacionCooficial);
-
-		HttpHeaders headers = addAccessControllAllowOrigin();
+		
 		HttpStatus status = (resultados.size() > 0) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
 		return new ResponseEntity<List<UnidadRest>>(resultados, headers, status);
 
 	}
 
+	@RolesAllowed({ Dir3caibConstantes.DIR_WS })
 	@RequestMapping(value = "/unidades/obtenerHistoricosFinales", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<List<UnidadRest>> obtenerHistoricosFinales(@RequestParam String codigo,
-			@RequestParam(defaultValue = "false") boolean denominacionCooficial) throws Exception {
-
-		List<UnidadRest> resultados = dir3RestEjb.obtenerHistoricosFinales(codigo,denominacionCooficial);
+	public @ResponseBody ResponseEntity<List<UnidadRest>> obtenerHistoricosFinales( HttpServletRequest request,
+			@RequestParam String codigo, @RequestParam(defaultValue = "false") boolean denominacionCooficial) 
+					throws Exception {
 
 		HttpHeaders headers = addAccessControllAllowOrigin();
+		String error = autenticateUsrApp(request, Arrays.asList(Dir3caibConstantes.DIR_WS));
+		if (error != null) {
+			return new ResponseEntity<List<UnidadRest>>(null, headers, HttpStatus.UNAUTHORIZED);
+		}
+		
+		List<UnidadRest> resultados = dir3RestEjb.obtenerHistoricosFinales(codigo, denominacionCooficial);
+
 		HttpStatus status = (resultados.size() > 0) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
 		return new ResponseEntity<List<UnidadRest>>(resultados, headers, status);
 
 	}
 
+	@RolesAllowed({ Dir3caibConstantes.DIR_WS })
 	@RequestMapping(value = "/unidades/obtenerHistoricosFinalesSIR", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<List<UnidadRest>> obtenerHistoricosFinalesSIR(@RequestParam String codigo,
-			@RequestParam(defaultValue = "false") boolean denominacionCooficial) throws Exception {
+	public @ResponseBody ResponseEntity<List<UnidadRest>> obtenerHistoricosFinalesSIR( HttpServletRequest request,
+			@RequestParam String codigo, @RequestParam(defaultValue = "false") boolean denominacionCooficial) 
+					throws Exception {
 
+		HttpHeaders headers = addAccessControllAllowOrigin();
+		String error = autenticateUsrApp(request, Arrays.asList(Dir3caibConstantes.DIR_WS));
+		if (error != null) {
+			return new ResponseEntity<List<UnidadRest>>(null, headers, HttpStatus.UNAUTHORIZED);
+		}
+		
 		List<UnidadRest> resultados = dir3RestEjb.obtenerHistoricosFinalesSIR(codigo, denominacionCooficial);
 
-		HttpHeaders headers = addAccessControllAllowOrigin();
 		HttpStatus status = (resultados.size() > 0) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
 		return new ResponseEntity<List<UnidadRest>>(resultados, headers, status);
 
 	}
 
-	private HttpHeaders addAccessControllAllowOrigin() {
+	public HttpHeaders addAccessControllAllowOrigin() {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Access-Control-Allow-Origin", "*");
 		return headers;
@@ -692,9 +780,10 @@ public class RestController {
 		for (Unidad unidad : resultados) {
 			ObjetoDirectorio objetoDirectorio = new ObjetoDirectorio();
 			objetoDirectorio.setCodigo(unidad.getCodigoDir3());
-			objetoDirectorio.setDenominacion((denominacionCooficial && Utils.isNotEmpty(unidad.getDenomLenguaCooficial()))
-					? unidad.getDenomLenguaCooficial()
-					: unidad.getDenominacion());
+			objetoDirectorio
+					.setDenominacion((denominacionCooficial && Utils.isNotEmpty(unidad.getDenomLenguaCooficial()))
+							? unidad.getDenomLenguaCooficial()
+							: unidad.getDenominacion());
 			objetoDirectorios.add(objetoDirectorio);
 		}
 
@@ -715,9 +804,10 @@ public class RestController {
 		for (Oficina oficina : resultados) {
 			ObjetoDirectorio objetoDirectorio = new ObjetoDirectorio();
 			objetoDirectorio.setCodigo(oficina.getCodigo());
-			objetoDirectorio.setDenominacion((denominacionCooficial && Utils.isNotEmpty(oficina.getDenomLenguaCooficial()))
-					? oficina.getDenomLenguaCooficial()
-					: oficina.getDenominacion());
+			objetoDirectorio
+					.setDenominacion((denominacionCooficial && Utils.isNotEmpty(oficina.getDenomLenguaCooficial()))
+							? oficina.getDenomLenguaCooficial()
+							: oficina.getDenominacion());
 			objetoDirectorios.add(objetoDirectorio);
 		}
 

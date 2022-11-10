@@ -14,12 +14,15 @@ import javax.ws.rs.core.Response;
 
 import org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition;
 import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.enums.SecuritySchemeType;
 import org.eclipse.microprofile.openapi.annotations.info.Contact;
 import org.eclipse.microprofile.openapi.annotations.info.Info;
 import org.eclipse.microprofile.openapi.annotations.info.License;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
+import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
+import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
 
 import es.caib.dir3caib.persistence.model.json.OficinaRest;
 import es.caib.dir3caib.persistence.model.json.UnidadRest;
@@ -54,7 +57,7 @@ import org.eclipse.microprofile.openapi.annotations.servers.Server;
 		),
 		servers = { @Server(url = "/dir3caib/rest/") }
 )
-
+@SecurityScheme(type = SecuritySchemeType.HTTP, securitySchemeName = "BasicAuth", scheme = "basic")
 @Path("/")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -1470,7 +1473,7 @@ public class RestResource {
                                     mediaType = MediaType.APPLICATION_JSON,
                                     schema = @Schema(implementation = List.class)))
                     })
-	
+	@SecurityRequirement(name = "BasicAuth")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -1522,6 +1525,7 @@ public class RestResource {
                                     mediaType = MediaType.APPLICATION_JSON,
                                     schema = @Schema(implementation = OficinaRest.class)))
                     })
+	@SecurityRequirement(name = "BasicAuth")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -1590,7 +1594,7 @@ public class RestResource {
                                     mediaType = MediaType.APPLICATION_JSON,
                                     schema = @Schema(implementation = List.class)))
                     })
-	
+	@SecurityRequirement(name = "BasicAuth")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -1658,7 +1662,7 @@ public class RestResource {
                                     mediaType = MediaType.APPLICATION_JSON,
                                     schema = @Schema(implementation = List.class)))
                     })
-	
+	@SecurityRequirement(name = "BasicAuth")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -1711,6 +1715,7 @@ public class RestResource {
                                     mediaType = MediaType.APPLICATION_JSON,
                                     schema = @Schema(implementation = UnidadRest.class)))
                     })
+	@SecurityRequirement(name = "BasicAuth")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -1761,7 +1766,7 @@ public class RestResource {
 	 */
 	
 	@Operation(
-            operationId = "obtenerUnidad",
+            operationId = "buscarUnidad",
             summary = "Mètode que retorna un objecte de tipus UnidadRest amb la informació de la unitat a partir del codi indicat"
             )
 	@APIResponses(
@@ -1777,12 +1782,12 @@ public class RestResource {
                                     mediaType = MediaType.APPLICATION_JSON,
                                     schema = @Schema(implementation = UnidadRest.class)))
                     })
-	
+	@SecurityRequirement(name = "BasicAuth")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/unidades/buscarUnidad")
-	public Response obtenerUnidad(
+	public Response buscarUnidad(
 			
 			@Parameter(
 					description = "codi de la unitat",
@@ -1828,7 +1833,7 @@ public class RestResource {
                                     mediaType = MediaType.APPLICATION_JSON,
                                     schema = @Schema(implementation = UnidadRest.class)))
                     })
-	
+	@SecurityRequirement(name = "BasicAuth")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -1879,7 +1884,7 @@ public class RestResource {
                                     mediaType = MediaType.APPLICATION_JSON,
                                     schema = @Schema(implementation = UnidadRest.class)))
                     })
-	
+	@SecurityRequirement(name = "BasicAuth")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)

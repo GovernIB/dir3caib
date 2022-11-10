@@ -247,6 +247,35 @@
 			<version>1.1.2</version>
 			<scope>provided</scope>
 		</dependency>
+		
+		<!--  PluginsIB -->
+		<dependency>
+	      <groupId>org.fundaciobit.pluginsib.core</groupId>
+	      <artifactId>pluginsib-core</artifactId>
+	      <version>2.0.2</version>
+	    </dependency>
+	    
+	    <!-- JBOSS -->
+	    <dependency>
+	      <groupId>org.jboss.jbossas</groupId>
+	      <artifactId>jboss-as-tomcat</artifactId>
+	      <version>5.1.0.GA</version>
+	      <scope>provided</scope>
+	    </dependency>
+	    
+	    <dependency>
+	      <groupId>org.jboss.security</groupId>
+	      <artifactId>jbosssx</artifactId>
+	      <version>2.0.4.SP7</version>
+	      <scope>provided</scope>
+	    </dependency>
+
+	    <dependency>
+	      <groupId>org.jboss.security</groupId>
+	      <artifactId>jboss-security-spi</artifactId>
+	      <version>2.0.4.SP7</version>
+	      <scope>provided</scope>
+	    </dependency>
 
     </dependencies>
 	
