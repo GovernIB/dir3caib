@@ -28,36 +28,6 @@ drop sequence DIR_RELOFI_SEQ;
 drop sequence DIR_RELSIR_SEQ;
 
 
---
-
-create sequence DIR_CAMBTER_SEQ;
-
-create sequence DIR_CLOCA_SEQ;
-
-create sequence DIR_CODUO_SEQ;
-
-create sequence DIR_CONOF_SEQ;
-
-create sequence DIR_CONTUO_SEQ;
-
-create sequence DIR_HISOFI_SEQ;
-
-create sequence DIR_HISTUO_SEQ;
-
-create sequence DIR_NIFCIF_SEQ;
-
-create sequence DIR_SERVOFI_SEQ;
-
-create sequence DIR_SERVUO_SEQ;
-
-create sequence DIR_SINC_SEQ;
-
-create sequence DIR_RELOFI_SEQ;
-
-create sequence DIR_RELSIR_SEQ;
-
-
-
 DROP TABLE dir_unidad  CASCADE;
 DROP TABLE dir_catmotivoextincion  CASCADE;
 DROP TABLE dir_descarga  CASCADE;
