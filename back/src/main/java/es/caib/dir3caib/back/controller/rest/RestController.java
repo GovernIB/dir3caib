@@ -26,6 +26,8 @@ import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -596,8 +598,26 @@ public class RestController extends RestUtils {
 			return new ResponseEntity<List<OficinaRest>>(null, headers, HttpStatus.UNAUTHORIZED);
 		}
 		
-		List<OficinaRest> resultados = dir3RestEjb.obtenerArbolOficinas(codigo, fechaActualizacion, fechaSincronizacion,
-				denominacionCooficial);
+		List<OficinaRest> resultados = null;
+		
+		try {
+			
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			
+			if (fechaActualizacion != null)
+				log.info(" fechaActualizacion => " + fechaActualizacion.toString() + " - "
+						+ dateFormat.format(fechaActualizacion));
+
+			if (fechaSincronizacion != null)
+				log.info(" fechaSincronizacion => " + fechaSincronizacion.toString() + " - "
+						+ dateFormat.format(fechaSincronizacion));
+		
+			resultados = dir3RestEjb.obtenerArbolOficinas(codigo, fechaActualizacion, fechaSincronizacion,
+					denominacionCooficial);
+			
+		} catch(Exception e) {
+			log.error("RestController->obtenerArbolOficinas: " + e.getMessage());
+		}
 
 		HttpStatus status = (resultados.size() > 0) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
 		return new ResponseEntity<List<OficinaRest>>(resultados, headers, status);
@@ -655,8 +675,25 @@ public class RestController extends RestUtils {
 			return new ResponseEntity<UnidadRest>(null, headers, HttpStatus.UNAUTHORIZED);
 		}
 		
-		UnidadRest resultado = dir3RestEjb.obtenerUnidad(codigo, fechaActualizacion, fechaSincronizacion,
-				denominacionCooficial);
+		UnidadRest resultado = null;
+		try { 
+			
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			
+			if (fechaActualizacion != null)
+				log.info(" fechaActualizacion => " + fechaActualizacion.toString() + " - "
+						+ dateFormat.format(fechaActualizacion));
+
+			if (fechaSincronizacion != null)
+				log.info(" fechaSincronizacion => " + fechaSincronizacion.toString() + " - "
+						+ dateFormat.format(fechaSincronizacion));
+			
+			resultado = dir3RestEjb.obtenerUnidad(codigo, fechaActualizacion, fechaSincronizacion,
+					denominacionCooficial);
+			
+		} catch(Exception e) {
+			log.error("RestController -> obtenerUnidad: " + e.getMessage());
+		}
 
 		HttpStatus status = (resultado != null) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
 		return new ResponseEntity<UnidadRest>(resultado, headers, status);
@@ -696,8 +733,26 @@ public class RestController extends RestUtils {
 			return new ResponseEntity<List<UnidadRest>>(null, headers, HttpStatus.UNAUTHORIZED);
 		}
 		
-		List<UnidadRest> resultados = dir3RestEjb.obtenerArbolUnidades(codigo, fechaActualizacion, fechaSincronizacion,
+		List<UnidadRest> resultados = null;
+		
+		try{
+			
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			
+			if (fechaActualizacion != null)
+				log.info(" fechaActualizacion => " + fechaActualizacion.toString() + " - "
+						+ dateFormat.format(fechaActualizacion));
+
+			if (fechaSincronizacion != null)
+				log.info(" fechaSincronizacion => " + fechaSincronizacion.toString() + " - "
+						+ dateFormat.format(fechaSincronizacion));
+			
+			resultados = dir3RestEjb.obtenerArbolUnidades(codigo, fechaActualizacion, fechaSincronizacion,
 				denominacionCooficial);
+			
+		}catch(Exception e) {
+			log.error("RestController -> obtenerArbolUnidades: " + e.getMessage());
+		}
 
 		HttpStatus status = (resultados.size() > 0) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
 		return new ResponseEntity<List<UnidadRest>>(resultados, headers, status);
