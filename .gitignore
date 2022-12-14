@@ -1,5 +1,7 @@
 target
 .classpath
 .project
+.idea
 .settings/
 /ws/dir3caib-api/dependency-reduced-pom.xml
+*.bak

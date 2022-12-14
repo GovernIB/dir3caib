@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -487,7 +488,7 @@ public class RestController extends RestUtils {
 	@RequestMapping(value = "/catalogo/localidades/provincia/entidadGeografica", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<List<CodigoValor>> localidades(@RequestParam Long codigoProvincia,
 			String codigoEntidadGeografica, @RequestParam(defaultValue = "") String estado) throws Exception {
-		
+
 		List<CodigoValor> resultado = dir3RestEjb.getLocalidadByProvinciaEntidadGeografica(codigoProvincia,
 				codigoEntidadGeografica, estado);
 
@@ -564,8 +565,8 @@ public class RestController extends RestUtils {
 	@RequestMapping(value = "/oficinas/obtenerOficina", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<OficinaRest> obtenerOficina(HttpServletRequest request,
 			@RequestParam String codigo,
-			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaActualizacion,
-			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaSincronizacion,
+			@RequestParam(required = false) String fechaActualizacion,
+			@RequestParam(required = false) String fechaSincronizacion,
 			@RequestParam(required = false, defaultValue = "false") boolean denominacionCooficial) throws Exception {
 
 		HttpHeaders headers = addAccessControllAllowOrigin();
@@ -574,9 +575,41 @@ public class RestController extends RestUtils {
 		if (error != null) {
 			return new ResponseEntity<OficinaRest>(null, headers, HttpStatus.UNAUTHORIZED);
 		}
+		
+		if (Utils.isNotEmpty(fechaActualizacion) && !RestUtils.isValidDateFormat(fechaActualizacion)) {
+			return new ResponseEntity<OficinaRest>(null, headers, HttpStatus.BAD_REQUEST);
+		}
 
-		OficinaRest resultado = dir3RestEjb.obtenerOficina(codigo, fechaActualizacion, fechaSincronizacion,
-				denominacionCooficial, Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+		if (Utils.isNotEmpty(fechaSincronizacion) && !RestUtils.isValidDateFormat(fechaSincronizacion)) {
+			return new ResponseEntity<OficinaRest>(null, headers, HttpStatus.BAD_REQUEST);
+		}
+		
+		OficinaRest resultado = null;
+		
+		try {
+		
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			
+			Date fechaActualizacionDate = null;
+			if (fechaActualizacion != null) {
+				fechaActualizacionDate = dateFormat.parse(fechaActualizacion);
+				log.info(" fechaActualizacionDate => " + dateFormat.format(fechaActualizacionDate));
+			}
+
+			Date fechaSincronizacionDate = null;
+			if (fechaSincronizacion != null) {
+				fechaSincronizacionDate = dateFormat.parse(fechaSincronizacion);
+				log.info(" fechaSincronizacionDate => " + dateFormat.format(fechaSincronizacionDate));
+			}
+			
+			resultado = dir3RestEjb.obtenerOficina(codigo, fechaActualizacionDate, fechaSincronizacionDate,
+					denominacionCooficial, Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+			
+		} catch(Exception e) {
+			log.error("RestController->obtenerOficina: ");
+			e.printStackTrace();
+			return new ResponseEntity<OficinaRest>(null, headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 
 		HttpStatus status = (resultado != null) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
 		return new ResponseEntity<OficinaRest>(resultado, headers, status);
@@ -586,37 +619,50 @@ public class RestController extends RestUtils {
 	@RolesAllowed({ Dir3caibConstantes.DIR_WS })
 	@RequestMapping(value = "/oficinas/obtenerArbolOficinas", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<List<OficinaRest>> obtenerArbolOficinas(HttpServletRequest request,
-			@RequestParam String codigo,
-			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaActualizacion,
-			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaSincronizacion,
+			@RequestParam String codigo, @RequestParam(required = false) String fechaActualizacion,
+			@RequestParam(required = false) String fechaSincronizacion,
 			@RequestParam(required = false, defaultValue = "false") boolean denominacionCooficial) throws Exception {
 
 		HttpHeaders headers = addAccessControllAllowOrigin();
-		
+
 		String error = autenticateUsrApp(request, Arrays.asList(Dir3caibConstantes.DIR_WS));
 		if (error != null) {
 			return new ResponseEntity<List<OficinaRest>>(null, headers, HttpStatus.UNAUTHORIZED);
 		}
-		
-		List<OficinaRest> resultados = null;
-		
-		try {
-			
-			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-			
-			if (fechaActualizacion != null)
-				log.info(" fechaActualizacion => " + fechaActualizacion.toString() + " - "
-						+ dateFormat.format(fechaActualizacion));
 
-			if (fechaSincronizacion != null)
-				log.info(" fechaSincronizacion => " + fechaSincronizacion.toString() + " - "
-						+ dateFormat.format(fechaSincronizacion));
-		
-			resultados = dir3RestEjb.obtenerArbolOficinas(codigo, fechaActualizacion, fechaSincronizacion,
+		if (Utils.isNotEmpty(fechaActualizacion) && !RestUtils.isValidDateFormat(fechaActualizacion)) {
+			return new ResponseEntity<List<OficinaRest>>(null, headers, HttpStatus.BAD_REQUEST);
+		}
+
+		if (Utils.isNotEmpty(fechaSincronizacion) && !RestUtils.isValidDateFormat(fechaSincronizacion)) {
+			return new ResponseEntity<List<OficinaRest>>(null, headers, HttpStatus.BAD_REQUEST);
+		}
+
+		List<OficinaRest> resultados = null;
+
+		try {
+
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+			Date fechaActualizacionDate = null;
+			if (fechaActualizacion != null) {
+				fechaActualizacionDate = dateFormat.parse(fechaActualizacion);
+				log.info(" fechaActualizacionDate => " + dateFormat.format(fechaActualizacionDate));
+			}
+
+			Date fechaSincronizacionDate = null;
+			if (fechaSincronizacion != null) {
+				fechaSincronizacionDate = dateFormat.parse(fechaSincronizacion);
+				log.info(" fechaSincronizacionDate => " + dateFormat.format(fechaSincronizacionDate));
+			}
+
+			resultados = dir3RestEjb.obtenerArbolOficinas(codigo, fechaActualizacionDate, fechaSincronizacionDate,
 					denominacionCooficial);
-			
-		} catch(Exception e) {
-			log.error("RestController->obtenerArbolOficinas: " + e.getMessage());
+
+		} catch (Exception e) {
+			log.error("RestController->obtenerArbolOficinas: ");
+			e.printStackTrace();
+			return new ResponseEntity<List<OficinaRest>>(null, headers, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
 		HttpStatus status = (resultados.size() > 0) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
@@ -626,18 +672,18 @@ public class RestController extends RestUtils {
 
 	@RolesAllowed({ Dir3caibConstantes.DIR_WS })
 	@RequestMapping(value = "/oficinas/obtenerOficinasSIRUnidad", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<List<OficinaRest>> obtenerOficinasSIRUnidad( HttpServletRequest request,
-			@RequestParam String codigo,
-			@RequestParam(defaultValue = "false") boolean denominacionCooficial) throws Exception {
+	public @ResponseBody ResponseEntity<List<OficinaRest>> obtenerOficinasSIRUnidad(HttpServletRequest request,
+			@RequestParam String codigo, @RequestParam(defaultValue = "false") boolean denominacionCooficial)
+			throws Exception {
 
 		HttpHeaders headers = addAccessControllAllowOrigin();
 		String error = autenticateUsrApp(request, Arrays.asList(Dir3caibConstantes.DIR_WS));
 		if (error != null) {
 			return new ResponseEntity<List<OficinaRest>>(null, headers, HttpStatus.UNAUTHORIZED);
 		}
-		
+
 		List<OficinaRest> resultados = dir3RestEjb.obtenerOficinasSIRUnidad(codigo, denominacionCooficial);
-		
+
 		HttpStatus status = (resultados.size() > 0) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
 		return new ResponseEntity<List<OficinaRest>>(resultados, headers, status);
 
@@ -645,17 +691,17 @@ public class RestController extends RestUtils {
 
 	@RolesAllowed({ Dir3caibConstantes.DIR_WS })
 	@RequestMapping(value = "/sincronizacion/fechaUltimaActualizacion", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<Date> obtenerFechaUltimaActualizacion(HttpServletRequest request) throws Exception {
+	public @ResponseBody ResponseEntity<Date> obtenerFechaUltimaActualizacion(HttpServletRequest request)
+			throws Exception {
 
 		HttpHeaders headers = addAccessControllAllowOrigin();
 		String error = autenticateUsrApp(request, Arrays.asList(Dir3caibConstantes.DIR_WS));
 		if (error != null) {
 			return new ResponseEntity<Date>(null, headers, HttpStatus.UNAUTHORIZED);
 		}
-		
+
 		Date resultado = dir3RestEjb.obtenerFechaUltimaActualizacion();
 
-		
 		HttpStatus status = (resultado != null) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
 		return new ResponseEntity<Date>(resultado, headers, status);
 
@@ -663,10 +709,10 @@ public class RestController extends RestUtils {
 
 	@RolesAllowed({ Dir3caibConstantes.DIR_WS })
 	@RequestMapping(value = "/unidades/obtenerUnidad", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<UnidadRest> obtenerUnidad( HttpServletRequest request,
+	public @ResponseBody ResponseEntity<UnidadRest> obtenerUnidad(HttpServletRequest request,
 			@RequestParam String codigo,
-			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaActualizacion,
-			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaSincronizacion,
+			@RequestParam(required = false) String fechaActualizacion,
+			@RequestParam(required = false) String fechaSincronizacion,
 			@RequestParam(required = false, defaultValue = "false") boolean denominacionCooficial) throws Exception {
 
 		HttpHeaders headers = addAccessControllAllowOrigin();
@@ -675,24 +721,38 @@ public class RestController extends RestUtils {
 			return new ResponseEntity<UnidadRest>(null, headers, HttpStatus.UNAUTHORIZED);
 		}
 		
-		UnidadRest resultado = null;
-		try { 
-			
-			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-			
-			if (fechaActualizacion != null)
-				log.info(" fechaActualizacion => " + fechaActualizacion.toString() + " - "
-						+ dateFormat.format(fechaActualizacion));
+		if (Utils.isNotEmpty(fechaActualizacion) && !RestUtils.isValidDateFormat(fechaActualizacion)) {
+			return new ResponseEntity<UnidadRest>(null, headers, HttpStatus.BAD_REQUEST);
+		}
 
-			if (fechaSincronizacion != null)
-				log.info(" fechaSincronizacion => " + fechaSincronizacion.toString() + " - "
-						+ dateFormat.format(fechaSincronizacion));
-			
-			resultado = dir3RestEjb.obtenerUnidad(codigo, fechaActualizacion, fechaSincronizacion,
+		if (Utils.isNotEmpty(fechaSincronizacion) && !RestUtils.isValidDateFormat(fechaSincronizacion)) {
+			return new ResponseEntity<UnidadRest>(null, headers, HttpStatus.BAD_REQUEST);
+		}
+
+		UnidadRest resultado = null;
+		try {
+
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+			Date fechaActualizacionDate = null;
+			if (fechaActualizacion != null) {
+				fechaActualizacionDate = dateFormat.parse(fechaActualizacion);
+				log.info(" fechaActualizacionDate => " + dateFormat.format(fechaActualizacionDate));
+			}
+
+			Date fechaSincronizacionDate = null;
+			if (fechaSincronizacion != null) {
+				fechaSincronizacionDate = dateFormat.parse(fechaSincronizacion);
+				log.info(" fechaSincronizacionDate => " + dateFormat.format(fechaSincronizacionDate));
+			}
+
+			resultado = dir3RestEjb.obtenerUnidad(codigo, fechaActualizacionDate, fechaSincronizacionDate,
 					denominacionCooficial);
-			
-		} catch(Exception e) {
+
+		} catch (Exception e) {
 			log.error("RestController -> obtenerUnidad: " + e.getMessage());
+			e.printStackTrace();
+			return new ResponseEntity<UnidadRest>(null, headers, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
 		HttpStatus status = (resultado != null) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
@@ -702,16 +762,16 @@ public class RestController extends RestUtils {
 
 	@RolesAllowed({ Dir3caibConstantes.DIR_WS })
 	@RequestMapping(value = "/unidades/buscarUnidad", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<UnidadRest> obtenerUnidad( HttpServletRequest request,
-			@RequestParam String codigo,
-			@RequestParam(defaultValue = "false") boolean denominacionCooficial) throws Exception {
+	public @ResponseBody ResponseEntity<UnidadRest> obtenerUnidad(HttpServletRequest request,
+			@RequestParam String codigo, @RequestParam(defaultValue = "false") boolean denominacionCooficial)
+			throws Exception {
 
 		HttpHeaders headers = addAccessControllAllowOrigin();
 		String error = autenticateUsrApp(request, Arrays.asList(Dir3caibConstantes.DIR_WS));
 		if (error != null) {
 			return new ResponseEntity<UnidadRest>(null, headers, HttpStatus.UNAUTHORIZED);
 		}
-		
+
 		UnidadRest resultado = dir3RestEjb.buscarUnidad(codigo, denominacionCooficial);
 
 		HttpStatus status = (resultado != null) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
@@ -721,10 +781,10 @@ public class RestController extends RestUtils {
 
 	@RolesAllowed({ Dir3caibConstantes.DIR_WS })
 	@RequestMapping(value = "/unidades/obtenerArbolUnidades", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<List<UnidadRest>> obtenerArbolUnidades( HttpServletRequest request,
+	public @ResponseBody ResponseEntity<List<UnidadRest>> obtenerArbolUnidades(HttpServletRequest request,
 			@RequestParam String codigo,
-			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaActualizacion,
-			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaSincronizacion,
+			@RequestParam(required = false) String fechaActualizacion,
+			@RequestParam(required = false) String fechaSincronizacion,
 			@RequestParam(required = false, defaultValue = "false") boolean denominacionCooficial) throws Exception {
 
 		HttpHeaders headers = addAccessControllAllowOrigin();
@@ -733,25 +793,39 @@ public class RestController extends RestUtils {
 			return new ResponseEntity<List<UnidadRest>>(null, headers, HttpStatus.UNAUTHORIZED);
 		}
 		
-		List<UnidadRest> resultados = null;
-		
-		try{
-			
-			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-			
-			if (fechaActualizacion != null)
-				log.info(" fechaActualizacion => " + fechaActualizacion.toString() + " - "
-						+ dateFormat.format(fechaActualizacion));
+		if (Utils.isNotEmpty(fechaActualizacion) && !RestUtils.isValidDateFormat(fechaActualizacion)) {
+			return new ResponseEntity<List<UnidadRest>>(null, headers, HttpStatus.BAD_REQUEST);
+		}
 
-			if (fechaSincronizacion != null)
-				log.info(" fechaSincronizacion => " + fechaSincronizacion.toString() + " - "
-						+ dateFormat.format(fechaSincronizacion));
+		if (Utils.isNotEmpty(fechaSincronizacion) && !RestUtils.isValidDateFormat(fechaSincronizacion)) {
+			return new ResponseEntity<List<UnidadRest>>(null, headers, HttpStatus.BAD_REQUEST);
+		}
+
+		List<UnidadRest> resultados = null;
+
+		try {
+
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+			Date fechaActualizacionDate = null;
+			if (fechaActualizacion != null) {
+				fechaActualizacionDate = dateFormat.parse(fechaActualizacion);
+				log.info(" fechaActualizacionDate => " + dateFormat.format(fechaActualizacionDate));
+			}
+
+			Date fechaSincronizacionDate = null;
+			if (fechaSincronizacion != null) {
+				fechaSincronizacionDate = dateFormat.parse(fechaSincronizacion);
+				log.info(" fechaSincronizacionDate => " + dateFormat.format(fechaSincronizacionDate));
+			}
 			
-			resultados = dir3RestEjb.obtenerArbolUnidades(codigo, fechaActualizacion, fechaSincronizacion,
-				denominacionCooficial);
-			
-		}catch(Exception e) {
+			resultados = dir3RestEjb.obtenerArbolUnidades(codigo, fechaActualizacionDate, fechaSincronizacionDate,
+					denominacionCooficial);
+
+		} catch (Exception e) {
 			log.error("RestController -> obtenerArbolUnidades: " + e.getMessage());
+			e.printStackTrace();
+			return new ResponseEntity<List<UnidadRest>>(null, headers, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
 		HttpStatus status = (resultados.size() > 0) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
@@ -761,18 +835,18 @@ public class RestController extends RestUtils {
 
 	@RolesAllowed({ Dir3caibConstantes.DIR_WS })
 	@RequestMapping(value = "/unidades/obtenerArbolUnidadesDestinatarias", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<List<UnidadRest>> obtenerArbolUnidadesDestinatarias( HttpServletRequest request,
-			@RequestParam String codigo,
-			@RequestParam(defaultValue = "false") boolean denominacionCooficial) throws Exception {
+	public @ResponseBody ResponseEntity<List<UnidadRest>> obtenerArbolUnidadesDestinatarias(HttpServletRequest request,
+			@RequestParam String codigo, @RequestParam(defaultValue = "false") boolean denominacionCooficial)
+			throws Exception {
 
 		HttpHeaders headers = addAccessControllAllowOrigin();
 		String error = autenticateUsrApp(request, Arrays.asList(Dir3caibConstantes.DIR_WS));
 		if (error != null) {
 			return new ResponseEntity<List<UnidadRest>>(null, headers, HttpStatus.UNAUTHORIZED);
 		}
-		
+
 		List<UnidadRest> resultados = dir3RestEjb.obtenerArbolUnidadesDestinatarias(codigo, denominacionCooficial);
-		
+
 		HttpStatus status = (resultados.size() > 0) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
 		return new ResponseEntity<List<UnidadRest>>(resultados, headers, status);
 
@@ -780,16 +854,16 @@ public class RestController extends RestUtils {
 
 	@RolesAllowed({ Dir3caibConstantes.DIR_WS })
 	@RequestMapping(value = "/unidades/obtenerHistoricosFinales", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<List<UnidadRest>> obtenerHistoricosFinales( HttpServletRequest request,
-			@RequestParam String codigo, @RequestParam(defaultValue = "false") boolean denominacionCooficial) 
-					throws Exception {
+	public @ResponseBody ResponseEntity<List<UnidadRest>> obtenerHistoricosFinales(HttpServletRequest request,
+			@RequestParam String codigo, @RequestParam(defaultValue = "false") boolean denominacionCooficial)
+			throws Exception {
 
 		HttpHeaders headers = addAccessControllAllowOrigin();
 		String error = autenticateUsrApp(request, Arrays.asList(Dir3caibConstantes.DIR_WS));
 		if (error != null) {
 			return new ResponseEntity<List<UnidadRest>>(null, headers, HttpStatus.UNAUTHORIZED);
 		}
-		
+
 		List<UnidadRest> resultados = dir3RestEjb.obtenerHistoricosFinales(codigo, denominacionCooficial);
 
 		HttpStatus status = (resultados.size() > 0) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
@@ -799,16 +873,16 @@ public class RestController extends RestUtils {
 
 	@RolesAllowed({ Dir3caibConstantes.DIR_WS })
 	@RequestMapping(value = "/unidades/obtenerHistoricosFinalesSIR", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<List<UnidadRest>> obtenerHistoricosFinalesSIR( HttpServletRequest request,
-			@RequestParam String codigo, @RequestParam(defaultValue = "false") boolean denominacionCooficial) 
-					throws Exception {
+	public @ResponseBody ResponseEntity<List<UnidadRest>> obtenerHistoricosFinalesSIR(HttpServletRequest request,
+			@RequestParam String codigo, @RequestParam(defaultValue = "false") boolean denominacionCooficial)
+			throws Exception {
 
 		HttpHeaders headers = addAccessControllAllowOrigin();
 		String error = autenticateUsrApp(request, Arrays.asList(Dir3caibConstantes.DIR_WS));
 		if (error != null) {
 			return new ResponseEntity<List<UnidadRest>>(null, headers, HttpStatus.UNAUTHORIZED);
 		}
-		
+
 		List<UnidadRest> resultados = dir3RestEjb.obtenerHistoricosFinalesSIR(codigo, denominacionCooficial);
 
 		HttpStatus status = (resultados.size() > 0) ? HttpStatus.OK : HttpStatus.NO_CONTENT;

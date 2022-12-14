@@ -1406,7 +1406,7 @@ public class RestResource {
                                     schema = @Schema(implementation = List.class)))
                     })
 	
-
+	@SecurityRequirement(name = "BasicAuth")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
