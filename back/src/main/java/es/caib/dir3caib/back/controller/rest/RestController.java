@@ -12,7 +12,6 @@ import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.ObjetoDirectorio;
 import es.caib.dir3caib.utils.Utils;
 import org.apache.log4j.Logger;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,17 +24,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import es.caib.dir3caib.back.controller.rest.RestUtils;
-import es.caib.dir3caib.back.security.LoginInfo;
 
 /**
  * Created 25/03/14 13:32

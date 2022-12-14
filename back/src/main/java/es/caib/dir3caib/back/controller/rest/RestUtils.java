@@ -1,34 +1,24 @@
 package es.caib.dir3caib.back.controller.rest;
 
-import java.security.Principal;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.StringTokenizer;
-
-import javax.security.auth.login.LoginContext;
-import javax.security.auth.login.LoginException;
-import javax.servlet.http.HttpServletRequest;
-
+import es.caib.dir3caib.back.security.LoginInfo;
+import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import org.apache.log4j.Logger;
 import org.fundaciobit.pluginsib.core.utils.Base64;
+import org.jboss.web.tomcat.security.login.WebAuthentication;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 
-import org.jboss.web.tomcat.security.login.WebAuthentication;
-
-import es.caib.dir3caib.back.security.LoginInfo;
-import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
+import javax.security.auth.login.LoginContext;
+import javax.security.auth.login.LoginException;
+import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class RestUtils {
 
