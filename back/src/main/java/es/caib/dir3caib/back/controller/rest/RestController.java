@@ -588,21 +588,17 @@ public class RestController extends RestUtils {
 			Date fechaActualizacionDate = null;
 			if (fechaActualizacion != null) {
 				fechaActualizacionDate = dateFormat.parse(fechaActualizacion);
-				log.info(" fechaActualizacionDate => " + dateFormat.format(fechaActualizacionDate));
 			}
 
 			Date fechaSincronizacionDate = null;
 			if (fechaSincronizacion != null) {
 				fechaSincronizacionDate = dateFormat.parse(fechaSincronizacion);
-				log.info(" fechaSincronizacionDate => " + dateFormat.format(fechaSincronizacionDate));
 			}
 			
 			resultado = dir3RestEjb.obtenerOficina(codigo, fechaActualizacionDate, fechaSincronizacionDate,
 					denominacionCooficial, Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 			
 		} catch(Exception e) {
-			log.error("RestController->obtenerOficina: ");
-			e.printStackTrace();
 			return new ResponseEntity<OficinaRest>(null, headers, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
@@ -642,21 +638,17 @@ public class RestController extends RestUtils {
 			Date fechaActualizacionDate = null;
 			if (fechaActualizacion != null) {
 				fechaActualizacionDate = dateFormat.parse(fechaActualizacion);
-				log.info(" fechaActualizacionDate => " + dateFormat.format(fechaActualizacionDate));
 			}
 
 			Date fechaSincronizacionDate = null;
 			if (fechaSincronizacion != null) {
 				fechaSincronizacionDate = dateFormat.parse(fechaSincronizacion);
-				log.info(" fechaSincronizacionDate => " + dateFormat.format(fechaSincronizacionDate));
 			}
 
 			resultados = dir3RestEjb.obtenerArbolOficinas(codigo, fechaActualizacionDate, fechaSincronizacionDate,
 					denominacionCooficial);
 
 		} catch (Exception e) {
-			log.error("RestController->obtenerArbolOficinas: ");
-			e.printStackTrace();
 			return new ResponseEntity<List<OficinaRest>>(null, headers, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
@@ -732,21 +724,17 @@ public class RestController extends RestUtils {
 			Date fechaActualizacionDate = null;
 			if (fechaActualizacion != null) {
 				fechaActualizacionDate = dateFormat.parse(fechaActualizacion);
-				log.info(" fechaActualizacionDate => " + dateFormat.format(fechaActualizacionDate));
 			}
 
 			Date fechaSincronizacionDate = null;
 			if (fechaSincronizacion != null) {
 				fechaSincronizacionDate = dateFormat.parse(fechaSincronizacion);
-				log.info(" fechaSincronizacionDate => " + dateFormat.format(fechaSincronizacionDate));
 			}
 
 			resultado = dir3RestEjb.obtenerUnidad(codigo, fechaActualizacionDate, fechaSincronizacionDate,
 					denominacionCooficial);
 
 		} catch (Exception e) {
-			log.error("RestController -> obtenerUnidad: " + e.getMessage());
-			e.printStackTrace();
 			return new ResponseEntity<UnidadRest>(null, headers, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
@@ -805,21 +793,17 @@ public class RestController extends RestUtils {
 			Date fechaActualizacionDate = null;
 			if (fechaActualizacion != null) {
 				fechaActualizacionDate = dateFormat.parse(fechaActualizacion);
-				log.info(" fechaActualizacionDate => " + dateFormat.format(fechaActualizacionDate));
 			}
 
 			Date fechaSincronizacionDate = null;
 			if (fechaSincronizacion != null) {
 				fechaSincronizacionDate = dateFormat.parse(fechaSincronizacion);
-				log.info(" fechaSincronizacionDate => " + dateFormat.format(fechaSincronizacionDate));
 			}
 			
 			resultados = dir3RestEjb.obtenerArbolUnidades(codigo, fechaActualizacionDate, fechaSincronizacionDate,
 					denominacionCooficial);
 
 		} catch (Exception e) {
-			log.error("RestController -> obtenerArbolUnidades: " + e.getMessage());
-			e.printStackTrace();
 			return new ResponseEntity<List<UnidadRest>>(null, headers, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
