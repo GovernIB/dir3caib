@@ -17,6 +17,7 @@ public class UnidadWs extends es.caib.dir3caib.persistence.model.ws.UnidadTF {
     private String poder;
     private Date fechaUltimaActualizacion;
     private boolean comparteNif;
+    private String nifCif;
 
     public UnidadWs(){
     }
@@ -76,6 +77,14 @@ public class UnidadWs extends es.caib.dir3caib.persistence.model.ws.UnidadTF {
         this.comparteNif = comparteNif;
     }
 
+    public String getNifCif() {
+        return nifCif;
+    }
+
+    public void setNifCif(String nifCif) {
+        this.nifCif = nifCif;
+    }
+
     public void rellenar(Unidad unidad) {
         super.rellenar(unidad,false);
         this.setDenomLenguaCooficial(unidad.getDenomLenguaCooficial());
@@ -84,6 +93,7 @@ public class UnidadWs extends es.caib.dir3caib.persistence.model.ws.UnidadTF {
         this.setPoder(unidad.getPoder().getDescripcionPoder());
         this.setComparteNif(unidad.isComparteNif());
         this.setFechaUltimaActualizacion(unidad.getFechaUltimaActualizacion());
+        this.setNifCif(unidad.getNifcif());
     }
 
     public static UnidadWs generar(Unidad unidad) {

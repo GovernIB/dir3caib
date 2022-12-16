@@ -95,6 +95,7 @@
           <xs:element minOccurs="0" name="denomLenguaCooficial" type="xs:string"/>
           <xs:element minOccurs="0" name="fechaUltimaActualizacion" type="xs:dateTime"/>
           <xs:element name="idiomalengua" type="xs:int"/>
+          <xs:element minOccurs="0" name="nifCif" type="xs:string"/>
           <xs:element minOccurs="0" name="poder" type="xs:string"/>
           <xs:element minOccurs="0" name="version" type="xs:long"/>
         </xs:sequence>

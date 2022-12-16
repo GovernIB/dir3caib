@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *         &lt;element name="denomLenguaCooficial" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="fechaUltimaActualizacion" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="idiomalengua" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element name="nifCif" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="poder" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="version" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
  *       &lt;/sequence>
@@ -40,6 +41,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     "denomLenguaCooficial",
     "fechaUltimaActualizacion",
     "idiomalengua",
+    "nifCif",
     "poder",
     "version"
 })
@@ -54,6 +56,7 @@ public class UnidadWs
     @XmlSchemaType(name = "dateTime")
     protected Timestamp fechaUltimaActualizacion;
     protected int idiomalengua;
+    protected String nifCif;
     protected String poder;
     protected Long version;
 
@@ -135,6 +138,30 @@ public class UnidadWs
      */
     public void setIdiomalengua(int value) {
         this.idiomalengua = value;
+    }
+
+    /**
+     * Obtiene el valor de la propiedad nifCif.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getNifCif() {
+        return nifCif;
+    }
+
+    /**
+     * Define el valor de la propiedad nifCif.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setNifCif(String value) {
+        this.nifCif = value;
     }
 
     /**

@@ -42,6 +42,7 @@ public class UnidadRest {
     private String numVia;
     private Long codigoTipoVia;
     private String codPostal;
+    private String nifCif;
     private Set<String> historicosUO;
     private List<ContactoRest> contactos;
 
@@ -233,6 +234,14 @@ public class UnidadRest {
         this.codPostal = codPostal;
     }
 
+    public String getNifCif() {
+        return nifCif;
+    }
+
+    public void setNifCif(String nifCif) {
+        this.nifCif = nifCif;
+    }
+
     public Set<String> getHistoricosUO() {
         return historicosUO;
     }
@@ -313,6 +322,7 @@ public class UnidadRest {
             this.setCodigoTipoVia(null);
         }
         this.setCodPostal(unidad.getCodPostal());
+        this.setNifCif(unidad.getNifcif());
         // Enviamos los historicos a regweb para la gestión del organigrama
         Set<String> sHistoricosUO = new HashSet<String>();
        for (HistoricoUO historico : unidad.getHistoricosAnterior()) {
@@ -449,6 +459,7 @@ public static UnidadRest toUnidadRest ( UnidadWs unidad, boolean codigoDir3, boo
     	    unidadRest.setCodigoTipoVia((unidad.getCodigoTipoVia() != null) ? unidad.getCodigoTipoVia() : null);
     	    unidadRest.setCodPostal(unidad.getCodPostal());
     	    unidadRest.setHistoricosUO(unidad.getHistoricosUO());
+            unidadRest.setNifCif(unidad.getNifCif());
     	    
     	    List<ContactoRest> contactosRest = new ArrayList<ContactoRest>();
     	    if (unidad.getContactos() != null)

@@ -26,12 +26,13 @@ public class TestUnidadesV2Ws extends Dir3CaibTestUtils{
             Dir3CaibObtenerUnidadesWs apiUnidades = getObtenerUnidadesApi(true);
 
             Long start = System.currentTimeMillis();
-            UnidadWs unidadWs = apiUnidades.obtenerUnidadV2("A04019281", null, null);
+            UnidadWs unidadWs = apiUnidades.obtenerUnidadV2("A04003003", null, null);
             Long end = System.currentTimeMillis();
 
             System.out.println("TIEMPO CARGA UNIDAD: " + Utils.formatElapsedTime(end - start));
             System.out.println("DESTINATRIAS " + unidadWs.getDenominacion());
             System.out.println("DESTINATRIAS " + unidadWs.getDenomLenguaCooficial());
+            System.out.println("NIFCIF " + unidadWs.getNifCif());
 
         } catch (Exception e) {
             e.printStackTrace();
