@@ -278,11 +278,10 @@ public class OficinaRest implements Serializable {
             this.setOrganizativasOfiRest(null);
         }
 
-        //TODO ADAPTAR
         /*if(oficina.getServicios() != null){
             List<Long> serviciosIds= new ArrayList<Long>();
-            for(CatServicio servicio: oficina.getServicios()){
-                serviciosIds.add(servicio.getCodServicio());
+            for(ServicioOfi servicio: oficina.getServicios()){
+                serviciosIds.add(servicio.getServicio().getCodServicio());
             }
             this.setServicios(serviciosIds);
         } else {
@@ -296,12 +295,27 @@ public class OficinaRest implements Serializable {
         }
     }
 
+    public void rellenarLigero(Oficina oficina, boolean denominacionOficial){
+        this.setCodigo(oficina.getCodigo());
+        this.setDenominacion((denominacionOficial && Utils.isNotEmpty(oficina.getDenomLenguaCooficial())) ? oficina.getDenomLenguaCooficial() : oficina.getDenominacion());
+        this.setCodUoResponsable(oficina.getCodUoResponsable().getCodigo());
+    }
+
 
     public static OficinaRest generar(Oficina oficina, boolean denominacionOficial){
         OficinaRest oficinaRest = null;
         if(oficina!=null){
         	oficinaRest = new OficinaRest();
         	oficinaRest.rellenar(oficina,denominacionOficial);
+        }
+        return oficinaRest;
+    }
+
+    public static OficinaRest generarLigero(Oficina oficina, boolean denominacionOficial){
+        OficinaRest oficinaRest = null;
+        if(oficina!=null){
+            oficinaRest = new OficinaRest();
+            oficinaRest.rellenarLigero(oficina,denominacionOficial);
         }
         return oficinaRest;
     }

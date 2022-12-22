@@ -676,6 +676,27 @@ public class RestController extends RestUtils {
 
 	}
 
+
+	/**
+	 * Obtiene las {@link es.caib.dir3caib.persistence.model.Oficina} del organismo
+	 * indicado
+	 *
+	 */
+	@RolesAllowed({ Dir3caibConstantes.DIR_WS })
+	@RequestMapping(value = "/oficinas/obtenerArbolOficinasSir", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<List<OficinaRest>> obtenerArbolOficinasSir(
+			@RequestParam String codigo, @RequestParam boolean denominacionCooficial) throws Exception {
+
+		List<OficinaRest> resultado = dir3RestEjb.obtenerArbolOficinasSir(codigo, denominacionCooficial);
+
+		HttpHeaders headers = addAccessControllAllowOrigin();
+		// Si hay resultados fijamos el HttpStatus a OK, sino indicamos que no hay
+		// resultados.
+		HttpStatus status = (resultado.size() > 0) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
+		return new ResponseEntity<List<OficinaRest>>(resultado, headers, status);
+
+	}
+
 	@RolesAllowed({ Dir3caibConstantes.DIR_WS })
 	@RequestMapping(value = "/sincronizacion/fechaUltimaActualizacion", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<Date> obtenerFechaUltimaActualizacion(HttpServletRequest request)
@@ -956,7 +977,9 @@ public class RestController extends RestUtils {
 			oficinaJson.setEstado(ofi.getEstado().getDescripcionEstadoEntidad());
 			oficinaJson.setNivelAdministracion(ofi.getNivelAdministracion().getDescripcionNivelAdministracion());
 
-			oficinaJson.setTipoOficina(ofi.getTipoOficina().getDescripcionJerarquiaOficina()); // CatJerarquiaOficina
+			if(ofi.getTipoOficina()!=null) {
+				oficinaJson.setTipoOficina(ofi.getTipoOficina().getDescripcionJerarquiaOficina()); // CatJerarquiaOficina
+			}
 			oficinaJson.setUnidadResponsable(ofi.getCodUoResponsable().getDenominacion());// Unidad
 			if (ofi.getCodOfiResponsable() != null) {
 				oficinaJson.setOficinaResponsable(ofi.getCodOfiResponsable().getDenominacion()); // Oficina

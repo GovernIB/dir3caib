@@ -41,6 +41,8 @@ public interface Dir3RestLocal  {
   
   List<Oficina> obtenerOficinasOrganismo(String codigo, String fechaActualizacion, String estado) throws Exception;
 
+
+
   List<Oficina> obtenerArbolOficinasOpenData(String codigo, String estado) throws Exception;
   
   List<Oficina> getOficinasBalearesOpenData(String estado) throws Exception;
@@ -102,6 +104,8 @@ public interface Dir3RestLocal  {
   List<OficinaRest> obtenerArbolOficinas(String codigo, Date fechaActualizacion, Date fechaSincronizacion, boolean denominacionOficial) throws Exception;
 
   List<OficinaRest> obtenerOficinasSIRUnidad(String codigoUnidad, boolean denominacionOficial) throws Exception;
+
+  List<OficinaRest> obtenerArbolOficinasSir(String codigo, boolean denominacionCooficial) throws Exception;
 
   Date obtenerFechaUltimaActualizacion() throws Exception;
   

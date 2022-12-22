@@ -1501,6 +1501,56 @@ public class RestResource {
 		return Response.status(Response.Status.NO_CONTENT).build();
 
 	}
+
+
+	/*
+	 * Retorna l'arbre d'oficines sir de tot l'arbre de la unitat indicada pel codi
+	 */
+	@Operation(
+			operationId = "obtenerArbolOficinasSir",
+			summary = "Servei que permet obtenir totes les oficines sir del organisme indicat per paràmetre i dels seus organismes fills"
+	)
+	@APIResponses(
+			value = {
+					@APIResponse(
+							responseCode = "204",
+							description = "Sense contingut",
+							content = @Content(mediaType = MediaType.APPLICATION_JSON)),
+					@APIResponse(
+							responseCode = "200",
+							description = "Llista d'objectes OficinaRest en format JSON",
+							content = @Content(
+									mediaType = MediaType.APPLICATION_JSON,
+									schema = @Schema(implementation = List.class)))
+			})
+	@SecurityRequirement(name = "BasicAuth")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/oficinas/obtenerArbolOficinasSir")
+	public Response obtenerArbolOficinasSir(
+
+			@Parameter(
+					description = "codi de la unitat que volem obtenir les seves oficines",
+					required = true,
+					example = "L01502973",
+					schema = @Schema(implementation = String.class)
+			)
+			@QueryParam("codigo") String codigo,
+			@Parameter(
+					description = "Indica si volem obtenir la denominació cooficial",
+					required = false,
+					example = "true",
+					schema = @Schema(implementation = boolean.class)
+			)
+			@QueryParam("denominacionCooficial") boolean denominacionCooficial
+
+	){
+
+
+		return Response.status(Response.Status.NO_CONTENT).build();
+
+	}
 		
 	
 	/*

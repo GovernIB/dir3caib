@@ -562,6 +562,43 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
 	@Override
 	@SuppressWarnings(value = "unchecked")
+	public List<Oficina> obtenerOficinasSIRArbol(String codigoUnidad, boolean denominacionCooficial) throws Exception {
+		return obtenerOficinasSIRArbol(codigoUnidad,true, denominacionCooficial);
+	}
+
+	@Override
+	@SuppressWarnings(value = "unchecked")
+	public List<Oficina> obtenerOficinasSIRArbol(String codigoUnidad, boolean isCodigoDir3, boolean denominacionCooficial) throws Exception {
+
+		String variableCampo = (isCodigoDir3) ? "codigoDir3" : "codigo";
+
+		Query q = em.createQuery(
+				"select relacionSirOfi.oficina.codigo, relacionSirOfi.oficina.denominacion, relacionSirOfi.oficina.denomLenguaCooficial, relacionSirOfi.oficina.codUoResponsable.codigoDir3 from RelacionSirOfi as relacionSirOfi " +
+						" left outer join relacionSirOfi.oficina.servicios as servicios " +
+						"  where relacionSirOfi.unidad.codUnidadRaiz." + variableCampo + " =:codigoUnidad "
+						+ "and servicios.servicio=:SERVICIO_SIR_RECEPCION "
+						+ "and relacionSirOfi.estado.codigoEstadoEntidad= :vigente ");
+
+		q.setParameter("codigoUnidad", codigoUnidad);
+		q.setParameter("SERVICIO_SIR_RECEPCION", servicioEjb.findById(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
+		q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+
+		List<Object[]> result = q.getResultList();
+		List<Oficina> oficinas = new ArrayList<Oficina>();
+
+		for (Object[] object : result) {
+			String denominacion = (denominacionCooficial && Utils.isNotEmpty((String) object[2])) ? (String) object[2] : (String) object[1];
+			Oficina oficina = new Oficina((String) object[0], denominacion, (String) object[3],null);
+			oficinas.add(oficina);
+		}
+
+		return oficinas;
+
+	}
+
+
+	@Override
+	@SuppressWarnings(value = "unchecked")
 
 	public Boolean tieneOficinasSIR(String codigoUnidad) throws Exception {
 

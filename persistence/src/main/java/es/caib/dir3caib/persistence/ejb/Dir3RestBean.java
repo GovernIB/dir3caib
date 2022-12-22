@@ -902,25 +902,6 @@ public class Dir3RestBean implements Dir3RestLocal {
 		return NodoUtils.getNodoListUnidadRaizUnidadSuperior(q.getResultList(), denominacionCooficial, true);
 	}
 
-	/*@SuppressWarnings(value = "unchecked")
-	@Override
-	public List<Oficina> obtenerOficinasSIRUnidad(String codigoUnidad) throws Exception {
-
-		Query q = em.createQuery(
-				"select relacionSirOfi.oficina from RelacionSirOfi as relacionSirOfi " +
-						" left outer join relacionSirOfi.oficina.servicios as servicios " +
-						"  where relacionSirOfi.unidad.codigo =:codigoUnidad "
-						+ "and (servicios.servicio=:SERVICIO_SIR_RECEPCION) "
-						+ "and relacionSirOfi.estado.codigoEstadoEntidad= :vigente ");
-
-		q.setParameter("codigoUnidad", codigoUnidad);
-		q.setParameter("SERVICIO_SIR_RECEPCION", servicioEjb.findById(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
-		q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-
-		return q.getResultList() != null ? q.getResultList() : new ArrayList<Oficina>();
-
-	}*/
-
 	/**
 	 * Método que obtiene las localidades en funcion de una provincia y de una
 	 * entidad geografica
@@ -1313,6 +1294,25 @@ public class Dir3RestBean implements Dir3RestLocal {
 
 		return oficinasRest;
 
+	}
+
+	/**
+	 * Obtiene todas las {@link es.caib.dir3caib.persistence.model.Oficina}  SIR cuyo
+	 * organismo responsable es el indicado por código(del padres e hijos).
+	 *
+	 * @param codigo Código del organismo
+	 */
+	@Override
+	public List<OficinaRest> obtenerArbolOficinasSir(String codigo, boolean denominacionCooficial) throws Exception {
+		List<Oficina> oficinas = oficinaEjb.obtenerOficinasSIRArbol(codigo,denominacionCooficial);
+
+		List<OficinaRest> oficinasRest = new ArrayList<OficinaRest>();
+
+		for (Oficina oficina : oficinas) {
+			oficinasRest.add(OficinaRest.generarLigero(oficina, denominacionCooficial));
+		}
+
+		return oficinasRest;
 	}
 
 	@Override

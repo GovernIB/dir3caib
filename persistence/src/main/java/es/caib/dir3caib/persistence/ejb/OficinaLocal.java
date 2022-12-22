@@ -132,6 +132,9 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
     List<Oficina> obtenerOficinasOrganismoByEstado(String codigo, Date fechaActualizacion,
             Date fechaSincronizacion, String estado) throws Exception;
 
+
+
+
     /**
      * Obtiene el listado de oficinas Sir de una Unidad
      * para ello consulta la relacionSirOfi y además que tengan los servicios SIR y SIR_RECEPCION y que sean vigentes.
@@ -143,6 +146,20 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
     List<Oficina> obtenerOficinasSIRUnidad(String codigo) throws Exception;
     
     List<Oficina> obtenerOficinasSIRUnidad(String codigo, boolean isCodigoDir3) throws Exception;
+
+
+    /**
+     * Obtiene el listado de oficinas Sir del organigrama del codigo indicado
+     * para ello consulta la relacionSirOfi y además que tengan los servicios SIR y SIR_RECEPCION y que sean vigentes.
+     *
+     * @param codigoUnidad
+     * @param denominacionCooficial indica si quiere traer la denominacioncooficial
+     *          Código de la unidad
+     *
+     */
+    List<Oficina> obtenerOficinasSIRArbol(String codigoUnidad, boolean denominacionCooficial) throws Exception;
+
+    List<Oficina> obtenerOficinasSIRArbol(String codigoUnidad, boolean isCodigoDir3, boolean denominacionCooficial) throws Exception;
 
    /**
     * Nos dice si una unidad tiene oficinas SIR
