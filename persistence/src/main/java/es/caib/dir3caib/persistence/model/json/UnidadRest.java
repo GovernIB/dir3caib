@@ -20,6 +20,7 @@ import java.util.*;
 public class UnidadRest {
 
     private String codigo;
+    private Long version;
     private String denominacion;
     private String codigoEstadoEntidad;
     private Long nivelJerarquico;
@@ -56,6 +57,14 @@ public class UnidadRest {
 
     public void setCodigo(String codigo) {
         this.codigo = codigo;
+    }
+    
+    public Long getVersion() {
+    	return version;
+    }
+    
+    public void setVersion(Long version) {
+    	this.version = version;
     }
 
     public String getDenominacion() {
@@ -272,6 +281,7 @@ public class UnidadRest {
 
     public void rellenar(Unidad unidad) {
         this.setCodigo(unidad.getCodigo());
+        this.setVersion(unidad.getVersion());
         this.setCodUnidadRaiz(unidad.getCodUnidadRaiz().getCodigo());
         this.setCodUnidadSuperior(unidad.getCodUnidadSuperior().getCodigo());
         this.setCodigoEstadoEntidad(unidad.getEstado().getCodigoEstadoEntidad());
@@ -340,6 +350,7 @@ public class UnidadRest {
 
     public void rellenarLigero(Unidad unidad) {
         this.setCodigo(unidad.getCodigo());
+        this.setVersion(unidad.getVersion());
         this.setDenominacion(unidad.getDenominacion());
     }
 
@@ -359,6 +370,7 @@ public class UnidadRest {
         if (unidad != null) {
             unidadTF = new UnidadRest();
             unidadTF.setCodigo(unidad.getCodigo());
+            unidadTF.setVersion(unidad.getVersion());
             unidadTF.setDenominacion(unidad.getDenominacion());
             unidadTF.setCodUnidadRaiz(unidad.getCodUnidadRaiz().getCodigo());
             unidadTF.setCodUnidadSuperior(unidad.getCodUnidadSuperior().getCodigo());
@@ -408,67 +420,77 @@ public class UnidadRest {
     	return unidadRest;
     }
     
-public static UnidadRest toUnidadRest ( UnidadWs unidad, boolean codigoDir3, boolean denominacionCooficial) {
-    	
-    	UnidadRest unidadRest = null;
-    	int posSeparador = 0;
-    	
-    	if (unidad != null) {
-    		unidadRest = new UnidadRest();
-    		
-    		String codigo = unidad.getCodigo();
-    		if(codigoDir3 && codigo != null) {
-    			posSeparador = codigo.indexOf(Dir3caibConstantes.SEPARADOR_CODIGO_VERSION);
-    			codigo = (posSeparador > 0) ? codigo.substring(0, posSeparador) : codigo;
-    		}
-    		unidadRest.setCodigo(codigo);
-    		
-    		unidadRest.setDenominacion((denominacionCooficial && Utils.isNotEmpty(unidad.getDenomLenguaCooficial())) ? unidad.getDenomLenguaCooficial() : unidad.getDenominacion());
-    		unidadRest.setCodigoEstadoEntidad(unidad.getCodigoEstadoEntidad());
-    		unidadRest.setNivelJerarquico(unidad.getNivelJerarquico());
-    		
-    		String codigoUnidadSuperior = unidad.getCodUnidadSuperior();
-    		if(codigoDir3 && codigoUnidadSuperior != null) {
-    			posSeparador = codigoUnidadSuperior.indexOf(Dir3caibConstantes.SEPARADOR_CODIGO_VERSION);
-    			codigoUnidadSuperior = (posSeparador > 0) ? codigoUnidadSuperior.substring(0, posSeparador) : codigoUnidadSuperior;
-    		}
-    		unidadRest.setCodUnidadSuperior(codigoUnidadSuperior);
-    		
-    		String codigoUnidadRaiz = unidad.getCodUnidadRaiz();
-    		if(codigoDir3 && codigoUnidadRaiz != null) {
-    			posSeparador = codigoUnidadRaiz.indexOf(Dir3caibConstantes.SEPARADOR_CODIGO_VERSION);
-    			codigoUnidadRaiz = (posSeparador > 0) ? codigoUnidadRaiz.substring(0, posSeparador) : codigoUnidadRaiz;
-    		}
-    	    unidadRest.setCodUnidadRaiz(codigoUnidadRaiz);
-    	    
-    	    unidadRest.setEsEdp(unidad.isEsEdp());
-    	    unidadRest.setCodEdpPrincipal((Utils.isNotEmpty(unidad.getCodEdpPrincipal())) ? unidad.getCodEdpPrincipal() : null);
-    	    unidadRest.setCompetencias(unidad.getCompetencias());
-    	    unidadRest.setFechaAltaOficial(unidad.getFechaAltaOficial());
-    	    unidadRest.setFechaBajaOficial(unidad.getFechaBajaOficial());
-    	    unidadRest.setFechaExtincion(unidad.getFechaExtincion());
-    	    unidadRest.setFechaAnulacion(unidad.getFechaAnulacion());
-    	    unidadRest.setNivelAdministracion(unidad.getNivelAdministracion());
-    	    unidadRest.setCodigoAmbitoTerritorial((Utils.isNotEmpty(unidad.getCodigoAmbitoTerritorial())) ? unidad.getCodigoAmbitoTerritorial() : null);
-    	    unidadRest.setCodigoAmbPais((unidad.getCodigoAmbPais() != null) ? unidad.getCodigoAmbPais() : null);
-    	    unidadRest.setCodAmbProvincia((unidad.getCodAmbProvincia() != null) ? unidad.getCodAmbProvincia() : null);
-    	    unidadRest.setCodAmbComunidad((unidad.getCodAmbComunidad() != null) ? unidad.getCodAmbComunidad() : null);
-    	    unidadRest.setDescripcionLocalidad((Utils.isNotEmpty(unidad.getDescripcionLocalidad())) ? unidad.getDescripcionLocalidad() : null);
-    	    unidadRest.setNombreVia(unidad.getNombreVia());
-    	    unidadRest.setNumVia(unidad.getNumVia());
-    	    unidadRest.setCodigoTipoVia((unidad.getCodigoTipoVia() != null) ? unidad.getCodigoTipoVia() : null);
-    	    unidadRest.setCodPostal(unidad.getCodPostal());
-    	    unidadRest.setHistoricosUO(unidad.getHistoricosUO());
-            unidadRest.setNifCif(unidad.getNifCif());
-    	    
-    	    List<ContactoRest> contactosRest = new ArrayList<ContactoRest>();
-    	    if (unidad.getContactos() != null)
-    	    	for (ContactoTF contacto : unidad.getContactos()) {
-    	    		contactosRest.add(ContactoRest.generar(contacto));
-    	    	}
-    	    unidadRest.setContactos(contactosRest);
-    		
-    	}
-    	return unidadRest;
-    }
+    
+	public static UnidadRest toUnidadRest(UnidadWs unidad, boolean codigoDir3, boolean denominacionCooficial) {
+
+		UnidadRest unidadRest = null;
+		int posSeparador = 0;
+
+		if (unidad != null) {
+			unidadRest = new UnidadRest();
+
+			String codigo = unidad.getCodigo();
+			if (codigoDir3 && codigo != null) {
+				posSeparador = codigo.indexOf(Dir3caibConstantes.SEPARADOR_CODIGO_VERSION);
+				codigo = (posSeparador > 0) ? codigo.substring(0, posSeparador) : codigo;
+			}
+			unidadRest.setCodigo(codigo);
+			
+			unidadRest.setVersion(unidad.getVersion());
+
+			unidadRest.setDenominacion((denominacionCooficial && Utils.isNotEmpty(unidad.getDenomLenguaCooficial()))
+					? unidad.getDenomLenguaCooficial()
+					: unidad.getDenominacion());
+			unidadRest.setCodigoEstadoEntidad(unidad.getCodigoEstadoEntidad());
+			unidadRest.setNivelJerarquico(unidad.getNivelJerarquico());
+
+			String codigoUnidadSuperior = unidad.getCodUnidadSuperior();
+			if (codigoDir3 && codigoUnidadSuperior != null) {
+				posSeparador = codigoUnidadSuperior.indexOf(Dir3caibConstantes.SEPARADOR_CODIGO_VERSION);
+				codigoUnidadSuperior = (posSeparador > 0) ? codigoUnidadSuperior.substring(0, posSeparador)
+						: codigoUnidadSuperior;
+			}
+			unidadRest.setCodUnidadSuperior(codigoUnidadSuperior);
+
+			String codigoUnidadRaiz = unidad.getCodUnidadRaiz();
+			if (codigoDir3 && codigoUnidadRaiz != null) {
+				posSeparador = codigoUnidadRaiz.indexOf(Dir3caibConstantes.SEPARADOR_CODIGO_VERSION);
+				codigoUnidadRaiz = (posSeparador > 0) ? codigoUnidadRaiz.substring(0, posSeparador) : codigoUnidadRaiz;
+			}
+			unidadRest.setCodUnidadRaiz(codigoUnidadRaiz);
+
+			unidadRest.setEsEdp(unidad.isEsEdp());
+			unidadRest.setCodEdpPrincipal(
+					(Utils.isNotEmpty(unidad.getCodEdpPrincipal())) ? unidad.getCodEdpPrincipal() : null);
+			unidadRest.setCompetencias(unidad.getCompetencias());
+			unidadRest.setFechaAltaOficial(unidad.getFechaAltaOficial());
+			unidadRest.setFechaBajaOficial(unidad.getFechaBajaOficial());
+			unidadRest.setFechaExtincion(unidad.getFechaExtincion());
+			unidadRest.setFechaAnulacion(unidad.getFechaAnulacion());
+			unidadRest.setNivelAdministracion(unidad.getNivelAdministracion());
+			unidadRest.setCodigoAmbitoTerritorial(
+					(Utils.isNotEmpty(unidad.getCodigoAmbitoTerritorial())) ? unidad.getCodigoAmbitoTerritorial()
+							: null);
+			unidadRest.setCodigoAmbPais((unidad.getCodigoAmbPais() != null) ? unidad.getCodigoAmbPais() : null);
+			unidadRest.setCodAmbProvincia((unidad.getCodAmbProvincia() != null) ? unidad.getCodAmbProvincia() : null);
+			unidadRest.setCodAmbComunidad((unidad.getCodAmbComunidad() != null) ? unidad.getCodAmbComunidad() : null);
+			unidadRest.setDescripcionLocalidad(
+					(Utils.isNotEmpty(unidad.getDescripcionLocalidad())) ? unidad.getDescripcionLocalidad() : null);
+			unidadRest.setNombreVia(unidad.getNombreVia());
+			unidadRest.setNumVia(unidad.getNumVia());
+			unidadRest.setCodigoTipoVia((unidad.getCodigoTipoVia() != null) ? unidad.getCodigoTipoVia() : null);
+			unidadRest.setCodPostal(unidad.getCodPostal());
+			unidadRest.setHistoricosUO(unidad.getHistoricosUO());
+			unidadRest.setNifCif(unidad.getNifCif());
+
+			List<ContactoRest> contactosRest = new ArrayList<ContactoRest>();
+			if (unidad.getContactos() != null)
+				for (ContactoTF contacto : unidad.getContactos()) {
+					contactosRest.add(ContactoRest.generar(contacto));
+				}
+			unidadRest.setContactos(contactosRest);
+
+		}
+		return unidadRest;
+	}
 }
