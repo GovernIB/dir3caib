@@ -21,7 +21,7 @@ import java.util.List;
  */
 @Stateless(name = "CatJerarquiaOficinaEJB")
 @SecurityDomain("seycon")
-@RolesAllowed({Dir3caibConstantes.DIR_ADMIN, Dir3caibConstantes.DIR_WS})
+@RolesAllowed({Dir3caibConstantes.DIR_ADMIN, Dir3caibConstantes.ROL_TOTHOM, Dir3caibConstantes.DIR_WS})
 public class CatJerarquiaOficinaBean extends BaseEjbJPA<CatJerarquiaOficina, Long> implements CatJerarquiaOficinaLocal{
 
     protected final Logger log = Logger.getLogger(getClass());

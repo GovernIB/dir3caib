@@ -22,7 +22,7 @@ import java.util.List;
  */
 @Stateless(name = "CatTipoCodigoFuenteExternaEJB")
 @SecurityDomain("seycon")
-@RolesAllowed({Dir3caibConstantes.DIR_ADMIN, Dir3caibConstantes.DIR_WS})
+@RolesAllowed({Dir3caibConstantes.DIR_ADMIN, Dir3caibConstantes.ROL_TOTHOM, Dir3caibConstantes.DIR_WS})
 public class CatTipoCodigoFuenteExternaBean extends BaseEjbJPA<CatTipoCodigoFuenteExterna, Long> implements CatTipoCodigoFuenteExternaLocal{
 
     protected final Logger log = Logger.getLogger(getClass());

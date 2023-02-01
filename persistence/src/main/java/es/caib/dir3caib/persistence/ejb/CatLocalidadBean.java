@@ -1,6 +1,7 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.CatLocalidad;
+import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.utils.Utils;
 
 import org.apache.log4j.Logger;
@@ -22,7 +23,7 @@ import java.util.List;
  */
 @Stateless(name = "CatLocalidadEJB")
 @SecurityDomain("seycon")
-@RolesAllowed({"DIR_ADMIN", "DIR_WS"})
+@RolesAllowed({Dir3caibConstantes.DIR_ADMIN, Dir3caibConstantes.ROL_TOTHOM, Dir3caibConstantes.DIR_WS})
 public class CatLocalidadBean extends BaseEjbJPA<CatLocalidad, Long> implements CatLocalidadLocal{
 
     protected final Logger log = Logger.getLogger(getClass());

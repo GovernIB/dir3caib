@@ -21,7 +21,7 @@ import java.util.List;
  */
 @Stateless(name = "CatPoderEJB")
 @SecurityDomain("seycon")
-@RolesAllowed({Dir3caibConstantes.DIR_ADMIN, Dir3caibConstantes.DIR_WS})
+@RolesAllowed({Dir3caibConstantes.DIR_ADMIN, Dir3caibConstantes.ROL_TOTHOM, Dir3caibConstantes.DIR_WS})
 public class CatPoderBean extends BaseEjbJPA<CatPoder, Long> implements CatPoderLocal{
 
     protected final Logger log = Logger.getLogger(getClass());

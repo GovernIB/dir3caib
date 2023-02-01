@@ -1,6 +1,7 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.CatMotivoExtincion;
+import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.SecurityDomain;
 
@@ -19,7 +20,7 @@ import java.util.List;
  */
 @Stateless(name = "CatMotivoExtincionEJB")
 @SecurityDomain("seycon")
-@RolesAllowed("DIR_ADMIN")
+@RolesAllowed({Dir3caibConstantes.DIR_ADMIN, Dir3caibConstantes.ROL_TOTHOM, Dir3caibConstantes.DIR_WS})
 public class CatMotivoExtincionBean extends BaseEjbJPA<CatMotivoExtincion, String> implements CatMotivoExtincionLocal{
 
     protected final Logger log = Logger.getLogger(getClass());
