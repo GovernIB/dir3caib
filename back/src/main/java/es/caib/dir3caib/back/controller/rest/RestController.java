@@ -64,7 +64,7 @@ public class RestController extends RestUtils {
 	@RequestMapping(value = "/unidad/unidadesDenominacion", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<List<ObjetoDirectorio>> unidadesPorDenominacion(
 			@RequestParam String denominacion,
-			@RequestParam(required = false, defaultValue = "false") boolean cooficial,
+			@RequestParam(required = false, defaultValue = "true") boolean cooficial,
 			@RequestParam(required = false, defaultValue = "") String estado) throws Exception {
 
 		// Transformamos el campo denominacion de ISO a UTF-8 para realizar las
@@ -88,7 +88,7 @@ public class RestController extends RestUtils {
 	@RequestMapping(value = "/oficina/oficinasDenominacion", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<List<ObjetoDirectorio>> oficinasPorDenominacion(
 			@RequestParam String denominacion,
-			@RequestParam(required = false, defaultValue = "false") boolean cooficial,
+			@RequestParam(required = false, defaultValue = "true") boolean cooficial,
 			@RequestParam(required = false, defaultValue = "") String estado) throws Exception {
 
 		// Transformamos el campo denominacion de ISO a UTF-8 para realizar las
@@ -111,7 +111,7 @@ public class RestController extends RestUtils {
 	 */
 	@RequestMapping(value = "/unidad/arbolUnidades", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<List<ObjetoDirectorio>> arbolUnidades(@RequestParam String codigo,
-			@RequestParam(required = false, defaultValue = "false") boolean cooficial,
+			@RequestParam(required = false, defaultValue = "true") boolean cooficial,
 			@RequestParam(required = false, defaultValue = "") String estado) throws Exception {
 
 		List<Unidad> resultado = dir3RestEjb.obtenerArbolUnidades(codigo, null, estado);
@@ -131,7 +131,7 @@ public class RestController extends RestUtils {
 	 */
 	@RequestMapping(value = "/oficina/oficinasOrganismo", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<List<ObjetoDirectorio>> oficinasOrganismo(@RequestParam String codigo,
-			@RequestParam(required = false, defaultValue = "false") boolean cooficial,
+			@RequestParam(required = false, defaultValue = "true") boolean cooficial,
 			@RequestParam(required = false, defaultValue = "") String estado) throws Exception {
 
 		List<Oficina> resultado = dir3RestEjb.obtenerOficinasOrganismo(codigo, null, estado);
@@ -191,12 +191,14 @@ public class RestController extends RestUtils {
 	 * es para definir parametros opcionales
 	 */
 	@RequestMapping(value = "/busqueda/organismos", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<List<Nodo>> busquedaOrganismos(@RequestParam(required = false) String codigo,
+	public @ResponseBody ResponseEntity<List<Nodo>> busquedaOrganismos(
+			@RequestParam(required = false) String codigo,
 			@RequestParam(required = false) String denominacion,
 			@RequestParam(required = false) Long codNivelAdministracion,
 			@RequestParam(required = false) Long codComunidadAutonoma,
 			@RequestParam(required = false, defaultValue = "false") boolean conOficinas,
-			@RequestParam(required = false) boolean unidadRaiz, @RequestParam(required = false) String provincia,
+			@RequestParam(required = false) boolean unidadRaiz, 
+			@RequestParam(required = false) String provincia,
 			@RequestParam(required = false) String localidad,
 			@RequestParam(defaultValue = "true", required = false) boolean vigentes,
 			@RequestParam(defaultValue = "true", required = false) boolean cooficial) throws Exception {
@@ -259,7 +261,7 @@ public class RestController extends RestUtils {
 	 */
 	@RequestMapping(value = "/unidad/denominacion", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<String> unidadDenominacion(@RequestParam String codigo,
-			@RequestParam(defaultValue = "false") boolean cooficial, @RequestParam(defaultValue = "") String estado)
+			@RequestParam(required = false, defaultValue = "true") boolean cooficial, @RequestParam(required = false, defaultValue = "") String estado)
 			throws Exception {
 
 		String denominacion = dir3RestEjb.unidadDenominacion(codigo, cooficial, estado);
@@ -291,7 +293,7 @@ public class RestController extends RestUtils {
 	 */
 	@RequestMapping(value = "/oficina/denominacion", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<String> oficinaDenominacion(@RequestParam String codigo,
-			@RequestParam(defaultValue = "false") boolean cooficial, @RequestParam(defaultValue = "") String estado)
+			@RequestParam(required = false, defaultValue = "true") boolean cooficial, @RequestParam(required = false, defaultValue = "") String estado)
 			throws Exception {
 
 		String denominacion = dir3RestEjb.oficinaDenominacion(codigo, cooficial, estado);
@@ -313,7 +315,7 @@ public class RestController extends RestUtils {
 	 */
 	@RequestMapping(value = "/organigrama", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<Nodo> organigrama(@RequestParam String codigo,
-			@RequestParam(defaultValue = "false") boolean cooficial) throws Exception {
+			@RequestParam(required = false, defaultValue = "true") boolean cooficial) throws Exception {
 
 		Nodo nodo = new Nodo();
 		arbolEjb.arbolUnidadesAscendentes(codigo, nodo, Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE, false, cooficial);
@@ -377,7 +379,7 @@ public class RestController extends RestUtils {
 	@RequestMapping(value = "/busqueda/unidades/denominacion/comunidad", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<List<Nodo>> obtenerUnidadesDenominacionComunidad(
 			@RequestParam(required = false, defaultValue = "") String denominacion, @RequestParam Long codComunidad,
-			@RequestParam(defaultValue = "false") boolean cooficial) throws Exception {
+			@RequestParam(required = false, defaultValue = "true") boolean cooficial) throws Exception {
 		List<Nodo> resultado = new ArrayList<Nodo>();
 
 		if (codComunidad != null) {
@@ -562,7 +564,7 @@ public class RestController extends RestUtils {
 			@RequestParam String codigo,
 			@RequestParam(required = false) String fechaActualizacion,
 			@RequestParam(required = false) String fechaSincronizacion,
-			@RequestParam(required = false, defaultValue = "false") boolean denominacionCooficial) throws Exception {
+			@RequestParam(required = false, defaultValue = "true") boolean denominacionCooficial) throws Exception {
 
 		HttpHeaders headers = addAccessControllAllowOrigin();
 
@@ -612,7 +614,7 @@ public class RestController extends RestUtils {
 	public @ResponseBody ResponseEntity<List<OficinaRest>> obtenerArbolOficinas(HttpServletRequest request,
 			@RequestParam String codigo, @RequestParam(required = false) String fechaActualizacion,
 			@RequestParam(required = false) String fechaSincronizacion,
-			@RequestParam(required = false, defaultValue = "false") boolean denominacionCooficial) throws Exception {
+			@RequestParam(required = false, defaultValue = "true") boolean denominacionCooficial) throws Exception {
 
 		HttpHeaders headers = addAccessControllAllowOrigin();
 
@@ -660,7 +662,7 @@ public class RestController extends RestUtils {
 	@RolesAllowed({ Dir3caibConstantes.DIR_WS })
 	@RequestMapping(value = "/oficinas/obtenerOficinasSIRUnidad", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<List<OficinaRest>> obtenerOficinasSIRUnidad(HttpServletRequest request,
-			@RequestParam String codigo, @RequestParam(defaultValue = "false") boolean denominacionCooficial)
+			@RequestParam String codigo, @RequestParam(required = false, defaultValue = "true") boolean denominacionCooficial)
 			throws Exception {
 
 		HttpHeaders headers = addAccessControllAllowOrigin();
@@ -685,7 +687,8 @@ public class RestController extends RestUtils {
 	@RolesAllowed({ Dir3caibConstantes.DIR_WS })
 	@RequestMapping(value = "/oficinas/obtenerArbolOficinasSir", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<List<OficinaRest>> obtenerArbolOficinasSir(
-			@RequestParam String codigo, @RequestParam boolean denominacionCooficial) throws Exception {
+			@RequestParam String codigo, @RequestParam(required = false, defaultValue = "true") boolean denominacionCooficial) 
+			throws Exception {
 
 		List<OficinaRest> resultado = dir3RestEjb.obtenerArbolOficinasSir(codigo, denominacionCooficial);
 
@@ -767,7 +770,7 @@ public class RestController extends RestUtils {
 	@RolesAllowed({ Dir3caibConstantes.DIR_WS })
 	@RequestMapping(value = "/unidades/buscarUnidad", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<UnidadRest> obtenerUnidad(HttpServletRequest request,
-			@RequestParam String codigo, @RequestParam(defaultValue = "false") boolean denominacionCooficial)
+			@RequestParam String codigo, @RequestParam(required = false, defaultValue = "true") boolean denominacionCooficial)
 			throws Exception {
 
 		HttpHeaders headers = addAccessControllAllowOrigin();
@@ -789,7 +792,7 @@ public class RestController extends RestUtils {
 			@RequestParam String codigo,
 			@RequestParam(required = false) String fechaActualizacion,
 			@RequestParam(required = false) String fechaSincronizacion,
-			@RequestParam(required = false, defaultValue = "false") boolean denominacionCooficial) throws Exception {
+			@RequestParam(required = false, defaultValue = "true") boolean denominacionCooficial) throws Exception {
 
 		HttpHeaders headers = addAccessControllAllowOrigin();
 		String error = autenticateUsrApp(request, Arrays.asList(Dir3caibConstantes.DIR_WS));
@@ -836,7 +839,7 @@ public class RestController extends RestUtils {
 	@RolesAllowed({ Dir3caibConstantes.DIR_WS })
 	@RequestMapping(value = "/unidades/obtenerArbolUnidadesDestinatarias", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<List<UnidadRest>> obtenerArbolUnidadesDestinatarias(HttpServletRequest request,
-			@RequestParam String codigo, @RequestParam(defaultValue = "false") boolean denominacionCooficial)
+			@RequestParam String codigo, @RequestParam(required = false, defaultValue = "true") boolean denominacionCooficial)
 			throws Exception {
 
 		HttpHeaders headers = addAccessControllAllowOrigin();
@@ -855,7 +858,7 @@ public class RestController extends RestUtils {
 	@RolesAllowed({ Dir3caibConstantes.DIR_WS })
 	@RequestMapping(value = "/unidades/obtenerHistoricosFinales", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<List<UnidadRest>> obtenerHistoricosFinales(HttpServletRequest request,
-			@RequestParam String codigo, @RequestParam(defaultValue = "false") boolean denominacionCooficial)
+			@RequestParam String codigo, @RequestParam(required = false, defaultValue = "true") boolean denominacionCooficial)
 			throws Exception {
 
 		HttpHeaders headers = addAccessControllAllowOrigin();
@@ -874,7 +877,7 @@ public class RestController extends RestUtils {
 	@RolesAllowed({ Dir3caibConstantes.DIR_WS })
 	@RequestMapping(value = "/unidades/obtenerHistoricosFinalesSIR", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<List<UnidadRest>> obtenerHistoricosFinalesSIR(HttpServletRequest request,
-			@RequestParam String codigo, @RequestParam(defaultValue = "false") boolean denominacionCooficial)
+			@RequestParam String codigo, @RequestParam(required = false, defaultValue = "true") boolean denominacionCooficial)
 			throws Exception {
 
 		HttpHeaders headers = addAccessControllAllowOrigin();

@@ -101,7 +101,7 @@ public class NodoUtils {
             String denominacionUoResponsable = ( denominacionCooficial && Utils.isNotEmpty((String) object[10])) ? (String) object[10] : (String) object[6];
 
             Nodo nodo = new Nodo(obj[0], denominacion, obj[2], denominacionUnidadRaiz + " - " + obj[3], denominacionUoResponsable, obj[5], obj[7]);
-
+            nodo.setDenominacionCooficial((Utils.isNotEmpty((String) object[8])) ? (String) object[8] : "");
 
             nodos.add(nodo);
         }
@@ -137,6 +137,7 @@ public class NodoUtils {
         	String denominacionUnidadSuperior = (denominacionCooficial && Utils.isNotEmpty((String)object[6])) ?(String) object[6] : (String) object[3];		
             Nodo nodo = new Nodo(codigo, denominacion, "", denominacionUnidadRaiz, denominacionUnidadSuperior, "");
             nodo.setCodigoDir3((String) object[7]);
+            nodo.setDenominacionCooficial((Utils.isNotEmpty((String)object[4]))?(String)object[4]:"");
             nodos.add(nodo);
         }
 
@@ -168,6 +169,7 @@ public class NodoUtils {
             nodo.setCodigoDir3(unidad.getCodigoDir3());
             nodo.setVersion(String.valueOf(unidad.getVersion()));
             nodo.setCodigoEstado(unidad.getEstado().getCodigoEstadoEntidad());
+            nodo.setDenominacionCooficial((Utils.isNotEmpty(unidad.getDenomLenguaCooficial())) ? unidad.getDenomLenguaCooficial() : "");
             nodos.add(nodo);
         }
 
@@ -189,7 +191,7 @@ public class NodoUtils {
             Nodo nodo = new Nodo(oficina.getCodigo(), denominacion, oficina.getEstado().getDescripcionEstadoEntidad(), 
             		ofiResponsable, uoResponsable, "", oficina.getOficinaSir());
             nodo.setCodigoEstado(oficina.getEstado().getCodigoEstadoEntidad());
-
+            nodo.setDenominacionCooficial((Utils.isNotEmpty(oficina.getDenomLenguaCooficial())) ? oficina.getDenomLenguaCooficial() : "" );
             nodos.add(nodo);
         }
 
@@ -256,6 +258,7 @@ public class NodoUtils {
             
             Nodo nodo = new Nodo(obj[0], denominacion, obj[2], denominacioUnidadRaiz + " - " + obj[3], denominacionUnidadSuperior + " - " + obj[5], obj[7],Boolean.parseBoolean(obj[8]),Long.parseLong(obj[9]), obj[10],obj[11], obj[12],obj[13] + " " + obj[14]+ ", " + obj[15]+ ", "+ obj[16]+ ", " + obj[17],obj[18],obj[19],obj[20],obj[21],obj[22]);
             nodo.setCodigoDir3((String)obj[26]);
+            nodo.setDenominacionCooficial((Utils.isNotEmpty((String) obj[23])) ? (String) obj[23] : "");
             nodos.add(nodo);
         }
 

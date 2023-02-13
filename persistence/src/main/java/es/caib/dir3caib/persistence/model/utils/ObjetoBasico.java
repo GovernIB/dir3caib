@@ -15,6 +15,7 @@ public class ObjetoBasico {
   private String codigoDir3;
   private String version; 
   private String denominacion;
+  private String denominacionCooficial;
   private String descripcionEstado;
   private String codigoEstado;
   private String raiz;
@@ -88,6 +89,14 @@ public class ObjetoBasico {
 
   public void setDenominacion(String denominacion) {
     this.denominacion = denominacion;
+  }
+
+  public String getDenominacionCooficial() {
+	return denominacionCooficial;
+  }
+
+  public void setDenominacionCooficial(String denominacionCooficial) {
+	this.denominacionCooficial = denominacionCooficial;
   }
 
   public String getDescripcionEstado() {

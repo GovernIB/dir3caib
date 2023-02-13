@@ -573,7 +573,8 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 		String variableCampo = (isCodigoDir3) ? "codigoDir3" : "codigo";
 
 		Query q = em.createQuery(
-				"select relacionSirOfi.oficina.codigo, relacionSirOfi.oficina.denominacion, relacionSirOfi.oficina.denomLenguaCooficial, relacionSirOfi.oficina.codUoResponsable.codigoDir3 from RelacionSirOfi as relacionSirOfi " +
+				"select relacionSirOfi.oficina.codigo, relacionSirOfi.oficina.denominacion, relacionSirOfi.oficina.denomLenguaCooficial, "
+				+ "relacionSirOfi.oficina.codUoResponsable.codigoDir3 from RelacionSirOfi as relacionSirOfi " +
 						" left outer join relacionSirOfi.oficina.servicios as servicios " +
 						"  where relacionSirOfi.unidad.codUnidadRaiz." + variableCampo + " =:codigoUnidad "
 						+ "and servicios.servicio=:SERVICIO_SIR_RECEPCION "
@@ -588,7 +589,9 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
 		for (Object[] object : result) {
 			String denominacion = (denominacionCooficial && Utils.isNotEmpty((String) object[2])) ? (String) object[2] : (String) object[1];
-			Oficina oficina = new Oficina((String) object[0], denominacion, (String) object[3],null);
+			String denomLenguaCooficial = (Utils.isNotEmpty((String) object[2])) ? (String) object[2] : "";
+			Oficina oficina = new Oficina((String) object[0], denominacion, (String) object[3], null);
+			oficina.setDenomLenguaCooficial(denomLenguaCooficial);
 			oficinas.add(oficina);
 		}
 

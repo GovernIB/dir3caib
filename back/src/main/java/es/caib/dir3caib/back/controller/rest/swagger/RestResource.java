@@ -85,12 +85,12 @@ public class RestResource {
 			@QueryParam("denominacion") String denominacion,
 			
 			@Parameter(
-					description = "booleà per indicar que ens retorni la denominació cooficial si existeix",
+					description = "booleà per indicar que ens retorni la denominació cooficial si existeix. Per defecte està a 'true' i ens retornarà la denominació cooficial. Si es vol la denominació oficial s'ha d'enviar el valor 'false'.",
 					required = false,
 					example = "true",
 					schema = @Schema(implementation = Boolean.class)
 					)
-			@DefaultValue("false") @QueryParam("cooficial") boolean cooficial,
+			@DefaultValue("true") @QueryParam("cooficial") boolean cooficial,
 			
 			@Parameter(
 					description = "filtre per codi d'estat dels resultats. Si no s'informa, ens retorna els resultats amb estat vigent (V)",
@@ -141,12 +141,12 @@ public class RestResource {
 			@QueryParam("denominacion") String denominacion, 
 			
 			@Parameter(
-					description = "booleà per indicar que ens retorni la denominació cooficial si existeix",
+					description = "booleà per indicar que ens retorni la denominació cooficial si existeix. Per defecte està a 'true' i ens retornarà la denominació cooficial. Si es vol la denominació oficial s'ha d'enviar el valor 'false'.",
 					required = false,
 					example = "true",
 					schema = @Schema(implementation = boolean.class)
 					)
-			@QueryParam("cooficial") @DefaultValue("false") boolean cooficial,
+			@QueryParam("cooficial") @DefaultValue("true") boolean cooficial,
 			
 			@Parameter(
 					description = "filtre dels resultats per codi d'estat. Si no s'informa, ens retorna els resultats amb estat vigent (V)",
@@ -200,12 +200,12 @@ public class RestResource {
 			@QueryParam("codigo") String codigo,
 			
 			@Parameter(
-					description = "booleà per indicar que ens retorni la denominació cooficial si existeix",
+					description = "booleà per indicar que ens retorni la denominació cooficial si existeix. Per defecte està a 'true' i ens retornarà la denominació cooficial. Si es vol la denominació oficial s'ha d'enviar el valor 'false'.",
 					required = false,
 					example = "true",
 					schema = @Schema(implementation = boolean.class)
 					)
-			@QueryParam("cooficial") @DefaultValue("false") boolean cooficial, 
+			@QueryParam("cooficial") @DefaultValue("true") boolean cooficial, 
 			
 			@Parameter(
 					description = "filtre per codi d'estat dels resultats. Si no s'informa, ens retorna els resultats amb estat vigent (V)",
@@ -259,12 +259,12 @@ public class RestResource {
 			@QueryParam("codigo") String codigo,
 			
 			@Parameter(
-					description = "booleà per indicar que ens retorni la denominació cooficial si existeix",
+					description = "booleà per indicar que ens retorni la denominació cooficial si existeix. Per defecte està a 'true' i ens retornarà la denominació cooficial. Si es vol la denominació oficial s'ha d'enviar el valor 'false'.",
 					required = false,
 					example = "true",
 					schema = @Schema(implementation = boolean.class)
 					)
-			@QueryParam("cooficial") @DefaultValue("false") boolean cooficial, 
+			@QueryParam("cooficial") @DefaultValue("true") boolean cooficial, 
 			
 			@Parameter(
 					description = "filtre per codi d'estat dels resultats. Si no s'informa, ens retorna els resultats amb estat vigent (V)",
@@ -383,12 +383,12 @@ public class RestResource {
 			@QueryParam("vigentes") @DefaultValue("true") boolean vigentes,
 			
 			@Parameter(
-					description = "indica si volem que es retornin les denominacions cooficials si existeixen. Per defecte, no es retornen",
+					description = "indica si volem que es retornin les denominacions cooficials si existeixen. Per defecte està a 'true' i ens retornarà la denominació cooficial. Si es vol la denominació oficial o les dues denominacions s'ha d'enviar el valor 'false'.",
 					required = false,
 					example = "true",
 					schema = @Schema(implementation = boolean.class)
 					)
-			@QueryParam("cooficial") @DefaultValue("false") boolean cooficial
+			@QueryParam("cooficial") @DefaultValue("true") boolean cooficial
 		
 			){
 
@@ -541,12 +541,12 @@ public class RestResource {
 			@QueryParam("codigo") String codigo,
 			
 			@Parameter(
-					description = "indica si volem que es retorni la denominació cooficial si existeix",
+					description = "indica si volem que es retorni la denominació cooficial si existeix. Per defecte està a 'true' i ens retornarà la denominació cooficial. Si es vol la denominació oficial s'ha d'enviar el valor 'false'.",
 					required = false,
 					example = "true",
 					schema = @Schema(implementation = boolean.class)
 					)
-			@QueryParam("cooficial") @DefaultValue("false") boolean cooficial,
+			@QueryParam("cooficial") @DefaultValue("true") boolean cooficial,
 			
 			@Parameter(
 					description = "filtre per codi d'estat dels resultats. Si no s'informa, ens retorna els resultats amb estat vigent (V)",
@@ -600,12 +600,12 @@ public class RestResource {
 			@QueryParam("codigo") String codigo,
 			
 			@Parameter(
-					description = "indica si volem que es retorni la denominació cooficial si existeix",
+					description = "indica si volem que es retorni la denominació cooficial si existeix. Per defecte està a 'true' i ens retornarà la denominació cooficial. Si es vol la denominació oficial s'ha d'enviar el valor 'false'.",
 					required = false,
 					example = "true",
 					schema = @Schema(implementation = boolean.class)
 					)
-			@QueryParam("cooficial") @DefaultValue("false") boolean cooficial,
+			@QueryParam("cooficial") @DefaultValue("true") boolean cooficial,
 			
 			@Parameter(
 					description = "filtre per codi d'estat dels resultats. Si no s'informa, ens retorna els resultats amb estat vigent (V)",
@@ -658,12 +658,12 @@ public class RestResource {
 			@QueryParam("codigo") String codigo, 
 			
 			@Parameter(
-					description = "booleà per indicar que ens retorni la denominació cooficial si existeix",
+					description = "booleà per indicar que ens retorni la denominació cooficial si existeix. Per defecte està a 'true' i ens retornarà la denominació cooficial. Si es vol la denominació oficial s'ha d'enviar el valor 'false'.",
 					required = false,
 					example = "true",
 					schema = @Schema(implementation = boolean.class)
 					)
-			@QueryParam("cooficial") @DefaultValue("false") boolean cooficial
+			@QueryParam("cooficial") @DefaultValue("true") boolean cooficial
 			
 		){
 
@@ -759,12 +759,12 @@ public class RestResource {
 			@QueryParam("codComunidad") Long codComunidad,
 			
 			@Parameter(
-					description = "booleà per indicar que ens retorni la denominació cooficial si existeix",
+					description = "booleà per indicar que ens retorni la denominació cooficial si existeix. Per defecte està a 'true' i ens retornarà la denominació cooficial. Si es vol la denominació oficial s'ha d'enviar el valor 'false'.",
 					required = false,
 					example = "true",
 					schema = @Schema(implementation = boolean.class)
 					)
-			@QueryParam("cooficial") @DefaultValue("false") boolean cooficial
+			@QueryParam("cooficial") @DefaultValue("true") boolean cooficial
 			
 		){
 
@@ -1438,12 +1438,12 @@ public class RestResource {
 			@QueryParam("fechaSincronizacion") String fechaSincronizacionString,
 			
 			@Parameter(
-					description = "booleà que indica si volem que es retorni la denominació cooficial si existeix",
+					description = "booleà que indica si volem que es retorni la denominació cooficial si existeix. Per defecte està a 'true' i ens retornarà la denominació cooficial. Si es vol la denominació oficial o les dues denominacions s'ha d'enviar el valor 'false'.",
 					required = false,
 					example = "true",
 					schema = @Schema(implementation = boolean.class)
 					)
-			@QueryParam("denominacionCooficial") @DefaultValue("false") boolean denominacionCooficial
+			@QueryParam("denominacionCooficial") @DefaultValue("true") boolean denominacionCooficial
 			
 		){
 
@@ -1489,12 +1489,12 @@ public class RestResource {
 			@QueryParam("codigo") String codigo,
 			
 			@Parameter(
-					description = "booleà que indica si volem que es retorni la denominació cooficial si existeix",
+					description = "booleà que indica si volem que es retorni la denominació cooficial si existeix. Per defecte està a 'true' i ens retornarà la denominació cooficial. Si es vol la denominació oficial o les dues denominacions s'ha d'enviar el valor 'false'.",
 					required = false,
 					example = "true",
 					schema = @Schema(implementation = boolean.class)
 					)
-			@QueryParam("denominacionCooficial") @DefaultValue("false") boolean denominacionCooficial
+			@QueryParam("denominacionCooficial") @DefaultValue("true") boolean denominacionCooficial
 			
 		){
 
@@ -1538,12 +1538,12 @@ public class RestResource {
 			)
 			@QueryParam("codigo") String codigo,
 			@Parameter(
-					description = "Indica si volem obtenir la denominació cooficial",
+					description = "Indica si volem obtenir la denominació cooficial. Per defecte està a 'true' i ens retornarà la denominació cooficial. Si es vol la denominació oficial o les dues denominacions s'ha d'enviar el valor 'false'.",
 					required = false,
 					example = "true",
 					schema = @Schema(implementation = boolean.class)
 			)
-			@QueryParam("denominacionCooficial") boolean denominacionCooficial
+			@QueryParam("denominacionCooficial") @DefaultValue("true") boolean denominacionCooficial
 
 	){
 
@@ -1607,12 +1607,12 @@ public class RestResource {
 			@QueryParam("fechaSincronizacion") String fechaSincronizacionString,
 			
 			@Parameter(
-					description = "booleà que indica si volem que es retorni la denominació cooficial si existeix",
+					description = "booleà que indica si volem que es retorni la denominació cooficial si existeix. Per defecte està a 'true' i ens retornarà la denominació cooficial. Si es vol la denominació oficial o les dues denominacions s'ha d'enviar el valor 'false'.",
 					required = false,
 					example = "true",
 					schema = @Schema(implementation = boolean.class)
 					)
-			@QueryParam("denominacionCooficial") @DefaultValue("false") boolean denominacionCooficial
+			@QueryParam("denominacionCooficial") @DefaultValue("true") boolean denominacionCooficial
 			
 		){
 
@@ -1676,12 +1676,12 @@ public class RestResource {
 			@QueryParam("fechaSincronizacion") String fechaSincronizacionString,
 			
 			@Parameter(
-					description = "booleà que indica si volem que es retorni la denominació cooficial si existeix",
+					description = "booleà que indica si volem que es retorni la denominació cooficial si existeix. Per defecte està a 'true' i ens retornarà la denominació cooficial. Si es vol la denominació oficial o les dues denominacions s'ha d'enviar el valor 'false'.",
 					required = false,
 					example = "true",
 					schema = @Schema(implementation = boolean.class)
 					)
-			@QueryParam("denominacionCooficial") @DefaultValue("false") boolean denominacionCooficial
+			@QueryParam("denominacionCooficial") @DefaultValue("true") boolean denominacionCooficial
 			
 		){
 
@@ -1728,12 +1728,12 @@ public class RestResource {
 			@QueryParam("codigo") String codigo,
 			
 			@Parameter(
-					description = "booleà que indica si volem que es retorni la denominació cooficial si existeix",
+					description = "booleà que indica si volem que es retorni la denominació cooficial si existeix. Per defecte està a 'true' i ens retornarà la denominació cooficial. Si es vol la denominació oficial o les dues denominacions s'ha d'enviar el valor 'false'.",
 					required = false,
 					example = "true",
 					schema = @Schema(implementation = boolean.class)
 					)
-			@QueryParam("denominacionCooficial") @DefaultValue("false") boolean denominacionCooficial
+			@QueryParam("denominacionCooficial") @DefaultValue("true") boolean denominacionCooficial
 			
 		){
 
@@ -1848,12 +1848,12 @@ public class RestResource {
 			@QueryParam("codigo") String codigo,
 			
 			@Parameter(
-					description = "booleà que indica si volem que es retorni la denominació cooficial si existeix",
+					description = "booleà que indica si volem que es retorni la denominació cooficial si existeix. Per defecte està a 'true' i ens retornarà la denominació cooficial. Si es vol la denominació oficial o les dues denominacions s'ha d'enviar el valor 'false'.",
 					required = false,
 					example = "true",
 					schema = @Schema(implementation = boolean.class)
 					)
-			@QueryParam("denominacionCooficial") @DefaultValue("false") boolean denominacionCooficial
+			@QueryParam("denominacionCooficial") @DefaultValue("true") boolean denominacionCooficial
 			
 		){
 
@@ -1899,12 +1899,12 @@ public class RestResource {
 			@QueryParam("codigo") String codigo,
 			
 			@Parameter(
-					description = "booleà que indica si volem que es retorni la denominació cooficial si existeix",
+					description = "booleà que indica si volem que es retorni la denominació cooficial si existeix. Per defecte està a 'true' i ens retornarà la denominació cooficial. Si es vol la denominació oficial o les dues denominacions s'ha d'enviar el valor 'false'.",
 					required = false,
 					example = "true",
 					schema = @Schema(implementation = boolean.class)
 					)
-			@QueryParam("denominacionCooficial") @DefaultValue("false") boolean denominacionCooficial
+			@QueryParam("denominacionCooficial") @DefaultValue("true") boolean denominacionCooficial
 			
 		){
 
@@ -1950,12 +1950,12 @@ public class RestResource {
 			@QueryParam("codigo") String codigo,
 			
 			@Parameter(
-					description = "booleà que indica si volem que es retorni la denominació cooficial si existeix",
+					description = "booleà que indica si volem que es retorni la denominació cooficial si existeix. Per defecte està a 'true' i ens retornarà la denominació cooficial. Si es vol la denominació oficial o les dues denominacions s'ha d'enviar el valor 'false'.",
 					required = false,
 					example = "true",
 					schema = @Schema(implementation = boolean.class)
 					)
-			@QueryParam("denominacionCooficial") @DefaultValue("false") boolean denominacionCooficial
+			@QueryParam("denominacionCooficial") @DefaultValue("true") boolean denominacionCooficial
 			
 		){
 

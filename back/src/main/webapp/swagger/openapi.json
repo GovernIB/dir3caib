@@ -17,6 +17,9 @@
             "nullable":true,
             "type":"integer"
           },
+          "denominacionCooficial":{
+            "type":"string"
+          },
           "fechaAnulacion":{
             "nullable":true,
             "type":"string"
@@ -53,25 +56,29 @@
           "codEdpPrincipal":{
             "type":"string"
           },
+          "version":{
+            "nullable":true,
+            "type":"integer"
+          },
           "competencias":{
             "type":"string"
           },
           "numVia":{
             "type":"string"
           },
-          "codAmbProvincia":{
-            "nullable":true,
-            "type":"integer"
-          },
           "fechaBajaOficial":{
             "nullable":true,
             "type":"string"
           },
-          "denominacion":{
-            "type":"string"
+          "codAmbProvincia":{
+            "nullable":true,
+            "type":"integer"
           },
           "fechaExtincion":{
             "nullable":true,
+            "type":"string"
+          },
+          "denominacion":{
             "type":"string"
           },
           "codUnidadSuperior":{
@@ -128,6 +135,9 @@
             "type":"integer"
           },
           "codOfiResponsable":{
+            "type":"string"
+          },
+          "denominacionCooficial":{
             "type":"string"
           },
           "codigoPais":{
@@ -242,12 +252,12 @@
             "$ref":"#/components/schemas/org_apache_log4j_helpers_AppenderAttachableImpl",
             "type":"object"
           },
+          "debugEnabled":{
+            "type":"boolean"
+          },
           "appender":{
             "$ref":"#/components/schemas/org_apache_log4j_Appender",
             "type":"object"
-          },
-          "debugEnabled":{
-            "type":"boolean"
           },
           "repository":{
             "$ref":"#/components/schemas/org_apache_log4j_spi_LoggerRepository",
@@ -339,12 +349,12 @@
             "$ref":"#/components/schemas/org_apache_log4j_helpers_AppenderAttachableImpl",
             "type":"object"
           },
+          "debugEnabled":{
+            "type":"boolean"
+          },
           "appender":{
             "$ref":"#/components/schemas/org_apache_log4j_Appender",
             "type":"object"
-          },
-          "debugEnabled":{
-            "type":"boolean"
           },
           "repository":{
             "$ref":"#/components/schemas/org_apache_log4j_spi_LoggerRepository",
@@ -485,10 +495,10 @@
           "displayCountry":{
             "type":"string"
           },
-          "variant":{
+          "ISO3Country":{
             "type":"string"
           },
-          "ISO3Country":{
+          "variant":{
             "type":"string"
           },
           "extensionKeys":{
@@ -507,12 +517,6 @@
         },
         "type":"object"
       },
-      "java_lang_Character":{
-        "properties":{
-
-        },
-        "type":"object"
-      },
       "sun_util_locale_BaseLocale":{
         "properties":{
           "variant":{
@@ -527,6 +531,12 @@
           "script":{
             "type":"string"
           }
+        },
+        "type":"object"
+      },
+      "java_lang_Character":{
+        "properties":{
+
         },
         "type":"object"
       },
@@ -609,12 +619,12 @@
             "$ref":"#/components/schemas/java_util_Enumeration",
             "type":"object"
           },
-          "disabled":{
-            "type":"boolean"
-          },
           "threshold":{
             "$ref":"#/components/schemas/org_apache_log4j_Level",
             "type":"object"
+          },
+          "disabled":{
+            "type":"boolean"
           }
         },
         "type":"object"
@@ -653,12 +663,12 @@
       },
       "org_apache_log4j_Appender":{
         "properties":{
-          "layout":{
-            "$ref":"#/components/schemas/org_apache_log4j_Layout",
-            "type":"object"
-          },
           "filter":{
             "$ref":"#/components/schemas/org_apache_log4j_spi_Filter",
+            "type":"object"
+          },
+          "layout":{
+            "$ref":"#/components/schemas/org_apache_log4j_Layout",
             "type":"object"
           },
           "name":{
@@ -666,6 +676,15 @@
           },
           "errorHandler":{
             "$ref":"#/components/schemas/org_apache_log4j_spi_ErrorHandler",
+            "type":"object"
+          }
+        },
+        "type":"object"
+      },
+      "org_apache_log4j_spi_Filter":{
+        "properties":{
+          "next":{
+            "$ref":"#/components/schemas/org_apache_log4j_spi_Filter",
             "type":"object"
           }
         },
@@ -688,15 +707,6 @@
       "org_apache_log4j_spi_ErrorHandler":{
         "properties":{
 
-        },
-        "type":"object"
-      },
-      "org_apache_log4j_spi_Filter":{
-        "properties":{
-          "next":{
-            "$ref":"#/components/schemas/org_apache_log4j_spi_Filter",
-            "type":"object"
-          }
         },
         "type":"object"
       },
@@ -731,588 +741,6 @@
   },
   "openapi":"3.0.1",
   "paths":{
-    "/rest/busqueda/unidades/denominacion/comunidad":{
-      "get":{
-        "deprecated":false,
-        "operationId":"obtenerUnidadesDenominacionComunidad",
-        "parameters":[
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"denominació de l'organisme que cercam",
-            "in":"query",
-            "name":"denominacion",
-            "required":false,
-            "schema":{
-              "type":"string"
-            }
-          },
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"codi de la comunitat autònoma a la que volem cercar",
-            "example":"7",
-            "in":"query",
-            "name":"codComunidad",
-            "required":true,
-            "schema":{
-              "nullable":true,
-              "type":"integer"
-            }
-          },
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"booleà per indicar que ens retorni la denominació cooficial si existeix",
-            "example":"true",
-            "in":"query",
-            "name":"cooficial",
-            "required":false,
-            "schema":{
-              "type":"boolean"
-            }
-          }
-        ],
-        "responses":{
-          "200":{
-            "content":{
-              "application/json":{
-                "schema":{
-                  "items":{
-                    "nullable":true,
-                    "properties":{
-
-                    },
-                    "type":"object"
-                  },
-                  "type":"array"
-                }
-              }
-            },
-            "description":"Llista d'objectes Nodo en format JSON"
-          },
-          "204":{
-            "content":{
-              "application/json":{
-                "schema":{
-
-                }
-              }
-            },
-            "description":"Sense contingut"
-          }
-        },
-        "summary":"Servei per permet cercar unitats per denominació i comunitat autònoma"
-      }
-    },
-    "/rest/unidades/obtenerHistoricosFinales":{
-      "get":{
-        "deprecated":false,
-        "operationId":"obtenerHistoricosFinales",
-        "parameters":[
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"codi de la unitat extingida",
-            "example":"E04984901",
-            "in":"query",
-            "name":"codigo",
-            "required":true,
-            "schema":{
-              "type":"string"
-            }
-          },
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"booleà que indica si volem que es retorni la denominació cooficial si existeix",
-            "example":"true",
-            "in":"query",
-            "name":"denominacionCooficial",
-            "required":false,
-            "schema":{
-              "type":"boolean"
-            }
-          }
-        ],
-        "responses":{
-          "200":{
-            "content":{
-              "application/json":{
-                "schema":{
-                  "$ref":"#/components/schemas/es_caib_dir3caib_persistence_model_json_UnidadRest",
-                  "type":"object"
-                }
-              }
-            },
-            "description":"Una llista d'objectes de tipus UnidadRest."
-          },
-          "204":{
-            "content":{
-              "application/json":{
-                "schema":{
-
-                }
-              }
-            },
-            "description":"Sense contingut"
-          }
-        },
-        "security":[
-          {
-            "BasicAuth":[
-            ]
-          }
-        ],
-        "summary":"Mètode que retorna les unitats que substitueixen a la unitat amb el codi indicat. Aquest codi serà d’una unitat extingida."
-      }
-    },
-    "/rest/oficinas/obtenerArbolOficinas":{
-      "get":{
-        "deprecated":false,
-        "operationId":"obtenerArbolOficinas",
-        "parameters":[
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"codi de la unitat",
-            "example":"L01502973",
-            "in":"query",
-            "name":"codigo",
-            "required":true,
-            "schema":{
-              "type":"string"
-            }
-          },
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"data de la darrera actualització. Format: yyyy-MM-dd",
-            "in":"query",
-            "name":"fechaActualizacion",
-            "required":false,
-            "schema":{
-              "type":"string"
-            }
-          },
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"data en la que es va fer la primera sincronització. Format: yyyy-MM-dd",
-            "in":"query",
-            "name":"fechaSincronizacion",
-            "required":false,
-            "schema":{
-              "type":"string"
-            }
-          },
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"booleà que indica si volem que es retorni la denominació cooficial si existeix",
-            "example":"true",
-            "in":"query",
-            "name":"denominacionCooficial",
-            "required":false,
-            "schema":{
-              "type":"boolean"
-            }
-          }
-        ],
-        "responses":{
-          "200":{
-            "content":{
-              "application/json":{
-                "schema":{
-                  "items":{
-                    "nullable":true,
-                    "properties":{
-
-                    },
-                    "type":"object"
-                  },
-                  "type":"array"
-                }
-              }
-            },
-            "description":"Llista d'objectes OficinaRest que representa l'arbre en format de llista"
-          },
-          "204":{
-            "content":{
-              "application/json":{
-                "schema":{
-
-                }
-              }
-            },
-            "description":"Sense contingut"
-          }
-        },
-        "security":[
-          {
-            "BasicAuth":[
-            ]
-          }
-        ],
-        "summary":"Servei que ens retorna l'arbre d'oficines de la unitat indicada pel codi, partint de la darrera actualització i la data de la sincronització que s'indica per paràmetre. Si la data d'actualització és null es considera una sincronització i retorna tot l'arbre d'oficines vigents amb la unitat."
-      }
-    },
-    "/rest/oficinas/obtenerOficinasSIRUnidad":{
-      "get":{
-        "deprecated":false,
-        "operationId":"obtenerOficinasSIRUnidad",
-        "parameters":[
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"codi de la unitat",
-            "example":"E03139201",
-            "in":"query",
-            "name":"codigo",
-            "required":true,
-            "schema":{
-              "type":"string"
-            }
-          },
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"booleà que indica si volem que es retorni la denominació cooficial si existeix",
-            "example":"true",
-            "in":"query",
-            "name":"denominacionCooficial",
-            "required":false,
-            "schema":{
-              "type":"boolean"
-            }
-          }
-        ],
-        "responses":{
-          "200":{
-            "content":{
-              "application/json":{
-                "schema":{
-                  "items":{
-                    "nullable":true,
-                    "properties":{
-
-                    },
-                    "type":"object"
-                  },
-                  "type":"array"
-                }
-              }
-            },
-            "description":"Llista d'objectes OficinaRest que representa l'arbre en format de llista"
-          },
-          "204":{
-            "content":{
-              "application/json":{
-                "schema":{
-
-                }
-              }
-            },
-            "description":"Sense contingut"
-          }
-        },
-        "security":[
-          {
-            "BasicAuth":[
-            ]
-          }
-        ],
-        "summary":"Servei que ens retorna el llistat d'oficines integrades en SIR de la unitat indicada pel codi."
-      }
-    },
-    "/rest/oficinas/obtenerArbolOficinasSir":{
-      "get":{
-        "deprecated":false,
-        "operationId":"obtenerArbolOficinasSir",
-        "parameters":[
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"codi de la unitat que volem obtenir les seves oficines",
-            "example":"L01502973",
-            "in":"query",
-            "name":"codigo",
-            "required":true,
-            "schema":{
-              "type":"string"
-            }
-          },
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"Indica si volem obtenir la denominació cooficial",
-            "example":"true",
-            "in":"query",
-            "name":"denominacionCooficial",
-            "required":false,
-            "schema":{
-              "type":"boolean"
-            }
-          }
-        ],
-        "responses":{
-          "200":{
-            "content":{
-              "application/json":{
-                "schema":{
-                  "items":{
-                    "nullable":true,
-                    "properties":{
-
-                    },
-                    "type":"object"
-                  },
-                  "type":"array"
-                }
-              }
-            },
-            "description":"Llista d'objectes OficinaRest en format JSON"
-          },
-          "204":{
-            "content":{
-              "application/json":{
-                "schema":{
-
-                }
-              }
-            },
-            "description":"Sense contingut"
-          }
-        },
-        "security":[
-          {
-            "BasicAuth":[
-            ]
-          }
-        ],
-        "summary":"Servei que permet obtenir totes les oficines sir del organisme indicat per paràmetre i dels seus organismes fills"
-      }
-    },
-    "/rest/unidades/obtenerArbolUnidades":{
-      "get":{
-        "deprecated":false,
-        "operationId":"obtenerArbolUnidades",
-        "parameters":[
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"codi de la unitat arrel",
-            "example":"E03139201",
-            "in":"query",
-            "name":"codigo",
-            "required":true,
-            "schema":{
-              "type":"string"
-            }
-          },
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"data de la darrera actualització. Format: yyyy-MM-dd",
-            "in":"query",
-            "name":"fechaActualizacion",
-            "required":false,
-            "schema":{
-              "type":"string"
-            }
-          },
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"data en la que es va fer la primera sincronització. Format: yyyy-MM-dd",
-            "in":"query",
-            "name":"fechaSincronizacion",
-            "required":false,
-            "schema":{
-              "type":"string"
-            }
-          },
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"booleà que indica si volem que es retorni la denominació cooficial si existeix",
-            "example":"true",
-            "in":"query",
-            "name":"denominacionCooficial",
-            "required":false,
-            "schema":{
-              "type":"boolean"
-            }
-          }
-        ],
-        "responses":{
-          "200":{
-            "content":{
-              "application/json":{
-                "schema":{
-                  "items":{
-                    "nullable":true,
-                    "properties":{
-
-                    },
-                    "type":"object"
-                  },
-                  "type":"array"
-                }
-              }
-            },
-            "description":"Llista d'objectes UnidadRest que representa l'arbre en format de llista."
-          },
-          "204":{
-            "content":{
-              "application/json":{
-                "schema":{
-
-                }
-              }
-            },
-            "description":"Sense contingut"
-          }
-        },
-        "security":[
-          {
-            "BasicAuth":[
-            ]
-          }
-        ],
-        "summary":"Servei que ens retorna l 'arbre d'unitats de la unitat indicada pel codi, partint de la data de la darrera actualització i la data de la sincronització. Si no s'indica data d'actualització es considera que és una sincronització i et retorna tot l'arbre d'unitats vigents. Si s'indica data d'actualització, retorna les unitats que han estat actualitzades dins el període de temps indicat tenint en compte també la data de la darrera importació des de dir3 Madrid."
-      }
-    },
-    "/rest/unidades/obtenerArbolUnidadesDestinatarias":{
-      "get":{
-        "deprecated":false,
-        "operationId":"obtenerArbolUnidadesDestinatarias",
-        "parameters":[
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"codi de la unitat arrel",
-            "example":"A04031575",
-            "in":"query",
-            "name":"codigo",
-            "required":true,
-            "schema":{
-              "type":"string"
-            }
-          },
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"booleà que indica si volem que es retorni la denominació cooficial si existeix",
-            "example":"true",
-            "in":"query",
-            "name":"denominacionCooficial",
-            "required":false,
-            "schema":{
-              "type":"boolean"
-            }
-          }
-        ],
-        "responses":{
-          "200":{
-            "content":{
-              "application/json":{
-                "schema":{
-                  "items":{
-                    "nullable":true,
-                    "properties":{
-
-                    },
-                    "type":"object"
-                  },
-                  "type":"array"
-                }
-              }
-            },
-            "description":"Llista d'objectes UnidadRest que representa l'arbre en format de llista."
-          },
-          "204":{
-            "content":{
-              "application/json":{
-                "schema":{
-
-                }
-              }
-            },
-            "description":"Sense contingut"
-          }
-        },
-        "security":[
-          {
-            "BasicAuth":[
-            ]
-          }
-        ],
-        "summary":"Mètode que retorna una llista d’unitats que tenen oficines i que per tant són possibles destinatàries. S’empra per les aplicacions per saber a on dirigir la seva tramitació."
-      }
-    },
-    "/rest/unidades/obtenerHistoricosFinalesSIR":{
-      "get":{
-        "deprecated":false,
-        "operationId":"obtenerHistoricosFinalesSIR",
-        "parameters":[
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"codi de la unitat extingida",
-            "example":"E04984901",
-            "in":"query",
-            "name":"codigo",
-            "required":true,
-            "schema":{
-              "type":"string"
-            }
-          },
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"booleà que indica si volem que es retorni la denominació cooficial si existeix",
-            "example":"true",
-            "in":"query",
-            "name":"denominacionCooficial",
-            "required":false,
-            "schema":{
-              "type":"boolean"
-            }
-          }
-        ],
-        "responses":{
-          "200":{
-            "content":{
-              "application/json":{
-                "schema":{
-                  "$ref":"#/components/schemas/es_caib_dir3caib_persistence_model_json_UnidadRest",
-                  "type":"object"
-                }
-              }
-            },
-            "description":"Una llista d'objectes de tipus UnidadRest"
-          },
-          "204":{
-            "content":{
-              "application/json":{
-                "schema":{
-
-                }
-              }
-            },
-            "description":"Sense contingut"
-          }
-        },
-        "security":[
-          {
-            "BasicAuth":[
-            ]
-          }
-        ],
-        "summary":"Mètode que retorna les unitats que tenen alguna oficina SIR que substitueixen a la unitat del codi indicat. Aquest codi serà d’una unitat extingida. Regweb3 empra aquest mètode per a la gestió de enviaments SIR d’unitats extingides."
-      }
-    },
     "/rest/catalogo/comunidadesAutonomas":{
       "get":{
         "deprecated":false,
@@ -1363,203 +791,108 @@
         "summary":"Servei que permet obtenir totes les comunitats autònomes"
       }
     },
-    "/rest/GET/oficinas/baleares":{
+    "/rest/oficina/oficinasDenominacion":{
       "get":{
         "deprecated":false,
-        "operationId":"getOficinasBalearesOpenData",
+        "operationId":"oficinasPorDenominacion",
         "parameters":[
           {
             "allowEmptyValue":false,
             "allowReserved":false,
-            "description":"filtre per codi d'estat. Si no s'informa, ens retorna els resultats amb estat vigent (V)",
-            "example":"V",
+            "description":"denominació de l'oficina que cercam",
+            "example":"salut",
             "in":"query",
-            "name":"estado",
-            "required":false,
-            "schema":{
-              "type":"string"
-            }
-          }
-        ],
-        "responses":{
-          "200":{
-            "content":{
-              "application/json":{
-                "schema":{
-                  "items":{
-                    "nullable":true,
-                    "properties":{
-
-                    },
-                    "type":"object"
-                  },
-                  "type":"array"
-                }
-              }
-            },
-            "description":"Llista d'objectes OficinaJson"
-          },
-          "204":{
-            "content":{
-              "application/json":{
-                "schema":{
-
-                }
-              }
-            },
-            "description":"Sense contingut"
-          }
-        },
-        "summary":"Servei que permet obtenir totes les oficines, vigents si no s’indica un altre estat, de Balears."
-      }
-    },
-    "/rest/catalogo/nivelesAdministracion":{
-      "get":{
-        "deprecated":false,
-        "operationId":"nivelesAdministracion",
-        "parameters":[
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"filtre per codi d'estat dels resultats. Si no s'informa, ens retorna tots els resultats.",
-            "example":"V",
-            "in":"query",
-            "name":"estado",
-            "required":false,
-            "schema":{
-              "type":"string"
-            }
-          }
-        ],
-        "responses":{
-          "200":{
-            "content":{
-              "application/json":{
-                "schema":{
-                  "items":{
-                    "nullable":true,
-                    "properties":{
-
-                    },
-                    "type":"object"
-                  },
-                  "type":"array"
-                }
-              }
-            },
-            "description":"Llista de <CodigoValor> que representa els nivells d'administració del catàleg"
-          },
-          "204":{
-            "content":{
-              "application/json":{
-                "schema":{
-
-                }
-              }
-            },
-            "description":"Sense contingut"
-          }
-        },
-        "summary":"Servei per permet obtenir els nivells d'administració del catàleg"
-      }
-    },
-    "/rest/sincronizacion/fechaUltimaActualizacion":{
-      "get":{
-        "deprecated":false,
-        "operationId":"obtenerFechaUltimaActualizacion",
-        "parameters":[
-        ],
-        "responses":{
-          "200":{
-            "content":{
-              "application/json":{
-                "schema":{
-                  "nullable":true,
-                  "type":"string"
-                }
-              }
-            },
-            "description":"String amb la data de la darrera actualització"
-          },
-          "204":{
-            "content":{
-              "text/plain":{
-                "schema":{
-
-                }
-              }
-            },
-            "description":"Sense contingut"
-          }
-        },
-        "summary":"Servei que ens retorna la data de la darrera sincronització"
-      }
-    },
-    "/rest/catalogo/entidadesGeograficas":{
-      "get":{
-        "deprecated":false,
-        "operationId":"entidadesGeograficas",
-        "parameters":[
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"filtre per codi d'estat dels resultats. Si no s'informa, ens retorna tots els resultats.",
-            "example":"V",
-            "in":"query",
-            "name":"estado",
-            "required":false,
-            "schema":{
-              "type":"string"
-            }
-          }
-        ],
-        "responses":{
-          "200":{
-            "content":{
-              "application/json":{
-                "schema":{
-                  "items":{
-                    "nullable":true,
-                    "properties":{
-
-                    },
-                    "type":"object"
-                  },
-                  "type":"array"
-                }
-              }
-            },
-            "description":"Llista de <CodigoValor> que representa les entitats geogràfiques del catàleg "
-          },
-          "204":{
-            "content":{
-              "application/json":{
-                "schema":{
-
-                }
-              }
-            },
-            "description":"Sense contingut"
-          }
-        },
-        "summary":"Servei per permet obtenir totes les entitats geogràfiques"
-      }
-    },
-    "/rest/GET/oficinas":{
-      "get":{
-        "deprecated":false,
-        "operationId":"getArbolOficinasOrganismoOpenData",
-        "parameters":[
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"codi de la unitat que volem obtenir les seves oficines",
-            "example":"L01502973",
-            "in":"query",
-            "name":"codigo",
+            "name":"denominacion",
             "required":true,
             "schema":{
               "type":"string"
+            }
+          },
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"booleà per indicar que ens retorni la denominació cooficial si existeix. Per defecte està a 'true' i ens retornarà la denominació cooficial. Si es vol la denominació oficial s'ha d'enviar el valor 'false'.",
+            "example":"true",
+            "in":"query",
+            "name":"cooficial",
+            "required":false,
+            "schema":{
+              "type":"boolean"
+            }
+          },
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"filtre dels resultats per codi d'estat. Si no s'informa, ens retorna els resultats amb estat vigent (V)",
+            "example":"V",
+            "in":"query",
+            "name":"estado",
+            "required":false,
+            "schema":{
+              "type":"string"
+            }
+          }
+        ],
+        "responses":{
+          "200":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "items":{
+                    "nullable":true,
+                    "properties":{
+
+                    },
+                    "type":"object"
+                  },
+                  "type":"array"
+                }
+              }
+            },
+            "description":"Llista de ObjetoDirectorio en format JSON. "
+          },
+          "204":{
+            "content":{
+              "application/json":{
+                "schema":{
+
+                }
+              }
+            },
+            "description":"Sense contingut"
+          }
+        },
+        "summary":"Servei per cercar les oficines que contenguin la denominació indicada"
+      }
+    },
+    "/rest/unidad/unidadesDenominacion":{
+      "get":{
+        "deprecated":false,
+        "operationId":"unidadesPorDenominacion",
+        "parameters":[
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"denominació de l'organisme que cercam",
+            "example":"salut",
+            "in":"query",
+            "name":"denominacion",
+            "required":true,
+            "schema":{
+              "type":"string"
+            }
+          },
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"booleà per indicar que ens retorni la denominació cooficial si existeix. Per defecte està a 'true' i ens retornarà la denominació cooficial. Si es vol la denominació oficial s'ha d'enviar el valor 'false'.",
+            "example":"true",
+            "in":"query",
+            "name":"cooficial",
+            "required":false,
+            "schema":{
+              "nullable":true,
+              "type":"boolean"
             }
           },
           {
@@ -1591,7 +924,7 @@
                 }
               }
             },
-            "description":"Llista d'objectes OficinaJson en format JSON"
+            "description":"Llista de ObjetoDirectorio en format JSON"
           },
           "204":{
             "content":{
@@ -1604,7 +937,148 @@
             "description":"Sense contingut"
           }
         },
-        "summary":"Servei que permet obtenir totes les oficines del organisme indicat per paràmetre"
+        "summary":"Servei per cercar unitats que contenguin la denominació indicada"
+      }
+    },
+    "/rest/unidad/denominacion":{
+      "get":{
+        "deprecated":false,
+        "operationId":"unidadDenominacion",
+        "parameters":[
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"codi de  la unitat que cercam",
+            "example":"L01502973",
+            "in":"query",
+            "name":"codigo",
+            "required":true,
+            "schema":{
+              "type":"string"
+            }
+          },
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"indica si volem que es retorni la denominació cooficial si existeix. Per defecte està a 'true' i ens retornarà la denominació cooficial. Si es vol la denominació oficial s'ha d'enviar el valor 'false'.",
+            "example":"true",
+            "in":"query",
+            "name":"cooficial",
+            "required":false,
+            "schema":{
+              "type":"boolean"
+            }
+          },
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"filtre per codi d'estat dels resultats. Si no s'informa, ens retorna els resultats amb estat vigent (V)",
+            "example":"V",
+            "in":"query",
+            "name":"estado",
+            "required":false,
+            "schema":{
+              "type":"string"
+            }
+          }
+        ],
+        "responses":{
+          "200":{
+            "content":{
+              "text/plain":{
+                "schema":{
+                  "type":"string"
+                }
+              }
+            },
+            "description":"Cadena de text amb la denominació de la unitat"
+          },
+          "204":{
+            "content":{
+              "application/json":{
+                "schema":{
+
+                }
+              }
+            },
+            "description":"Sense contingut"
+          }
+        },
+        "summary":"Servei per obtenir la denominació d'una unitat a partir del seu codi Dir3"
+      }
+    },
+    "/rest/oficina/oficinasOrganismo":{
+      "get":{
+        "deprecated":false,
+        "operationId":"oficinasOrganismo",
+        "parameters":[
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"codi de l'organisme del que volem obtenir les seves oficines",
+            "example":"E00145001",
+            "in":"query",
+            "name":"codigo",
+            "required":true,
+            "schema":{
+              "type":"string"
+            }
+          },
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"booleà per indicar que ens retorni la denominació cooficial si existeix. Per defecte està a 'true' i ens retornarà la denominació cooficial. Si es vol la denominació oficial s'ha d'enviar el valor 'false'.",
+            "example":"true",
+            "in":"query",
+            "name":"cooficial",
+            "required":false,
+            "schema":{
+              "type":"boolean"
+            }
+          },
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"filtre per codi d'estat dels resultats. Si no s'informa, ens retorna els resultats amb estat vigent (V)",
+            "example":"V",
+            "in":"query",
+            "name":"estado",
+            "required":false,
+            "schema":{
+              "type":"string"
+            }
+          }
+        ],
+        "responses":{
+          "200":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "items":{
+                    "nullable":true,
+                    "properties":{
+
+                    },
+                    "type":"object"
+                  },
+                  "type":"array"
+                }
+              }
+            },
+            "description":"Llista de ObjetoDirectorio en format JSON "
+          },
+          "204":{
+            "content":{
+              "application/json":{
+                "schema":{
+
+                }
+              }
+            },
+            "description":"Sense contingut"
+          }
+        },
+        "summary":"Servei que obté les oficines que depenen de l'organisme del codi indicat"
       }
     },
     "/rest/catalogo/ambitosTerritoriales":{
@@ -1690,7 +1164,7 @@
           {
             "allowEmptyValue":false,
             "allowReserved":false,
-            "description":"indica si volem que es retorni la denominació cooficial si existeix",
+            "description":"indica si volem que es retorni la denominació cooficial si existeix. Per defecte està a 'true' i ens retornarà la denominació cooficial. Si es vol la denominació oficial s'ha d'enviar el valor 'false'.",
             "example":"true",
             "in":"query",
             "name":"cooficial",
@@ -1737,277 +1211,10 @@
         "summary":"Servei per obtenir la denominació d'una oficina a partir del seu codi Dir3"
       }
     },
-    "/rest/unidad/unidadesDenominacion":{
+    "/rest/catalogo/entidadesGeograficas":{
       "get":{
         "deprecated":false,
-        "operationId":"unidadesPorDenominacion",
-        "parameters":[
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"denominació de l'organisme que cercam",
-            "example":"salut",
-            "in":"query",
-            "name":"denominacion",
-            "required":true,
-            "schema":{
-              "type":"string"
-            }
-          },
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"booleà per indicar que ens retorni la denominació cooficial si existeix",
-            "example":"true",
-            "in":"query",
-            "name":"cooficial",
-            "required":false,
-            "schema":{
-              "nullable":true,
-              "type":"boolean"
-            }
-          },
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"filtre per codi d'estat dels resultats. Si no s'informa, ens retorna els resultats amb estat vigent (V)",
-            "example":"V",
-            "in":"query",
-            "name":"estado",
-            "required":false,
-            "schema":{
-              "type":"string"
-            }
-          }
-        ],
-        "responses":{
-          "200":{
-            "content":{
-              "application/json":{
-                "schema":{
-                  "items":{
-                    "nullable":true,
-                    "properties":{
-
-                    },
-                    "type":"object"
-                  },
-                  "type":"array"
-                }
-              }
-            },
-            "description":"Llista de ObjetoDirectorio en format JSON"
-          },
-          "204":{
-            "content":{
-              "application/json":{
-                "schema":{
-
-                }
-              }
-            },
-            "description":"Sense contingut"
-          }
-        },
-        "summary":"Servei per cercar unitats que contenguin la denominació indicada"
-      }
-    },
-    "/rest/oficina/oficinasDenominacion":{
-      "get":{
-        "deprecated":false,
-        "operationId":"oficinasPorDenominacion",
-        "parameters":[
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"denominació de l'oficina que cercam",
-            "example":"salut",
-            "in":"query",
-            "name":"denominacion",
-            "required":true,
-            "schema":{
-              "type":"string"
-            }
-          },
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"booleà per indicar que ens retorni la denominació cooficial si existeix",
-            "example":"true",
-            "in":"query",
-            "name":"cooficial",
-            "required":false,
-            "schema":{
-              "type":"boolean"
-            }
-          },
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"filtre dels resultats per codi d'estat. Si no s'informa, ens retorna els resultats amb estat vigent (V)",
-            "example":"V",
-            "in":"query",
-            "name":"estado",
-            "required":false,
-            "schema":{
-              "type":"string"
-            }
-          }
-        ],
-        "responses":{
-          "200":{
-            "content":{
-              "application/json":{
-                "schema":{
-                  "items":{
-                    "nullable":true,
-                    "properties":{
-
-                    },
-                    "type":"object"
-                  },
-                  "type":"array"
-                }
-              }
-            },
-            "description":"Llista de ObjetoDirectorio en format JSON. "
-          },
-          "204":{
-            "content":{
-              "application/json":{
-                "schema":{
-
-                }
-              }
-            },
-            "description":"Sense contingut"
-          }
-        },
-        "summary":"Servei per cercar les oficines que contenguin la denominació indicada"
-      }
-    },
-    "/rest/catalogo/localidades/provincia/entidadGeografica":{
-      "get":{
-        "deprecated":false,
-        "operationId":"provinciasCA",
-        "parameters":[
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"codi de la provincia",
-            "example":"7",
-            "in":"query",
-            "name":"codigoProvincia",
-            "required":true,
-            "schema":{
-              "nullable":true,
-              "type":"integer"
-            }
-          },
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"codi de l'entitat geogràfica",
-            "example":"01",
-            "in":"query",
-            "name":"codigoEntidadGeografica",
-            "required":true,
-            "schema":{
-              "type":"string"
-            }
-          },
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"filtre per codi d'estat dels resultats. Si no s'informa, ens retorna tots els resultats.",
-            "example":"V",
-            "in":"query",
-            "name":"estado",
-            "required":false,
-            "schema":{
-              "type":"string"
-            }
-          }
-        ],
-        "responses":{
-          "200":{
-            "content":{
-              "application/json":{
-                "schema":{
-                  "items":{
-                    "nullable":true,
-                    "properties":{
-
-                    },
-                    "type":"object"
-                  },
-                  "type":"array"
-                }
-              }
-            },
-            "description":"Llista de <CodigoValor> que representa les províncies del catàleg"
-          },
-          "204":{
-            "content":{
-              "application/json":{
-                "schema":{
-
-                }
-              }
-            },
-            "description":"Sense contingut"
-          }
-        },
-        "summary":"Servei per permet obtenir totes les provincies de la comunitat autònoma indicada per paràmetre."
-      }
-    },
-    "/rest/GET/unidad/estado":{
-      "get":{
-        "deprecated":false,
-        "operationId":"unidadEstado",
-        "parameters":[
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"codi de la unitat que es vol consultar el seu estat",
-            "example":"L01502973",
-            "in":"query",
-            "name":"codigo",
-            "required":true,
-            "schema":{
-              "type":"string"
-            }
-          }
-        ],
-        "responses":{
-          "200":{
-            "content":{
-              "text/plain":{
-                "schema":{
-                  "type":"string"
-                }
-              }
-            },
-            "description":"Llista de unitats orgàniques "
-          },
-          "204":{
-            "content":{
-              "application/json":{
-                "schema":{
-
-                }
-              }
-            },
-            "description":"Sense contingut"
-          }
-        },
-        "summary":"Servei per obtenir el codi de l'estat d'una unitat determinada"
-      }
-    },
-    "/rest/catalogo/estados":{
-      "get":{
-        "deprecated":false,
-        "operationId":"estadosEntidad",
+        "operationId":"entidadesGeograficas",
         "parameters":[
           {
             "allowEmptyValue":false,
@@ -2038,7 +1245,7 @@
                 }
               }
             },
-            "description":"Llista de <CodigoValor> que representa els estats del catàleg"
+            "description":"Llista de <CodigoValor> que representa les entitats geogràfiques del catàleg "
           },
           "204":{
             "content":{
@@ -2051,57 +1258,7 @@
             "description":"Sense contingut"
           }
         },
-        "summary":"Servei que permet obtenir tots els estats que poden tenir els registres de dir3. Es recorda que un estat també pot tenir un estat associat."
-      }
-    },
-    "/rest/catalogo/paises":{
-      "get":{
-        "deprecated":false,
-        "operationId":"paises",
-        "parameters":[
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"filtre per codi d'estat dels resultats. Si no s'informa, ens retorna tots els resultats.",
-            "example":"V",
-            "in":"query",
-            "name":"estado",
-            "required":false,
-            "schema":{
-              "type":"string"
-            }
-          }
-        ],
-        "responses":{
-          "200":{
-            "content":{
-              "application/json":{
-                "schema":{
-                  "items":{
-                    "nullable":true,
-                    "properties":{
-
-                    },
-                    "type":"object"
-                  },
-                  "type":"array"
-                }
-              }
-            },
-            "description":"Llista de <PaisJson> que representa els països del catàleg"
-          },
-          "204":{
-            "content":{
-              "application/json":{
-                "schema":{
-
-                }
-              }
-            },
-            "description":"Sense contingut"
-          }
-        },
-        "summary":"Servei que permet obtenir tots els països."
+        "summary":"Servei per permet obtenir totes les entitats geogràfiques"
       }
     },
     "/rest/busqueda/organismos":{
@@ -2220,7 +1377,7 @@
           {
             "allowEmptyValue":false,
             "allowReserved":false,
-            "description":"indica si volem que es retornin les denominacions cooficials si existeixen. Per defecte, no es retornen",
+            "description":"indica si volem que es retornin les denominacions cooficials si existeixen. Per defecte està a 'true' i ens retornarà la denominació cooficial. Si es vol la denominació oficial o les dues denominacions s'ha d'enviar el valor 'false'.",
             "example":"true",
             "in":"query",
             "name":"cooficial",
@@ -2262,39 +1419,15 @@
         "summary":"Servei que permet fer una cerca d'organismes dins dir3 en funció dels paràmetres indicats. S'empra per cercar organismes externs destinataris quan es fa un registre d'entrada/sortida"
       }
     },
-    "/rest/unidad/denominacion":{
+    "/rest/catalogo/nivelesAdministracion":{
       "get":{
         "deprecated":false,
-        "operationId":"unidadDenominacion",
+        "operationId":"nivelesAdministracion",
         "parameters":[
           {
             "allowEmptyValue":false,
             "allowReserved":false,
-            "description":"codi de  la unitat que cercam",
-            "example":"L01502973",
-            "in":"query",
-            "name":"codigo",
-            "required":true,
-            "schema":{
-              "type":"string"
-            }
-          },
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"indica si volem que es retorni la denominació cooficial si existeix",
-            "example":"true",
-            "in":"query",
-            "name":"cooficial",
-            "required":false,
-            "schema":{
-              "type":"boolean"
-            }
-          },
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"filtre per codi d'estat dels resultats. Si no s'informa, ens retorna els resultats amb estat vigent (V)",
+            "description":"filtre per codi d'estat dels resultats. Si no s'informa, ens retorna tots els resultats.",
             "example":"V",
             "in":"query",
             "name":"estado",
@@ -2307,13 +1440,20 @@
         "responses":{
           "200":{
             "content":{
-              "text/plain":{
+              "application/json":{
                 "schema":{
-                  "type":"string"
+                  "items":{
+                    "nullable":true,
+                    "properties":{
+
+                    },
+                    "type":"object"
+                  },
+                  "type":"array"
                 }
               }
             },
-            "description":"Cadena de text amb la denominació de la unitat"
+            "description":"Llista de <CodigoValor> que representa els nivells d'administració del catàleg"
           },
           "204":{
             "content":{
@@ -2326,7 +1466,529 @@
             "description":"Sense contingut"
           }
         },
-        "summary":"Servei per obtenir la denominació d'una unitat a partir del seu codi Dir3"
+        "summary":"Servei per permet obtenir els nivells d'administració del catàleg"
+      }
+    },
+    "/rest/oficinas/obtenerArbolOficinasSir":{
+      "get":{
+        "deprecated":false,
+        "operationId":"obtenerArbolOficinasSir",
+        "parameters":[
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"codi de la unitat que volem obtenir les seves oficines",
+            "example":"L01502973",
+            "in":"query",
+            "name":"codigo",
+            "required":true,
+            "schema":{
+              "type":"string"
+            }
+          },
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"Indica si volem obtenir la denominació cooficial. Per defecte està a 'true' i ens retornarà la denominació cooficial. Si es vol la denominació oficial o les dues denominacions s'ha d'enviar el valor 'false'.",
+            "example":"true",
+            "in":"query",
+            "name":"denominacionCooficial",
+            "required":false,
+            "schema":{
+              "type":"boolean"
+            }
+          }
+        ],
+        "responses":{
+          "200":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "items":{
+                    "nullable":true,
+                    "properties":{
+
+                    },
+                    "type":"object"
+                  },
+                  "type":"array"
+                }
+              }
+            },
+            "description":"Llista d'objectes OficinaRest en format JSON"
+          },
+          "204":{
+            "content":{
+              "application/json":{
+                "schema":{
+
+                }
+              }
+            },
+            "description":"Sense contingut"
+          }
+        },
+        "security":[
+          {
+            "BasicAuth":[
+            ]
+          }
+        ],
+        "summary":"Servei que permet obtenir totes les oficines sir del organisme indicat per paràmetre i dels seus organismes fills"
+      }
+    },
+    "/rest/unidades/obtenerArbolUnidades":{
+      "get":{
+        "deprecated":false,
+        "operationId":"obtenerArbolUnidades",
+        "parameters":[
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"codi de la unitat arrel",
+            "example":"E03139201",
+            "in":"query",
+            "name":"codigo",
+            "required":true,
+            "schema":{
+              "type":"string"
+            }
+          },
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"data de la darrera actualització. Format: yyyy-MM-dd",
+            "in":"query",
+            "name":"fechaActualizacion",
+            "required":false,
+            "schema":{
+              "type":"string"
+            }
+          },
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"data en la que es va fer la primera sincronització. Format: yyyy-MM-dd",
+            "in":"query",
+            "name":"fechaSincronizacion",
+            "required":false,
+            "schema":{
+              "type":"string"
+            }
+          },
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"booleà que indica si volem que es retorni la denominació cooficial si existeix. Per defecte està a 'true' i ens retornarà la denominació cooficial. Si es vol la denominació oficial o les dues denominacions s'ha d'enviar el valor 'false'.",
+            "example":"true",
+            "in":"query",
+            "name":"denominacionCooficial",
+            "required":false,
+            "schema":{
+              "type":"boolean"
+            }
+          }
+        ],
+        "responses":{
+          "200":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "items":{
+                    "nullable":true,
+                    "properties":{
+
+                    },
+                    "type":"object"
+                  },
+                  "type":"array"
+                }
+              }
+            },
+            "description":"Llista d'objectes UnidadRest que representa l'arbre en format de llista."
+          },
+          "204":{
+            "content":{
+              "application/json":{
+                "schema":{
+
+                }
+              }
+            },
+            "description":"Sense contingut"
+          }
+        },
+        "security":[
+          {
+            "BasicAuth":[
+            ]
+          }
+        ],
+        "summary":"Servei que ens retorna l 'arbre d'unitats de la unitat indicada pel codi, partint de la data de la darrera actualització i la data de la sincronització. Si no s'indica data d'actualització es considera que és una sincronització i et retorna tot l'arbre d'unitats vigents. Si s'indica data d'actualització, retorna les unitats que han estat actualitzades dins el període de temps indicat tenint en compte també la data de la darrera importació des de dir3 Madrid."
+      }
+    },
+    "/rest/unidades/obtenerHistoricosFinales":{
+      "get":{
+        "deprecated":false,
+        "operationId":"obtenerHistoricosFinales",
+        "parameters":[
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"codi de la unitat extingida",
+            "example":"E04984901",
+            "in":"query",
+            "name":"codigo",
+            "required":true,
+            "schema":{
+              "type":"string"
+            }
+          },
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"booleà que indica si volem que es retorni la denominació cooficial si existeix. Per defecte està a 'true' i ens retornarà la denominació cooficial. Si es vol la denominació oficial o les dues denominacions s'ha d'enviar el valor 'false'.",
+            "example":"true",
+            "in":"query",
+            "name":"denominacionCooficial",
+            "required":false,
+            "schema":{
+              "type":"boolean"
+            }
+          }
+        ],
+        "responses":{
+          "200":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/es_caib_dir3caib_persistence_model_json_UnidadRest",
+                  "type":"object"
+                }
+              }
+            },
+            "description":"Una llista d'objectes de tipus UnidadRest."
+          },
+          "204":{
+            "content":{
+              "application/json":{
+                "schema":{
+
+                }
+              }
+            },
+            "description":"Sense contingut"
+          }
+        },
+        "security":[
+          {
+            "BasicAuth":[
+            ]
+          }
+        ],
+        "summary":"Mètode que retorna les unitats que substitueixen a la unitat amb el codi indicat. Aquest codi serà d’una unitat extingida."
+      }
+    },
+    "/rest/oficinas/obtenerOficinasSIRUnidad":{
+      "get":{
+        "deprecated":false,
+        "operationId":"obtenerOficinasSIRUnidad",
+        "parameters":[
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"codi de la unitat",
+            "example":"E03139201",
+            "in":"query",
+            "name":"codigo",
+            "required":true,
+            "schema":{
+              "type":"string"
+            }
+          },
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"booleà que indica si volem que es retorni la denominació cooficial si existeix. Per defecte està a 'true' i ens retornarà la denominació cooficial. Si es vol la denominació oficial o les dues denominacions s'ha d'enviar el valor 'false'.",
+            "example":"true",
+            "in":"query",
+            "name":"denominacionCooficial",
+            "required":false,
+            "schema":{
+              "type":"boolean"
+            }
+          }
+        ],
+        "responses":{
+          "200":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "items":{
+                    "nullable":true,
+                    "properties":{
+
+                    },
+                    "type":"object"
+                  },
+                  "type":"array"
+                }
+              }
+            },
+            "description":"Llista d'objectes OficinaRest que representa l'arbre en format de llista"
+          },
+          "204":{
+            "content":{
+              "application/json":{
+                "schema":{
+
+                }
+              }
+            },
+            "description":"Sense contingut"
+          }
+        },
+        "security":[
+          {
+            "BasicAuth":[
+            ]
+          }
+        ],
+        "summary":"Servei que ens retorna el llistat d'oficines integrades en SIR de la unitat indicada pel codi."
+      }
+    },
+    "/rest/oficinas/obtenerArbolOficinas":{
+      "get":{
+        "deprecated":false,
+        "operationId":"obtenerArbolOficinas",
+        "parameters":[
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"codi de la unitat",
+            "example":"L01502973",
+            "in":"query",
+            "name":"codigo",
+            "required":true,
+            "schema":{
+              "type":"string"
+            }
+          },
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"data de la darrera actualització. Format: yyyy-MM-dd",
+            "in":"query",
+            "name":"fechaActualizacion",
+            "required":false,
+            "schema":{
+              "type":"string"
+            }
+          },
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"data en la que es va fer la primera sincronització. Format: yyyy-MM-dd",
+            "in":"query",
+            "name":"fechaSincronizacion",
+            "required":false,
+            "schema":{
+              "type":"string"
+            }
+          },
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"booleà que indica si volem que es retorni la denominació cooficial si existeix. Per defecte està a 'true' i ens retornarà la denominació cooficial. Si es vol la denominació oficial o les dues denominacions s'ha d'enviar el valor 'false'.",
+            "example":"true",
+            "in":"query",
+            "name":"denominacionCooficial",
+            "required":false,
+            "schema":{
+              "type":"boolean"
+            }
+          }
+        ],
+        "responses":{
+          "200":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "items":{
+                    "nullable":true,
+                    "properties":{
+
+                    },
+                    "type":"object"
+                  },
+                  "type":"array"
+                }
+              }
+            },
+            "description":"Llista d'objectes OficinaRest que representa l'arbre en format de llista"
+          },
+          "204":{
+            "content":{
+              "application/json":{
+                "schema":{
+
+                }
+              }
+            },
+            "description":"Sense contingut"
+          }
+        },
+        "security":[
+          {
+            "BasicAuth":[
+            ]
+          }
+        ],
+        "summary":"Servei que ens retorna l'arbre d'oficines de la unitat indicada pel codi, partint de la darrera actualització i la data de la sincronització que s'indica per paràmetre. Si la data d'actualització és null es considera una sincronització i retorna tot l'arbre d'oficines vigents amb la unitat."
+      }
+    },
+    "/rest/sincronizacion/fechaUltimaActualizacion":{
+      "get":{
+        "deprecated":false,
+        "operationId":"obtenerFechaUltimaActualizacion",
+        "parameters":[
+        ],
+        "responses":{
+          "200":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "nullable":true,
+                  "type":"string"
+                }
+              }
+            },
+            "description":"String amb la data de la darrera actualització"
+          },
+          "204":{
+            "content":{
+              "text/plain":{
+                "schema":{
+
+                }
+              }
+            },
+            "description":"Sense contingut"
+          }
+        },
+        "summary":"Servei que ens retorna la data de la darrera sincronització"
+      }
+    },
+    "/rest/unidades/obtenerHistoricosFinalesSIR":{
+      "get":{
+        "deprecated":false,
+        "operationId":"obtenerHistoricosFinalesSIR",
+        "parameters":[
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"codi de la unitat extingida",
+            "example":"E04984901",
+            "in":"query",
+            "name":"codigo",
+            "required":true,
+            "schema":{
+              "type":"string"
+            }
+          },
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"booleà que indica si volem que es retorni la denominació cooficial si existeix. Per defecte està a 'true' i ens retornarà la denominació cooficial. Si es vol la denominació oficial o les dues denominacions s'ha d'enviar el valor 'false'.",
+            "example":"true",
+            "in":"query",
+            "name":"denominacionCooficial",
+            "required":false,
+            "schema":{
+              "type":"boolean"
+            }
+          }
+        ],
+        "responses":{
+          "200":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/es_caib_dir3caib_persistence_model_json_UnidadRest",
+                  "type":"object"
+                }
+              }
+            },
+            "description":"Una llista d'objectes de tipus UnidadRest"
+          },
+          "204":{
+            "content":{
+              "application/json":{
+                "schema":{
+
+                }
+              }
+            },
+            "description":"Sense contingut"
+          }
+        },
+        "security":[
+          {
+            "BasicAuth":[
+            ]
+          }
+        ],
+        "summary":"Mètode que retorna les unitats que tenen alguna oficina SIR que substitueixen a la unitat del codi indicat. Aquest codi serà d’una unitat extingida. Regweb3 empra aquest mètode per a la gestió de enviaments SIR d’unitats extingides."
+      }
+    },
+    "/rest/GET/oficinas/baleares":{
+      "get":{
+        "deprecated":false,
+        "operationId":"getOficinasBalearesOpenData",
+        "parameters":[
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"filtre per codi d'estat. Si no s'informa, ens retorna els resultats amb estat vigent (V)",
+            "example":"V",
+            "in":"query",
+            "name":"estado",
+            "required":false,
+            "schema":{
+              "type":"string"
+            }
+          }
+        ],
+        "responses":{
+          "200":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "items":{
+                    "nullable":true,
+                    "properties":{
+
+                    },
+                    "type":"object"
+                  },
+                  "type":"array"
+                }
+              }
+            },
+            "description":"Llista d'objectes OficinaJson"
+          },
+          "204":{
+            "content":{
+              "application/json":{
+                "schema":{
+
+                }
+              }
+            },
+            "description":"Sense contingut"
+          }
+        },
+        "summary":"Servei que permet obtenir totes les oficines, vigents si no s’indica un altre estat, de Balears."
       }
     },
     "/rest/busqueda/oficinas":{
@@ -2476,192 +2138,6 @@
         "summary":"Servei per fer una cerca d'oficines origen dins dir3 en funció dels paràmetres indicats. S'empra per cercar oficines d'origen externes quan es fa un registre d'entrada/sortida"
       }
     },
-    "/rest/organigrama":{
-      "get":{
-        "deprecated":false,
-        "operationId":"organigrama",
-        "parameters":[
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"codi de l'organisme arrel del que volem obtenir el seu arbre",
-            "example":"A04031575",
-            "in":"query",
-            "name":"codigo",
-            "required":true,
-            "schema":{
-              "type":"string"
-            }
-          },
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"booleà per indicar que ens retorni la denominació cooficial si existeix",
-            "example":"true",
-            "in":"query",
-            "name":"cooficial",
-            "required":false,
-            "schema":{
-              "type":"boolean"
-            }
-          }
-        ],
-        "responses":{
-          "200":{
-            "content":{
-              "application/json":{
-                "schema":{
-                  "items":{
-                    "nullable":true,
-                    "properties":{
-
-                    },
-                    "type":"object"
-                  },
-                  "type":"array"
-                }
-              }
-            },
-            "description":"Llista d'objectes Nodo amb un subconjunt d'informació de l'organisme."
-          },
-          "204":{
-            "content":{
-              "application/json":{
-                "schema":{
-
-                }
-              }
-            },
-            "description":"Sense contingut"
-          }
-        },
-        "summary":"Servei per obté l'arbre d'organismes/unitats del codi indicat pero la estructura que monta es un conjunt d'informació reduida."
-      }
-    },
-    "/rest/catalogo/tiposvia":{
-      "get":{
-        "deprecated":false,
-        "operationId":"tiposVia",
-        "parameters":[
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"filtre per codi d'estat dels resultats. Si no s'informa, ens retorna tots els resultats.",
-            "example":"V",
-            "in":"query",
-            "name":"estado",
-            "required":false,
-            "schema":{
-              "type":"string"
-            }
-          }
-        ],
-        "responses":{
-          "200":{
-            "content":{
-              "application/json":{
-                "schema":{
-                  "items":{
-                    "nullable":true,
-                    "properties":{
-
-                    },
-                    "type":"object"
-                  },
-                  "type":"array"
-                }
-              }
-            },
-            "description":"Llista de <CodigoValor> que representa els tipus de via del catàleg"
-          },
-          "204":{
-            "content":{
-              "application/json":{
-                "schema":{
-
-                }
-              }
-            },
-            "description":"Sense contingut"
-          }
-        },
-        "summary":"Servei que permet obtenir tots els tipus de via del catàleg."
-      }
-    },
-    "/rest/oficina/oficinasOrganismo":{
-      "get":{
-        "deprecated":false,
-        "operationId":"oficinasOrganismo",
-        "parameters":[
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"codi de l'organisme del que volem obtenir les seves oficines",
-            "example":"E00145001",
-            "in":"query",
-            "name":"codigo",
-            "required":true,
-            "schema":{
-              "type":"string"
-            }
-          },
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"booleà per indicar que ens retorni la denominació cooficial si existeix",
-            "example":"true",
-            "in":"query",
-            "name":"cooficial",
-            "required":false,
-            "schema":{
-              "type":"boolean"
-            }
-          },
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"filtre per codi d'estat dels resultats. Si no s'informa, ens retorna els resultats amb estat vigent (V)",
-            "example":"V",
-            "in":"query",
-            "name":"estado",
-            "required":false,
-            "schema":{
-              "type":"string"
-            }
-          }
-        ],
-        "responses":{
-          "200":{
-            "content":{
-              "application/json":{
-                "schema":{
-                  "items":{
-                    "nullable":true,
-                    "properties":{
-
-                    },
-                    "type":"object"
-                  },
-                  "type":"array"
-                }
-              }
-            },
-            "description":"Llista de ObjetoDirectorio en format JSON "
-          },
-          "204":{
-            "content":{
-              "application/json":{
-                "schema":{
-
-                }
-              }
-            },
-            "description":"Sense contingut"
-          }
-        },
-        "summary":"Servei que obté les oficines que depenen de l'organisme del codi indicat"
-      }
-    },
     "/rest/unidad/arbolUnidades":{
       "get":{
         "deprecated":false,
@@ -2682,7 +2158,7 @@
           {
             "allowEmptyValue":false,
             "allowReserved":false,
-            "description":"booleà per indicar que ens retorni la denominació cooficial si existeix",
+            "description":"booleà per indicar que ens retorni la denominació cooficial si existeix. Per defecte està a 'true' i ens retornarà la denominació cooficial. Si es vol la denominació oficial s'ha d'enviar el valor 'false'.",
             "example":"true",
             "in":"query",
             "name":"cooficial",
@@ -2734,56 +2210,6 @@
           }
         },
         "summary":"Servei que obté l'arbre d'organismes/unitats del codi indicat"
-      }
-    },
-    "/rest/catalogo/provincias":{
-      "get":{
-        "deprecated":false,
-        "operationId":"provincias",
-        "parameters":[
-          {
-            "allowEmptyValue":false,
-            "allowReserved":false,
-            "description":"filtre per codi d'estat dels resultats. Si no s'informa, ens retorna tots els resultats.",
-            "example":"V",
-            "in":"query",
-            "name":"estado",
-            "required":false,
-            "schema":{
-              "type":"string"
-            }
-          }
-        ],
-        "responses":{
-          "200":{
-            "content":{
-              "application/json":{
-                "schema":{
-                  "items":{
-                    "nullable":true,
-                    "properties":{
-
-                    },
-                    "type":"object"
-                  },
-                  "type":"array"
-                }
-              }
-            },
-            "description":"Llista de <CodigoValor> que representa les províncies del catàleg"
-          },
-          "204":{
-            "content":{
-              "application/json":{
-                "schema":{
-
-                }
-              }
-            },
-            "description":"Sense contingut"
-          }
-        },
-        "summary":"Servei per permet obtenir totes les provincies"
       }
     },
     "/rest/catalogo/provincias/comunidadAutonoma":{
@@ -2849,6 +2275,208 @@
         "summary":"Servei per permet obtenir totes les provincies de la comunitat autònoma indicada per paràmetre."
       }
     },
+    "/rest/catalogo/localidades/provincia/entidadGeografica":{
+      "get":{
+        "deprecated":false,
+        "operationId":"provinciasCA",
+        "parameters":[
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"codi de la provincia",
+            "example":"7",
+            "in":"query",
+            "name":"codigoProvincia",
+            "required":true,
+            "schema":{
+              "nullable":true,
+              "type":"integer"
+            }
+          },
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"codi de l'entitat geogràfica",
+            "example":"01",
+            "in":"query",
+            "name":"codigoEntidadGeografica",
+            "required":true,
+            "schema":{
+              "type":"string"
+            }
+          },
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"filtre per codi d'estat dels resultats. Si no s'informa, ens retorna tots els resultats.",
+            "example":"V",
+            "in":"query",
+            "name":"estado",
+            "required":false,
+            "schema":{
+              "type":"string"
+            }
+          }
+        ],
+        "responses":{
+          "200":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "items":{
+                    "nullable":true,
+                    "properties":{
+
+                    },
+                    "type":"object"
+                  },
+                  "type":"array"
+                }
+              }
+            },
+            "description":"Llista de <CodigoValor> que representa les províncies del catàleg"
+          },
+          "204":{
+            "content":{
+              "application/json":{
+                "schema":{
+
+                }
+              }
+            },
+            "description":"Sense contingut"
+          }
+        },
+        "summary":"Servei per permet obtenir totes les provincies de la comunitat autònoma indicada per paràmetre."
+      }
+    },
+    "/rest/GET/unidad/estado":{
+      "get":{
+        "deprecated":false,
+        "operationId":"unidadEstado",
+        "parameters":[
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"codi de la unitat que es vol consultar el seu estat",
+            "example":"L01502973",
+            "in":"query",
+            "name":"codigo",
+            "required":true,
+            "schema":{
+              "type":"string"
+            }
+          }
+        ],
+        "responses":{
+          "200":{
+            "content":{
+              "text/plain":{
+                "schema":{
+                  "type":"string"
+                }
+              }
+            },
+            "description":"Llista de unitats orgàniques "
+          },
+          "204":{
+            "content":{
+              "application/json":{
+                "schema":{
+
+                }
+              }
+            },
+            "description":"Sense contingut"
+          }
+        },
+        "summary":"Servei per obtenir el codi de l'estat d'una unitat determinada"
+      }
+    },
+    "/rest/oficinas/obtenerOficina":{
+      "get":{
+        "deprecated":false,
+        "operationId":"obtenerOficina",
+        "parameters":[
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"codi de la unitat",
+            "example":"O00031074",
+            "in":"query",
+            "name":"codigo",
+            "required":true,
+            "schema":{
+              "type":"string"
+            }
+          },
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"data de la darrera actualització. Format: yyyy-MM-dd",
+            "in":"query",
+            "name":"fechaActualizacion",
+            "required":false,
+            "schema":{
+              "type":"string"
+            }
+          },
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"data en la que es va fer la primera sincronització. Format: yyyy-MM-dd",
+            "in":"query",
+            "name":"fechaSincronizacion",
+            "required":false,
+            "schema":{
+              "type":"string"
+            }
+          },
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"booleà que indica si volem que es retorni la denominació cooficial si existeix. Per defecte està a 'true' i ens retornarà la denominació cooficial. Si es vol la denominació oficial o les dues denominacions s'ha d'enviar el valor 'false'.",
+            "example":"true",
+            "in":"query",
+            "name":"denominacionCooficial",
+            "required":false,
+            "schema":{
+              "type":"boolean"
+            }
+          }
+        ],
+        "responses":{
+          "200":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/es_caib_dir3caib_persistence_model_json_OficinaRest",
+                  "type":"object"
+                }
+              }
+            },
+            "description":"Un objecte OficinaRest amb les dades d'una oficina"
+          },
+          "204":{
+            "content":{
+              "application/json":{
+                "schema":{
+
+                }
+              }
+            },
+            "description":"Sense contingut"
+          }
+        },
+        "security":[
+          {
+            "BasicAuth":[
+            ]
+          }
+        ],
+        "summary":"Servei que ens retorna les dades d'una oficina en funció del codi, la data d'actualització i la de sincronització"
+      }
+    },
     "/rest/unidades/buscarUnidad":{
       "get":{
         "deprecated":false,
@@ -2869,7 +2497,7 @@
           {
             "allowEmptyValue":false,
             "allowReserved":false,
-            "description":"booleà que indica si volem que es retorni la denominació cooficial si existeix",
+            "description":"booleà que indica si volem que es retorni la denominació cooficial si existeix. Per defecte està a 'true' i ens retornarà la denominació cooficial. Si es vol la denominació oficial o les dues denominacions s'ha d'enviar el valor 'false'.",
             "example":"true",
             "in":"query",
             "name":"denominacionCooficial",
@@ -2909,6 +2537,56 @@
           }
         ],
         "summary":"Mètode que retorna un objecte de tipus UnidadRest amb la informació de la unitat a partir del codi indicat"
+      }
+    },
+    "/rest/catalogo/provincias":{
+      "get":{
+        "deprecated":false,
+        "operationId":"provincias",
+        "parameters":[
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"filtre per codi d'estat dels resultats. Si no s'informa, ens retorna tots els resultats.",
+            "example":"V",
+            "in":"query",
+            "name":"estado",
+            "required":false,
+            "schema":{
+              "type":"string"
+            }
+          }
+        ],
+        "responses":{
+          "200":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "items":{
+                    "nullable":true,
+                    "properties":{
+
+                    },
+                    "type":"object"
+                  },
+                  "type":"array"
+                }
+              }
+            },
+            "description":"Llista de <CodigoValor> que representa les províncies del catàleg"
+          },
+          "204":{
+            "content":{
+              "application/json":{
+                "schema":{
+
+                }
+              }
+            },
+            "description":"Sense contingut"
+          }
+        },
+        "summary":"Servei per permet obtenir totes les provincies"
       }
     },
     "/rest/unidades/obtenerUnidad":{
@@ -2995,16 +2673,16 @@
         "summary":"Mètode que retorna un objecte de tipus UnidadRest vigent a partir del codi indicat  en funció de la data d'actualització i la de sincronització (indica quan es va fer la primera sincronització). Si la data d'actualització és posterior a la d'importació amb dir3 de Madrid es suposa que  ha canviat i s' envia. "
       }
     },
-    "/rest/oficinas/obtenerOficina":{
+    "/rest/organigrama":{
       "get":{
         "deprecated":false,
-        "operationId":"obtenerOficina",
+        "operationId":"organigrama",
         "parameters":[
           {
             "allowEmptyValue":false,
             "allowReserved":false,
-            "description":"codi de la unitat",
-            "example":"O00031074",
+            "description":"codi de l'organisme arrel del que volem obtenir el seu arbre",
+            "example":"A04031575",
             "in":"query",
             "name":"codigo",
             "required":true,
@@ -3015,9 +2693,271 @@
           {
             "allowEmptyValue":false,
             "allowReserved":false,
-            "description":"data de la darrera actualització. Format: yyyy-MM-dd",
+            "description":"booleà per indicar que ens retorni la denominació cooficial si existeix. Per defecte està a 'true' i ens retornarà la denominació cooficial. Si es vol la denominació oficial s'ha d'enviar el valor 'false'.",
+            "example":"true",
             "in":"query",
-            "name":"fechaActualizacion",
+            "name":"cooficial",
+            "required":false,
+            "schema":{
+              "type":"boolean"
+            }
+          }
+        ],
+        "responses":{
+          "200":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "items":{
+                    "nullable":true,
+                    "properties":{
+
+                    },
+                    "type":"object"
+                  },
+                  "type":"array"
+                }
+              }
+            },
+            "description":"Llista d'objectes Nodo amb un subconjunt d'informació de l'organisme."
+          },
+          "204":{
+            "content":{
+              "application/json":{
+                "schema":{
+
+                }
+              }
+            },
+            "description":"Sense contingut"
+          }
+        },
+        "summary":"Servei per obté l'arbre d'organismes/unitats del codi indicat pero la estructura que monta es un conjunt d'informació reduida."
+      }
+    },
+    "/rest/catalogo/estados":{
+      "get":{
+        "deprecated":false,
+        "operationId":"estadosEntidad",
+        "parameters":[
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"filtre per codi d'estat dels resultats. Si no s'informa, ens retorna tots els resultats.",
+            "example":"V",
+            "in":"query",
+            "name":"estado",
+            "required":false,
+            "schema":{
+              "type":"string"
+            }
+          }
+        ],
+        "responses":{
+          "200":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "items":{
+                    "nullable":true,
+                    "properties":{
+
+                    },
+                    "type":"object"
+                  },
+                  "type":"array"
+                }
+              }
+            },
+            "description":"Llista de <CodigoValor> que representa els estats del catàleg"
+          },
+          "204":{
+            "content":{
+              "application/json":{
+                "schema":{
+
+                }
+              }
+            },
+            "description":"Sense contingut"
+          }
+        },
+        "summary":"Servei que permet obtenir tots els estats que poden tenir els registres de dir3. Es recorda que un estat també pot tenir un estat associat."
+      }
+    },
+    "/rest/catalogo/tiposvia":{
+      "get":{
+        "deprecated":false,
+        "operationId":"tiposVia",
+        "parameters":[
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"filtre per codi d'estat dels resultats. Si no s'informa, ens retorna tots els resultats.",
+            "example":"V",
+            "in":"query",
+            "name":"estado",
+            "required":false,
+            "schema":{
+              "type":"string"
+            }
+          }
+        ],
+        "responses":{
+          "200":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "items":{
+                    "nullable":true,
+                    "properties":{
+
+                    },
+                    "type":"object"
+                  },
+                  "type":"array"
+                }
+              }
+            },
+            "description":"Llista de <CodigoValor> que representa els tipus de via del catàleg"
+          },
+          "204":{
+            "content":{
+              "application/json":{
+                "schema":{
+
+                }
+              }
+            },
+            "description":"Sense contingut"
+          }
+        },
+        "summary":"Servei que permet obtenir tots els tipus de via del catàleg."
+      }
+    },
+    "/rest/catalogo/paises":{
+      "get":{
+        "deprecated":false,
+        "operationId":"paises",
+        "parameters":[
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"filtre per codi d'estat dels resultats. Si no s'informa, ens retorna tots els resultats.",
+            "example":"V",
+            "in":"query",
+            "name":"estado",
+            "required":false,
+            "schema":{
+              "type":"string"
+            }
+          }
+        ],
+        "responses":{
+          "200":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "items":{
+                    "nullable":true,
+                    "properties":{
+
+                    },
+                    "type":"object"
+                  },
+                  "type":"array"
+                }
+              }
+            },
+            "description":"Llista de <PaisJson> que representa els països del catàleg"
+          },
+          "204":{
+            "content":{
+              "application/json":{
+                "schema":{
+
+                }
+              }
+            },
+            "description":"Sense contingut"
+          }
+        },
+        "summary":"Servei que permet obtenir tots els països."
+      }
+    },
+    "/rest/GET/oficinas":{
+      "get":{
+        "deprecated":false,
+        "operationId":"getArbolOficinasOrganismoOpenData",
+        "parameters":[
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"codi de la unitat que volem obtenir les seves oficines",
+            "example":"L01502973",
+            "in":"query",
+            "name":"codigo",
+            "required":true,
+            "schema":{
+              "type":"string"
+            }
+          },
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"filtre per codi d'estat dels resultats. Si no s'informa, ens retorna els resultats amb estat vigent (V)",
+            "example":"V",
+            "in":"query",
+            "name":"estado",
+            "required":false,
+            "schema":{
+              "type":"string"
+            }
+          }
+        ],
+        "responses":{
+          "200":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "items":{
+                    "nullable":true,
+                    "properties":{
+
+                    },
+                    "type":"object"
+                  },
+                  "type":"array"
+                }
+              }
+            },
+            "description":"Llista d'objectes OficinaJson en format JSON"
+          },
+          "204":{
+            "content":{
+              "application/json":{
+                "schema":{
+
+                }
+              }
+            },
+            "description":"Sense contingut"
+          }
+        },
+        "summary":"Servei que permet obtenir totes les oficines del organisme indicat per paràmetre"
+      }
+    },
+    "/rest/busqueda/unidades/denominacion/comunidad":{
+      "get":{
+        "deprecated":false,
+        "operationId":"obtenerUnidadesDenominacionComunidad",
+        "parameters":[
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"denominació de l'organisme que cercam",
+            "in":"query",
+            "name":"denominacion",
             "required":false,
             "schema":{
               "type":"string"
@@ -3026,10 +2966,74 @@
           {
             "allowEmptyValue":false,
             "allowReserved":false,
-            "description":"data en la que es va fer la primera sincronització. Format: yyyy-MM-dd",
+            "description":"codi de la comunitat autònoma a la que volem cercar",
+            "example":"7",
             "in":"query",
-            "name":"fechaSincronizacion",
+            "name":"codComunidad",
+            "required":true,
+            "schema":{
+              "nullable":true,
+              "type":"integer"
+            }
+          },
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"booleà per indicar que ens retorni la denominació cooficial si existeix. Per defecte està a 'true' i ens retornarà la denominació cooficial. Si es vol la denominació oficial s'ha d'enviar el valor 'false'.",
+            "example":"true",
+            "in":"query",
+            "name":"cooficial",
             "required":false,
+            "schema":{
+              "type":"boolean"
+            }
+          }
+        ],
+        "responses":{
+          "200":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "items":{
+                    "nullable":true,
+                    "properties":{
+
+                    },
+                    "type":"object"
+                  },
+                  "type":"array"
+                }
+              }
+            },
+            "description":"Llista d'objectes Nodo en format JSON"
+          },
+          "204":{
+            "content":{
+              "application/json":{
+                "schema":{
+
+                }
+              }
+            },
+            "description":"Sense contingut"
+          }
+        },
+        "summary":"Servei per permet cercar unitats per denominació i comunitat autònoma"
+      }
+    },
+    "/rest/unidades/obtenerArbolUnidadesDestinatarias":{
+      "get":{
+        "deprecated":false,
+        "operationId":"obtenerArbolUnidadesDestinatarias",
+        "parameters":[
+          {
+            "allowEmptyValue":false,
+            "allowReserved":false,
+            "description":"codi de la unitat arrel",
+            "example":"A04031575",
+            "in":"query",
+            "name":"codigo",
+            "required":true,
             "schema":{
               "type":"string"
             }
@@ -3037,7 +3041,7 @@
           {
             "allowEmptyValue":false,
             "allowReserved":false,
-            "description":"booleà que indica si volem que es retorni la denominació cooficial si existeix",
+            "description":"booleà que indica si volem que es retorni la denominació cooficial si existeix. Per defecte està a 'true' i ens retornarà la denominació cooficial. Si es vol la denominació oficial o les dues denominacions s'ha d'enviar el valor 'false'.",
             "example":"true",
             "in":"query",
             "name":"denominacionCooficial",
@@ -3052,12 +3056,18 @@
             "content":{
               "application/json":{
                 "schema":{
-                  "$ref":"#/components/schemas/es_caib_dir3caib_persistence_model_json_OficinaRest",
-                  "type":"object"
+                  "items":{
+                    "nullable":true,
+                    "properties":{
+
+                    },
+                    "type":"object"
+                  },
+                  "type":"array"
                 }
               }
             },
-            "description":"Un objecte OficinaRest amb les dades d'una oficina"
+            "description":"Llista d'objectes UnidadRest que representa l'arbre en format de llista."
           },
           "204":{
             "content":{
@@ -3076,7 +3086,7 @@
             ]
           }
         ],
-        "summary":"Servei que ens retorna les dades d'una oficina en funció del codi, la data d'actualització i la de sincronització"
+        "summary":"Mètode que retorna una llista d’unitats que tenen oficines i que per tant són possibles destinatàries. S’empra per les aplicacions per saber a on dirigir la seva tramitació."
       }
     }
   },

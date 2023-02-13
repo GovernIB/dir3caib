@@ -17,6 +17,7 @@ public class OficinaRest implements Serializable {
 
     private String codigo;
     private String denominacion;
+    private String denominacionCooficial;
     private String estado;    //CatEstadoEntidad
     private Long nivelAdministracion;  //CatNivelAdministracion
     private Long tipoOficina;  //CatJerarquiaOficina
@@ -53,7 +54,15 @@ public class OficinaRest implements Serializable {
         this.denominacion = denominacion;
     }
 
-    public String getEstado() {
+    public String getDenominacionCooficial() {
+		return denominacionCooficial;
+	}
+
+	public void setDenominacionCooficial(String denominacionCooficial) {
+		this.denominacionCooficial = denominacionCooficial;
+	}
+
+	public String getEstado() {
         return estado;
     }
 
@@ -218,6 +227,8 @@ public class OficinaRest implements Serializable {
     public void rellenar(Oficina oficina, boolean denominacionOficial){
         this.setCodigo(oficina.getCodigo());
         this.setDenominacion((denominacionOficial && Utils.isNotEmpty(oficina.getDenomLenguaCooficial())) ? oficina.getDenomLenguaCooficial() : oficina.getDenominacion());
+        if (Utils.isNotEmpty(oficina.getDenomLenguaCooficial()))
+        	this.setDenominacionCooficial(oficina.getDenomLenguaCooficial());
         this.setEstado(oficina.getEstado().getCodigoEstadoEntidad());
         if(oficina.getCodPais()!=null) {
             this.setCodigoPais(oficina.getCodPais().getCodigoPais());
@@ -298,6 +309,7 @@ public class OficinaRest implements Serializable {
     public void rellenarLigero(Oficina oficina, boolean denominacionOficial){
         this.setCodigo(oficina.getCodigo());
         this.setDenominacion((denominacionOficial && Utils.isNotEmpty(oficina.getDenomLenguaCooficial())) ? oficina.getDenomLenguaCooficial() : oficina.getDenominacion());
+        this.setDenominacionCooficial((Utils.isNotEmpty(oficina.getDenomLenguaCooficial())) ?  oficina.getDenomLenguaCooficial() : "");
         this.setCodUoResponsable(oficina.getCodUoResponsable().getCodigo());
     }
 

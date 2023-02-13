@@ -7,6 +7,7 @@ import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.persistence.model.ws.ContactoTF;
 import es.caib.dir3caib.persistence.model.ws.UnidadTF;
 import es.caib.dir3caib.persistence.model.ws.v2.UnidadWs;
+import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.utils.Utils;
 
 import java.util.*;
@@ -22,6 +23,7 @@ public class UnidadRest {
     private String codigo;
     private Long version;
     private String denominacion;
+    private String denominacionCooficial;
     private String codigoEstadoEntidad;
     private Long nivelJerarquico;
     private String codUnidadSuperior;
@@ -75,7 +77,15 @@ public class UnidadRest {
         this.denominacion = denominacion;
     }
 
-    public String getCodigoEstadoEntidad() {
+    public String getDenominacionCooficial() {
+		return denominacionCooficial;
+	}
+
+	public void setDenominacionCooficial(String denominacionCooficial) {
+		this.denominacionCooficial = denominacionCooficial;
+	}
+
+	public String getCodigoEstadoEntidad() {
         return codigoEstadoEntidad;
     }
 
@@ -293,6 +303,8 @@ public class UnidadRest {
         }
         this.setCompetencias(unidad.getCompetencias());
         this.setDenominacion(unidad.getDenominacion());
+        if (Utils.isNotEmpty(unidad.getDenomLenguaCooficial()))
+        	this.setDenominacionCooficial(unidad.getDenomLenguaCooficial());
         this.setFechaAltaOficial(unidad.getFechaAltaOficial());
         this.setFechaAnulacion(unidad.getFechaAnulacion());
         this.setFechaBajaOficial(unidad.getFechaBajaOficial());
@@ -352,6 +364,8 @@ public class UnidadRest {
         this.setCodigo(unidad.getCodigo());
         this.setVersion(unidad.getVersion());
         this.setDenominacion(unidad.getDenominacion());
+        if (Utils.isNotEmpty(unidad.getDenomLenguaCooficial()))
+        	this.setDenominacionCooficial(unidad.getDenomLenguaCooficial());
     }
 
 
@@ -372,6 +386,8 @@ public class UnidadRest {
             unidadTF.setCodigo(unidad.getCodigo());
             unidadTF.setVersion(unidad.getVersion());
             unidadTF.setDenominacion(unidad.getDenominacion());
+            if (Utils.isNotEmpty(unidad.getDenomLenguaCooficial()))
+            	unidadTF.setDenominacionCooficial(unidad.getDenomLenguaCooficial());
             unidadTF.setCodUnidadRaiz(unidad.getCodUnidadRaiz().getCodigo());
             unidadTF.setCodUnidadSuperior(unidad.getCodUnidadSuperior().getCodigo());
             unidadTF.setEsEdp(unidad.isEsEdp());
@@ -387,6 +403,7 @@ public class UnidadRest {
     		unidadRest = new UnidadRest();
     		unidadRest.setCodigo(unidadTF.getCodigo());
     		unidadRest.setDenominacion(unidadTF.getDenominacion());
+    		unidadRest.setDenominacionCooficial(unidadTF.getDenominacion());
     		unidadRest.setCodigoEstadoEntidad(unidadTF.getCodigoEstadoEntidad());
     		unidadRest.setNivelJerarquico(unidadTF.getNivelJerarquico());
     		unidadRest.setCodUnidadSuperior(unidadTF.getCodUnidadSuperior());
@@ -441,6 +458,8 @@ public class UnidadRest {
 			unidadRest.setDenominacion((denominacionCooficial && Utils.isNotEmpty(unidad.getDenomLenguaCooficial()))
 					? unidad.getDenomLenguaCooficial()
 					: unidad.getDenominacion());
+			if (Utils.isNotEmpty(unidad.getDenomLenguaCooficial()))
+				unidadRest.setDenominacionCooficial(unidad.getDenomLenguaCooficial());
 			unidadRest.setCodigoEstadoEntidad(unidad.getCodigoEstadoEntidad());
 			unidadRest.setNivelJerarquico(unidad.getNivelJerarquico());
 
