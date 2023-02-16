@@ -42,6 +42,13 @@ public interface SincronizacionLocal extends BaseEjb<Sincronizacion, Long> {
      */
     Sincronizacion ultimaSincronizacionCompletada(String tipo) throws Exception;
 
+
+    /**
+     * Purga las sincronizaciones con más de un mes de antigüedad
+     * @throws Exception
+     */
+    void purgarSincronizaciones() throws Exception;
+
     /**
      * Borra todas las sincronizacions del tipo indicado
      *

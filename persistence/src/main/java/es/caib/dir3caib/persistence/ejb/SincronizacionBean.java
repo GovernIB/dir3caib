@@ -7,16 +7,13 @@ import es.caib.dir3caib.utils.Configuracio;
 import es.caib.dir3caib.ws.dir3.catalogo.client.SC21CTVolcadoCatalogos;
 import es.caib.dir3caib.ws.dir3.catalogo.client.SC21CTVolcadoCatalogosService;
 import es.caib.dir3caib.ws.dir3.oficina.client.OficinasVersionWs;
-import es.caib.dir3caib.ws.dir3.oficina.client.OficinasWs;
 import es.caib.dir3caib.ws.dir3.oficina.client.SD02OFDescargaOficinas;
 import es.caib.dir3caib.ws.dir3.oficina.client.SD02OFDescargaOficinasService;
 import es.caib.dir3caib.ws.dir3.oficina.client.TipoConsultaOF;
 import es.caib.dir3caib.ws.dir3.unidad.client.SD01UNDescargaUnidades;
 import es.caib.dir3caib.ws.dir3.unidad.client.SD01UNDescargaUnidadesService;
 import es.caib.dir3caib.ws.dir3.unidad.client.TipoConsultaUO;
-import es.caib.dir3caib.ws.dir3.unidad.client.UnidadesWs;
 import es.caib.dir3caib.ws.dir3.unidad.client.UnidadesWsVersion;
-
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -35,10 +32,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -130,6 +124,29 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
             return (Sincronizacion) query.getResultList().get(0);
         } else {
             return null;
+        }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void purgarSincronizaciones() throws Exception {
+
+        Calendar hoy = Calendar.getInstance(); //obtiene la fecha de hoy
+        hoy.add(Calendar.DATE, -30); //el -30 indica que se le restaran 10 dias
+
+        Query q = em.createQuery( "select sincronizacion from Sincronizacion as sincronizacion where sincronizacion.fechaImportacion <= :fecha " +
+                "and sincronizacion.tipo = :tipo and (sincronizacion.estado = :correcto or sincronizacion.estado = :vacia) ");
+
+        q.setParameter("correcto", Dir3caibConstantes.SINCRONIZACION_CORRECTA);
+        q.setParameter("vacia", Dir3caibConstantes.SINCRONIZACION_VACIA);
+        q.setParameter("tipo", Dir3caibConstantes.UNIDADES_OFICINAS);
+        q.setParameter("fecha", hoy.getTime());
+
+        List<Sincronizacion> sincronizaciones = q.getResultList();
+
+        for(Sincronizacion sincronizacion:sincronizaciones){
+
+            eliminarSincronizacion(sincronizacion);
         }
     }
 

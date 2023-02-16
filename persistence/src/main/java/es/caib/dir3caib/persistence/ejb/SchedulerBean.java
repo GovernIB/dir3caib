@@ -35,4 +35,15 @@ public class SchedulerBean implements SchedulerLocal{
             }
         }
     }
+
+    @Override
+    public void purgarSincronizaciones() throws Exception {
+        log.info("------------- Purgando SINCRONIZACIONES -------------");
+        try{
+            sincronizacionEjb.purgarSincronizaciones();
+        }catch (Exception e){
+            log.info("Error purgando integraciones");
+        }
+
+    }
 }

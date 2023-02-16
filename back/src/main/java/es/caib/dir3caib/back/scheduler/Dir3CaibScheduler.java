@@ -27,4 +27,17 @@ public class Dir3CaibScheduler {
         }
 
     }
+
+    @Scheduled(cron = "0 0 1 * * *") // 0 0 1 * * * Cada día a las 01:00h
+    public void purgarSincronizaciones() {
+
+        try {
+            schedulerEjb.purgarSincronizaciones();
+
+        } catch (Exception e) {
+            log.info("Error purgando integraciones");
+            e.printStackTrace();
+        }
+
+    }
 }
