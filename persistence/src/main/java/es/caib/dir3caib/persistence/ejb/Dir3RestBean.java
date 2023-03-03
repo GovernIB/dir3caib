@@ -1,15 +1,6 @@
 package es.caib.dir3caib.persistence.ejb;
 
-import es.caib.dir3caib.persistence.model.ContactoUnidadOrganica;
-import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
-import es.caib.dir3caib.persistence.model.HistoricoUO;
-import es.caib.dir3caib.persistence.model.Oficina;
-import es.caib.dir3caib.persistence.model.RelacionOrganizativaOfi;
-import es.caib.dir3caib.persistence.model.Sincronizacion;
-import es.caib.dir3caib.persistence.model.CatPais;
-import es.caib.dir3caib.persistence.model.CatServicio;
-import es.caib.dir3caib.persistence.model.ContactoOfi;
-import es.caib.dir3caib.persistence.model.Unidad;
+import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.model.json.OficinaRest;
 import es.caib.dir3caib.persistence.model.json.UnidadRest;
 import es.caib.dir3caib.persistence.model.ws.OficinaTF;
@@ -79,6 +70,9 @@ public class Dir3RestBean implements Dir3RestLocal {
 
 	@EJB(mappedName = "dir3caib/CatServicioEJB/local")
 	private CatServicioLocal servicioEjb;
+
+	@EJB(mappedName = "dir3caib/ServicioOfiEJB/local")
+	private ServicioOfiLocal servicioOfiEjb;
 
 	/**
 	 * Obtiene las unidades(codigo-denominacion) cuya denominación coincide con la
@@ -643,6 +637,12 @@ public class Dir3RestBean implements Dir3RestLocal {
 						+ "oficina.denomLenguaCooficial, unidadRaiz.denomLenguaCooficial, oficina.codUoResponsable.denomLenguaCooficial "
 						+ "from Oficina as oficina left outer join oficina.codUoResponsable.codUnidadRaiz as unidadRaiz left outer join oficina.localidad as ofilocalidad ");
 
+		if(oficinasSir){
+			StringBuilder conOficinasSir = new StringBuilder(" left outer join oficina.servicios as servicios ");
+			query.append(conOficinasSir);
+		}
+
+
 		// Parametros de busqueda
 
 		if (codigo != null && codigo.length() > 0) {
@@ -692,10 +692,8 @@ public class Dir3RestBean implements Dir3RestLocal {
 
 		// buscamos aquellas que sean oficinas sir de Recepcion
 		if (oficinasSir) {
-			where.add(" :SERVICIO_SIR_RECEPCION in elements(oficina.servicios) ");
-			// parametros.put("SERVICIO_SIR", new
-			// Servicio(Dir3caibConstantes.SERVICIO_SIR));
-			parametros.put("SERVICIO_SIR_RECEPCION", new CatServicio(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
+			where.add(" servicios.servicio.codServicio= :SERVICIO_SIR_RECEPCION " );
+			parametros.put("SERVICIO_SIR_RECEPCION",Dir3caibConstantes.SERVICIO_SIR_RECEPCION);
 
 		}
 
