@@ -77,7 +77,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 	@Override
 	public Unidad findByCodigoDir3UltimaVersion(String codigo) throws Exception {
 		Query q = em.createQuery("select u from Unidad u " + "where  u.codigoDir3 =:codigo and  u.version = "
-				+ " (select max(uu.version) from Unidad uu where uu.codigo = u.codigo)  ");
+				+ " (select max(uu.version) from Unidad uu where uu.codigoDir3 = u.codigoDir3)  ");
 
 		q.setParameter("codigo", codigo);
 
