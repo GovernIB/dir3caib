@@ -547,11 +547,11 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 				"select relacionSirOfi.oficina from RelacionSirOfi as relacionSirOfi " +
 				" left outer join relacionSirOfi.oficina.servicios as servicios " +
 						"  where relacionSirOfi.unidad." + variableCampo + " =:codigoUnidad "
-					    + "and servicios.servicio=:SERVICIO_SIR_RECEPCION "
+					    + "and servicios.servicio.codServicio=:SERVICIO_SIR_RECEPCION "
 						+ "and relacionSirOfi.estado.codigoEstadoEntidad= :vigente ");
 
 		q.setParameter("codigoUnidad", codigoUnidad);
-		q.setParameter("SERVICIO_SIR_RECEPCION", servicioEjb.findById(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
+		q.setParameter("SERVICIO_SIR_RECEPCION", Dir3caibConstantes.SERVICIO_SIR_RECEPCION);
 		q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
 
@@ -577,11 +577,11 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 				+ "relacionSirOfi.oficina.codUoResponsable.codigoDir3 from RelacionSirOfi as relacionSirOfi " +
 						" left outer join relacionSirOfi.oficina.servicios as servicios " +
 						"  where relacionSirOfi.unidad.codUnidadRaiz." + variableCampo + " =:codigoUnidad "
-						+ "and servicios.servicio=:SERVICIO_SIR_RECEPCION "
+						+ "and servicios.servicio.codServicio=:SERVICIO_SIR_RECEPCION "
 						+ "and relacionSirOfi.estado.codigoEstadoEntidad= :vigente ");
 
 		q.setParameter("codigoUnidad", codigoUnidad);
-		q.setParameter("SERVICIO_SIR_RECEPCION", servicioEjb.findById(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
+		q.setParameter("SERVICIO_SIR_RECEPCION", Dir3caibConstantes.SERVICIO_SIR_RECEPCION);
 		q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
 		List<Object[]> result = q.getResultList();
@@ -604,19 +604,18 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 	@SuppressWarnings(value = "unchecked")
 
 	public Boolean tieneOficinasSIR(String codigoUnidad) throws Exception {
-
 		Query q = em.createQuery(
 				"select count(relacionSirOfi.oficina.codigo) from RelacionSirOfi as relacionSirOfi " +
 						" left outer join relacionSirOfi.oficina.servicios as servicios " +
 						"  where relacionSirOfi.unidad.codigo =:codigoUnidad "
-						+ "and (servicios.servicio=:SERVICIO_SIR or servicios.servicio=:SERVICIO_SIR_ENVIO or servicios.servicio=:SERVICIO_SIR_RECEPCION) "
+						+ "and (servicios.servicio.codServicio=:SERVICIO_SIR or servicios.servicio.codServicio=:SERVICIO_SIR_ENVIO or servicios.servicio.codServicio=:SERVICIO_SIR_RECEPCION) "
 						+ "and relacionSirOfi.estado.codigoEstadoEntidad= :vigente ");
 
 
 		q.setParameter("codigoUnidad", codigoUnidad);
-		q.setParameter("SERVICIO_SIR", servicioEjb.findById(Dir3caibConstantes.SERVICIO_SIR));
-		q.setParameter("SERVICIO_SIR_ENVIO", servicioEjb.findById(Dir3caibConstantes.SERVICIO_SIR_ENVIO));
-		q.setParameter("SERVICIO_SIR_RECEPCION", servicioEjb.findById(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
+		q.setParameter("SERVICIO_SIR", Dir3caibConstantes.SERVICIO_SIR);
+		q.setParameter("SERVICIO_SIR_ENVIO", Dir3caibConstantes.SERVICIO_SIR_ENVIO);
+		q.setParameter("SERVICIO_SIR_RECEPCION", Dir3caibConstantes.SERVICIO_SIR_RECEPCION);
 		q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
 
@@ -714,53 +713,24 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 	/**
 	 * Determina si una oficina es SIR
 	 *
+	 *
+	 *
 	 * @param codigoOficina
 	 * @return
 	 * @throws Exception
 	 */
-	/*
-	 * private boolean esOficinaSir(String codigoOficina) throws Exception {
-	 * 
-	 *//*
-		 * Query q = em.
-		 * createQuery("select relacionSirOfi.oficina from RelacionSirOfi as relacionSirOfi where relacionSirOfi.oficina.codigo =:codigoOficina "
-		 * +
-		 * "and :SERVICIO_SIR_RECEPCION in elements(relacionSirOfi.oficina.servicios) "
-		 * + "and relacionSirOfi.estado.codigoEstadoEntidad='V' ");
-		 *//*
-			 * 
-			 * Query q = em.
-			 * createQuery("select oficina.id from Oficina as oficina where oficina.codigo =:codigoOficina "
-			 * + "and :SIR in elements(oficina.servicios)  " +
-			 * "and :SIR_RECEPCION in elements(oficina.servicios)  " +
-			 * "and :SIR_ENVIO in elements(oficina.servicios)  " +
-			 * "and estado.codigoEstadoEntidad='V' ");
-			 * 
-			 * q.setParameter("codigoOficina", codigoOficina); q.setParameter("SIR",
-			 * servicioEjb.findById(Dir3caibConstantes.SERVICIO_SIR));
-			 * q.setParameter("SIR_RECEPCION",
-			 * servicioEjb.findById(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
-			 * q.setParameter("SIR_ENVIO", new
-			 * servicioEjb.findById(Dir3caibConstantes.SERVICIO_SIR_ENVIO));;
-			 * 
-			 * 
-			 * return q.getResultList() != null && q.getResultList().size() > 0;
-			 * 
-			 * }
-			 */
+	//REvisar parece que no se usa
 	@Override
 	public Boolean isSIRCompleto(String codigoOficina) throws Exception {
 
-		Query q = em.createQuery("select oficina.id from Oficina as oficina where oficina.codigo =:codigoOficina "
-				+ "and :SIR in elements(oficina.servicios)  " 
-				+ "and :SIR_RECEPCION in elements(oficina.servicios)  "
-				+ "and :SIR_ENVIO in elements(oficina.servicios)  " 
-				+ "and estado.codigoEstadoEntidad= :vigente ");
+		Query q = em.createQuery("select distinct oficina.id from Oficina as oficina left outer join oficina.servicios as servicios where oficina.codigo =:codigoOficina "
+				+ " and (servicios.servicio.codServicio= :SIR  or servicios.servicio.codServicio= :SIR_RECEPCION or servicios.servicio.codServicio= :SIR_ENVIO) and oficina.estado.codigoEstadoEntidad= :vigente ");
+
 
 		q.setParameter("codigoOficina", codigoOficina);
-		q.setParameter("SIR", servicioEjb.findById(Dir3caibConstantes.SERVICIO_SIR));
-		q.setParameter("SIR_RECEPCION", servicioEjb.findById(Dir3caibConstantes.SERVICIO_SIR_RECEPCION));
-		q.setParameter("SIR_ENVIO", servicioEjb.findById(Dir3caibConstantes.SERVICIO_SIR_ENVIO));
+		q.setParameter("SIR", Dir3caibConstantes.SERVICIO_SIR);
+		q.setParameter("SIR_RECEPCION", Dir3caibConstantes.SERVICIO_SIR_RECEPCION);
+		q.setParameter("SIR_ENVIO", Dir3caibConstantes.SERVICIO_SIR_ENVIO);
 		q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
 		return q.getResultList() != null && q.getResultList().size() > 0;
