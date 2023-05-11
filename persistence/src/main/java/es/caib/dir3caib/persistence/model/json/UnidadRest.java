@@ -280,16 +280,20 @@ public class UnidadRest {
 
     public void setContactosRest(List<ContactoUnidadOrganica> contactos) {
         List<ContactoRest> contactoTFList = new ArrayList<ContactoRest>();
-
-        for (ContactoUnidadOrganica contactoOfi : contactos) {
-            ContactoRest contactoTF = ContactoRest.generar(contactoOfi);
-            contactoTFList.add(contactoTF);
+        if (contactos != null){
+	        for (ContactoUnidadOrganica contactoOfi : contactos) {
+	            ContactoRest contactoTF = ContactoRest.generar(contactoOfi);
+	            contactoTFList.add(contactoTF);
+	        }
         }
-
         this.contactos = contactoTFList;
     }
-
+    
     public void rellenar(Unidad unidad) {
+    	rellenar(unidad,true, true);
+    }
+
+    public void rellenar(Unidad unidad, boolean mostrarHistoricos, boolean mostrarContactos) {
         this.setCodigo(unidad.getCodigo());
         this.setVersion(unidad.getVersion());
         this.setCodUnidadRaiz(unidad.getCodUnidadRaiz().getCodigo());
@@ -345,15 +349,20 @@ public class UnidadRest {
         }
         this.setCodPostal(unidad.getCodPostal());
         this.setNifCif(unidad.getNifcif());
-        // Enviamos los historicos a regweb para la gestión del organigrama
-        Set<String> sHistoricosUO = new HashSet<String>();
-       for (HistoricoUO historico : unidad.getHistoricosAnterior()) {
-            sHistoricosUO.add(historico.getUnidadUltima().getCodigoDir3());
+        
+        if (mostrarHistoricos) {
+	        // Enviamos los historicos a regweb para la gestión del organigrama
+	        Set<String> sHistoricosUO = new HashSet<String>();
+	        for (HistoricoUO historico : unidad.getHistoricosAnterior()) {
+	            sHistoricosUO.add(historico.getUnidadUltima().getCodigoDir3());
+	        }
+	        this.setHistoricosUO(sHistoricosUO);
         }
-        this.setHistoricosUO(sHistoricosUO);
 
-        if (unidad.getContactos() != null) {
-            this.setContactosRest(unidad.getContactos());
+        if (mostrarContactos) {
+        	List<ContactoUnidadOrganica> listaContactos = unidad.getContactos();
+        	if (listaContactos != null)
+        		this.setContactosRest(listaContactos);
         } else {
             this.setContactosRest(null);
         }
@@ -368,14 +377,16 @@ public class UnidadRest {
         	this.setDenominacionCooficial(unidad.getDenomLenguaCooficial());
     }
 
-
     public static UnidadRest generar(Unidad unidad) {
+    	return generar(unidad, true, true);
+    }
+    
+    public static UnidadRest generar(Unidad unidad, boolean mostrarHistoricos, boolean mostrarContactos) {
     	UnidadRest unidadTF = null;
         if (unidad != null) {
             unidadTF = new UnidadRest();
-            unidadTF.rellenar(unidad);
+            unidadTF.rellenar(unidad, mostrarHistoricos, mostrarContactos);
         }
-
         return unidadTF;
     }
 
@@ -438,7 +449,7 @@ public class UnidadRest {
     }
     
     
-	public static UnidadRest toUnidadRest(UnidadWs unidad, boolean codigoDir3, boolean denominacionCooficial) {
+	public static UnidadRest toUnidadRest(UnidadWs unidad, boolean codigoDir3, boolean denominacionCooficial, boolean mostrarHistoricos, boolean mostrarContactos) {
 
 		UnidadRest unidadRest = null;
 		int posSeparador = 0;
@@ -499,15 +510,18 @@ public class UnidadRest {
 			unidadRest.setNumVia(unidad.getNumVia());
 			unidadRest.setCodigoTipoVia((unidad.getCodigoTipoVia() != null) ? unidad.getCodigoTipoVia() : null);
 			unidadRest.setCodPostal(unidad.getCodPostal());
-			unidadRest.setHistoricosUO(unidad.getHistoricosUO());
+			if (mostrarHistoricos && unidad.getHistoricosUO() != null)
+				unidadRest.setHistoricosUO(unidad.getHistoricosUO());
 			unidadRest.setNifCif(unidad.getNifCif());
 
-			List<ContactoRest> contactosRest = new ArrayList<ContactoRest>();
-			if (unidad.getContactos() != null)
-				for (ContactoTF contacto : unidad.getContactos()) {
-					contactosRest.add(ContactoRest.generar(contacto));
-				}
-			unidadRest.setContactos(contactosRest);
+			if (mostrarContactos) {
+				List<ContactoRest> contactosRest = new ArrayList<ContactoRest>();
+				if (unidad.getContactos() != null)
+					for (ContactoTF contacto : unidad.getContactos()) {
+						contactosRest.add(ContactoRest.generar(contacto));
+					}
+				unidadRest.setContactos(contactosRest);
+			}
 
 		}
 		return unidadRest;

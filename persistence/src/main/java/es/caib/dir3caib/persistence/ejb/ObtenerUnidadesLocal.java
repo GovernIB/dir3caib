@@ -1,6 +1,7 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.Unidad;
+import es.caib.dir3caib.persistence.model.json.UnidadRest;
 import es.caib.dir3caib.persistence.model.ws.UnidadTF;
 import es.caib.dir3caib.persistence.model.ws.v2.UnidadWs;
 import es.caib.dir3caib.persistence.utils.Nodo;
@@ -32,6 +33,8 @@ public interface ObtenerUnidadesLocal {
     List<UnidadTF> obtenerArbolUnidadesTF(String codigo, Date fechaActualizada, Date fechaSincronizacion) throws Exception;
 
     List<UnidadWs> obtenerArbolUnidadesWs(String codigo, Date fechaActualizada, Date fechaSincronizacion) throws Exception;
+    
+    List<UnidadRest> obtenerArbolUnidadesRest(String codigo, Date fechaActualizada, Date fechaSincronizacion, boolean mostrarHistoricos, boolean mostrarContactos) throws Exception;
 
     List<UnidadTF> obtenerArbolUnidadesDestinatariasTF(String codigo) throws Exception;
 

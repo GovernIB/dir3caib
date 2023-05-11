@@ -113,7 +113,7 @@ public interface Dir3RestLocal  {
   
   UnidadRest buscarUnidad(String codigo, boolean denominacionCooficial) throws Exception;
   
-  List<UnidadRest> obtenerArbolUnidades(String codigo, Date fechaActualizacion, Date fechaSincronizacion, boolean denominacionCooficial)
+  List<UnidadRest> obtenerArbolUnidades(String codigo, Date fechaActualizacion, Date fechaSincronizacion, boolean denominacionCooficial, boolean mostrarHistoricos, boolean mostrarContactos)
 	      throws Exception;
 
   List<UnidadRest> obtenerArbolUnidadesDestinatarias(String codigo, boolean denominacionCooficial) throws Exception;

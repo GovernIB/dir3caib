@@ -1,6 +1,7 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.*;
+import es.caib.dir3caib.persistence.model.json.UnidadRest;
 import es.caib.dir3caib.persistence.model.ws.UnidadTF;
 import es.caib.dir3caib.persistence.model.ws.v2.UnidadWs;
 import es.caib.dir3caib.persistence.utils.Nodo;
@@ -166,6 +167,16 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
             arbolWs.add(UnidadWs.generar(uni));
         }
         return arbolWs;
+    }
+    
+    @Override
+    public List<UnidadRest> obtenerArbolUnidadesRest(String codigo, Date fechaActualizacion, Date fechaSincronizacion, boolean mostrarHistoricos, boolean mostrarContactos) throws Exception {
+        List<UnidadRest> arbol = new ArrayList<UnidadRest>();
+        List<Unidad> arbolUnidades = obtenerArbolUnidades(codigo, fechaActualizacion, fechaSincronizacion);
+        for (Unidad uni : arbolUnidades) {
+        	arbol.add(UnidadRest.generar(uni,mostrarHistoricos, mostrarContactos));
+        }
+        return arbol;
 
     }
 

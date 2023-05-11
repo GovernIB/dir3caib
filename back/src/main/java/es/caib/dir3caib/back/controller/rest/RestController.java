@@ -817,7 +817,9 @@ public class RestController extends RestUtils {
 			@RequestParam String codigo,
 			@RequestParam(required = false) String fechaActualizacion,
 			@RequestParam(required = false) String fechaSincronizacion,
-			@RequestParam(required = false, defaultValue = "true") boolean denominacionCooficial) throws Exception {
+			@RequestParam(required = false, defaultValue = "true") boolean denominacionCooficial,
+			@RequestParam(required = false, defaultValue = "true") boolean historicos,
+			@RequestParam(required = false, defaultValue = "true") boolean contactos) throws Exception {
 
 		HttpHeaders headers = addAccessControllAllowOrigin();
 		String error = autenticateUsrApp(request, Arrays.asList(Dir3caibConstantes.DIR_WS));
@@ -850,13 +852,13 @@ public class RestController extends RestUtils {
 			}
 			
 			resultados = dir3RestEjb.obtenerArbolUnidades(codigo, fechaActualizacionDate, fechaSincronizacionDate,
-					denominacionCooficial);
+					denominacionCooficial, historicos, contactos);
 
 		} catch (Exception e) {
 			return new ResponseEntity<List<UnidadRest>>(null, headers, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-		HttpStatus status = (resultados.size() > 0) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
+		HttpStatus status = (resultados != null && resultados.size() > 0) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
 		return new ResponseEntity<List<UnidadRest>>(resultados, headers, status);
 
 	}

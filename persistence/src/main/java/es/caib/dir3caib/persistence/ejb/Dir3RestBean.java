@@ -1321,26 +1321,19 @@ public class Dir3RestBean implements Dir3RestLocal {
 	@Override
 	public UnidadRest obtenerUnidad(String codigo, Date fechaActualizacion, Date fechaSincronizacion, boolean denominacionCooficial) throws Exception {
 		return UnidadRest
-				.toUnidadRest(obtenerUnidadesEjb.obtenerUnidadWs(codigo, fechaActualizacion, fechaSincronizacion), true, denominacionCooficial);
+				.toUnidadRest(obtenerUnidadesEjb.obtenerUnidadWs(codigo, fechaActualizacion, fechaSincronizacion), true, denominacionCooficial, true, true);
 	}
 
 	@Override
 	public UnidadRest buscarUnidad(String codigo, boolean denominacionCooficial) throws Exception {
-		return UnidadRest.toUnidadRest(obtenerUnidadesEjb.buscarUnidadWs(codigo), true, denominacionCooficial);
+		return UnidadRest.toUnidadRest(obtenerUnidadesEjb.buscarUnidadWs(codigo), true, denominacionCooficial, true, true);
 	}
 
 	@Override
-	public List<UnidadRest> obtenerArbolUnidades(String codigo, Date fechaActualizacion, Date fechaSincronizacion, boolean denominacionCooficial)
+	public List<UnidadRest> obtenerArbolUnidades(String codigo, Date fechaActualizacion, Date fechaSincronizacion, 
+			boolean denominacionCooficial, boolean mostrarHistoricos, boolean mostrarContactos)
 			throws Exception {
-
-		List<UnidadWs> llista = obtenerUnidadesEjb.obtenerArbolUnidadesWs(codigo, fechaActualizacion,
-				fechaSincronizacion);
-		List<UnidadRest> resultados = new ArrayList<UnidadRest>();
-		for (UnidadWs unidad : llista) {
-			resultados.add(UnidadRest.toUnidadRest(unidad, true, denominacionCooficial));
-		}
-		return resultados;
-
+		return  obtenerUnidadesEjb.obtenerArbolUnidadesRest(codigo, fechaActualizacion, fechaSincronizacion, mostrarHistoricos, mostrarContactos);
 	}
 
 	@Override
@@ -1349,7 +1342,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 		List<UnidadWs> llista = obtenerUnidadesEjb.obtenerArbolUnidadesDestinatariasWs(codigo);
 		List<UnidadRest> resultados = new ArrayList<UnidadRest>();
 		for (UnidadWs unidad : llista) {
-			resultados.add(UnidadRest.toUnidadRest(unidad, true, denominacionCooficial));
+			resultados.add(UnidadRest.toUnidadRest(unidad, true, denominacionCooficial, true, true));
 		}
 		return resultados;
 	}
@@ -1365,7 +1358,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 		List<UnidadWs> llista = obtenerUnidadesEjb.obtenerHistoricosFinalesWs(codigo);
 		List<UnidadRest> resultados = new ArrayList<UnidadRest>();
 		for (UnidadWs unidad : llista) {
-			resultados.add(UnidadRest.toUnidadRest(unidad,true, denominacionCooficial));
+			resultados.add(UnidadRest.toUnidadRest(unidad,true, denominacionCooficial, true, true));
 		}
 		return resultados;
 	}
@@ -1376,7 +1369,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 		List<UnidadWs> llista = obtenerUnidadesEjb.obtenerHistoricosFinalesSIRWs(codigo);
 		List<UnidadRest> resultados = new ArrayList<UnidadRest>();
 		for (UnidadWs unidad : llista) {
-			resultados.add(UnidadRest.toUnidadRest(unidad, true, denominacionCooficial));
+			resultados.add(UnidadRest.toUnidadRest(unidad, true, denominacionCooficial, true, true));
 		}
 		return resultados;
 

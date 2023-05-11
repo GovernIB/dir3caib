@@ -26,6 +26,7 @@ import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
 
 import es.caib.dir3caib.persistence.model.json.OficinaRest;
 import es.caib.dir3caib.persistence.model.json.UnidadRest;
+import es.caib.dir3caib.persistence.utils.ObjetoDirectorioExtendido;
 
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
@@ -1681,7 +1682,23 @@ public class RestResource {
 					example = "true",
 					schema = @Schema(implementation = boolean.class)
 					)
-			@QueryParam("denominacionCooficial") @DefaultValue("true") boolean denominacionCooficial
+			@QueryParam("denominacionCooficial") @DefaultValue("true") boolean denominacionCooficial,
+			
+			@Parameter(
+					description = "booleà que indica si volem que es retorni el històric de les unitats. Per defecte està a 'true' i ens retornarà la llista si existeix.",
+					required = false,
+					example = "true",
+					schema = @Schema(implementation = boolean.class)
+					)
+			@QueryParam("historicos") @DefaultValue("true") boolean mostrarHistoricos,
+			
+			@Parameter(
+					description = "booleà que indica si volem que es retornin els contactes de la unitat ( direcció, telèfon, email,...). Per defecte està a 'true' i ens retornarà la llista si existeix.",
+					required = false,
+					example = "true",
+					schema = @Schema(implementation = boolean.class)
+					)
+			@QueryParam("contactos") @DefaultValue("true") boolean mostrarContactos
 			
 		){
 
