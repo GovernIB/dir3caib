@@ -2,13 +2,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-v4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>dir3caib-ws-api</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
     <packaging>jar</packaging>
     <name>Dir3Caib - WS - Dir3Caib WS API</name>
     <parent>
         <groupId>es.caib.dir3caib</groupId>
         <artifactId>dir3caib-ws</artifactId>
-        <version>1.1.0</version>
+        <version>1.1.1</version>
     </parent>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -125,13 +125,13 @@
                             <dependency>
                                 <groupId>es.caib.dir3caib</groupId>
                                 <artifactId>dir3caib-ws-server</artifactId>
-                                <version>1.1.0</version>
+                                <version>1.1.1</version>
                                 <scope>compile</scope>
                             </dependency>
                             <dependency>
                                 <groupId>es.caib.dir3caib</groupId>
                                 <artifactId>dir3caib-persistence</artifactId>
-                                <version>1.1.0</version>
+                                <version>1.1.1</version>
                                 <scope>compile</scope>
                             </dependency>
                             <dependency>
@@ -276,19 +276,19 @@
         <dependency>
             <groupId>es.caib.dir3caib</groupId>
             <artifactId>dir3caib-utils</artifactId>
-            <version>1.1.0</version>
+            <version>1.1.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>es.caib.dir3caib</groupId>
             <artifactId>dir3caib-persistence</artifactId>
-            <version>1.1.0</version>
+            <version>1.1.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>es.caib.dir3caib</groupId>
             <artifactId>dir3caib-ws-server</artifactId>
-            <version>1.1.0</version>
+            <version>1.1.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

@@ -7,11 +7,11 @@
     <parent>
         <groupId>es.caib.dir3caib</groupId>
         <artifactId>dir3caib-ws</artifactId>
-        <version>1.1.0</version>
+        <version>1.1.1</version>
     </parent>
 
     <artifactId>dir3caib-ws-server</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
 	<packaging>ejb</packaging>
 	
 	<name>Dir3Caib - WS - Dir3Caib WS Server</name>
