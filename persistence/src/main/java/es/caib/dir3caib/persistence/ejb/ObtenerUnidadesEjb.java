@@ -4,6 +4,7 @@ import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.model.ws.UnidadTF;
 import es.caib.dir3caib.persistence.model.ws.v2.UnidadWs;
 import es.caib.dir3caib.persistence.utils.Nodo;
+import es.caib.dir3caib.persistence.utils.ObjetoDirectorioExtendido;
 import es.caib.dir3caib.utils.Configuracio;
 import es.caib.dir3caib.utils.Utils;
 import org.apache.log4j.Logger;
@@ -355,6 +356,16 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
             historicosFinalesList.add(UnidadWs.generar(uni));
         }
         return historicosFinalesList;
+    }
+    
+    @Override 
+    public List<ObjetoDirectorioExtendido> obtenerHistoricosFinalesExtendido(String codigo) throws Exception {
+    	List<ObjetoDirectorioExtendido> historicosFinalesList = new ArrayList<ObjetoDirectorioExtendido>();
+    	Set<Unidad> historicosFinales = obtenerHistoricosFinales(codigo);
+    	for (Unidad uni : historicosFinales) {
+            historicosFinalesList.add(new ObjetoDirectorioExtendido(uni.getCodigoDir3(), uni.getVersion(), uni.getDenominacion(), uni.getDenomLenguaCooficial(), uni.getEstado().getCodigoEstadoEntidad()));
+        }
+    	return historicosFinalesList;
     }
 
     private Set<Unidad> obtenerHistoricosFinales(String codigo) throws Exception {

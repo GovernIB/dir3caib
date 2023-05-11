@@ -1862,6 +1862,42 @@ public class RestResource {
 	}
 
 	
+	@Operation(
+            operationId = "historico",
+            summary = "Mètode que retorna les unitats que substitueixen a la unitat amb el codi indicat. Aquest codi serà d’una unitat extingida."
+            )
+	@APIResponses(
+            value = {
+                    @APIResponse(
+                            responseCode = "204",
+                            description = "Sense contingut",
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON)),
+                    @APIResponse(
+                            responseCode = "200",
+                            description = "Una llista d'objectes de tipus ObjetoDirectorioExtendido.",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON,
+                                    schema = @Schema(implementation = UnidadRest.class)))
+                    })
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/unidades/historico")
+	public Response historicoUnidad(
+			@Parameter(
+					description = "codi de la unitat extingida",
+					required = true,
+					example = "E04984901",
+					schema = @Schema(implementation = String.class)
+					)
+			@QueryParam("codigo") String codigo
+
+			) throws Exception {
+		
+		return Response.status(Response.Status.NO_CONTENT).build();
+	}
+	
+	
 	/*
 	 * Retorna la informació d'una unitat a partir del codi indicat
 	 */

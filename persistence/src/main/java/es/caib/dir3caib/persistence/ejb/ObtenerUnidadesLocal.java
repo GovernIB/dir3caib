@@ -4,6 +4,7 @@ import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.persistence.model.ws.UnidadTF;
 import es.caib.dir3caib.persistence.model.ws.v2.UnidadWs;
 import es.caib.dir3caib.persistence.utils.Nodo;
+import es.caib.dir3caib.persistence.utils.ObjetoDirectorioExtendido;
 
 import javax.ejb.Local;
 import java.util.Date;
@@ -47,5 +48,7 @@ public interface ObtenerUnidadesLocal {
     List<UnidadTF> obtenerHistoricosFinalesSIRTF(String codigo) throws Exception;
 
     List<UnidadWs> obtenerHistoricosFinalesSIRWs(String codigo) throws Exception;
+
+	List<ObjetoDirectorioExtendido> obtenerHistoricosFinalesExtendido(String codigo) throws Exception;
 
 }

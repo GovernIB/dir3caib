@@ -5,10 +5,10 @@ import es.caib.dir3caib.persistence.model.Oficina;
 import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.persistence.model.json.OficinaRest;
 import es.caib.dir3caib.persistence.model.json.UnidadRest;
-import es.caib.dir3caib.persistence.model.ws.OficinaTF;
 import es.caib.dir3caib.persistence.utils.CodigoValor;
 import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.ObjetoDirectorio;
+import es.caib.dir3caib.persistence.utils.ObjetoDirectorioExtendido;
 
 import javax.ejb.Local;
 
@@ -119,6 +119,8 @@ public interface Dir3RestLocal  {
   List<UnidadRest> obtenerArbolUnidadesDestinatarias(String codigo, boolean denominacionCooficial) throws Exception;
   
   List<UnidadRest> obtenerHistoricosFinales(String codigo, boolean denominacionCooficial) throws Exception;
+  
+  List<ObjetoDirectorioExtendido> obtenerHistoricosFinalesExtendido(String codigo) throws Exception;
   
   List<UnidadRest> obtenerHistoricosFinalesSIR(String codigo, boolean denominacionCooficial) throws Exception;
   

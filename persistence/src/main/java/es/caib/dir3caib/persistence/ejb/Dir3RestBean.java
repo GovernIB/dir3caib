@@ -3,14 +3,13 @@ package es.caib.dir3caib.persistence.ejb;
 import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.model.json.OficinaRest;
 import es.caib.dir3caib.persistence.model.json.UnidadRest;
-import es.caib.dir3caib.persistence.model.ws.OficinaTF;
-import es.caib.dir3caib.persistence.model.ws.UnidadTF;
 import es.caib.dir3caib.persistence.model.ws.v2.UnidadWs;
 import es.caib.dir3caib.persistence.utils.CodigoValor;
 import es.caib.dir3caib.persistence.utils.DataBaseUtils;
 import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.NodoUtils;
 import es.caib.dir3caib.persistence.utils.ObjetoDirectorio;
+import es.caib.dir3caib.persistence.utils.ObjetoDirectorioExtendido;
 import es.caib.dir3caib.utils.Utils;
 
 import org.apache.log4j.Logger;
@@ -1158,11 +1157,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 			boolean denominacionCooficial) {
 		List<ObjetoDirectorio> objetoDirectorios = new ArrayList<ObjetoDirectorio>();
 		for (Object[] obj : resultados) {
-			ObjetoDirectorio objetoDirectorio = new ObjetoDirectorio();
-			objetoDirectorio.setCodigo((String) obj[0]);
-			objetoDirectorio.setDenominacion(
-					(denominacionCooficial && Utils.isNotEmpty((String) obj[2])) ? (String) obj[2] : (String) obj[1]);
-			objetoDirectorios.add(objetoDirectorio);
+			objetoDirectorios.add(new ObjetoDirectorio((String) obj[0], ((denominacionCooficial && Utils.isNotEmpty((String) obj[2])) ? (String) obj[2] : (String) obj[1])));
 		}
 
 		return objetoDirectorios;
@@ -1359,6 +1354,11 @@ public class Dir3RestBean implements Dir3RestLocal {
 		return resultados;
 	}
 
+	@Override
+	public List<ObjetoDirectorioExtendido> obtenerHistoricosFinalesExtendido(String codigo) throws Exception {
+		return obtenerUnidadesEjb.obtenerHistoricosFinalesExtendido(codigo);
+	}
+	
 	@Override
 	public List<UnidadRest> obtenerHistoricosFinales(String codigo, boolean denominacionCooficial) throws Exception {
 

@@ -10,6 +10,7 @@ import es.caib.dir3caib.persistence.model.json.UnidadRest;
 import es.caib.dir3caib.persistence.utils.CodigoValor;
 import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.ObjetoDirectorio;
+import es.caib.dir3caib.persistence.utils.ObjetoDirectorioExtendido;
 import es.caib.dir3caib.utils.Utils;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpHeaders;
@@ -393,6 +394,30 @@ public class RestController extends RestUtils {
 		HttpStatus status = (resultado.size() > 0) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
 		return new ResponseEntity<List<Nodo>>(resultado, headers, status);
 
+	}
+	
+	/**
+	 * Dada una unidad, buscar si tiene un histórico de cambios
+	 */
+	@RequestMapping(value = "/unidades/historico", method  = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<List<ObjetoDirectorioExtendido>> historicoUnidad(@RequestParam String codigo) throws Exception {
+		
+		List<ObjetoDirectorioExtendido> resultados = dir3RestEjb.obtenerHistoricosFinalesExtendido(codigo);
+		
+		if (resultados.size() < 1) {
+			// no existeix historic i retornam l'ObjetoDirectorioExtendido de la unitat passada per paràmetre
+			
+			UnidadRest unidad = dir3RestEjb.buscarUnidad(codigo, false);
+			
+			ObjetoDirectorioExtendido objetoDirectorioExtendido = new ObjetoDirectorioExtendido(
+					unidad.getCodigo(), unidad.getVersion(), unidad.getDenominacion(), unidad.getDenominacionCooficial(), unidad.getCodigoEstadoEntidad());
+			
+			resultados = Arrays.asList(objetoDirectorioExtendido);
+		}
+		
+		HttpHeaders headers = addAccessControllAllowOrigin();
+		return new ResponseEntity<List<ObjetoDirectorioExtendido>>(resultados, headers, HttpStatus.OK);
+		
 	}
 
 	/**

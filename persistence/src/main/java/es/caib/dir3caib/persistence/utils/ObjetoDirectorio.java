@@ -25,4 +25,15 @@ public class ObjetoDirectorio {
     public void setDenominacion(String denominacion) {
         this.denominacion = denominacion;
     }
+
+	public ObjetoDirectorio() {
+		super();
+	}
+
+	public ObjetoDirectorio(String codigo, String denominacion) {
+		super();
+		this.codigo = codigo;
+		this.denominacion = denominacion;
+	}
+    
 }
