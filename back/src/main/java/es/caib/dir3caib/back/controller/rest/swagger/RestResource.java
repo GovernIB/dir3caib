@@ -6,6 +6,7 @@ import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -19,13 +20,16 @@ import org.eclipse.microprofile.openapi.annotations.info.Contact;
 import org.eclipse.microprofile.openapi.annotations.info.Info;
 import org.eclipse.microprofile.openapi.annotations.info.License;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
+import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
 
+import es.caib.dir3caib.back.controller.rest.SistraResponse;
 import es.caib.dir3caib.persistence.model.json.OficinaRest;
 import es.caib.dir3caib.persistence.model.json.UnidadRest;
+import es.caib.dir3caib.persistence.model.json.UnidadRestExtendido;
 import es.caib.dir3caib.persistence.utils.ObjetoDirectorioExtendido;
 
 import org.eclipse.microprofile.openapi.annotations.media.Content;
@@ -2014,6 +2018,36 @@ public class RestResource {
 
 		return Response.status(Response.Status.NO_CONTENT).build();
 
+	}
+	
+	
+	/*
+	 * Retorna totes les unitats que compleixen amb els criteris de cerca que s'envien per POST a la part de "filtro" de l'objecte SistraRequest.
+	 */
+	
+	@Operation(
+            operationId = "sistraObtenerUnidades",
+            summary = "Mètode que retorna les unitats en funció dels criteris indicats al camp filtro del JSON d'entrada."
+            )
+	@APIResponses(
+            value = {
+                    @APIResponse(
+                            responseCode = "200",
+                            description = "Una llista d'objectes de tipus UnidadRestExtendido",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON,
+                                    schema = @Schema(implementation = SistraResponse.class)))
+                    })
+	@SecurityRequirement(name = "BasicAuth")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/sistra/unidades")
+	public Response sistraObtenerUnidades (
+			@RequestBody(description = "JSON amb els criteris de cerca d'unitats en format JSON: {\"idDominio\":\"SISTRA\", \"filtro\":[{\"codigo\":\"codigodir3\",\"valor\":\"\"},{\"codigo\":\"denominacion\",\"valor\":\"\"},{\"codigo\":\"nivelAdministracion\",\"valor\":\"2\"},{\"codigo\":\"comunidadAutonoma\",\"valor\":\"4\"},{\"codigo\":\"provincia\",\"valor\":\"\"},{\"codigo\":\"localidad\",\"valor\":\"\"},{\"codigo\":\"conOficinas\",\"valor\":\"false\"},{\"codigo\":\"unidadRaiz\",\"valor\":\"false\"},{\"codigo\":\"vigentes\",\"valor\":\"true\"}]}", required = true, content = @Content( mediaType = MediaType.APPLICATION_JSON,  schema = @Schema(implementation = String.class ))
+			) String peticion
+		){
+		return Response.status(Response.Status.NO_CONTENT).build();
 	}
 	
 }

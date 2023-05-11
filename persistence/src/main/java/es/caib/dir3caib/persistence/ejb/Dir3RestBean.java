@@ -3,6 +3,8 @@ package es.caib.dir3caib.persistence.ejb;
 import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.model.json.OficinaRest;
 import es.caib.dir3caib.persistence.model.json.UnidadRest;
+import es.caib.dir3caib.persistence.model.json.ContactoRest;
+import es.caib.dir3caib.persistence.model.json.UnidadRestExtendido;
 import es.caib.dir3caib.persistence.model.ws.v2.UnidadWs;
 import es.caib.dir3caib.persistence.utils.CodigoValor;
 import es.caib.dir3caib.persistence.utils.DataBaseUtils;
@@ -425,6 +427,219 @@ public class Dir3RestBean implements Dir3RestLocal {
 				unidadRaiz, provincia, localidad, vigentes, false);
 	}
 
+	@Override
+	@SuppressWarnings(value = "unchecked")
+	public List<UnidadRestExtendido> busquedaOrganismosSistra(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad,
+			boolean conOficinas, boolean unidadRaiz, Long provincia, String localidad, boolean vigentes) throws Exception {
+		
+		Query q;
+		Map<String, Object> parametros = new HashMap<String, Object>();
+		List<String> where = new ArrayList<String>();
+		
+		// Los left outer joins son para las FK ( hay que poner todos los que se usan en el select)
+				StringBuilder query = new StringBuilder(
+						"Select distinct(unidad.codigo), unidad.denominacion, unidad.estado.codigoEstadoEntidad, unidad.codUnidadRaiz.codigo, unidad.codUnidadRaiz.denominacion, unidad.codUnidadSuperior.codigo, "
+								+ " unidad.codUnidadSuperior.denominacion, unidad.codLocalidad.descripcionLocalidad, unidad.esEdp, unidad.nivelJerarquico, unidad.nifcif, unidad.nivelAdministracion.descripcionNivelAdministracion, unidad.codTipoUnidad.descripcionTipoUnidadOrganica, "
+								+ " unidad.tipoVia.descripcionTipoVia, unidad.nombreVia, unidad.numVia, unidad.complemento, unidad.codPostal, unidad.codAmbitoTerritorial.descripcionAmbito, unidad.codAmbPais.descripcionPais, unidad.codAmbComunidad.descripcionComunidad, "
+								+ " unidad.codAmbProvincia.descripcionProvincia, unidad.codAmbIsla.descripcionIsla, "
+								+ " unidad.denomLenguaCooficial, unidad.codUnidadRaiz.denomLenguaCooficial, unidad.codUnidadSuperior.denomLenguaCooficial, "
+								+ " unidad.codigoDir3, unidad.codUnidadRaiz.codigoDir3, unidad.codUnidadSuperior.codigoDir3, unidad.version, unidad.nivelAdministracion.codigoNivelAdministracion, unidad.codAmbitoTerritorial.codigoAmbito, unidad.codAmbPais.codigoPais, "
+								+ " unidad.codAmbProvincia.codigoProvincia, unidad.tipoVia.codigoTipoVia, unidad.estado.descripcionEstadoEntidad, unidad.codLocalidad.codigoLocalidad, unidad.codAmbComunidad.codigoComunidad, unidad.competencias "
+								+ " from Unidad  as unidad left outer join unidad.codLocalidad as uniLocalidad "
+								+ "                        left outer join unidad.catLocalidad as catLocalidad"
+								+ "                        left outer join unidad.codTipoUnidad as tipoUnidad"
+								+ "                        left outer join unidad.codAmbProvincia as provincia  "
+								+ "                        left outer join unidad.codAmbIsla as isla "
+								+ "                        left outer join unidad.codAmbitoTerritorial as ambTerritorial "
+								+ "                        left outer join unidad.nivelAdministracion as nivelAdministracion "
+								+ "                        left outer join unidad.codTipoEntPublica as codTipoEntPublica "
+								+ "                        left outer join unidad.codAmbEntGeografica as codAmbEntGeografica "
+								+ "                        left outer join unidad.codAmbPais as pais "
+								+ "                        left outer join unidad.tipoVia as tipoVia "
+								+ "                        left outer join unidad.codAmbComunidad as  comunidad "
+								+ "                        left outer join unidad.codComunidad as  codcomunidad ");
+
+				// Parametros de busqueda
+				if (codigo != null && codigo.length() > 0) {
+					where.add(DataBaseUtils.like("unidad.codigoDir3", "codigo", parametros, codigo));
+				}
+				if (denominacion != null && denominacion.length() > 0) {
+					String condicion1 = DataBaseUtils.like("unidad.denominacion", "denominacion", parametros, denominacion);
+					String condicion2 = DataBaseUtils.like("unidad.denomLenguaCooficial", "denomcooficial", parametros,
+							denominacion);
+					where.add(" ((" + condicion1 + ") or (" + condicion2 + ")) ");
+				}
+				if (codigoNivelAdministracion != null && codigoNivelAdministracion != -1) {
+					where.add(" unidad.nivelAdministracion.codigoNivelAdministracion = :codigoNivelAdministracion ");
+					parametros.put("codigoNivelAdministracion", codigoNivelAdministracion);
+				}
+
+				if (codComunidad != null && codComunidad != -1) {
+					// al nivel administración Universidades no les aplica el ámbito territorial,
+					// por tanto hay que considerar la comunidad de los datos de contacto
+					if (Dir3caibConstantes.NIVEL_ADMINISTRACION_UNIVERSIDADES.equals(codigoNivelAdministracion)) {
+						where.add(
+								" (unidad.codAmbComunidad.codigoComunidad = :codComunidad or unidad.codComunidad.codigoComunidad = :comunidad) ");
+						parametros.put("codComunidad", codComunidad);
+						parametros.put("comunidad", codComunidad);
+
+					} else {
+						where.add(" unidad.codAmbComunidad.codigoComunidad = :codComunidad ");
+						parametros.put("codComunidad", codComunidad);
+					}
+
+				}
+
+				if (provincia != null && provincia != -1) {
+					where.add(" unidad.codAmbProvincia.codigoProvincia = :codProvincia ");
+					parametros.put("codProvincia", provincia);
+				}
+				if (localidad != null && !localidad.equals("-1") && !localidad.isEmpty()) {
+					// Se consideran los dos campos de localidad porque hemos detectado que la
+					// localidad viene informada indistintamente en ambas y no sigue un criterio
+					// lógico,
+					String[] localidadsplit = localidad.split("-");
+					where.add(
+							" (unidad.catLocalidad.codigoLocalidad = :localidad or unidad.codLocalidad.codigoLocalidad = :codlocalidad) ");
+					parametros.put("localidad", Long.parseLong(localidadsplit[0]));
+					parametros.put("codlocalidad", Long.parseLong(localidadsplit[0]));
+					if (provincia != null && provincia != -1) {
+						where.add(
+								" (unidad.catLocalidad.provincia.codigoProvincia = :provincia  or unidad.codLocalidad.provincia.codigoProvincia = :codprovincia) ");
+						parametros.put("provincia", provincia);
+						parametros.put("codprovincia", provincia);
+						if (localidadsplit[1] != null && localidadsplit[1].length() > 0) {
+							where.add(
+									" (unidad.catLocalidad.entidadGeografica.codigoEntidadGeografica = :entidadGeografica  or unidad.codLocalidad.entidadGeografica.codigoEntidadGeografica = :codentidadGeografica) ");
+							parametros.put("entidadGeografica", localidadsplit[1]);
+							parametros.put("codentidadGeografica", localidadsplit[1]);
+						}
+					}
+
+				}
+				// Solo se buscaran vigentes cuando lo indiquen
+				if (vigentes) {
+					where.add(" unidad.estado.codigoEstadoEntidad =:vigente ");
+					parametros.put("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+				}
+				if (unidadRaiz) {
+					where.add(" unidad.codUnidadRaiz.codigo = unidad.codigo ");
+				}
+
+				// Añadimos los parametros a la query
+				if (parametros.size() != 0) {
+					query.append("where ");
+					int count = 0;
+					for (String w : where) {
+						if (count != 0) {
+							query.append(" and ");
+						}
+						query.append(w);
+						count++;
+					}
+					query.append("order by unidad.estado.codigoEstadoEntidad desc, unidad.denominacion asc ");
+					q = em.createQuery(query.toString());
+					// log.info("Query => " + query.toString());
+
+					for (Map.Entry<String, Object> param : parametros.entrySet()) {
+						q.setParameter(param.getKey(), param.getValue());
+						// log.info("Parameter " + param.getKey() + " => " + param.getValue());
+					}
+
+				} else {
+					query.append(" order by unidad.estado.codigoEstadoEntidad desc, unidad.denominacion asc ");
+					q = em.createQuery(query.toString());					
+				}
+				
+				
+				List<Object[]> resultados = q.getResultList();
+				List<UnidadRestExtendido> lista = new ArrayList<UnidadRestExtendido>(resultados.size());
+				
+				for (Object[] object : resultados) {
+					
+					String[] obj = new String[object.length];
+		            for (int i = 0; i < object.length; i++) {
+		                obj[i] = String.valueOf(object[i]);
+		            }
+					
+					UnidadRestExtendido unidadRest = new UnidadRestExtendido();
+					
+					unidadRest.setCodigo(obj[0]);
+					unidadRest.setVersion(Long.parseLong(obj[29]));					
+					unidadRest.setDenominacion(obj[1]);
+					unidadRest.setDenominacionCooficial(obj[23]);
+					unidadRest.setCodigoEstadoEntidad(obj[2]);
+					unidadRest.setDescripcionEstadoEntidad(obj[35]);
+					unidadRest.setNivelJerarquico(Long.parseLong(obj[9]));
+					unidadRest.setNivelAdministracion(Long.parseLong(obj[30]));
+					unidadRest.setDescripcionNivelAdministracion(obj[11]);
+					unidadRest.setCodUnidadSuperior(obj[5]);
+					unidadRest.setDenominacionUnidadSuperior(obj[6]);
+					unidadRest.setDenominacionCooficialUnidadSuperior(obj[25]);
+					unidadRest.setCodUnidadRaiz(obj[3]);
+					unidadRest.setDenominacionUnidadRaiz(obj[4]);
+					unidadRest.setDenominacionCooficialUnidadRaiz(obj[24]);
+					unidadRest.setNumVia(obj[15]);
+					unidadRest.setNombreVia(obj[14]);
+					unidadRest.setCodPostal(obj[17]);
+					unidadRest.setNifCif(obj[10]);
+					unidadRest.setCodigoDir3(obj[26]);
+					unidadRest.setCodigoDir3UnidadRaiz(obj[27]);
+					unidadRest.setCodigoDir3UnidadSuperior(obj[28]);
+					unidadRest.setCodigoAmbitoTerritorial(obj[31]);
+					unidadRest.setDescripcionAmbitoTerritorial(obj[18]);
+					unidadRest.setCodigoAmbPais((Utils.isNotEmpty(obj[32])) ? Long.parseLong(obj[32]) : 0);
+					unidadRest.setDescripcionAmbPais(obj[19]);
+					unidadRest.setCodAmbProvincia((Utils.isNotEmpty(obj[33])) ? Long.parseLong(obj[33]) : 0);
+					unidadRest.setDescripcionAmbProvincia(obj[21]);
+					unidadRest.setCodigoTipoVia((Utils.isNotEmpty(obj[34])) ? Long.parseLong(obj[34]) : 0);					
+					unidadRest.setDescripcionTipoVia(obj[13]);
+					unidadRest.setCodigoLocalidad(obj[36]);
+					unidadRest.setDescripcionLocalidad(obj[7]);
+					unidadRest.setCodAmbComunidad((Utils.isNotEmpty(obj[37])) ? Long.parseLong(obj[37]): 0);
+					unidadRest.setDescripcionAmbComunidad(obj[20]);
+					unidadRest.setEsEdp(Boolean.parseBoolean(obj[8]));
+					unidadRest.setCompetencias(obj[38]);
+				    // historicosUO;
+					
+					lista.add(unidadRest);
+				}
+				
+				// Cargamos los contactos de las unidades
+				for (UnidadRestExtendido ur : lista) {
+					List<ContactoUnidadOrganica> contactos = contactoUOEjb.getContactosByUnidad(ur.getCodigo());
+					List<ContactoRest> contactosList = new ArrayList<>();
+					for (ContactoUnidadOrganica cont : contactos) {
+						contactosList.add(ContactoRest.generar(cont));
+					}
+					ur.setContactos(contactosList);
+				}
+				
+				
+				// Si nos indican la variable conOficinas a true es que interesa devolver solo
+				// aquellos organismos que tienen oficinas en las que registrar
+				if (conOficinas) {
+					List<UnidadRestExtendido> unidadesConOficinas = new ArrayList<UnidadRestExtendido>();
+					for (UnidadRestExtendido unidad : lista) {
+						if (tieneOficinasOrganismo(unidad.getCodigo())) {
+							unidadesConOficinas.add(unidad);
+						}
+					}
+					lista = new ArrayList<UnidadRestExtendido>(unidadesConOficinas);
+				}
+				
+				// Actualizamos las unidades obtenidas y marcamos si tienen oficinasSIR
+				// y sustituimos el valor del codigo por el codigoDir3(sin version)
+				for (UnidadRestExtendido unidad2 : lista) {
+					if (oficinaEjb.obtenerOficinasSIRUnidad(unidad2.getCodigo(),false).size() > 0) {
+						unidad2.setTieneOficinaSIR(true);
+					}
+				}
+				return lista;
+	}
+	
+	
+	
 	@Override
 	@SuppressWarnings(value = "unchecked")
 	public List<Nodo> busquedaOrganismos(String codigo, String denominacion, Long codigoNivelAdministracion,

@@ -7,6 +7,7 @@ import es.caib.dir3caib.persistence.model.json.OficinaJson;
 import es.caib.dir3caib.persistence.model.json.OficinaRest;
 import es.caib.dir3caib.persistence.model.json.PaisJson;
 import es.caib.dir3caib.persistence.model.json.UnidadRest;
+import es.caib.dir3caib.persistence.model.json.UnidadRestExtendido;
 import es.caib.dir3caib.persistence.utils.CodigoValor;
 import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.ObjetoDirectorio;
@@ -15,22 +16,30 @@ import es.caib.dir3caib.utils.Utils;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
+
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -919,6 +928,101 @@ public class RestController extends RestUtils {
 		return new ResponseEntity<List<UnidadRest>>(resultados, headers, status);
 
 	}
+	
+	
+	@RolesAllowed({ Dir3caibConstantes.DIR_WS })
+	@RequestMapping(value = "/sistra/unidades", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody ResponseEntity<SistraResponse> sistraObtenerUnidades(HttpServletRequest request, @RequestBody String peticion) throws Exception {
+		
+		HttpHeaders headers = addAccessControllAllowOrigin();
+		String error = autenticateUsrApp(request, Arrays.asList(Dir3caibConstantes.DIR_WS));
+				
+		SistraResponse respuesta = new SistraResponse();
+		if (error != null) {
+			respuesta.setError(true);
+			respuesta.setCodigoError("401");
+			respuesta.setDescripcionError("UNAUTHORIZED");
+			return new ResponseEntity<SistraResponse>(respuesta, headers, HttpStatus.OK);		
+		}
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		SistraRequest sistraRequest = objectMapper.readValue(peticion, new TypeReference<SistraRequest>(){});
+		
+		// log.info("idDominio: " + sistraRequest.getIdDominio());
+		// log.info("filtro: " + sistraRequest.getFiltro().size());
+
+		if (sistraRequest != null && sistraRequest.getFiltro().size() > 0) {
+			
+			List<SistraCodigoValor> parametros = sistraRequest.getFiltro();
+			
+			String denominacion = ""; 
+			String codigo = "";
+			Long nivelAdministracion = null;
+			Long codComunidadAutonoma = null;
+			Long provincia = null;
+			String localidad = "";
+			Boolean conOficinas = false;
+			Boolean unidadRaiz = false;
+			Boolean vigentes = true;
+			
+			for (SistraCodigoValor sistraCodigoValor : parametros) {
+				switch (sistraCodigoValor.getCodigo().toLowerCase().trim()) {
+				case "codigodir3":
+					codigo = (Utils.isNotEmpty(sistraCodigoValor.getValor())) ? sistraCodigoValor.getValor() : "";
+					// log.info("Codigo: " + codigo);
+					break;
+				case "denominacion":
+					denominacion = (Utils.isNotEmpty(sistraCodigoValor.getValor())) ? sistraCodigoValor.getValor() : "";
+					// log.info("denominacion: " + denominacion);
+					break;
+				case "niveladministracion":
+					nivelAdministracion = (Utils.isNotEmpty(sistraCodigoValor.getValor())) ? Long.parseLong(sistraCodigoValor.getValor()) : null;	
+					// log.info("nivelAdministracion: " + nivelAdministracion);
+					break;
+				case "comunidadautonoma":
+					codComunidadAutonoma = (Utils.isNotEmpty(sistraCodigoValor.getValor())) ? Long.parseLong(sistraCodigoValor.getValor()) : null;
+					// log.info("comunidadautonoma: " + codComunidadAutonoma);
+					break;
+				case "provincia":
+					provincia = (Utils.isNotEmpty(sistraCodigoValor.getValor())) ? Long.parseLong(sistraCodigoValor.getValor()) : null;
+					// log.info("provincia: " + provincia);
+					break;
+				case "localidad":
+					localidad = (Utils.isNotEmpty(sistraCodigoValor.getValor())) ? sistraCodigoValor.getValor() : "";
+					// log.info("localidad: " + localidad);
+					 break;
+				case "conoficinas":
+					conOficinas = (Utils.isNotEmpty(sistraCodigoValor.getValor())) ? Boolean.parseBoolean(sistraCodigoValor.getValor()) : false;
+					// log.info("conOficinas: " + conOficinas);
+					break;
+				case "unidadraiz":
+					unidadRaiz = (Utils.isNotEmpty(sistraCodigoValor.getValor())) ? Boolean.parseBoolean(sistraCodigoValor.getValor()) : false;
+					// log.info("unidadRaiz: " + unidadRaiz);
+					break;
+				case "vigentes":
+					vigentes = (Utils.isNotEmpty(sistraCodigoValor.getValor())) ? Boolean.parseBoolean(sistraCodigoValor.getValor()) : true;
+					// log.info("vigentes: " + vigentes);
+					break;
+				}
+			}
+			
+			List<UnidadRestExtendido> resultado = dir3RestEjb.busquedaOrganismosSistra(codigo, denominacion, nivelAdministracion, codComunidadAutonoma, conOficinas, unidadRaiz,
+					provincia, localidad,  vigentes);
+			
+			respuesta.setDatos(objectMapper.writeValueAsString(resultado));
+			
+		}else {
+			respuesta.setError(true);
+			respuesta.setCodigoError("400");
+			respuesta.setDescripcionError("Bad request");
+			return new ResponseEntity<SistraResponse>(respuesta, headers, HttpStatus.OK);
+		}
+		
+		respuesta.setError(false);
+		return new ResponseEntity<SistraResponse>(respuesta, headers, HttpStatus.OK);
+		
+	}
+	
 
 	public HttpHeaders addAccessControllAllowOrigin() {
 		HttpHeaders headers = new HttpHeaders();
