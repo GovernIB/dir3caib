@@ -16,16 +16,17 @@
 
         <!--REST-->
         <sec:intercept-url pattern="/rest/**" access="permitAll"/>
+        
+		<!-- PUBLIC -->
+		<sec:intercept-url pattern="/public/**" access="permitAll" />        
 
         <!--UNIDAD-->
         <sec:intercept-url pattern="/unidad/list" access="hasAnyRole('DIR_ADMIN','tothom')"/>
         <sec:intercept-url pattern="/unidad/**/arbol" access="hasAnyRole('DIR_ADMIN','tothom')"/>
 
-
         <!--OFICINA-->
         <sec:intercept-url pattern="/oficina/list" access="hasAnyRole('DIR_ADMIN','tothom')"/>
         <sec:intercept-url pattern="/oficina/**/arbol" access="hasAnyRole('DIR_ADMIN','tothom')"/>
-
 
         <!--CATALOGO-->
         <sec:intercept-url pattern="/catalogo/**" access="hasRole('DIR_ADMIN')"/>
