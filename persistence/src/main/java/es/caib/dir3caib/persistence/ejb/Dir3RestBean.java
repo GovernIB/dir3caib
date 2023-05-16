@@ -105,10 +105,11 @@ public class Dir3RestBean implements Dir3RestLocal {
 			String estado) throws Exception {
 
 		if (!denominacion.isEmpty()) {
-			Query q = em.createQuery("select distinct unidad.codigoDir3, unidad.denominacion, unidad.denomLenguaCooficial "
-					+ "from Unidad as unidad " + "where ( upper(unidad.denominacion) like upper(:denominacion) "
-					+ "	or upper(unidad.denomLenguaCooficial) like upper(:denominacion))"
-					+ "and unidad.estado.codigoEstadoEntidad = :estado");
+			Query q = em
+					.createQuery("select distinct unidad.codigoDir3, unidad.denominacion, unidad.denomLenguaCooficial "
+							+ "from Unidad as unidad " + "where ( upper(unidad.denominacion) like upper(:denominacion) "
+							+ "	or upper(unidad.denomLenguaCooficial) like upper(:denominacion))"
+							+ "and unidad.estado.codigoEstadoEntidad = :estado");
 			q.setParameter("denominacion", "%" + denominacion.toLowerCase() + "%");
 			q.setParameter("estado", (Utils.isNotEmpty(estado)) ? estado : Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 			return transformarAObjetoDirectorio(q.getResultList(), denominacionCooficial);
@@ -337,7 +338,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 	 */
 	@Override
 	public List<Oficina> obtenerArbolOficinasOpenData(String codigo, String estado) throws Exception {
-		return obtenerOficinasEjb.obtenerArbolOficinasOpenData(codigo,estado);
+		return obtenerOficinasEjb.obtenerArbolOficinasOpenData(codigo, estado);
 	}
 
 	/**
@@ -348,13 +349,11 @@ public class Dir3RestBean implements Dir3RestLocal {
 	 */
 	@Override
 	public List<Oficina> getOficinasBalearesOpenData(String estado) throws Exception {
-		
-		
-		Query q = em.createQuery(
-				"Select oficina from Oficina as oficina "
+
+		Query q = em.createQuery("Select oficina from Oficina as oficina "
 				+ "where oficina.codComunidad.codigoComunidad =:comunidad and oficina.estado.codigoEstadoEntidad=:vigente "
 				+ "and oficina.tipoOficina.codigoJerarquiaOficina=:tipoOficina order by oficina.localidad");
-		
+
 		q.setParameter("comunidad", 4L); // BALEARES
 		q.setParameter("tipoOficina", 1L); // GENERAL
 		q.setParameter("vigente", (Utils.isNotEmpty(estado)) ? estado : Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE); // GENERAL
@@ -429,217 +428,230 @@ public class Dir3RestBean implements Dir3RestLocal {
 
 	@Override
 	@SuppressWarnings(value = "unchecked")
-	public List<UnidadRestExtendido> busquedaOrganismosSistra(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad,
-			boolean conOficinas, boolean unidadRaiz, Long provincia, String localidad, boolean vigentes) throws Exception {
-		
+	public List<UnidadRestExtendido> busquedaOrganismosSistra(String codigo, String denominacion,
+			Long codigoNivelAdministracion, Long codComunidad, boolean conOficinas, boolean unidadRaiz, Long provincia,
+			boolean vigentes) throws Exception {
+
 		Query q;
 		Map<String, Object> parametros = new HashMap<String, Object>();
 		List<String> where = new ArrayList<String>();
-		
-		// Los left outer joins son para las FK ( hay que poner todos los que se usan en el select)
-				StringBuilder query = new StringBuilder(
-						"Select distinct(unidad.codigo), unidad.denominacion, unidad.estado.codigoEstadoEntidad, unidad.codUnidadRaiz.codigo, unidad.codUnidadRaiz.denominacion, unidad.codUnidadSuperior.codigo, "
-								+ " unidad.codUnidadSuperior.denominacion, unidad.codLocalidad.descripcionLocalidad, unidad.esEdp, unidad.nivelJerarquico, unidad.nifcif, unidad.nivelAdministracion.descripcionNivelAdministracion, unidad.codTipoUnidad.descripcionTipoUnidadOrganica, "
-								+ " unidad.tipoVia.descripcionTipoVia, unidad.nombreVia, unidad.numVia, unidad.complemento, unidad.codPostal, unidad.codAmbitoTerritorial.descripcionAmbito, unidad.codAmbPais.descripcionPais, unidad.codAmbComunidad.descripcionComunidad, "
-								+ " unidad.codAmbProvincia.descripcionProvincia, unidad.codAmbIsla.descripcionIsla, "
-								+ " unidad.denomLenguaCooficial, unidad.codUnidadRaiz.denomLenguaCooficial, unidad.codUnidadSuperior.denomLenguaCooficial, "
-								+ " unidad.codigoDir3, unidad.codUnidadRaiz.codigoDir3, unidad.codUnidadSuperior.codigoDir3, unidad.version, unidad.nivelAdministracion.codigoNivelAdministracion, unidad.codAmbitoTerritorial.codigoAmbito, unidad.codAmbPais.codigoPais, "
-								+ " unidad.codAmbProvincia.codigoProvincia, unidad.tipoVia.codigoTipoVia, unidad.estado.descripcionEstadoEntidad, unidad.codLocalidad.codigoLocalidad, unidad.codAmbComunidad.codigoComunidad, unidad.competencias "
-								+ " from Unidad  as unidad left outer join unidad.codLocalidad as uniLocalidad "
-								+ "                        left outer join unidad.catLocalidad as catLocalidad"
-								+ "                        left outer join unidad.codTipoUnidad as tipoUnidad"
-								+ "                        left outer join unidad.codAmbProvincia as provincia  "
-								+ "                        left outer join unidad.codAmbIsla as isla "
-								+ "                        left outer join unidad.codAmbitoTerritorial as ambTerritorial "
-								+ "                        left outer join unidad.nivelAdministracion as nivelAdministracion "
-								+ "                        left outer join unidad.codTipoEntPublica as codTipoEntPublica "
-								+ "                        left outer join unidad.codAmbEntGeografica as codAmbEntGeografica "
-								+ "                        left outer join unidad.codAmbPais as pais "
-								+ "                        left outer join unidad.tipoVia as tipoVia "
-								+ "                        left outer join unidad.codAmbComunidad as  comunidad "
-								+ "                        left outer join unidad.codComunidad as  codcomunidad ");
 
-				// Parametros de busqueda
-				if (codigo != null && codigo.length() > 0) {
-					where.add(DataBaseUtils.like("unidad.codigoDir3", "codigo", parametros, codigo));
+		// Los left outer joins son para las FK ( hay que poner todos los que se usan en
+		// el select)
+		StringBuilder query = new StringBuilder(
+				"Select distinct(unidad.codigo), unidad.denominacion, unidad.estado.codigoEstadoEntidad, unidad.codUnidadRaiz.codigo, unidad.codUnidadRaiz.denominacion, unidad.codUnidadSuperior.codigo, "
+						+ " unidad.codUnidadSuperior.denominacion, unidad.codLocalidad.descripcionLocalidad, unidad.esEdp, unidad.nivelJerarquico, unidad.nifcif, unidad.nivelAdministracion.descripcionNivelAdministracion, unidad.codTipoUnidad.descripcionTipoUnidadOrganica, "
+						+ " unidad.tipoVia.descripcionTipoVia, unidad.nombreVia, unidad.numVia, unidad.complemento, unidad.codPostal, unidad.codAmbitoTerritorial.descripcionAmbito, unidad.codAmbPais.descripcionPais, unidad.codAmbComunidad.descripcionComunidad, "
+						+ " unidad.codAmbProvincia.descripcionProvincia, unidad.codAmbIsla.descripcionIsla, "
+						+ " unidad.denomLenguaCooficial, unidad.codUnidadRaiz.denomLenguaCooficial, unidad.codUnidadSuperior.denomLenguaCooficial, "
+						+ " unidad.codigoDir3, unidad.codUnidadRaiz.codigoDir3, unidad.codUnidadSuperior.codigoDir3, unidad.version, unidad.nivelAdministracion.codigoNivelAdministracion, unidad.codAmbitoTerritorial.codigoAmbito, unidad.codAmbPais.codigoPais, "
+						+ " unidad.codAmbProvincia.codigoProvincia, unidad.tipoVia.codigoTipoVia, unidad.estado.descripcionEstadoEntidad, unidad.codLocalidad.codigoLocalidad, unidad.codAmbComunidad.codigoComunidad, unidad.competencias "
+						+ " from Unidad  as unidad left outer join unidad.codLocalidad as uniLocalidad "
+						+ "                        left outer join unidad.catLocalidad as catLocalidad"
+						+ "                        left outer join unidad.codTipoUnidad as tipoUnidad"
+						+ "                        left outer join unidad.codAmbProvincia as provincia  "
+						+ "                        left outer join unidad.codAmbIsla as isla "
+						+ "                        left outer join unidad.codAmbitoTerritorial as ambTerritorial "
+						+ "                        left outer join unidad.nivelAdministracion as nivelAdministracion "
+						+ "                        left outer join unidad.codTipoEntPublica as codTipoEntPublica "
+						+ "                        left outer join unidad.codAmbEntGeografica as codAmbEntGeografica "
+						+ "                        left outer join unidad.codAmbPais as pais "
+						+ "                        left outer join unidad.tipoVia as tipoVia "
+						+ "                        left outer join unidad.codAmbComunidad as  comunidad "
+						+ "                        left outer join unidad.codComunidad as  codcomunidad ");
+
+		// Parametros de busqueda
+		if (codigo != null && codigo.length() > 0) {
+			where.add(DataBaseUtils.like("unidad.codigoDir3", "codigo", parametros, codigo));
+		}
+		if (denominacion != null && denominacion.length() > 0) {
+			String condicion1 = DataBaseUtils.like("unidad.denominacion", "denominacion", parametros, denominacion);
+			String condicion2 = DataBaseUtils.like("unidad.denomLenguaCooficial", "denomcooficial", parametros,
+					denominacion);
+			where.add(" ((" + condicion1 + ") or (" + condicion2 + ")) ");
+		}
+		if (codigoNivelAdministracion != null && codigoNivelAdministracion != -1) {
+			where.add(" unidad.nivelAdministracion.codigoNivelAdministracion = :codigoNivelAdministracion ");
+			parametros.put("codigoNivelAdministracion", codigoNivelAdministracion);
+		}
+
+		if (codComunidad != null && codComunidad != -1) {
+			// al nivel administración Universidades no les aplica el ámbito territorial,
+			// por tanto hay que considerar la comunidad de los datos de contacto
+			if (Dir3caibConstantes.NIVEL_ADMINISTRACION_UNIVERSIDADES.equals(codigoNivelAdministracion)) {
+				where.add(
+						" (unidad.codAmbComunidad.codigoComunidad = :codComunidad or unidad.codComunidad.codigoComunidad = :comunidad) ");
+				parametros.put("codComunidad", codComunidad);
+				parametros.put("comunidad", codComunidad);
+
+			} else {
+				where.add(" unidad.codAmbComunidad.codigoComunidad = :codComunidad ");
+				parametros.put("codComunidad", codComunidad);
+			}
+
+		}
+
+		if (provincia != null && provincia != -1) {
+			where.add(" unidad.codAmbProvincia.codigoProvincia = :codProvincia ");
+			parametros.put("codProvincia", provincia);
+		}
+
+		// Solo se buscaran vigentes cuando lo indiquen
+		if (vigentes) {
+			where.add(" unidad.estado.codigoEstadoEntidad =:vigente ");
+			parametros.put("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+		}
+		if (unidadRaiz) {
+			where.add(" unidad.codUnidadRaiz.codigo = unidad.codigo ");
+		}
+
+		// Añadimos los parametros a la query
+		if (parametros.size() != 0) {
+			query.append("where ");
+			int count = 0;
+			for (String w : where) {
+				if (count != 0) {
+					query.append(" and ");
 				}
-				if (denominacion != null && denominacion.length() > 0) {
-					String condicion1 = DataBaseUtils.like("unidad.denominacion", "denominacion", parametros, denominacion);
-					String condicion2 = DataBaseUtils.like("unidad.denomLenguaCooficial", "denomcooficial", parametros,
-							denominacion);
-					where.add(" ((" + condicion1 + ") or (" + condicion2 + ")) ");
-				}
-				if (codigoNivelAdministracion != null && codigoNivelAdministracion != -1) {
-					where.add(" unidad.nivelAdministracion.codigoNivelAdministracion = :codigoNivelAdministracion ");
-					parametros.put("codigoNivelAdministracion", codigoNivelAdministracion);
-				}
+				query.append(w);
+				count++;
+			}
+			query.append("order by unidad.estado.codigoEstadoEntidad desc, unidad.denominacion asc ");
+			q = em.createQuery(query.toString());
+			// log.info("Query => " + query.toString());
 
-				if (codComunidad != null && codComunidad != -1) {
-					// al nivel administración Universidades no les aplica el ámbito territorial,
-					// por tanto hay que considerar la comunidad de los datos de contacto
-					if (Dir3caibConstantes.NIVEL_ADMINISTRACION_UNIVERSIDADES.equals(codigoNivelAdministracion)) {
-						where.add(
-								" (unidad.codAmbComunidad.codigoComunidad = :codComunidad or unidad.codComunidad.codigoComunidad = :comunidad) ");
-						parametros.put("codComunidad", codComunidad);
-						parametros.put("comunidad", codComunidad);
+			for (Map.Entry<String, Object> param : parametros.entrySet()) {
+				q.setParameter(param.getKey(), param.getValue());
+				// log.info("Parameter " + param.getKey() + " => " + param.getValue());
+			}
 
-					} else {
-						where.add(" unidad.codAmbComunidad.codigoComunidad = :codComunidad ");
-						parametros.put("codComunidad", codComunidad);
-					}
+		} else {
+			query.append(" order by unidad.estado.codigoEstadoEntidad desc, unidad.denominacion asc ");
+			q = em.createQuery(query.toString());
+		}
 
-				}
+		List<Object[]> resultados = q.getResultList();
+		List<UnidadRestExtendido> lista = new ArrayList<UnidadRestExtendido>(resultados.size());
 
-				if (provincia != null && provincia != -1) {
-					where.add(" unidad.codAmbProvincia.codigoProvincia = :codProvincia ");
-					parametros.put("codProvincia", provincia);
-				}
-				if (localidad != null && !localidad.equals("-1") && !localidad.isEmpty()) {
-					// Se consideran los dos campos de localidad porque hemos detectado que la
-					// localidad viene informada indistintamente en ambas y no sigue un criterio
-					// lógico,
-					String[] localidadsplit = localidad.split("-");
-					where.add(
-							" (unidad.catLocalidad.codigoLocalidad = :localidad or unidad.codLocalidad.codigoLocalidad = :codlocalidad) ");
-					parametros.put("localidad", Long.parseLong(localidadsplit[0]));
-					parametros.put("codlocalidad", Long.parseLong(localidadsplit[0]));
-					if (provincia != null && provincia != -1) {
-						where.add(
-								" (unidad.catLocalidad.provincia.codigoProvincia = :provincia  or unidad.codLocalidad.provincia.codigoProvincia = :codprovincia) ");
-						parametros.put("provincia", provincia);
-						parametros.put("codprovincia", provincia);
-						if (localidadsplit[1] != null && localidadsplit[1].length() > 0) {
-							where.add(
-									" (unidad.catLocalidad.entidadGeografica.codigoEntidadGeografica = :entidadGeografica  or unidad.codLocalidad.entidadGeografica.codigoEntidadGeografica = :codentidadGeografica) ");
-							parametros.put("entidadGeografica", localidadsplit[1]);
-							parametros.put("codentidadGeografica", localidadsplit[1]);
-						}
-					}
+		for (Object[] object : resultados) {
 
-				}
-				// Solo se buscaran vigentes cuando lo indiquen
-				if (vigentes) {
-					where.add(" unidad.estado.codigoEstadoEntidad =:vigente ");
-					parametros.put("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-				}
-				if (unidadRaiz) {
-					where.add(" unidad.codUnidadRaiz.codigo = unidad.codigo ");
-				}
+			String[] obj = new String[object.length];
+			for (int i = 0; i < object.length; i++) {
+				obj[i] = String.valueOf(object[i]);
+			}
 
-				// Añadimos los parametros a la query
-				if (parametros.size() != 0) {
-					query.append("where ");
-					int count = 0;
-					for (String w : where) {
-						if (count != 0) {
-							query.append(" and ");
-						}
-						query.append(w);
-						count++;
-					}
-					query.append("order by unidad.estado.codigoEstadoEntidad desc, unidad.denominacion asc ");
-					q = em.createQuery(query.toString());
-					// log.info("Query => " + query.toString());
+			UnidadRestExtendido unidadRest = new UnidadRestExtendido();
 
-					for (Map.Entry<String, Object> param : parametros.entrySet()) {
-						q.setParameter(param.getKey(), param.getValue());
-						// log.info("Parameter " + param.getKey() + " => " + param.getValue());
-					}
+			unidadRest.setCodigo(Utils.isNotEmpty(obj[0]) ? obj[0] : null);
+			unidadRest.setVersion(Utils.isNotEmpty(obj[29]) ? Long.parseLong(obj[29]) : 0);
+			unidadRest.setDenominacion(Utils.isNotEmpty(obj[1]) ? obj[1] : "");
+			unidadRest.setDenominacionCooficial(Utils.isNotEmpty(obj[23]) ? obj[23] : "");
+			unidadRest.setCodigoEstadoEntidad(Utils.isNotEmpty(obj[2]) ? obj[2] : "");
+			unidadRest.setDescripcionEstadoEntidad(Utils.isNotEmpty(obj[35]) ? obj[35] : "");
+			unidadRest.setNivelJerarquico(Utils.isNotEmpty(obj[9]) ? Long.parseLong(obj[9]) : 0);
+			unidadRest.setNivelAdministracion(Utils.isNotEmpty(obj[30]) ? Long.parseLong(obj[30]) : 0);
+			unidadRest.setDescripcionNivelAdministracion(Utils.isNotEmpty(obj[11]) ? obj[11] : "");
+			unidadRest.setCodUnidadSuperior(Utils.isNotEmpty(obj[5]) ? obj[5] : "");
+			unidadRest.setDenominacionUnidadSuperior(Utils.isNotEmpty(obj[6]) ? obj[6] : "");
+			unidadRest.setDenominacionCooficialUnidadSuperior(Utils.isNotEmpty(obj[25]) ? obj[25] : "");
+			unidadRest.setCodUnidadRaiz(Utils.isNotEmpty(obj[3]) ? obj[3] : "");
+			unidadRest.setDenominacionUnidadRaiz(Utils.isNotEmpty(obj[4]) ? obj[4] : "");
+			unidadRest.setDenominacionCooficialUnidadRaiz(Utils.isNotEmpty(obj[24]) ? obj[24] : "");
+			unidadRest.setNumVia(Utils.isNotEmpty(obj[15]) ? obj[15] : "");
+			unidadRest.setNombreVia(Utils.isNotEmpty(obj[14]) ? obj[14] : "");
+			unidadRest.setCodPostal(Utils.isNotEmpty(obj[17]) ? obj[17] : "");
+			unidadRest.setNifCif(Utils.isNotEmpty(obj[10]) ? obj[10] : "");
+			unidadRest.setCodigoDir3(Utils.isNotEmpty(obj[26]) ? obj[26] : "");
+			unidadRest.setCodigoDir3UnidadRaiz(Utils.isNotEmpty(obj[27]) ? obj[27] : "");
+			unidadRest.setCodigoDir3UnidadSuperior(Utils.isNotEmpty(obj[28]) ? obj[28] : "");
+			unidadRest.setCodigoAmbitoTerritorial(Utils.isNotEmpty(obj[31]) ? obj[31] : "");
+			unidadRest.setDescripcionAmbitoTerritorial(Utils.isNotEmpty(obj[18]) ? obj[18] : "");
+			unidadRest.setCodigoAmbPais((Utils.isNotEmpty(obj[32])) ? Long.parseLong(obj[32]) : 0);
+			unidadRest.setDescripcionAmbPais(Utils.isNotEmpty(obj[19]) ? obj[19] : "");
+			unidadRest.setCodAmbProvincia((Utils.isNotEmpty(obj[33])) ? Long.parseLong(obj[33]) : 0);
+			unidadRest.setDescripcionAmbProvincia(Utils.isNotEmpty(obj[21]) ? obj[21] : "");
+			unidadRest.setCodigoTipoVia((Utils.isNotEmpty(obj[34])) ? Long.parseLong(obj[34]) : 0);
+			unidadRest.setDescripcionTipoVia(Utils.isNotEmpty(obj[13]) ? obj[13] : "");
+			unidadRest.setCodigoLocalidad(Utils.isNotEmpty(obj[36]) ? obj[36] : "");
+			unidadRest.setDescripcionLocalidad(Utils.isNotEmpty(obj[7]) ? obj[7] : "");
+			unidadRest.setCodAmbComunidad((Utils.isNotEmpty(obj[37])) ? Long.parseLong(obj[37]) : 0);
+			unidadRest.setDescripcionAmbComunidad(Utils.isNotEmpty(obj[20]) ? obj[20] : "");
+			unidadRest.setEsEdp(Boolean.parseBoolean(obj[8]));
+			unidadRest.setCompetencias(Utils.isNotEmpty(obj[38]) ? obj[38] : "");
+			// historicosUO;
 
+			lista.add(unidadRest);
+		}
+
+		// Cargamos los contactos de las unidades
+		for (UnidadRestExtendido ur : lista) {
+			List<ContactoUnidadOrganica> contactos = contactoUOEjb.getContactosByUnidad(ur.getCodigo());
+
+			// Carregam HashMap
+			Map<String, String> contactosMap = new HashMap<String, String>();
+			for (ContactoUnidadOrganica cont : contactos) {
+				final String key = cont.getTipoContacto().getCodigoTipoContacto();
+				if (!contactosMap.containsKey(key)) {
+					contactosMap.put(key, cont.getValorContacto());
 				} else {
-					query.append(" order by unidad.estado.codigoEstadoEntidad desc, unidad.denominacion asc ");
-					q = em.createQuery(query.toString());					
+					final String valor = contactosMap.get(key) + "," + cont.getValorContacto();
+					contactosMap.put(key, valor);
 				}
-				
-				
-				List<Object[]> resultados = q.getResultList();
-				List<UnidadRestExtendido> lista = new ArrayList<UnidadRestExtendido>(resultados.size());
-				
-				for (Object[] object : resultados) {
-					
-					String[] obj = new String[object.length];
-		            for (int i = 0; i < object.length; i++) {
-		                obj[i] = String.valueOf(object[i]);
-		            }
-					
-					UnidadRestExtendido unidadRest = new UnidadRestExtendido();
-					
-					unidadRest.setCodigo(obj[0]);
-					unidadRest.setVersion(Long.parseLong(obj[29]));					
-					unidadRest.setDenominacion(obj[1]);
-					unidadRest.setDenominacionCooficial(obj[23]);
-					unidadRest.setCodigoEstadoEntidad(obj[2]);
-					unidadRest.setDescripcionEstadoEntidad(obj[35]);
-					unidadRest.setNivelJerarquico(Long.parseLong(obj[9]));
-					unidadRest.setNivelAdministracion(Long.parseLong(obj[30]));
-					unidadRest.setDescripcionNivelAdministracion(obj[11]);
-					unidadRest.setCodUnidadSuperior(obj[5]);
-					unidadRest.setDenominacionUnidadSuperior(obj[6]);
-					unidadRest.setDenominacionCooficialUnidadSuperior(obj[25]);
-					unidadRest.setCodUnidadRaiz(obj[3]);
-					unidadRest.setDenominacionUnidadRaiz(obj[4]);
-					unidadRest.setDenominacionCooficialUnidadRaiz(obj[24]);
-					unidadRest.setNumVia(obj[15]);
-					unidadRest.setNombreVia(obj[14]);
-					unidadRest.setCodPostal(obj[17]);
-					unidadRest.setNifCif(obj[10]);
-					unidadRest.setCodigoDir3(obj[26]);
-					unidadRest.setCodigoDir3UnidadRaiz(obj[27]);
-					unidadRest.setCodigoDir3UnidadSuperior(obj[28]);
-					unidadRest.setCodigoAmbitoTerritorial(obj[31]);
-					unidadRest.setDescripcionAmbitoTerritorial(obj[18]);
-					unidadRest.setCodigoAmbPais((Utils.isNotEmpty(obj[32])) ? Long.parseLong(obj[32]) : 0);
-					unidadRest.setDescripcionAmbPais(obj[19]);
-					unidadRest.setCodAmbProvincia((Utils.isNotEmpty(obj[33])) ? Long.parseLong(obj[33]) : 0);
-					unidadRest.setDescripcionAmbProvincia(obj[21]);
-					unidadRest.setCodigoTipoVia((Utils.isNotEmpty(obj[34])) ? Long.parseLong(obj[34]) : 0);					
-					unidadRest.setDescripcionTipoVia(obj[13]);
-					unidadRest.setCodigoLocalidad(obj[36]);
-					unidadRest.setDescripcionLocalidad(obj[7]);
-					unidadRest.setCodAmbComunidad((Utils.isNotEmpty(obj[37])) ? Long.parseLong(obj[37]): 0);
-					unidadRest.setDescripcionAmbComunidad(obj[20]);
-					unidadRest.setEsEdp(Boolean.parseBoolean(obj[8]));
-					unidadRest.setCompetencias(obj[38]);
-				    // historicosUO;
-					
-					lista.add(unidadRest);
+			}
+
+			// Assignam el valor en funció del tipus
+			for (String key : contactosMap.keySet()) {
+				switch (key) {
+				case "C":
+					ur.setContactoCentralita(contactosMap.get(key));
+					break;
+				case "E":
+					ur.setContactoEmail(contactosMap.get(key));
+					break;
+				case "F":
+					ur.setContactoFax(contactosMap.get(key));
+					break;
+				case "P":
+					ur.setContactoCitaPrevia(contactosMap.get(key));
+					break;
+				case "T":
+					ur.setContactoTelefono(contactosMap.get(key));
+					break;
+				case "U":
+					ur.setContactoURL(contactosMap.get(key));
+					break;
+				default:
+					ur.setContactoOtro(contactosMap.get(key));
+					break;
 				}
-				
-				// Cargamos los contactos de las unidades
-				for (UnidadRestExtendido ur : lista) {
-					List<ContactoUnidadOrganica> contactos = contactoUOEjb.getContactosByUnidad(ur.getCodigo());
-					List<ContactoRest> contactosList = new ArrayList<>();
-					for (ContactoUnidadOrganica cont : contactos) {
-						contactosList.add(ContactoRest.generar(cont));
-					}
-					ur.setContactos(contactosList);
+			}
+			ur.setContactos(null);
+		}
+
+		// Si nos indican la variable conOficinas a true es que interesa devolver solo
+		// aquellos organismos que tienen oficinas en las que registrar
+		if (conOficinas)
+
+		{
+			List<UnidadRestExtendido> unidadesConOficinas = new ArrayList<UnidadRestExtendido>();
+			for (UnidadRestExtendido unidad : lista) {
+				if (tieneOficinasOrganismo(unidad.getCodigo())) {
+					unidadesConOficinas.add(unidad);
 				}
-				
-				
-				// Si nos indican la variable conOficinas a true es que interesa devolver solo
-				// aquellos organismos que tienen oficinas en las que registrar
-				if (conOficinas) {
-					List<UnidadRestExtendido> unidadesConOficinas = new ArrayList<UnidadRestExtendido>();
-					for (UnidadRestExtendido unidad : lista) {
-						if (tieneOficinasOrganismo(unidad.getCodigo())) {
-							unidadesConOficinas.add(unidad);
-						}
-					}
-					lista = new ArrayList<UnidadRestExtendido>(unidadesConOficinas);
-				}
-				
-				// Actualizamos las unidades obtenidas y marcamos si tienen oficinasSIR
-				// y sustituimos el valor del codigo por el codigoDir3(sin version)
-				for (UnidadRestExtendido unidad2 : lista) {
-					if (oficinaEjb.obtenerOficinasSIRUnidad(unidad2.getCodigo(),false).size() > 0) {
-						unidad2.setTieneOficinaSIR(true);
-					}
-				}
-				return lista;
+			}
+			lista = new ArrayList<UnidadRestExtendido>(unidadesConOficinas);
+		}
+
+		// Actualizamos las unidades obtenidas y marcamos si tienen oficinasSIR
+		// y sustituimos el valor del codigo por el codigoDir3(sin version)
+		for (UnidadRestExtendido unidad2 : lista) {
+			if (oficinaEjb.obtenerOficinasSIRUnidad(unidad2.getCodigo(), false).size() > 0) {
+				unidad2.setTieneOficinaSIR(true);
+			}
+		}
+		return lista;
 	}
-	
-	
-	
+
 	@Override
 	@SuppressWarnings(value = "unchecked")
 	public List<Nodo> busquedaOrganismos(String codigo, String denominacion, Long codigoNivelAdministracion,
@@ -799,15 +811,17 @@ public class Dir3RestBean implements Dir3RestLocal {
 		// Actualizamos las unidades obtenidas y marcamos si tienen oficinasSIR
 		// y sustituimos el valor del codigo por el codigoDir3(sin version)
 		for (Nodo unidad2 : unidades) {
-			//if (obtenerOficinasSIRUnidad(unidad2.getCodigo()).size() > 0) {
-			if (oficinaEjb.obtenerOficinasSIRUnidad(unidad2.getCodigo(),false).size() > 0) {
+			// if (obtenerOficinasSIRUnidad(unidad2.getCodigo()).size() > 0) {
+			if (oficinaEjb.obtenerOficinasSIRUnidad(unidad2.getCodigo(), false).size() > 0) {
 				unidad2.setTieneOficinaSir(true);
 			}
 			// Unidad, unidad raiz, unidadSuperior
 			String[] codigoSeparado = unidad2.getCodigo().split(Dir3caibConstantes.SEPARADOR_CODIGO_VERSION);
 			unidad2.setCodigo(codigoSeparado[0]);
-			unidad2.setSuperior(unidad2.getSuperior().substring(0, unidad2.getSuperior().lastIndexOf(Dir3caibConstantes.SEPARADOR_CODIGO_VERSION)));
-			unidad2.setRaiz(unidad2.getRaiz().substring(0, unidad2.getRaiz().lastIndexOf(Dir3caibConstantes.SEPARADOR_CODIGO_VERSION)));
+			unidad2.setSuperior(unidad2.getSuperior().substring(0,
+					unidad2.getSuperior().lastIndexOf(Dir3caibConstantes.SEPARADOR_CODIGO_VERSION)));
+			unidad2.setRaiz(unidad2.getRaiz().substring(0,
+					unidad2.getRaiz().lastIndexOf(Dir3caibConstantes.SEPARADOR_CODIGO_VERSION)));
 
 		}
 		return unidades;
@@ -851,11 +865,10 @@ public class Dir3RestBean implements Dir3RestLocal {
 						+ "oficina.denomLenguaCooficial, unidadRaiz.denomLenguaCooficial, oficina.codUoResponsable.denomLenguaCooficial "
 						+ "from Oficina as oficina left outer join oficina.codUoResponsable.codUnidadRaiz as unidadRaiz left outer join oficina.localidad as ofilocalidad ");
 
-		if(oficinasSir){
+		if (oficinasSir) {
 			StringBuilder conOficinasSir = new StringBuilder(" left outer join oficina.servicios as servicios ");
 			query.append(conOficinasSir);
 		}
-
 
 		// Parametros de busqueda
 
@@ -906,8 +919,8 @@ public class Dir3RestBean implements Dir3RestLocal {
 
 		// buscamos aquellas que sean oficinas sir de Recepcion
 		if (oficinasSir) {
-			where.add(" servicios.servicio.codServicio= :SERVICIO_SIR_RECEPCION " );
-			parametros.put("SERVICIO_SIR_RECEPCION",Dir3caibConstantes.SERVICIO_SIR_RECEPCION);
+			where.add(" servicios.servicio.codServicio= :SERVICIO_SIR_RECEPCION ");
+			parametros.put("SERVICIO_SIR_RECEPCION", Dir3caibConstantes.SERVICIO_SIR_RECEPCION);
 
 		}
 
@@ -933,13 +946,15 @@ public class Dir3RestBean implements Dir3RestLocal {
 			query.append("order by oficina.denominacion asc");
 			q = em.createQuery(query.toString());
 		}
-		
+
 		List<Nodo> nodos = NodoUtils.getNodoListExtendido(q.getResultList(), denominacionCooficial);
 
 		// correcció codigo per no tornar el código amb la versió
-		for(Nodo nodo : nodos) {
-			nodo.setRaiz(nodo.getRaiz().substring(0,nodo.getRaiz().lastIndexOf(Dir3caibConstantes.SEPARADOR_CODIGO_VERSION)));
-			nodo.setCodigoSuperior(nodo.getCodigoSuperior().substring(0,nodo.getCodigoSuperior().lastIndexOf(Dir3caibConstantes.SEPARADOR_CODIGO_VERSION)));
+		for (Nodo nodo : nodos) {
+			nodo.setRaiz(nodo.getRaiz().substring(0,
+					nodo.getRaiz().lastIndexOf(Dir3caibConstantes.SEPARADOR_CODIGO_VERSION)));
+			nodo.setCodigoSuperior(nodo.getCodigoSuperior().substring(0,
+					nodo.getCodigoSuperior().lastIndexOf(Dir3caibConstantes.SEPARADOR_CODIGO_VERSION)));
 		}
 		return nodos;
 
@@ -1128,20 +1143,20 @@ public class Dir3RestBean implements Dir3RestLocal {
 	public List<CodigoValor> getLocalidadByProvinciaEntidadGeografica(Long codigoProvincia,
 			String codigoEntidadGeografica, String estado) throws Exception {
 
-		 String filtreEstado = (Utils.isNotEmpty(estado)) ? " and catLocalidad.estado.codigoEstadoEntidad = :estado " : "";
+		String filtreEstado = (Utils.isNotEmpty(estado)) ? " and catLocalidad.estado.codigoEstadoEntidad = :estado "
+				: "";
 
-		 Query q = em.createQuery(
+		Query q = em.createQuery(
 				"Select catLocalidad.codigoLocalidad, catLocalidad.descripcionLocalidad from CatLocalidad as catLocalidad "
 						+ " left outer join catLocalidad.provincia as provincia "
 						+ " left outer join catLocalidad.entidadGeografica as entidadGeografica "
 						+ " where provincia.codigoProvincia =:codigoProvincia and entidadGeografica.codigoEntidadGeografica=:codigoEntidadGeografica "
-						+ filtreEstado
-						+ " order by catLocalidad.descripcionLocalidad ASC");
+						+ filtreEstado + " order by catLocalidad.descripcionLocalidad ASC");
 
 		q.setParameter("codigoProvincia", codigoProvincia);
 		q.setParameter("codigoEntidadGeografica", codigoEntidadGeografica);
-		
-		if(filtreEstado != "")
+
+		if (filtreEstado != "")
 			q.setParameter("estado", estado);
 
 		return transformarACodigoValor(q.getResultList());
@@ -1157,13 +1172,11 @@ public class Dir3RestBean implements Dir3RestLocal {
 	@Override
 	@SuppressWarnings(value = "unchecked")
 	public List<CodigoValor> getComunidadesAutonomas(String estado) throws Exception {
-		
+
 		String filtreEstado = (Utils.isNotEmpty(estado)) ? "where ca.estado.codigoEstadoEntidad = :estado " : "";
-		
-		Query q = em.createQuery(
-				"select ca.codigoComunidad, ca.descripcionComunidad from CatComunidadAutonoma as ca "
-				+ filtreEstado
-				+ " order by ca.descripcionComunidad");
+
+		Query q = em.createQuery("select ca.codigoComunidad, ca.descripcionComunidad from CatComunidadAutonoma as ca "
+				+ filtreEstado + " order by ca.descripcionComunidad");
 
 		if (filtreEstado != "")
 			q.setParameter("estado", estado);
@@ -1181,16 +1194,15 @@ public class Dir3RestBean implements Dir3RestLocal {
 	@Override
 	@SuppressWarnings(value = "unchecked")
 	public List<CodigoValor> getEntidadesGeograficas(String estado) throws Exception {
-		
-		String filtreEstado = (Utils.isNotEmpty(estado)) ? " where eg.estado.codigoEstadoEntidad = :estado " : ""; 
-		
+
+		String filtreEstado = (Utils.isNotEmpty(estado)) ? " where eg.estado.codigoEstadoEntidad = :estado " : "";
+
 		Query q = em.createQuery(
 				"select eg.codigoEntidadGeografica, eg.descripcionEntidadGeografica from CatEntidadGeografica as eg "
-				+ filtreEstado
-				+ " order by eg.codigoEntidadGeografica");
+						+ filtreEstado + " order by eg.codigoEntidadGeografica");
 
 		if (filtreEstado != "")
-			q.setParameter("estado", estado );
+			q.setParameter("estado", estado);
 
 		return transformarACodigoValor(q.getResultList());
 
@@ -1205,13 +1217,11 @@ public class Dir3RestBean implements Dir3RestLocal {
 	@Override
 	@SuppressWarnings(value = "unchecked")
 	public List<CodigoValor> getProvincias(String estado) throws Exception {
-		
-		String filtreEstado = (Utils.isNotEmpty(estado)) ? " where prov.estado.codigoEstadoEntidad = :estado " : ""; 
-		
-		Query q = em.createQuery(
-				"select prov.codigoProvincia, prov.descripcionProvincia from CatProvincia as prov "
-				+ filtreEstado
-				+ "order by prov.descripcionProvincia");
+
+		String filtreEstado = (Utils.isNotEmpty(estado)) ? " where prov.estado.codigoEstadoEntidad = :estado " : "";
+
+		Query q = em.createQuery("select prov.codigoProvincia, prov.descripcionProvincia from CatProvincia as prov "
+				+ filtreEstado + "order by prov.descripcionProvincia");
 
 		if (filtreEstado != "")
 			q.setParameter("estado", estado);
@@ -1229,18 +1239,18 @@ public class Dir3RestBean implements Dir3RestLocal {
 	@Override
 	@SuppressWarnings(value = "unchecked")
 	public List<CodigoValor> getProvinciasByComunidad(Long codComunidad, String estado) throws Exception {
-		
+
 		String filtreEstado = (Utils.isNotEmpty(estado)) ? " and prov.estado.codigoEstadoEntidad = :estado " : "";
-		
+
 		Query q = em.createQuery("Select prov.codigoProvincia, prov.descripcionProvincia from CatProvincia as prov "
-				+ "where prov.comunidadAutonoma.codigoComunidad =:codComunidad "
-				+ filtreEstado
+				+ "where prov.comunidadAutonoma.codigoComunidad =:codComunidad " + filtreEstado
 				+ "order by prov.codigoProvincia");
 
 		q.setParameter("codComunidad", codComunidad);
 
-		if (filtreEstado != "") { q.setParameter("estado", estado);}
-
+		if (filtreEstado != "") {
+			q.setParameter("estado", estado);
+		}
 
 		return transformarACodigoValor(q.getResultList());
 
@@ -1255,16 +1265,15 @@ public class Dir3RestBean implements Dir3RestLocal {
 	@Override
 	@SuppressWarnings(value = "unchecked")
 	public List<CodigoValor> getNivelesAdministracion(String estado) throws Exception {
-		
+
 		String filtreEstado = (Utils.isNotEmpty(estado)) ? " where na.estado.codigoEstadoEntidad = :estado " : "";
-		
+
 		Query q = em.createQuery("select na.codigoNivelAdministracion, na.descripcionNivelAdministracion "
-				+ "from CatNivelAdministracion as na "
-				+ filtreEstado
-				+ "order by na.descripcionNivelAdministracion");
+				+ "from CatNivelAdministracion as na " + filtreEstado + "order by na.descripcionNivelAdministracion");
 
-		if (filtreEstado != "")  {q.setParameter("estado", estado);}
-
+		if (filtreEstado != "") {
+			q.setParameter("estado", estado);
+		}
 
 		return transformarACodigoValor(q.getResultList());
 
@@ -1275,17 +1284,20 @@ public class Dir3RestBean implements Dir3RestLocal {
 	public List<CodigoValor> getAmbitoTerritorialByAdministracion(Long nivelAdministracion, String estado)
 			throws Exception {
 
-		String filtreEstado = (Utils.isNotEmpty(estado)) ? " and catAmbitoTerritorial.estado.codigoEstadoEntidad = :estado " : "";
-		
+		String filtreEstado = (Utils.isNotEmpty(estado))
+				? " and catAmbitoTerritorial.estado.codigoEstadoEntidad = :estado "
+				: "";
+
 		Query q = em.createQuery("Select catAmbitoTerritorial.codigoAmbito,catAmbitoTerritorial.descripcionAmbito "
 				+ "from CatAmbitoTerritorial as catAmbitoTerritorial "
 				+ "where catAmbitoTerritorial.nivelAdministracion.codigoNivelAdministracion = :nivelAdministracion "
-				+ filtreEstado
-				+ "order by catAmbitoTerritorial.codigoAmbito");
+				+ filtreEstado + "order by catAmbitoTerritorial.codigoAmbito");
 
 		q.setParameter("nivelAdministracion", nivelAdministracion);
 
-		if (filtreEstado != "") {q.setParameter("estado", (Utils.isNotEmpty(estado)) ? estado : Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);}
+		if (filtreEstado != "") {
+			q.setParameter("estado", (Utils.isNotEmpty(estado)) ? estado : Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+		}
 
 		return transformarACodigoValor(q.getResultList());
 	}
@@ -1293,16 +1305,19 @@ public class Dir3RestBean implements Dir3RestLocal {
 	@Override
 	@SuppressWarnings(value = "unchecked")
 	public List<CodigoValor> getEstadosEntidad(String estado) throws Exception {
-		
-		String filtreEstado = (Utils.isNotEmpty(estado)) ? " where catEstadoEntidad.estado.codigoEstadoEntidad = :estado " : "";
+
+		String filtreEstado = (Utils.isNotEmpty(estado))
+				? " where catEstadoEntidad.estado.codigoEstadoEntidad = :estado "
+				: "";
 
 		Query q = em
 				.createQuery("Select catEstadoEntidad.codigoEstadoEntidad, catEstadoEntidad.descripcionEstadoEntidad "
-						+ "from CatEstadoEntidad as catEstadoEntidad "
-						+ filtreEstado
+						+ "from CatEstadoEntidad as catEstadoEntidad " + filtreEstado
 						+ "order by catEstadoEntidad.codigoEstadoEntidad ASC");
 
-		if (filtreEstado != "") {q.setParameter("estado", estado);}
+		if (filtreEstado != "") {
+			q.setParameter("estado", estado);
+		}
 
 		return transformarACodigoValor(q.getResultList());
 
@@ -1312,14 +1327,15 @@ public class Dir3RestBean implements Dir3RestLocal {
 	@SuppressWarnings(value = "unchecked")
 	public List<CodigoValor> getTiposVia(String estado) throws Exception {
 
-		String filtreEstado = (Utils.isNotEmpty(estado)) ? " where catTipoVia.estado.codigoEstadoEntidad = :estado " : "";
-		
-		Query q = em.createQuery("Select catTipoVia.codigoTipoVia, catTipoVia.descripcionTipoVia "
-				+ "from CatTipoVia as catTipoVia " 
-				+ filtreEstado
-				+ "order by catTipoVia.descripcionTipoVia");
+		String filtreEstado = (Utils.isNotEmpty(estado)) ? " where catTipoVia.estado.codigoEstadoEntidad = :estado "
+				: "";
 
-		if (filtreEstado != "") {q.setParameter("estado", estado);}
+		Query q = em.createQuery("Select catTipoVia.codigoTipoVia, catTipoVia.descripcionTipoVia "
+				+ "from CatTipoVia as catTipoVia " + filtreEstado + "order by catTipoVia.descripcionTipoVia");
+
+		if (filtreEstado != "") {
+			q.setParameter("estado", estado);
+		}
 
 		return transformarACodigoValor(q.getResultList());
 
@@ -1328,14 +1344,15 @@ public class Dir3RestBean implements Dir3RestLocal {
 	@Override
 	@SuppressWarnings(value = "unchecked")
 	public List<CatPais> getPaises(String estado) throws Exception {
-		
-		String filtreEstado = (Utils.isNotEmpty(estado)) ? " where catPais.estado.codigoEstadoEntidad = :estado " : ""; 
 
-		Query q = em.createQuery("Select catPais " + "from CatPais as catPais "
-				+ filtreEstado 
-				+ "order by catPais.descripcionPais");
+		String filtreEstado = (Utils.isNotEmpty(estado)) ? " where catPais.estado.codigoEstadoEntidad = :estado " : "";
 
-		if (filtreEstado != "") {q.setParameter("estado", estado);}
+		Query q = em.createQuery(
+				"Select catPais " + "from CatPais as catPais " + filtreEstado + "order by catPais.descripcionPais");
+
+		if (filtreEstado != "") {
+			q.setParameter("estado", estado);
+		}
 
 		return q.getResultList();
 
@@ -1372,7 +1389,9 @@ public class Dir3RestBean implements Dir3RestLocal {
 			boolean denominacionCooficial) {
 		List<ObjetoDirectorio> objetoDirectorios = new ArrayList<ObjetoDirectorio>();
 		for (Object[] obj : resultados) {
-			objetoDirectorios.add(new ObjetoDirectorio((String) obj[0], ((denominacionCooficial && Utils.isNotEmpty((String) obj[2])) ? (String) obj[2] : (String) obj[1])));
+			objetoDirectorios.add(new ObjetoDirectorio((String) obj[0],
+					((denominacionCooficial && Utils.isNotEmpty((String) obj[2])) ? (String) obj[2]
+							: (String) obj[1])));
 		}
 
 		return objetoDirectorios;
@@ -1382,7 +1401,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 	@Override
 	public OficinaRest obtenerOficina(String codigo, Date fechaActualizacion, Date fechaSincronizacion,
 			boolean denominacionOficial, String estado) throws Exception {
-		
+
 		Oficina oficina = oficinaEjb.findById(codigo, estado);
 
 		if (oficina != null) {
@@ -1505,14 +1524,14 @@ public class Dir3RestBean implements Dir3RestLocal {
 	}
 
 	/**
-	 * Obtiene todas las {@link es.caib.dir3caib.persistence.model.Oficina}  SIR cuyo
+	 * Obtiene todas las {@link es.caib.dir3caib.persistence.model.Oficina} SIR cuyo
 	 * organismo responsable es el indicado por código(del padres e hijos).
 	 *
 	 * @param codigo Código del organismo
 	 */
 	@Override
 	public List<OficinaRest> obtenerArbolOficinasSir(String codigo, boolean denominacionCooficial) throws Exception {
-		List<Oficina> oficinas = oficinaEjb.obtenerOficinasSIRArbol(codigo,denominacionCooficial);
+		List<Oficina> oficinas = oficinaEjb.obtenerOficinasSIRArbol(codigo, denominacionCooficial);
 
 		List<OficinaRest> oficinasRest = new ArrayList<OficinaRest>();
 
@@ -1534,25 +1553,29 @@ public class Dir3RestBean implements Dir3RestLocal {
 	}
 
 	@Override
-	public UnidadRest obtenerUnidad(String codigo, Date fechaActualizacion, Date fechaSincronizacion, boolean denominacionCooficial) throws Exception {
-		return UnidadRest
-				.toUnidadRest(obtenerUnidadesEjb.obtenerUnidadWs(codigo, fechaActualizacion, fechaSincronizacion), true, denominacionCooficial, true, true);
+	public UnidadRest obtenerUnidad(String codigo, Date fechaActualizacion, Date fechaSincronizacion,
+			boolean denominacionCooficial) throws Exception {
+		return UnidadRest.toUnidadRest(
+				obtenerUnidadesEjb.obtenerUnidadWs(codigo, fechaActualizacion, fechaSincronizacion), true,
+				denominacionCooficial, true, true);
 	}
 
 	@Override
 	public UnidadRest buscarUnidad(String codigo, boolean denominacionCooficial) throws Exception {
-		return UnidadRest.toUnidadRest(obtenerUnidadesEjb.buscarUnidadWs(codigo), true, denominacionCooficial, true, true);
+		return UnidadRest.toUnidadRest(obtenerUnidadesEjb.buscarUnidadWs(codigo), true, denominacionCooficial, true,
+				true);
 	}
 
 	@Override
-	public List<UnidadRest> obtenerArbolUnidades(String codigo, Date fechaActualizacion, Date fechaSincronizacion, 
-			boolean denominacionCooficial, boolean mostrarHistoricos, boolean mostrarContactos)
+	public List<UnidadRest> obtenerArbolUnidades(String codigo, Date fechaActualizacion, Date fechaSincronizacion,
+			boolean denominacionCooficial, boolean mostrarHistoricos, boolean mostrarContactos) throws Exception {
+		return obtenerUnidadesEjb.obtenerArbolUnidadesRest(codigo, fechaActualizacion, fechaSincronizacion,
+				mostrarHistoricos, mostrarContactos);
+	}
+
+	@Override
+	public List<UnidadRest> obtenerArbolUnidadesDestinatarias(String codigo, boolean denominacionCooficial)
 			throws Exception {
-		return  obtenerUnidadesEjb.obtenerArbolUnidadesRest(codigo, fechaActualizacion, fechaSincronizacion, mostrarHistoricos, mostrarContactos);
-	}
-
-	@Override
-	public List<UnidadRest> obtenerArbolUnidadesDestinatarias(String codigo, boolean denominacionCooficial) throws Exception {
 
 		List<UnidadWs> llista = obtenerUnidadesEjb.obtenerArbolUnidadesDestinatariasWs(codigo);
 		List<UnidadRest> resultados = new ArrayList<UnidadRest>();
@@ -1566,14 +1589,14 @@ public class Dir3RestBean implements Dir3RestLocal {
 	public List<ObjetoDirectorioExtendido> obtenerHistoricosFinalesExtendido(String codigo) throws Exception {
 		return obtenerUnidadesEjb.obtenerHistoricosFinalesExtendido(codigo);
 	}
-	
+
 	@Override
 	public List<UnidadRest> obtenerHistoricosFinales(String codigo, boolean denominacionCooficial) throws Exception {
 
 		List<UnidadWs> llista = obtenerUnidadesEjb.obtenerHistoricosFinalesWs(codigo);
 		List<UnidadRest> resultados = new ArrayList<UnidadRest>();
 		for (UnidadWs unidad : llista) {
-			resultados.add(UnidadRest.toUnidadRest(unidad,true, denominacionCooficial, true, true));
+			resultados.add(UnidadRest.toUnidadRest(unidad, true, denominacionCooficial, true, true));
 		}
 		return resultados;
 	}

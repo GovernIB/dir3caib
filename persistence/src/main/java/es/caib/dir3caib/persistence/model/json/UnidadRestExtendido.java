@@ -2,22 +2,32 @@ package es.caib.dir3caib.persistence.model.json;
 
 public class UnidadRestExtendido extends UnidadRest {
 	
-    private String descripcionEstadoEntidad;
-    private String descripcionNivelJerarquico;
-    private String denominacionUnidadSuperior;
-    private String denominacionCooficialUnidadSuperior;
-    private String denominacionUnidadRaiz;
-    private String denominacionCooficialUnidadRaiz;
-    private String codigoLocalidad;
-    private String descripcionNivelAdministracion;
-    private String descripcionTipoVia;
-    private String descripcionAmbitoTerritorial;
-    private String descripcionAmbPais;
-    private String descripcionAmbProvincia;
-    private String descripcionAmbComunidad;
-    private String codigoDir3;
-    private String codigoDir3UnidadSuperior;
-    private String codigoDir3UnidadRaiz;
+    private String descripcionEstadoEntidad = "";
+    private String descripcionNivelJerarquico = "";
+    private String denominacionUnidadSuperior = "";
+    private String denominacionCooficialUnidadSuperior = "";
+    private String denominacionUnidadRaiz = "";
+    private String denominacionCooficialUnidadRaiz = "";
+    private String codigoLocalidad = "";
+    private String descripcionNivelAdministracion = "";
+    private String descripcionTipoVia = "";
+    private String descripcionAmbitoTerritorial = "";
+    private String descripcionAmbPais = "";
+    private String descripcionAmbProvincia = "";
+    private String descripcionAmbComunidad = "";
+    private String codigoDir3 = "";
+    private String codigoDir3UnidadSuperior = "";
+    private String codigoDir3UnidadRaiz = "";
+    
+    // Es creen aquests tipus de contactos en format String perquè Sistra no pot interpretar les llistes
+    private String contactoEmail = "";
+    private String contactoCentralita = "";
+    private String contactoFax = "";
+    private String contactoOtro = "";
+    private String contactoURL = "";
+    private String contactoTelefono = "";
+    private String contactoCitaPrevia = "";
+    
     private Boolean tieneOficinaSIR;
     
 	public String getDescripcionEstadoEntidad() {
@@ -121,6 +131,48 @@ public class UnidadRestExtendido extends UnidadRest {
 	}
 	public void setTieneOficinaSIR(Boolean tieneOficinaSIR) {
 		this.tieneOficinaSIR = tieneOficinaSIR;
+	}
+	public String getContactoEmail() {
+		return contactoEmail;
+	}
+	public void setContactoEmail(String contactoEmail) {
+		this.contactoEmail = contactoEmail;
+	}
+	public String getContactoCentralita() {
+		return contactoCentralita;
+	}
+	public void setContactoCentralita(String contactoCentralita) {
+		this.contactoCentralita = contactoCentralita;
+	}
+	public String getContactoFax() {
+		return contactoFax;
+	}
+	public void setContactoFax(String contactoFax) {
+		this.contactoFax = contactoFax;
+	}
+	public String getContactoOtro() {
+		return contactoOtro;
+	}
+	public void setContactoOtro(String contactoOtro) {
+		this.contactoOtro = contactoOtro;
+	}
+	public String getContactoURL() {
+		return contactoURL;
+	}
+	public void setContactoURL(String contactoURL) {
+		this.contactoURL = contactoURL;
+	}
+	public String getContactoTelefono() {
+		return contactoTelefono;
+	}
+	public void setContactoTelefono(String contactoTelefono) {
+		this.contactoTelefono = contactoTelefono;
+	}
+	public String getContactoCitaPrevia() {
+		return contactoCitaPrevia;
+	}
+	public void setContactoCitaPrevia(String contactoCitaPrevia) {
+		this.contactoCitaPrevia = contactoCitaPrevia;
 	}
 	public UnidadRestExtendido() {
 		super();

@@ -976,7 +976,6 @@ public class RestController extends RestUtils {
 			Long nivelAdministracion = null;
 			Long codComunidadAutonoma = null;
 			Long provincia = null;
-			String localidad = "";
 			Boolean conOficinas = false;
 			Boolean unidadRaiz = false;
 			Boolean vigentes = true;
@@ -1003,10 +1002,6 @@ public class RestController extends RestUtils {
 					provincia = (Utils.isNotEmpty(sistraCodigoValor.getValor())) ? Long.parseLong(sistraCodigoValor.getValor()) : null;
 					// log.info("provincia: " + provincia);
 					break;
-				case "localidad":
-					localidad = (Utils.isNotEmpty(sistraCodigoValor.getValor())) ? sistraCodigoValor.getValor() : "";
-					// log.info("localidad: " + localidad);
-					 break;
 				case "conoficinas":
 					conOficinas = (Utils.isNotEmpty(sistraCodigoValor.getValor())) ? Boolean.parseBoolean(sistraCodigoValor.getValor()) : false;
 					// log.info("conOficinas: " + conOficinas);
@@ -1023,7 +1018,7 @@ public class RestController extends RestUtils {
 			}
 			
 			List<UnidadRestExtendido> resultado = dir3RestEjb.busquedaOrganismosSistra(codigo, denominacion, nivelAdministracion, codComunidadAutonoma, conOficinas, unidadRaiz,
-					provincia, localidad,  vigentes);
+					provincia, vigentes);
 			
 			respuesta.setDatos(objectMapper.writeValueAsString(resultado));
 			

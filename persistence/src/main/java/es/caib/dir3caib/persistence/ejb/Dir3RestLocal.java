@@ -96,7 +96,7 @@ public interface Dir3RestLocal  {
 		throws Exception;
 
   List<UnidadRestExtendido> busquedaOrganismosSistra(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad,
-			boolean conOficinas, boolean unidadRaiz, Long provincia, String localidad, boolean vigentes) throws Exception;
+			boolean conOficinas, boolean unidadRaiz, Long provincia, boolean vigentes) throws Exception;
   
   List<Nodo> busquedaDenominacionComunidad(String denominacion, Long codComunidad, boolean denominacionCooficial)
 		throws Exception;
