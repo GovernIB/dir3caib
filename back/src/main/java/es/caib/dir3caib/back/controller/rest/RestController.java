@@ -830,6 +830,9 @@ public class RestController extends RestUtils {
 			@RequestParam(required = false, defaultValue = "true") boolean historicos,
 			@RequestParam(required = false, defaultValue = "true") boolean contactos) throws Exception {
 
+		
+		Date inicio = new Date(); 
+		
 		HttpHeaders headers = addAccessControllAllowOrigin();
 		String error = autenticateUsrApp(request, Arrays.asList(Dir3caibConstantes.DIR_WS));
 		if (error != null) {
@@ -860,15 +863,28 @@ public class RestController extends RestUtils {
 				fechaSincronizacionDate = dateFormat.parse(fechaSincronizacion);
 			}
 			
+			log.info(" Antes consulta => " + (System.currentTimeMillis() - inicio.getTime()) + " ms");
+			
+			inicio = new Date();
+			
 			resultados = dir3RestEjb.obtenerArbolUnidades(codigo, fechaActualizacionDate, fechaSincronizacionDate,
 					denominacionCooficial, historicos, contactos);
+			
+			log.info(" Tiempo consulta bbdd + conversión a UnidadRest => " + (System.currentTimeMillis() - inicio.getTime()) + " ms");
 
 		} catch (Exception e) {
 			return new ResponseEntity<List<UnidadRest>>(null, headers, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
 		HttpStatus status = (resultados != null && resultados.size() > 0) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
-		return new ResponseEntity<List<UnidadRest>>(resultados, headers, status);
+		
+		inicio = new Date();
+		
+		ResponseEntity<List<UnidadRest>> respuesta = new ResponseEntity<List<UnidadRest>>(resultados, headers, status);
+		
+		log.info(" Generar responseEntity => " + (System.currentTimeMillis() - inicio.getTime()) + " ms");
+		
+		return respuesta;
 
 	}
 
