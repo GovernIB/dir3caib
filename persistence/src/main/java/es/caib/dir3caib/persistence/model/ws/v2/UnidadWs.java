@@ -110,11 +110,11 @@ public class UnidadWs extends es.caib.dir3caib.persistence.model.ws.UnidadTF {
         UnidadWs unidadWs = null;
         if (unidad != null) {
             unidadWs = new UnidadWs();
-            unidadWs.setCodigo(unidad.getCodigo());
+            unidadWs.setCodigo(unidad.getCodigoDir3());
             unidadWs.setDenominacion(unidad.getDenominacion());
             unidadWs.setDenomLenguaCooficial(unidad.getDenomLenguaCooficial());
-            unidadWs.setCodUnidadRaiz(unidad.getCodUnidadRaiz().getCodigo());
-            unidadWs.setCodUnidadSuperior(unidad.getCodUnidadSuperior().getCodigo());
+            unidadWs.setCodUnidadRaiz(unidad.getCodUnidadRaiz().getCodigoDir3());
+            unidadWs.setCodUnidadSuperior(unidad.getCodUnidadSuperior().getCodigoDir3());
             unidadWs.setEsEdp(unidad.isEsEdp());
         }
 
