@@ -638,54 +638,6 @@ public class RestResource {
 	}
 
 	/*
-	 * Retorna la versió de Dir3Caib
-	 */
-	/*
-	 * @Operation( operationId = "getVersion", summary =
-	 * "Servei que retorna la versió de Dir3Caib" )
-	 * 
-	 * @APIResponses( value = {
-	 * 
-	 * @APIResponse( responseCode = "204", description = "Sense contingut", content
-	 * = @Content(mediaType = MediaType.TEXT_PLAIN)),
-	 * 
-	 * @APIResponse( responseCode = "200", description =
-	 * "String amb la versió de Dir3Caib", content = @Content( mediaType =
-	 * MediaType.TEXT_PLAIN, schema = @Schema(implementation = String.class))) })
-	 * 
-	 * @GET
-	 * 
-	 * @Produces(MediaType.TEXT_PLAIN)
-	 * 
-	 * @Consumes(MediaType.APPLICATION_JSON)
-	 * 
-	 * @Path(value = "/version") public Response getVersion () {
-	 * 
-	 * return Response.status(Response.Status.NO_CONTENT).build();
-	 * 
-	 * }
-	 */
-
-	/*
-	 * Obtener la fecha de la ultima sincronizacion
-	 */
-
-	@Operation(operationId = "obtenerFechaUltimaActualizacion", summary = "Servei que ens retorna la data de la darrera sincronització")
-	@APIResponses(value = {
-			@APIResponse(responseCode = "204", description = "Sense contingut", content = @Content(mediaType = MediaType.TEXT_PLAIN)),
-			@APIResponse(responseCode = "200", description = "String amb la data de la darrera actualització", content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = Date.class))) })
-
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/sincronizacion/fechaUltimaActualizacion")
-	public Response obtenerFechaUltimaActualizacion() {
-
-		return Response.status(Response.Status.NO_CONTENT).build();
-
-	}
-
-	/*
 	 * Retorna l'arbre d'oficines de la unitat indicada pel codi
 	 */
 

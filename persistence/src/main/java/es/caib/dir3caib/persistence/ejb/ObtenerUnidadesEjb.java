@@ -174,11 +174,11 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
         List<UnidadRest> arbol = new ArrayList<UnidadRest>();
         List<Unidad> arbolUnidades = obtenerArbolUnidades(codigo, fechaActualizacion, fechaSincronizacion);
         
-        Date inicio = new Date();
+        // Date inicio = new Date();
         for (Unidad uni : arbolUnidades) {
         	arbol.add(UnidadRest.generar(uni,mostrarHistoricos, mostrarContactos));
         }
-        log.info("Conversión lista Unidades to UnidadRest => " + (System.currentTimeMillis()-inicio.getTime()) + " ms");
+        // log.info("Conversión lista Unidades to UnidadRest => " + (System.currentTimeMillis()-inicio.getTime()) + " ms");
         return arbol;
 
     }

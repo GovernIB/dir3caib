@@ -294,10 +294,10 @@ public class UnidadRest {
     }
 
     public void rellenar(Unidad unidad, boolean mostrarHistoricos, boolean mostrarContactos) {
-        this.setCodigo(unidad.getCodigo());
+        this.setCodigo(unidad.getCodigoDir3());
         this.setVersion(unidad.getVersion());
-        this.setCodUnidadRaiz(unidad.getCodUnidadRaiz().getCodigo());
-        this.setCodUnidadSuperior(unidad.getCodUnidadSuperior().getCodigo());
+        this.setCodUnidadRaiz(unidad.getCodUnidadRaiz().getCodigoDir3());
+        this.setCodUnidadSuperior(unidad.getCodUnidadSuperior().getCodigoDir3());
         this.setCodigoEstadoEntidad(unidad.getEstado().getCodigoEstadoEntidad());
         this.setEsEdp(unidad.isEsEdp());
         if (unidad.getCodEdpPrincipal() != null) {
@@ -394,13 +394,13 @@ public class UnidadRest {
     	UnidadRest unidadTF = null;
         if (unidad != null) {
             unidadTF = new UnidadRest();
-            unidadTF.setCodigo(unidad.getCodigo());
+            unidadTF.setCodigo(unidad.getCodigoDir3());
             unidadTF.setVersion(unidad.getVersion());
             unidadTF.setDenominacion(unidad.getDenominacion());
             if (Utils.isNotEmpty(unidad.getDenomLenguaCooficial()))
             	unidadTF.setDenominacionCooficial(unidad.getDenomLenguaCooficial());
-            unidadTF.setCodUnidadRaiz(unidad.getCodUnidadRaiz().getCodigo());
-            unidadTF.setCodUnidadSuperior(unidad.getCodUnidadSuperior().getCodigo());
+            unidadTF.setCodUnidadRaiz(unidad.getCodUnidadRaiz().getCodigoDir3());
+            unidadTF.setCodUnidadSuperior(unidad.getCodUnidadSuperior().getCodigoDir3());
             unidadTF.setEsEdp(unidad.isEsEdp());
         }
 
