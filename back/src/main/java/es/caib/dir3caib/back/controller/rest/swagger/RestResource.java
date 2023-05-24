@@ -945,7 +945,7 @@ public class RestResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/sistra/unidades")
 	public Response sistraObtenerUnidades(
-			@RequestBody(description = "JSON amb els criteris de cerca d'unitats en format JSON: {\"idDominio\":\"SISTRA\", \"filtro\":[{\"codigo\":\"codigodir3\",\"valor\":\"\"},{\"codigo\":\"denominacion\",\"valor\":\"\"},{\"codigo\":\"nivelAdministracion\",\"valor\":\"2\"},{\"codigo\":\"comunidadAutonoma\",\"valor\":\"4\"},{\"codigo\":\"provincia\",\"valor\":\"\"},{\"codigo\":\"conOficinas\",\"valor\":\"false\"},{\"codigo\":\"unidadRaiz\",\"valor\":\"false\"},{\"codigo\":\"vigentes\",\"valor\":\"true\"}]}", required = true, content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = String.class))) String peticion) {
+			@RequestBody(description = "JSON amb els criteris de cerca d'unitats en format JSON: {\"idDominio\":\"SISTRA\", \"filtro\":[{\"codigo\":\"codigodir3\",\"valor\":\"\"},{\"codigo\":\"denominacion\",\"valor\":\"\"},{\"codigo\":\"nivelAdministracion\",\"valor\":\"2\"},{\"codigo\":\"nivelJerarquico\",\"valor\":\"\"},{\"codigo\":\"comunidadAutonoma\",\"valor\":\"4\"},{\"codigo\":\"provincia\",\"valor\":\"\"},{\"codigo\":\"conOficinas\",\"valor\":\"false\"},{\"codigo\":\"unidadRaiz\",\"valor\":\"false\"},{\"codigo\":\"vigentes\",\"valor\":\"true\"}]}", required = true, content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = String.class))) String peticion) {
 		return Response.status(Response.Status.NO_CONTENT).build();
 	}
 

@@ -429,7 +429,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 	@Override
 	@SuppressWarnings(value = "unchecked")
 	public List<UnidadRestExtendido> busquedaOrganismosSistra(String codigo, String denominacion,
-			Long codigoNivelAdministracion, Long codComunidad, boolean conOficinas, boolean unidadRaiz, Long provincia,
+			Long codigoNivelAdministracion, Long nivelJerarquico, Long codComunidad, boolean conOficinas, boolean unidadRaiz, Long provincia,
 			boolean vigentes) throws Exception {
 
 		Query q;
@@ -442,13 +442,12 @@ public class Dir3RestBean implements Dir3RestLocal {
 				"Select distinct(unidad.codigo), unidad.denominacion, unidad.estado.codigoEstadoEntidad, unidad.codUnidadRaiz.codigo, unidad.codUnidadRaiz.denominacion, unidad.codUnidadSuperior.codigo, "
 						+ " unidad.codUnidadSuperior.denominacion, unidad.codLocalidad.descripcionLocalidad, unidad.esEdp, unidad.nivelJerarquico, unidad.nifcif, unidad.nivelAdministracion.descripcionNivelAdministracion, unidad.codTipoUnidad.descripcionTipoUnidadOrganica, "
 						+ " unidad.tipoVia.descripcionTipoVia, unidad.nombreVia, unidad.numVia, unidad.complemento, unidad.codPostal, unidad.codAmbitoTerritorial.descripcionAmbito, unidad.codAmbPais.descripcionPais, unidad.codAmbComunidad.descripcionComunidad, "
-						+ " unidad.codAmbProvincia.descripcionProvincia, unidad.codAmbIsla.descripcionIsla, "
-						+ " unidad.denomLenguaCooficial, unidad.codUnidadRaiz.denomLenguaCooficial, unidad.codUnidadSuperior.denomLenguaCooficial, "
+						+ " unidad.codAmbProvincia.descripcionProvincia, unidad.codAmbIsla.descripcionIsla, unidad.denomLenguaCooficial, unidad.codUnidadRaiz.denomLenguaCooficial, unidad.codUnidadSuperior.denomLenguaCooficial, "
 						+ " unidad.codigoDir3, unidad.codUnidadRaiz.codigoDir3, unidad.codUnidadSuperior.codigoDir3, unidad.version, unidad.nivelAdministracion.codigoNivelAdministracion, unidad.codAmbitoTerritorial.codigoAmbito, unidad.codAmbPais.codigoPais, "
 						+ " unidad.codAmbProvincia.codigoProvincia, unidad.tipoVia.codigoTipoVia, unidad.estado.descripcionEstadoEntidad, unidad.codLocalidad.codigoLocalidad, unidad.codAmbComunidad.codigoComunidad, unidad.competencias "
 						+ " from Unidad  as unidad left outer join unidad.codLocalidad as uniLocalidad "
 						+ "                        left outer join unidad.catLocalidad as catLocalidad"
-						+ "                        left outer join unidad.codTipoUnidad as tipoUnidad"
+						+ "                        left outer join unidad.codTipoUnidad as tipoUnidad "
 						+ "                        left outer join unidad.codAmbProvincia as provincia  "
 						+ "                        left outer join unidad.codAmbIsla as isla "
 						+ "                        left outer join unidad.codAmbitoTerritorial as ambTerritorial "
@@ -457,8 +456,8 @@ public class Dir3RestBean implements Dir3RestLocal {
 						+ "                        left outer join unidad.codAmbEntGeografica as codAmbEntGeografica "
 						+ "                        left outer join unidad.codAmbPais as pais "
 						+ "                        left outer join unidad.tipoVia as tipoVia "
-						+ "                        left outer join unidad.codAmbComunidad as  comunidad "
-						+ "                        left outer join unidad.codComunidad as  codcomunidad ");
+						+ "                        left outer join unidad.codAmbComunidad as comunidad "
+						+ "                        left outer join unidad.codComunidad as codcomunidad ");
 
 		// Parametros de busqueda
 		if (codigo != null && codigo.length() > 0) {
@@ -473,6 +472,10 @@ public class Dir3RestBean implements Dir3RestLocal {
 		if (codigoNivelAdministracion != null && codigoNivelAdministracion != -1) {
 			where.add(" unidad.nivelAdministracion.codigoNivelAdministracion = :codigoNivelAdministracion ");
 			parametros.put("codigoNivelAdministracion", codigoNivelAdministracion);
+		}
+		if (nivelJerarquico != null && nivelJerarquico != -1) {
+			where.add(" unidad.nivelJerarquico = :nivelJerarquico ");
+			parametros.put("nivelJerarquico", nivelJerarquico);
 		}
 
 		if (codComunidad != null && codComunidad != -1) {

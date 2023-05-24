@@ -961,7 +961,8 @@ public class RestController extends RestUtils {
 		// log.info("idDominio: " + sistraRequest.getIdDominio());
 		// log.info("filtro: " + sistraRequest.getFiltro().size());
 
-		if (sistraRequest != null && sistraRequest.getFiltro().size() > 0) {
+		if (sistraRequest != null && sistraRequest.getFiltro().size() > 0) 
+		{
 			
 			List<SistraCodigoValor> parametros = sistraRequest.getFiltro();
 			
@@ -973,50 +974,55 @@ public class RestController extends RestUtils {
 			Boolean conOficinas = false;
 			Boolean unidadRaiz = false;
 			Boolean vigentes = true;
+			Long nivelJerarquico = null; 
 			
 			for (SistraCodigoValor sistraCodigoValor : parametros) {
 				switch (sistraCodigoValor.getCodigo().toLowerCase().trim()) {
-				case "codigodir3":
-					codigo = (Utils.isNotEmpty(sistraCodigoValor.getValor())) ? sistraCodigoValor.getValor() : "";
-					// log.info("Codigo: " + codigo);
-					break;
-				case "denominacion":
-					denominacion = (Utils.isNotEmpty(sistraCodigoValor.getValor())) ? sistraCodigoValor.getValor() : "";
-					// log.info("denominacion: " + denominacion);
-					break;
-				case "niveladministracion":
-					nivelAdministracion = (Utils.isNotEmpty(sistraCodigoValor.getValor())) ? Long.parseLong(sistraCodigoValor.getValor()) : null;	
-					// log.info("nivelAdministracion: " + nivelAdministracion);
-					break;
-				case "comunidadautonoma":
-					codComunidadAutonoma = (Utils.isNotEmpty(sistraCodigoValor.getValor())) ? Long.parseLong(sistraCodigoValor.getValor()) : null;
-					// log.info("comunidadautonoma: " + codComunidadAutonoma);
-					break;
-				case "provincia":
-					provincia = (Utils.isNotEmpty(sistraCodigoValor.getValor())) ? Long.parseLong(sistraCodigoValor.getValor()) : null;
-					// log.info("provincia: " + provincia);
-					break;
-				case "conoficinas":
-					conOficinas = (Utils.isNotEmpty(sistraCodigoValor.getValor())) ? Boolean.parseBoolean(sistraCodigoValor.getValor()) : false;
-					// log.info("conOficinas: " + conOficinas);
-					break;
-				case "unidadraiz":
-					unidadRaiz = (Utils.isNotEmpty(sistraCodigoValor.getValor())) ? Boolean.parseBoolean(sistraCodigoValor.getValor()) : false;
-					// log.info("unidadRaiz: " + unidadRaiz);
-					break;
-				case "vigentes":
-					vigentes = (Utils.isNotEmpty(sistraCodigoValor.getValor())) ? Boolean.parseBoolean(sistraCodigoValor.getValor()) : true;
-					// log.info("vigentes: " + vigentes);
-					break;
+					case "codigodir3":
+						codigo = (Utils.isNotEmpty(sistraCodigoValor.getValor())) ? sistraCodigoValor.getValor() : "";
+						// log.info("Codigo: " + codigo);
+						break;
+					case "denominacion":
+						denominacion = (Utils.isNotEmpty(sistraCodigoValor.getValor())) ? sistraCodigoValor.getValor() : "";
+						// log.info("denominacion: " + denominacion);
+						break;
+					case "niveladministracion":
+						nivelAdministracion = (Utils.isNotEmpty(sistraCodigoValor.getValor())) ? Long.parseLong(sistraCodigoValor.getValor()) : null;	
+						// log.info("nivelAdministracion: " + nivelAdministracion);
+						break;
+					case "comunidadautonoma":
+						codComunidadAutonoma = (Utils.isNotEmpty(sistraCodigoValor.getValor())) ? Long.parseLong(sistraCodigoValor.getValor()) : null;
+						// log.info("comunidadautonoma: " + codComunidadAutonoma);
+						break;
+					case "provincia":
+						provincia = (Utils.isNotEmpty(sistraCodigoValor.getValor())) ? Long.parseLong(sistraCodigoValor.getValor()) : null;
+						// log.info("provincia: " + provincia);
+						break;
+					case "conoficinas":
+						conOficinas = (Utils.isNotEmpty(sistraCodigoValor.getValor())) ? Boolean.parseBoolean(sistraCodigoValor.getValor()) : false;
+						// log.info("conOficinas: " + conOficinas);
+						break;
+					case "unidadraiz":
+						unidadRaiz = (Utils.isNotEmpty(sistraCodigoValor.getValor())) ? Boolean.parseBoolean(sistraCodigoValor.getValor()) : false;
+						// log.info("unidadRaiz: " + unidadRaiz);
+						break;
+					case "vigentes":
+						vigentes = (Utils.isNotEmpty(sistraCodigoValor.getValor())) ? Boolean.parseBoolean(sistraCodigoValor.getValor()) : true;
+						// log.info("vigentes: " + vigentes);
+						break;
+					case "niveljerarquico":
+						nivelJerarquico = (Utils.isNotEmpty(sistraCodigoValor.getValor())) ? Long.parseLong(sistraCodigoValor.getValor()) : null;
+						// log.info("Nivel jerarquico: " + nivelJerarquico);
+						break;
 				}
 			}
 			
-			List<UnidadRestExtendido> resultado = dir3RestEjb.busquedaOrganismosSistra(codigo, denominacion, nivelAdministracion, codComunidadAutonoma, conOficinas, unidadRaiz,
+			List<UnidadRestExtendido> resultado = dir3RestEjb.busquedaOrganismosSistra(codigo, denominacion, nivelAdministracion, nivelJerarquico, codComunidadAutonoma, conOficinas, unidadRaiz,
 					provincia, vigentes);
 			
 			respuesta.setDatos(objectMapper.writeValueAsString(resultado));
 			
-		}else {
+		} else {
 			respuesta.setError(true);
 			respuesta.setCodigoError("400");
 			respuesta.setDescripcionError("Bad request");
@@ -1173,6 +1179,6 @@ public class RestController extends RestUtils {
 		}
 
 		return oficinaJsons;
-
 	}
+	
 }
