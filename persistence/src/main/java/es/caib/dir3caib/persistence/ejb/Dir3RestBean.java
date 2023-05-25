@@ -4,7 +4,7 @@ import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.model.json.OficinaRest;
 import es.caib.dir3caib.persistence.model.json.UnidadRest;
 import es.caib.dir3caib.persistence.model.json.ContactoRest;
-import es.caib.dir3caib.persistence.model.json.UnidadRestExtendido;
+import es.caib.dir3caib.persistence.model.json.UnidadRestSistra;
 import es.caib.dir3caib.persistence.model.ws.v2.UnidadWs;
 import es.caib.dir3caib.persistence.utils.CodigoValor;
 import es.caib.dir3caib.persistence.utils.DataBaseUtils;
@@ -428,9 +428,8 @@ public class Dir3RestBean implements Dir3RestLocal {
 
 	@Override
 	@SuppressWarnings(value = "unchecked")
-	public List<UnidadRestExtendido> busquedaOrganismosSistra(String codigo, String denominacion,
-			Long codigoNivelAdministracion, Long nivelJerarquico, Long codComunidad, boolean conOficinas, boolean unidadRaiz, Long provincia,
-			boolean vigentes) throws Exception {
+	public List<UnidadRestSistra> busquedaOrganismosSistra(String codigo, String denominacion, Long codigoNivelAdministracion,
+			Long nivelJerarquico, Long codComunidad, boolean unidadRaiz, Long provincia, boolean vigentes) throws Exception {
 
 		Query q;
 		Map<String, Object> parametros = new HashMap<String, Object>();
@@ -534,7 +533,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 		}
 
 		List<Object[]> resultados = q.getResultList();
-		List<UnidadRestExtendido> lista = new ArrayList<UnidadRestExtendido>(resultados.size());
+		List<UnidadRestSistra> lista = new ArrayList<UnidadRestSistra>(resultados.size());
 
 		for (Object[] object : resultados) {
 
@@ -543,115 +542,64 @@ public class Dir3RestBean implements Dir3RestLocal {
 				obj[i] = String.valueOf(object[i]);
 			}
 
-			UnidadRestExtendido unidadRest = new UnidadRestExtendido();
-
-			unidadRest.setCodigo(Utils.isNotEmpty(obj[0]) ? obj[0] : null);
+			UnidadRestSistra unidadRest = new UnidadRestSistra();
+			unidadRest.setCodigoDir3(Utils.isNotEmpty(obj[26]) ? obj[26] : "");
 			unidadRest.setVersion(Utils.isNotEmpty(obj[29]) ? Long.parseLong(obj[29]) : 0);
 			unidadRest.setDenominacion(Utils.isNotEmpty(obj[1]) ? obj[1] : "");
 			unidadRest.setDenominacionCooficial(Utils.isNotEmpty(obj[23]) ? obj[23] : "");
-			unidadRest.setCodigoEstadoEntidad(Utils.isNotEmpty(obj[2]) ? obj[2] : "");
-			unidadRest.setDescripcionEstadoEntidad(Utils.isNotEmpty(obj[35]) ? obj[35] : "");
+			unidadRest.setEstado(Utils.isNotEmpty(obj[2]) ? obj[2] : "");
 			unidadRest.setNivelJerarquico(Utils.isNotEmpty(obj[9]) ? Long.parseLong(obj[9]) : 0);
 			unidadRest.setNivelAdministracion(Utils.isNotEmpty(obj[30]) ? Long.parseLong(obj[30]) : 0);
-			unidadRest.setDescripcionNivelAdministracion(Utils.isNotEmpty(obj[11]) ? obj[11] : "");
-			unidadRest.setCodUnidadSuperior(Utils.isNotEmpty(obj[5]) ? obj[5] : "");
-			unidadRest.setDenominacionUnidadSuperior(Utils.isNotEmpty(obj[6]) ? obj[6] : "");
-			unidadRest.setDenominacionCooficialUnidadSuperior(Utils.isNotEmpty(obj[25]) ? obj[25] : "");
-			unidadRest.setCodUnidadRaiz(Utils.isNotEmpty(obj[3]) ? obj[3] : "");
-			unidadRest.setDenominacionUnidadRaiz(Utils.isNotEmpty(obj[4]) ? obj[4] : "");
-			unidadRest.setDenominacionCooficialUnidadRaiz(Utils.isNotEmpty(obj[24]) ? obj[24] : "");
 			unidadRest.setNumVia(Utils.isNotEmpty(obj[15]) ? obj[15] : "");
 			unidadRest.setNombreVia(Utils.isNotEmpty(obj[14]) ? obj[14] : "");
-			unidadRest.setCodPostal(Utils.isNotEmpty(obj[17]) ? obj[17] : "");
-			unidadRest.setNifCif(Utils.isNotEmpty(obj[10]) ? obj[10] : "");
-			unidadRest.setCodigoDir3(Utils.isNotEmpty(obj[26]) ? obj[26] : "");
-			unidadRest.setCodigoDir3UnidadRaiz(Utils.isNotEmpty(obj[27]) ? obj[27] : "");
-			unidadRest.setCodigoDir3UnidadSuperior(Utils.isNotEmpty(obj[28]) ? obj[28] : "");
-			unidadRest.setCodigoAmbitoTerritorial(Utils.isNotEmpty(obj[31]) ? obj[31] : "");
-			unidadRest.setDescripcionAmbitoTerritorial(Utils.isNotEmpty(obj[18]) ? obj[18] : "");
-			unidadRest.setCodigoAmbPais((Utils.isNotEmpty(obj[32])) ? Long.parseLong(obj[32]) : 0);
-			unidadRest.setDescripcionAmbPais(Utils.isNotEmpty(obj[19]) ? obj[19] : "");
-			unidadRest.setCodAmbProvincia((Utils.isNotEmpty(obj[33])) ? Long.parseLong(obj[33]) : 0);
-			unidadRest.setDescripcionAmbProvincia(Utils.isNotEmpty(obj[21]) ? obj[21] : "");
-			unidadRest.setCodigoTipoVia((Utils.isNotEmpty(obj[34])) ? Long.parseLong(obj[34]) : 0);
-			unidadRest.setDescripcionTipoVia(Utils.isNotEmpty(obj[13]) ? obj[13] : "");
-			unidadRest.setCodigoLocalidad(Utils.isNotEmpty(obj[36]) ? obj[36] : "");
 			unidadRest.setDescripcionLocalidad(Utils.isNotEmpty(obj[7]) ? obj[7] : "");
-			unidadRest.setCodAmbComunidad((Utils.isNotEmpty(obj[37])) ? Long.parseLong(obj[37]) : 0);
-			unidadRest.setDescripcionAmbComunidad(Utils.isNotEmpty(obj[20]) ? obj[20] : "");
-			unidadRest.setEsEdp(Boolean.parseBoolean(obj[8]));
-			unidadRest.setCompetencias(Utils.isNotEmpty(obj[38]) ? obj[38] : "");
-			// historicosUO;
-
+			
+			String codigoDir3 = Utils.isNotEmpty(obj[0]) ? obj[0] : "";
+			if (codigoDir3 != "") {
+				
+				List<ContactoUnidadOrganica> contactos = contactoUOEjb.getContactosByUnidad(codigoDir3);
+				
+				Map<String, String> contactosMap = new HashMap<String, String>();
+				for (ContactoUnidadOrganica cont : contactos) {
+					final String key = cont.getTipoContacto().getCodigoTipoContacto();
+					if (!contactosMap.containsKey(key)) {
+						contactosMap.put(key, cont.getValorContacto());
+					} else {
+						final String valor = contactosMap.get(key) + "," + cont.getValorContacto();
+						contactosMap.put(key, valor);
+					}
+				}
+				
+				for (String key : contactosMap.keySet()) {
+					switch (key) {
+						case "C":
+							unidadRest.setContactoCentralita(contactosMap.get(key));
+							break;
+						case "E":
+							unidadRest.setContactoEmail(contactosMap.get(key));
+							break;
+						case "F":
+							unidadRest.setContactoFax(contactosMap.get(key));
+							break;
+						case "P":
+							unidadRest.setContactoCitaPrevia(contactosMap.get(key));
+							break;
+						case "T":
+							unidadRest.setContactoTelefono(contactosMap.get(key));
+							break;
+						case "U":
+							unidadRest.setContactoURL(contactosMap.get(key));
+							break;
+						default:
+							unidadRest.setContactoOtro(contactosMap.get(key));
+							break;
+					}
+				}
+				
+			}
 			lista.add(unidadRest);
 		}
-
-		// Cargamos los contactos de las unidades
-		for (UnidadRestExtendido ur : lista) {
-			List<ContactoUnidadOrganica> contactos = contactoUOEjb.getContactosByUnidad(ur.getCodigo());
-
-			// Carregam HashMap
-			Map<String, String> contactosMap = new HashMap<String, String>();
-			for (ContactoUnidadOrganica cont : contactos) {
-				final String key = cont.getTipoContacto().getCodigoTipoContacto();
-				if (!contactosMap.containsKey(key)) {
-					contactosMap.put(key, cont.getValorContacto());
-				} else {
-					final String valor = contactosMap.get(key) + "," + cont.getValorContacto();
-					contactosMap.put(key, valor);
-				}
-			}
-
-			// Assignam el valor en funció del tipus
-			for (String key : contactosMap.keySet()) {
-				switch (key) {
-				case "C":
-					ur.setContactoCentralita(contactosMap.get(key));
-					break;
-				case "E":
-					ur.setContactoEmail(contactosMap.get(key));
-					break;
-				case "F":
-					ur.setContactoFax(contactosMap.get(key));
-					break;
-				case "P":
-					ur.setContactoCitaPrevia(contactosMap.get(key));
-					break;
-				case "T":
-					ur.setContactoTelefono(contactosMap.get(key));
-					break;
-				case "U":
-					ur.setContactoURL(contactosMap.get(key));
-					break;
-				default:
-					ur.setContactoOtro(contactosMap.get(key));
-					break;
-				}
-			}
-			ur.setContactos(null);
-		}
-
-		// Si nos indican la variable conOficinas a true es que interesa devolver solo
-		// aquellos organismos que tienen oficinas en las que registrar
-		if (conOficinas)
-
-		{
-			List<UnidadRestExtendido> unidadesConOficinas = new ArrayList<UnidadRestExtendido>();
-			for (UnidadRestExtendido unidad : lista) {
-				if (tieneOficinasOrganismo(unidad.getCodigo())) {
-					unidadesConOficinas.add(unidad);
-				}
-			}
-			lista = new ArrayList<UnidadRestExtendido>(unidadesConOficinas);
-		}
-
-		// Actualizamos las unidades obtenidas y marcamos si tienen oficinasSIR
-		// y sustituimos el valor del codigo por el codigoDir3(sin version)
-		for (UnidadRestExtendido unidad2 : lista) {
-			if (oficinaEjb.obtenerOficinasSIRUnidad(unidad2.getCodigo(), false).size() > 0) {
-				unidad2.setTieneOficinaSIR(true);
-			}
-		}
+		
 		return lista;
 	}
 

@@ -7,7 +7,7 @@ import es.caib.dir3caib.persistence.model.json.OficinaJson;
 import es.caib.dir3caib.persistence.model.json.OficinaRest;
 import es.caib.dir3caib.persistence.model.json.PaisJson;
 import es.caib.dir3caib.persistence.model.json.UnidadRest;
-import es.caib.dir3caib.persistence.model.json.UnidadRestExtendido;
+import es.caib.dir3caib.persistence.model.json.UnidadRestSistra;
 import es.caib.dir3caib.persistence.utils.CodigoValor;
 import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.ObjetoDirectorio;
@@ -971,7 +971,6 @@ public class RestController extends RestUtils {
 			Long nivelAdministracion = null;
 			Long codComunidadAutonoma = null;
 			Long provincia = null;
-			Boolean conOficinas = false;
 			Boolean unidadRaiz = false;
 			Boolean vigentes = true;
 			Long nivelJerarquico = null; 
@@ -998,10 +997,6 @@ public class RestController extends RestUtils {
 						provincia = (Utils.isNotEmpty(sistraCodigoValor.getValor())) ? Long.parseLong(sistraCodigoValor.getValor()) : null;
 						// log.info("provincia: " + provincia);
 						break;
-					case "conoficinas":
-						conOficinas = (Utils.isNotEmpty(sistraCodigoValor.getValor())) ? Boolean.parseBoolean(sistraCodigoValor.getValor()) : false;
-						// log.info("conOficinas: " + conOficinas);
-						break;
 					case "unidadraiz":
 						unidadRaiz = (Utils.isNotEmpty(sistraCodigoValor.getValor())) ? Boolean.parseBoolean(sistraCodigoValor.getValor()) : false;
 						// log.info("unidadRaiz: " + unidadRaiz);
@@ -1017,7 +1012,7 @@ public class RestController extends RestUtils {
 				}
 			}
 			
-			List<UnidadRestExtendido> resultado = dir3RestEjb.busquedaOrganismosSistra(codigo, denominacion, nivelAdministracion, nivelJerarquico, codComunidadAutonoma, conOficinas, unidadRaiz,
+			List<UnidadRestSistra> resultado = dir3RestEjb.busquedaOrganismosSistra(codigo, denominacion, nivelAdministracion, nivelJerarquico, codComunidadAutonoma, unidadRaiz,
 					provincia, vigentes);
 			
 			respuesta.setDatos(objectMapper.writeValueAsString(resultado));

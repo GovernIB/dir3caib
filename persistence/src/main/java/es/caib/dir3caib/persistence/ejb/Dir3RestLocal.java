@@ -5,7 +5,7 @@ import es.caib.dir3caib.persistence.model.Oficina;
 import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.persistence.model.json.OficinaRest;
 import es.caib.dir3caib.persistence.model.json.UnidadRest;
-import es.caib.dir3caib.persistence.model.json.UnidadRestExtendido;
+import es.caib.dir3caib.persistence.model.json.UnidadRestSistra;
 import es.caib.dir3caib.persistence.utils.CodigoValor;
 import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.ObjetoDirectorio;
@@ -95,8 +95,8 @@ public interface Dir3RestLocal  {
 		Long provincia, String localidad, boolean oficinasSir, boolean vigentes, boolean denominacionCooficial)
 		throws Exception;
 
-  List<UnidadRestExtendido> busquedaOrganismosSistra(String codigo, String denominacion, Long codigoNivelAdministracion, Long nivelJerarquico, 
-		  Long codComunidad, boolean conOficinas, boolean unidadRaiz, Long provincia, boolean vigentes) throws Exception;
+  List<UnidadRestSistra> busquedaOrganismosSistra(String codigo, String denominacion, Long codigoNivelAdministracion, Long nivelJerarquico, 
+		  Long codComunidad, boolean unidadRaiz, Long provincia, boolean vigentes) throws Exception;
   
   List<Nodo> busquedaDenominacionComunidad(String denominacion, Long codComunidad, boolean denominacionCooficial)
 		throws Exception;
