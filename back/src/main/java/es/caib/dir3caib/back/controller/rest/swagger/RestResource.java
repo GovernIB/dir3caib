@@ -938,7 +938,7 @@ public class RestResource {
 
 	@Operation(operationId = "sistraObtenerUnidades", summary = "Mètode que retorna les unitats en funció dels criteris indicats al camp filtro del JSON d'entrada.")
 	@APIResponses(value = {
-			@APIResponse(responseCode = "200", description = "Una llista d'objectes de tipus UnidadRestExtendido", content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = SistraResponse.class))) })
+			@APIResponse(responseCode = "200", description = "Una llista d'objectes de tipus UnidadRestSistra", content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = SistraResponse.class))) })
 	@SecurityRequirement(name = "BasicAuth")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
