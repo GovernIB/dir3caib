@@ -269,6 +269,13 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 	public Paginacion busqueda(Integer pageNumber, String codigo, String denominacion, Long codigoNivelAdministracion,
 			Long codComunidad, Long codigoProvincia, String codigoEstado, Boolean denominacionCooficial)
 			throws Exception {
+        log.info("XXXXXXXXX "+ codComunidad);
+        log.info("XXXXXXXXX "+ codigoNivelAdministracion);
+        log.info("XXXXXXXXX "+ codigo);
+        log.info("XXXXXXXXX "+ denominacion);
+        log.info("XXXXXXXXX "+ codigoProvincia);
+        log.info("XXXXXXXXX "+ codigoEstado);
+        log.info("XXXXXXXXX "+ denominacionCooficial);
 
 		Query q;
 		Query q2;
@@ -282,16 +289,17 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 			where.add(DataBaseUtils.like("oficina.codigo", "codigo", parametros, codigo));
 		}
 		if (!denominacion.isEmpty()) {
-			// String condicion1 = DataBaseUtils.like("oficina.denominacion",
-			// "denominacion1", parametros, denominacion);
-			// String condicion2 = DataBaseUtils.like("oficina.denomlenguacooficial",
-			// "denominacion2", parametros, denominacion);
 
-			String condicion1 = " upper(oficina.denominacion) like upper(:denominacion) ";
-			String condicion2 = " upper(oficina.denomLenguaCooficial) like upper(:denominacion) ";
+			String condicion1 = DataBaseUtils.like("oficina.denomLenguaCooficial", "denominacion1", parametros,
+					denominacion);
+			String condicion2 = DataBaseUtils.like("oficina.denominacion", "denominacion2", parametros, denominacion);
 
-			where.add(" ( " + condicion1 + " ) or ( " + condicion2 + " ) ");
-			parametros.put("denominacion", "%" + denominacion + "%");
+			// String condicion1 = "upper(unidad.denomLenguaCooficial) like
+			// upper(:denominacion)";
+			// String condicion2 = " upper(unidad.denominacion) like upper(:denominacion)";
+
+			where.add("((" + condicion1 + ") or (" + condicion2 + "))");
+			// parametros.put("denominacion", "%"+denominacion+"%");
 
 		}
 		if (codigoNivelAdministracion != null && codigoNivelAdministracion != -1) {
