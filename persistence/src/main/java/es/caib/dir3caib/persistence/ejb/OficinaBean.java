@@ -269,13 +269,6 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 	public Paginacion busqueda(Integer pageNumber, String codigo, String denominacion, Long codigoNivelAdministracion,
 			Long codComunidad, Long codigoProvincia, String codigoEstado, Boolean denominacionCooficial)
 			throws Exception {
-        log.info("XXXXXXXXX "+ codComunidad);
-        log.info("XXXXXXXXX "+ codigoNivelAdministracion);
-        log.info("XXXXXXXXX "+ codigo);
-        log.info("XXXXXXXXX "+ denominacion);
-        log.info("XXXXXXXXX "+ codigoProvincia);
-        log.info("XXXXXXXXX "+ codigoEstado);
-        log.info("XXXXXXXXX "+ denominacionCooficial);
 
 		Query q;
 		Query q2;
