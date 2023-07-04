@@ -15,6 +15,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.InetAddress;
 import java.util.Date;
 
 /**
@@ -77,7 +78,7 @@ public class MailUtils {
 
     public static void envioEmailErrorSincronizacion(String tipoSincronizacion, Throwable th) throws Exception{
 
-        String asunto = Dir3caibConstantes.ASUNTO_MAIL + tipoSincronizacion;
+        String asunto = Dir3caibConstantes.ASUNTO_MAIL + tipoSincronizacion + Dir3caibConstantes.ENTORN +  InetAddress.getLocalHost().getHostName();
 
         InternetAddress addressFrom = new InternetAddress(Dir3caibConstantes.APLICACION_EMAIL, Dir3caibConstantes.APLICACION_NOMBRE);
 

@@ -146,9 +146,10 @@ public interface Dir3caibConstantes {
 
     // Textos para envio Mail error en Sincronización
      String ASUNTO_MAIL = "S'ha produit un error a la sincronització de ";
+     String ENTORN = " a l'entorn  ";
      String CUERPO_MAIL = "S'ha produït un error a la sincronització. S'ha de revisar perquè si no s'actualitzen les dades diàriament pot afectar a les aplicacions connectades amb DIR3CAIB.";
      String APLICACION_NOMBRE = "DIR3CAIB";
-     String APLICACION_EMAIL = "no_responder@dir3caib.com";
+     String APLICACION_EMAIL = "noreply@caib.es";
 
 
     //NIVEL ADMINISTRACION UNIVERSIDADES
