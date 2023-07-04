@@ -3,17 +3,10 @@ package es.caib.dir3caib.persistence.ejb;
 import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.model.json.OficinaRest;
 import es.caib.dir3caib.persistence.model.json.UnidadRest;
-import es.caib.dir3caib.persistence.model.json.ContactoRest;
 import es.caib.dir3caib.persistence.model.json.UnidadRestSistra;
 import es.caib.dir3caib.persistence.model.ws.v2.UnidadWs;
-import es.caib.dir3caib.persistence.utils.CodigoValor;
-import es.caib.dir3caib.persistence.utils.DataBaseUtils;
-import es.caib.dir3caib.persistence.utils.Nodo;
-import es.caib.dir3caib.persistence.utils.NodoUtils;
-import es.caib.dir3caib.persistence.utils.ObjetoDirectorio;
-import es.caib.dir3caib.persistence.utils.ObjetoDirectorioExtendido;
+import es.caib.dir3caib.persistence.utils.*;
 import es.caib.dir3caib.utils.Utils;
-
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 
@@ -24,13 +17,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created 1/04/14 9:50
@@ -936,11 +923,11 @@ public class Dir3RestBean implements Dir3RestLocal {
 
 		List<Object[]> unidades = q.getResultList();
 
-		if (unidades.size() > 0) {
+		if (!unidades.isEmpty()) {
 			Object[] obj = unidades.get(0);
 			return (denominacionCooficial && Utils.isNotEmpty((String) obj[1])) ? (String) obj[1] : (String) obj[0];
 		} else {
-			return "";
+			return null;
 		}
 	}
 
@@ -995,11 +982,11 @@ public class Dir3RestBean implements Dir3RestLocal {
 
 		List<Object[]> oficinas = q.getResultList();
 
-		if (oficinas.size() > 0) {
+		if (!oficinas.isEmpty()) {
 			Object[] obj = oficinas.get(0);
 			return (denominacionCooficial && Utils.isNotEmpty((String) obj[1])) ? (String) obj[1] : (String) obj[0];
 		} else {
-			return "";
+			return null;
 		}
 	}
 
