@@ -44,9 +44,6 @@ public class Dir3RestBean implements Dir3RestLocal {
 	@EJB(mappedName = "dir3caib/OficinaEJB/local")
 	private OficinaLocal oficinaEjb;
 
-	@EJB(mappedName = "dir3caib/RelacionOrganizativaOfiEJB/local")
-	private RelacionOrganizativaOfiLocal relacionOrganizativaOfiEjb;
-
 	@EJB(mappedName = "dir3caib/UnidadEJB/local")
 	private UnidadLocal unidadEjb;
 
@@ -55,12 +52,6 @@ public class Dir3RestBean implements Dir3RestLocal {
 
 	@EJB(mappedName = "dir3caib/ObtenerUnidadesEJB/local")
 	private ObtenerUnidadesLocal obtenerUnidadesEjb;
-
-	@EJB(mappedName = "dir3caib/CatServicioEJB/local")
-	private CatServicioLocal servicioEjb;
-
-	@EJB(mappedName = "dir3caib/ServicioOfiEJB/local")
-	private ServicioOfiLocal servicioOfiEjb;
 
 	/**
 	 * Obtiene las unidades(codigo-denominacion) cuya denominación coincide con la
@@ -896,6 +887,48 @@ public class Dir3RestBean implements Dir3RestLocal {
 		}
 		return nodos;
 
+	}
+
+	/**
+	 * Comprueba la existencia de una Oficina vigente
+	 * @param codigo
+	 * @return
+	 * @throws Exception
+	 */
+	@Override
+	@SuppressWarnings(value = "unchecked")
+	public Boolean existeOficina(String codigo) throws Exception{
+
+		Query q = em.createQuery("Select oficina.codigo from Oficina as oficina " +
+				"where oficina.codigo=:codigo and oficina.estado.codigoEstadoEntidad =:vigente");
+
+		q.setParameter("codigo", codigo);
+		q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+
+		List<Object[]> oficinas = q.getResultList();
+
+		return !oficinas.isEmpty();
+	}
+
+	/**
+	 * Comprueba la existencia de una Unidad vigente
+	 * @param codigo
+	 * @return
+	 * @throws Exception
+	 */
+	@Override
+	@SuppressWarnings(value = "unchecked")
+	public Boolean existeUnidad(String codigo) throws Exception{
+
+		Query q = em.createQuery("Select unidad.codigo from Unidad as unidad " +
+				"where unidad.codigo=:codigo and unidad.estado.codigoEstadoEntidad =:vigente");
+
+		q.setParameter("codigo", codigo);
+		q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+
+		List<Object[]> unidades = q.getResultList();
+
+		return !unidades.isEmpty();
 	}
 
 	/**
