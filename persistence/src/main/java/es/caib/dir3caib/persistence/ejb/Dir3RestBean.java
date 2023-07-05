@@ -920,8 +920,8 @@ public class Dir3RestBean implements Dir3RestLocal {
 	@SuppressWarnings(value = "unchecked")
 	public Boolean existeUnidad(String codigo) throws Exception{
 
-		Query q = em.createQuery("Select unidad.codigo from Unidad as unidad " +
-				"where unidad.codigo=:codigo and unidad.estado.codigoEstadoEntidad =:vigente");
+		Query q = em.createQuery("Select unidad.codigoDir3 from Unidad as unidad " +
+				"where unidad.codigoDir3=:codigo and unidad.estado.codigoEstadoEntidad =:vigente");
 
 		q.setParameter("codigo", codigo);
 		q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
