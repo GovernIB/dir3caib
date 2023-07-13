@@ -1,13 +1,11 @@
 package es.caib.dir3caib.back.controller.rest;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import es.caib.dir3caib.persistence.ejb.ArbolLocal;
 import es.caib.dir3caib.persistence.ejb.Dir3RestLocal;
 import es.caib.dir3caib.persistence.model.*;
-import es.caib.dir3caib.persistence.model.json.OficinaJson;
-import es.caib.dir3caib.persistence.model.json.OficinaRest;
-import es.caib.dir3caib.persistence.model.json.PaisJson;
-import es.caib.dir3caib.persistence.model.json.UnidadRest;
-import es.caib.dir3caib.persistence.model.json.UnidadRestSistra;
+import es.caib.dir3caib.persistence.model.json.*;
 import es.caib.dir3caib.persistence.utils.CodigoValor;
 import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.ObjetoDirectorio;
@@ -19,27 +17,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
-
-import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -264,6 +252,32 @@ public class RestController extends RestUtils {
 		// resultados.
 		HttpStatus status = (resultado.size() > 0) ? HttpStatus.OK : HttpStatus.NO_CONTENT;
 		return new ResponseEntity<List<Nodo>>(resultado, headers, status);
+	}
+
+	/**
+	 * Comprueba la existenciade una Oficina y si está Vigente
+	 */
+	@RequestMapping(value = "/oficina/existe", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<Boolean> existeOficina(@RequestParam String codigo) throws Exception {
+
+		Boolean existeOficina = dir3RestEjb.existeOficina(codigo);
+		HttpHeaders headers = addAccessControllAllowOrigin();
+		HttpStatus status = HttpStatus.OK; // Al ser Boolean, siempre habrá resultados
+
+		return new ResponseEntity<Boolean>(existeOficina, headers, status);
+	}
+
+	/**
+	 * Comprueba la existenciade una Unidad y si está Vigente
+	 */
+	@RequestMapping(value = "/unidad/existe", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<Boolean> existeUnidad(@RequestParam String codigo) throws Exception {
+
+		Boolean existeUnidad = dir3RestEjb.existeUnidad(codigo);
+		HttpHeaders headers = addAccessControllAllowOrigin();
+		HttpStatus status = HttpStatus.OK; // Al ser Boolean, siempre habrá resultados
+
+		return new ResponseEntity<Boolean>(existeUnidad, headers, status);
 	}
 
 	/**
