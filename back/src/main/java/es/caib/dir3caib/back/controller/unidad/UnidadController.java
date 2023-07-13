@@ -2,9 +2,7 @@ package es.caib.dir3caib.back.controller.unidad;
 
 import es.caib.dir3caib.back.controller.BaseController;
 import es.caib.dir3caib.back.form.UnidadBusquedaForm;
-import es.caib.dir3caib.persistence.ejb.ObtenerUnidadesLocal;
-import es.caib.dir3caib.persistence.ejb.RelacionOrganizativaOfiLocal;
-import es.caib.dir3caib.persistence.ejb.RelacionSirOfiLocal;
+import es.caib.dir3caib.persistence.ejb.*;
 import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.Paginacion;
@@ -49,6 +47,17 @@ public class UnidadController extends BaseController {
 
     @EJB(mappedName = "dir3caib/ObtenerUnidadesEJB/local")
     private ObtenerUnidadesLocal obtenerUnidadesEjb;
+
+    @EJB(mappedName = "dir3caib/ImportadorUnidadesEJB/local")
+    private ImportadorUnidadesLocal importadorUnidadesEjb;
+
+    @EJB(mappedName = "dir3caib/ImportadorOficinasEJB/local")
+    private ImportadorOficinasLocal importadorOficinasEjb;
+
+    @EJB(mappedName = "dir3caib/SincronizacionEJB/local")
+    private SincronizacionLocal sincronizacionEjb;
+
+
 
 
     /**
@@ -352,5 +361,31 @@ public class UnidadController extends BaseController {
     //TODO REVISAR tema historicos
     public ModelAndView mostrarArbolUnidades(HttpServletRequest request, @PathVariable String codUnidad) throws Exception {
         return detalleComun(codUnidad, false);
+    }
+
+
+
+    @RequestMapping(value = "/importarUnidades/{idSincronizacion}", method = RequestMethod.GET)
+    public String importarUnidadesNivelAdministracion(@PathVariable String idSincronizacion) throws Exception {
+
+        Sincronizacion sincronizacion = sincronizacionEjb.findById(new Long(idSincronizacion));
+
+        if(sincronizacion != null){
+            importadorUnidadesEjb.importarUnidades(sincronizacion);
+        }
+
+        return "";
+    }
+
+    @RequestMapping(value = "/importarOficinas/{idSincronizacion}", method = RequestMethod.GET)
+    public String importarOficinasNivelAdministracion(@PathVariable String idSincronizacion) throws Exception {
+
+        Sincronizacion sincronizacion = sincronizacionEjb.findById(new Long(idSincronizacion));
+
+        if(sincronizacion != null){
+            importadorOficinasEjb.importarOficinas(sincronizacion);
+        }
+
+        return "";
     }
 }
