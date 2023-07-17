@@ -343,8 +343,10 @@ public class UnidadTF implements Serializable {
         this.setCodPostal(unidad.getCodPostal());
         // Enviamos los historicos a regweb para la gestión del organigrama
         Set<String> sHistoricosUO = new HashSet<String>();
-       for (HistoricoUO historico : unidad.getHistoricosAnterior()) {
-            sHistoricosUO.add(historico.getUnidadUltima().getCodigoDir3());
+        for (HistoricoUO historico : unidad.getHistoricosAnterior()) {
+           if( historico.getUnidadUltima().getCodigoDir3() != unidad.getCodigoDir3()) {
+               sHistoricosUO.add(historico.getUnidadUltima().getCodigoDir3());
+           }
         }
         this.setHistoricosUO(sHistoricosUO);
 
