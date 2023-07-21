@@ -879,7 +879,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 
 			q = em.createQuery(
 					"Select unidad from Unidad as unidad where unidad.codUnidadSuperior.codigo =:codigo and unidad.codigo !=:codigo  "
-							+ "and :fechaActualizacion < unidad.fechaImportacion " + "order by unidad.nivelJerarquico");
+							+ "and :fechaActualizacion < unidad.fechaImportacion and unidad.version = (select max(uu.version) from Unidad uu where uu.codigoDir3 = unidad.codigoDir3) " + "order by unidad.nivelJerarquico");
 			q.setParameter("fechaActualizacion", fechaActualizacion);
 
 		}
@@ -971,7 +971,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 				// es una actualizacion, traemos aquellas unidades que tienen fechaactualizacion
 				// anterior a la fecha de importacion de las unidades
 				q = em.createQuery("Select unidad from Unidad as unidad where unidad.codUnidadRaiz.codigo =:codigo "
-						+ "and :fechaActualizacion < unidad.fechaImportacion " + "order by unidad.nivelJerarquico");
+						+ "and :fechaActualizacion < unidad.fechaImportacion and  unidad.version = (select max(uu.version) from Unidad uu where uu.codigoDir3 = unidad.codigoDir3) " + "order by unidad.nivelJerarquico");
 				q.setParameter("fechaActualizacion", fechaActualizacion);
 			}
 			q.setParameter("codigo", codigo);
