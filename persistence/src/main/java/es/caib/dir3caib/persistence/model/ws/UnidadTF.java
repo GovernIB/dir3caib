@@ -344,7 +344,7 @@ public class UnidadTF implements Serializable {
         // Enviamos los historicos a regweb para la gestión del organigrama
         Set<String> sHistoricosUO = new HashSet<String>();
         for (HistoricoUO historico : unidad.getHistoricosAnterior()) {
-           if( historico.getUnidadUltima().getCodigoDir3() != unidad.getCodigoDir3()) {
+           if( !historico.getUnidadUltima().getCodigoDir3().equals(unidad.getCodigoDir3())) {
                sHistoricosUO.add(historico.getUnidadUltima().getCodigoDir3());
            }
         }

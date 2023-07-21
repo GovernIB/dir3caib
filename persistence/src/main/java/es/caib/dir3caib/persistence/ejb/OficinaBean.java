@@ -1001,7 +1001,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 			String denominacion = (denominacionCooficial && Utils.isNotEmpty((String) object[4])) ? (String) object[4] : (String) object[1];
 
 			Oficina oficina = new Oficina((String) object[0], denominacion, (String) object[2],
-					(String) object[3], null);
+					(String) object[3], servicios);
 
 			oficinas.add(oficina);
 		}
