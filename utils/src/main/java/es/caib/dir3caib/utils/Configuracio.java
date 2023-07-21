@@ -1,5 +1,7 @@
 package es.caib.dir3caib.utils;
 
+import javax.xml.bind.ValidationEvent;
+
 /**
  * @author anadal
  */
@@ -12,12 +14,12 @@ public class Configuracio {
     }
 
     public static boolean isCAIB() {
-        return Boolean.getBoolean(DIR3CAIB_PROPERTY_BASE + "iscaib");
+        return getBoolean(DIR3CAIB_PROPERTY_BASE + "iscaib");
     }
 
 
     public static boolean isDevelopment() {
-        return Boolean.getBoolean(DIR3CAIB_PROPERTY_BASE + "development");
+        return getBoolean(DIR3CAIB_PROPERTY_BASE + "development");
     }
 
     public static String getArchivosPath() {
@@ -87,7 +89,7 @@ public class Configuracio {
     }
 
     public static boolean isSincronizar() {
-        return Boolean.getBoolean(DIR3CAIB_PROPERTY_BASE + "sincronizar");
+        return  getBoolean(DIR3CAIB_PROPERTY_BASE + "sincronizar");
     }
 
     public static String getRemitenteEmail() {
@@ -103,7 +105,12 @@ public class Configuracio {
     }
 
     public static boolean isDenominacionCooficial() {
-        return Boolean.getBoolean(DIR3CAIB_PROPERTY_BASE + "denominacioncooficial");
+       return  getBoolean(DIR3CAIB_PROPERTY_BASE + "denominacioncooficial");
+    }
+
+    private static Boolean getBoolean(String property){
+        String name= System.getProperty(property);
+        return ((name != null) && name.trim().equalsIgnoreCase("true"));
     }
 
 }
