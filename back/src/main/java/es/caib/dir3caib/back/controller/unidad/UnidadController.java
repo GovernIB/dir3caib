@@ -2,7 +2,9 @@ package es.caib.dir3caib.back.controller.unidad;
 
 import es.caib.dir3caib.back.controller.BaseController;
 import es.caib.dir3caib.back.form.UnidadBusquedaForm;
-import es.caib.dir3caib.persistence.ejb.*;
+import es.caib.dir3caib.persistence.ejb.ObtenerUnidadesLocal;
+import es.caib.dir3caib.persistence.ejb.RelacionOrganizativaOfiLocal;
+import es.caib.dir3caib.persistence.ejb.RelacionSirOfiLocal;
 import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.Paginacion;
@@ -48,17 +50,6 @@ public class UnidadController extends BaseController {
     @EJB(mappedName = "dir3caib/ObtenerUnidadesEJB/local")
     private ObtenerUnidadesLocal obtenerUnidadesEjb;
 
-    @EJB(mappedName = "dir3caib/ImportadorUnidadesEJB/local")
-    private ImportadorUnidadesLocal importadorUnidadesEjb;
-
-    @EJB(mappedName = "dir3caib/ImportadorOficinasEJB/local")
-    private ImportadorOficinasLocal importadorOficinasEjb;
-
-    @EJB(mappedName = "dir3caib/SincronizacionEJB/local")
-    private SincronizacionLocal sincronizacionEjb;
-
-
-
 
     /**
      * Listado de los {@link es.caib.dir3caib.persistence.model.Unidad}
@@ -92,11 +83,11 @@ public class UnidadController extends BaseController {
         String comunidadAutonoma = Configuracio.getBusquedaComunidad();
 
         //Establece los valores por defecto en la búsqueda
-        if(administracion != null){
+        if (administracion != null) {
             unidadBusqueda.getUnidad().setNivelAdministracion(new CatNivelAdministracion(Long.valueOf(administracion.trim())));
         }
 
-        if(comunidadAutonoma != null){
+        if (comunidadAutonoma != null) {
             unidadBusqueda.getUnidad().setCodComunidad(new CatComunidadAutonoma(Long.valueOf(comunidadAutonoma.trim())));
         }
 
@@ -134,10 +125,10 @@ public class UnidadController extends BaseController {
                 codNivelAdministracion,
                 codAmbitoTerritorial,
                 codComunidad,
-                codAmbProvincia, 
-                busqueda.getUnidadRaiz(), 
-                codEstadoEntidad, nifcif, 
-                unidadVersion, 
+                codAmbProvincia,
+                busqueda.getUnidadRaiz(),
+                codEstadoEntidad, nifcif,
+                unidadVersion,
                 busqueda.getDenominacionCooficial());
 
         busqueda.setPageNumber(1);
@@ -152,8 +143,8 @@ public class UnidadController extends BaseController {
         return mav;
 
     }
-    
-    
+
+
     private ModelAndView detalleComun(String codUnidad, boolean denominacionCooficial) throws Exception {
 
         Long start = System.currentTimeMillis();
@@ -326,7 +317,7 @@ public class UnidadController extends BaseController {
         if (!Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE.equals(unidad.getEstado().getCodigoEstadoEntidad())) {
             unidadExtinguida = true;
             Nodo nodo = new Nodo();
-            obtenerUnidadesEjb.montarHistoricosFinales(unidad, nodo, 1,unidad.getEstado().getCodigoEstadoEntidad());
+            obtenerUnidadesEjb.montarHistoricosFinales(unidad, nodo, 1, unidad.getEstado().getCodigoEstadoEntidad());
             mav.addObject("nodo", nodo);
         }
 
@@ -335,9 +326,9 @@ public class UnidadController extends BaseController {
         mav.addObject("denominacionCooficial", denominacionCooficial);
         mav.addObject("paginaUrl", (denominacionCooficial) ? "detall" : "detalle");
         return mav;
-    	
+
     }
-    
+
     /**
      * Método que obtiene el detalle y el árbol de una unidad. Se muestra la denominacionCooficial
      *
@@ -347,9 +338,9 @@ public class UnidadController extends BaseController {
      */
     @RequestMapping(value = "/{codUnidad}/detall", method = RequestMethod.GET)
     public ModelAndView mostrarArbolUnidadesDenominacionCooficial(HttpServletRequest request, @PathVariable String codUnidad) throws Exception {
-    	return detalleComun(codUnidad, true);
+        return detalleComun(codUnidad, true);
     }
-    
+
     /**
      * Método que obtiene el detalle y el árbol de una unidad.
      *
@@ -363,29 +354,4 @@ public class UnidadController extends BaseController {
         return detalleComun(codUnidad, false);
     }
 
-
-
-    @RequestMapping(value = "/importarUnidades/{idSincronizacion}", method = RequestMethod.GET)
-    public String importarUnidadesNivelAdministracion(@PathVariable String idSincronizacion) throws Exception {
-
-        Sincronizacion sincronizacion = sincronizacionEjb.findById(new Long(idSincronizacion));
-
-        if(sincronizacion != null){
-            importadorUnidadesEjb.importarUnidades(sincronizacion);
-        }
-
-        return "";
-    }
-
-    @RequestMapping(value = "/importarOficinas/{idSincronizacion}", method = RequestMethod.GET)
-    public String importarOficinasNivelAdministracion(@PathVariable String idSincronizacion) throws Exception {
-
-        Sincronizacion sincronizacion = sincronizacionEjb.findById(new Long(idSincronizacion));
-
-        if(sincronizacion != null){
-            importadorOficinasEjb.importarOficinas(sincronizacion);
-        }
-
-        return "";
-    }
 }

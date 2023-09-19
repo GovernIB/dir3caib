@@ -166,8 +166,8 @@
 
     create table DIR_HISTORICOUO (
         ID number(19,0) not null,
-        MOTIVORELACION varchar2(255 char),
-        OBSERVEXTINCION varchar2(255 char),
+        MOTIVORELACION varchar2(2000 char),
+        OBSERVEXTINCION varchar2(2000 char),
         ESTADO varchar2(2 char),
         CODANTERIOR varchar2(20 char),
         CODULTIMA varchar2(20 char)

@@ -9,14 +9,11 @@ import es.caib.dir3caib.utils.Configuracio;
 import javax.persistence.*;
 import java.io.File;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
- * @version 1.1
  * @author mgonzalez
+ * @version 1.1
  */
 @Table(name = "DIR_SINCRONIZACION")
 @Entity
@@ -29,8 +26,9 @@ public class Sincronizacion implements Serializable {
     private Date fechaImportacion;
     private String tipo;
     private Long estado;
-    private List<String> ficherosDirectorio;
-    private List<String> ficherosCatalogo;
+    private List<String> ficherosDirectorio = new ArrayList<>();
+    private Map<Integer, List<String>> ficherosDirectorioCompleto = new HashMap<Integer, List<String>>();
+    private List<String> ficherosCatalogo = new ArrayList<>();
 
     public Sincronizacion() {
     }
@@ -114,9 +112,14 @@ public class Sincronizacion implements Serializable {
     }
 
     @Transient
-    public void obtenerFicheros(){
+    public Map<Integer, List<String>> getFicherosDirectorioCompleto() {
+        return ficherosDirectorioCompleto;
+    }
 
-        if(getTipo().equals(Dir3caibConstantes.UNIDADES_OFICINAS)){
+    @Transient
+    public void obtenerFicheros(List<CatNivelAdministracion> niveles) {
+
+        if (getTipo().equals(Dir3caibConstantes.DIRECTORIO_ACTUALIZACION)) {
             File directorio = new File(Configuracio.getDirectorioPath(getCodigo()));
 
             if (directorio.exists()) {
@@ -124,8 +127,16 @@ public class Sincronizacion implements Serializable {
             }
             setFicherosDirectorio(ficherosDirectorio);
 
+        } else if (getTipo().equals(Dir3caibConstantes.DIRECTORIO_COMPLETO)) {
+            for (CatNivelAdministracion nivel : niveles) {
 
-        }else if(getTipo().equals(Dir3caibConstantes.CATALOGO)){
+                File directorio = new File(Configuracio.getDirectorioPath(getCodigo()) + "nivel_" + nivel.getCodigoNivelAdministracion());
+                if (directorio.exists()) {
+                    ficherosDirectorioCompleto.put(nivel.getCodigoNivelAdministracion().intValue(), new ArrayList<>(Arrays.asList(directorio.list())));
+                }
+            }
+
+        } else if (getTipo().equals(Dir3caibConstantes.CATALOGO)) {
             File catalogos = new File(Configuracio.getCatalogosPath(getCodigo()));
 
             if (catalogos.exists()) {

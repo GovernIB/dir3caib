@@ -27,7 +27,7 @@ import java.io.OutputStream;
  */
 @Controller
 @RequestMapping(value = "/archivo")
-public class ArchivoController extends BaseController{
+public class ArchivoController extends BaseController {
 
     protected final Logger log = Logger.getLogger(getClass());
 
@@ -36,12 +36,18 @@ public class ArchivoController extends BaseController{
 
 
     @RequestMapping(value = "/{nombreArchivo}/{idSincronizacion}", method = RequestMethod.GET)
-    public void  archivo(@PathVariable("nombreArchivo") String nombreArchivo,@PathVariable("idSincronizacion") Long idSincronizacion,  HttpServletRequest request, HttpServletResponse response)  {
+    public void archivo(@PathVariable("nombreArchivo") String nombreArchivo, @PathVariable("idSincronizacion") Long idSincronizacion, HttpServletRequest request, HttpServletResponse response) {
 
-        fullDownload(nombreArchivo,idSincronizacion, response);
+        fullDownload(nombreArchivo, idSincronizacion, null, response);
     }
 
-    public void fullDownload(String nombre, Long idSincronizacion,  HttpServletResponse response) {
+    @RequestMapping(value = "/{nombreArchivo}/{nivelAdministracion}/{idSincronizacion}", method = RequestMethod.GET)
+    public void archivo(@PathVariable("nombreArchivo") String nombreArchivo, @PathVariable("nivelAdministracion") Long nivelAdministracion, @PathVariable("idSincronizacion") Long idSincronizacion, HttpServletRequest request, HttpServletResponse response) {
+
+        fullDownload(nombreArchivo, idSincronizacion, nivelAdministracion, response);
+    }
+
+    public void fullDownload(String nombre, Long idSincronizacion, Long nivelAdministracion, HttpServletResponse response) {
 
         FileInputStream input = null;
         OutputStream output = null;
@@ -54,12 +60,14 @@ public class ArchivoController extends BaseController{
 
                 Sincronizacion sincronizacion = sincronizacionEjb.findById(idSincronizacion);
 
-                if(Dir3caibConstantes.CATALOGO.equals(sincronizacion.getTipo())){
-                  file = new File(Configuracio.getCatalogosPath(sincronizacion.getCodigo()), nombre);
-                }
+                if (Dir3caibConstantes.CATALOGO.equals(sincronizacion.getTipo())) {
+                    file = new File(Configuracio.getCatalogosPath(sincronizacion.getCodigo()), nombre);
 
-                if(Dir3caibConstantes.UNIDADES_OFICINAS.equals(sincronizacion.getTipo())){
-                  file = new File(Configuracio.getDirectorioPath(sincronizacion.getCodigo()), nombre);
+                } else if (Dir3caibConstantes.DIRECTORIO_ACTUALIZACION.equals(sincronizacion.getTipo())) {
+                    file = new File(Configuracio.getDirectorioPath(sincronizacion.getCodigo()), nombre);
+
+                } else if (Dir3caibConstantes.DIRECTORIO_COMPLETO.equals(sincronizacion.getTipo())) {
+                    file = new File(Configuracio.getDirectorioPath(sincronizacion.getCodigo()) + "nivel_" + nivelAdministracion + "/", nombre);
                 }
 
                 String contentType = mimeTypesMap.getContentType(file);
@@ -79,10 +87,9 @@ public class ArchivoController extends BaseController{
 
         } catch (NumberFormatException e) {
             log.info(e);
-        }  catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
 
     }
 }

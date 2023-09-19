@@ -1,6 +1,5 @@
 package es.caib.dir3caib.utils;
 
-import javax.xml.bind.ValidationEvent;
 
 /**
  * @author anadal
@@ -17,7 +16,6 @@ public class Configuracio {
         return getBoolean(DIR3CAIB_PROPERTY_BASE + "iscaib");
     }
 
-
     public static boolean isDevelopment() {
         return getBoolean(DIR3CAIB_PROPERTY_BASE + "development");
     }
@@ -27,7 +25,6 @@ public class Configuracio {
     }
 
     /**
-     *
      * @param idSincronizacion
      * @return
      */
@@ -36,7 +33,6 @@ public class Configuracio {
     }
 
     /**
-     *
      * @param idSincronizacion
      * @return
      */
@@ -45,14 +41,12 @@ public class Configuracio {
     }
 
     /**
-     *
      * @param idSincronizacion
      * @return
      */
     public static String getDirectorioPath(Long idSincronizacion) {
         return getSincronizacionPath(idSincronizacion) + "directorio/";
     }
-
 
 
     public static String getCatalogoEndPoint() {
@@ -89,7 +83,7 @@ public class Configuracio {
     }
 
     public static boolean isSincronizar() {
-        return  getBoolean(DIR3CAIB_PROPERTY_BASE + "sincronizar");
+        return getBoolean(DIR3CAIB_PROPERTY_BASE + "sincronizar");
     }
 
     public static String getRemitenteEmail() {
@@ -105,11 +99,11 @@ public class Configuracio {
     }
 
     public static boolean isDenominacionCooficial() {
-       return  getBoolean(DIR3CAIB_PROPERTY_BASE + "denominacioncooficial");
+        return getBoolean(DIR3CAIB_PROPERTY_BASE + "denominacioncooficial");
     }
 
-    private static Boolean getBoolean(String property){
-        String name= System.getProperty(property);
+    private static Boolean getBoolean(String property) {
+        String name = System.getProperty(property);
         return ((name != null) && name.trim().equalsIgnoreCase("true"));
     }
 

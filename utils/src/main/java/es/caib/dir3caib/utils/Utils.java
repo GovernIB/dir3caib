@@ -5,23 +5,29 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 
  * @author anadal
- * 
  */
 public class Utils {
 
-  public static String formatElapsedTime(final long l) {
-    final long hr = TimeUnit.MILLISECONDS.toHours(l);
-    final long min = TimeUnit.MILLISECONDS.toMinutes(l - TimeUnit.HOURS.toMillis(hr));
-    final long sec = TimeUnit.MILLISECONDS.toSeconds(l - TimeUnit.HOURS.toMillis(hr)
-        - TimeUnit.MINUTES.toMillis(min));
-    final long ms = TimeUnit.MILLISECONDS.toMillis(l - TimeUnit.HOURS.toMillis(hr)
-        - TimeUnit.MINUTES.toMillis(min) - TimeUnit.SECONDS.toMillis(sec));
-    return String.format("%02d:%02d:%02d.%03d", hr, min, sec, ms);
-  }
+    /**
+     * @param l
+     * @return
+     */
+    public static String formatElapsedTime(final long l) {
+        final long hr = TimeUnit.MILLISECONDS.toHours(l);
+        final long min = TimeUnit.MILLISECONDS.toMinutes(l - TimeUnit.HOURS.toMillis(hr));
+        final long sec = TimeUnit.MILLISECONDS.toSeconds(l - TimeUnit.HOURS.toMillis(hr)
+                - TimeUnit.MINUTES.toMillis(min));
+        final long ms = TimeUnit.MILLISECONDS.toMillis(l - TimeUnit.HOURS.toMillis(hr)
+                - TimeUnit.MINUTES.toMillis(min) - TimeUnit.SECONDS.toMillis(sec));
+        return String.format("%02d:%02d:%02d.%03d", hr, min, sec, ms);
+    }
 
-
+    /**
+     * @param date1
+     * @param date2
+     * @return
+     */
     public boolean isSameDay(Date date1, Date date2) {
         if (date1 == null || date2 == null) {
             throw new IllegalArgumentException("The dates must not be null");
@@ -33,7 +39,11 @@ public class Utils {
         return isSameDay(cal1, cal2);
     }
 
-
+    /**
+     * @param cal1
+     * @param cal2
+     * @return
+     */
     public boolean isSameDay(Calendar cal1, Calendar cal2) {
         if (cal1 == null || cal2 == null) {
             throw new IllegalArgumentException("The dates must not be null");
@@ -84,6 +94,7 @@ public class Utils {
 
     /**
      * Comprueba si una cadena está vacia ("") o es null.
+     *
      * @param cadena
      * @return
      */
@@ -94,6 +105,7 @@ public class Utils {
 
     /**
      * Comprueba si una cadena no está vacia ("") o es null.
+     *
      * @param cadena
      * @return
      */
@@ -103,6 +115,7 @@ public class Utils {
 
     /**
      * Comprueba si una cadena es númerico
+     *
      * @param cadena
      * @return true si es númerico, false si no lo es.
      */

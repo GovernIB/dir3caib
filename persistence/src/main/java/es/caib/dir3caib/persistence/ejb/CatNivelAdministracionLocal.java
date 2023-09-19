@@ -1,10 +1,9 @@
 package es.caib.dir3caib.persistence.ejb;
 
-import java.util.List;
+import es.caib.dir3caib.persistence.model.CatNivelAdministracion;
 
 import javax.ejb.Local;
-
-import es.caib.dir3caib.persistence.model.CatNivelAdministracion;
+import java.util.List;
 
 /**
  * Created by Fundació BIT.
@@ -14,11 +13,28 @@ import es.caib.dir3caib.persistence.model.CatNivelAdministracion;
  */
 @Local
 public interface CatNivelAdministracionLocal extends BaseEjb<CatNivelAdministracion, Long> {
-  
-  void deleteAll() throws Exception;
 
-  List<CatNivelAdministracion> getAll(String estado) throws Exception;
-  
-  List<CatNivelAdministracion> getByEstado(String estado) throws Exception;
-  
+    /**
+     * Elimina el contenido de la tabla
+     *
+     * @throws Exception
+     */
+    void deleteAll() throws Exception;
+
+    /**
+     *
+     * @param estado
+     * @return
+     * @throws Exception
+     */
+    List<CatNivelAdministracion> getAll(String estado) throws Exception;
+
+    /**
+     *
+     * @param estado
+     * @return
+     * @throws Exception
+     */
+    List<CatNivelAdministracion> getByEstado(String estado) throws Exception;
+
 }

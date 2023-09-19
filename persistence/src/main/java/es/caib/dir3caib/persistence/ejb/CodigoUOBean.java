@@ -1,9 +1,7 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.CodigoUnidadOrganica;
-import es.caib.dir3caib.persistence.model.ContactoUnidadOrganica;
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
-
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.SecurityDomain;
 
@@ -21,11 +19,11 @@ import java.util.List;
 @Stateless(name = "CodigoUOEJB")
 @SecurityDomain("seycon")
 @RolesAllowed({Dir3caibConstantes.DIR_ADMIN, Dir3caibConstantes.ROL_TOTHOM, Dir3caibConstantes.DIR_WS})
-public class CodigoUOBean extends BaseEjbJPA<CodigoUnidadOrganica, Long> implements CodigoUOLocal{
+public class CodigoUOBean extends BaseEjbJPA<CodigoUnidadOrganica, Long> implements CodigoUOLocal {
 
     protected final Logger log = Logger.getLogger(getClass());
 
-    @PersistenceContext(unitName="dir3caib")
+    @PersistenceContext(unitName = "dir3caib")
     private EntityManager em;
 
     @Override
@@ -44,7 +42,7 @@ public class CodigoUOBean extends BaseEjbJPA<CodigoUnidadOrganica, Long> impleme
     @SuppressWarnings(value = "unchecked")
     public List<CodigoUnidadOrganica> getAll() throws Exception {
 
-        return  em.createQuery("Select codigoUO from CodigoUnidadOrganica as codigoUO order by codigoUO.id").getResultList();
+        return em.createQuery("Select codigoUO from CodigoUnidadOrganica as codigoUO order by codigoUO.id").getResultList();
     }
 
     @Override
@@ -64,5 +62,12 @@ public class CodigoUOBean extends BaseEjbJPA<CodigoUnidadOrganica, Long> impleme
         q.setMaxResults(RESULTADOS_PAGINACION);
 
         return q.getResultList();
+    }
+
+    @Override
+    public void deleteAll() throws Exception {
+
+        em.createQuery("delete from CodigoUnidadOrganica").executeUpdate();
+
     }
 }

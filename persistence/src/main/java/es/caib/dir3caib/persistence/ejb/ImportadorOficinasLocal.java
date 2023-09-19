@@ -5,20 +5,18 @@ import es.caib.dir3caib.persistence.model.Sincronizacion;
 import javax.ejb.Local;
 
 /**
- * 
  * @author anadal
- * 
  */
 @Local
 public interface ImportadorOficinasLocal {
 
-  /**
-   * Importa en la Bd los datos que contienen los archivos descargados previamente via WS
-   *
-   * @param
-   * @return
-   * @throws Exception
-   */
-  void importarOficinas(Sincronizacion sincronizacion) throws Exception;
+    /**
+     * Importa en la Bd los datos que contienen los archivos descargados previamente via WS
+     *
+     * @param
+     * @return
+     * @throws Exception
+     */
+    void importarOficinas(Sincronizacion sincronizacion) throws Exception;
 
 }

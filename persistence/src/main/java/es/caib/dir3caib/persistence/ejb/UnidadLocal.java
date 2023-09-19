@@ -3,7 +3,6 @@ package es.caib.dir3caib.persistence.ejb;
 import es.caib.dir3caib.persistence.model.HistoricoUO;
 import es.caib.dir3caib.persistence.model.Oficina;
 import es.caib.dir3caib.persistence.model.Unidad;
-import es.caib.dir3caib.persistence.model.UnidadPK;
 import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.Paginacion;
 
@@ -22,6 +21,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
 
     /**
      * Busca una unidad por su pk
+     *
      * @param codigo
      * @param version
      * @return
@@ -31,6 +31,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
 
     /**
      * Obtiene la unidad con código el indicado y de mayor version
+     *
      * @param codigo
      * @return
      * @throws Exception
@@ -45,7 +46,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @return
      * @throws Exception
      */
-   // Unidad findByPKsReduced(String codigo, Long version) throws Exception;
+    // Unidad findByPKsReduced(String codigo, Long version) throws Exception;
 
     /**
      * Borra todas las unidades
@@ -123,7 +124,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @throws Exception
      */
     Paginacion busqueda(Integer pageNumber, String codigo, String denominacion, Long codigoNivelAdministracion,
-                        String codAmbitoTerritorial, Long codComunidad, Long codigoProvincia, Boolean unidadRaiz, String codigoEstado, 
+                        String codAmbitoTerritorial, Long codComunidad, Long codigoProvincia, Boolean unidadRaiz, String codigoEstado,
                         String nifcif, Long unidadVersion, Boolean denominacionCooficial) throws Exception;
 
     /**
@@ -221,7 +222,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @throws Exception
      */
     List<Unidad> obtenerArbol(String codigo) throws Exception;
-    
+
     List<Unidad> obtenerArbol(String codigo, String estado) throws Exception;
 
     /**
@@ -251,8 +252,6 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
     List<String> getAllCodigos();
 
 
-
-
     /**
      * Devuelve todas las unidades de la lista de ids indicados. Se emplea para montar la cache de unidades
      * en la importación de oficinas desde Madrid
@@ -261,7 +260,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @return
      * @throws Exception
      */
-     List<Unidad> getListByIds(List<String> ids) throws Exception;
+    List<Unidad> getListByIds(List<String> ids) throws Exception;
 
 
     /**
@@ -282,7 +281,6 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @throws Exception
      */
     Unidad findByCodigoLigero(String codigo) throws Exception;
-    
 
 
     /**
@@ -308,14 +306,12 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
     boolean unidadValida(Unidad unidad, Date fechaSincro) throws Exception;
 
     /**
-     *
      * @param codigoUnidad
      * @throws Exception
      */
     void crearUnidad(String codigoUnidad) throws Exception;
 
     /**
-     *
      * @param codigoUnidad
      * @param codigoUnidadRaiz
      * @param codigoUnidadSuperior
@@ -338,6 +334,7 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
 
     /**
      * Comprueba la existencia de un HistoriooUnidad en concreto
+     *
      * @param codigoAnterior
      * @param codigoUltima
      * @return
@@ -345,38 +342,58 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      */
     Boolean existeHistoricoUnidad(String codigoAnterior, String codigoUltima) throws Exception;
 
-   /**
-    * Obtiene los históricos hacia atrás de una unidad.
-    *
-    * @param codigoUnidad
-    * @return
-    * @throws Exception
-    */
-   Set<Unidad> historicosHaciaAtras(String codigoUnidad) throws Exception;
-   
-   Set<Unidad> historicosHaciaAtras(String codigoUnidad, boolean denominacionCooficial) throws Exception;
+    /**
+     * Obtiene los históricos hacia atrás de una unidad.
+     *
+     * @param codigoUnidad
+     * @return
+     * @throws Exception
+     */
+    Set<Unidad> historicosHaciaAtras(String codigoUnidad) throws Exception;
 
-   /**
-    * Obtiene los sustitutos de una unidad
-    *
-    * @param unidad
-    * @param historicosFinales
-    * @throws Exception
-    */
+    Set<Unidad> historicosHaciaAtras(String codigoUnidad, boolean denominacionCooficial) throws Exception;
+
+    /**
+     * Obtiene los sustitutos de una unidad
+     *
+     * @param unidad
+     * @param historicosFinales
+     * @throws Exception
+     */
     void historicosFinales(Unidad unidad, Set<Unidad> historicosFinales) throws Exception;
 
+    /**
+     * @param unidad
+     * @param historicosFinales
+     * @throws Exception
+     */
     void historicosUOFinales(Unidad unidad, Set<HistoricoUO> historicosFinales) throws Exception;
 
-    /* Obtiene las unidades del nivel indicado cuya unidad Raiz es la indicada por codigo */
+    /**
+     * Obtiene las unidades del nivel indicado cuya unidad Raiz es la indicada por codigo
+     *
+     * @param nivel
+     * @param codigo
+     * @param estado
+     * @return
+     * @throws Exception
+     */
     public List<Unidad> getUnidadesByNivel(long nivel, String codigo, String estado) throws Exception;
 
-    /*
-         Obtiene las unidades del nivel indicado cuya unidad superior es la indicada por codigo
+    /**
+     * Obtiene las unidades del nivel indicado cuya unidad superior es la indicada por codigo
+     *
+     * @param nivel
+     * @param codigo
+     * @param estado
+     * @return
+     * @throws Exception
      */
     public List<Unidad> getUnidadesByNivelByUnidadSuperior(long nivel, String codigo, String estado) throws Exception;
 
     /**
      * Obtiene una unidad con sus contactos y sus relaciones
+     *
      * @param id
      * @return
      * @throws Exception
@@ -385,53 +402,127 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
 
     /**
      * Obtiene una unidad con sus contactos y sus relaciones
+     *
      * @param codigo
      * @return
      * @throws Exception
      */
     Unidad findFullByIdConHistoricos(String codigo) throws Exception;
 
+    /**
+     * @param codigo
+     * @return
+     * @throws Exception
+     */
     Unidad findFullByCodigoDir3ConHistoricos(String codigo) throws Exception;
 
-   /**
-    * Este método mira si la unidad del código especificado tiene oficinas donde registrar.
-    * Para ello comprueba si es unidadResponsable de alguna oficina y después mira si tiene relacionesOrganizativas con oficinas.
-    * Es además recursivo, así que lo mira hasta el último nivel del organigrama.
-    *
-    * @param codigo de la unidad
-    * @return
-    * @throws Exception
-    */
-   Boolean tieneOficinasArbol(String codigo) throws Exception;
+    /**
+     * Este método mira si la unidad del código especificado tiene oficinas donde registrar.
+     * Para ello comprueba si es unidadResponsable de alguna oficina y después mira si tiene relacionesOrganizativas con oficinas.
+     * Es además recursivo, así que lo mira hasta el último nivel del organigrama.
+     *
+     * @param codigo de la unidad
+     * @return
+     * @throws Exception
+     */
+    Boolean tieneOficinasArbol(String codigo) throws Exception;
 
     /**
-     *
      * @param codigoUnidad
      * @param codigoServicio
      * @throws Exception
      */
     void crearServicioUnidad(String codigoUnidad, Long codigoServicio) throws Exception;
 
-	List<Nodo> hijos(String codigo, String estado, boolean denominacionCooficial, boolean codigoDir3) throws Exception;
+    /**
+     * @param codigo
+     * @param estado
+     * @param denominacionCooficial
+     * @param codigoDir3
+     * @return
+     * @throws Exception
+     */
+    List<Nodo> hijos(String codigo, String estado, boolean denominacionCooficial, boolean codigoDir3) throws Exception;
 
-	Unidad findByCodigoLigero(String codigo, boolean denominacionCooficial) throws Exception;
+    /**
+     * @param codigo
+     * @param denominacionCooficial
+     * @return
+     * @throws Exception
+     */
+    Unidad findByCodigoLigero(String codigo, boolean denominacionCooficial) throws Exception;
 
-	String unidadDenominacion(String codigo, boolean denominacionCooficial) throws Exception;
+    /**
+     * @param codigo
+     * @param denominacionCooficial
+     * @return
+     * @throws Exception
+     */
+    String unidadDenominacion(String codigo, boolean denominacionCooficial) throws Exception;
 
-	List<Unidad> findByDenominacion(String denominacion, boolean denominacionCooficial) throws Exception;
+    /**
+     * @param denominacion
+     * @param denominacionCooficial
+     * @return
+     * @throws Exception
+     */
+    List<Unidad> findByDenominacion(String denominacion, boolean denominacionCooficial) throws Exception;
 
-	Nodo findUnidad(String id, String estado, boolean denominacionCooficial) throws Exception;
-	
-	Nodo findUnidadByCodigoDir3(String codigoDir3, String estado, boolean denominacionCooficial) throws Exception;
+    /**
+     * @param id
+     * @param estado
+     * @param denominacionCooficial
+     * @return
+     * @throws Exception
+     */
+    Nodo findUnidad(String id, String estado, boolean denominacionCooficial) throws Exception;
 
-	void arbolHijos(Set<Unidad> unidadesPadres, String estado, Set<Unidad> hijosTotales, boolean denominacionCooficial)
-			throws Exception;
+    /**
+     * @param codigoDir3
+     * @param estado
+     * @param denominacionCooficial
+     * @return
+     * @throws Exception
+     */
+    Nodo findUnidadByCodigoDir3(String codigoDir3, String estado, boolean denominacionCooficial) throws Exception;
 
-	List<Unidad> obtenerArbolUnidadesUnidadRaiz(String codigo, Date fechaActualizacion, Date fechaSincronizacion,
-			boolean denominacionCooficial) throws Exception;
+    /**
+     * @param unidadesPadres
+     * @param estado
+     * @param hijosTotales
+     * @param denominacionCooficial
+     * @throws Exception
+     */
+    void arbolHijos(Set<Unidad> unidadesPadres, String estado, Set<Unidad> hijosTotales, boolean denominacionCooficial)
+            throws Exception;
 
-	List<Unidad> obtenerArbolUnidadesDestinatarias(String codigo, boolean denominacionCooficial) throws Exception;
-	
-	public List<Unidad> getUnidadesByNivelByUnidadSuperior(long nivel, String codigo, String estado, boolean denominacionCooficial) throws Exception;
+    /**
+     * @param codigo
+     * @param fechaActualizacion
+     * @param fechaSincronizacion
+     * @param denominacionCooficial
+     * @return
+     * @throws Exception
+     */
+    List<Unidad> obtenerArbolUnidadesUnidadRaiz(String codigo, Date fechaActualizacion, Date fechaSincronizacion,
+                                                boolean denominacionCooficial) throws Exception;
+
+    /**
+     * @param codigo
+     * @param denominacionCooficial
+     * @return
+     * @throws Exception
+     */
+    List<Unidad> obtenerArbolUnidadesDestinatarias(String codigo, boolean denominacionCooficial) throws Exception;
+
+    /**
+     * @param nivel
+     * @param codigo
+     * @param estado
+     * @param denominacionCooficial
+     * @return
+     * @throws Exception
+     */
+    List<Unidad> getUnidadesByNivelByUnidadSuperior(long nivel, String codigo, String estado, boolean denominacionCooficial) throws Exception;
 
 }

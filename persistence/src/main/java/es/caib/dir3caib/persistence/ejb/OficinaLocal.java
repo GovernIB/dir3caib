@@ -13,7 +13,6 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 
  * @author mgonzalez
  * @author anadal
  */
@@ -29,36 +28,40 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
 
     /**
      * Realiza la búsqueda de oficinas en función de los criterios especificados
-     * @param pageNumber numero de pagina, para la paginación
-     * @param codigo código de la oficina
-     * @param denominacion denominacion de la oficina
+     *
+     * @param pageNumber                numero de pagina, para la paginación
+     * @param codigo                    código de la oficina
+     * @param denominacion              denominacion de la oficina
      * @param codigoNivelAdministracion codigo del nivel de administración
-     * @param codComunidad codigo de la comunidad  a la que pertenece.
-     * @param codigoProvincia codigo de la provincia a la que pertenece.
-     * @param codigoEstado codigo de estado (vigente, anulado)
+     * @param codComunidad              codigo de la comunidad  a la que pertenece.
+     * @param codigoProvincia           codigo de la provincia a la que pertenece.
+     * @param codigoEstado              codigo de estado (vigente, anulado)
      * @param denominacionCooficial
      * @return
      * @throws Exception
      */
     Paginacion busqueda(Integer pageNumber, String codigo, String denominacion,
-                        Long codigoNivelAdministracion, Long codComunidad, Long codigoProvincia, 
+                        Long codigoNivelAdministracion, Long codComunidad, Long codigoProvincia,
                         String codigoEstado, Boolean denominacionCooficial)
             throws Exception;
 
     /**
      * Elimina todos los registros de la tabla de históricos de oficinas
+     *
      * @throws Exception
      */
     void deleteHistoricosOficina() throws Exception;
 
     /**
      * Elimina todos los servicios de oficinas de la tabla de servicios.
+     *
      * @throws Exception
      */
     void deleteServiciosOficina() throws Exception;
 
     /**
      * Elimina los Servicios de la oficina en cuestión
+     *
      * @param idOficina
      * @throws Exception
      */
@@ -66,6 +69,7 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
 
     /**
      * Obtiene una oficina con sus contactos y sus servicios
+     *
      * @param id
      * @return
      * @throws Exception
@@ -74,6 +78,7 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
 
     /**
      * Obtiene el código, denominación y estado de la oficina indicada
+     *
      * @param codigo
      * @return
      * @throws Exception
@@ -82,6 +87,7 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
 
     /**
      * Obtiene una Oficina según su código y estado
+     *
      * @param codigo
      * @param estado
      * @return
@@ -89,10 +95,10 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      */
     Oficina findById(String codigo, String estado) throws Exception;
 
-
     /**
      * Obtiene el codigo, la denominación, el estado, la tupla codigo-denominacion de la unidad raiz y la tupla codigo-denominacion de la unidad responsable
      * de la oficina. Se emplea para pintar el árbol de oficinas
+     *
      * @param id
      * @param estado
      * @return
@@ -120,31 +126,37 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      * Método que devuelve las oficinas de un organismo(son todas, padres e hijos),
      * teniendo en cuenta la fecha de la ultima actualización de regweb.
      * Se emplea para la sincronizacion y actualización con regweb
-     * @param codigo código de la unidad
-     * @param fechaActualizacion   fecha de la ultima actualización
-     * @param fechaSincronizacion  fecha de la primera sincronización
+     *
+     * @param codigo              código de la unidad
+     * @param fechaActualizacion  fecha de la ultima actualización
+     * @param fechaSincronizacion fecha de la primera sincronización
      * @return
      * @throws Exception
      */
     List<Oficina> obtenerOficinasOrganismo(String codigo, Date fechaActualizacion,
                                            Date fechaSincronizacion) throws Exception;
-    
+
+    /**
+     *
+     * @param codigo
+     * @param fechaActualizacion
+     * @param fechaSincronizacion
+     * @param estado
+     * @return
+     * @throws Exception
+     */
     List<Oficina> obtenerOficinasOrganismoByEstado(String codigo, Date fechaActualizacion,
-            Date fechaSincronizacion, String estado) throws Exception;
-
-
+                                                   Date fechaSincronizacion, String estado) throws Exception;
 
 
     /**
      * Obtiene el listado de oficinas Sir de una Unidad
      * para ello consulta la relacionSirOfi y además que tengan los servicios SIR y SIR_RECEPCION y que sean vigentes.
      *
-     * @param codigo
-     *          Código de la unidad
-     *
+     * @param codigo Código de la unidad
      */
     List<Oficina> obtenerOficinasSIRUnidad(String codigo) throws Exception;
-    
+
     List<Oficina> obtenerOficinasSIRUnidad(String codigo, boolean isCodigoDir3) throws Exception;
 
 
@@ -154,25 +166,25 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      *
      * @param codigoUnidad
      * @param denominacionCooficial indica si quiere traer la denominacioncooficial
-     *          Código de la unidad
-     *
+     *                              Código de la unidad
      */
     List<Oficina> obtenerOficinasSIRArbol(String codigoUnidad, boolean denominacionCooficial) throws Exception;
 
     List<Oficina> obtenerOficinasSIRArbol(String codigoUnidad, boolean isCodigoDir3, boolean denominacionCooficial) throws Exception;
 
-   /**
-    * Nos dice si una unidad tiene oficinas SIR
-    *
-    * @param codigoUnidad
-    * @return
-    * @throws Exception
-    */
-   Boolean tieneOficinasSIR(String codigoUnidad) throws Exception;
+    /**
+     * Nos dice si una unidad tiene oficinas SIR
+     *
+     * @param codigoUnidad
+     * @return
+     * @throws Exception
+     */
+    Boolean tieneOficinasSIR(String codigoUnidad) throws Exception;
 
 
-   /**
+    /**
      * Obtiene todos los código de las oficinas. Se emplea en la importación de oficinas desde Madrid.
+     *
      * @return
      * @throws Exception
      */
@@ -184,7 +196,6 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      *
      * @param codigo codigo de la unidad
      * @param estado estado de las oficinas
-     *
      * @return {@link es.caib.dir3caib.persistence.utils.Nodo}
      */
     List<Nodo> oficinasDependientes(String codigo, String estado) throws Exception;
@@ -200,7 +211,6 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
     List<Nodo> oficinasAuxiliares(String codigo, String estado) throws Exception;
 
     /**
-     *
      * @param codigoOficina
      * @param codigoServicio
      * @throws Exception
@@ -208,7 +218,6 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
     void crearServicioOficina(String codigoOficina, Long codigoServicio) throws Exception;
 
     /**
-     *
      * @param codigoAnterior
      * @param codigoUltima
      * @throws Exception
@@ -217,6 +226,7 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
 
     /**
      * Comprueba la existencia de un ServicioOficina en concreto
+     *
      * @param codigoOficina
      * @param codigoServicio
      * @return
@@ -226,6 +236,7 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
 
     /**
      * Comprueba la existencia de un HistoricoOficina en concreto
+     *
      * @param codigoAnterior
      * @param codigoUltima
      * @return
@@ -235,6 +246,7 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
 
     /**
      * Elmina los HistoricoOfi de una Oficina
+     *
      * @param idOficina
      * @throws Exception
      */
@@ -269,22 +281,81 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      */
     List<Oficina> obtenerOficinasRegistran(String codigoUnidad) throws Exception;
 
-   Boolean isSIRCompleto(String codigoOficina) throws Exception;
+    /**
+     *
+     * @param codigoOficina
+     * @return
+     * @throws Exception
+     */
+    Boolean isSIRCompleto(String codigoOficina) throws Exception;
 
-   List<Nodo> hijos(String codigo, String estado, boolean denominacionCooficial) throws Exception;
+    /**
+     *
+     * @param codigo
+     * @param estado
+     * @param denominacionCooficial
+     * @return
+     * @throws Exception
+     */
+    List<Nodo> hijos(String codigo, String estado, boolean denominacionCooficial) throws Exception;
 
-   List<Nodo> oficinasDependientes(String codigo, String estado, boolean denominacionCooficial) throws Exception;
+    /**
+     *
+     * @param codigo
+     * @param estado
+     * @param denominacionCooficial
+     * @return
+     * @throws Exception
+     */
+    List<Nodo> oficinasDependientes(String codigo, String estado, boolean denominacionCooficial) throws Exception;
 
-   List<Nodo> oficinasAuxiliares(String codigo, String estado, boolean denominacionCooficial) throws Exception;
+    /**
+     *
+     * @param codigo
+     * @param estado
+     * @param denominacionCooficial
+     * @return
+     * @throws Exception
+     */
+    List<Nodo> oficinasAuxiliares(String codigo, String estado, boolean denominacionCooficial) throws Exception;
 
-   Oficina findByCodigoLigero(String codigo, boolean denominacionCooficial) throws Exception;
+    /**
+     *
+     * @param codigo
+     * @param denominacionCooficial
+     * @return
+     * @throws Exception
+     */
+    Oficina findByCodigoLigero(String codigo, boolean denominacionCooficial) throws Exception;
 
-   Nodo findOficina(String id, String estado, boolean denominacionCooficial) throws Exception;
+    /**
+     *
+     * @param id
+     * @param estado
+     * @param denominacionCooficial
+     * @return
+     * @throws Exception
+     */
+    Nodo findOficina(String id, String estado, boolean denominacionCooficial) throws Exception;
 
-   List<Oficina> responsableByUnidadEstado(String codigoUnidadResponsable, String estado, boolean denominacionCooficial)
-		throws Exception;
+    /**
+     *
+     * @param codigoUnidadResponsable
+     * @param estado
+     * @param denominacionCooficial
+     * @return
+     * @throws Exception
+     */
+    List<Oficina> responsableByUnidadEstado(String codigoUnidadResponsable, String estado, boolean denominacionCooficial) throws Exception;
 
-   List<Oficina> dependienteByUnidadEstado(String codigoUnidadResponsable, String estado, boolean denominacionCooficial)
-		throws Exception;
-   
+    /**
+     *
+     * @param codigoUnidadResponsable
+     * @param estado
+     * @param denominacionCooficial
+     * @return
+     * @throws Exception
+     */
+    List<Oficina> dependienteByUnidadEstado(String codigoUnidadResponsable, String estado, boolean denominacionCooficial) throws Exception;
+
 }

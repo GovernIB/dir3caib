@@ -2,13 +2,17 @@ package es.caib.dir3caib.persistence.ejb;
 
 
 import es.caib.dir3caib.persistence.model.CodigoUnidadOrganica;
-import es.caib.dir3caib.persistence.model.ContactoUnidadOrganica;
 
 import javax.ejb.Local;
-import java.util.List;
 
 @Local
-public interface CodigoUOLocal extends BaseEjb<CodigoUnidadOrganica, Long>{
+public interface CodigoUOLocal extends BaseEjb<CodigoUnidadOrganica, Long> {
 
+    /**
+     * Elimina el contenido de la tabla
+     *
+     * @throws Exception
+     */
+    void deleteAll() throws Exception;
 
 }

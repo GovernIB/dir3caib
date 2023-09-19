@@ -10,18 +10,31 @@ import javax.ejb.Local;
 import java.util.List;
 
 /**
- *
  * @author mgonzalez
  */
 @Local
-public interface ContactoUOLocal extends BaseEjb<ContactoUnidadOrganica, Long>{
-  
-   void deleteAll() throws Exception;
+public interface ContactoUOLocal extends BaseEjb<ContactoUnidadOrganica, Long> {
 
-   void deleteByUnidad(String idUnidad) throws Exception;
+    /**
+     * Elimina el contenido de la tabla
+     *
+     * @throws Exception
+     */
+    void deleteAll() throws Exception;
 
+    /**
+     *
+     * @param idUnidad
+     * @throws Exception
+     */
+    void deleteByUnidad(String idUnidad) throws Exception;
 
-   List<ContactoUnidadOrganica> getContactosByUnidad(String codigoUnidad) throws Exception;
-  
-  
+    /**
+     *
+     * @param codigoUnidad
+     * @return
+     * @throws Exception
+     */
+    List<ContactoUnidadOrganica> getContactosByUnidad(String codigoUnidad) throws Exception;
+
 }

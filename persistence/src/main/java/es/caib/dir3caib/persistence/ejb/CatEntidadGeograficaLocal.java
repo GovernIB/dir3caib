@@ -2,9 +2,8 @@ package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.CatEntidadGeografica;
 
-import java.util.List;
-
 import javax.ejb.Local;
+import java.util.List;
 
 /**
  * Created by Fundació BIT.
@@ -14,9 +13,20 @@ import javax.ejb.Local;
  */
 @Local
 public interface CatEntidadGeograficaLocal extends BaseEjb<CatEntidadGeografica, String> {
-  
-  void deleteAll() throws Exception;
 
-  List<CatEntidadGeografica> getByEstado(String estado) throws Exception;
-  
+    /**
+     * Elimina el contenido de la tabla
+     *
+     * @throws Exception
+     */
+    void deleteAll() throws Exception;
+
+    /**
+     *
+     * @param estado
+     * @return
+     * @throws Exception
+     */
+    List<CatEntidadGeografica> getByEstado(String estado) throws Exception;
+
 }

@@ -3,6 +3,7 @@ package es.caib.dir3caib.back.controller;
 import es.caib.dir3caib.back.utils.Mensaje;
 import es.caib.dir3caib.persistence.ejb.Dir3CaibLocal;
 import es.caib.dir3caib.persistence.ejb.SincronizacionLocal;
+import es.caib.dir3caib.persistence.model.CatNivelAdministracion;
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.model.Sincronizacion;
 import es.caib.dir3caib.utils.Configuracio;
@@ -18,9 +19,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Fundació BIT.
+ *
  * @author earrivi
  * Date: 2/10/13
  */
@@ -41,27 +44,30 @@ public class PrincipalController extends BaseController {
     public ModelAndView principal(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         ModelAndView mav = null;
+        List<CatNivelAdministracion> niveles = catNivelAdministracionEjb.getByEstado(Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
-        if(request.isUserInRole(Dir3caibConstantes.DIR_ADMIN)){
+        if (request.isUserInRole(Dir3caibConstantes.DIR_ADMIN)) {
             mav = new ModelAndView("principal");
 
             ArrayList<Sincronizacion> sincronizaciones = new ArrayList<Sincronizacion>();
 
-            Sincronizacion catalogo = sincronizacionEjb.ultimaSincronizacionCompletada(Dir3caibConstantes.CATALOGO);
-            Sincronizacion directorio = sincronizacionEjb.ultimaSincronizacionCompletada(Dir3caibConstantes.UNIDADES_OFICINAS);
+            Sincronizacion catalogo = sincronizacionEjb.ultimaSincronizacionCatalogo();
+            Sincronizacion directorio = sincronizacionEjb.ultimaSincronizacionDirectorio();
 
-            if(directorio != null){
-                directorio.obtenerFicheros();
+            if (directorio != null) {
+                directorio.obtenerFicheros(niveles);
                 sincronizaciones.add(directorio);
             }
-            if(catalogo != null){
-                catalogo.obtenerFicheros();
+
+            if (catalogo != null) {
+                catalogo.obtenerFicheros(null);
                 sincronizaciones.add(catalogo);
             }
 
             mav.addObject("sincronizaciones", sincronizaciones);
+            mav.addObject("nivelesAdministracion", niveles);
 
-        }else if(request.isUserInRole(Dir3caibConstantes.ROL_TOTHOM)){
+        } else if (request.isUserInRole(Dir3caibConstantes.ROL_TOTHOM)) {
             mav = new ModelAndView("redirect:/unidad/list");
         }
 

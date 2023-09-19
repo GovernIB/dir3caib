@@ -12,6 +12,11 @@ import javax.ejb.Local;
  */
 @Local
 public interface CatJerarquiaOficinaLocal extends BaseEjb<CatJerarquiaOficina, Long> {
-  
-  void deleteAll() throws Exception;
+
+    /**
+     * Elimina el contenido de la tabla
+     *
+     * @throws Exception
+     */
+    void deleteAll() throws Exception;
 }

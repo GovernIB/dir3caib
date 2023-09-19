@@ -13,9 +13,19 @@ import javax.ejb.Local;
  */
 @Local
 public interface CatAmbitoTerritorialLocal extends BaseEjb<CatAmbitoTerritorial, Long> {
-  
-  void deleteAll() throws Exception;
 
-  
-  CatAmbitoTerritorial findByPKs(String codigoAmbito, Long codigoNivelAdministracion) throws Exception;
+    /**
+     * Elimina el contenido de la tabla
+     *
+     * @throws Exception
+     */
+    void deleteAll() throws Exception;
+
+    /**
+     * @param codigoAmbito
+     * @param codigoNivelAdministracion
+     * @return
+     * @throws Exception
+     */
+    CatAmbitoTerritorial findByPKs(String codigoAmbito, Long codigoNivelAdministracion) throws Exception;
 }

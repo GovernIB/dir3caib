@@ -1,6 +1,5 @@
 package es.caib.dir3caib.persistence.ejb;
 
-import es.caib.dir3caib.persistence.model.CodigoUnidadOrganica;
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.model.NifCifUnidadOrganica;
 import org.apache.log4j.Logger;
@@ -20,10 +19,10 @@ import java.util.List;
 @Stateless(name = "NifCifUOEJB")
 @SecurityDomain("seycon")
 @RolesAllowed({Dir3caibConstantes.DIR_ADMIN, Dir3caibConstantes.ROL_TOTHOM, Dir3caibConstantes.DIR_WS})
-public class NifCifUOBean extends BaseEjbJPA<NifCifUnidadOrganica, Long> implements NifCifUOLocal{
+public class NifCifUOBean extends BaseEjbJPA<NifCifUnidadOrganica, Long> implements NifCifUOLocal {
     protected final Logger log = Logger.getLogger(getClass());
 
-    @PersistenceContext(unitName="dir3caib")
+    @PersistenceContext(unitName = "dir3caib")
     private EntityManager em;
 
     @Override
@@ -42,7 +41,7 @@ public class NifCifUOBean extends BaseEjbJPA<NifCifUnidadOrganica, Long> impleme
     @SuppressWarnings(value = "unchecked")
     public List<NifCifUnidadOrganica> getAll() throws Exception {
 
-        return  em.createQuery("Select nifcifUO from NifCifUnidadOrganica as nifcifUO order by nifcifUO.id").getResultList();
+        return em.createQuery("Select nifcifUO from NifCifUnidadOrganica as nifcifUO order by nifcifUO.id").getResultList();
     }
 
     @Override
@@ -62,5 +61,12 @@ public class NifCifUOBean extends BaseEjbJPA<NifCifUnidadOrganica, Long> impleme
         q.setMaxResults(RESULTADOS_PAGINACION);
 
         return q.getResultList();
+    }
+
+    @Override
+    public void deleteAll() throws Exception {
+
+        em.createQuery("delete from NifCifUnidadOrganica").executeUpdate();
+
     }
 }

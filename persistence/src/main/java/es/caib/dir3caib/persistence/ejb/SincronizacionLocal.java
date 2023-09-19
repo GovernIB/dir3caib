@@ -34,17 +34,25 @@ public interface SincronizacionLocal extends BaseEjb<Sincronizacion, Long> {
     Sincronizacion ultimaSincronizacionCorrecta(String tipo) throws Exception;
 
     /**
-     * Obtiene la última sincronizacion finalizada correctamente (Coorecta || Vacia)
+     * Obtiene la última sincronizacion del Directorio finalizada correctamente (Coorecta || Vacia)
      *
-     * @param tipo de la sincronizacion (Directorio || Catalogo)
      * @return
      * @throws Exception
      */
-    Sincronizacion ultimaSincronizacionCompletada(String tipo) throws Exception;
+    Sincronizacion ultimaSincronizacionDirectorio() throws Exception;
+
+    /**
+     * Obtiene la última sincronizacion del Catálogo finalizada correctamente (Coorecta || Vacia)
+     *
+     * @return
+     * @throws Exception
+     */
+    Sincronizacion ultimaSincronizacionCatalogo() throws Exception;
 
 
     /**
      * Purga las sincronizaciones con más de un mes de antigüedad
+     *
      * @throws Exception
      */
     void purgarSincronizaciones() throws Exception;
@@ -58,6 +66,14 @@ public interface SincronizacionLocal extends BaseEjb<Sincronizacion, Long> {
     void deleteAllByTipo(String tipo) throws Exception;
 
     /**
+     * Elimina todas las sincronizaciones de tipo Actualizacion y directorio, menos la que se le pasa por parámetro
+     *
+     * @param idSincronizacion
+     * @throws Exception
+     */
+    void eliminarSincronizacionesDirectorio(Long idSincronizacion) throws Exception;
+
+    /**
      * Actualiza el estado de una Sincronizacion
      *
      * @param codigo
@@ -67,14 +83,22 @@ public interface SincronizacionLocal extends BaseEjb<Sincronizacion, Long> {
     void actualizarEstado(Long codigo, Long estado) throws Exception;
 
     /**
-     * Descarga los ficheros del WS de DIR3 con los datos de Unidades y Oficinas
+     * Realiza una sincronización del directorio DIR3 (Unidades y Oficinas)
      *
      * @param fechaInicio
      * @param fechaFin
      * @return
      * @throws Exception
      */
-    Sincronizacion descargarDirectorioWS(Date fechaInicio, Date fechaFin) throws Exception;
+    Sincronizacion descargaSincronizacionDirectorio(Date fechaInicio, Date fechaFin) throws Exception;
+
+    /**
+     * Realiza una descarga completa del directorio DIR3 (Unidades y Oficinas)
+     *
+     * @return
+     * @throws Exception
+     */
+    Sincronizacion descargaCompletaDirectorio() throws Exception;
 
     /**
      * Descarga los ficheros del WS de DIR3 con los datos del catálogo
@@ -117,13 +141,13 @@ public interface SincronizacionLocal extends BaseEjb<Sincronizacion, Long> {
      */
     List<Sincronizacion> sincronizarDirectorio() throws Exception;
 
-  /**
-   * Realiza la descarga y sincronización del Catálogo
-   *
-   * @return
-   * @throws Exception
-   */
-  Sincronizacion sincronizarCatalogo() throws Exception;
+    /**
+     * Realiza la descarga y sincronización del Catálogo
+     *
+     * @return
+     * @throws Exception
+     */
+    Sincronizacion sincronizarCatalogo() throws Exception;
 
     /**
      * Realiza la descarga y sincronización de las Oficinas y Unidades

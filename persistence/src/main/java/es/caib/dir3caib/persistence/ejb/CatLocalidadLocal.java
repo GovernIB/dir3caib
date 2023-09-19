@@ -2,9 +2,8 @@ package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.CatLocalidad;
 
-import java.util.List;
-
 import javax.ejb.Local;
+import java.util.List;
 
 /**
  * Created by Fundació BIT.
@@ -15,14 +14,35 @@ import javax.ejb.Local;
  */
 @Local
 public interface CatLocalidadLocal extends BaseEjb<CatLocalidad, Long> {
-  
-  CatLocalidad findByPKs(Long codigoLocalidad, Long codigoProvincia,
-                         String codigoEntidadGeografica) throws Exception;
-  
-  void deleteAll() throws Exception;
 
-  List<CatLocalidad> getAll(String estado) throws Exception;
+    /**
+     * @param codigoLocalidad
+     * @param codigoProvincia
+     * @param codigoEntidadGeografica
+     * @return
+     * @throws Exception
+     */
+    CatLocalidad findByPKs(Long codigoLocalidad, Long codigoProvincia, String codigoEntidadGeografica) throws Exception;
 
-  List<CatLocalidad> getByEstado(String estado) throws Exception;
+    /**
+     * Elimina el contenido de la tabla
+     *
+     * @throws Exception
+     */
+    void deleteAll() throws Exception;
+
+    /**
+     * @param estado
+     * @return
+     * @throws Exception
+     */
+    List<CatLocalidad> getAll(String estado) throws Exception;
+
+    /**
+     * @param estado
+     * @return
+     * @throws Exception
+     */
+    List<CatLocalidad> getByEstado(String estado) throws Exception;
 
 }

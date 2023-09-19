@@ -1,7 +1,6 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
-import es.caib.dir3caib.persistence.model.HistoricoUO;
 import es.caib.dir3caib.persistence.model.ServicioUO;
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.SecurityDomain;
@@ -20,27 +19,27 @@ import java.util.List;
 @Stateless(name = "ServicioUOEJB")
 @SecurityDomain("seycon")
 @RolesAllowed({Dir3caibConstantes.DIR_ADMIN, Dir3caibConstantes.ROL_TOTHOM, Dir3caibConstantes.DIR_WS})
-public class ServicioUOBean extends BaseEjbJPA<ServicioUO, Long> implements ServicioUOLocal{
+public class ServicioUOBean extends BaseEjbJPA<ServicioUO, Long> implements ServicioUOLocal {
 
     protected final Logger log = Logger.getLogger(getClass());
 
-    @PersistenceContext(unitName="dir3caib")
+    @PersistenceContext(unitName = "dir3caib")
     private EntityManager em;
 
     @Override
     public ServicioUO findById(Long id) throws Exception {
-        return em.find(ServicioUO.class,id);
+        return em.find(ServicioUO.class, id);
     }
 
     @Override
     public ServicioUO getReference(Long id) throws Exception {
-        return em.getReference(ServicioUO.class,id);
+        return em.getReference(ServicioUO.class, id);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public List<ServicioUO> getAll() throws Exception {
-        return  em.createQuery("Select servicioUO from ServicioUO as servicioUO ").getResultList();
+        return em.createQuery("Select servicioUO from ServicioUO as servicioUO ").getResultList();
     }
 
     @SuppressWarnings("unchecked")
@@ -59,5 +58,12 @@ public class ServicioUOBean extends BaseEjbJPA<ServicioUO, Long> implements Serv
         q.setMaxResults(RESULTADOS_PAGINACION);
 
         return q.getResultList();
+    }
+
+    @Override
+    public void deleteAll() throws Exception {
+
+        em.createQuery("delete from ServicioUO").executeUpdate();
+
     }
 }

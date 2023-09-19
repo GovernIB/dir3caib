@@ -11,11 +11,7 @@ import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Fundació BIT.
@@ -29,7 +25,7 @@ import java.util.Set;
 public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
 
     protected final Logger log = Logger.getLogger(getClass());
-    
+
     @EJB(mappedName = "dir3caib/OficinaEJB/local")
     private OficinaLocal oficinaEjb;
 
@@ -41,8 +37,8 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
 
     @EJB(mappedName = "dir3caib/SincronizacionEJB/local")
     private SincronizacionLocal sincronizacionEjb;
-    
-    
+
+
     protected SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
 
     /**
@@ -50,15 +46,13 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
      * fecha de actualización. Si la fecha de actualización es inferior a la de
      * importación con Madrid se supone que no ha cambiado y se envia null
      *
-     * @param codigo
-     *          Código de la oficina
-     * @param fechaActualizacion
-     *          fecha en la que se realiza la actualizacion.
+     * @param codigo             Código de la oficina
+     * @param fechaActualizacion fecha en la que se realiza la actualizacion.
      */
     @Override
     public OficinaTF obtenerOficinaTF(String codigo, Date fechaActualizacion, Date fechaSincronizacion, boolean denominacionOficial) throws Exception {
 
-        Oficina oficina = obtenerOficina(codigo,fechaActualizacion,fechaSincronizacion);
+        Oficina oficina = obtenerOficina(codigo, fechaActualizacion, fechaSincronizacion);
 
         return OficinaTF.generar(oficina, denominacionOficial);
 
@@ -69,10 +63,8 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
      * fecha de actualización. Si la fecha de actualización es inferior a la de
      * importación con Madrid se supone que no ha cambiado y se envia null
      *
-     * @param codigo
-     *          Código de la oficina
-     * @param fechaActualizacion
-     *          fecha en la que se realiza la actualizacion.
+     * @param codigo             Código de la oficina
+     * @param fechaActualizacion fecha en la que se realiza la actualizacion.
      */
     @Override
     public OficinaWs obtenerOficinaWs(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
@@ -87,10 +79,8 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
      * fecha de actualización. Si la fecha de actualización es inferior a la de
      * importación con Madrid se supone que no ha cambiado y se envia null
      *
-     * @param codigo
-     *          Código de la oficina
-     * @param fechaActualizacion
-     *          fecha en la que se realiza la actualizacion.
+     * @param codigo             Código de la oficina
+     * @param fechaActualizacion fecha en la que se realiza la actualizacion.
      */
     private Oficina obtenerOficina(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
 
@@ -139,7 +129,6 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
 
 
     /**
-     *
      * Obtiene todas las {@link es.caib.dir3caib.persistence.model.ws.OficinaTF} cuyo organismo responsable es el indicado por código(son todas padres e hijas).Solo se envian aquellas
      * que han sido actualizadas controlando que la unidad del código que nos pasan se haya podido actualizar también.
      * Esto es debido a que cuando en Madrid actualizan una unidad la tendencia es extinguirla y crear una nueva con código diferente.
@@ -150,16 +139,15 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
      */
     @Override
     public List<OficinaTF> obtenerArbolOficinasTF(String codigo, Date fechaActualizacion, Date fechaSincronizacion, boolean denominacionOficial) throws Exception {
-        List<Oficina> oficinas = obtenerArbolOficinas(codigo,fechaActualizacion,fechaSincronizacion);
+        List<Oficina> oficinas = obtenerArbolOficinas(codigo, fechaActualizacion, fechaSincronizacion);
         List<OficinaTF> arbolTF = new ArrayList<OficinaTF>();
         for (Oficina oficina : oficinas) {
-            arbolTF.add(OficinaTF.generar(oficina,denominacionOficial));
+            arbolTF.add(OficinaTF.generar(oficina, denominacionOficial));
         }
         return arbolTF;
     }
 
     /**
-     *
      * Obtiene todas las {@link es.caib.dir3caib.persistence.model.ws.v2.OficinaWs} cuyo organismo responsable es el indicado por código(son todas padres e hijas).Solo se envian aquellas
      * que han sido actualizadas controlando que la unidad del código que nos pasan se haya podido actualizar también.
      * Esto es debido a que cuando en Madrid actualizan una unidad la tendencia es extinguirla y crear una nueva con código diferente.
@@ -170,7 +158,7 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
      */
     @Override
     public List<OficinaWs> obtenerArbolOficinasWs(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
-        List<Oficina> oficinas = obtenerArbolOficinas(codigo,fechaActualizacion,fechaSincronizacion);
+        List<Oficina> oficinas = obtenerArbolOficinas(codigo, fechaActualizacion, fechaSincronizacion);
         List<OficinaWs> arbolWs = new ArrayList<OficinaWs>();
         for (Oficina oficina : oficinas) {
             arbolWs.add(OficinaWs.generar(oficina));
@@ -179,7 +167,6 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
     }
 
     /**
-     *
      * Obtiene todas las {@link es.caib.dir3caib.persistence.model.ws.OficinaTF} cuyo organismo responsable es el indicado por código(son todas padres e hijas).Solo se envian aquellas
      * que han sido actualizadas controlando que la unidad del código que nos pasan se haya podido actualizar también.
      * Esto es debido a que cuando en Madrid actualizan una unidad la tendencia es extinguirla y crear una nueva con código diferente.
@@ -226,13 +213,13 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
         }
 
         //Obtenemos las unidades hijas vigentes del código que nos han indicado
-        if(unidad!=null) {
+        if (unidad != null) {
             unidades.addAll(unidadEjb.obtenerArbol(unidad.getCodigo()));
         }
 
         //Obtenemos las unidades que se han actualizado(extinguido, eetc) entre las fechas indicadas para obtener sus oficinas que
         //se han actualizado
-        unidades.addAll(obtenerUnidadesEjb.obtenerArbolUnidades( codigo, fechaActualizacion, fechaSincronizacion));
+        unidades.addAll(obtenerUnidadesEjb.obtenerArbolUnidades(codigo, fechaActualizacion, fechaSincronizacion));
 
 
         List<Oficina> oficinasCompleto = new ArrayList<Oficina>();
@@ -341,14 +328,9 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
     @Override
     public Date obtenerFechaUltimaActualizacion() throws Exception {
 
-        Sincronizacion sincronizacion = sincronizacionEjb.ultimaSincronizacionCompletada(Dir3caibConstantes.UNIDADES_OFICINAS);
+        Sincronizacion sincronizacion = sincronizacionEjb.ultimaSincronizacionDirectorio();
 
         return sincronizacion.getFechaImportacion();
     }
-
-
-
-
-
 
 }

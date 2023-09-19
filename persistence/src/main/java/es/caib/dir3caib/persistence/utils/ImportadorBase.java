@@ -8,10 +8,7 @@ import es.caib.dir3caib.utils.Utils;
 import org.apache.log4j.Logger;
 
 import javax.ejb.EJB;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -25,10 +22,10 @@ public class ImportadorBase {
     protected final Logger log = Logger.getLogger(getClass());
 
     @EJB(mappedName = "dir3caib/UnidadEJB/local")
-    private UnidadLocal unidadEjb;
+    public UnidadLocal unidadEjb;
 
     @EJB(mappedName = "dir3caib/OficinaEJB/local")
-    private OficinaLocal oficinaEjb;
+    public OficinaLocal oficinaEjb;
 
     @EJB(mappedName = "dir3caib/CatAmbitoTerritorialEJB/local")
     private CatAmbitoTerritorialLocal catAmbitoTerritorialEjb;
@@ -37,13 +34,13 @@ public class ImportadorBase {
     private CatEntidadGeograficaLocal catEntidadGeograficaEjb;
 
     @EJB(mappedName = "dir3caib/CatEstadoEntidadEJB/local")
-    private CatEstadoEntidadLocal catEstadoEntidadEjb;
+    public CatEstadoEntidadLocal catEstadoEntidadEjb;
 
     @EJB(mappedName = "dir3caib/CatIslaEJB/local")
     private CatIslaLocal catIslaEjb;
 
     @EJB(mappedName = "dir3caib/CatNivelAdministracionEJB/local")
-    private CatNivelAdministracionLocal catNivelAdministracionEjb;
+    public CatNivelAdministracionLocal catNivelAdministracionEjb;
 
     @EJB(mappedName = "dir3caib/CatPaisEJB/local")
     private CatPaisLocal catPaisEjb;
@@ -68,9 +65,6 @@ public class ImportadorBase {
 
     @EJB(mappedName = "dir3caib/CatLocalidadEJB/local")
     private CatLocalidadLocal catLocalidadEjb;
-
-   /* @EJB(mappedName = "dir3caib/ServicioEJB/local")
-    private CatServicioLocal servicioEjb;*/
 
     @EJB(mappedName = "dir3caib/CatServicioUOEJB/local")
     private CatServicioUOLocal catServicioUOEjb;
@@ -105,17 +99,18 @@ public class ImportadorBase {
     public Map<String, CatTipoContacto> cacheTipoContacto = new TreeMap<String, CatTipoContacto>();
     public Map<Long, CatPoder> cachePoder = new TreeMap<Long, CatPoder>();
     public Map<Long, CatServicio> cacheServicioOfi = new TreeMap<Long, CatServicio>();
-    public Map<Long, CatServicioUO> cacheServicioUo = new TreeMap<Long,CatServicioUO>();
+    public Map<Long, CatServicioUO> cacheServicioUo = new TreeMap<Long, CatServicioUO>();
     public Map<Long, CatJerarquiaOficina> cacheJerarquiaOficina = new TreeMap<Long, CatJerarquiaOficina>();
     public Map<Long, CatTipoCodigoFuenteExterna> cacheTipoCodigoFuenteExterna = new TreeMap<Long, CatTipoCodigoFuenteExterna>();
     public Set<String> unidadesExistInBBDD = new TreeSet<String>();
-  //  public Set<UnidadPK> unidadesExistInBBDDNueva = new TreeSet<UnidadPK>();
+    //  public Set<UnidadPK> unidadesExistInBBDDNueva = new TreeSet<UnidadPK>();
     public Set<String> oficinasExistInBBDD = new TreeSet<String>();
     public UnidadesCacheManager cacheUnidad;
 
 
     /**
      * Inicializamos los caches necesarios para importar las Unidades
+     *
      * @throws Exception
      */
     public void cacheImportadorUnidades() throws Exception {
@@ -221,7 +216,6 @@ public class ImportadorBase {
         log.debug(" CatServicioUO : " + cacheServicioUo.size());
 
 
-
         long end = System.currentTimeMillis();
         log.debug("Inicialitzades Caches de Importar Unidades en " + Utils.formatElapsedTime(end - start));
 
@@ -229,7 +223,7 @@ public class ImportadorBase {
 
         // Obtenemos todos los códigos de las Unidades que existen en bbdd
         unidadesExistInBBDD.addAll(unidadEjb.getAllCodigos());
-      //  unidadesExistInBBDDNueva.addAll(unidadEjb.getAllUnidadPK());
+        //  unidadesExistInBBDDNueva.addAll(unidadEjb.getAllUnidadPK());
 
         end = System.currentTimeMillis();
         log.debug("Inicialitzada Cache Unidades existents en " + Utils.formatElapsedTime(end - start));
@@ -238,6 +232,7 @@ public class ImportadorBase {
 
     /**
      * Inicializamos los caches necesarios para importar las Oficinas
+     *
      * @param isUpdate indica que es una actualización de datos( ya existen los datos en la BD)
      * @throws Exception
      */
@@ -249,7 +244,7 @@ public class ImportadorBase {
             cacheUnidad = new UnidadesCacheManager(this.unidadEjb);
         } else { // Si es creación/sincronización solo inicializamos las requeridas(unidades Responsables de las oficinas que se van a sincronizar)
             List<List<String>> unitsIds = new ArrayList<List<String>>();
-           // List<List<UnidadPK>> unitsIds = new ArrayList<List<UnidadPK>>();
+            // List<List<UnidadPK>> unitsIds = new ArrayList<List<UnidadPK>>();
             int total = getRequiredUnidades(unitsIds, sincronizacion);
             cacheUnidad = new UnidadesCacheManager(this.unidadEjb, unitsIds, total);
         }
@@ -341,6 +336,7 @@ public class ImportadorBase {
     /**
      * Esta función obtiene los códigos de todas las unidades responsables de las oficinas que
      * han venido en el fichero "OFICINAS.CSV" que son las que se deben importar. Estas unidades responsables es lo que llamamos unidadesRequeridas.
+     *
      * @param all donde guardamos los códigos de las unidades requeridas finales
      * @return
      * @throws Exception
@@ -351,10 +347,10 @@ public class ImportadorBase {
 
         // Conjunto donde guardamos todos los códigos de las unidades Responsables para procesarlas
         Set<String> allCodes = new HashSet<String>();
-      //  Set<UnidadPK> allCodes = new HashSet<UnidadPK>();
+        //  Set<UnidadPK> allCodes = new HashSet<UnidadPK>();
 
         List<String> codigosUnidad = new ArrayList<String>(); //String que representa codigo-version
-       // List<UnidadPK> codigosUnidad = new ArrayList<UnidadPK>();
+        // List<UnidadPK> codigosUnidad = new ArrayList<UnidadPK>();
         all.add(codigosUnidad);
 
         int count = 0;
@@ -362,34 +358,37 @@ public class ImportadorBase {
 
         try {
 
-            is1 = new FileInputStream(new File(Configuracio.getDirectorioPath(sincronizacion.getCodigo()), Dir3caibConstantes.OFI_OFICINAS));
+            // Obtenemos los niveles de administración vigentes
+            List<CatNivelAdministracion> niveles = catNivelAdministracionEjb.getByEstado(Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
-            BufferedReader is = new BufferedReader(new InputStreamReader(is1, "UTF-8"));
-            reader = new CSVReader(is, ';');
+            for (CatNivelAdministracion nivel : niveles) {
 
+                String directorio = Configuracio.getDirectorioPath(sincronizacion.getCodigo()) + "nivel_" + nivel.getCodigoNivelAdministracion() + "/";
+                reader = getReader(directorio, Dir3caibConstantes.OFI_OFICINAS);
 
-            //Recorremos cada una de las filas del fichero para ir obteniendo la unidadResponsable de cada oficina
-            String[] fila;
-            reader.readNext();
-            while ((fila = reader.readNext()) != null) {
+                //Recorremos cada una de las filas del fichero para ir obteniendo la unidadResponsable de cada oficina
+                String[] fila;
+                reader.readNext();
+                while ((fila = reader.readNext()) != null) {
 
-                String codUOResponsable = fila[7].trim();
-                Long versionUOResponsable = Long.valueOf(fila[8].trim());
+                    String codUOResponsable = fila[7].trim();
+                    Long versionUOResponsable = Long.valueOf(fila[8].trim());
 
-                String uoResponsableCodigoVersion = codUOResponsable+"v"+versionUOResponsable;
-                // Si no la contiene la añadimos a la lista
-                if (!allCodes.contains(uoResponsableCodigoVersion)) {
-                    allCount++;
-                    count++;
-                    //Traspasamos a la lista final de 500 en 500
-                    if (count > 500) {
-                        codigosUnidad = new ArrayList<String>();
-                        all.add(codigosUnidad);
-                        count = 0;
+                    String uoResponsableCodigoVersion = codUOResponsable + "v" + versionUOResponsable;
+                    // Si no la contiene la añadimos a la lista
+                    if (!allCodes.contains(uoResponsableCodigoVersion)) {
+                        allCount++;
+                        count++;
+                        //Traspasamos a la lista final de 500 en 500
+                        if (count > 500) {
+                            codigosUnidad = new ArrayList<String>();
+                            all.add(codigosUnidad);
+                            count = 0;
+                        }
+
+                        codigosUnidad.add(uoResponsableCodigoVersion);
+                        allCodes.add(uoResponsableCodigoVersion);
                     }
-
-                    codigosUnidad.add(uoResponsableCodigoVersion);
-                    allCodes.add(uoResponsableCodigoVersion);
                 }
             }
 
@@ -408,6 +407,32 @@ public class ImportadorBase {
                 }
             }
         }
+    }
+
+    /**
+     * @param directorio
+     * @param fichero
+     * @return
+     * @throws FileNotFoundException
+     * @throws UnsupportedEncodingException
+     */
+    public CSVReader getReader(String directorio, String fichero) throws Exception {
+
+        File file = new File(directorio, fichero);
+        FileInputStream fileInputStream = null;
+        BufferedReader bufferedReader = null;
+
+        try {
+            fileInputStream = new FileInputStream(file);
+            bufferedReader = new BufferedReader(new InputStreamReader(fileInputStream, "UTF-8"));
+
+            return new CSVReader(bufferedReader, ';');
+
+        } catch (FileNotFoundException | UnsupportedEncodingException e) {
+            log.info("Error obteniendo el fichero (" + fichero + ") " + e.getMessage());
+            return null;
+        }
+
     }
 
 }

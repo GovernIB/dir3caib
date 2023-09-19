@@ -9,13 +9,22 @@ import es.caib.dir3caib.persistence.model.ContactoOfi;
 import javax.ejb.Local;
 
 /**
- *
  * @author mgonzalez
  */
 @Local
-public interface ContactoOfiLocal extends BaseEjb<ContactoOfi, Long>{
-  
-   void deleteAll() throws Exception;
+public interface ContactoOfiLocal extends BaseEjb<ContactoOfi, Long> {
 
+    /**
+     * Elimina el contenido de la tabla
+     *
+     * @throws Exception
+     */
+    void deleteAll() throws Exception;
+
+    /**
+     *
+     * @param idOficina
+     * @throws Exception
+     */
     void deleteByOficina(String idOficina) throws Exception;
 }

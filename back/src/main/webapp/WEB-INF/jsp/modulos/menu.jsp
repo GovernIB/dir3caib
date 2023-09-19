@@ -53,7 +53,6 @@
                                     <li class="divider"></li>
                                     <li><a href="<c:url value="/sincronizacion/restaurarOficinasUnidades"/>"><fmt:message key="sincronizacion.restaurar.OficinasUnidades"/></a></li>
                                 </c:if>
-
                             </ul>
                         </li>
                     </sec:authorize>
@@ -70,12 +69,10 @@
                     <%--Menú Oficinas--%>
                     <li class="dropdown">
                         <a id="drop1" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"><fmt:message key="menu.oficina"/><b class="caret"></b></a>
-
                         <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
                             <li><a href="<c:url value="/oficina/list"/>"><fmt:message key="menu.buscar.oficina"/></a></li>
                         </ul>
                     </li>
-
                 </ul>
             </div>
         </div>

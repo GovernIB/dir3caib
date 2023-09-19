@@ -14,22 +14,48 @@ import java.util.List;
  */
 @Local
 public interface RelacionSirOfiLocal extends BaseEjb<RelacionSirOfi, Long> {
-  
-  void deleteAll() throws Exception;
-  
-  RelacionSirOfi findByPKs(String codigoUnidad, String codigoOficina) throws Exception;
-  
-  List<String> getUnidadesOficinas() throws Exception;
 
-  /**
-   Obtiene las relaciones SIR de la unidad indicada y en función del estado indicado
-   * @param codigo codigo de la unidad
-   * @param estado estado de la relación
-   * @return
-   * @throws Exception
-   */
-  List<RelacionSirOfi> relacionesSirOfiByUnidaddEstado(String codigo, String estado) throws Exception;
-  
-  List<RelacionSirOfi> relacionesSirOfiByUnidaddEstado(String codigo, String estado, boolean denominacionCooficial) throws Exception;
+    /**
+     * Elimina el contenido de la tabla
+     *
+     * @throws Exception
+     */
+    void deleteAll() throws Exception;
+
+    /**
+     *
+     * @param codigoUnidad
+     * @param codigoOficina
+     * @return
+     * @throws Exception
+     */
+    RelacionSirOfi findByPKs(String codigoUnidad, String codigoOficina) throws Exception;
+
+    /**
+     *
+     * @return
+     * @throws Exception
+     */
+    List<String> getUnidadesOficinas() throws Exception;
+
+    /**
+     * Obtiene las relaciones SIR de la unidad indicada y en función del estado indicado
+     *
+     * @param codigo codigo de la unidad
+     * @param estado estado de la relación
+     * @return
+     * @throws Exception
+     */
+    List<RelacionSirOfi> relacionesSirOfiByUnidaddEstado(String codigo, String estado) throws Exception;
+
+    /**
+     *
+     * @param codigo
+     * @param estado
+     * @param denominacionCooficial
+     * @return
+     * @throws Exception
+     */
+    List<RelacionSirOfi> relacionesSirOfiByUnidaddEstado(String codigo, String estado, boolean denominacionCooficial) throws Exception;
 
 }
