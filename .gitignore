@@ -5,3 +5,4 @@ target
 .settings/
 /ws/dir3caib-api/dependency-reduced-pom.xml
 *.bak
+*.iml
