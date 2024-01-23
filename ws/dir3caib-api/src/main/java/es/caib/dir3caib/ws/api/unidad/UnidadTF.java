@@ -1,16 +1,11 @@
 
 package es.caib.dir3caib.ws.api.unidad;
 
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.bind.annotation.XmlSeeAlso;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
@@ -24,6 +19,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="codAmbComunidad" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
+ *         &lt;element name="codAmbIsla" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
  *         &lt;element name="codAmbProvincia" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
  *         &lt;element name="codEdpPrincipal" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="codPostal" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -59,6 +55,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "unidadTF", propOrder = {
     "codAmbComunidad",
+    "codAmbIsla",
     "codAmbProvincia",
     "codEdpPrincipal",
     "codPostal",
@@ -90,6 +87,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 public class UnidadTF {
 
     protected Long codAmbComunidad;
+    protected Long codAmbIsla;
     protected Long codAmbProvincia;
     protected String codEdpPrincipal;
     protected String codPostal;
@@ -151,6 +149,30 @@ public class UnidadTF {
      */
     public void setCodAmbComunidad(Long value) {
         this.codAmbComunidad = value;
+    }
+
+    /**
+     * Obtiene el valor de la propiedad codAmbIsla.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Long }
+     *     
+     */
+    public Long getCodAmbIsla() {
+        return codAmbIsla;
+    }
+
+    /**
+     * Define el valor de la propiedad codAmbIsla.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Long }
+     *     
+     */
+    public void setCodAmbIsla(Long value) {
+        this.codAmbIsla = value;
     }
 
     /**

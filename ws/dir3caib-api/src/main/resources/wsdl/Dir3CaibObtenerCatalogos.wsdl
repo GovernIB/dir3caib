@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="Dir3CaibObtenerCatalogosWsService" targetNamespace="http://catalogo.ws.dir3caib.caib.es/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://catalogo.ws.dir3caib.caib.es/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+<wsdl:definitions name="Dir3CaibObtenerCatalogosWsService" targetNamespace="http://catalogo.ws.dir3caib.caib.es/"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://catalogo.ws.dir3caib.caib.es/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
   <wsdl:types>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://catalogo.ws.dir3caib.caib.es/" elementFormDefault="unqualified" targetNamespace="http://catalogo.ws.dir3caib.caib.es/" version="1.0">
 <xs:element name="getVersion" type="tns:getVersion"/>
@@ -24,6 +26,8 @@
 <xs:element name="obtenerCatEstadoEntidadResponse" type="tns:obtenerCatEstadoEntidadResponse"/>
 <xs:element name="obtenerCatEstadoEntidadV2" type="tns:obtenerCatEstadoEntidadV2"/>
 <xs:element name="obtenerCatEstadoEntidadV2Response" type="tns:obtenerCatEstadoEntidadV2Response"/>
+<xs:element name="obtenerCatIsla" type="tns:obtenerCatIsla"/>
+<xs:element name="obtenerCatIslaResponse" type="tns:obtenerCatIslaResponse"/>
 <xs:element name="obtenerCatLocalidad" type="tns:obtenerCatLocalidad"/>
 <xs:element name="obtenerCatLocalidadByEstado" type="tns:obtenerCatLocalidadByEstado"/>
 <xs:element name="obtenerCatLocalidadByEstadoResponse" type="tns:obtenerCatLocalidadByEstadoResponse"/>
@@ -226,6 +230,22 @@
 <xs:complexType name="obtenerCatComunidadAutonomaResponse">
     <xs:sequence>
       <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:catComunidadAutonomaTF"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="obtenerCatIsla">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="obtenerCatIslaResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:catIslaWs"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="catIslaWs">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codigoIsla" type="xs:long"/>
+      <xs:element minOccurs="0" name="codigoProvincia" type="xs:long"/>
+      <xs:element minOccurs="0" name="descripcionIsla" type="xs:string"/>
+      <xs:element minOccurs="0" name="estado" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
 <xs:complexType name="obtenerCatEntidadGeograficaByEstado">
@@ -452,6 +472,10 @@
     <wsdl:part name="parameters" element="tns:obtenerCatEntidadGeograficaResponse">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="obtenerCatIsla">
+    <wsdl:part name="parameters" element="tns:obtenerCatIsla">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="obtenerCatLocalidadV2">
     <wsdl:part name="parameters" element="tns:obtenerCatLocalidadV2">
     </wsdl:part>
@@ -464,12 +488,12 @@
     <wsdl:part name="parameters" element="tns:obtenerCatProvinciaV2Response">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="obtenerCatComunidadAutonomaByEstado">
-    <wsdl:part name="parameters" element="tns:obtenerCatComunidadAutonomaByEstado">
-    </wsdl:part>
-  </wsdl:message>
   <wsdl:message name="obtenerCatEntidadGeograficaV2">
     <wsdl:part name="parameters" element="tns:obtenerCatEntidadGeograficaV2">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="obtenerCatComunidadAutonomaByEstado">
+    <wsdl:part name="parameters" element="tns:obtenerCatComunidadAutonomaByEstado">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="obtenerCatComunidadAutonomaResponse">
@@ -592,6 +616,10 @@
     <wsdl:part name="parameters" element="tns:obtenerCatPaisByEstadoResponse">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="obtenerCatIslaResponse">
+    <wsdl:part name="parameters" element="tns:obtenerCatIslaResponse">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="obtenerCatPaisV2Response">
     <wsdl:part name="parameters" element="tns:obtenerCatPaisV2Response">
     </wsdl:part>
@@ -709,6 +737,12 @@
       <wsdl:input name="obtenerCatComunidadAutonoma" message="tns:obtenerCatComunidadAutonoma">
     </wsdl:input>
       <wsdl:output name="obtenerCatComunidadAutonomaResponse" message="tns:obtenerCatComunidadAutonomaResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatIsla">
+      <wsdl:input name="obtenerCatIsla" message="tns:obtenerCatIsla">
+    </wsdl:input>
+      <wsdl:output name="obtenerCatIslaResponse" message="tns:obtenerCatIslaResponse">
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="obtenerCatEntidadGeograficaByEstado">
@@ -915,6 +949,15 @@
         <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output name="obtenerCatEntidadGeograficaByEstadoResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerCatIsla">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="obtenerCatIsla">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="obtenerCatIslaResponse">
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>

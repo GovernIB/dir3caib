@@ -30,6 +30,7 @@ public class ObjectFactory {
     private final static QName _ObtenerCatEstadoEntidad_QNAME = new QName("http://catalogo.ws.dir3caib.caib.es/", "obtenerCatEstadoEntidad");
     private final static QName _ObtenerCatLocalidadV2_QNAME = new QName("http://catalogo.ws.dir3caib.caib.es/", "obtenerCatLocalidadV2");
     private final static QName _ObtenerCatEntidadGeograficaResponse_QNAME = new QName("http://catalogo.ws.dir3caib.caib.es/", "obtenerCatEntidadGeograficaResponse");
+    private final static QName _ObtenerCatIsla_QNAME = new QName("http://catalogo.ws.dir3caib.caib.es/", "obtenerCatIsla");
     private final static QName _ObtenerCatProvinciaV2Response_QNAME = new QName("http://catalogo.ws.dir3caib.caib.es/", "obtenerCatProvinciaV2Response");
     private final static QName _ObtenerCatComunidadAutonomaV2_QNAME = new QName("http://catalogo.ws.dir3caib.caib.es/", "obtenerCatComunidadAutonomaV2");
     private final static QName _ObtenerCatEntidadGeograficaV2_QNAME = new QName("http://catalogo.ws.dir3caib.caib.es/", "obtenerCatEntidadGeograficaV2");
@@ -64,6 +65,7 @@ public class ObjectFactory {
     private final static QName _ObtenerCatNivelAdministracion_QNAME = new QName("http://catalogo.ws.dir3caib.caib.es/", "obtenerCatNivelAdministracion");
     private final static QName _ObtenerCatPaisByEstadoResponse_QNAME = new QName("http://catalogo.ws.dir3caib.caib.es/", "obtenerCatPaisByEstadoResponse");
     private final static QName _ObtenerCatPaisV2_QNAME = new QName("http://catalogo.ws.dir3caib.caib.es/", "obtenerCatPaisV2");
+    private final static QName _ObtenerCatIslaResponse_QNAME = new QName("http://catalogo.ws.dir3caib.caib.es/", "obtenerCatIslaResponse");
     private final static QName _ObtenerCatPaisV2Response_QNAME = new QName("http://catalogo.ws.dir3caib.caib.es/", "obtenerCatPaisV2Response");
     private final static QName _ObtenerCatEntidadGeograficaByEstado_QNAME = new QName("http://catalogo.ws.dir3caib.caib.es/", "obtenerCatEntidadGeograficaByEstado");
     private final static QName _ObtenerCatNivelAdministracionV2_QNAME = new QName("http://catalogo.ws.dir3caib.caib.es/", "obtenerCatNivelAdministracionV2");
@@ -174,6 +176,14 @@ public class ObjectFactory {
      */
     public ObtenerCatComunidadAutonomaByEstado createObtenerCatComunidadAutonomaByEstado() {
         return new ObtenerCatComunidadAutonomaByEstado();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerCatIsla }
+     * 
+     */
+    public ObtenerCatIsla createObtenerCatIsla() {
+        return new ObtenerCatIsla();
     }
 
     /**
@@ -401,6 +411,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ObtenerCatIslaResponse }
+     * 
+     */
+    public ObtenerCatIslaResponse createObtenerCatIslaResponse() {
+        return new ObtenerCatIslaResponse();
+    }
+
+    /**
      * Create an instance of {@link GetVersion }
      * 
      */
@@ -449,19 +467,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ObtenerCatComunidadAutonomaV2Response }
-     * 
-     */
-    public ObtenerCatComunidadAutonomaV2Response createObtenerCatComunidadAutonomaV2Response() {
-        return new ObtenerCatComunidadAutonomaV2Response();
-    }
-
-    /**
      * Create an instance of {@link ObtenerCatServicioResponse }
      * 
      */
     public ObtenerCatServicioResponse createObtenerCatServicioResponse() {
         return new ObtenerCatServicioResponse();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerCatComunidadAutonomaV2Response }
+     * 
+     */
+    public ObtenerCatComunidadAutonomaV2Response createObtenerCatComunidadAutonomaV2Response() {
+        return new ObtenerCatComunidadAutonomaV2Response();
     }
 
     /**
@@ -625,6 +643,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link CatIslaWs }
+     * 
+     */
+    public CatIslaWs createCatIslaWs() {
+        return new CatIslaWs();
+    }
+
+    /**
      * Create an instance of {@link CatLocalidadTF }
      * 
      */
@@ -724,6 +750,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://catalogo.ws.dir3caib.caib.es/", name = "obtenerCatEntidadGeograficaResponse")
     public JAXBElement<ObtenerCatEntidadGeograficaResponse> createObtenerCatEntidadGeograficaResponse(ObtenerCatEntidadGeograficaResponse value) {
         return new JAXBElement<ObtenerCatEntidadGeograficaResponse>(_ObtenerCatEntidadGeograficaResponse_QNAME, ObtenerCatEntidadGeograficaResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ObtenerCatIsla }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://catalogo.ws.dir3caib.caib.es/", name = "obtenerCatIsla")
+    public JAXBElement<ObtenerCatIsla> createObtenerCatIsla(ObtenerCatIsla value) {
+        return new JAXBElement<ObtenerCatIsla>(_ObtenerCatIsla_QNAME, ObtenerCatIsla.class, null, value);
     }
 
     /**
@@ -1030,6 +1065,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://catalogo.ws.dir3caib.caib.es/", name = "obtenerCatPaisV2")
     public JAXBElement<ObtenerCatPaisV2> createObtenerCatPaisV2(ObtenerCatPaisV2 value) {
         return new JAXBElement<ObtenerCatPaisV2>(_ObtenerCatPaisV2_QNAME, ObtenerCatPaisV2 .class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ObtenerCatIslaResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://catalogo.ws.dir3caib.caib.es/", name = "obtenerCatIslaResponse")
+    public JAXBElement<ObtenerCatIslaResponse> createObtenerCatIslaResponse(ObtenerCatIslaResponse value) {
+        return new JAXBElement<ObtenerCatIslaResponse>(_ObtenerCatIslaResponse_QNAME, ObtenerCatIslaResponse.class, null, value);
     }
 
     /**

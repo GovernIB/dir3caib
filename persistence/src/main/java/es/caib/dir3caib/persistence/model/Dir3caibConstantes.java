@@ -20,6 +20,9 @@ public interface Dir3caibConstantes {
 
     String SEPARADOR_CODIGO_VERSION = "v";
 
+    String UNIDAD = "unidad";
+    String OFICINA = "oficina";
+
     // Importación Catalogo
     String CATALOGOS_ARCHIVO_ZIP = "catalogos";
     String CAT_AMBITO_TERRITORIAL = "CAT_AMBITO_TERRITORIAL.CSV";

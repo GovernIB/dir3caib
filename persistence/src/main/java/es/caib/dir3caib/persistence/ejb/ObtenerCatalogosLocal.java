@@ -99,6 +99,13 @@ public interface ObtenerCatalogosLocal {
     List<CatProvinciaWs> obtenerCatProvinciaWs() throws Exception;
 
     /**
+     * Obtiene las Islas
+     * @return
+     * @throws Exception
+     */
+    List<CatIslaWs> obtenerCatIslaWs() throws Exception;
+
+    /**
      * @param estado
      * @return
      * @throws Exception

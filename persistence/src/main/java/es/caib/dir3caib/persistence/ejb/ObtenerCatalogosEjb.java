@@ -2,13 +2,12 @@ package es.caib.dir3caib.persistence.ejb;
 
 
 import es.caib.dir3caib.persistence.model.*;
-import es.caib.dir3caib.persistence.model.ws.*;
 import es.caib.dir3caib.persistence.model.ws.CatEstadoEntidad;
 import es.caib.dir3caib.persistence.model.ws.CatNivelAdministracion;
 import es.caib.dir3caib.persistence.model.ws.CatPais;
 import es.caib.dir3caib.persistence.model.ws.CatTipoVia;
+import es.caib.dir3caib.persistence.model.ws.*;
 import es.caib.dir3caib.persistence.model.ws.v2.*;
-import es.caib.dir3caib.utils.Utils;
 import org.apache.log4j.Logger;
 
 import javax.annotation.security.RunAs;
@@ -43,6 +42,9 @@ public class ObtenerCatalogosEjb implements ObtenerCatalogosLocal {
 
     @EJB(mappedName = "dir3caib/CatProvinciaEJB/local")
     private CatProvinciaLocal catProvinciaEjb;
+
+    @EJB(mappedName = "dir3caib/CatIslaEJB/local")
+    private CatIslaLocal catIslaEjb;
 
     @EJB(mappedName = "dir3caib/CatLocalidadEJB/local")
     private CatLocalidadLocal catLocalidadEjb;
@@ -301,6 +303,22 @@ public class ObtenerCatalogosEjb implements ObtenerCatalogosLocal {
 
         return provinciasWs;
 
+    }
+
+    /**
+     * Obtiene todas las Islas
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public List<CatIslaWs> obtenerCatIslaWs() throws Exception{
+        List<CatIsla> islas = catIslaEjb.getAll();
+        List<CatIslaWs> catIslasWs = new ArrayList<>();
+        for(CatIsla catIsla: islas){
+            catIslasWs.add(CatIslaWs.generar(catIsla));
+        }
+
+        return catIslasWs;
     }
 
     /**
