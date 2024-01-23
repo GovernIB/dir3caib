@@ -3,8 +3,6 @@ package es.caib.dir3caib.ws.api.test;
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.utils.Utils;
 import es.caib.dir3caib.ws.api.catalogo.*;
-import es.caib.dir3caib.ws.api.unidad.Dir3CaibObtenerUnidadesWs;
-import es.caib.dir3caib.ws.api.unidad.UnidadWs;
 import org.junit.Test;
 
 import java.util.List;
@@ -137,6 +135,27 @@ public class TestCatalogoV2Ws extends Dir3CaibTestUtils{
             System.out.println("Objetos encontrados " + list.size());
             System.out.println("Objetos encontrados " + listV2.size());
             System.out.println("Objetos encontrados " + listByEstado.size());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void obtenerCatIsla() {
+        try{
+            Dir3CaibObtenerCatalogosWs apiCatalogos = getObtenerCatalogosApi(true);
+
+            Long start = System.currentTimeMillis();
+            List<CatIslaWs> islas = apiCatalogos.obtenerCatIsla();
+            Long end = System.currentTimeMillis();
+
+            System.out.println("TIEMPO CARGA: " + Utils.formatElapsedTime(end - start));
+            System.out.println("Islas encontrados " + islas.size());
+
+            for(CatIslaWs isla:islas){
+                System.out.println("Isla: " + isla.getDescripcionIsla());
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
