@@ -47,7 +47,6 @@
 <xs:complexType name="unidadTF">
     <xs:sequence>
       <xs:element minOccurs="0" name="codAmbComunidad" type="xs:long"/>
-      <xs:element minOccurs="0" name="codAmbIsla" type="xs:long"/>
       <xs:element minOccurs="0" name="codAmbProvincia" type="xs:long"/>
       <xs:element minOccurs="0" name="codEdpPrincipal" type="xs:string"/>
       <xs:element minOccurs="0" name="codPostal" type="xs:string"/>
@@ -94,6 +93,7 @@
     <xs:complexContent>
       <xs:extension base="tns:unidadTF">
         <xs:sequence>
+          <xs:element minOccurs="0" name="codAmbIsla" type="xs:long"/>
           <xs:element name="comparteNif" type="xs:boolean"/>
           <xs:element minOccurs="0" name="denomLenguaCooficial" type="xs:string"/>
           <xs:element minOccurs="0" name="fechaUltimaActualizacion" type="xs:dateTime"/>

@@ -35,7 +35,6 @@ public class UnidadTF implements Serializable {
     private Long codAmbProvincia;
     private Long codAmbComunidad;
     private String descripcionLocalidad;
-    private Long codAmbIsla;
     private String nombreVia;
     private String numVia;
     private Long codigoTipoVia;
@@ -66,7 +65,6 @@ public class UnidadTF implements Serializable {
         codigoAmbPais = unidadTF.codigoAmbPais;
         codAmbProvincia = unidadTF.codAmbProvincia;
         codAmbComunidad = unidadTF.codAmbComunidad;
-        codAmbIsla = unidadTF.codAmbIsla;
         descripcionLocalidad = unidadTF.descripcionLocalidad;
         nombreVia = unidadTF.nombreVia;
         numVia = unidadTF.numVia;
@@ -221,14 +219,6 @@ public class UnidadTF implements Serializable {
         this.codAmbComunidad = codAmbComunidad;
     }
 
-    public Long getCodAmbIsla() {
-        return codAmbIsla;
-    }
-
-    public void setCodAmbIsla(Long codAmbIsla) {
-        this.codAmbIsla = codAmbIsla;
-    }
-
     public String getDescripcionLocalidad() {
         return descripcionLocalidad;
     }
@@ -341,9 +331,6 @@ public class UnidadTF implements Serializable {
             this.setDescripcionLocalidad(unidad.getCodLocalidad().getDescripcionLocalidad());
         } else {
             this.setDescripcionLocalidad(null);
-        }
-        if(unidad.getCodAmbIsla() != null){
-            this.setCodAmbIsla(unidad.getCodAmbIsla().getCodigoIsla());
         }
         this.setNombreVia(unidad.getNombreVia());
         this.setNumVia(unidad.getNumVia());

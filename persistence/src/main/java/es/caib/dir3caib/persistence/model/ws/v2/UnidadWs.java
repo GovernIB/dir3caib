@@ -18,6 +18,7 @@ public class UnidadWs extends es.caib.dir3caib.persistence.model.ws.UnidadTF {
     private Date fechaUltimaActualizacion;
     private boolean comparteNif;
     private String nifCif;
+    private Long codAmbIsla;
 
     public UnidadWs(){
     }
@@ -85,6 +86,14 @@ public class UnidadWs extends es.caib.dir3caib.persistence.model.ws.UnidadTF {
         this.nifCif = nifCif;
     }
 
+    public Long getCodAmbIsla() {
+        return codAmbIsla;
+    }
+
+    public void setCodAmbIsla(Long codAmbIsla) {
+        this.codAmbIsla = codAmbIsla;
+    }
+
     public void rellenar(Unidad unidad) {
         super.rellenar(unidad,false);
         this.setDenomLenguaCooficial(unidad.getDenomLenguaCooficial());
@@ -94,6 +103,9 @@ public class UnidadWs extends es.caib.dir3caib.persistence.model.ws.UnidadTF {
         this.setComparteNif(unidad.isComparteNif());
         this.setFechaUltimaActualizacion(unidad.getFechaUltimaActualizacion());
         this.setNifCif(unidad.getNifcif());
+        if(unidad.getCodAmbIsla() != null){
+            this.setCodAmbIsla(unidad.getCodAmbIsla().getCodigoIsla());
+        }
     }
 
     public static UnidadWs generar(Unidad unidad) {

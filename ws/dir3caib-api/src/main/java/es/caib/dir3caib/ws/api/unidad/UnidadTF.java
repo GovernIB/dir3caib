@@ -19,7 +19,6 @@ import java.util.List;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="codAmbComunidad" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
- *         &lt;element name="codAmbIsla" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
  *         &lt;element name="codAmbProvincia" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
  *         &lt;element name="codEdpPrincipal" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="codPostal" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -55,7 +54,6 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "unidadTF", propOrder = {
     "codAmbComunidad",
-    "codAmbIsla",
     "codAmbProvincia",
     "codEdpPrincipal",
     "codPostal",
@@ -87,7 +85,6 @@ import java.util.List;
 public class UnidadTF {
 
     protected Long codAmbComunidad;
-    protected Long codAmbIsla;
     protected Long codAmbProvincia;
     protected String codEdpPrincipal;
     protected String codPostal;
@@ -149,30 +146,6 @@ public class UnidadTF {
      */
     public void setCodAmbComunidad(Long value) {
         this.codAmbComunidad = value;
-    }
-
-    /**
-     * Obtiene el valor de la propiedad codAmbIsla.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Long }
-     *     
-     */
-    public Long getCodAmbIsla() {
-        return codAmbIsla;
-    }
-
-    /**
-     * Define el valor de la propiedad codAmbIsla.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Long }
-     *     
-     */
-    public void setCodAmbIsla(Long value) {
-        this.codAmbIsla = value;
     }
 
     /**

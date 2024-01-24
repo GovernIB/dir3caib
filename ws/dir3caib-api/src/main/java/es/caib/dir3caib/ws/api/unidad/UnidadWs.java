@@ -1,13 +1,9 @@
 
 package es.caib.dir3caib.ws.api.unidad;
 
-import java.sql.Timestamp;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.sql.Timestamp;
 
 
 /**
@@ -20,6 +16,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;complexContent>
  *     &lt;extension base="{http://unidad.ws.dir3caib.caib.es/}unidadTF">
  *       &lt;sequence>
+ *         &lt;element name="codAmbIsla" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
  *         &lt;element name="comparteNif" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *         &lt;element name="denomLenguaCooficial" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="fechaUltimaActualizacion" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
@@ -37,6 +34,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "unidadWs", propOrder = {
+    "codAmbIsla",
     "comparteNif",
     "denomLenguaCooficial",
     "fechaUltimaActualizacion",
@@ -49,6 +47,7 @@ public class UnidadWs
     extends UnidadTF
 {
 
+    protected Long codAmbIsla;
     protected boolean comparteNif;
     protected String denomLenguaCooficial;
     @XmlElement(type = String.class)
@@ -59,6 +58,30 @@ public class UnidadWs
     protected String nifCif;
     protected String poder;
     protected Long version;
+
+    /**
+     * Obtiene el valor de la propiedad codAmbIsla.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Long }
+     *     
+     */
+    public Long getCodAmbIsla() {
+        return codAmbIsla;
+    }
+
+    /**
+     * Define el valor de la propiedad codAmbIsla.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Long }
+     *     
+     */
+    public void setCodAmbIsla(Long value) {
+        this.codAmbIsla = value;
+    }
 
     /**
      * Obtiene el valor de la propiedad comparteNif.
