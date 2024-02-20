@@ -5,9 +5,11 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.*;
-import es.caib.dir3caib.persistence.utils.*;
+import es.caib.dir3caib.persistence.utils.DataBaseUtils;
+import es.caib.dir3caib.persistence.utils.Nodo;
+import es.caib.dir3caib.persistence.utils.NodoUtils;
+import es.caib.dir3caib.persistence.utils.Paginacion;
 import es.caib.dir3caib.utils.Utils;
-
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.jboss.ejb3.annotation.SecurityDomain;
@@ -19,13 +21,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author mgonzalez
@@ -424,55 +420,41 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Oficina> obtenerOficinasOrganismo(String codigo, Date fechaActualizacion, Date fechaSincronizacion)
-			throws Exception {
-		return obtenerOficinasOrganismoByEstado(codigo, fechaActualizacion, fechaSincronizacion, Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
-	}
-	
-	@Override
-	@SuppressWarnings("unchecked")
-	public List<Oficina> obtenerOficinasOrganismoByEstado(String codigo, Date fechaActualizacion, Date fechaSincronizacion, String estado)
-			throws Exception {
-
-		// En un primer paso obtenemos las oficinas en función de si es SINCRO o
-		// ACTUALIZACION
-		// Obtenemos aquellas oficinas que tienen una dependencia orgánica con el
-		// órganismo(codUoResponsable) (la que paga)
+	public List<Oficina> obtenerOficinasOrganismo(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
+		// En un primer paso obtenemos las oficinas en función de si es SINCRO o ACTUALIZACION
+		// Obtenemos aquellas oficinas que tienen una dependencia orgánica con el órganismo(codUoResponsable)
 		Query q;
 		if (fechaActualizacion == null) {// Es una sincronizacion, solo se mandan las vigentes
-			q = em.createQuery(
-					"Select oficina from Oficina as oficina where oficina.codUoResponsable.codigo =:codigo and oficina.estado.codigoEstadoEntidad =:vigente order by oficina.codigo");
-			q.setParameter("vigente", estado);
-		} else { // Es una actualizacion, se mandan todas las que tienen fechaactualizacion
-					// anterior a la fecha de importacion de las oficinas
+			q = em.createQuery("Select oficina from Oficina as oficina where " +
+					"oficina.codUoResponsable.codigo =:codigo and oficina.estado.codigoEstadoEntidad =:vigente order by oficina.codigo");
+			q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
+
+		} else { // Es una actualizacion, se mandan todas las que tienen fechaActualizacion anterior a la fecha de importacion de las oficinas
 			q = em.createQuery("Select oficina from Oficina as oficina where oficina.codUoResponsable.codigo =:codigo "
-					+ " and :fechaActualizacion < oficina.fechaImportacion " + " order by oficina.codigo");
+					+ " and :fechaActualizacion < oficina.fechaImportacion order by oficina.codigo");
 			q.setParameter("fechaActualizacion", fechaActualizacion);
 		}
 
 		q.setParameter("codigo", codigo);
+
 		List<Oficina> oficinas = q.getResultList(); // oficinas candidatas a ser enviadas a regweb
 		List<Oficina> oficinasCompletas = new ArrayList<Oficina>();
 		List<Oficina> oficinasActualizadas = new ArrayList<Oficina>();
 
-		// En este segundo paso tratamos las oficinas en funcion de si es SINCRO O
-		// ACTUALIZACION
+		// En este segundo paso tratamos las oficinas en funcion de si es SINCRO O ACTUALIZACION
 		if (fechaActualizacion == null) { // ES SINCRONIZACION
 			for (Oficina oficina : oficinas) {
 				// RelacionOrganizativaOfi es lo que nosotros llamamos dependencia FUNCIONAL
-				Set<RelacionOrganizativaOfi> relaciones = new HashSet<RelacionOrganizativaOfi>(
-						oficina.getOrganizativasOfi());
+				Set<RelacionOrganizativaOfi> relaciones = new HashSet<RelacionOrganizativaOfi>(oficina.getOrganizativasOfi());
 
 				Set<RelacionOrganizativaOfi> relacionesEstado = new HashSet<RelacionOrganizativaOfi>();
 				// Metemos en la lista las relaciones cuyo estado es vigente y el estado de la
 				// unidad con la que esta relacionada
 				// tambien es vigente. En el caso de la sincro solo nos interesa que la relación
-				// sea vigente y la unidad
-				// con la que está relacionada también.
+				// sea vigente y la unidad con la que está relacionada también.
 				for (RelacionOrganizativaOfi relOrg : relaciones) {
-					if (relOrg.getEstado().getCodigoEstadoEntidad().equals(estado)
-							&& relOrg.getUnidad().getEstado().getCodigoEstadoEntidad()
-									.equals(estado)) {
+					if (relOrg.getEstado().getCodigoEstadoEntidad().equals(Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE)
+							&& relOrg.getUnidad().getEstado().getCodigoEstadoEntidad().equals(Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE)) {
 						relacionesEstado.add(relOrg);
 					}
 				}
@@ -488,14 +470,22 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 				// de la unidad con la que esta relacionada
 				// tambien es vigente.
 				for (RelacionSirOfi relSir : relacionesSir) {
-					if (relSir.getEstado().getCodigoEstadoEntidad().equals(estado)
-							&& relSir.getUnidad().getEstado().getCodigoEstadoEntidad()
-									.equals(estado)) {
+					if (relSir.getEstado().getCodigoEstadoEntidad().equals(Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE)
+							&& relSir.getUnidad().getEstado().getCodigoEstadoEntidad().equals(Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE)) {
 						relacionesSirVigentes.add(relSir);
 					}
 				}
 				oficina.setSirOfi(null);
 				oficina.setSirOfi(new ArrayList<RelacionSirOfi>(relacionesSirVigentes));
+
+				// Filtramos solo los servicios Vigentes
+				Set<ServicioOfi> serviciosVigentes = new HashSet<>();
+				for(ServicioOfi servicio:oficina.getServicios()){
+					if(Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE.equals(servicio.getEstado().getCodigoEstadoEntidad())){
+						serviciosVigentes.add(servicio);
+					}
+				}
+				oficina.setServicios(serviciosVigentes);
 
 			}
 			oficinasCompletas = new ArrayList<Oficina>(oficinas);
@@ -511,8 +501,17 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 					//Obtenemos las relacionesOfiValidas
 					oficina.setOrganizativasOfi(obtenerRelacionesOfi(oficina.getOrganizativasOfi(), fechaSincronizacion));
 
-                    //Obtenemos las relacionesSirValidas
+					//Obtenemos las relacionesSirValidas
 					oficina.setSirOfi(obtenerRelacionesSir(oficina.getSirOfi(), fechaSincronizacion));
+
+					// Filtramos solo los servicios Vigentes
+					Set<ServicioOfi> serviciosVigentes = new HashSet<>();
+					for(ServicioOfi servicio:oficina.getServicios()){
+						if(Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE.equals(servicio.getEstado().getCodigoEstadoEntidad())){
+							serviciosVigentes.add(servicio);
+						}
+					}
+					oficina.setServicios(serviciosVigentes);
 
 					oficinasActualizadas.add(oficina);
 				}
@@ -521,7 +520,6 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 		}
 
 		return oficinasCompletas;
-
 	}
 
 	/**

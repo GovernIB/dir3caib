@@ -136,18 +136,6 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
     List<Oficina> obtenerOficinasOrganismo(String codigo, Date fechaActualizacion,
                                            Date fechaSincronizacion) throws Exception;
 
-    /**
-     *
-     * @param codigo
-     * @param fechaActualizacion
-     * @param fechaSincronizacion
-     * @param estado
-     * @return
-     * @throws Exception
-     */
-    List<Oficina> obtenerOficinasOrganismoByEstado(String codigo, Date fechaActualizacion,
-                                                   Date fechaSincronizacion, String estado) throws Exception;
-
 
     /**
      * Obtiene el listado de oficinas Sir de una Unidad
@@ -157,6 +145,13 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      */
     List<Oficina> obtenerOficinasSIRUnidad(String codigo) throws Exception;
 
+    /**
+     *
+     * @param codigo
+     * @param isCodigoDir3
+     * @return
+     * @throws Exception
+     */
     List<Oficina> obtenerOficinasSIRUnidad(String codigo, boolean isCodigoDir3) throws Exception;
 
 

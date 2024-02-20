@@ -81,7 +81,9 @@
                                         <h5><spring:message code="oficina.clasificacion"/></h5>
                                     </div>
                                     <c:forEach items="${oficina.servicios}" var="servicio">
-                                        <dt> - </dt><dd>${servicio.servicio.descServicio}</dd>
+                                        <c:if test="${servicio.estado.codigoEstadoEntidad == Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE}">
+                                            <dt> - </dt><dd>${servicio.servicio.descServicio}</dd>
+                                        </c:if>
                                     </c:forEach>
 
                                 </dl>
