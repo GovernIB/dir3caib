@@ -1,0 +1,541 @@
+@import "reset";
+@import "responsive-mixins";
+
+body {
+    background-color: #ececec;
+    color: #333;
+    font: normal 100% 'Noto Sans', 'TrebuchetMS', 'Trebuchet MS', Arial, Helvetica, sans-serif;
+    padding: 0;
+    margin: 0; 
+}
+
+header {
+    background-color: #4DBA6F;    
+    z-index: 3;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    padding-top: 10px;
+
+    @include tablet {
+        height: 70px;
+    }
+
+    #logo{
+        margin-left: 70px;
+        display: inline-block;
+        position: relative;
+        
+        img {
+            width:50px;
+            height: auto;
+            
+            @include tablet{
+                width:60px;
+                margin-top: 6px;
+            }
+        }
+        
+        span {
+            font-size: 25px;
+            margin-top: 2px;
+            color: #FFF;
+            position: absolute;
+            width: 350px;
+            margin-left: 5px;
+            
+            @include tablet{
+                font-size: 34px;
+                margin-top: 6px;
+            }
+        }
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        position: relative;
+        
+        .imc-bt-menu {
+            display: inline-block;
+            width: 2em;
+            height: 2em;
+            border: none;
+            vertical-align: middle;
+            background: transparent url("../img/menu.svg") no-repeat center center / 85% auto;
+            position: absolute;
+            top: 8px;
+            right: 15px;
+            
+            @include tablet {
+                top: 15px;
+            }
+        }
+    }
+    
+    .imc-marc {
+        display:none;
+        width: 23em;
+        top: 0;
+        right: 0;
+        background: #ffffff;
+        z-index: 9999999;
+        position: fixed;
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        border-left: 1px solid #ebebeb;
+        box-shadow: 1px 1px 1px #ebebeb;
+        
+        .imc-marc-menu{
+            transition: transform .2s ease-out;
+            
+            .imc-cercador {
+                width: 100%;
+                height: 2.5em;
+                padding: 0 1.5em;
+                background-color: #4dba79;    
+            }
+            
+            li {
+                border-bottom: 1px solid #ddd;
+                list-style: none;
+                padding: 1em;
+                color: #333;
+                text-transform: uppercase;
+                vertical-align: middle;
+            }
+            
+            .imc--idioma::before{
+                content: "";
+                display: inline-block;
+                width: 1.5em;
+                height: 1.5em;
+                vertical-align: middle;
+                background: transparent url('../img/idioma.svg') no-repeat center center / 80% auto;
+                opacity: 0.6;
+                margin-right: 8px;
+            }
+            
+            .imc--accessibilitat::before {
+                content: "";
+                display: inline-block;
+                width: 1.5em;
+                height: 1.5em;
+                vertical-align: middle;
+                background: transparent url('../img/accessibilitat.svg') no-repeat center center / 80% auto;
+                opacity: 0.6;
+            }
+            
+            .imc--cerrar::before {
+                content: "";
+                display: inline-block;
+                width: 1.2em;
+                height: 1.2em;
+                vertical-align: middle;
+                background: transparent url('../img/cerrarMenu.png') no-repeat center center / 80% auto;
+                opacity: 0.6;
+                margin-right: 10px;
+            }
+            
+            .imc--idioma { 
+                strong {
+                    text-decoration: underline;
+                }
+            }
+            
+            a {
+                font-size:1em;
+                font-weight: bold;
+                color: #545454;
+                text-transform: uppercase;
+                text-decoration: none;
+            }
+            
+            a::hover{
+                color: #cc073c !important;
+            }
+        }
+        
+        
+    }  
+}
+
+.imc--fons {
+    position: fixed;
+    z-index: 5;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    visibility: visible;
+    opacity: .5;
+    transition: visibility 0s, opacity .2s ease-out;
+    cursor: pointer;
+    display: none;
+}
+
+.imc-logo {
+    font-size: 65%;
+    @include tablet {
+        font-size: 90%;
+    }
+    position:fixed;
+    z-index: 6;
+    top: 0;
+    left: 0;
+    width: 3.5em;
+    height: 100%;
+    text-align: center;
+    background-color: #fff;
+    border-right: 1px solid #EBEBEB;
+    box-shadow: 1px 1px 1px #ebebeb;
+    padding-top:15px;
+
+    a.imc--goib { 
+        height: auto;
+        background: none;
+
+        img {
+            max-width: 70%;
+        }
+    }
+
+    a{ 
+        span {
+            display: block;
+            position: absolute;
+            top: -999em;
+            left: -999em;
+        }
+    }
+} 
+
+.formulariCerca { 
+	background-color: #F8F8F8 !important;
+	margin-top:20px;
+    margin-left: 47px;
+    margin-right: 15px;
+	padding:25px;	
+    display: flex;
+    flex-direction: column;
+    
+    @include tablet {
+        padding:50px;
+        margin-left: 60px;   
+    }
+    
+    @include desktop{
+        max-width: 1200px;
+    }
+    
+    @include large{
+        max-width: 980px;
+        margin: 15px auto;
+    }
+    
+    .columnes {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            
+            @include desktop {
+                flex-direction: row;
+            }
+            
+            #nivelAdministracionDiv {
+                @include desktop{
+                    margin-right: 10px; 
+                    flex: 1; 
+                }
+            }
+            
+            #comunidadAutonomaDiv {
+                @include desktop{ 
+                    flex: 1; 
+                }
+            }
+            
+    }
+
+    p {
+        font-size:0.9em;
+    }
+
+    .row{
+        margin: 15px 0;
+    }
+
+    select, input {
+        padding: 10px; 
+        width: 100%
+    }
+    
+    h3 {
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+    
+    label{
+        font-size: 0.9em;
+    }
+
+    #denominacionDiv {
+        width: 100%; 
+        margin-top:15px; 
+
+        input {
+            width: 87%;
+            z-index: 2; 
+            background: transparent;
+        }
+        
+        button{
+            padding-right: 1em;
+            padding-left: 1em;
+            display: inline-block;
+            height: 2.3em;
+            color: #FFF;
+            background-color: #cc073c;
+            border: none;
+            cursor: pointer;
+        }
+        
+        button:hover{
+            background-color: #000;
+        }
+    }
+
+    .card {
+        position:relative;
+        background: #FFF;
+        padding: 40px 20px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        margin-top:40px;
+        display:none;
+        
+        @include tablet{
+            padding: 15px 30px;
+        }
+
+        .cooficial {
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .oficial {
+            font-size: 0.9em;
+            font-style: italic;
+        }
+
+        .codigodir3{
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 10px 15px;
+            background: #ececec;
+            border-radius: 0px 0px 0px 10px;
+            font-weight: bold; 
+        }
+
+        ul.basic {
+            background: #ececec;
+            width: 70%;
+            border-radius: 7px;
+            padding: 12px;
+            display: none;
+
+            li {
+                list-style: none;
+            }
+        }
+
+        .columnes {
+            position: relative;
+            margin-top:10px;
+            display: flex;
+            flex-direction: column;
+            
+            @include desktop {
+                flex-direction: row;
+            }
+            
+        }
+
+        .direccio, .contactes {
+            background: #ececec;
+            border-radius: 5px;
+            padding: 10px 15px;
+            font-size: 0.85em;
+            margin-top:10px;
+            position:relative;
+            
+            @include desktop{
+                flex: 1;
+            }
+
+            .titol {
+                font-weight: bold;
+	            font-size: 1em;
+	            margin: 0px;
+            }
+
+            ul {
+                padding: 0;
+	            margin-top: 10px;
+
+                li {
+                    list-style: none;
+                }
+            }
+        }
+        
+        .direccio {
+            @include desktop {
+                margin-right: 10px;
+            }
+        }
+
+        .superior, .arrel {
+            background: #ececec;
+            border-radius: 5px;
+            padding: 10px 15px;
+            font-size: 0.85em;
+            margin-top: 10px;
+
+            .titol {
+                font-weight: bold;
+	            font-size: 1em;
+	            margin: 0px 0px 8px 0px;
+                display:block;
+            }
+        }
+    }
+}
+
+.noVisible {
+    display: none;
+    visibility: hidden;
+}
+
+.autocomplete-suggestions {
+    background-color:#FFF;
+    padding: 10px;
+    border: 1px solid #ccc;
+    max-height: none;
+    padding-left: 15px;
+    padding-top: 10px;
+    
+    .autocomplete-suggestion {
+        padding: 2px 5px;
+        font-size: 0.9em;
+        overflow: hidden;
+        border-bottom:1px solid #ececec;
+        cursor: pointer;
+        background-color:#FFF;
+        
+        @include tablet{
+             white-space: nowrap;
+             font-size: 1em;
+        }
+        
+        br {
+            margin-bottom: 5px;
+        }
+    }
+}
+
+.imc-peu{
+    font: normal 90% 'Noto Sans',Arial,Helvetica,sans-serif;
+    font-size: 90%;
+    line-height: normal;
+    color: #333;
+    margin-top: 35px;
+    
+    @include tablet {
+        margin-top: 10px;
+    }
+    
+    @include large{
+        max-width: 1050px;
+        margin: 15px auto;
+    }
+
+    .imc--contingut {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0;
+        
+        @include tablet{
+            flex-direction: row;
+            flex-wrap: nowrap;
+            padding-left: 60px;
+            padding-right: 60px;
+            justify-content: space-between;
+        }
+        
+        @include extralarge {
+            padding: 0;
+        }
+    }
+
+    .imc-peu-govern {
+        text-align: center;
+        
+        @include desktop {
+            text-align:left;
+        }
+        
+        span {
+            
+            display: block;
+        }
+
+        span:first-child {
+            font-weight: bold; 
+            text-transform: uppercase; 
+        }
+    }
+
+    p, ul, li {
+        display: block;
+        vertical-align: middle;
+	    text-align: center;
+    }
+
+    .imc-peu-opcions li{
+        @include extralarge {
+            display: inline-block;
+        }
+    }
+    
+    .imc-peu-xarxes li {
+        display: inline-block;
+    }
+}
+
+.vermell{ color: #C30045; }
+.vermell-pastel{ color: #FAC6CD;}
+.verd{ color: #4DBA6F; }
+.verd-pastel{ color: #B1DCC0; }
+.groc { color: #FEC25C; }
+.groc-pastel{ color: #FFE7BB; }
+.blau{ color:#10BED2; }
+.blau-pastel{ color: #BBE5F0; }
+.gris{ color:#BAAFAB; }
+.gris-pastel{ color:#DBD5D2; }
+
+.bg-vermell{ background-color: #C30045; }
+.bg-vermell-pastel{ background-color: #FAC6CD;}
+.bg-verd{ background-color: #4DBA6F; }
+.bg-verd-pastel{ background-color: #B1DCC0; }
+.bg-groc { background-color: #FEC25C; }
+.bg-groc-pastel{ background-color: #FFE7BB; }
+.bg-blau{ background-color:#10BED2; }
+.bg-blau-pastel{ background-color: #BBE5F0; }
+.bg-gris{ background-color:#BAAFAB; }
+.bg-gris-pastel{ background-color:#DBD5D2; }

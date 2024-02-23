@@ -1,0 +1,251 @@
+body { 
+	background-color:#f2f2f2;
+	color: #333;
+	font: normal 100% 'Noto Sans', 'TrebuchetMS', 'Trebuchet MS', Arial, Helvetica, sans-serif
+}
+
+header {
+	background-color: #32814b;
+	position: fixed;
+	z-index: 3;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 85px;
+	padding-top: 10px;
+}
+
+header #logo{
+	margin-left: 0px;
+    display: inline-block;
+}
+
+header #aplication-logo{
+	margin-left: 40px;
+    display: inline-block;
+}
+
+header .container {
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+.imc-logo {
+  font-size: 90%;
+  position: fixed;
+  z-index: 6;
+  top: 0;
+  left: 0;
+  width: 3.5em;
+  height: 100%;
+  text-align: center;
+  background-color: #fff;
+  border-right: 1px solid #EBEBEB;
+  box-shadow: 1px 1px 1px #ebebeb;
+}
+
+.imc-logo > div {
+	margin-top: 8px;
+}
+
+.imc-logo a.imc--goib {
+  height: auto;
+  background: none;
+}
+
+.imc-logo a span {
+  display: block;
+  position: absolute;
+  top: -999em;
+  left: -999em;
+}
+
+
+.formulariCerca { 
+	background-color: #F8F8F8 !important;
+	width:75%;
+	min-width:800px;
+	margin:130px auto 0;
+	padding:50px;	
+	max-width: 1200px;
+}
+
+.formulariCerca p {font-size:0.9em;}
+
+form .row{
+	margin: 15px 0;
+}
+
+form select, form input { padding: 10px; width: 100%}
+
+#comunidadAutonomaDiv, #nivelAdministracionDiv { float:left; width: 47%; margin-right:15px;} 
+#denominacionDiv { width: 100%; margin-top:15px; clear:both; }
+#denominacionDiv input { width: 94%; }
+
+.autocomplete-suggestion {
+  padding: 2px 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  border-bottom:1px solid #ececec;
+  cursor: pointer;
+}
+
+.autocomplete-suggestions {
+	background-color:#FFF;
+	padding: 10px;
+	border: 1px solid #ccc;
+}
+
+
+.card {
+	position:relative;
+	background: #FFF;
+    padding: 15px 30px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+	width: 89%;
+	margin-top:40px;
+	display:none;
+}
+
+.card .cooficial {
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.card .oficial {
+    font-size: 1em;
+    margin-top: -15px;
+    font-style: italic;
+}
+
+.card .codigodir3{
+	position: absolute;
+    top: 0;
+    right: 0;
+    padding: 10px 15px;
+    background: #ececec;
+    border-radius: 0px 0px 0px 10px;
+    font-weight: bold; 
+}
+
+
+.card ul.basic {
+	background: #ececec;
+    width: 70%;
+    border-radius: 7px;
+    padding: 12px;
+	display: none;
+}
+
+.card ul.basic li { list-style: none; }
+
+
+.card .columnes {
+	position: relative;
+	margin-top:10px;
+}
+
+.card .direccio, .card .contactes {
+	background: #ececec;
+    border-radius: 5px;
+    padding: 10px 30px;
+	font-size: 0.95em;
+	height: 145px;
+	width: calc(45% - 1em);
+	margin-top:10px;
+    float:left;
+	position:relative;
+	
+}
+
+.card .direccio { 
+	 margin-right: 1em;
+}
+
+.card .direccio .titol, .card .contactes .titol{ 
+	font-weight: bold;
+	font-size: 1em;
+	margin: 0px;
+}
+
+.card .direccio ul, .card .contactes ul {
+	padding: 0;
+	margin-top: 10px;
+}
+
+.card .direccio ul li, .card .contactes ul li {
+	list-style: none;
+}
+
+.card .superior, .card .arrel { 
+	background: #ececec;
+    border-radius: 5px;
+    padding: 10px 30px;
+	font-size: 0.95em;
+	margin-top: 10px;
+}
+
+.card .superior .titol,  .card .arrel .titol {
+	font-weight: bold;
+	font-size: 1em;
+	margin: 0px 0px 8px 0px;
+	display:block;
+}
+
+.imc-peu{
+	padding: 4em 0em 2em 1.5em;
+    font: normal 90% 'Bariol Regular',Arial,Helvetica,sans-serif;
+    font-size: 90%;
+    line-height: normal;
+    color: #333;
+    margin: 0;
+}
+
+.imc-peu .imc--contingut {
+    display: flex;
+    align-items: center;
+    width: calc(100% - 7em);
+    max-width: 1280px !important;
+    margin: 0em auto 0em auto;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.imc-peu-govern, .imc-peu-opcions, .imc-peu-xarxes {
+    width: 33%;
+}
+
+.imc-peu p, .imc-peu ul, .imc-peu li {
+    display: inline-block;
+    vertical-align: middle;
+	text-align: center;
+}
+
+.imc-peu-xarxes {
+    width: 23%;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.vermell{ color: #C30045; }
+.vermell-pastel{ color: #FAC6CD;}
+.verd{ color: #4DBA6F; }
+.verd-pastel{ color: #B1DCC0; }
+.groc { color: #FEC25C; }
+.groc-pastel{ color: #FFE7BB; }
+.blau{ color:#10BED2; }
+.blau-pastel{ color: #BBE5F0; }
+.gris{ color:#BAAFAB; }
+.gris-pastel{ color:#DBD5D2; }
+
+.bg-vermell{ background-color: #C30045; }
+.bg-vermell-pastel{ background-color: #FAC6CD;}
+.bg-verd{ background-color: #4DBA6F; }
+.bg-verd-pastel{ background-color: #B1DCC0; }
+.bg-groc { background-color: #FEC25C; }
+.bg-groc-pastel{ background-color: #FFE7BB; }
+.bg-blau{ background-color:#10BED2; }
+.bg-blau-pastel{ background-color: #BBE5F0; }
+.bg-gris{ background-color:#BAAFAB; }
+.bg-gris-pastel{ background-color:#DBD5D2; }

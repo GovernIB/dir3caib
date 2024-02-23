@@ -25,6 +25,7 @@
         <module>utils</module>
         <module>persistence</module>
         <module>back</module>
+		<module>front</module>
         <module>ws</module>
         <module>ear</module>
     </modules>

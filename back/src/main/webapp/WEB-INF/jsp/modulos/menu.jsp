@@ -1,4 +1,4 @@
-ï»¿<%@page import="es.caib.dir3caib.back.security.LoginInfo" %>
+<%@page import="es.caib.dir3caib.back.security.LoginInfo" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
@@ -11,7 +11,7 @@
                                             alt="Govern de les Illes Balears"/></div>
     <div class="aplication-logo pull-left"><a href="<c:url value="/"/>"><img src="<c:url value="/img/logoDir.png"/>"
                                                                              width="159" height="36"
-                                                                             alt="Directorio ComÃºn"/></a></div>
+                                                                             alt="Directorio Común"/></a></div>
 
     <div class="pull-right main-menu">
 
@@ -37,7 +37,7 @@
             <div class="navbar-inner">
                 <ul class="nav  pull-right" role="navigation">
 
-                    <%--MENÃš SINCRONIZACIÃ“N--%>
+                    <%--MENÚ SINCRONIZACIÓN--%>
                     <sec:authorize access="hasRole('DIR_ADMIN')">
                         <li class="dropdown">
                             <a id="drop4" href="#" role="button" class="dropdown-toggle"
@@ -49,6 +49,8 @@
                                 <li><a href="javascript:void(0);" onclick="if (! confirmDescarga('<c:url value="/sincronizacion/catalogo"/>','<fmt:message key="menu.sincronizar.confirm"/>')) { return false; }"><fmt:message key="menu.sincronizar.catalogo"/></a></li>
                                 <li class="divider"></li>
                                 <li><a href="javascript:void(0);" onclick="if (! confirmDescarga('<c:url value="/sincronizacion/directorio"/>','<fmt:message key="menu.sincronizar.confirm"/>')) { return false; }"><fmt:message key="menu.sincronizar.directorio"/></a></li>
+                                <li class="divider"></li>
+                                <li><a href="javascript:void(0);" onclick="if (! confirmDescarga('<c:url value="/sincronizacion/generarjson"/>','<fmt:message key="menu.sincronizar.json.confirm"/>')) { return false; }"><fmt:message key="menu.sincronizar.json"/></a></li>
                                 <c:if test="${loginInfo.development == true}">
                                     <li class="divider"></li>
                                     <li><a href="<c:url value="/sincronizacion/restaurarOficinasUnidades"/>"><fmt:message key="sincronizacion.restaurar.OficinasUnidades"/></a></li>
@@ -57,7 +59,7 @@
                         </li>
                     </sec:authorize>
 
-                    <%--MENÃš UNIDADES--%>
+                    <%--MENÚ UNIDADES--%>
                     <li class="dropdown">
                         <a id="drop2" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"><fmt:message key="menu.unidad"/><b class="caret"></b></a>
 
@@ -66,7 +68,7 @@
                         </ul>
                     </li>
 
-                    <%--MenÃº Oficinas--%>
+                    <%--Menú Oficinas--%>
                     <li class="dropdown">
                         <a id="drop1" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"><fmt:message key="menu.oficina"/><b class="caret"></b></a>
                         <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">

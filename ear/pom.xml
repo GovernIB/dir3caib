@@ -46,6 +46,13 @@
                             <contextRoot>dir3caib</contextRoot>
                             <bundleFileName>dir3caib.war</bundleFileName>
                         </webModule>
+						
+						<webModule>
+							<groupId>es.caib.dir3caib</groupId>
+							<artifactId>dir3caib-front</artifactId>
+							<contextRoot>dir3caibfront</contextRoot>
+							<bundleFileName>dir3caib-front.war</bundleFileName>
+						</webModule>
 
                         <ejbModule>
                             <groupId>es.caib.dir3caib</groupId>
@@ -101,6 +108,13 @@
             <version>${project.version}</version>
             <type>war</type>
         </dependency>
+		
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>dir3caib-front</artifactId>
+			<version>${project.version}</version>
+			<type>war</type>
+		</dependency>
 
         <dependency>
             <groupId>${project.groupId}</groupId>

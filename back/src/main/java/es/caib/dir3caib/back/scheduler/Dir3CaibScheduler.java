@@ -40,4 +40,19 @@ public class Dir3CaibScheduler {
         }
 
     }
+    
+    
+    @Scheduled(cron = "0 0 6 * * *") // 0 0 6 * * * Cada día a las 06:00h
+    public void crearFicheros() {
+    	
+		try {	
+			schedulerEjb.generarJsonUnidadesVigentes();
+			
+		} catch (Exception e) {
+			log.error("Error JsonScheduler: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+    
 }

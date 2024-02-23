@@ -4,6 +4,7 @@ import es.caib.dir3caib.persistence.model.CatPais;
 import es.caib.dir3caib.persistence.model.Oficina;
 import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.persistence.model.json.OficinaRest;
+import es.caib.dir3caib.persistence.model.json.UnidadExportar;
 import es.caib.dir3caib.persistence.model.json.UnidadRest;
 import es.caib.dir3caib.persistence.model.json.UnidadRestSistra;
 import es.caib.dir3caib.persistence.utils.CodigoValor;
@@ -30,7 +31,16 @@ public interface Dir3RestLocal {
      * @throws Exception
      */
     List<ObjetoDirectorio> findUnidadesByDenominacion(String denominacion) throws Exception;
-
+    
+    /**
+     * 
+     * @param comunidadAutonoma
+     * @param nivelAdministracion
+     * @return
+     * @throws Exception
+     */
+    List<UnidadExportar> exportarUnidades(Long comunidadAutonoma, Long nivelAdministracion) throws Exception;
+    
     /**
      *
      * @param denominacion
@@ -373,7 +383,7 @@ public interface Dir3RestLocal {
      */
     List<Nodo> busquedaDenominacionComunidad(String denominacion, Long codComunidad, boolean denominacionCooficial)
             throws Exception;
-
+    
     /**
      *
      * @param estado

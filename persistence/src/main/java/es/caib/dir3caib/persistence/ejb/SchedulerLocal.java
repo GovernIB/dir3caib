@@ -21,4 +21,11 @@ public interface SchedulerLocal {
      * @throws Exception
      */
     void purgarSincronizaciones() throws Exception;
+    
+    
+    /**
+     * Generar ficheros en formato JSON con todas las unidades vigentes.
+     * 
+     */
+    void generarJsonUnidadesVigentes() throws Exception;
 }

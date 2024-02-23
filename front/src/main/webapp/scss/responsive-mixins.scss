@@ -1,0 +1,26 @@
+// Responsive mixins 
+// Bootstrap breakpoints
+
+@mixin tablet {
+  @media only screen and (min-width: 768px) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media only screen and (min-width: 900px) {
+    @content;
+  }
+}
+
+@mixin large {
+  @media only screen and (min-width: 1000px) {
+    @content;
+  }
+}
+
+@mixin extralarge {
+  @media only screen and (min-width: 1200px) {
+    @content;
+  }
+}

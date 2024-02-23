@@ -101,6 +101,10 @@ public class Configuracio {
     public static boolean isDenominacionCooficial() {
         return getBoolean(DIR3CAIB_PROPERTY_BASE + "denominacioncooficial");
     }
+    
+    public static String getJsonPath() {
+    	return getArchivosPath() + "json/";
+    }
 
     private static Boolean getBoolean(String property) {
         String name = System.getProperty(property);
