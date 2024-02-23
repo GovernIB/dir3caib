@@ -46,6 +46,9 @@ public class SincronizacionController extends BaseController {
 
     @EJB(mappedName = "dir3caib/ImportadorOficinasEJB/local")
     private ImportadorOficinasLocal importadorOficinasEjb;
+    
+    @EJB(mappedName = "dir3caib/SchedulerEJB/local")
+	private SchedulerLocal schedulerEjb;
 
 
     /**
@@ -376,5 +379,22 @@ public class SincronizacionController extends BaseController {
 
         return "redirect:/sincronizacion/list/1";
     }
+    
+    
+    @RequestMapping(value = "/generarjson", method = RequestMethod.GET)
+	public String generarJsonUnidades(HttpServletRequest request) throws Exception {
+
+		try {
+
+			schedulerEjb.generarJsonUnidadesVigentes();
+
+			Mensaje.saveMessageInfo(request, "Generación de ficheros JSON");
+
+		} catch (Exception e) {
+			Mensaje.saveMessageError(request, e.getMessage());
+		}
+
+		return "redirect:/sincronizacion/list/1";
+	}
 
 }
