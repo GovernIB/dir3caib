@@ -114,16 +114,18 @@
 
 	<build>
 		<plugins>
+			<!-- Només s'utilitza per generar el fitxer CSS a partir dels fitxers SCSS a desenvolupament -->
+			<!--
 			<plugin>
 				<groupId>us.hebi.sass</groupId>
 				<artifactId>sass-cli-maven-plugin</artifactId>
 				<version>1.0.3</version>
 				<configuration>
 					<sassVersion>1.62.0</sassVersion>
-					<args> <!-- Any argument that should be forwarded to the sass cli -style=compressed -->
+					<args>
 						<arg>${project.basedir}/src/main/webapp/scss/estils.scss:${project.basedir}/src/main/webapp/css/styles.css</arg>
-						<arg>--no-source-map</arg>
-						<arg>--style=compressed</arg>
+						<arg>- -no-source-map</arg>
+						<arg>- -style=compressed</arg>
 					</args>
 				</configuration>
 				<executions>
@@ -135,7 +137,7 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin -->
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>3.0.2</version>
