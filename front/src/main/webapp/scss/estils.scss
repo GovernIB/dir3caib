@@ -280,6 +280,7 @@ header {
     
     label{
         font-size: 0.9em;
+        font-weight: 600;
     }
 
     #denominacionDiv {
@@ -429,21 +430,28 @@ header {
     padding-left: 15px;
     padding-top: 10px;
     
+    .autocomplete-group {
+        font-weight: bold;
+        font-style: italic;
+    }
+    
     .autocomplete-suggestion {
-        padding: 2px 5px;
+        padding: 10px 5px;
         font-size: 0.9em;
         overflow: hidden;
         border-bottom:1px solid #ececec;
         cursor: pointer;
         background-color:#FFF;
+        line-height: 15px;
         
         @include tablet{
              white-space: nowrap;
              font-size: 1em;
         }
         
-        br {
-            margin-bottom: 5px;
+        em {
+            font-style: italic;
+            font-size: 0.95em;
         }
     }
 }

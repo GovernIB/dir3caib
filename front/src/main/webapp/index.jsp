@@ -1,3 +1,4 @@
+<%@page import="es.caib.dir3caib.utils.Configuracio"%>
 <%@page import="java.util.ResourceBundle"%>
 <%@page import="java.util.Locale"%>
 <%
@@ -265,15 +266,124 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
              $('#codigoComunidad').on('change', function(){
                 codigoComunidad = this.value;
                 $('#denominacion').val('');
-                $('#denominacion').devbridgeAutocomplete('clear');
-                $('#denominacion').devbridgeAutocomplete('clearCache');
+                
+                if (codigoComunidad != 'undefined' && nivelAdministracion != 'undefined'){
+                    let nombreFichero = "obtener?nivel=" + nivelAdministracion + "&comunidad=" + codigoComunidad;
+
+                    $.getScript( nombreFichero, function( data, textStatus, jqxhr ) {
+
+                        unidades = $.map(unitats, function (value, key) { 
+                    return { value: value.denominacionCooficial + " - " + value.codigo, 
+                             data: {
+                                dir3: value.codigo,
+                                denominacion: value.denominacion,
+                                cooficial: value.denominacionCooficial, 
+                                esEdp: value.esEdp,
+                                nif: value.nif,
+                                raiz_codigo: value.unidadRaiz.codigo,
+                                raiz_denominacion: value.unidadRaiz.denominacion,
+                                raiz_cooficial: value.unidadRaiz.denominacionCooficial,
+                                sup_codigo: value.unidadSuperior.codigo,
+                                sup_denominacion: value.unidadSuperior.denominacion,
+                                sup_cooficial: value.unidadSuperior.denominacionCooficial,
+                                comunidad: value.direccion.comunidadAutonoma, 
+                                pais: value.direccion.pais,
+                                provincia: value.direccion.provincia,
+                                cp: value.direccion.codigoPostal,
+                                complemento: value.direccion.complemento,
+                                numero: value.direccion.numVia,
+                                nombre: value.direccion.nombreVia,
+                                tipo: value.direccion.tipoVia,
+                                localidad: value.direccion.localidad,
+                                contactos: value.contactos,
+                             } 
+                            }; 
+                        });
+                    });                
+
+                    $('#denominacion').devbridgeAutocomplete({
+                        lookup: unidades,
+                        lookupLimit: 10,
+                        nocache: true,
+                        formatResult: function (suggestion, currentValue) {
+                            if (suggestion.data.denominacion != suggestion.data.cooficial)
+                                return "<p>"+suggestion.value+"<br><em>"+suggestion.data.cooficial+"</em></p>";
+                            else
+                                return "<p>"+suggestion.value+"</p>";
+                        },
+                        minChars: 3,
+                        onSelect: function (suggestion) {
+                            mostrarResultados(unidades, suggestion.data.dir3);
+                        },
+                        showNoSuggestionNotice: true,
+                        noSuggestionNotice: '<%=messages.getString("form.sincoincidencias")%>',
+                        groupBy: 'comunidad'
+                    });
+
+                }
+
             });
             
             $('#codigoNivelAdministracion').on('change', function(){
                 nivelAdministracion = this.value;
                 $('#denominacion').val('');
-                $('#denominacion').devbridgeAutocomplete('clear');
-                $('#denominacion').devbridgeAutocomplete('clearCache');
+                // $('#denominacion').devbridgeAutocomplete('clear');
+
+                if (codigoComunidad != 'undefined' && nivelAdministracion != 'undefined'){
+                    let nombreFichero = "obtener?nivel=" + nivelAdministracion + "&comunidad=" + codigoComunidad;
+
+                    $.getScript( nombreFichero, function( data, textStatus, jqxhr ) {
+
+                        unidades = $.map(unitats, function (value, key) { 
+                    return { value: value.denominacionCooficial + " - " + value.codigo, 
+                             data: {
+                                dir3: value.codigo,
+                                denominacion: value.denominacion,
+                                cooficial: value.denominacionCooficial, 
+                                esEdp: value.esEdp,
+                                nif: value.nif,
+                                raiz_codigo: value.unidadRaiz.codigo,
+                                raiz_denominacion: value.unidadRaiz.denominacion,
+                                raiz_cooficial: value.unidadRaiz.denominacionCooficial,
+                                sup_codigo: value.unidadSuperior.codigo,
+                                sup_denominacion: value.unidadSuperior.denominacion,
+                                sup_cooficial: value.unidadSuperior.denominacionCooficial,
+                                comunidad: value.direccion.comunidadAutonoma, 
+                                pais: value.direccion.pais,
+                                provincia: value.direccion.provincia,
+                                cp: value.direccion.codigoPostal,
+                                complemento: value.direccion.complemento,
+                                numero: value.direccion.numVia,
+                                nombre: value.direccion.nombreVia,
+                                tipo: value.direccion.tipoVia,
+                                localidad: value.direccion.localidad,
+                                contactos: value.contactos,
+                             } 
+                            }; 
+                        });
+                    });                 
+
+                    $('#denominacion').devbridgeAutocomplete({
+                        lookup: unidades,
+                        lookupLimit: 10,
+                        nocache: true,
+                        formatResult: function (suggestion, currentValue) {
+                            if (suggestion.data.denominacion != suggestion.data.cooficial)
+                                return "<p>"+suggestion.value+"<br><em>"+suggestion.data.cooficial+"</em></p>";
+                            else
+                                return "<p>"+suggestion.value+"</p>"; 
+                        },
+                        minChars: 3,
+                        onSelect: function (suggestion) {
+                            mostrarResultados(unidades, suggestion.data.dir3);
+                        },
+                        showNoSuggestionNotice: true,
+                        noSuggestionNotice: '<%=messages.getString("form.sincoincidencias")%>',
+                        groupBy: 'comunidad'
+                    });
+
+                }
+
             });
 
             $('#denominacion').on('focus', function(){           
@@ -311,11 +421,17 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
                         });
                     });
 
+                    $('#denominacion').devbridgeAutocomplete('clear');                    
+
                     $('#denominacion').devbridgeAutocomplete({
                         lookup: unidades,
                         lookupLimit: 10,
+                        nocache: true,
                         formatResult: function (suggestion, currentValue) {
-                            return "<p>"+suggestion.value+"<br><em>"+suggestion.data.cooficial+"</em></p>"; 
+                            if (suggestion.data.cooficial != suggestion.data.denominacion)
+                                return "<p>"+suggestion.value+"<br><em>"+suggestion.data.cooficial+"</em></p>";
+                            else
+                                return "<p>"+suggestion.value+"</p>";
                         },
                         minChars: 3,
                         onSelect: function (suggestion) {
@@ -340,7 +456,6 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
             $('#limpiar').on('click', function() {
                 $('#denominacion').val('');
                 $('#denominacion').devbridgeAutocomplete('clear');
-                $('#denominacion').devbridgeAutocomplete('clearCache');
                 $('.card').css('display', 'none');
             }); 
 
@@ -371,16 +486,24 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
             });
 
             if (organismo != 'undefined') {
-                if(organismo.data.cooficial != organismo.data.denominacion)
-                    $('#cooficial').html(organismo.data.cooficial);
 
-                $('#oficial').html(organismo.data.denominacion);
+                if(organismo.data.cooficial != organismo.data.denominacion){
+                    $('#cooficial').html(organismo.data.cooficial);
+                    $('#oficial').html(organismo.data.denominacion);
+                }else{
+                    $('#oficial').html("");
+                    $('#cooficial').html(organismo.data.denominacion);
+                }
+                
                 $('#codigodir3').html(organismo.data.dir3);
 
                 $('#direccioNom').html(organismo.data.tipo + " " + organismo.data.nombre + ", " + organismo.data.numero);
                 $('#direccioCompl').html(organismo.data.complemento);
                 $('#direccioCP').html(organismo.data.cp + " - " + organismo.data.localidad);
-                $('#direccioProv').html(organismo.data.provincia + " - " + organismo.data.comunidad);
+
+                const provincia = (organismo.data.provincia != null) ? organismo.data.provincia + " - " : "";
+               
+                $('#direccioProv').html(provincia + organismo.data.comunidad);
                 $('#direccioPais').html(organismo.data.pais);
 
                 $('#contactesList li').remove();
@@ -443,6 +566,7 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
         }
 
     </script>
+ <% if(Configuracio.isCAIB() && !Configuracio.isDevelopment()){ %>
     <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -457,5 +581,6 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
   
   ga('send', 'pageview');
 </script>
+<% } %>
 </body>
 </html>
