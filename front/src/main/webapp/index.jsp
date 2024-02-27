@@ -50,7 +50,7 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
                 <div class="imc-cercador" id="imc-cercador"></div>
                 <ul>
                     <li id="langs" class="imc-marc-ico imc--idioma">
-                        <a href="index.jsp?lang=ca" id="idioma" data-lang="ca" lang="ca"><% if("ca".equals(locale.getLanguage())){ %><strong><%=messages.getString("menu.ca")%></a></strong><% } else { %><%=messages.getString("menu.ca")%></a><% } %> \ 
+                        <a href="index.jsp?lang=ca" id="idioma" data-lang="ca" lang="ca"><% if("ca".equals(locale.getLanguage())){ %><strong><%=messages.getString("menu.ca")%></strong><% } else { %><%=messages.getString("menu.ca")%><% } %></a> \ 
                         <a href="index.jsp?lang=es" id="idioma" data-lang="es" lang="es"><% if("es".equals(locale.getLanguage())){ %><strong><%=messages.getString("menu.es")%></strong><% } else { %><%=messages.getString("menu.es")%><% } %></a>
                     </li>
                     <li>
