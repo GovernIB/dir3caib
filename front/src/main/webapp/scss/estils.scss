@@ -67,6 +67,7 @@ header {
             position: absolute;
             top: 8px;
             right: 15px;
+            cursor:pointer;
             
             @include tablet {
                 top: 15px;
