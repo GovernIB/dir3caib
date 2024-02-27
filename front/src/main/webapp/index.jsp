@@ -50,8 +50,8 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
                 <div class="imc-cercador" id="imc-cercador"></div>
                 <ul>
                     <li id="langs" class="imc-marc-ico imc--idioma">
-                        <a href="index.jsp?lang=ca" id="idioma" data-lang="ca" lang="ca"><% if("ca".equals(locale.getLanguage())){ %><strong><%=messages.getString("menu.ca")%></strong><% } else { %><%=messages.getString("menu.ca")%><% } %></a> \ 
-                        <a href="index.jsp?lang=es" id="idioma" data-lang="es" lang="es"><% if("es".equals(locale.getLanguage())){ %><strong><%=messages.getString("menu.es")%></strong><% } else { %><%=messages.getString("menu.es")%><% } %></a>
+                        <a href="index.jsp?lang=ca" id="idioma" data-lang="ca" lang="ca"><% if("ca".equalsIgnoreCase(locale.getLanguage())){ %><strong><%=messages.getString("menu.catala")%></strong><% } else { %><%=messages.getString("menu.catala")%><% } %></a> \ 
+                        <a href="index.jsp?lang=es" id="idioma" data-lang="es" lang="es"><% if("es".equalsIgnoreCase(locale.getLanguage())){ %><strong><%=messages.getString("menu.castella")%></strong><% } else { %><%=messages.getString("menu.castella")%><% } %></a>
                     </li>
                     <li>
                         <a href="https://www.caib.es/govern/external/accessibilitatext.do?path=/webcaib/govern_illes/accessibilitat/accessibilitatweb&lang=<%=locale.getLanguage() %>&fitxa=3705238" class="imc-marc-ico imc--accessibilitat" id="imc-marc-accessibilitat">
