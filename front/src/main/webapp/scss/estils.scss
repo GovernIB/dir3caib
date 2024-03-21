@@ -399,6 +399,10 @@ header {
             @include desktop {
                 margin-right: 10px;
             }
+            
+            ul li:first-child:first-letter {
+    			text-transform:capitalize;
+			}
         }
 
         .superior, .arrel {
@@ -418,6 +422,54 @@ header {
     }
 }
 
+#acordeonContainer{
+	display:none;	
+}
+
+.accordion {
+	
+    border: 1px solid #ccc;
+    background-color: #fff;
+    
+    .accordion-item {
+    	border-bottom: 1px solid #ccc;
+    }
+    
+    .accordion-item:last-child {
+   		border-bottom: none;
+    }
+  
+    .accordion-header {
+    	background-color: #f4f4f4;
+    	font-weight: bold;
+    	padding: 10px;
+    	cursor: pointer;
+  	}
+  
+  	.accordion-header:hover {
+    	background-color: #e0e0e0;
+  	}
+  
+  	.accordion-content {
+    	display: none;
+    	padding: 10px;
+    	
+    	.card {
+			border: 0;
+			margin-top: 0;
+			display:block;	
+			
+			.codigodir3{
+				margin-right: 30px;
+  				margin-top: 15px;
+  				border-radius: 10px;
+			}
+		}
+    	
+  	}
+    
+ }
+
 .noVisible {
     display: none;
     visibility: hidden;
@@ -430,6 +482,7 @@ header {
     max-height: none;
     padding-left: 15px;
     padding-top: 10px;
+    max-height: auto !important;
     
     .autocomplete-group {
         font-weight: bold;
@@ -444,6 +497,7 @@ header {
         cursor: pointer;
         background-color:#FFF;
         line-height: 15px;
+        display:none;
         
         @include tablet{
              white-space: nowrap;
@@ -455,6 +509,28 @@ header {
             font-size: 0.95em;
         }
     }
+    
+    .autocomplete-suggestion:nth-child(-n+10){
+		display: block;
+	}
+    
+}
+
+.mostrarTodosContainer{
+	padding: 10px;
+	text-align: right;
+	
+	button {
+	  background-color: #cc073c;
+	  padding: 1em;
+	  color: #FFF;
+	  border: 0;
+	  cursor: pointer;
+	}	
+	
+	button:hover {
+		background-color: #000;
+	}
 }
 
 .imc-peu{

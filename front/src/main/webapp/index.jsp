@@ -6,7 +6,7 @@ Locale locale = Locale.getDefault();
 String idioma = request.getParameter("lang");
 if (idioma != null) {
 	locale = new Locale(idioma);
-} 
+}
 
 ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webapp.missatges", locale);
 %>
@@ -16,7 +16,8 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1">
+<meta name="viewport"
+	content="user-scalable=no, width=device-width, initial-scale=1">
 
 <title><%=messages.getString("titol")%></title>
 
@@ -37,40 +38,58 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
 	<header>
 		<div class="container">
 			<div id="logo">
-				<img src="img/logo_dir3caib.png" width="70" height="70" alt="<%=messages.getString("logoAlt")%>" /> <span><%=messages.getString("logoNom")%></span>
+				<img src="img/logo_dir3caib.png" width="70" height="70"
+					alt="<%=messages.getString("logoAlt")%>" /> <span><%=messages.getString("logoNom")%></span>
 			</div>
-			<button type="button" class="imc-bt-menu float-right" id="imc-bt-menu" title="Menú">
-			 <span class="noVisible" id="menuHamburguesa"><%=messages.getString("menu.altMenu")%></span>
+			<button type="button" class="imc-bt-menu float-right"
+				id="imc-bt-menu" title="Menú">
+				<span class="noVisible" id="menuHamburguesa"><%=messages.getString("menu.altMenu")%></span>
 			</button>
 		</div>
-		
+
 		<!-- menu lateral -->
 		<div class="imc-marc" id="imc-marc">
-            <div class="imc-marc-menu" id="imc-marc-menu">
-                <div class="imc-cercador" id="imc-cercador"></div>
-                <ul>
-                    <li id="langs" class="imc-marc-ico imc--idioma">
-                        <a href="index.jsp?lang=ca" id="idioma" data-lang="ca" lang="ca"><% if("ca".equalsIgnoreCase(locale.getLanguage())){ %><strong><%=messages.getString("menu.catala")%></strong><% } else { %><%=messages.getString("menu.catala")%><% } %></a> \ 
-                        <a href="index.jsp?lang=es" id="idioma" data-lang="es" lang="es"><% if("es".equalsIgnoreCase(locale.getLanguage())){ %><strong><%=messages.getString("menu.castella")%></strong><% } else { %><%=messages.getString("menu.castella")%><% } %></a>
-                    </li>
-                    <li>
-                        <a href="https://www.caib.es/govern/external/accessibilitatext.do?path=/webcaib/govern_illes/accessibilitat/accessibilitatweb&lang=<%=locale.getLanguage() %>&fitxa=3705238" class="imc-marc-ico imc--accessibilitat" id="imc-marc-accessibilitat">
-                            <span><%=messages.getString("menu.accessibilitat")%></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="imc-marc-ico imc--cerrar" id="imc-bt-cerrar"><span><%=messages.getString("menu.cerrar")%></span></a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+			<div class="imc-marc-menu" id="imc-marc-menu">
+				<div class="imc-cercador" id="imc-cercador"></div>
+				<ul>
+					<li id="langs" class="imc-marc-ico imc--idioma"><a
+						href="index.jsp?lang=ca" id="idioma" data-lang="ca" lang="ca">
+							<%
+							if ("ca".equalsIgnoreCase(locale.getLanguage())) {
+							%><strong><%=messages.getString("menu.catala")%></strong> <%
+ } else {
+ %><%=messages.getString("menu.catala")%> <%
+ }
+ %>
+					</a> \ <a href="index.jsp?lang=es" id="idioma" data-lang="es" lang="es">
+							<%
+							if ("es".equalsIgnoreCase(locale.getLanguage())) {
+							%><strong><%=messages.getString("menu.castella")%></strong> <%
+ } else {
+ %><%=messages.getString("menu.castella")%> <%
+ }
+ %>
+					</a></li>
+					<li><a
+						href="https://www.caib.es/govern/external/accessibilitatext.do?path=/webcaib/govern_illes/accessibilitat/accessibilitatweb&lang=<%=locale.getLanguage()%>&fitxa=3705238"
+						class="imc-marc-ico imc--accessibilitat"
+						id="imc-marc-accessibilitat"> <span><%=messages.getString("menu.accessibilitat")%></span>
+					</a></li>
+					<li><a href="#" class="imc-marc-ico imc--cerrar"
+						id="imc-bt-cerrar"><span><%=messages.getString("menu.cerrar")%></span></a>
+					</li>
+				</ul>
+			</div>
+		</div>
 	</header>
-    <div class="imc--fons"></div>
-    
+	<div class="imc--fons"></div>
+
 	<section class="imc-logo">
 		<div>
-			<a href="https://www.caib.es" class="imc--goib" title="<%=messages.getString("logoAlt")%>" target="_blank"> 
-			     <img src="img/goib_front_lateral.png" title="" alt="<%=messages.getString("logoAlt")%>"> <span><%=messages.getString("logoAlt")%></span>
+			<a href="https://www.caib.es" class="imc--goib"
+				title="<%=messages.getString("logoAlt")%>" target="_blank"> <img
+				src="img/goib_front_lateral.png" title=""
+				alt="<%=messages.getString("logoAlt")%>"> <span><%=messages.getString("logoAlt")%></span>
 			</a>
 		</div>
 	</section>
@@ -81,7 +100,7 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
 
 		<p><%=messages.getString("descripcio")%></p>
 
-        <div class="row columnes">
+		<div class="row columnes">
 			<div id="nivelAdministracionDiv">
 				<label for="codigoNivelAdministracion"><%=messages.getString("form.nivelAdministracion.label")%>:</label>
 				<select id="codigoNivelAdministracion">
@@ -93,7 +112,7 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
 					<option value="6"><%=messages.getString("form.nivelAdministracion.6")%></option>
 				</select>
 			</div>
-	
+
 			<div id="comunidadAutonomaDiv">
 				<label for="codigoComunidad"><%=messages.getString("form.ccaa.label")%>:</label>
 				<select id="codigoComunidad">
@@ -119,15 +138,15 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
 					<option value="14"><%=messages.getString("form.ccaa.14")%></option>
 				</select>
 			</div>
-        </div>
-        
+		</div>
+
 		<div class="row" id="denominacionDiv">
 			<label for="denominacion"><%=messages.getString("form.buscador.label")%>:</label>
 			<input id="denominacion" type="text" autocomplete="off" />
-			
-			<button id="limpiar"><%=messages.getString("borrarBtn") %></button>
+
+			<button id="limpiar"><%=messages.getString("borrarBtn")%></button>
 		</div>
-		
+
 
 		<div id="resultados">
 			<div class="card">
@@ -155,19 +174,24 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
 
 				<div class="superior">
 					<span class="titol"><%=messages.getString("resultados.unidadSuperior")%></span>
-					<a href="#" class="enlaceUnidad" id="unitatSuperior"><span class="codi"></span>	- <span class="tag"></span>
-					</a>
+					<a href="#" class="enlaceUnidad" id="unitatSuperior"><span
+						class="codi"></span> - <span class="tag"></span> </a>
 				</div>
 
 				<div class="arrel">
 					<span class="titol"><%=messages.getString("resultados.unidadRaiz")%></span>
-					<a href="#" class="enlaceUnidad" id="unitatArrel"><span class="codi"></span> - <span class="tag"></span></a>
+					<a href="#" class="enlaceUnidad" id="unitatArrel"><span
+						class="codi"></span> - <span class="tag"></span></a>
 				</div>
 
 			</div>
 
 		</div>
 
+		<div id="acordeonContainer">
+			<div class="accordion"></div>
+		</div>
+		
 	</section>
 
 
@@ -181,38 +205,50 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
 
 			<div class="imc-peu-opcions">
 				<ul>
-					<li>
-					   <a href="https://www.caib.es/seucaib/<%=locale.getLanguage() %>/mapaWeb"><%=messages.getString("pie.mapaweb")%> 
-					   </a>
-					</li>
-					<li>
-					   <a href="https://www.caib.es/seucaib/<%=locale.getLanguage() %>/fichainformativa/4266878"><%=messages.getString("pie.avisoLegal")%> 
-					   <img src="img/legal.png" title="<%=messages.getString("pie.avisoLegal")%>" alt="<%=messages.getString("pie.avisoLegal")%>" /> 
-					   </a>
-					</li>
-					<li>
-					   <a href="http://www.caib.es/govern/rss.do?lang=<%=locale.getLanguage() %>" target="_blank"><%=messages.getString("pie.rss")%>
-							<img src="img/rss.png" title="<%=messages.getString("pie.rss")%>" alt="<%=messages.getString("pie.rss")%>" /> 
-					   </a>
-					</li>
+					<li><a
+						href="https://www.caib.es/seucaib/<%=locale.getLanguage()%>/mapaWeb"><%=messages.getString("pie.mapaweb")%>
+					</a></li>
+					<li><a
+						href="https://www.caib.es/seucaib/<%=locale.getLanguage()%>/fichainformativa/4266878"><%=messages.getString("pie.avisoLegal")%>
+							<img src="img/legal.png"
+							title="<%=messages.getString("pie.avisoLegal")%>"
+							alt="<%=messages.getString("pie.avisoLegal")%>" /> </a></li>
+					<li><a
+						href="http://www.caib.es/govern/rss.do?lang=<%=locale.getLanguage()%>"
+						target="_blank"><%=messages.getString("pie.rss")%> <img
+							src="img/rss.png" title="<%=messages.getString("pie.rss")%>"
+							alt="<%=messages.getString("pie.rss")%>" /> </a></li>
 				</ul>
 			</div>
 
 			<div class="imc-peu-xarxes">
 				<div>
-					<p><%=messages.getString("pie.redes")%>:</p>
+					<p><%=messages.getString("pie.redes")%>:
+					</p>
 					<ul>
-						<li><a href="http://www.youtube.com/CanalIllesBalears" title="<%=messages.getString("pie.youtube")%>" target="_blank"> 
-						  <img src="img/youtube.png" title="<%=messages.getString("pie.youtube")%>" alt="<%=messages.getString("pie.youtube")%>" />
+						<li><a href="http://www.youtube.com/CanalIllesBalears"
+							title="<%=messages.getString("pie.youtube")%>" target="_blank">
+								<img src="img/youtube.png"
+								title="<%=messages.getString("pie.youtube")%>"
+								alt="<%=messages.getString("pie.youtube")%>" />
 						</a></li>
-						<li><a href="https://www.facebook.com/GovernIllesBalears/" title="<%=messages.getString("pie.facebook")%>" target="_blank"> 
-						  <img src="img/facebook.png" title="<%=messages.getString("pie.facebook")%>" alt="<%=messages.getString("pie.facebook")%>" />
+						<li><a href="https://www.facebook.com/GovernIllesBalears/"
+							title="<%=messages.getString("pie.facebook")%>" target="_blank">
+								<img src="img/facebook.png"
+								title="<%=messages.getString("pie.facebook")%>"
+								alt="<%=messages.getString("pie.facebook")%>" />
 						</a></li>
-						<li><a href="https://www.instagram.com/goib" title="<%=messages.getString("pie.instagram")%>" target="_blank"> 
-							<img src="img/instagram.png" title="<%=messages.getString("pie.instagram")%>" alt="<%=messages.getString("pie.instagram")%>" />
+						<li><a href="https://www.instagram.com/goib"
+							title="<%=messages.getString("pie.instagram")%>" target="_blank">
+								<img src="img/instagram.png"
+								title="<%=messages.getString("pie.instagram")%>"
+								alt="<%=messages.getString("pie.instagram")%>" />
 						</a></li>
-						<li><a href="http://www.twitter.com/goib" title="<%=messages.getString("pie.twitter")%>" target="_blank">
-								<img src="img/twitter.png"	title="<%=messages.getString("pie.twitter")%>" alt="<%=messages.getString("pie.twitter")%>" />
+						<li><a href="http://www.twitter.com/goib"
+							title="<%=messages.getString("pie.twitter")%>" target="_blank">
+								<img src="img/twitter.png"
+								title="<%=messages.getString("pie.twitter")%>"
+								alt="<%=messages.getString("pie.twitter")%>" />
 						</a></li>
 					</ul>
 				</div>
@@ -230,6 +266,7 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
             let codigoComunidad = "4"; 
             let nivelAdministracion = "2";
             let unidades = []; 
+			let resultados = [];
 
             let nombreFichero = "obtener?nivel=" + nivelAdministracion + "&comunidad=" + codigoComunidad;
             $.getScript( nombreFichero, function( data, textStatus, jqxhr ) {
@@ -266,6 +303,7 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
              $('#codigoComunidad').on('change', function(){
                 codigoComunidad = this.value;
                 $('#denominacion').val('');
+	            $('#acordeonContainer').css('display', 'none');
                 
                 if (codigoComunidad != 'undefined' && nivelAdministracion != 'undefined'){
                     let nombreFichero = "obtener?nivel=" + nivelAdministracion + "&comunidad=" + codigoComunidad;
@@ -303,7 +341,6 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
 
                     $('#denominacion').devbridgeAutocomplete({
                         lookup: unidades,
-                        lookupLimit: 10,
                         nocache: true,
                         formatResult: function (suggestion, currentValue) {
                             if (suggestion.data.denominacion != suggestion.data.cooficial)
@@ -327,7 +364,7 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
             $('#codigoNivelAdministracion').on('change', function(){
                 nivelAdministracion = this.value;
                 $('#denominacion').val('');
-                // $('#denominacion').devbridgeAutocomplete('clear');
+                $('#acordeonContainer').css('display', 'none');
 
                 if (codigoComunidad != 'undefined' && nivelAdministracion != 'undefined'){
                     let nombreFichero = "obtener?nivel=" + nivelAdministracion + "&comunidad=" + codigoComunidad;
@@ -365,7 +402,6 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
 
                     $('#denominacion').devbridgeAutocomplete({
                         lookup: unidades,
-                        lookupLimit: 10,
                         nocache: true,
                         formatResult: function (suggestion, currentValue) {
                             if (suggestion.data.denominacion != suggestion.data.cooficial)
@@ -421,18 +457,27 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
                         });
                     });
 
-                    $('#denominacion').devbridgeAutocomplete('clear');                    
+                    $('#denominacion').devbridgeAutocomplete('clear');
+					$('#acordeonContainer').css('display', 'none');                    
 
                     $('#denominacion').devbridgeAutocomplete({
                         lookup: unidades,
-                        lookupLimit: 10,
                         nocache: true,
+						beforeRender: function (container, suggestions) {
+							const numElementos = parseInt(suggestions.length,10);
+                            if (numElementos > 10) {
+                               $('.autocomplete-suggestions').append('<div class="mostrarTodosContainer"><button id="mostrarTodosBtn" onclick="javascript:mostrarTodosBtn();"><%=messages.getString("resultados.verTodos")%></div>');
+							   suggestions.sort((a,b) => (a.data.cooficial > b.data.cooficial) ? 1 : ((b.data.cooficial > a.data.cooficial) ? -1 : 0));
+							   mostrarResultadosAcordeon(suggestions);
+                            }
+						},
                         formatResult: function (suggestion, currentValue) {
                             if (suggestion.data.cooficial != suggestion.data.denominacion)
                                 return "<p>"+suggestion.value+"<br><em>"+suggestion.data.cooficial+"</em></p>";
                             else
                                 return "<p>"+suggestion.value+"</p>";
                         },
+						maxHeight: 550,
                         minChars: 3,
                         onSelect: function (suggestion) {
                             mostrarResultados(unidades, suggestion.data.dir3);
@@ -456,7 +501,8 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
             $('#limpiar').on('click', function() {
                 $('#denominacion').val('');
                 $('#denominacion').devbridgeAutocomplete('clear');
-                $('.card').css('display', 'none');
+                $('#resultados .card').css('display', 'none');
+				$('#acordeonContainer').css('display', 'none');
             }); 
 
             $('#imc-bt-menu').on('click', function(){
@@ -475,112 +521,246 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
             });
 
         });
-        
-        function mostrarResultados (unidades, codigoDir3) {
-            let organismo;
-            
-            unidades.forEach( function (item){  
-                    if (item.data.dir3 == codigoDir3) {
-                        return organismo = item;
-                    }
-            });
-
-            if (organismo != 'undefined') {
-
-                if(organismo.data.cooficial != organismo.data.denominacion){
-                    $('#cooficial').html(organismo.data.cooficial);
-                    $('#oficial').html(organismo.data.denominacion);
-                }else{
-                    $('#oficial').html("");
-                    $('#cooficial').html(organismo.data.denominacion);
-                }
-                
-                $('#codigodir3').html(organismo.data.dir3);
-
-                $('#direccioNom').html(organismo.data.tipo + " " + organismo.data.nombre + ", " + organismo.data.numero);
-                $('#direccioCompl').html(organismo.data.complemento);
-                $('#direccioCP').html(organismo.data.cp + " - " + organismo.data.localidad);
-
-                const provincia = (organismo.data.provincia != null) ? organismo.data.provincia + " - " : "";
-               
-                $('#direccioProv').html(provincia + organismo.data.comunidad);
-                $('#direccioPais').html(organismo.data.pais);
-
-                $('#contactesList li').remove();
-                let contactosLista = organismo.data.contactos;
-                if(contactosLista.length > 0) {
-                    for (let i = 0; i < contactosLista.length; i++) {
-
-                        let tipoContacto = "";
-
-                        switch (contactosLista[i].tipo) {
-                            case 'C':
-                                tipoContacto = "<%=messages.getString("tipoContacto.C")%>";
-                                break;
-                            case 'E':
-                                tipoContacto = "<%=messages.getString("tipoContacto.E")%>";
-                                break;
-                            case 'F':
-                                tipoContacto = "<%=messages.getString("tipoContacto.F")%>";
-                                break;
-                            case 'O':
-                                tipoContacto = "<%=messages.getString("tipoContacto.O")%>";
-                                break;
-                            case 'P':
-                                tipoContacto = "<%=messages.getString("tipoContacto.P")%>";
-                                break;
-                            case 'T':
-                                tipoContacto = "<%=messages.getString("tipoContacto.T")%>";
-                                break;
-                            case 'U':
-                                tipoContacto = "<%=messages.getString("tipoContacto.U")%>";
-                                break;
-                            default:
-                                tipoContacto = "<%=messages.getString("tipoContacto")%>";
-                                break;   
-                        }
-
-                         $('#contactesList').append('<li><span class="tag">'+ tipoContacto + ':</span> '+ contactosLista[i].valor +'</li>');
-                    }
-            }
-
-            if (organismo.data.raiz_codigo !== organismo.data.dir3){
-                $('#unitatSuperior').attr('data-dir3', organismo.data.sup_codigo); 
-                $('#unitatSuperior .codi').html(organismo.data.sup_codigo);
-                $('#unitatSuperior .tag').html(organismo.data.sup_denominacion);
-            
-                $('#unitatArrel').data('dir3', organismo.data.raiz_codigo);
-                $('#unitatArrel .codi').html(organismo.data.raiz_codigo);
-                $('#unitatArrel .tag').html(organismo.data.raiz_denominacion);
-
-                $('.superior').css('display','block');
-                $('.arrel').css('display','block');
-            }else{
-                $('.superior').css('display','none');
-                $('.arrel').css('display','none');
-            }
-
-            $('.card').css('display','block');
-
-            }
-        }
 
     </script>
- <% if(Configuracio.isCAIB() && !Configuracio.isDevelopment()){ %>
-    <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-  ga('create', 'UA-91918552-2', 'auto'
-    
-    , {'clientId': '858F3BE17D90B9408200C5E2D3EDF47A'}
-    
-     );
-  
-  ga('send', 'pageview');
-</script>
-<% } %>
+	<script type="text/javascript">
+	   
+	    function mostrarContenidoAcordeon(item) {        
+	        if ($('#accordion-item-'+item+' .accordion-content').css('display') == 'block'){
+	        	$('#accordion-item-' + item + ' .accordion-content').slideUp();
+				$('#accordion-item-' + item + ' .accordion-content').css('display', 'none');
+	    	} else {
+				$('#accordion-item-' + item + ' .accordion-content').slideDown();
+				$('#accordion-item-' + item + ' .accordion-content').css('display', 'block');
+	    	}			
+		}
+	
+		function mostrarTodosBtn() {
+			$('#acordeonContainer').css('display', 'block');
+			$('.autocomplete-suggestions').css('display', 'none');
+		}
+	
+		function mostrarResultadosAcordeon(unidades) {
+			$('.accordion').empty();
+			$('.resultados .card').css('display', 'none');
+			unidades.forEach(function(item) {
+				
+						let itemCode = '<div class="accordion-item" id="accordion-item-'+item.data.dir3+'">'
+												+ '<div class="accordion-header" onclick="javascript:mostrarContenidoAcordeon(\'' + item.data.dir3 + '\')"><h2>';
+											
+						itemCode += (item.data.cooficial != item.data.denominacion) ? item.data.cooficial : item.data.denominacion;
+						
+						itemCode += '</h2></div><div class="accordion-content"><div class="card">';
+
+						if (item.data.cooficial != item.data.denominacion) {
+							itemCode += '<p class="cooficial">'	+ item.data.cooficial + '</p><p class="oficial">' + item.data.denominacion + '</p>';
+						} else {
+							itemCode += '<p class="oficial">' + item.data.denominacion + '</p><p class="oficial"></p>';
+						}
+
+						itemCode += '<span class="codigodir3">'	+ item.data.dir3 + '</span>' 
+								+ '<div class="columnes"><div class="direccio"><p class="titol"><%=messages.getString("resultados.direccion")%></p><ul>'
+								+ '<li>' + item.data.tipo + ' ' + item.data.nombre + ' ' + item.data.numero +'</li>'
+								+ '<li>' + item.data.complemento + '</li>'
+								+ '<li>' + item.data.cp + ' - ' + item.data.localidad + '</li>';
+						
+						if (item.data.provincia != null) {
+							itemCode += '<li>' + item.data.provincia +' - ' + item.data.comunidad  +'</li>';
+						}else{
+                            itemCode += '<li>' + item.data.comunidad + '</li>';
+                        }
+						
+						itemCode += '<li>' + item.data.pais + '</li></ul></div>';
+						
+						let contactosLista = item.data.contactos;
+						if (contactosLista.length > 0) {
+                            itemCode += '<div class="contactes"><p class="titol"><%=messages.getString("resultados.contactos")%></p><ul>';
+                            for (let i = 0; i < contactosLista.length; i++) {
+                                let tipoContacto = "";
+                                switch (contactosLista[i].tipo) {
+                                case 'C':
+                                    tipoContacto = "<%=messages.getString("tipoContacto.C")%>";
+                                    break;
+                                case 'E':
+                                    tipoContacto = "<%=messages.getString("tipoContacto.E")%>";
+                                    break;
+                                case 'F':
+                                    tipoContacto = "<%=messages.getString("tipoContacto.F")%>";
+                                    break;
+                                case 'O':
+                                    tipoContacto = "<%=messages.getString("tipoContacto.O")%>";
+                                    break;
+                                case 'P':
+                                    tipoContacto = "<%=messages.getString("tipoContacto.P")%>";
+                                    break;
+                                case 'T':
+                                    tipoContacto = "<%=messages.getString("tipoContacto.T")%>";
+                                    break;
+                                case 'U':
+                                    tipoContacto = "<%=messages.getString("tipoContacto.U")%>";
+                                    break;
+                                default:
+                                    tipoContacto = "<%=messages.getString("tipoContacto")%>";
+                                    break;
+                                }
+                                itemCode += '<li><span class="tag">'+ tipoContacto + ':</span> '+ contactosLista[i].valor +'</li>';
+                            }
+                            itemCode += '</ul></div>';
+                        }
+						
+						if (item.data.raiz_codigo !== item.data.dir3){
+                            itemCode += '</div><div class="superior"><span class="titol"><%=messages.getString("resultados.unidadSuperior")%></span>'
+                                    + '<span class="codi">'+item.data.sup_codigo+'</span> - <span class="tag">';
+                            itemCode += (item.data.sup_cooficial != item.data.sup_denominacion) ? item.data.sup_cooficial : item.data.sup_denominacion;
+                            itemCode += '</span></div><div class="arrel"><span class="titol"><%=messages.getString("resultados.unidadRaiz")%></span>'
+                                    + '<span class="codi">'+item.data.raiz_codigo+'</span> - <span class="tag">';
+                             itemCode += (item.data.raiz_cooficial != item.data.raiz_denominacion) ? item.data.raiz_cooficial : item.data.raiz_denominacion;
+                             itemCode += '</span></div></div></div></div>';
+                             
+                        }else{
+                            
+                        	itemCode += '</div><div class="superior"><span class="titol"><%=messages.getString("resultados.unidadSuperior")%></span>'
+                                    + '<span class="codi">'+item.data.sup_codigo+'</span> - <span class="tag">';
+                            itemCode += (item.data.sup_cooficial != item.data.sup_denominacion) ? item.data.sup_cooficial : item.data.sup_denominacion;
+                            itemCode += '</span></div><div class="arrel"><span class="titol"><%=messages.getString("resultados.unidadRaiz")%></span>'
+                                    + '<span class="codi">'+item.data.raiz_codigo+'</span> - <span class="tag">';
+                            itemCode += (item.data.raiz_cooficial != item.data.raiz_denominacion) ? item.data.raiz_cooficial : item.data.raiz_denominacion;
+							itemCode += '</span></div></div></div></div>';
+                        }
+						
+						$('.accordion').append(itemCode);
+					
+					});
+		}
+
+		function mostrarResultados(unidades, codigoDir3) {
+			let organismo;
+
+			unidades.forEach(function(item) {
+				if (item.data.dir3 == codigoDir3) {
+					return organismo = item;
+				}
+			});
+
+			if (organismo != 'undefined') {
+
+				if (organismo.data.cooficial != organismo.data.denominacion) {
+					$('#cooficial').html(organismo.data.cooficial);
+					$('#oficial').html(organismo.data.denominacion);
+				} else {
+					$('#oficial').html("");
+					$('#cooficial').html(organismo.data.denominacion);
+				}
+
+				$('#codigodir3').html(organismo.data.dir3);
+
+				$('#direccioNom').html(
+						organismo.data.tipo + " "
+								+ organismo.data.nombre + ", "
+								+ organismo.data.numero);
+				$('#direccioCompl')
+						.html(organismo.data.complemento);
+				$('#direccioCP').html(
+						organismo.data.cp + " - "
+								+ organismo.data.localidad);
+
+				const provincia = (organismo.data.provincia != null) ? organismo.data.provincia
+						+ " - "
+						: "";
+
+				$('#direccioProv').html(
+						provincia + organismo.data.comunidad);
+				$('#direccioPais').html(organismo.data.pais);
+
+				$('#contactesList li').remove();
+				let contactosLista = organismo.data.contactos;
+				if (contactosLista.length > 0) {
+					for (let i = 0; i < contactosLista.length; i++) {
+
+						let tipoContacto = "";
+
+						switch (contactosLista[i].tipo) {
+						case 'C':
+							tipoContacto = "<%=messages.getString("tipoContacto.C")%>";
+                            break;
+                        case 'E':
+                            tipoContacto = "<%=messages.getString("tipoContacto.E")%>";
+                            break;
+                        case 'F':
+                            tipoContacto = "<%=messages.getString("tipoContacto.F")%>";
+                            break;
+                        case 'O':
+                            tipoContacto = "<%=messages.getString("tipoContacto.O")%>";
+                            break;
+                        case 'P':
+                            tipoContacto = "<%=messages.getString("tipoContacto.P")%>";
+                            break;
+                        case 'T':
+                            tipoContacto = "<%=messages.getString("tipoContacto.T")%>";
+                            break;
+                        case 'U':
+                            tipoContacto = "<%=messages.getString("tipoContacto.U")%>";
+                            break;
+                        default:
+                            tipoContacto = "<%=messages.getString("tipoContacto")%>";
+                            break;   
+                    }
+
+                     $('#contactesList').append('<li><span class="tag">'+ tipoContacto + ':</span> '+ contactosLista[i].valor +'</li>');
+                }
+        }
+
+        if (organismo.data.raiz_codigo !== organismo.data.dir3){
+            $('#unitatSuperior').attr('data-dir3', organismo.data.sup_codigo); 
+            $('#unitatSuperior .codi').html(organismo.data.sup_codigo);
+			$('#unitatSuperior .tag').html((organismo.data.sup_cooficial != organismo.data.sup_denominacion) ? organismo.data.sup_cooficial : organismo.data.sup_denominacion);
+			
+			$('#unitatArrel').data('dir3', organismo.data.raiz_codigo);
+			$('#unitatArrel .codi').html(organismo.data.raiz_codigo);
+			$('#unitatArrel .tag').html((organismo.data.raiz_cooficial != organismo.data.raiz_denominacion) ? organismo.data.raiz_cooficial : organismo.data.raiz_denominacion);
+
+			$('.superior').css('display', 'block');
+			$('.arrel').css('display', 'block');
+		} else {
+			$('.superior').css('display', 'none');
+			$('.arrel').css('display', 'none');
+		}
+
+				$('.card').css('display', 'block');
+
+			}
+		}
+	</script>
+
+	<%
+	if (Configuracio.isCAIB() && !Configuracio.isDevelopment()) {
+	%>
+	<script>
+		(function(i, s, o, g, r, a, m) {
+			i['GoogleAnalyticsObject'] = r;
+			i[r] = i[r] || function() {
+				(i[r].q = i[r].q || []).push(arguments)
+			}, i[r].l = 1 * new Date();
+			a = s.createElement(o), m = s.getElementsByTagName(o)[0];
+			a.async = 1;
+			a.src = g;
+			m.parentNode.insertBefore(a, m)
+		})(window, document, 'script',
+				'https://www.google-analytics.com/analytics.js', 'ga');
+
+		ga('create', 'UA-91918552-2', 'auto'
+
+		, {
+			'clientId' : '858F3BE17D90B9408200C5E2D3EDF47A'
+		}
+
+		);
+
+		ga('send', 'pageview');
+	</script>
+	<%
+	}
+	%>
 </body>
 </html>
