@@ -54,21 +54,16 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
 				<ul>
 					<li id="langs" class="imc-marc-ico imc--idioma"><a
 						href="index.jsp?lang=ca" id="idioma" data-lang="ca" lang="ca">
-							<%
-							if ("ca".equalsIgnoreCase(locale.getLanguage())) {
-							%><strong><%=messages.getString("menu.catala")%></strong> <%
- } else {
- %><%=messages.getString("menu.catala")%> <%
- }
- %>
+							<% if ("ca".equalsIgnoreCase(locale.getLanguage())) { %>
+							<strong><%=messages.getString("menu.catala")%></strong> 
+							<% } else { %>
+							<%=messages.getString("menu.catala")%> 
+							<% } %>
 					</a> \ <a href="index.jsp?lang=es" id="idioma" data-lang="es" lang="es">
-							<%
-							if ("es".equalsIgnoreCase(locale.getLanguage())) {
-							%><strong><%=messages.getString("menu.castella")%></strong> <%
- } else {
- %><%=messages.getString("menu.castella")%> <%
- }
- %>
+							<% if ("es".equalsIgnoreCase(locale.getLanguage())) { %><strong><%=messages.getString("menu.castella")%></strong> 
+							<% } else { %>
+							<%=messages.getString("menu.castella")%>
+							<% } %>
 					</a></li>
 					<li><a
 						href="https://www.caib.es/govern/external/accessibilitatext.do?path=/webcaib/govern_illes/accessibilitat/accessibilitatweb&lang=<%=locale.getLanguage()%>&fitxa=3705238"
@@ -272,7 +267,7 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
             $.getScript( nombreFichero, function( data, textStatus, jqxhr ) {
 
                         unidades = $.map(unitats, function (value, key) { 
-                    return { value: value.denominacionCooficial + " - " + value.codigo, 
+                    return { value: <% if ("ca".equalsIgnoreCase(locale.getLanguage())) { %>value.denominacionCooficial<% } else {%>value.denominacion<% } %>+ " - " + value.codigo, 
                              data: {
                                 dir3: value.codigo,
                                 denominacion: value.denominacion,
@@ -311,7 +306,7 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
                     $.getScript( nombreFichero, function( data, textStatus, jqxhr ) {
 
                         unidades = $.map(unitats, function (value, key) { 
-                    return { value: value.denominacionCooficial + " - " + value.codigo, 
+                    return { value: <% if ("ca".equalsIgnoreCase(locale.getLanguage())) { %>value.denominacionCooficial<% } else {%>value.denominacion<% } %>+ " - " + value.codigo, 
                              data: {
                                 dir3: value.codigo,
                                 denominacion: value.denominacion,
@@ -372,7 +367,7 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
                     $.getScript( nombreFichero, function( data, textStatus, jqxhr ) {
 
                         unidades = $.map(unitats, function (value, key) { 
-                    return { value: value.denominacionCooficial + " - " + value.codigo, 
+                    return { value: <% if ("ca".equalsIgnoreCase(locale.getLanguage())) { %>value.denominacionCooficial<% } else {%>value.denominacion<% } %>+ " - " + value.codigo, 
                              data: {
                                 dir3: value.codigo,
                                 denominacion: value.denominacion,
@@ -429,7 +424,7 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
                     $.getScript( nombreFichero, function( data, textStatus, jqxhr ) {
 
                         unidades = $.map(unitats, function (value, key) { 
-                    return { value: value.denominacionCooficial + " - " + value.codigo, 
+                    return { value: <% if ("ca".equalsIgnoreCase(locale.getLanguage())) { %>value.denominacionCooficial<% } else {%>value.denominacion<% } %>+ " - " + value.codigo, 
                              data: {
                                 dir3: value.codigo,
                                 denominacion: value.denominacion,
@@ -458,19 +453,27 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
                     });
 
                     $('#denominacion').devbridgeAutocomplete('clear');
-					$('#acordeonContainer').css('display', 'none');                    
+					$('#acordeonContainer').css('display', 'none');   
 
                     $('#denominacion').devbridgeAutocomplete({
                         lookup: unidades,
                         nocache: true,
 						beforeRender: function (container, suggestions) {
-							const numElementos = parseInt(suggestions.length,10);
+							$('.autocomplete-suggestions').css('max-height', '');
+							$('#resultados .card').css('display', 'none');
+						    const numElementos = parseInt(suggestions.length,10);
                             if (numElementos > 10) {
                                $('.autocomplete-suggestions').append('<div class="mostrarTodosContainer"><button id="mostrarTodosBtn" onclick="javascript:mostrarTodosBtn();"><%=messages.getString("resultados.verTodos")%></div>');
-							   suggestions.sort((a,b) => (a.data.cooficial > b.data.cooficial) ? 1 : ((b.data.cooficial > a.data.cooficial) ? -1 : 0));
+                            } else {
 							   mostrarResultadosAcordeon(suggestions);
                             }
 						},
+						formatGroup: function (suggestion, category) {
+							console.log("category: " + category);
+							if (category != 'undefined' && category != null) {
+                            	return '<div class="autocomplete-group"><strong>' + category + '</strong></div>';
+                            }
+                        },
                         formatResult: function (suggestion, currentValue) {
                             if (suggestion.data.cooficial != suggestion.data.denominacion)
                                 return "<p>"+suggestion.value+"<br><em>"+suggestion.data.cooficial+"</em></p>";
@@ -526,7 +529,8 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
 
 	<script type="text/javascript">
 	   
-	    function mostrarContenidoAcordeon(item) {        
+	    function mostrarContenidoAcordeon(item) {     
+			$('.accordion-content').css('display', 'none');   
 	        if ($('#accordion-item-'+item+' .accordion-content').css('display') == 'block'){
 	        	$('#accordion-item-' + item + ' .accordion-content').slideUp();
 				$('#accordion-item-' + item + ' .accordion-content').css('display', 'none');
@@ -543,39 +547,65 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
 	
 		function mostrarResultadosAcordeon(unidades) {
 			$('.accordion').empty();
-			$('.resultados .card').css('display', 'none');
+			$('#resultados .card').css('display', 'none');
 			unidades.forEach(function(item) {
 				
 						let itemCode = '<div class="accordion-item" id="accordion-item-'+item.data.dir3+'">'
 												+ '<div class="accordion-header" onclick="javascript:mostrarContenidoAcordeon(\'' + item.data.dir3 + '\')"><h2>';
-											
+						
+						<% if ("ca".equalsIgnoreCase(locale.getLanguage())) { %>
 						itemCode += (item.data.cooficial != item.data.denominacion) ? item.data.cooficial : item.data.denominacion;
+						<% } else { %>
+						itemCode += (item.data.denominacion != item.data.cooficial) ? item.data.denominacion : item.data.cooficial;
+						<% } %>
+						
 						
 						itemCode += '</h2></div><div class="accordion-content"><div class="card">';
 
 						if (item.data.cooficial != item.data.denominacion) {
+							<% if ("ca".equalsIgnoreCase(locale.getLanguage())) { %>
 							itemCode += '<p class="cooficial">'	+ item.data.cooficial + '</p><p class="oficial">' + item.data.denominacion + '</p>';
+							<% } else { %>
+							itemCode += '<p class="cooficial">'	+ item.data.denominacion + '</p><p class="oficial">' + item.data.cooficial + '</p>';
+							<% } %>
 						} else {
 							itemCode += '<p class="oficial">' + item.data.denominacion + '</p><p class="oficial"></p>';
 						}
 
 						itemCode += '<span class="codigodir3">'	+ item.data.dir3 + '</span>' 
-								+ '<div class="columnes"><div class="direccio"><p class="titol"><%=messages.getString("resultados.direccion")%></p><ul>'
-								+ '<li>' + item.data.tipo + ' ' + item.data.nombre + ' ' + item.data.numero +'</li>'
-								+ '<li>' + item.data.complemento + '</li>'
-								+ '<li>' + item.data.cp + ' - ' + item.data.localidad + '</li>';
+								+ '<div class="columnes"><div class="direccio"><p class="titol"><%=messages.getString("resultados.direccion")%></p><ul><li>';
+								
+						if (item.data.tipo != null)
+							itemCode += item.data.tipo + ' ';
 						
+						if (item.data.nombre != null)
+							itemCode += item.data.nombre + ', ';
+						
+						if (item.data.numero != null)
+							itemCode += item.data.numero;
+						
+						itemCode += '</li>';
+						
+						if (item.data.complemento != null)
+							itemCode += '<li>' + item.data.complemento	+ '</li>';
+							
+						if (item.data.cp != null && item.data.localidad != null)
+                            itemCode += '<li>' + item.data.cp + ' - ' + item.data.localidad + '</li>';
+							
 						if (item.data.provincia != null) {
-							itemCode += '<li>' + item.data.provincia +' - ' + item.data.comunidad  +'</li>';
-						}else{
-                            itemCode += '<li>' + item.data.comunidad + '</li>';
-                        }
-						
-						itemCode += '<li>' + item.data.pais + '</li></ul></div>';
-						
+							itemCode += '<li>' + item.data.provincia + ' - ' + item.data.comunidad + '</li>';
+						} else {
+							itemCode += '<li>' + item.data.comunidad + '</li>';
+						}
+
+						if (item.data.pais != null)
+							itemCode += '<li>' + item.data.pais + '</li>';
+
+						itemCode += '</ul></div>';
+
 						let contactosLista = item.data.contactos;
 						if (contactosLista.length > 0) {
-                            itemCode += '<div class="contactes"><p class="titol"><%=messages.getString("resultados.contactos")%></p><ul>';
+							itemCode += '<div class="contactes"><p class="titol"><%=messages.getString("resultados.contactos")%></p><ul>';
                             for (let i = 0; i < contactosLista.length; i++) {
                                 let tipoContacto = "";
                                 switch (contactosLista[i].tipo) {
@@ -612,23 +642,22 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
 						if (item.data.raiz_codigo !== item.data.dir3){
                             itemCode += '</div><div class="superior"><span class="titol"><%=messages.getString("resultados.unidadSuperior")%></span>'
                                     + '<span class="codi">'+item.data.sup_codigo+'</span> - <span class="tag">';
-                            itemCode += (item.data.sup_cooficial != item.data.sup_denominacion) ? item.data.sup_cooficial : item.data.sup_denominacion;
+                            itemCode += (item.data.sup_cooficial != item.data.sup_denominacion<% if ("es".equalsIgnoreCase(locale.getLanguage())) { %> && false <%} %>) ? item.data.sup_cooficial : item.data.sup_denominacion;
                             itemCode += '</span></div><div class="arrel"><span class="titol"><%=messages.getString("resultados.unidadRaiz")%></span>'
                                     + '<span class="codi">'+item.data.raiz_codigo+'</span> - <span class="tag">';
-                             itemCode += (item.data.raiz_cooficial != item.data.raiz_denominacion) ? item.data.raiz_cooficial : item.data.raiz_denominacion;
+                             itemCode += (item.data.raiz_cooficial != item.data.raiz_denominacion<% if ("es".equalsIgnoreCase(locale.getLanguage())) { %> && false <%} %>) ? item.data.raiz_cooficial : item.data.raiz_denominacion;
                              itemCode += '</span></div></div></div></div>';
                              
                         }else{
                             
                         	itemCode += '</div><div class="superior"><span class="titol"><%=messages.getString("resultados.unidadSuperior")%></span>'
                                     + '<span class="codi">'+item.data.sup_codigo+'</span> - <span class="tag">';
-                            itemCode += (item.data.sup_cooficial != item.data.sup_denominacion) ? item.data.sup_cooficial : item.data.sup_denominacion;
+                            itemCode += (item.data.sup_cooficial != item.data.sup_denominacion<% if ("es".equalsIgnoreCase(locale.getLanguage())) { %> && false <%} %>) ? item.data.sup_cooficial : item.data.sup_denominacion;
                             itemCode += '</span></div><div class="arrel"><span class="titol"><%=messages.getString("resultados.unidadRaiz")%></span>'
                                     + '<span class="codi">'+item.data.raiz_codigo+'</span> - <span class="tag">';
-                            itemCode += (item.data.raiz_cooficial != item.data.raiz_denominacion) ? item.data.raiz_cooficial : item.data.raiz_denominacion;
+                            itemCode += (item.data.raiz_cooficial != item.data.raiz_denominacion<% if ("es".equalsIgnoreCase(locale.getLanguage())) { %> && false <%} %>) ? item.data.raiz_cooficial : item.data.raiz_denominacion;
 							itemCode += '</span></div></div></div></div>';
                         }
-						
 						$('.accordion').append(itemCode);
 					
 					});
@@ -646,8 +675,13 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
 			if (organismo != 'undefined') {
 
 				if (organismo.data.cooficial != organismo.data.denominacion) {
+					<% if ("es".equalsIgnoreCase(locale.getLanguage())) { %>
+					$('#cooficial').html(organismo.data.denominacion);
+					$('#oficial').html(organismo.data.cooficial); 
+					<%} else {%>
 					$('#cooficial').html(organismo.data.cooficial);
 					$('#oficial').html(organismo.data.denominacion);
+					<%} %>
 				} else {
 					$('#oficial').html("");
 					$('#cooficial').html(organismo.data.denominacion);
@@ -655,23 +689,27 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
 
 				$('#codigodir3').html(organismo.data.dir3);
 
-				$('#direccioNom').html(
-						organismo.data.tipo + " "
-								+ organismo.data.nombre + ", "
-								+ organismo.data.numero);
+				let direccion1 = (organismo.data.tipo != null) ? organismo.data.tipo + " " : "";
+				direccion1 += (organismo.data.nombre != null) ? organismo.data.nombre + ", " : "";
+				direccion1 += (organismo.data.numero != null) ? organismo.data.numero : "";
+				
+				$('#direccioNom').html(direccion1);
+				
 				$('#direccioCompl')
 						.html(organismo.data.complemento);
-				$('#direccioCP').html(
-						organismo.data.cp + " - "
-								+ organismo.data.localidad);
+				
+				let cp = (organismo.data.cp != null) ? organismo.data.cp + " - " : "";
+				cp += (organismo.data.localidad != null) ? organismo.data.localidad : "";
+				
+				$('#direccioCP').html(cp);
 
-				const provincia = (organismo.data.provincia != null) ? organismo.data.provincia
-						+ " - "
-						: "";
+				const provincia = (organismo.data.provincia != null) ? organismo.data.provincia	+ " - "	: "";
 
 				$('#direccioProv').html(
 						provincia + organismo.data.comunidad);
-				$('#direccioPais').html(organismo.data.pais);
+				
+				if (organismo.data.pais != null)
+					$('#direccioPais').html(organismo.data.pais);
 
 				$('#contactesList li').remove();
 				let contactosLista = organismo.data.contactos;
@@ -709,28 +747,28 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
 
                      $('#contactesList').append('<li><span class="tag">'+ tipoContacto + ':</span> '+ contactosLista[i].valor +'</li>');
                 }
-        }
+        	}
 
-        if (organismo.data.raiz_codigo !== organismo.data.dir3){
-            $('#unitatSuperior').attr('data-dir3', organismo.data.sup_codigo); 
-            $('#unitatSuperior .codi').html(organismo.data.sup_codigo);
-			$('#unitatSuperior .tag').html((organismo.data.sup_cooficial != organismo.data.sup_denominacion) ? organismo.data.sup_cooficial : organismo.data.sup_denominacion);
-			
-			$('#unitatArrel').data('dir3', organismo.data.raiz_codigo);
-			$('#unitatArrel .codi').html(organismo.data.raiz_codigo);
-			$('#unitatArrel .tag').html((organismo.data.raiz_cooficial != organismo.data.raiz_denominacion) ? organismo.data.raiz_cooficial : organismo.data.raiz_denominacion);
-
-			$('.superior').css('display', 'block');
-			$('.arrel').css('display', 'block');
-		} else {
-			$('.superior').css('display', 'none');
-			$('.arrel').css('display', 'none');
-		}
-
-				$('.card').css('display', 'block');
-
+	        if (organismo.data.raiz_codigo !== organismo.data.dir3){
+	            $('#unitatSuperior').attr('data-dir3', organismo.data.sup_codigo); 
+	            $('#unitatSuperior .codi').html(organismo.data.sup_codigo);
+				$('#unitatSuperior .tag').html((organismo.data.sup_cooficial != organismo.data.sup_denominacion<% if ("es".equalsIgnoreCase(locale.getLanguage())) { %> && false <%} %>) ? organismo.data.sup_cooficial : organismo.data.sup_denominacion);
+				
+				$('#unitatArrel').data('dir3', organismo.data.raiz_codigo);
+				$('#unitatArrel .codi').html(organismo.data.raiz_codigo);
+				$('#unitatArrel .tag').html((organismo.data.raiz_cooficial != organismo.data.raiz_denominacion<% if ("es".equalsIgnoreCase(locale.getLanguage())) { %> && false <%} %>) ? organismo.data.raiz_cooficial : organismo.data.raiz_denominacion);
+	
+				$('.superior').css('display', 'block');
+				$('.arrel').css('display', 'block');
+			} else {
+				$('.superior').css('display', 'none');
+				$('.arrel').css('display', 'none');
 			}
+
+			$('.card').css('display', 'block');
+
 		}
+	}
 	</script>
 
 	<%

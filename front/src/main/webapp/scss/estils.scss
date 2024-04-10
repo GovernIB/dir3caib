@@ -247,6 +247,8 @@ header {
             }
             
             #nivelAdministracionDiv {
+				margin-top: 10px;
+				
                 @include desktop{
                     margin-right: 10px; 
                     flex: 1; 
@@ -254,6 +256,8 @@ header {
             }
             
             #comunidadAutonomaDiv {
+				margin-top: 10px;
+				
                 @include desktop{ 
                     flex: 1; 
                 }
@@ -292,6 +296,7 @@ header {
             width: 87%;
             z-index: 2; 
             background: transparent;
+            margin-bottom: 10px;
         }
         
         button{
@@ -317,6 +322,7 @@ header {
         border-radius: 5px;
         border: 1px solid #ccc;
         margin-top:40px;
+        padding-top: 75px;
         display:none;
         
         @include tablet{
@@ -326,6 +332,11 @@ header {
         .cooficial {
             font-weight: bold;
             font-size: 0.9em;
+            margin-top: 0;
+            
+			@include tablet {
+				margin-top: 35px;
+			}
         }
 
         .oficial {
@@ -424,6 +435,8 @@ header {
 
 #acordeonContainer{
 	display:none;	
+	margin-top: 10px;
+  	border-top: 1px solid black;
 }
 
 .accordion {
@@ -458,12 +471,17 @@ header {
 			border: 0;
 			margin-top: 0;
 			display:block;	
+			padding-top:70px;
 			
 			.codigodir3{
 				margin-right: 30px;
   				margin-top: 15px;
   				border-radius: 10px;
 			}
+			
+			.cooficial {
+			 	margin-top: 0;
+			 }
 		}
     	
   	}
@@ -500,7 +518,6 @@ header {
         display:none;
         
         @include tablet{
-             white-space: nowrap;
              font-size: 1em;
         }
         
@@ -539,6 +556,7 @@ header {
     line-height: normal;
     color: #333;
     margin-top: 35px;
+    margin-bottom: 20px;
     
     @include tablet {
         margin-top: 10px;
@@ -598,9 +616,17 @@ header {
         }
     }
     
-    .imc-peu-xarxes li {
-        display: inline-block;
-    }
+    .imc-peu-xarxes{
+		
+		p {
+			margin: 10px 0;
+		}
+		
+		li {
+        	display: inline-block;
+    	}
+		
+	} 
 }
 
 .vermell{ color: #C30045; }
