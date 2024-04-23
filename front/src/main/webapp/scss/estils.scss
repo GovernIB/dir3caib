@@ -406,11 +406,13 @@ header {
             }
         }
         
+        .contactes{
+			@include desktop{
+				margin-left: 10px;
+			}
+		}
+        
         .direccio {
-            @include desktop {
-                margin-right: 10px;
-            }
-            
             ul li:first-child:first-letter {
     			text-transform:capitalize;
 			}

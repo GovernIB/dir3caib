@@ -455,7 +455,7 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
                     $('#denominacion').devbridgeAutocomplete('clear');
 					$('#acordeonContainer').css('display', 'none');   
 
-                    $('#denominacion').devbridgeAutocomplete({
+					$('#denominacion').devbridgeAutocomplete({
                         lookup: unidades,
                         nocache: true,
 						beforeRender: function (container, suggestions) {
@@ -463,15 +463,21 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
 							$('#resultados .card').css('display', 'none');
 						    const numElementos = parseInt(suggestions.length,10);
                             if (numElementos > 10) {
-                               $('.autocomplete-suggestions').append('<div class="mostrarTodosContainer"><button id="mostrarTodosBtn" onclick="javascript:mostrarTodosBtn();"><%=messages.getString("resultados.verTodos")%></div>');
-                            } else {
 							   mostrarResultadosAcordeon(suggestions);
+                               $('.autocomplete-suggestions').append('<div class="mostrarTodosContainer"><button id="mostrarTodosBtn" onclick="javascript:mostrarTodosBtn();"><%=messages.getString("resultados.verTodos")%></div>');
+
+                                const numGrupos = $('.autocomplete-suggestions').children('.autocomplete-group').length;
+                                if (numGrupos > 1) {
+                                    $('.autocomplete-suggestions').children('.autocomplete-group').css('display', 'none');
+                                }
+
                             }
 						},
 						formatGroup: function (suggestion, category) {
-							console.log("category: " + category);
-							if (category != 'undefined' && category != null) {
+							if (typeof category === 'undefined' || category != null) {
                             	return '<div class="autocomplete-group"><strong>' + category + '</strong></div>';
+                            }else{
+								return '';
                             }
                         },
                         formatResult: function (suggestion, currentValue) {
@@ -488,7 +494,7 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
                         showNoSuggestionNotice: true,
                         noSuggestionNotice: '<%=messages.getString("form.sincoincidencias")%>',
                         groupBy: 'comunidad'
-                    });
+                    });  
 
                 }
             }); 
@@ -531,7 +537,7 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
 	   
 	    function mostrarContenidoAcordeon(item) {     
 			$('.accordion-content').css('display', 'none');   
-	        if ($('#accordion-item-'+item+' .accordion-content').css('display') == 'block'){
+	        if ($('#accordion-item-'+item+' .accordion-content').css('display') == 'block'){       	
 	        	$('#accordion-item-' + item + ' .accordion-content').slideUp();
 				$('#accordion-item-' + item + ' .accordion-content').css('display', 'none');
 	    	} else {
@@ -543,15 +549,33 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
 		function mostrarTodosBtn() {
 			$('#acordeonContainer').css('display', 'block');
 			$('.autocomplete-suggestions').css('display', 'none');
+			
+			let items = $('.accordion-item').get();
+			items.sort(function(a, b) {
+                var keyA = $(a).attr('data-nombre');
+                var keyB = $(b).attr('data-nombre');
+                if (keyA < keyB) return -1;
+                if (keyA > keyB) return 1;
+                return 0;
+            });
+            let contenedor = $('.accordion');
+            contenedor.empty();
+            $.each(items, function(i, div) {
+                         contenedor.append(div);
+                     });
+			            
 		}
 	
 		function mostrarResultadosAcordeon(unidades) {
 			$('.accordion').empty();
 			$('#resultados .card').css('display', 'none');
 			unidades.forEach(function(item) {
-				
-						let itemCode = '<div class="accordion-item" id="accordion-item-'+item.data.dir3+'">'
-												+ '<div class="accordion-header" onclick="javascript:mostrarContenidoAcordeon(\'' + item.data.dir3 + '\')"><h2>';
+
+						const nombre = <% if ("ca".equalsIgnoreCase(locale.getLanguage())) { %>item.data.cooficial<% } else {%>item.data.denominacion<% } %>; 
+			
+						let itemCode = '<div class="accordion-item" id="accordion-item-'+ item.data.dir3 +'" data-nombre="' + nombre + '">';
+						
+						itemCode += '<div class="accordion-header" onclick="javascript:mostrarContenidoAcordeon(\'' + item.data.dir3 + '\')"><h2>';
 						
 						<% if ("ca".equalsIgnoreCase(locale.getLanguage())) { %>
 						itemCode += (item.data.cooficial != item.data.denominacion) ? item.data.cooficial : item.data.denominacion;
@@ -569,7 +593,7 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
 							itemCode += '<p class="cooficial">'	+ item.data.denominacion + '</p><p class="oficial">' + item.data.cooficial + '</p>';
 							<% } %>
 						} else {
-							itemCode += '<p class="oficial">' + item.data.denominacion + '</p><p class="oficial"></p>';
+							itemCode += '<p class="cooficial">' + item.data.denominacion + '</p><p class="oficial"></p>';
 						}
 
 						itemCode += '<span class="codigodir3">'	+ item.data.dir3 + '</span>' 
@@ -771,10 +795,8 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
 	}
 	</script>
 
-	<%
-	if (Configuracio.isCAIB() && !Configuracio.isDevelopment()) {
-	%>
-	<script>
+	<% if (Configuracio.isCAIB() && !Configuracio.isDevelopment()) { %>
+	<script type="text/javascript">
 		(function(i, s, o, g, r, a, m) {
 			i['GoogleAnalyticsObject'] = r;
 			i[r] = i[r] || function() {
@@ -784,21 +806,11 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
 			a.async = 1;
 			a.src = g;
 			m.parentNode.insertBefore(a, m)
-		})(window, document, 'script',
-				'https://www.google-analytics.com/analytics.js', 'ga');
+		})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
-		ga('create', 'UA-91918552-2', 'auto'
-
-		, {
-			'clientId' : '858F3BE17D90B9408200C5E2D3EDF47A'
-		}
-
-		);
-
+		ga('create', 'UA-91918552-2', 'auto', {'clientId' : '858F3BE17D90B9408200C5E2D3EDF47A'});
 		ga('send', 'pageview');
 	</script>
-	<%
-	}
-	%>
+	<% } %>
 </body>
 </html>
