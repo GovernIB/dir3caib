@@ -16,7 +16,7 @@ Dir3 es defineix de la següent forma:
 
 ***Documentació***
 
-[Documentació de branca](https://github.com/GovernIB/tree/dir3caib-1.1#documentacio)
+[Documentació de branca](https://github.com/GovernIB/dir3caib/tree/dir3caib-1.1/doc)
 
 ***Característiques***
 
