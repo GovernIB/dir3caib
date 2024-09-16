@@ -4,7 +4,7 @@
 
 ***Versions***
 
-> - Versió Estable: Tag [__dir3caib-1.1.0__](../../tree/dir3caib-1.1.0) (branca [1.1](../../tree/dir3caib-1.0))<br/>
+> - Versió Estable: Tag [__dir3caib-1.1.0__](../../tree/dir3caib-1.1.0) (branca [1.1](../../tree/dir3caib-1.1))<br/>
 > - Versió en Desenvolupament: dir3caib-1.1 (branca [1.1](../../tree/dir3caib-1.1))
 
 ***Descripció***
@@ -16,7 +16,7 @@ Dir3 es defineix de la següent forma:
 
 ***Documentació***
 
-[Documentació de branca](https://github.com/GovernIB/tree/dir3caib-1.0.14#documentaci%C3%B3)
+[Documentació de branca](https://github.com/GovernIB/tree/dir3caib-1.1#documentacio)
 
 ***Característiques***
 
