@@ -2,6 +2,7 @@ package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.model.Sincronizacion;
+import es.caib.dir3caib.persistence.utils.MailUtils;
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.SecurityDomain;
 import org.jboss.ejb3.annotation.TransactionTimeout;
@@ -28,58 +29,33 @@ public class Dir3CaibBean implements Dir3CaibLocal {
     @PersistenceContext(unitName = "dir3caib")
     private EntityManager em;
 
-    @EJB
-    private SincronizacionLocal sincronizacionEjb;
-    @EJB
-    private OficinaLocal oficinaEjb;
-    @EJB
-    private ContactoOfiLocal contactoOfiEjb;
-    @EJB
-    private RelacionOrganizativaOfiLocal relOrgOfiEjb;
-    @EJB
-    private CatServicioLocal servicioEjb;
-    @EJB
-    private RelacionSirOfiLocal relSirOfiEjb;
-    @EJB
-    private UnidadLocal unidadEjb;
-    @EJB
-    private ContactoUOLocal contactoUOEjb;
-    @EJB
-    private CatEstadoEntidadLocal catEstadoEntidadEjb;
-    @EJB
-    private CatIslaLocal catIslaEjb;
-    @EJB
-    private CatJerarquiaOficinaLocal catJerarquiaOficinaEjb;
-    @EJB
-    private CatMotivoExtincionLocal catMotivoExtincionEjb;
-    @EJB
-    private CatNivelAdministracionLocal catNivelAdministracionEjb;
-    @EJB
-    private CatPaisLocal catPaisEjb;
-    @EJB
-    private CatTipoContactoLocal catTipoContactoEjb;
-    @EJB
-    private CatTipoEntidadPublicaLocal catTipoEntidadPublicaEjb;
-    @EJB
-    private CatTipoUnidadOrganicaLocal catTipoUnidadOrganicaEjb;
-    @EJB
-    private CatTipoViaLocal catTipoViaEjb;
-    @EJB
-    private CatComunidadAutonomaLocal catComunidadAutonomaEjb;
-    @EJB
-    private CatProvinciaLocal catProvinciaEjb;
-    @EJB
-    private CatLocalidadLocal catLocalidadEjb;
-    @EJB
-    private CatAmbitoTerritorialLocal catAmbitoTerritorialEjb;
-    @EJB
-    private CatEntidadGeograficaLocal catEntidadGeograficaEjb;
-    @EJB
-    private NifCifUOLocal nifCifEjb;
-    @EJB
-    private CodigoUOLocal codigoUoEjb;
-    @EJB
-    private ServicioUOLocal servicioUoEjb;
+    @EJB private SincronizacionLocal sincronizacionEjb;
+    @EJB private OficinaLocal oficinaEjb;
+    @EJB private ContactoOfiLocal contactoOfiEjb;
+    @EJB private RelacionOrganizativaOfiLocal relOrgOfiEjb;
+    @EJB private CatServicioLocal servicioEjb;
+    @EJB private RelacionSirOfiLocal relSirOfiEjb;
+    @EJB private UnidadLocal unidadEjb;
+    @EJB private ContactoUOLocal contactoUOEjb;
+    @EJB private CatEstadoEntidadLocal catEstadoEntidadEjb;
+    @EJB private CatIslaLocal catIslaEjb;
+    @EJB private CatJerarquiaOficinaLocal catJerarquiaOficinaEjb;
+    @EJB private CatMotivoExtincionLocal catMotivoExtincionEjb;
+    @EJB private CatNivelAdministracionLocal catNivelAdministracionEjb;
+    @EJB private CatPaisLocal catPaisEjb;
+    @EJB private CatTipoContactoLocal catTipoContactoEjb;
+    @EJB private CatTipoEntidadPublicaLocal catTipoEntidadPublicaEjb;
+    @EJB private CatTipoUnidadOrganicaLocal catTipoUnidadOrganicaEjb;
+    @EJB private CatTipoViaLocal catTipoViaEjb;
+    @EJB private CatComunidadAutonomaLocal catComunidadAutonomaEjb;
+    @EJB private CatProvinciaLocal catProvinciaEjb;
+    @EJB private CatLocalidadLocal catLocalidadEjb;
+    @EJB private CatAmbitoTerritorialLocal catAmbitoTerritorialEjb;
+    @EJB private CatEntidadGeograficaLocal catEntidadGeograficaEjb;
+    @EJB private NifCifUOLocal nifCifEjb;
+    @EJB private CodigoUOLocal codigoUoEjb;
+    @EJB private ServicioUOLocal servicioUoEjb;
+    @EJB private ImportadorLocal importadorEjb;
 
     @Override
     public void eliminarCompleto() throws Exception {
@@ -166,7 +142,7 @@ public class Dir3CaibBean implements Dir3CaibLocal {
 
     @Override
     @TransactionTimeout(value = 40000)
-    public void restaurarUnidadesOficinas() throws Exception {
+    public Sincronizacion restaurarUnidadesOficinas() throws Exception {
 
         // Realizamos una descarga inicial completa
         Sincronizacion sincronizacion = sincronizacionEjb.descargaCompletaDirectorio();
@@ -178,9 +154,22 @@ public class Dir3CaibBean implements Dir3CaibLocal {
         eliminarOficinasUnidades();
 
         // Si la descarga de datos es correcta, procedemos a realizar la sincronización de datos
-        if (sincronizacion != null && sincronizacion.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
+        if (sincronizacion.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
 
-            sincronizacionEjb.importarUnidadesOficinas(sincronizacion);
+            try {
+                importadorEjb.importarUnidadesOficinas(sincronizacion);
+
+                // Si ha funcionado correctamente, actualizamos el estado
+                sincronizacionEjb.actualizarEstado(sincronizacion.getCodigo(), Dir3caibConstantes.SINCRONIZACION_CORRECTA);
+
+            }catch (Exception e){
+                log.info("Error restaurando UnidadesOficinas: " + e.getMessage());
+                sincronizacionEjb.actualizarEstado(sincronizacion.getCodigo(), Dir3caibConstantes.SINCRONIZACION_ERRONEA);
+                MailUtils.envioEmailErrorSincronizacion(Dir3caibConstantes.SINCRONIZACION_DIRECTORIO, e);
+            }
+
         }
+
+        return sincronizacion;
     }
 }

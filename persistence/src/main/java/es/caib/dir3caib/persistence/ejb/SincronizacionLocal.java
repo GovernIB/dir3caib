@@ -116,13 +116,6 @@ public interface SincronizacionLocal extends BaseEjb<Sincronizacion, Long> {
      */
     void eliminarSincronizacion(Sincronizacion sincronizacion) throws Exception;
 
-    /**
-     * Realiza la importación del directório (Unidades y Oficinas)
-     *
-     * @param sincronizacion
-     * @throws Exception
-     */
-    Sincronizacion importarUnidadesOficinas(Sincronizacion sincronizacion) throws Exception;
 
     /**
      * Realiza la importación del catálogo

@@ -86,7 +86,6 @@ public class MailUtils {
 
         cuerpoMail.append(Dir3caibConstantes.CUERPO_MAIL);
 
-
         if(th!=null) {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw, true);
@@ -98,8 +97,5 @@ public class MailUtils {
         }
 
         enviaMail(asunto, cuerpoMail.toString(), addressFrom, Message.RecipientType.TO, Configuracio.getAdministradorEmail());
-
     }
-
-
 }

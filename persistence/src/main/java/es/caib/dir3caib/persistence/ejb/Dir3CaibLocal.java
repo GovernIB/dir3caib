@@ -1,5 +1,7 @@
 package es.caib.dir3caib.persistence.ejb;
 
+import es.caib.dir3caib.persistence.model.Sincronizacion;
+
 import javax.ejb.Local;
 
 /**
@@ -55,6 +57,6 @@ public interface Dir3CaibLocal {
      *
      * @throws Exception
      */
-    void restaurarUnidadesOficinas() throws Exception;
+    Sincronizacion restaurarUnidadesOficinas() throws Exception;
 
 }

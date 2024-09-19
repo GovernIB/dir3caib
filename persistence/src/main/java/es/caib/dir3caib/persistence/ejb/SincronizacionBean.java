@@ -1,13 +1,10 @@
 package es.caib.dir3caib.persistence.ejb;
 
-import es.caib.dir3caib.persistence.model.CatComunidadAutonoma;
 import es.caib.dir3caib.persistence.model.CatNivelAdministracion;
 import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
 import es.caib.dir3caib.persistence.model.Sincronizacion;
-import es.caib.dir3caib.persistence.model.json.UnidadExportar;
 import es.caib.dir3caib.persistence.utils.MailUtils;
 import es.caib.dir3caib.utils.Configuracio;
-import es.caib.dir3caib.utils.Utils;
 import es.caib.dir3caib.ws.dir3.catalogo.client.SC21CTVolcadoCatalogos;
 import es.caib.dir3caib.ws.dir3.catalogo.client.SC21CTVolcadoCatalogosService;
 import es.caib.dir3caib.ws.dir3.oficina.client.OficinasVersionWs;
@@ -24,8 +21,6 @@ import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.SecurityDomain;
 import org.jboss.ejb3.annotation.TransactionTimeout;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -36,11 +31,8 @@ import javax.xml.ws.BindingProvider;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.RandomAccessFile;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.zip.ZipEntry;
@@ -60,14 +52,11 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
 
 	public static final SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
 
-	@EJB(mappedName = "dir3caib/ImportadorUnidadesEJB/local")
-	private ImportadorUnidadesLocal importadorUnidades;
-
-	@EJB(mappedName = "dir3caib/ImportadorOficinasEJB/local")
-	private ImportadorOficinasLocal importadorOficinas;
-
 	@EJB(mappedName = "dir3caib/ImportadorCatalogoEJB/local")
 	private ImportadorCatalogoLocal importadorCatalogo;
+
+	@EJB(mappedName = "dir3caib/ImportadorEJB/local")
+	private ImportadorLocal importadorEjb;
 
 	@EJB(mappedName = "dir3caib/CatNivelAdministracionEJB/local")
 	protected CatNivelAdministracionLocal catNivelAdministracionEjb;
@@ -91,10 +80,11 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
 	@SuppressWarnings("unchecked")
 	public Sincronizacion ultimaSincronizacionByTipo(String tipo) throws Exception {
 
-		Query query = em.createQuery(
-				"select sincronizacion from Sincronizacion as sincronizacion where sincronizacion.tipo= :tipo order by sincronizacion.codigo desc");
+		Query query = em.createQuery("select sincronizacion from Sincronizacion as sincronizacion where sincronizacion.tipo= :tipo order by sincronizacion.codigo desc");
 		query.setParameter("tipo", tipo);
+
 		List<Sincronizacion> sincronizacions = query.getResultList();
+
 		if (!sincronizacions.isEmpty()) {
 			return (Sincronizacion) query.getResultList().get(0);
 		} else {
@@ -192,10 +182,7 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
 	@SuppressWarnings(value = "unchecked")
 	public List<Sincronizacion> getAll() throws Exception {
 
-		return em
-				.createQuery(
-						"Select sincronizacion from Sincronizacion as sincronizacion order by sincronizacion.codigo")
-				.getResultList();
+		return em.createQuery("Select sincronizacion from Sincronizacion as sincronizacion order by sincronizacion.codigo").getResultList();
 	}
 
 	@Override
@@ -210,8 +197,7 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
 	@SuppressWarnings("unchecked")
 	public List<Sincronizacion> getPagination(int inicio) throws Exception {
 
-		Query q = em.createQuery(
-				"Select sincronizacion from Sincronizacion as sincronizacion order by sincronizacion.codigo desc");
+		Query q = em.createQuery("Select sincronizacion from Sincronizacion as sincronizacion order by sincronizacion.fechaFin desc");
 		q.setFirstResult(inicio);
 		q.setMaxResults(RESULTADOS_PAGINACION);
 
@@ -236,9 +222,10 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
 	@Override
 	public void actualizarEstado(Long codigo, Long estado) throws Exception {
 
-		Query query = em.createQuery("update Sincronizacion set estado = :estado where codigo = :codigo ");
+		Query query = em.createQuery("update Sincronizacion set estado = :estado, fechaImportacion = :fechaImportacion where codigo = :codigo ");
 		query.setParameter("codigo", codigo);
 		query.setParameter("estado", estado);
+		query.setParameter("fechaImportacion", new Date());
 		query.executeUpdate();
 	}
 
@@ -472,8 +459,7 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
 						+ sincronizacion.getCodigo() + ".zip";
 
 				// Directorio donde se descomprimiran los ficheros zip recibidos
-				String directorioPath = sincronizacionPath + "directorio/nivel_" + nivel.getCodigoNivelAdministracion()
-						+ "/";
+				String directorioPath = sincronizacionPath + "directorio/nivel_" + nivel.getCodigoNivelAdministracion() + "/";
 
 				// Procesamos los Archivos zip recibidos
 				if (codigoUnidades.equals(Dir3caibConstantes.CODIGO_VACIO)
@@ -501,8 +487,7 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
 						}
 
 					} catch (Exception e) {
-						log.info(
-								"Ha ocurrido un error descomprimiendo los archivos de las unidades/oficinas obtenidos del WS");
+						log.info("Ha ocurrido un error descomprimiendo los archivos de las unidades/oficinas obtenidos del WS");
 						// Borramos la sincronizacion creada previamente.
 						eliminarSincronizacion(sincronizacion);
 					}
@@ -619,7 +604,7 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
 
 			return sincronizacion;
 
-		} catch (Exception e) { // si hay algun problema, modificamos el estadod e la descarga
+		} catch (Exception e) { // si hay algun problema, modificamos el estado de la descarga
 			log.info("Excepcion en la descarga del catalogo");
 			e.printStackTrace();
 			sincronizacion.setEstado(Dir3caibConstantes.SINCRONIZACION_ERROR_DESCARGA);
@@ -646,25 +631,6 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
 
 		remove(sincronizacion);
 
-	}
-
-	/**
-	 * @param sincronizacion
-	 * @throws Exception
-	 */
-	@Override
-	@TransactionTimeout(value = 40000)
-	public Sincronizacion importarUnidadesOficinas(Sincronizacion sincronizacion) throws Exception {
-
-		// Importamos las Unidades y Oficinas
-		importadorUnidades.importarUnidades(sincronizacion);
-		importadorOficinas.importarOficinas(sincronizacion);
-
-		// Si el proceso ha sido correcto, actualizamos el estado
-		sincronizacion.setFechaImportacion(new Date());
-		sincronizacion.setEstado(Dir3caibConstantes.SINCRONIZACION_CORRECTA);
-
-		return merge(sincronizacion);
 	}
 
 	/**
@@ -713,13 +679,12 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
 			e.printStackTrace();
 			// Si ha habido un Error en la sincronización, modificamos el estado de la
 			// descarga
-			if (sincroCatalogo != null
-					&& sincroCatalogo.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
+			if (sincroCatalogo != null && sincroCatalogo.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
 				try {
 					actualizarEstado(sincroCatalogo.getCodigo(), Dir3caibConstantes.SINCRONIZACION_ERRONEA);
 				} catch (Exception ex2) {
+					log.info("Error actualizando estado: " + ex2.getMessage());
 					MailUtils.envioEmailErrorSincronizacion(Dir3caibConstantes.SINCRONIZACION_CATALOGO, ex2);
-					ex2.printStackTrace();
 				}
 			}
 			MailUtils.envioEmailErrorSincronizacion(Dir3caibConstantes.SINCRONIZACION_CATALOGO, e);
@@ -759,23 +724,30 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
 			}
 
 			// Importamos Unidades y Oficinas
-			if (sincroUnidadesOficinas != null
-					&& sincroUnidadesOficinas.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
-				sincroUnidadesOficinas = importarUnidadesOficinas(sincroUnidadesOficinas);
+			if (sincroUnidadesOficinas != null && sincroUnidadesOficinas.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
+
+				importadorEjb.importarUnidadesOficinas(sincroUnidadesOficinas);
+
+				// Si el proceso ha sido correcto, actualizamos la sincronización
+				sincroUnidadesOficinas.setFechaImportacion(new Date());
+				sincroUnidadesOficinas.setEstado(Dir3caibConstantes.SINCRONIZACION_CORRECTA);
+				merge(sincroUnidadesOficinas);
 			}
 
 		} catch (Exception e) {
+			log.info("Error sincronizando UnidadesOficinas: " + e.getMessage());
 			e.printStackTrace();
-			// Si ha habido un Error en la sincronización, modificamos el estado de la
-			// descarga
-			if (sincroUnidadesOficinas != null
-					&& sincroUnidadesOficinas.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
+
+			// Modificamos el estado de la descarga
+			if (sincroUnidadesOficinas != null && sincroUnidadesOficinas.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
 				try {
+					log.info("Se actualiza el estado de la sincronizacon descarga a ERROENA, con codigo: " + sincroUnidadesOficinas.getCodigo());
 					actualizarEstado(sincroUnidadesOficinas.getCodigo(), Dir3caibConstantes.SINCRONIZACION_ERRONEA);
 
 				} catch (Exception ex1) {
-					MailUtils.envioEmailErrorSincronizacion(Dir3caibConstantes.SINCRONIZACION_DIRECTORIO, ex1);
+					log.info("Error actualizando estado: " + ex1.getMessage());
 					ex1.printStackTrace();
+					MailUtils.envioEmailErrorSincronizacion(Dir3caibConstantes.SINCRONIZACION_DIRECTORIO, ex1);
 				}
 			}
 			MailUtils.envioEmailErrorSincronizacion(Dir3caibConstantes.SINCRONIZACION_DIRECTORIO, e);

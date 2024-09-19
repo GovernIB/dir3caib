@@ -339,9 +339,22 @@ public class SincronizacionController extends BaseController {
 
         try {
             // Elimina las Oficinas y Unidades, realiza una descarga inicia e importa los datos
-            dir3CaibEjb.restaurarUnidadesOficinas();
+            Sincronizacion sincronizacion = dir3CaibEjb.restaurarUnidadesOficinas();
 
-            Mensaje.saveMessageInfo(request, getMessage("directorio.sincronizacion.ok"));
+            // Mensajes al usuario
+            if (sincronizacion != null) {
+
+                if (sincronizacion.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_CORRECTA)) {
+                    Mensaje.saveMessageInfo(request, getMessage("directorio.sincronizacion.ok"));
+                } else if (sincronizacion.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_VACIA)) {
+                    Mensaje.saveMessageInfo(request, getMessage("directorio.sincronizacion.vacia"));
+                }else{
+                    Mensaje.saveMessageError(request, getMessage("directorio.sincronizacion.error"));
+                }
+
+            } else {
+                Mensaje.saveMessageError(request, getMessage("directorio.descarga.error"));
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
