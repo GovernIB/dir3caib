@@ -24,6 +24,8 @@ import javax.persistence.Query;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static es.caib.dir3caib.persistence.model.Dir3caibConstantes.SERVICIO_OFI_RFU_RECEPCION;
+
 /**
  * Created 1/04/14 9:50
  *
@@ -1775,6 +1777,13 @@ public class Dir3RestBean implements Dir3RestLocal {
 			resultados.add(UnidadRest.toUnidadRest(unidad, true, denominacionCooficial, true, true));
 		}
 		return resultados;
+
+	}
+
+	@Override
+	public Boolean isReferenciaUnica(String codigo) throws Exception{
+
+		return oficinaEjb.existeServicioOficina("codigo",SERVICIO_OFI_RFU_RECEPCION);
 
 	}
 

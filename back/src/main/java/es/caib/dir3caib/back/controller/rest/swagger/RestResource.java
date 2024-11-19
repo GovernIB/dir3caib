@@ -238,7 +238,7 @@ public class RestResource {
 	@Path("/oficina/existe")
 	public Response existeOficina(
 
-			@Parameter(description = "codi de la unitat que cercam", required = true, example = "O00001641", schema = @Schema(implementation = String.class)) @QueryParam("codigo") String codigo
+			@Parameter(description = "codi de la oficina que cercam", required = true, example = "O00001641", schema = @Schema(implementation = String.class)) @QueryParam("codigo") String codigo
 
 	) {
 		return Response.ok().status(Response.Status.NO_CONTENT).build();
@@ -969,6 +969,20 @@ public class RestResource {
 	public Response sistraObtenerUnidades(
 			@RequestBody(description = "JSON amb els criteris de cerca d'unitats en format JSON: {\"idDominio\":\"SISTRA\", \"filtro\":[{\"codigo\":\"codigodir3\",\"valor\":\"\"},{\"codigo\":\"denominacion\",\"valor\":\"\"},{\"codigo\":\"nivelAdministracion\",\"valor\":\"2\"},{\"codigo\":\"nivelJerarquico\",\"valor\":\"\"},{\"codigo\":\"comunidadAutonoma\",\"valor\":\"4\"},{\"codigo\":\"provincia\",\"valor\":\"\"},{\"codigo\":\"unidadRaiz\",\"valor\":\"false\"},{\"codigo\":\"vigentes\",\"valor\":\"true\"}]}", required = true, content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = String.class))) String peticion) {
 		return Response.status(Response.Status.NO_CONTENT).build();
+	}
+
+
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/oficina/referenciaUnica")
+	public Response isOficinaReferenciaUnica(
+
+			@Parameter(description = "codi de la oficina que volem sebre si te referencia Unica", required = true, example = "O00001641", schema = @Schema(implementation = String.class)) @QueryParam("codigo") String codigo
+
+	) {
+		return Response.ok().status(Response.Status.NO_CONTENT).build();
 	}
 
 }

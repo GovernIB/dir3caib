@@ -131,6 +131,7 @@ public interface Dir3caibConstantes {
     Long SERVICIO_CLAVE = 13L;
     Long SERVICIO_REA = 14L;
     Long SERVICIO_OFI_ORD = 15L;
+    Long SERVICIO_OFI_RFU_RECEPCION = 16L;
 
     // Estados Sincronización
     Long SINCRONIZACION_DESCARGADA = 1L;
