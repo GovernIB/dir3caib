@@ -1780,11 +1780,5 @@ public class Dir3RestBean implements Dir3RestLocal {
 
 	}
 
-	@Override
-	public Boolean isReferenciaUnica(String codigo) throws Exception{
-
-		return oficinaEjb.existeServicioOficina("codigo",SERVICIO_OFI_RFU_RECEPCION);
-
-	}
 
 }
