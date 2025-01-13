@@ -510,13 +510,4 @@ public interface Dir3RestLocal {
     List<UnidadRest> obtenerHistoricosFinalesSIR(String codigo, boolean denominacionCooficial) throws Exception;
 
 
-    /**
-     * Comprueba si la oficina tiene Referencia Unica
-     *
-     * @param codigo
-     * @return
-     * @throws Exception
-     */
-    Boolean isReferenciaUnica(String codigo) throws Exception;
-
 }
