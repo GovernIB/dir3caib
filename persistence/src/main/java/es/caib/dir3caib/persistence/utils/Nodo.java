@@ -35,6 +35,7 @@ public class Nodo extends ObjetoBasico {
     private String ambitoComunAutonoma;
     private String ambitoProvincia;
     private String ambitoIsla;
+    private boolean referenciaUnica;
 
 
     public Nodo() {
@@ -234,4 +235,12 @@ public class Nodo extends ObjetoBasico {
    public void setAmbitoIsla(String ambitoIsla) {
       this.ambitoIsla = ambitoIsla;
    }
+
+    public boolean isReferenciaUnica() {
+        return referenciaUnica;
+    }
+
+    public void setReferenciaUnica(boolean referenciaUnica) {
+        this.referenciaUnica = referenciaUnica;
+    }
 }

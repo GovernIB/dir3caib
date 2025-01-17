@@ -986,7 +986,11 @@ public class Dir3RestBean implements Dir3RestLocal {
 					nodo.getRaiz().lastIndexOf(Dir3caibConstantes.SEPARADOR_CODIGO_VERSION)));
 			nodo.setCodigoSuperior(nodo.getCodigoSuperior().substring(0,
 					nodo.getCodigoSuperior().lastIndexOf(Dir3caibConstantes.SEPARADOR_CODIGO_VERSION)));
+
+			nodo.setReferenciaUnica(oficinaEjb.existeServicioOficina(nodo.getCodigo(),SERVICIO_OFI_RFU_RECEPCION));
+
 		}
+
 		return nodos;
 
 	}
@@ -1777,6 +1781,13 @@ public class Dir3RestBean implements Dir3RestLocal {
 			resultados.add(UnidadRest.toUnidadRest(unidad, true, denominacionCooficial, true, true));
 		}
 		return resultados;
+
+	}
+
+	@Override
+	public Boolean isReferenciaUnica(String codigo) throws Exception{
+
+		return oficinaEjb.existeServicioOficina(codigo, SERVICIO_OFI_RFU_RECEPCION);
 
 	}
 

@@ -1042,6 +1042,19 @@ public class RestController extends RestUtils {
 		return new ResponseEntity<SistraResponse>(respuesta, headers, HttpStatus.OK);
 		
 	}
+
+	/**
+	 * Comprueba si una oficina tiene Referencia Unica
+	 */
+	@RequestMapping(value = "/oficina/referenciaUnica", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<Boolean> isOficinaReferenciaUnica(@RequestParam String codigo) throws Exception {
+
+		Boolean isRFU = dir3RestEjb.isReferenciaUnica(codigo);
+		HttpHeaders headers = addAccessControllAllowOrigin();
+		HttpStatus status = HttpStatus.OK; // Al ser Boolean, siempre habrá resultados
+
+		return new ResponseEntity<Boolean>(isRFU, headers, status);
+	}
 	
 
 	public HttpHeaders addAccessControllAllowOrigin() {

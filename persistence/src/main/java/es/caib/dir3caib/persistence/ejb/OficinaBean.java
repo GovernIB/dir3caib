@@ -735,6 +735,8 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 		return q.getResultList() != null && q.getResultList().size() > 0;
 	}
 
+
+
 	/**
 	 * Método que obtiene todos los códigos de las oficinas que hay en dir3caib.
 	 * 
@@ -873,13 +875,13 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 	@SuppressWarnings("unchecked")
 	public Boolean existeServicioOficina(String codigoOficina, Long codigoServicio) throws Exception {
 
-		Query q = em.createNativeQuery("select * from dir_servicioofi where codoficina = ? and codservicio = ? ");
+		Query q = em.createNativeQuery("select * from dir_servicioofi where codoficina = ? and codservicio = ?  and estado = 'V' ");
 		q.setParameter(1, codigoOficina);
 		q.setParameter(2, codigoServicio);
 
 		List<Object> servicios = q.getResultList();
 
-		return servicios.size() > 0;
+		return !servicios.isEmpty();
 	}
 
 	@Override
