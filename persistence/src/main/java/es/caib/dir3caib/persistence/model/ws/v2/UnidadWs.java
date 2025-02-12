@@ -2,6 +2,7 @@ package es.caib.dir3caib.persistence.model.ws.v2;
 
 import es.caib.dir3caib.persistence.model.Unidad;
 import es.caib.dir3caib.persistence.model.ws.UnidadTF;
+import es.caib.dir3caib.utils.Configuracio;
 
 import java.util.Date;
 
@@ -95,8 +96,11 @@ public class UnidadWs extends es.caib.dir3caib.persistence.model.ws.UnidadTF {
     }
 
     public void rellenar(Unidad unidad) {
-        super.rellenar(unidad,false);
-        this.setDenomLenguaCooficial(unidad.getDenomLenguaCooficial());
+        super.rellenar(unidad, false);
+        //Fijamos la denominación independientemente de lo que haya hecho el rellenar de la clase padre
+        this.setDenominacion(unidad.getDenominacion());
+        // Fijamos la denominación en lengua cooficial si no está vacia, si no fijamos la denominación
+        this.setDenomLenguaCooficial(unidad.getDenomLenguaCooficial().isEmpty()?unidad.getDenominacion():unidad.getDenomLenguaCooficial());
         this.setIdiomalengua(unidad.getIdiomalengua());
         this.setVersion(unidad.getVersion());
         this.setPoder(unidad.getPoder().getDescripcionPoder());

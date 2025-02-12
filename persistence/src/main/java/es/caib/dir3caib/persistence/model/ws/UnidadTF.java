@@ -299,7 +299,6 @@ public class UnidadTF implements Serializable {
             this.setCodEdpPrincipal(null);
         }
         this.setCompetencias(unidad.getCompetencias());
-        this.setDenominacion(unidad.getDenominacion());
         this.setDenominacion((denominacionOficial && Utils.isNotEmpty(unidad.getDenomLenguaCooficial())) ? unidad.getDenomLenguaCooficial() : unidad.getDenominacion());
         this.setFechaAltaOficial(unidad.getFechaAltaOficial());
         this.setFechaAnulacion(unidad.getFechaAnulacion());
