@@ -235,14 +235,6 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      */
     List<Unidad> getPagination(int startItem, int numberOfItems) throws Exception;
 
-    /**
-     * Obtiene la Denominacion de una Unidad
-     *
-     * @param codigo
-     * @return
-     * @throws Exception
-     */
-    String unidadDenominacion(String codigo) throws Exception;
 
     /**
      * Obtiene todos los códigos de las unidades. Se emplea para la importación de las unidades desde Madrid.
@@ -451,14 +443,6 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @throws Exception
      */
     Unidad findByCodigoLigero(String codigo, boolean denominacionCooficial) throws Exception;
-
-    /**
-     * @param codigo
-     * @param denominacionCooficial
-     * @return
-     * @throws Exception
-     */
-    String unidadDenominacion(String codigo, boolean denominacionCooficial) throws Exception;
 
     /**
      * @param denominacion

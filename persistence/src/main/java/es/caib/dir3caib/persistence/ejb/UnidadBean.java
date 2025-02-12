@@ -412,34 +412,6 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 		return q.getResultList();
 	}
 
-	/**
-	 * Obtiene la Denominacion de una Unidad
-	 *
-	 * @param codigo
-	 * @return
-	 * @throws Exception
-	 */
-	@Override
-	@SuppressWarnings(value = "unchecked")
-	public String unidadDenominacion(String codigo) throws Exception {
-		return unidadDenominacion(codigo, false);
-	}
-
-	@Override
-	@SuppressWarnings(value = "unchecked")
-	public String unidadDenominacion(String codigo, boolean denominacionCooficial) throws Exception {
-
-		Query q = em.createQuery("select unidad.denominacion from Unidad as unidad where unidad.codigo=:codigo")
-				.setParameter("codigo", codigo);
-
-		List<String> unidades = q.getResultList();
-
-		if (unidades.size() > 0) {
-			return unidades.get(0);
-		} else {
-			return null;
-		}
-	}
 
 	/**
 	 * Devuelve todas las unidades de la lista de ids indicados. Se emplea para
@@ -957,7 +929,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 	public List<Unidad> obtenerArbolUnidadesUnidadRaiz(String codigo, Date fechaActualizacion, Date fechaSincronizacion, boolean denominacionCooficial)
 			throws Exception {
 
-		String denominacion = unidadDenominacion(codigo, denominacionCooficial);
+
 		Query q;
 
 		try {
@@ -984,7 +956,6 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
 										// condiciones de ser enviadas
 
 			log.info(" ");
-			log.info("UNIDAD PADRE: " + codigo + " - " + denominacion);
 
 			if (fechaActualizacion != null) { // Si hay fecha de actualizacion solo se envian las actualizadas
 				for (Unidad unidad : unidadesObtenidas) {
