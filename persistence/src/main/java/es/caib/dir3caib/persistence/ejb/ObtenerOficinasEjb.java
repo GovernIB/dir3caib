@@ -21,7 +21,7 @@ import java.util.*;
  * Date: 12/02/14
  */
 @Stateless(name = "ObtenerOficinasEJB")
-@RunAs(Dir3caibConstantes.DIR_WS)  //todo añadir seguridad
+@RunAs(Dir3caibConstantes.DIR_WS)
 public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
 
     protected final Logger log = Logger.getLogger(getClass());
@@ -87,7 +87,6 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
         Oficina oficina = oficinaEjb.findById(codigo, Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
         if (oficina != null) {
-            //OficinaTF oficinaTF = null;
 
             List<ContactoOfi> contactosVisibles = new ArrayList<ContactoOfi>();
             for (ContactoOfi contactoOfi : oficina.getContactos()) {
@@ -120,13 +119,10 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
 
             return oficina;
         } else {
-            log.info("WS: Oficina cuyo codigoDir3 es " + codigo + " no existe o no es vigente");
+            log.info("WS: Oficina cuyo codigoDir3 es " + codigo + ", no existe o no es vigente");
             return null;
         }
-
-
     }
-
 
     /**
      * Obtiene todas las {@link es.caib.dir3caib.persistence.model.ws.OficinaTF} cuyo organismo responsable es el indicado por código(son todas padres e hijas).Solo se envian aquellas
@@ -139,6 +135,7 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
      */
     @Override
     public List<OficinaTF> obtenerArbolOficinasTF(String codigo, Date fechaActualizacion, Date fechaSincronizacion, boolean denominacionOficial) throws Exception {
+
         List<Oficina> oficinas = obtenerArbolOficinas(codigo, fechaActualizacion, fechaSincronizacion);
         List<OficinaTF> arbolTF = new ArrayList<OficinaTF>();
         for (Oficina oficina : oficinas) {
@@ -158,6 +155,7 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
      */
     @Override
     public List<OficinaWs> obtenerArbolOficinasWs(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
+
         List<Oficina> oficinas = obtenerArbolOficinas(codigo, fechaActualizacion, fechaSincronizacion);
         List<OficinaWs> arbolWs = new ArrayList<OficinaWs>();
         for (Oficina oficina : oficinas) {
@@ -189,20 +187,18 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
             log.info("ACTUALIZACION OFICINAS");
             //Obtenemos la raiz en funcion de la fecha de actualización
             unidad = unidadEjb.findUnidadActualizada(codigo, fechaActualizacion);
-            if (unidad != null) { //Han actualizado la raiz
-                // miramos que no esté extinguida o anulada antes de la primera sincro.
-                if (unidadEjb.unidadValida(unidad, fechaSincronizacion)) {
-                    unidades.add(unidad);
-                    Set<HistoricoUO> historicosRaiz = unidad.getHistoricosAnterior();
-                    if (historicosRaiz != null) {
-                        for (HistoricoUO historico : historicosRaiz) {
-                            unidades.add(historico.getUnidadUltima());
-                        }
+
+            if (unidad != null && unidadEjb.unidadValida(unidad, fechaSincronizacion)) {
+                unidades.add(unidad);
+                Set<HistoricoUO> historicosRaiz = unidad.getHistoricosAnterior();
+                if (historicosRaiz != null) {
+                    for (HistoricoUO historico : historicosRaiz) {
+                        unidades.add(historico.getUnidadUltima());
                     }
                 }
             }
-        }
 
+        }
 
         if (unidad == null) { // O es Sincro o es actualizacion pero con la raiz sin actualizar.
             unidad = unidadEjb.findUnidadEstado(codigo, Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
@@ -221,7 +217,6 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
         //se han actualizado
         unidades.addAll(obtenerUnidadesEjb.obtenerArbolUnidades(codigo, fechaActualizacion, fechaSincronizacion));
 
-
         List<Oficina> oficinasCompleto = new ArrayList<Oficina>();
 
         // Por cada Unidad, obtenemos sus Oficinas
@@ -232,6 +227,7 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
 
         Long end = System.currentTimeMillis();
         log.info("tiempo obtenerArbolOficinas: " + Utils.formatElapsedTime(end - start));
+
         return oficinasCompleto;
     }
 
@@ -260,7 +256,6 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
             unidades.add(unidad);
         }
 
-
         unidades.addAll(unidadEjb.obtenerArbol(unidad.getCodigo()));
         log.info("Total arbol: " + unidades.size());
 
@@ -278,6 +273,7 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
 
         Long end = System.currentTimeMillis();
         log.info("tiempo obtenerArbolOficinas: " + Utils.formatElapsedTime(end - start));
+
         return oficinasCompleto;
     }
 

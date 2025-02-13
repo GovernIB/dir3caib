@@ -46,7 +46,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
     protected SimpleDateFormat formatoFecha = new SimpleDateFormat(Dir3caibConstantes.FORMATO_FECHA);
 
     /**
-     Método que devuelve una {@link es.caib.dir3caib.persistence.model.ws.UnidadTF} a partir del código
+     Función que devuelve una {@link es.caib.dir3caib.persistence.model.ws.UnidadTF} a partir del código
      * indicado y en función de la fecha de actualización
      *
      * @param codigo
@@ -69,12 +69,10 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
         return UnidadWs.generar(unidad);
 
     }
-
-
-
+    
 
     /**
-     * Método que devuelve una {@link es.caib.dir3caib.persistence.model.ws.UnidadTF} a partir del código indicado
+     * Función que devuelve una {@link es.caib.dir3caib.persistence.model.ws.UnidadTF} a partir del código indicado
      * devolverá la unidad de mayor versión
      *
      * @param codigo código de la unidad a transferir
@@ -86,7 +84,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
     }
 
     /**
-     * Método que devuelve una {@link es.caib.dir3caib.persistence.model.ws.UnidadTF} a partir del código indicado
+     * Función que devuelve una {@link es.caib.dir3caib.persistence.model.ws.UnidadTF} a partir del código indicado
      * devolverá la unidad de mayor versión
      *
      * @param codigo código de la unidad a transferir
@@ -97,7 +95,12 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
         return UnidadWs.generar(unidad);
     }
 
-
+    /**
+     *
+     * @param codigo
+     * @return
+     * @throws Exception
+     */
     private Unidad buscarUnidad(String codigo) throws Exception {
 
         Unidad  unidad = unidadEjb.findByCodigoDir3UltimaVersion(codigo);
@@ -107,7 +110,6 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
             for (ContactoUnidadOrganica contactoUO : unidad.getContactos()) {
                 if (contactoUO.isVisibilidad()) {
                     contactosVisibles.add(contactoUO);
-
                 }
             }
             //Obtenemos los historicos finales
@@ -122,12 +124,11 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
             log.info("WS: la Unidad cuyo codigo Dir3 es " + codigo + " no existe");
             return null;
         }
-
     }
 
 
     /**
-     * Método que transforma el árbol de {@link es.caib.dir3caib.persistence.model.Unidad} a árbol de
+     * Función que transforma el árbol de {@link es.caib.dir3caib.persistence.model.Unidad} a árbol de
      * {@link es.caib.dir3caib.persistence.model.ws.UnidadTF}
      * @param codigo
      * @param fechaActualizacion
@@ -137,17 +138,17 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
      */
     @Override
     public List<UnidadTF> obtenerArbolUnidadesTF(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
+
         List<UnidadTF> arbolTF = new ArrayList<UnidadTF>();
         List<Unidad> arbolUnidades = obtenerArbolUnidades(codigo, fechaActualizacion, fechaSincronizacion);
         for (Unidad uni : arbolUnidades) {
             arbolTF.add(UnidadTF.generar(uni,Configuracio.isDenominacionCooficial()));
         }
          return arbolTF;
-
     }
 
     /**
-     * Método que transforma el árbol de {@link es.caib.dir3caib.persistence.model.Unidad} a árbol de
+     * Función que transforma el árbol de {@link es.caib.dir3caib.persistence.model.Unidad} a árbol de
      * {@link es.caib.dir3caib.persistence.model.ws.v2.UnidadWs}
      * @param codigo
      * @param fechaActualizacion
@@ -157,6 +158,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
      */
     @Override
     public List<UnidadWs> obtenerArbolUnidadesWs(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
+
         List<UnidadWs> arbolWs = new ArrayList<UnidadWs>();
         List<Unidad> arbolUnidades = obtenerArbolUnidades(codigo, fechaActualizacion, fechaSincronizacion);
         for (Unidad uni : arbolUnidades) {
@@ -167,27 +169,26 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
     
     @Override
     public List<UnidadRest> obtenerArbolUnidadesRest(String codigo, Date fechaActualizacion, Date fechaSincronizacion, boolean mostrarHistoricos, boolean mostrarContactos) throws Exception {
+
         List<UnidadRest> arbol = new ArrayList<UnidadRest>();
         List<Unidad> arbolUnidades = obtenerArbolUnidades(codigo, fechaActualizacion, fechaSincronizacion);
-        
-        // Date inicio = new Date();
+
         for (Unidad uni : arbolUnidades) {
         	arbol.add(UnidadRest.generar(uni,mostrarHistoricos, mostrarContactos));
         }
-        // log.info("Conversión lista Unidades to UnidadRest => " + (System.currentTimeMillis()-inicio.getTime()) + " ms");
-        return arbol;
 
+        return arbol;
     }
 
     /**
-     * Método que devuelve la lista de {@link es.caib.dir3caib.persistence.model.Unidad} a partir del
+     * Función que devuelve la lista de {@link es.caib.dir3caib.persistence.model.Unidad} a partir del
      * código indicado y las fechas indicadas
      * Si no se especifican fechas obtiene aquellas unidades que son vigentes.
      * Si se especifica la fecha de actualización obtiene las unidades que han sufrido cambios entre esa fecha y la actual.
      * La fecha de sincronización nos sirve para evitar traer unidades (extinguidas/anuladas) anteriores a esta fecha
      *
      *
-     * Este método considera también la posibilidad de que la misma raiz también se haya extinguido.
+     * Esta función considera también la posibilidad de que la misma raiz también se haya extinguido.
      * Esto es debido a que cuando en Madrid actualizan una unidad la tendencia es extinguirla y crear una nueva con código diferente.
      * Esto hace que se tengan que traer las unidades de la vieja y de la nueva.
      * Los casos que se consideran son:
@@ -200,8 +201,8 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
      *
      */
     public List<Unidad> obtenerArbolUnidades(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
-        // TODO falta prova
-        log.info("WS: Inicio obtenerArbolUnidadesTF");
+
+        log.info("WS: Inicio obtenerArbolUnidades");
         Long start = System.currentTimeMillis();
 
         List<Unidad> arbol = new ArrayList<Unidad>(); //Lista completa de unidades a enviar a regweb3(o porque es sincro o porque se han actualizado)
@@ -241,8 +242,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
                 }
             }
         }
-
-
+        
         if (unidad == null) { // Si la unidad es null es porque o es Sincro o es actualizacion pero con la raiz sin actualizar.
             //Obtenemos la unidad indicada
             unidad = unidadEjb.findUnidadEstado(codigo, Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
@@ -253,23 +253,22 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
                 }
             }
         }
-
-        List<UnidadTF> arbolTF = new ArrayList<UnidadTF>();
+        
         if (unidad != null) {
             //obtenemos el arbol de la unidad que nos han indicado para que se actualice bien
             if (unidad.equals(unidadRaiz)) { // Caso que la unidad que nos indican es unidad raiz
                 log.info("CASO UNIDAD QUE NOS PASAN ES RAIZ");
                 arbol.addAll(unidadEjb.obtenerArbolUnidadesUnidadRaiz(unidad.getCodigo(), fechaActualizacion, fechaSincronizacion));
-                log.info("Numero TOTAL de unidades a actualizar: " + arbol.size());
+                log.info("TOTAL de unidades a actualizar: " + arbol.size());
 
             } else { // caso de que la unidad que nos indican no es raiz
                 log.info("CASO UNIDAD QUE NOS PASAN NO ES RAIZ");
                 arbol.addAll(unidadEjb.obtenerArbolUnidadesUnidadNoRaiz(unidad.getCodigo(), fechaActualizacion, fechaSincronizacion));
-                log.info("Numero TOTAL de unidades a actualizar: " + arbol.size());
+                log.info("TOTAL de unidades a actualizar: " + arbol.size());
             }
 
             Long end = System.currentTimeMillis();
-            log.info("tiempo obtenerArbolUnidadesTF: " + Utils.formatElapsedTime(end - start));
+            log.info("tiempo obtenerArbolUnidades: " + Utils.formatElapsedTime(end - start));
 
         } else {
             log.info("WS: La unidad con codigoDir3 " + codigo + " no existe o está extinguida");
@@ -280,8 +279,8 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
 
 
     /**
-     * Método que devuelve la lista de {@link es.caib.dir3caib.persistence.model.ws.UnidadTF} a partir del
-     * código indicado y que estan vigentes y tienen oficinas. Método que emplea la aplicación SISTRA para
+     * Función que devuelve la lista de {@link es.caib.dir3caib.persistence.model.ws.UnidadTF} a partir del
+     * código indicado y que estan vigentes y tienen oficinas. Función que emplea la aplicación SISTRA para
      * saber donde enviar un registro telemático.
      *
      * @param codigo
@@ -293,8 +292,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
 
         List<Unidad> arbol = unidadEjb.obtenerArbolUnidadesDestinatarias(codigo);
         List<UnidadTF> arbolTF = new ArrayList<UnidadTF>();
-
-
+        
         for (Unidad unidad : arbol) {
             arbolTF.add(UnidadTF.generarLigero(unidad, Configuracio.isDenominacionCooficial()));
         }
@@ -304,8 +302,8 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
 
 
     /**
-     * Método que devuelve la lista de {@link es.caib.dir3caib.persistence.model.ws.v2.UnidadWs} a partir del
-     * código indicado y que estan vigentes y tienen oficinas. Método que emplea la aplicación SISTRA para
+     * Función que devuelve la lista de {@link es.caib.dir3caib.persistence.model.ws.v2.UnidadWs} a partir del
+     * código indicado y que estan vigentes y tienen oficinas. Función que emplea la aplicación SISTRA para
      * saber donde enviar un registro telemático.
      *
      * @param codigo
@@ -318,7 +316,6 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
         List<Unidad> arbol = unidadEjb.obtenerArbolUnidadesDestinatarias(codigo);
         List<UnidadWs> arbolWs = new ArrayList<UnidadWs>();
 
-
         for (Unidad unidad : arbol) {
             arbolWs.add(UnidadWs.generarLigero(unidad));
         }
@@ -327,7 +324,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
     }
 
     /**
-     * Método que devuelve la fecha de la última actualización de las unidades que se corresponde con la fecha en la que
+     * Función que devuelve la fecha de la última actualización de las unidades que se corresponde con la fecha en la que
      * se ha realizado el proceso de sincronización y devolvemos la fecha de importación
      *
      * @return
@@ -378,6 +375,12 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
     	return historicosFinalesList;
     }
 
+    /**
+     * 
+     * @param codigo
+     * @return
+     * @throws Exception
+     */
     private Set<Unidad> obtenerHistoricosFinales(String codigo) throws Exception {
 
         //Cogemos la de mayor version
@@ -385,9 +388,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
         Set<Unidad> historicosFinales = new HashSet<Unidad>();
         unidadEjb.historicosFinales(unidad, historicosFinales);
         return historicosFinales;
-
     }
-
 
     /**
      * Función que obtiene los históricos finales vigentes de la unidad indicada que son SIR
@@ -415,6 +416,12 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
         return historicosFinales;
     }
 
+    /**
+     * 
+     * @param codigo
+     * @return
+     * @throws Exception
+     */
     private Set<Unidad> obtenerHistoricosFinalesSIR(String codigo) throws Exception {
 
         Unidad unidad = unidadEjb.findFullByCodigoDir3ConHistoricos(codigo);
@@ -432,7 +439,7 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
     }
 
     /**
-     * Método que calcula los históricos de una unidad hasta el final y los devuelve en el objeto Nodo
+     * Función que calcula los históricos de una unidad hasta el final y los devuelve en el objeto Nodo
      *
      * @param unidad
      * @param nodo
@@ -464,10 +471,18 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
 
     }
 
+    /**
+     * 
+     * @param codigo
+     * @param fechaActualizacion
+     * @param fechaSincronizacion
+     * @return
+     * @throws Exception
+     */
     private Unidad obtenerUnidad(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
+        
         Unidad unidad = unidadEjb.findConHistoricosVigente(codigo);
-
-
+        
         if (unidad != null) {
             List<ContactoUnidadOrganica> contactosVisibles = new ArrayList<ContactoUnidadOrganica>();
             for (ContactoUnidadOrganica contactoUO : unidad.getContactos()) {
@@ -494,6 +509,5 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
             return null;
         }
     }
-
-
+    
 }

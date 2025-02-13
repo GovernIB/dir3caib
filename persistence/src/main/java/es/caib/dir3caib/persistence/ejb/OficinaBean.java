@@ -130,7 +130,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
 		List<Oficina> oficinas = q.getResultList();
 
-		if (oficinas.size() > 0) {
+		if (!oficinas.isEmpty()) {
 			return oficinas.get(0);
 		} else {
 			return null;
@@ -169,7 +169,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
 		List<Object[]> oficinas = q.getResultList();
 
-		if (oficinas.size() > 0) {
+		if (!oficinas.isEmpty()) {
 			Object[] obj = oficinas.get(0);
 			
 			String denominacion = (denominacionCooficial && Utils.isNotEmpty((String) obj[7])) ? (String) obj[7] : (String) obj[1];
@@ -279,16 +279,10 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 		}
 		if (!denominacion.isEmpty()) {
 
-			String condicion1 = DataBaseUtils.like("oficina.denomLenguaCooficial", "denominacion1", parametros,
-					denominacion);
+			String condicion1 = DataBaseUtils.like("oficina.denomLenguaCooficial", "denominacion1", parametros, denominacion);
 			String condicion2 = DataBaseUtils.like("oficina.denominacion", "denominacion2", parametros, denominacion);
 
-			// String condicion1 = "upper(unidad.denomLenguaCooficial) like
-			// upper(:denominacion)";
-			// String condicion2 = " upper(unidad.denominacion) like upper(:denominacion)";
-
 			where.add("((" + condicion1 + ") or (" + condicion2 + "))");
-			// parametros.put("denominacion", "%"+denominacion+"%");
 
 		}
 		if (codigoNivelAdministracion != null && codigoNivelAdministracion != -1) {
@@ -327,7 +321,6 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 			for (Map.Entry<String, Object> param : parametros.entrySet()) {
 				q.setParameter(param.getKey(), param.getValue());
 				q2.setParameter(param.getKey(), param.getValue());
-				//log.info("OficinaBean parametre => " + param.getKey() + " : " + param.getValue());
 			}
 
 		} else {
@@ -336,8 +329,6 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 			query.append("order by oficina.codigo desc");
 			q = em.createQuery(query.toString());
 		}
-
-		//log.info("OficinaBean query => " + query.toString());
 
 		Paginacion paginacion = null;
 
@@ -360,7 +351,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 	}
 
 	/**
-	 * Método que comprueba si una oficina tiene más oficinas hijas
+	 * Función que comprueba si una oficina tiene más oficinas hijas
 	 *
 	 * @param codigo código de la oficina
 	 */
@@ -368,8 +359,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 	@SuppressWarnings("unchecked")
 	public Boolean tieneHijos(String codigo) throws Exception {
 
-		Query q = em.createQuery(
-				"Select oficina from Oficina as oficina where oficina.codOfiResponsable.codigo =:codigo and oficina.codigo !=:codigo order by oficina.codigo");
+		Query q = em.createQuery("Select oficina from Oficina as oficina where oficina.codOfiResponsable.codigo =:codigo and oficina.codigo !=:codigo order by oficina.codigo");
 
 		q.setParameter("codigo", codigo);
 
@@ -407,7 +397,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 	}
 
 	/**
-	 * EL QUE SE EMPLEA EN LA SINCRO CON REGWEB (EL BUENO) Método que devuelve las
+	 * EL QUE SE EMPLEA EN LA SINCRO CON REGWEB (EL BUENO) Función que devuelve las
 	 * oficinas de un organismo(son todas, padres e hijos), teniendo en cuenta la
 	 * fecha de la ultima actualización de regweb. Se emplea para la sincronizacion
 	 * y actualización con regweb
@@ -553,10 +543,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 		q.setParameter("SERVICIO_SIR_RECEPCION", Dir3caibConstantes.SERVICIO_SIR_RECEPCION);
 		q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
-
-
 		return q.getResultList();
-
 	}
 
 	@Override
@@ -598,7 +585,6 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
 	}
 
-
 	@Override
 	@SuppressWarnings(value = "unchecked")
 
@@ -617,10 +603,9 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 		q.setParameter("SERVICIO_SIR_RECEPCION", Dir3caibConstantes.SERVICIO_SIR_RECEPCION);
 		q.setParameter("vigente", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
-
 		Long count = (Long) q.getSingleResult();
-		return count > 0;
 
+		return count > 0;
 	}
 
 	/**
@@ -679,6 +664,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 	 * @throws Exception
 	 */
 	private boolean relacionSirValida(RelacionSirOfi relSir, Date fechaSincro) throws Exception {
+
 		SimpleDateFormat fechaFormat = new SimpleDateFormat("dd/MM/yyyy");
 		String sSincro = "";
 		if (fechaSincro != null) {
@@ -725,7 +711,6 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 		Query q = em.createQuery("select distinct oficina.id from Oficina as oficina left outer join oficina.servicios as servicios where oficina.codigo =:codigoOficina "
 				+ " and (servicios.servicio.codServicio= :SIR  or servicios.servicio.codServicio= :SIR_RECEPCION or servicios.servicio.codServicio= :SIR_ENVIO) and oficina.estado.codigoEstadoEntidad= :vigente ");
 
-
 		q.setParameter("codigoOficina", codigoOficina);
 		q.setParameter("SIR", Dir3caibConstantes.SERVICIO_SIR);
 		q.setParameter("SIR_RECEPCION", Dir3caibConstantes.SERVICIO_SIR_RECEPCION);
@@ -738,7 +723,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
 
 	/**
-	 * Método que obtiene todos los códigos de las oficinas que hay en dir3caib.
+	 * Función que obtiene todos los códigos de las oficinas que hay en dir3caib.
 	 * 
 	 * @return
 	 * @throws Exception
@@ -752,7 +737,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 	}
 
 	/**
-	 * Método que mira si la oficina, su fecha de extinción y anulacion son
+	 * Función que mira si la oficina, su fecha de extinción y anulacion son
 	 * posteriores a la fecha de la primera sincronizacion con regweb. Así evitamos
 	 * enviar relaciones antiguas extinguidas o anuladas anterior a la fecha de
 	 * sincronización con regweb3.
@@ -933,18 +918,15 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
 		for (Object[] object : result) {
 
-			// Query q2 = em.createNativeQuery("select codservicio from DIR_SERVICIOOFI
-			// where codoficina=?");
-			Query q2 = em.createQuery(
-					"select servicioOfi.servicio from ServicioOfi as servicioOfi where servicioOfi.oficina.codigo=:codOficina");
-			// q2.setParameter(1, object[0]);
+			Query q2 = em.createQuery("select servicioOfi.servicio from ServicioOfi as servicioOfi where servicioOfi.oficina.codigo=:codOficina");
+
 			q2.setParameter("codOficina", object[0]);
 
 			List<Object> result2 = q2.getResultList();
 
 			Set<ServicioOfi> servicios = new HashSet<ServicioOfi>();
+
 			for (Object obj : result2) {
-				// ServicioOfi servicioOfi = new ServicioOfi((Long) obj);
 				ServicioOfi servicioOfi = new ServicioOfi((CatServicio) obj);
 				servicios.add(servicioOfi);
 			}
@@ -982,18 +964,13 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
 		for (Object[] object : result) {
 
-			// Query q2 = em.createNativeQuery("select codservicio from DIR_SERVICIOOFI
-			// where codoficina=?");
-			Query q2 = em.createQuery(
-					"select servicioOfi.servicio from ServicioOfi as servicioOfi where servicioOfi.oficina.codigo=:codOficina");
-			// q2.setParameter(1, object[0]);
+			Query q2 = em.createQuery("select servicioOfi.servicio from ServicioOfi as servicioOfi where servicioOfi.oficina.codigo=:codOficina");
 			q2.setParameter("codOficina", object[0]);
 
 			List<Object> result2 = q2.getResultList();
 
 			Set<ServicioOfi> servicios = new HashSet<ServicioOfi>();
 			for (Object obj : result2) {
-				// ServicioOfi servicioOfi = new ServicioOfi((Long) obj);
 				ServicioOfi servicioOfi = new ServicioOfi((CatServicio) obj);
 				servicios.add(servicioOfi);
 			}
@@ -1017,6 +994,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 	 * @return
 	 * @throws Exception
 	 */
+	@Override
 	public List<Oficina> obtenerOficinasRegistran(String codigoUnidad) throws Exception {
 
 		Query q = em.createQuery("Select oficina from Oficina as oficina "
@@ -1031,7 +1009,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
 
 	/**
-	 * Método que obtiene las relaciones organizativas de una oficina que son válidas según la fecha de sincronización y obteniendo las de la unidad con mayor versión
+	 * Función que obtiene las relaciones organizativas de una oficina que son válidas según la fecha de sincronización y obteniendo las de la unidad con mayor versión
 	 *
 	 * @param relacionOrganizativaOfis
 	 * @param fechaSincronizacion
@@ -1058,8 +1036,6 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 				relacionesValidas.add(relOrg);
 			}
 		}
-
-
 
 		//Enviamos solo las relaciones organizativas que estan relacionadas con la unidad de mayor versión
 		for(RelacionOrganizativaOfi rel: relacionesValidas){
@@ -1093,7 +1069,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
 
 	/**
-	 * Método que obtiene las relaciones sir de una oficina que son válidas según la fecha de sincronización y obteniendo las de la unidad con mayor versión
+	 * Función que obtiene las relaciones sir de una oficina que son válidas según la fecha de sincronización y obteniendo las de la unidad con mayor versión
 	 *
 	 * @param relacionSirOfis
 	 * @param fechaSincronizacion
@@ -1118,7 +1094,6 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 				relacionesSirValidas.add(relSir);
 			}
 		}
-
 
 		//Enviamos solo las relaciones sir que estan relacionadas con la unidad de mayor versión
 		for(RelacionSirOfi rel: relacionesSirValidas){
