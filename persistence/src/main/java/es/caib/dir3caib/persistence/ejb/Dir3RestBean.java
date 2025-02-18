@@ -1,14 +1,7 @@
 package es.caib.dir3caib.persistence.ejb;
 
 import es.caib.dir3caib.persistence.model.*;
-import es.caib.dir3caib.persistence.model.json.OficinaRest;
-import es.caib.dir3caib.persistence.model.json.UnidadExportar;
-import es.caib.dir3caib.persistence.model.json.UnidadExportarContacto;
-import es.caib.dir3caib.persistence.model.json.UnidadExportarDatosUnidad;
-import es.caib.dir3caib.persistence.model.json.UnidadExportarDireccion;
-import es.caib.dir3caib.persistence.model.json.UnidadExportarOficina;
-import es.caib.dir3caib.persistence.model.json.UnidadRest;
-import es.caib.dir3caib.persistence.model.json.UnidadRestSistra;
+import es.caib.dir3caib.persistence.model.json.*;
 import es.caib.dir3caib.persistence.model.ws.v2.UnidadWs;
 import es.caib.dir3caib.persistence.utils.*;
 import es.caib.dir3caib.utils.Utils;
@@ -243,7 +236,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 	}
 
 	/**
-	 * Método que comprueba si una unidad tiene más unidades hijas
+	 * Función que comprueba si una unidad tiene más unidades hijas
 	 *
 	 * @param codigo
 	 * @return
@@ -323,8 +316,6 @@ public class Dir3RestBean implements Dir3RestLocal {
 	 * @return
 	 * @throws Exception
 	 */
-	// TODO REVISAR PARECE QUE NO SE EMPLEA NI EN EL RestController, en REGWEB3 NO
-	// SE EMPLEA(03/10/2017)
 	@Override
 	@SuppressWarnings(value = "unchecked")
 	public List<Nodo> obtenerArbolUnidades(String codigo) throws Exception {
@@ -361,7 +352,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 	}
 
 	/*
-	 * Método que devuelve las oficinas de un organismo, teniendo en cuenta la fecha
+	 * Función que devuelve las oficinas de un organismo, teniendo en cuenta la fecha
 	 * de la ultima actualización de regweb. Se emplea para la sincronizacion y
 	 * actualización con regweb
 	 */
@@ -447,7 +438,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 	}
 
 	/**
-	 * Método que nos dice sin una unidad tiene oficinas donde registrar. Solo mira
+	 * Función que nos dice sin una unidad tiene oficinas donde registrar. Solo mira
 	 * relacion funcional y organizativa. Pendiente SIR y Oficinas Virtuales.
 	 *
 	 * @param codigo de la unidad que queremos consultar
@@ -860,7 +851,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 	}
 
 	/**
-	 * Método que permite buscar oficinas según el conjunto de criterios indicados
+	 * Función que permite buscar oficinas según el conjunto de criterios indicados
 	 * en los parámetros.
 	 *
 	 * @param codigo                    código de la oficina
@@ -1132,7 +1123,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 	}
 
 	/**
-	 * Método que busca unidades por denominación y comunidad para utilidad en
+	 * Función que busca unidades por denominación y comunidad para utilidad en
 	 * HELIUM.
 	 *
 	 * @param denominacion
@@ -1210,7 +1201,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 	}
 
 	/**
-	 * Método que obtiene las localidades en funcion de una provincia y de una
+	 * Función que obtiene las localidades en funcion de una provincia y de una
 	 * entidad geografica
 	 *
 	 * @param codigoProvincia
@@ -1439,7 +1430,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 	}
 
 	/**
-	 * Método que transforma los resultados de una lista de Object[] en una lista de
+	 * Función que transforma los resultados de una lista de Object[] en una lista de
 	 * CodigoValor
 	 *
 	 * @param resultados
@@ -1459,7 +1450,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 	}
 
 	/**
-	 * Método que transforma los resultados de una lista de Object[] en una lista de
+	 * Función que transforma los resultados de una lista de Object[] en una lista de
 	 * ObjetoDirectorio
 	 *
 	 * @param resultados
@@ -1703,7 +1694,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 	 */
 	@Override
 	public List<OficinaRest> obtenerArbolOficinasSir(String codigo, boolean denominacionCooficial) throws Exception {
-		List<Oficina> oficinas = oficinaEjb.obtenerOficinasSIRArbol(codigo, denominacionCooficial);
+		List<Oficina> oficinas = oficinaEjb.obtenerOficinasSIRArbol(codigo, true);
 
 		List<OficinaRest> oficinasRest = new ArrayList<OficinaRest>();
 

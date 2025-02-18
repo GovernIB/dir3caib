@@ -548,13 +548,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
 	@Override
 	@SuppressWarnings(value = "unchecked")
-	public List<Oficina> obtenerOficinasSIRArbol(String codigoUnidad, boolean denominacionCooficial) throws Exception {
-		return obtenerOficinasSIRArbol(codigoUnidad,true, denominacionCooficial);
-	}
-
-	@Override
-	@SuppressWarnings(value = "unchecked")
-	public List<Oficina> obtenerOficinasSIRArbol(String codigoUnidad, boolean isCodigoDir3, boolean denominacionCooficial) throws Exception {
+	public List<Oficina> obtenerOficinasSIRArbol(String codigoUnidad, boolean isCodigoDir3) throws Exception {
 
 		String variableCampo = (isCodigoDir3) ? "codigoDir3" : "codigo";
 
@@ -574,8 +568,8 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 		List<Oficina> oficinas = new ArrayList<Oficina>();
 
 		for (Object[] object : result) {
-			String denominacion = (denominacionCooficial && Utils.isNotEmpty((String) object[2])) ? (String) object[2] : (String) object[1];
-			String denomLenguaCooficial = (Utils.isNotEmpty((String) object[2])) ? (String) object[2] : "";
+			String denominacion = (String) object[1];
+			String denomLenguaCooficial = (String) object[2];
 			Oficina oficina = new Oficina((String) object[0], denominacion, (String) object[3], null);
 			oficina.setDenomLenguaCooficial(denomLenguaCooficial);
 			oficinas.add(oficina);
@@ -825,7 +819,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 	public List<Nodo> oficinasAuxiliares(String codigo, String estado, boolean denominacionCooficial) throws Exception {
 
 		Query q = em.createQuery(
-				"Select oficina.codigo, oficina.denominacion, oficina.estado.descripcionEstadoEntidad from Oficina as oficina where "
+				"Select oficina.codigo, oficina.denominacion, oficina.estado.descripcionEstadoEntidad, oficina.denomLenguaCooficial from Oficina as oficina where "
 						+ " oficina.codOfiResponsable.codigo=:codigo and oficina.estado.codigoEstadoEntidad =:estado "
 						+ " order by oficina.codigo");
 

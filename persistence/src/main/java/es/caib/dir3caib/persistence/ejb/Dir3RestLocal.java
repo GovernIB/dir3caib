@@ -3,10 +3,7 @@ package es.caib.dir3caib.persistence.ejb;
 import es.caib.dir3caib.persistence.model.CatPais;
 import es.caib.dir3caib.persistence.model.Oficina;
 import es.caib.dir3caib.persistence.model.Unidad;
-import es.caib.dir3caib.persistence.model.json.OficinaRest;
-import es.caib.dir3caib.persistence.model.json.UnidadExportar;
-import es.caib.dir3caib.persistence.model.json.UnidadRest;
-import es.caib.dir3caib.persistence.model.json.UnidadRestSistra;
+import es.caib.dir3caib.persistence.model.json.*;
 import es.caib.dir3caib.persistence.utils.CodigoValor;
 import es.caib.dir3caib.persistence.utils.Nodo;
 import es.caib.dir3caib.persistence.utils.ObjetoDirectorio;
@@ -509,7 +506,7 @@ public interface Dir3RestLocal {
      */
     List<UnidadRest> obtenerHistoricosFinalesSIR(String codigo, boolean denominacionCooficial) throws Exception;
 
-    /**
+   /**
      * Comprueba si la oficina tiene Referencia Unica
      *
      * @param codigo
