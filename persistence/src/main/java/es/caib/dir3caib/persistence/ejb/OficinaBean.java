@@ -138,20 +138,7 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
 	}
 
-	/**
-	 * Obtiene el codigo, la denominación, el estado, la tupla codigo-denominacion
-	 * de la unidad raiz y la tupla codigo-denominacion de la oficina
-	 * 
-	 * @param id
-	 * @param estado
-	 * @return
-	 * @throws Exception
-	 */
-	@Override
-	@SuppressWarnings("unchecked")
-	public Nodo findOficina(String id, String estado) throws Exception {
-		return findOficina(id, estado, false);
-	}
+
 	
 	@Override
 	@SuppressWarnings("unchecked")
@@ -369,20 +356,13 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 	}
 
 	/**
-	 * Metodo que obtiene los hijos de primer nivel de una oficina en funcion del
+	 * Función que obtiene los hijos de primer nivel de una oficina en funcion del
 	 * estado del padre. Se emplea para pintar el árbol de oficinas
 	 *
 	 * @param codigo identificador de la oficina padre.
 	 * @param estado estado de la oficina padre.
 	 * @return {@link es.caib.dir3caib.persistence.utils.Nodo}
 	 */
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public List<Nodo> hijos(String codigo, String estado) throws Exception {
-		return hijos(codigo, estado, false);
-	}
-
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Nodo> hijos(String codigo, String estado, boolean denominacionCooficial) throws Exception {
@@ -775,13 +755,6 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 	 *
 	 * @return {@link es.caib.dir3caib.persistence.utils.Nodo}
 	 */
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public List<Nodo> oficinasDependientes(String codigo, String estado) throws Exception {
-		return oficinasDependientes(codigo, estado, false);
-	}
-
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Nodo> oficinasDependientes(String codigo, String estado, boolean denominacionCooficial)
@@ -808,11 +781,11 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 	 * @param estado estado de la oficina
 	 * @return {@link es.caib.dir3caib.persistence.utils.Nodo}
 	 */
-	@Override
+	/*@Override
 	@SuppressWarnings("unchecked")
 	public List<Nodo> oficinasAuxiliares(String codigo, String estado) throws Exception {
 		return oficinasAuxiliares(codigo, estado, false);
-	}
+	}*/
 
 	@Override
 	@SuppressWarnings("unchecked")

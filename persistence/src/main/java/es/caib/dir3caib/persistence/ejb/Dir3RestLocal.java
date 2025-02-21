@@ -21,13 +21,6 @@ import java.util.List;
 @Local
 public interface Dir3RestLocal {
 
-    /**
-     *
-     * @param denominacion
-     * @return
-     * @throws Exception
-     */
-    List<ObjetoDirectorio> findUnidadesByDenominacion(String denominacion) throws Exception;
     
     /**
      * 
@@ -47,14 +40,6 @@ public interface Dir3RestLocal {
      * @throws Exception
      */
     List<ObjetoDirectorio> findUnidadesByDenominacion(String denominacion, boolean denominacionCooficial, String estado) throws Exception;
-
-    /**
-     *
-     * @param denominacion
-     * @return
-     * @throws Exception
-     */
-    List<ObjetoDirectorio> findOficinasByDenominacion(String denominacion) throws Exception;
 
     /**
      *
@@ -83,14 +68,6 @@ public interface Dir3RestLocal {
      * @throws Exception
      */
     List<Unidad> obtenerArbolUnidades(String codigo, String fechaActualizacion, String estado) throws Exception;
-
-    /**
-     *
-     * @param codigo
-     * @return
-     * @throws Exception
-     */
-    List<Nodo> obtenerArbolUnidades(String codigo) throws Exception;
 
     /**
      *
@@ -140,37 +117,6 @@ public interface Dir3RestLocal {
     /*TODO ELIMINAR los métodos que no se usan */
 
     /**
-     *
-     * @param codigo
-     * @param denominacion
-     * @param codigoNivelAdministracion
-     * @param codComunidad
-     * @param conOficinas
-     * @param unidadRaiz
-     * @param provincia
-     * @param localidad
-     * @param vigentes
-     * @return
-     * @throws Exception
-     */
-    List<Nodo> busquedaOrganismos(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, boolean conOficinas, boolean unidadRaiz, Long provincia, String localidad, boolean vigentes) throws Exception;
-
-    /**
-     *
-     * @param codigo
-     * @param denominacion
-     * @param codigoNivelAdministracion
-     * @param codComunidad
-     * @param provincia
-     * @param localidad
-     * @param oficinasSir
-     * @param vigentes
-     * @return
-     * @throws Exception
-     */
-    List<Nodo> busquedaOficinas(String codigo, String denominacion, Long codigoNivelAdministracion, Long codComunidad, Long provincia, String localidad, boolean oficinasSir, boolean vigentes) throws Exception;
-
-    /**
      * Comprueba la existencia de una Oficina vigente
      *
      * @param codigo
@@ -187,14 +133,6 @@ public interface Dir3RestLocal {
      * @throws Exception
      */
     Boolean existeUnidad(String codigo) throws Exception;
-
-    /**
-     *
-     * @param codigo
-     * @return
-     * @throws Exception
-     */
-    String unidadDenominacion(String codigo) throws Exception;
 
     /**
      *
@@ -231,15 +169,6 @@ public interface Dir3RestLocal {
      * @throws Exception
      */
     String oficinaDenominacion(String codigo, boolean denominacionCooficial, String estado) throws Exception;
-
-    /**
-     *
-     * @param denominacion
-     * @param codComunidad
-     * @return
-     * @throws Exception
-     */
-    List<Nodo> busquedaDenominacionComunidad(String denominacion, Long codComunidad) throws Exception;
 
     /**
      *

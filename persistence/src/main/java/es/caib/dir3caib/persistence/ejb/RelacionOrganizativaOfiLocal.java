@@ -39,26 +39,6 @@ public interface RelacionOrganizativaOfiLocal extends BaseEjb<RelacionOrganizati
     List<String> getUnidadesOficinas() throws Exception;
 
     /**
-     * Obtiene las relaciones organizativas de la unidad indicada y en función del estado indicado
-     *
-     * @param codigo codigo de la unidad
-     * @param estado estado de la relación
-     * @return
-     * @throws Exception
-     */
-    List<Nodo> getOrganizativasByUnidadEstado(String codigo, String estado) throws Exception;
-
-    /**
-     * Obtiene las relaciones organizativas de la unidad indicada y en función del estado indicado
-     *
-     * @param codigo codigo de la unidad
-     * @param estado estado de la relación
-     * @return
-     * @throws Exception
-     */
-    List<RelacionOrganizativaOfi> getOrganizativasCompletoByUnidadEstado(String codigo, String estado) throws Exception;
-
-    /**
      *
      * @param codigo
      * @param estado

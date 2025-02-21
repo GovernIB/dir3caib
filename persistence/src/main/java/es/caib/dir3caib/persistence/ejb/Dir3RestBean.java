@@ -53,19 +53,7 @@ public class Dir3RestBean implements Dir3RestLocal {
     @EJB(mappedName = "dir3caib/ObtenerUnidadesEJB/local")
     private ObtenerUnidadesLocal obtenerUnidadesEjb;
 
-	/**
-	 * Obtiene las unidades(codigo-denominacion) cuya denominación coincide con la
-	 * indicada.
-	 *
-	 * @param denominacion
-	 * @return
-	 * @throws Exception
-	 */
-	@Override
-	@SuppressWarnings(value = "unchecked")
-	public List<ObjetoDirectorio> findUnidadesByDenominacion(String denominacion) throws Exception {
-		return findUnidadesByDenominacion(denominacion, false, null);
-	}
+
 
 	/**
 	 * Obtiene las unidades(codigo-denominacion) cuya denominación coincide con la
@@ -96,19 +84,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 		}
 	}
 
-	/**
-	 * Obtiene las oficinas(codigo-denominacion) cuya denominación coincide con la
-	 * indicada.
-	 *
-	 * @param denominacion
-	 * @return
-	 * @throws Exception
-	 */
-	@Override
-	@SuppressWarnings(value = "unchecked")
-	public List<ObjetoDirectorio> findOficinasByDenominacion(String denominacion) throws Exception {
-		return findOficinasByDenominacion(denominacion, false, null);
-	}
+
 
 	/**
 	 * Obtiene las oficinas(codigo-denominacion) cuya denominación coincide con la
@@ -318,12 +294,6 @@ public class Dir3RestBean implements Dir3RestLocal {
 	 */
 	@Override
 	@SuppressWarnings(value = "unchecked")
-	public List<Nodo> obtenerArbolUnidades(String codigo) throws Exception {
-		return obtenerArbolUnidades(codigo, false, null);
-	}
-
-	@Override
-	@SuppressWarnings(value = "unchecked")
 	public List<Nodo> obtenerArbolUnidades(String codigo, boolean denominacionCooficial, String estado)
 			throws Exception {
 		Query q;
@@ -486,15 +456,6 @@ public class Dir3RestBean implements Dir3RestLocal {
 	 *         parámetros de búsqueda
 	 * @throws Exception
 	 */
-
-	@Override
-	@SuppressWarnings(value = "unchecked")
-	public List<Nodo> busquedaOrganismos(String codigo, String denominacion, Long codigoNivelAdministracion,
-			Long codComunidad, boolean conOficinas, boolean unidadRaiz, Long provincia, String localidad,
-			boolean vigentes) throws Exception {
-		return busquedaOrganismos(codigo, denominacion, codigoNivelAdministracion, codComunidad, conOficinas,
-				unidadRaiz, provincia, localidad, vigentes, false);
-	}
 
 	@Override
 	@SuppressWarnings(value = "unchecked")
@@ -865,15 +826,6 @@ public class Dir3RestBean implements Dir3RestLocal {
 	@Override
 	@SuppressWarnings(value = "unchecked")
 	public List<Nodo> busquedaOficinas(String codigo, String denominacion, Long codigoNivelAdministracion,
-			Long codComunidad, Long provincia, String localidad, boolean oficinasSir, boolean vigentes)
-			throws Exception {
-		return busquedaOficinas(codigo, denominacion, codigoNivelAdministracion, codComunidad, provincia, localidad,
-				oficinasSir, vigentes, false);
-	}
-
-	@Override
-	@SuppressWarnings(value = "unchecked")
-	public List<Nodo> busquedaOficinas(String codigo, String denominacion, Long codigoNivelAdministracion,
 			Long codComunidad, Long provincia, String localidad, boolean oficinasSir, boolean vigentes,
 			boolean denominacionCooficial) throws Exception {
 		Query q;
@@ -1030,19 +982,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 		return !unidades.isEmpty();
 	}
 
-	/**
-	 * Devuelve la denominación de la unidad especificada por codigo
-	 *
-	 * @param codigo
-	 * @return
-	 * @throws Exception
-	 */
 
-	@Override
-	@SuppressWarnings(value = "unchecked")
-	public String unidadDenominacion(String codigo) throws Exception {
-		return unidadDenominacion(codigo, false, null);
-	}
 
 	@Override
 	@SuppressWarnings(value = "unchecked")
@@ -1132,13 +1072,6 @@ public class Dir3RestBean implements Dir3RestLocal {
 	 *         denominación de unidad raiz y denominación de unidad superior
 	 * @throws Exception
 	 */
-
-	@Override
-	@SuppressWarnings(value = "unchecked")
-	public List<Nodo> busquedaDenominacionComunidad(String denominacion, Long codComunidad) throws Exception {
-		return busquedaDenominacionComunidad(denominacion, codComunidad, false);
-	}
-	
 
 	@Override
 	@SuppressWarnings(value = "unchecked")
@@ -1671,7 +1604,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 	}
 
 	@Override
-	public List<OficinaRest> obtenerOficinasSIRUnidad(String codigoUnidad, boolean denominacionOficial)
+	public List<OficinaRest> obtenerOficinasSIRUnidad(String codigoUnidad, boolean denominacionCooficial)
 			throws Exception {
 
 		List<Oficina> oficinas = oficinaEjb.obtenerOficinasSIRUnidad(codigoUnidad, true);
@@ -1679,7 +1612,7 @@ public class Dir3RestBean implements Dir3RestLocal {
 		List<OficinaRest> oficinasRest = new ArrayList<OficinaRest>();
 
 		for (Oficina oficina : oficinas) {
-			oficinasRest.add(OficinaRest.generar(oficina, denominacionOficial));
+			oficinasRest.add(OficinaRest.generar(oficina, denominacionCooficial));
 		}
 
 		return oficinasRest;

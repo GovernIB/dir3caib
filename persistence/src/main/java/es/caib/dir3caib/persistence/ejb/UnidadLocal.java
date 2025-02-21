@@ -205,15 +205,6 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
     void arbolHijos(Set<Unidad> unidadesPadres, String estado, Set<Unidad> hijosTotales) throws Exception;
 
     /**
-     * Obtiene una unidad por su denominación
-     *
-     * @param denominacion
-     * @return
-     * @throws Exception
-     */
-    List<Unidad> findByDenominacion(String denominacion) throws Exception;
-
-    /**
      * Obtiene el arbol de una Unidad, pero solo los códigos
      * Se emplea en el método de obtenerArbolOficinas.
      *
@@ -253,26 +244,6 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      * @throws Exception
      */
     List<Unidad> getListByIds(List<String> ids) throws Exception;
-
-
-    /**
-     * Obtiene el codigo, la denominación, el estado, la tupla codigo-denominacion de la unidad raiz y la tupla codigo-denominacion de la unidad.
-     * Se emplea para mostrar el arbol de unidades.
-     *
-     * @param id     identificador de la unidad
-     * @param estado estado de la unidad
-     * @return {@link es.caib.dir3caib.persistence.utils.Nodo}
-     */
-    Nodo findUnidad(String id, String estado) throws Exception;
-
-    /**
-     * OObtiene el código, denominación y estado de la unidad indicada
-     *
-     * @param codigo
-     * @return
-     * @throws Exception
-     */
-    Unidad findByCodigoLigero(String codigo) throws Exception;
 
 
     /**
@@ -444,13 +415,6 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      */
     Unidad findByCodigoLigero(String codigo, boolean denominacionCooficial) throws Exception;
 
-    /**
-     * @param denominacion
-     * @param denominacionCooficial
-     * @return
-     * @throws Exception
-     */
-    List<Unidad> findByDenominacion(String denominacion, boolean denominacionCooficial) throws Exception;
 
     /**
      * @param id
@@ -480,16 +444,6 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
     void arbolHijos(Set<Unidad> unidadesPadres, String estado, Set<Unidad> hijosTotales, boolean denominacionCooficial)
             throws Exception;
 
-    /**
-     * @param codigo
-     * @param fechaActualizacion
-     * @param fechaSincronizacion
-     * @param denominacionCooficial
-     * @return
-     * @throws Exception
-     */
-    List<Unidad> obtenerArbolUnidadesUnidadRaiz(String codigo, Date fechaActualizacion, Date fechaSincronizacion,
-                                                boolean denominacionCooficial) throws Exception;
 
     /**
      * @param codigo

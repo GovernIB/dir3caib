@@ -46,7 +46,7 @@ public class ArbolBean implements ArbolLocal {
      */
     public void arbolUnidades(String idUnidad, Nodo nodo, String estado, boolean conOficinas, boolean denominacionCooficial) throws Exception {
 
-        Nodo unidadPadre = unidadEjb.findUnidad(idUnidad, estado);
+        Nodo unidadPadre = unidadEjb.findUnidad(idUnidad, estado,denominacionCooficial);
 
 
         // Nodo que se està tratando (representa una unidad)
@@ -89,7 +89,7 @@ public class ArbolBean implements ArbolLocal {
 
 
         List<Nodo> hijos = new ArrayList<Nodo>();
-        List<Nodo> unidadesHijas = unidadEjb.hijos(idUnidad, estado);
+        List<Nodo> unidadesHijas = unidadEjb.hijos(idUnidad, estado,denominacionCooficial,false);
 
 
         for (Nodo unidadHija : unidadesHijas) {

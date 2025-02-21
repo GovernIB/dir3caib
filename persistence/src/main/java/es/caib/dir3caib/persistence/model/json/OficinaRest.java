@@ -34,6 +34,7 @@ public class OficinaRest implements Serializable {
     private String codPostal;
     private List<Long> servicios;
     private List<ContactoRest> contactos;
+    private boolean referenciaUnica;
 
     public OficinaRest() {
     }
@@ -189,7 +190,15 @@ public class OficinaRest implements Serializable {
         }
         this.contactos = contactoRestList;
     }
-    
+
+    public boolean isReferenciaUnica() {
+        return referenciaUnica;
+    }
+
+    public void setReferenciaUnica(boolean referenciaUnica) {
+        this.referenciaUnica = referenciaUnica;
+    }
+
     /**
      * Transforma un List de {@link es.caib.dir3caib.persistence.model.RelacionSirOfi} en {@link es.caib.dir3caib.persistence.model.ws.RelacionSirOfiTF}
      * @param sirOfi
@@ -289,15 +298,15 @@ public class OficinaRest implements Serializable {
             this.setOrganizativasOfiRest(null);
         }
 
-        /*if(oficina.getServicios() != null){
-            List<Long> serviciosIds= new ArrayList<Long>();
+        this.setReferenciaUnica(false);
+        if(oficina.getServicios() != null){
             for(ServicioOfi servicio: oficina.getServicios()){
-                serviciosIds.add(servicio.getServicio().getCodServicio());
+                if(servicio.getServicio().getCodServicio().equals(Dir3caibConstantes.SERVICIO_OFI_RFU_RECEPCION)){
+                    this.setReferenciaUnica(true);
+                    break;
+                }
             }
-            this.setServicios(serviciosIds);
-        } else {
-            this.setServicios(null);
-        }*/
+        }
 
         if (oficina.getContactos() != null) {
             this.setContactosRest(oficina.getContactos());
@@ -311,6 +320,16 @@ public class OficinaRest implements Serializable {
         this.setDenominacion((denominacionOficial && Utils.isNotEmpty(oficina.getDenomLenguaCooficial())) ? oficina.getDenomLenguaCooficial() : oficina.getDenominacion());
         this.setDenominacionCooficial((Utils.isNotEmpty(oficina.getDenomLenguaCooficial())) ?  oficina.getDenomLenguaCooficial() : "");
         this.setCodUoResponsable(oficina.getCodUoResponsable().getCodigo());
+
+        this.setReferenciaUnica(false);
+        if(oficina.getServicios() != null){
+            for(ServicioOfi servicio: oficina.getServicios()){
+                if(servicio.getServicio().getCodServicio().equals(Dir3caibConstantes.SERVICIO_OFI_RFU_RECEPCION)){
+                    this.setReferenciaUnica(true);
+                    break;
+                }
+            }
+        }
     }
 
 

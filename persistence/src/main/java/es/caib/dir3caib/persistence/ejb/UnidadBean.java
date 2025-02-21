@@ -148,6 +148,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
      * @return
      * @throws Exception
      */
+    @Override
     @SuppressWarnings("unchecked")
     public Unidad findUnidadEstado(String id, String estado) throws Exception {
 
@@ -180,14 +181,6 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
      * @param estado estado de la unidad
      * @return {@link es.caib.dir3caib.persistence.utils.Nodo}
      */
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public Nodo findUnidad(String id, String estado) throws Exception {
-
-        return findUnidad(id, estado, false);
-    }
-
     @Override
     @SuppressWarnings("unchecked")
     public Nodo findUnidad(String id, String estado, boolean denominacionCooficial) throws Exception {
@@ -298,13 +291,6 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
      * @return
      * @throws Exception
      */
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public Unidad findByCodigoLigero(String codigo) throws Exception {
-        return findByCodigoLigero(codigo, false);
-    }
-
     @Override
     @SuppressWarnings("unchecked")
     public Unidad findByCodigoLigero(String codigo, boolean denominacionCooficial) throws Exception {
@@ -591,32 +577,6 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     }
 
     /**
-     * Obtiene una unidad por su denominación
-     *
-     * @param denominacion
-     * @return
-     * @throws Exception
-     */
-
-    @Override
-    @SuppressWarnings(value = "unchecked")
-    public List<Unidad> findByDenominacion(String denominacion) throws Exception {
-        return findByDenominacion(denominacion, false);
-    }
-
-    @Override
-    @SuppressWarnings(value = "unchecked")
-    public List<Unidad> findByDenominacion(String denominacion, boolean denominacionCooficial) throws Exception {
-
-        Query q = em.createQuery(
-                "select unidad from Unidad as unidad where upper(unidad.denominacion) like upper(:denominacion)");
-
-        q.setParameter("denominacion", "%" + denominacion.toLowerCase() + "%");
-
-        return q.getResultList();
-    }
-
-    /**
      * Obtiene el arbol de una Unidad, pero solo los códigos Se emplea en el método
      * de obtenerArbolOficinas.
      *
@@ -885,16 +845,9 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
      * @return
      * @throws Exception
      */
-    // TODO debemos pasarle la denominacionCooficial??
     @Override
     @SuppressWarnings(value = "unchecked")
     public List<Unidad> obtenerArbolUnidadesUnidadRaiz(String codigo, Date fechaActualizacion, Date fechaSincronizacion) throws Exception {
-        return obtenerArbolUnidadesUnidadRaiz(codigo, fechaActualizacion, fechaSincronizacion, false);
-    }
-
-    @Override
-    @SuppressWarnings(value = "unchecked")
-    public List<Unidad> obtenerArbolUnidadesUnidadRaiz(String codigo, Date fechaActualizacion, Date fechaSincronizacion, boolean denominacionCooficial) throws Exception {
 
         Query q;
 

@@ -108,12 +108,6 @@ public class RelacionOrganizativaOfiBean extends BaseEjbJPA<RelacionOrganizativa
 
         return q.getResultList();
     }
-    
-    @SuppressWarnings("unchecked")
-    @Override
-    public List<Nodo> getOrganizativasByUnidadEstado(String codigo, String estado) throws Exception { 
-    	return getOrganizativasByUnidadEstado(codigo,estado,false);
-    }
 
     @SuppressWarnings("unchecked")
     @Override
@@ -128,10 +122,6 @@ public class RelacionOrganizativaOfiBean extends BaseEjbJPA<RelacionOrganizativa
         return NodoUtils.getNodoListMinimo(q.getResultList(), denominacionCooficial);
     }
 
-    @Override
-    public List<RelacionOrganizativaOfi> getOrganizativasCompletoByUnidadEstado(String codigo, String estado) throws Exception {
-    	return getOrganizativasCompletoByUnidadEstado(codigo,estado,false);
-    }
     
     @Override
     public List<RelacionOrganizativaOfi> getOrganizativasCompletoByUnidadEstado(String codigo, String estado, boolean denominacionCooficial) throws Exception {

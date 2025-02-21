@@ -95,30 +95,10 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      */
     Oficina findById(String codigo, String estado) throws Exception;
 
-    /**
-     * Obtiene el codigo, la denominación, el estado, la tupla codigo-denominacion de la unidad raiz y la tupla codigo-denominacion de la unidad responsable
-     * de la oficina. Se emplea para pintar el árbol de oficinas
-     *
-     * @param id
-     * @param estado
-     * @return
-     * @throws Exception
-     */
-    Nodo findOficina(String id, String estado) throws Exception;
-
     /*
        Método que comprueba si una oficina tiene más oficinas hijas
     */
     Boolean tieneHijos(String codigo) throws Exception;
-
-    /**
-     * Metodo que obtiene los hijos de primer nivel de una oficina en funcion del estado del padre.
-     *
-     * @param codigo identificador de la oficina padre.
-     * @param estado estado de la oficina padre.
-     * @return {@link es.caib.dir3caib.persistence.utils.Nodo}
-     */
-    List<Nodo> hijos(String codigo, String estado) throws Exception;
 
 
     /**
@@ -180,26 +160,6 @@ public interface OficinaLocal extends BaseEjb<Oficina, String> {
      * @throws Exception
      */
     List<String> getAllCodigos() throws Exception;
-
-    /**
-     * Obtiene las oficinas que dependen directamente de la unidad, es decir cuya unidad responsable es la del codigo
-     * indicado y del estado indicado por estado. Se emplea para pintar el árbol de unidades con sus oficinas
-     *
-     * @param codigo codigo de la unidad
-     * @param estado estado de las oficinas
-     * @return {@link es.caib.dir3caib.persistence.utils.Nodo}
-     */
-    List<Nodo> oficinasDependientes(String codigo, String estado) throws Exception;
-
-    /**
-     * Obtiene las oficinas auxiliares de un Oficina padre, es decir aquellas que dependen de la oficina del código
-     * especificado y del estado especificado.Se emplea para pintar el árbol de unidades con sus oficinas
-     *
-     * @param codigo código de la oficina
-     * @param estado estado de la oficina
-     * @return {@link es.caib.dir3caib.persistence.utils.Nodo}
-     */
-    List<Nodo> oficinasAuxiliares(String codigo, String estado) throws Exception;
 
     /**
      * @param codigoOficina
