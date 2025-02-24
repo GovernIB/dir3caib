@@ -699,13 +699,6 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     @Override
     @SuppressWarnings(value = "unchecked")
     public void arbolHijos(Set<Unidad> unidadesPadres, String estado, Set<Unidad> hijosTotales) throws Exception {
-        arbolHijos(unidadesPadres, estado, hijosTotales, false);
-    }
-
-    @Override
-    @SuppressWarnings(value = "unchecked")
-    public void arbolHijos(Set<Unidad> unidadesPadres, String estado, Set<Unidad> hijosTotales,
-                           boolean denominacionCooficial) throws Exception {
         for (Unidad unidad : unidadesPadres) {
 
             Query q = em.createQuery("select unidad.codigoDir3, unidad.denominacion, unidad.codUnidadRaiz.codigoDir3, "
@@ -722,16 +715,12 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
             List<Object[]> result = q.getResultList();
 
             for (Object[] object : result) {
-                String denominacion = (denominacionCooficial && Utils.isNotEmpty((String) object[5]))
-                        ? (String) object[5]
-                        : (String) object[1];
-
                 Unidad raiz = new Unidad();
                 Unidad superior = new Unidad();
                 raiz.setCodigoDir3((String) object[2]);
                 superior.setCodigoDir3((String) object[3]);
 
-                Unidad uni = new Unidad((String) object[6], (String) object[0], denominacion, raiz, superior, (Boolean) object[4]);
+                Unidad uni = new Unidad((String) object[6], (String) object[0], (String) object[1], raiz, superior, (Boolean) object[4]);
 
                 if (Utils.isNotEmpty((String) object[5]))
                     uni.setDenomLenguaCooficial((String) object[5]);
@@ -742,7 +731,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
             hijosTotales.addAll(hijos);
 
             // llamada recursiva para todos los hijos
-            arbolHijos(hijos, estado, hijosTotales, denominacionCooficial);
+            arbolHijos(hijos, estado, hijosTotales);
         }
 
     }
@@ -915,12 +904,6 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     @Override
     @SuppressWarnings(value = "unchecked")
     public List<Unidad> obtenerArbolUnidadesDestinatarias(String codigo) throws Exception {
-        return obtenerArbolUnidadesDestinatarias(codigo, false);
-    }
-
-    @Override
-    @SuppressWarnings(value = "unchecked")
-    public List<Unidad> obtenerArbolUnidadesDestinatarias(String codigo, boolean denominacionCooficial) throws Exception {
 
         Query q = em.createQuery(
                 "Select unidad.codigoDir3, unidad.denominacion, unidad.codUnidadRaiz.codigoDir3, unidad.codUnidadSuperior.codigoDir3, unidad.esEdp, unidad.denomLenguaCooficial, unidad.codigo "
@@ -933,13 +916,12 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
         List<Object[]> result = q.getResultList();
 
         for (Object[] object : result) {
-            String denominacion = (denominacionCooficial && Utils.isNotEmpty((String) object[5])) ? (String) object[5] : (String) object[1];
             Unidad raiz = new Unidad();
             raiz.setCodigoDir3((String) object[2]);
             Unidad superior = new Unidad();
             superior.setCodigoDir3((String) object[3]);
 
-            Unidad nueva = new Unidad((String) object[6], (String) object[0], denominacion, raiz, superior, (Boolean) object[4]);
+            Unidad nueva = new Unidad((String) object[6], (String) object[0], (String)object[1], raiz, superior, (Boolean) object[4]);
 
             if (Utils.isNotEmpty((String) object[5]))
                 nueva.setDenomLenguaCooficial((String) object[5]);

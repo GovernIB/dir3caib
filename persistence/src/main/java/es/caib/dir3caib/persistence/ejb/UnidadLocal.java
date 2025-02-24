@@ -434,24 +434,16 @@ public interface UnidadLocal extends BaseEjb<Unidad, String> {
      */
     Nodo findUnidadByCodigoDir3(String codigoDir3, String estado, boolean denominacionCooficial) throws Exception;
 
-    /**
+   /* *//**
      * @param unidadesPadres
      * @param estado
      * @param hijosTotales
      * @param denominacionCooficial
      * @throws Exception
-     */
+     *//*
     void arbolHijos(Set<Unidad> unidadesPadres, String estado, Set<Unidad> hijosTotales, boolean denominacionCooficial)
-            throws Exception;
+            throws Exception;*/
 
-
-    /**
-     * @param codigo
-     * @param denominacionCooficial
-     * @return
-     * @throws Exception
-     */
-    List<Unidad> obtenerArbolUnidadesDestinatarias(String codigo, boolean denominacionCooficial) throws Exception;
 
     /**
      * @param nivel
