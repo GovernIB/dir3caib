@@ -205,7 +205,8 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
         log.info("WS: Inicio obtenerArbolUnidades");
         Long start = System.currentTimeMillis();
 
-        List<Unidad> arbol = new ArrayList<Unidad>(); //Lista completa de unidades a enviar a regweb3(o porque es sincro o porque se han actualizado)
+
+        Set<Unidad> arbol = new HashSet<>(); //Conjunto completo de unidades a enviar a regweb3(o porque es sincro o porque se han actualizado)
         Unidad unidad = null;
         Unidad unidadRaiz = null;
 
@@ -274,7 +275,9 @@ public class ObtenerUnidadesEjb implements ObtenerUnidadesLocal {
             log.info("WS: La unidad con codigoDir3 " + codigo + " no existe o está extinguida");
 
         }
-        return arbol;
+
+        return new ArrayList<>(arbol);
+
     }
 
 

@@ -217,7 +217,7 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
         //se han actualizado
         unidades.addAll(obtenerUnidadesEjb.obtenerArbolUnidades(codigo, fechaActualizacion, fechaSincronizacion));
 
-        List<Oficina> oficinasCompleto = new ArrayList<Oficina>();
+        Set<Oficina> oficinasCompleto = new HashSet<>();
 
         // Por cada Unidad, obtenemos sus Oficinas
         for (Unidad uni : unidades) {
@@ -228,7 +228,7 @@ public class ObtenerOficinasEjb implements ObtenerOficinasLocal {
         Long end = System.currentTimeMillis();
         log.info("tiempo obtenerArbolOficinas: " + Utils.formatElapsedTime(end - start));
 
-        return oficinasCompleto;
+        return new ArrayList<>(oficinasCompleto);
     }
 
 
