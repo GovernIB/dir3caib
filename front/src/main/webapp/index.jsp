@@ -253,7 +253,12 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
 
 	<script type="text/javascript" src="js/jquery-3-7-1-min.js"></script>
 	<script type="text/javascript" src="js/jquery-autocomplete-min.js"></script>
-	<script type="module"> 
+	<script type="module">
+		let prueba = 'Secretaría';
+		console.log(prueba.normalize("NFD").replace(/[\u0300-\u036f]/g, ""));
+		console.log(prueba.normalize("NFC").replace(/[\u0300-\u036f]/g, ""));
+		console.log(prueba.normalize("NFKC").replace(/[\u0300-\u036f]/g, ""));
+		console.log(prueba.normalize('NFD').replace(/\p{Diacritic}/gu, ''));
 
         $(function () {
             'use strict';
@@ -266,8 +271,8 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
             let nombreFichero = "obtener?nivel=" + nivelAdministracion + "&comunidad=" + codigoComunidad;
             $.getScript( nombreFichero, function( data, textStatus, jqxhr ) {
 
-                        unidades = $.map(unitats, function (value, key) { 
-                    return { value: <% if ("ca".equalsIgnoreCase(locale.getLanguage())) { %>value.denominacionCooficial<% } else {%>value.denominacion<% } %>+ " - " + value.codigo, 
+                        unidades = $.map(unitats, function (value, key) {
+                    return { value: <% if ("ca".equalsIgnoreCase(locale.getLanguage())) { %>value.denominacionCooficial<% } else {%>value.denominacion<% } %>+ " - " + value.codigo,
                              data: {
                                 dir3: value.codigo,
                                 denominacion: value.denominacion,
@@ -306,7 +311,7 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
                     $.getScript( nombreFichero, function( data, textStatus, jqxhr ) {
 
                         unidades = $.map(unitats, function (value, key) { 
-                    return { value: <% if ("ca".equalsIgnoreCase(locale.getLanguage())) { %>value.denominacionCooficial<% } else {%>value.denominacion<% } %>+ " - " + value.codigo, 
+                    return { value: <% if ("ca".equalsIgnoreCase(locale.getLanguage())) { %>value.denominacionCooficial<% } else {%>value.denominacion<% } %>+ " - " + value.codigo,
                              data: {
                                 dir3: value.codigo,
                                 denominacion: value.denominacion,
@@ -423,7 +428,7 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
 
                     $.getScript( nombreFichero, function( data, textStatus, jqxhr ) {
 
-                        unidades = $.map(unitats, function (value, key) { 
+                        unidades = $.map(unitats, function (value, key) {
                     return { value: <% if ("ca".equalsIgnoreCase(locale.getLanguage())) { %>value.denominacionCooficial<% } else {%>value.denominacion<% } %>+ " - " + value.codigo, 
                              data: {
                                 dir3: value.codigo,
@@ -458,6 +463,15 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
 					$('#denominacion').devbridgeAutocomplete({
                         lookup: unidades,
                         nocache: true,
+						lookupFilter: function(suggestion, originalQuery, queryLowerCase) {
+							function normalize(str) {
+								return str
+										.normalize("NFD")
+										.replace(/[\u0300-\u036f]/g, "")
+										.toLowerCase();
+							}
+							return normalize(suggestion.value).includes(normalize(originalQuery));
+						},
 						beforeRender: function (container, suggestions) {
 							$('.autocomplete-suggestions').css('max-height', '');
 							$('#resultados .card').css('display', 'none');
