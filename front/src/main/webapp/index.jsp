@@ -254,11 +254,6 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
 	<script type="text/javascript" src="js/jquery-3-7-1-min.js"></script>
 	<script type="text/javascript" src="js/jquery-autocomplete-min.js"></script>
 	<script type="module">
-		let prueba = 'Secretaría';
-		console.log(prueba.normalize("NFD").replace(/[\u0300-\u036f]/g, ""));
-		console.log(prueba.normalize("NFC").replace(/[\u0300-\u036f]/g, ""));
-		console.log(prueba.normalize("NFKC").replace(/[\u0300-\u036f]/g, ""));
-		console.log(prueba.normalize('NFD').replace(/\p{Diacritic}/gu, ''));
 
         $(function () {
             'use strict';
@@ -429,7 +424,7 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
                     $.getScript( nombreFichero, function( data, textStatus, jqxhr ) {
 
                         unidades = $.map(unitats, function (value, key) {
-                    return { value: <% if ("ca".equalsIgnoreCase(locale.getLanguage())) { %>value.denominacionCooficial<% } else {%>value.denominacion<% } %>+ " - " + value.codigo, 
+                    return { value: <% if ("ca".equalsIgnoreCase(locale.getLanguage())) { %>value.denominacionCooficial<% } else {%>value.denominacion<% } %>+ " - " + value.codigo,
                              data: {
                                 dir3: value.codigo,
                                 denominacion: value.denominacion,
@@ -463,14 +458,26 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
 					$('#denominacion').devbridgeAutocomplete({
                         lookup: unidades,
                         nocache: true,
-						lookupFilter: function(suggestion, originalQuery, queryLowerCase) {
+						lookupFilter: function (suggestion, originalQuery, queryLowerCase) {
 							function normalize(str) {
-								return str
-										.normalize("NFD")
-										.replace(/[\u0300-\u036f]/g, "")
-										.toLowerCase();
+								return (str || "")
+										.normalize("NFD")                  // separa acentos
+										.replace(/[\u0300-\u036f]/g, "")   // quita acentos
+										.toLowerCase();                    // convierte a minúsculas
 							}
-							return normalize(suggestion.value).includes(normalize(originalQuery));
+
+							const query = normalize(originalQuery);
+							const denominacion = normalize(suggestion.data.denominacion);
+							const cooficial = normalize(suggestion.data.cooficial);
+							const value = normalize(suggestion.value);
+
+							if (denominacion === cooficial || cooficial === "") {
+								// Si son iguales, solo busco en uno
+								return value.includes(query) || denominacion.includes(query);
+							} else {
+								// Si son distintos, busco en los tres
+								return value.includes(query) || denominacion.includes(query) || cooficial.includes(query);
+							}
 						},
 						beforeRender: function (container, suggestions) {
 							$('.autocomplete-suggestions').css('max-height', '');
@@ -494,12 +501,31 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
 								return '';
                             }
                         },
-                        formatResult: function (suggestion, currentValue) {
-                            if (suggestion.data.cooficial != suggestion.data.denominacion)
-                                return "<p>"+suggestion.value+"<br><em>"+suggestion.data.cooficial+"</em></p>";
-                            else
-                                return "<p>"+suggestion.value+"</p>";
-                        },
+						formatResult: function (suggestion, currentValue) {
+							const denominacion = suggestion.data.denominacion || "";
+							const cooficial = suggestion.data.cooficial || "";
+							const codigo = suggestion.data.dir3 || "";
+
+							<% if ("ca".equalsIgnoreCase(locale.getLanguage())) { %>
+							if (denominacion !== cooficial && cooficial !== "") {
+								// En catalán → principal cooficial, secundaria oficial
+								return "<p>" + cooficial + " - " + codigo +
+										"<br><em>" + denominacion + "</em></p>";
+							} else {
+								// Si son iguales → solo muestro una
+								return "<p>" + cooficial + " - " + codigo + "</p>";
+							}
+							<% } else { %>
+							if (denominacion !== cooficial && cooficial !== "") {
+								// En castellano → principal oficial, secundaria cooficial
+								return "<p>" + denominacion + " - " + codigo +
+										"<br><em>" + cooficial + "</em></p>";
+							} else {
+								// Si son iguales → solo muestro una
+								return "<p>" + denominacion + " - " + codigo + "</p>";
+							}
+							<% } %>
+						},
 						maxHeight: 550,
                         minChars: 3,
                         onSelect: function (suggestion) {
