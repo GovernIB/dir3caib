@@ -814,13 +814,27 @@ ResourceBundle messages = ResourceBundle.getBundle("es.caib.dir3caib.front.webap
         	}
 
 	        if (organismo.data.raiz_codigo !== organismo.data.dir3){
+				<%
+  					boolean showCooficial = !"es".equalsIgnoreCase(locale.getLanguage());
+				%>
 	            $('#unitatSuperior').attr('data-dir3', organismo.data.sup_codigo); 
 	            $('#unitatSuperior .codi').html(organismo.data.sup_codigo);
-				$('#unitatSuperior .tag').html((organismo.data.sup_cooficial != organismo.data.sup_denominacion<% if ("es".equalsIgnoreCase(locale.getLanguage())) { %> && false <%} %>) ? organismo.data.sup_cooficial : organismo.data.sup_denominacion);
+
+				$('#unitatSuperior .tag').html(
+						(<%= showCooficial %> && organismo.data.sup_cooficial != organismo.data.sup_denominacion && organismo.data.sup_cooficial)
+						? organismo.data.sup_cooficial
+						: organismo.data.sup_denominacion
+			            );
+
 				
 				$('#unitatArrel').data('dir3', organismo.data.raiz_codigo);
 				$('#unitatArrel .codi').html(organismo.data.raiz_codigo);
-				$('#unitatArrel .tag').html((organismo.data.raiz_cooficial != organismo.data.raiz_denominacion<% if ("es".equalsIgnoreCase(locale.getLanguage())) { %> && false <%} %>) ? organismo.data.raiz_cooficial : organismo.data.raiz_denominacion);
+
+				$('#unitatArrel .tag').html(
+						(<%= showCooficial %> && organismo.data.raiz_cooficial !== organismo.data.raiz_denominacion && organismo.data.raiz_cooficial)
+						? organismo.data.raiz_cooficial
+						: organismo.data.raiz_denominacion
+			            );
 	
 				$('.superior').css('display', 'block');
 				$('.arrel').css('display', 'block');
