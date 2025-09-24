@@ -7,11 +7,11 @@
 	<parent>
 		<groupId>es.caib.dir3caib</groupId>
 		<artifactId>dir3caib</artifactId>
-		<version>1.1.1</version>
+		<version>1.1.2</version>
 	</parent>
 
 	<artifactId>dir3caib-front</artifactId>
-	<version>1.1.1</version>
+	<version>1.1.2</version>
 	<packaging>war</packaging>
 
 	<name>Dir3Caib - Front</name>
