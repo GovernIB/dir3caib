@@ -51,8 +51,14 @@ public class TestUnidadesV2Ws extends Dir3CaibTestUtils{
 
                 System.out.println("TIEMPO CARGA UNIDADESDESTINATARIAS: " + Utils.formatElapsedTime(end - start));
                 System.out.println("DESTINATRIAS " + destinatarias.size());
-                System.out.println("UNidad " + ((UnidadWs)destinatarias.get(0)).getDenominacion());
-                System.out.println("UNidad " + ((UnidadWs)destinatarias.get(0)).getDenomLenguaCooficial());
+            for(int i= 0; i<destinatarias.size(); i++){
+                System.out.println(" CODIGO: "  + destinatarias.get(i).getCodigo());
+                System.out.println(" RAIZ: " + destinatarias.get(i).getCodUnidadRaiz());
+                System.out.println(" SUPERIOR: " +destinatarias.get(i).getCodUnidadSuperior());
+                System.out.println(" DENOMINACION: " + destinatarias.get(i).getDenominacion());
+                System.out.println(" DENOMINACIONCOOFICIAL: " + destinatarias.get(i).getDenomLenguaCooficial());
+                System.out.println(" EDP: " + destinatarias.get(i).isEsEdp());
+            }
            // }
         } catch (Exception e) {
             e.printStackTrace();
@@ -160,6 +166,29 @@ public class TestUnidadesV2Ws extends Dir3CaibTestUtils{
             e.printStackTrace();
         }
 
+    }
+
+
+    @Test
+    public void obtenerArbolUnidades() {
+        try{
+            Dir3CaibObtenerUnidadesWs apiUnidades = getObtenerUnidadesApi(true);
+
+            Long start = System.currentTimeMillis();
+            List<UnidadWs> unidadesWs = apiUnidades.obtenerArbolUnidadesV2("A04003003", null, null);
+
+            Long end = System.currentTimeMillis();
+
+            System.out.println("TIEMPO CARGA UNIDAD: " + Utils.formatElapsedTime(end - start));
+            System.out.println("Unidades Historicos Finales: " + unidadesWs.size());
+            for(UnidadWs unidadWs:unidadesWs){
+                System.out.println(unidadWs.getCodigo() + " - "+ unidadWs.getDenominacion()+ " - "+ unidadWs.getDenomLenguaCooficial());
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 

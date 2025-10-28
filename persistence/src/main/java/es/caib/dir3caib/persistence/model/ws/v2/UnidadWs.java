@@ -100,7 +100,11 @@ public class UnidadWs extends es.caib.dir3caib.persistence.model.ws.UnidadTF {
         //Fijamos la denominación independientemente de lo que haya hecho el rellenar de la clase padre
         this.setDenominacion(unidad.getDenominacion());
         // Fijamos la denominación en lengua cooficial si no está vacia, si no fijamos la denominación
-        this.setDenomLenguaCooficial(unidad.getDenomLenguaCooficial().isEmpty()?unidad.getDenominacion():unidad.getDenomLenguaCooficial());
+        if(unidad.getDenomLenguaCooficial() != null) {
+            this.setDenomLenguaCooficial(unidad.getDenomLenguaCooficial());
+        }else{
+            this.setDenomLenguaCooficial(unidad.getDenominacion());
+        }
         this.setIdiomalengua(unidad.getIdiomalengua());
         this.setVersion(unidad.getVersion());
         this.setPoder(unidad.getPoder().getDescripcionPoder());
