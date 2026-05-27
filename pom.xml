@@ -50,7 +50,7 @@
     </dependencies>
 
     <repositories>
-        <repository>
+        <!--<repository>
             <id>maven-nuxeo</id>
             <name>Maven Nuxeo Repository</name>
             <url>https://maven.nuxeo.org/nexus/content/groups/public/</url>
@@ -63,6 +63,12 @@
                 <enabled>true</enabled>
                 <updatePolicy>never</updatePolicy>
             </snapshots>
+        </repository>-->
+
+        <repository>
+            <id>jboss-public</id>
+            <name>JBoss Public Repository</name>
+            <url>https://repository.jboss.org/nexus/content/groups/public/</url>
         </repository>
 
         <!-- Requerim GENAPP -->

@@ -26,7 +26,8 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    <repositories>
+    <!-- Descomentados no genera bien el jar (sensein18exception) -->
+  <!--  <repositories>
         <repository>
             <id>java.net-m2</id>
             <name>java.net - Maven 2</name>
@@ -37,7 +38,7 @@
             <name>jboss</name>
             <url>https://repository.jboss.org/nexus/content/repositories/releases</url>
         </repository>
-    </repositories>
+    </repositories>-->
     <build>
         <plugins>
             <plugin>
@@ -61,6 +62,7 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
                             <shadedArtifactAttached>true</shadedArtifactAttached>
                             <shadedClassifierName>sensei18nexception</shadedClassifierName>
                             <filters>
