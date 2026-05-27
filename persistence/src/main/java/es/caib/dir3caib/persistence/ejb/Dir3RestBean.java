@@ -828,6 +828,8 @@ public class Dir3RestBean implements Dir3RestLocal {
 	public List<Nodo> busquedaOficinas(String codigo, String denominacion, Long codigoNivelAdministracion,
 			Long codComunidad, Long provincia, String localidad, boolean oficinasSir, boolean vigentes,
 			boolean denominacionCooficial) throws Exception {
+
+		log.info("ENTRO EN XXXXXXXXXXXXXXXXX BUSQUEDA OFICINAS");
 		Query q;
 		Map<String, Object> parametros = new HashMap<String, Object>();
 		List<String> where = new ArrayList<String>();
@@ -893,8 +895,9 @@ public class Dir3RestBean implements Dir3RestLocal {
 
 		// buscamos aquellas que sean oficinas sir de Recepcion
 		if (oficinasSir) {
-			where.add(" servicios.servicio.codServicio= :SERVICIO_SIR_RECEPCION ");
+			where.add(" servicios.servicio.codServicio= :SERVICIO_SIR_RECEPCION and servicios.estado.codigoEstadoEntidad= :VIGENTE ");
 			parametros.put("SERVICIO_SIR_RECEPCION", Dir3caibConstantes.SERVICIO_SIR_RECEPCION);
+			parametros.put("VIGENTE", Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE);
 
 		}
 

@@ -885,18 +885,13 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
 		for (Object[] object : result) {
 
-			Query q2 = em.createQuery("select servicioOfi.servicio from ServicioOfi as servicioOfi where servicioOfi.oficina.codigo=:codOficina");
+			Query q2 = em.createQuery("select servicioOfi from ServicioOfi as servicioOfi where servicioOfi.oficina.codigo=:codOficina");
 
 			q2.setParameter("codOficina", object[0]);
 
-			List<Object> result2 = q2.getResultList();
+			List<ServicioOfi> result2 = q2.getResultList();
 
-			Set<ServicioOfi> servicios = new HashSet<ServicioOfi>();
-
-			for (Object obj : result2) {
-				ServicioOfi servicioOfi = new ServicioOfi((CatServicio) obj);
-				servicios.add(servicioOfi);
-			}
+			Set<ServicioOfi> servicios = new HashSet<ServicioOfi>(result2);
 
 			String denominacion = (denominacionCooficial && Utils.isNotEmpty((String) object[3])) ? (String) object[3] : (String) object[1];
 			
@@ -931,17 +926,13 @@ public class OficinaBean extends BaseEjbJPA<Oficina, String> implements OficinaL
 
 		for (Object[] object : result) {
 
-			Query q2 = em.createQuery("select servicioOfi.servicio from ServicioOfi as servicioOfi where servicioOfi.oficina.codigo=:codOficina");
+			Query q2 = em.createQuery("select servicioOfi from ServicioOfi as servicioOfi where servicioOfi.oficina.codigo=:codOficina");
 			q2.setParameter("codOficina", object[0]);
 
-			List<Object> result2 = q2.getResultList();
+			List<ServicioOfi> result2 = q2.getResultList();
 
-			Set<ServicioOfi> servicios = new HashSet<ServicioOfi>();
-			for (Object obj : result2) {
-				ServicioOfi servicioOfi = new ServicioOfi((CatServicio) obj);
-				servicios.add(servicioOfi);
-			}
-			
+			Set<ServicioOfi> servicios = new HashSet<ServicioOfi>(result2);
+
 			String denominacion = (denominacionCooficial && Utils.isNotEmpty((String) object[4])) ? (String) object[4] : (String) object[1];
 
 			Oficina oficina = new Oficina((String) object[0], denominacion, (String) object[2],

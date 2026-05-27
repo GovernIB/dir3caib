@@ -6,10 +6,8 @@ import org.hibernate.annotations.Index;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
+
 /**
  * @version 1.1
  * @created 28-oct-2013 14:41:39
@@ -738,8 +736,8 @@ public class Oficina implements Serializable {
   public Boolean getOficinaSir() {
 
     if(servicios != null) {
-      for (ServicioOfi servicio : servicios) {
-        if (servicio.getServicio().getCodServicio().equals(Dir3caibConstantes.SERVICIO_SIR) ||
+      for (ServicioOfi servicio : getServiciosVigentes()) {
+        if (servicio.getServicio().getCodServicio().equals(Dir3caibConstantes.SERVICIO_SIR)  ||
                 servicio.getServicio().getCodServicio().equals(Dir3caibConstantes.SERVICIO_SIR_ENVIO) ||
                 servicio.getServicio().getCodServicio().equals(Dir3caibConstantes.SERVICIO_SIR_RECEPCION)) {
           return true;
@@ -771,6 +769,22 @@ public class Oficina implements Serializable {
       }
     }
     return false;
+  }
+
+
+  @Transient
+  public Set<ServicioOfi> getServiciosVigentes() {
+    Set<ServicioOfi> serviciosVigentes = new HashSet<>();
+    if(servicios != null) {
+      for (ServicioOfi servicio : servicios) {
+        if (servicio != null
+                && servicio.getEstado() != null
+                && Dir3caibConstantes.ESTADO_ENTIDAD_VIGENTE.equals(servicio.getEstado().getCodigoEstadoEntidad())) {
+          serviciosVigentes.add(servicio);
+        }
+      }
+    }
+    return serviciosVigentes;
   }
 
 
