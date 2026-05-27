@@ -642,7 +642,7 @@ public class UnidadBean extends BaseEjbJPA<Unidad, String> implements UnidadLoca
     @SuppressWarnings(value = "unchecked")
     public List<Nodo> hijos(String codigo, String estado, boolean denominacionCooficial, boolean codigoDir3) throws Exception {
 
-        String campo = (codigoDir3) ? "codigo" : "codigoDir3";
+        String campo = (codigoDir3) ? "codigoDir3" : "codigo";
 
         Query q = em.createQuery(
                 "Select unidad.codigo, unidad.denominacion, unidad.estado.codigoEstadoEntidad,unidad.codUnidadRaiz.codigo, "
