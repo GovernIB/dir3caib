@@ -142,6 +142,9 @@ public interface SincronizacionLocal extends BaseEjb<Sincronizacion, Long> {
      */
     Sincronizacion sincronizarCatalogo() throws Exception;
 
+
+    Sincronizacion sincronizarUnidadesOficinasconFecha(Date fechaLimite) throws Exception;
+
     /**
      * Realiza la descarga y sincronización de las Oficinas y Unidades
      *

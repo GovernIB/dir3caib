@@ -1,16 +1,18 @@
 package es.caib.dir3caib.back.controller.sincronizacion;
 
 import es.caib.dir3caib.back.controller.BaseController;
+import es.caib.dir3caib.back.form.SincronizacionForm;
+import es.caib.dir3caib.back.form.UnidadBusquedaForm;
 import es.caib.dir3caib.back.utils.Mensaje;
 import es.caib.dir3caib.persistence.ejb.*;
-import es.caib.dir3caib.persistence.model.CatNivelAdministracion;
-import es.caib.dir3caib.persistence.model.Dir3caibConstantes;
-import es.caib.dir3caib.persistence.model.Sincronizacion;
+import es.caib.dir3caib.persistence.model.*;
 import es.caib.dir3caib.persistence.utils.Paginacion;
+import es.caib.dir3caib.utils.Configuracio;
 import es.caib.dir3caib.utils.Utils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,7 +20,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
+
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import java.text.SimpleDateFormat;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 
 
 /**
@@ -143,6 +151,62 @@ public class SincronizacionController extends BaseController {
                     Mensaje.saveMessageError(request, getMessage("directorio.descarga.error"));
                 }
             }
+
+        } catch (Exception ex) {
+            Mensaje.saveMessageError(request, getMessage("directorio.sincronizacion.error"));
+            ex.printStackTrace();
+        }
+
+        return new ModelAndView("redirect:/sincronizacion/list");
+    }
+
+
+    /**
+     * Carga el formulario para la busqueda de {@link es.caib.dir3caib.persistence.model.Unidad}
+     */
+    @RequestMapping(value = "/oficinasUnidadesconFechaLimite", method = RequestMethod.GET)
+    public String sincronizaroficinasUnidadesFecha(Model model) throws Exception {
+
+        SincronizacionForm sincroForm = new SincronizacionForm();
+
+        model.addAttribute("sincroForm", sincroForm);
+
+        return "sincronizacion/sincronizacionFecha";
+
+    }
+
+
+    /**
+     * Sincroniza las unidades y oficinas
+     * Obtiene las Unidades y Oficinas para importarlos.
+     *
+     * @param request
+     */
+    @RequestMapping(value = "/oficinasUnidadesconFechaLimite", method = RequestMethod.POST)
+    public ModelAndView sincronizaroficinasUnidadesFecha(@ModelAttribute SincronizacionForm sincroForm, HttpServletRequest request) throws Exception {
+
+        try {
+
+            long start = System.currentTimeMillis();
+
+            log.info("XXXXXXXXXXX FECHA LIMITE "+sincroForm.getFechaLimite());
+
+            Sincronizacion sincronizacion = sincronizacionEjb.sincronizarUnidadesOficinasconFecha(sincroForm.getFechaLimite());
+            log.info("Sincronizacion de las Oficinas y Unidades con Fecha completada en " + Utils.formatElapsedTime(System.currentTimeMillis() - start));
+
+            // Mensajes al usuario
+            if (sincronizacion != null) {
+
+                if (sincronizacion.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_CORRECTA)) {
+                    Mensaje.saveMessageInfo(request, getMessage("directorio.sincronizacion.ok"));
+                } else if (sincronizacion.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_VACIA)) {
+                    Mensaje.saveMessageInfo(request, getMessage("directorio.sincronizacion.vacia"));
+                }
+
+            } else {
+                Mensaje.saveMessageError(request, getMessage("directorio.descarga.error"));
+            }
+
 
         } catch (Exception ex) {
             Mensaje.saveMessageError(request, getMessage("directorio.sincronizacion.error"));
@@ -409,5 +473,12 @@ public class SincronizacionController extends BaseController {
 
 		return "redirect:/sincronizacion/list/1";
 	}
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        dateFormat.setLenient(false);
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+    }
 
 }

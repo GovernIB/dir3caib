@@ -11,7 +11,7 @@
                                             alt="Govern de les Illes Balears"/></div>
     <div class="aplication-logo pull-left"><a href="<c:url value="/"/>"><img src="<c:url value="/img/logoDir.png"/>"
                                                                              width="159" height="36"
-                                                                             alt="Directorio Común"/></a></div>
+                                                                             alt="Directorio Comï¿½n"/></a></div>
 
     <div class="pull-right main-menu">
 
@@ -37,7 +37,7 @@
             <div class="navbar-inner">
                 <ul class="nav  pull-right" role="navigation">
 
-                    <%--MENÚ SINCRONIZACIÓN--%>
+                    <%--MENï¿½ SINCRONIZACIï¿½N--%>
                     <sec:authorize access="hasRole('DIR_ADMIN')">
                         <li class="dropdown">
                             <a id="drop4" href="#" role="button" class="dropdown-toggle"
@@ -45,6 +45,7 @@
                             <ul class="dropdown-menu" role="menu" aria-labelledby="drop4">
                                 <li><a href="<c:url value="/sincronizacion/list"/>"><fmt:message key="menu.listado.sincronizacion"/></a></li>
                                 <li class="divider"></li>
+                                <li><a href="<c:url value="/sincronizacion/oficinasUnidadesconFechaLimite"/>"><fmt:message key="menu.sincronizar.oficinasUnidades.fechalimite"/></a></li>
                                 <li><a href="javascript:void(0);" onclick="if (! confirmDescarga('<c:url value="/sincronizacion/oficinasUnidades"/>','<fmt:message key="menu.sincronizar.confirm"/>')) { return false; }"><fmt:message key="menu.sincronizar.oficinasUnidades"/></a></li>
                                 <li><a href="javascript:void(0);" onclick="if (! confirmDescarga('<c:url value="/sincronizacion/catalogo"/>','<fmt:message key="menu.sincronizar.confirm"/>')) { return false; }"><fmt:message key="menu.sincronizar.catalogo"/></a></li>
                                 <li class="divider"></li>
@@ -59,7 +60,7 @@
                         </li>
                     </sec:authorize>
 
-                    <%--MENÚ UNIDADES--%>
+                    <%--MENï¿½ UNIDADES--%>
                     <li class="dropdown">
                         <a id="drop2" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"><fmt:message key="menu.unidad"/><b class="caret"></b></a>
 
@@ -68,7 +69,7 @@
                         </ul>
                     </li>
 
-                    <%--Menú Oficinas--%>
+                    <%--Menï¿½ Oficinas--%>
                     <li class="dropdown">
                         <a id="drop1" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"><fmt:message key="menu.oficina"/><b class="caret"></b></a>
                         <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">

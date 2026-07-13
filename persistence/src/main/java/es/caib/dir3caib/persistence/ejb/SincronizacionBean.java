@@ -707,6 +707,70 @@ public class SincronizacionBean extends BaseEjbJPA<Sincronizacion, Long> impleme
 
 	@Override
 	@TransactionTimeout(value = 50000)
+	public Sincronizacion sincronizarUnidadesOficinasconFecha(Date fechaLimite) throws Exception {
+
+		Sincronizacion sincroUnidadesOficinas = null;
+
+		try {
+
+			// Obtenemos la fecha de la ultima descarga/sincronizacion
+			Sincronizacion ultimaSincro = ultimaSincronizacionDirectorio();
+
+			log.info("XXXXX FECHA LIMITE " + fechaLimite);
+			log.info("XXXXX new date " + new Date());
+
+			if(fechaLimite.after(new Date())){
+				log.info("Entramos en after");
+				fechaLimite = new Date();
+			} else if (fechaLimite.before(ultimaSincro.getFechaFin())){
+				log.info("Entramos en before");
+				fechaLimite = ultimaSincro.getFechaFin();
+			}
+			log.info("XXXXX FECHA LIMITE despues" + fechaLimite);
+
+			// Descarga de directorio DIR3
+			if (ultimaSincro != null) {
+ 				sincroUnidadesOficinas = descargaSincronizacionDirectorio(ultimaSincro.getFechaFin(), fechaLimite);
+			} else {// Es una descarga inicial
+				sincroUnidadesOficinas = descargaCompletaDirectorio();
+			}
+
+			// Importamos Unidades y Oficinas
+			if (sincroUnidadesOficinas != null && sincroUnidadesOficinas.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
+
+				importadorEjb.importarUnidadesOficinas(sincroUnidadesOficinas);
+
+				// Si el proceso ha sido correcto, actualizamos la sincronización
+				sincroUnidadesOficinas.setFechaImportacion(new Date());
+				sincroUnidadesOficinas.setEstado(Dir3caibConstantes.SINCRONIZACION_CORRECTA);
+				merge(sincroUnidadesOficinas);
+			}
+
+		} catch (Exception e) {
+			log.info("Error sincronizando UnidadesOficinas: " + e.getMessage());
+			e.printStackTrace();
+
+			// Modificamos el estado de la descarga
+			if (sincroUnidadesOficinas != null && sincroUnidadesOficinas.getEstado().equals(Dir3caibConstantes.SINCRONIZACION_DESCARGADA)) {
+				try {
+					log.info("Se actualiza el estado de la sincronizacon descarga a ERROENA, con codigo: " + sincroUnidadesOficinas.getCodigo());
+					actualizarEstado(sincroUnidadesOficinas.getCodigo(), Dir3caibConstantes.SINCRONIZACION_ERRONEA);
+
+				} catch (Exception ex1) {
+					log.info("Error actualizando estado: " + ex1.getMessage());
+					ex1.printStackTrace();
+					MailUtils.envioEmailErrorSincronizacion(Dir3caibConstantes.SINCRONIZACION_DIRECTORIO, ex1);
+				}
+			}
+			MailUtils.envioEmailErrorSincronizacion(Dir3caibConstantes.SINCRONIZACION_DIRECTORIO, e);
+			throw e;
+		}
+
+		return sincroUnidadesOficinas;
+	}
+
+	@Override
+	@TransactionTimeout(value = 50000)
 	public Sincronizacion sincronizarUnidadesOficinas() throws Exception {
 
 		Sincronizacion sincroUnidadesOficinas = null;
